@@ -1,0 +1,53 @@
+<h1 id="course-introduction">Course Introduction</h1>
+<p>Welcome to NE 630 - Nuclear Reactor Theory! What is “nuclear reactor theory?” Good question. Nuclear reactor theory is all about the physics of systems that use neutrons to produce fissions in a self-sustaining, chain reaction. Often, this discipline is called <strong>reactor physics</strong>, a term I’ll use often.</p>
+<p>In a nutshell, reactor physics combines all the basics from NE 495 (reactions, cross sections, fluxes) to produce a mathematical model that describes the neutron population in a reactor. For us, that model will be the <em>neutron diffusion equation</em> that describes the neutron density in space, energy, and time:</p>
+<p><img 
+class="equation_image" 
+title="\frac{1}{v} \frac{\partial \phi}{\partial t}
+ - \nabla D(\mathbf{r}, E) \nabla \phi 
+  + \Sigma_t(\mathbf{r}, E) \phi(\mathbf{r}, E, t) 
+  = \int^{\infty}_0 \Sigma_s(\mathbf{r}, E&#39;\to E) \phi(\mathbf{r}, E&#39;, t) dE&#39;
+   + \frac{\chi(E)}{k_{\text{eff}}} \int^{\infty}_0 \bar{\nu}(\mathbf{r}, E&#39;)\Sigma_f(\mathbf{r}, E&#39;) \phi(\mathbf{r}, E&#39;, t) dE&#39; + S(\mathbf{r}, E, t) \, .
+" 
+src="/equation_images/%255Cfrac%257B1%257D%257Bv%257D%2520%255Cfrac%257B%255Cpartial%2520%255Cphi%257D%257B%255Cpartial%2520t%257D%250A%2520-%2520%255Cnabla%2520D(%255Cmathbf%257Br%257D%252C%2520E)%2520%255Cnabla%2520%255Cphi%2520%250A%2520%2520%252B%2520%255CSigma_t(%255Cmathbf%257Br%257D%252C%2520E)%2520%255Cphi(%255Cmathbf%257Br%257D%252C%2520E%252C%2520t)%2520%250A%2520%2520%253D%2520%255Cint%255E%257B%255Cinfty%257D_0%2520%255CSigma_s(%255Cmathbf%257Br%257D%252C%2520E%2526%252339%253B%255Cto%2520E)%2520%255Cphi(%255Cmathbf%257Br%257D%252C%2520E%2526%252339%253B%252C%2520t)%2520dE%2526%252339%253B%250A%2520%2520%2520%252B%2520%255Cfrac%257B%255Cchi(E)%257D%257Bk_%257B%255Ctext%257Beff%257D%257D%257D%2520%255Cint%255E%257B%255Cinfty%257D_0%2520%255Cbar%257B%255Cnu%257D(%255Cmathbf%257Br%257D%252C%2520E%2526%252339%253B)%255CSigma_f(%255Cmathbf%257Br%257D%252C%2520E%2526%252339%253B)%2520%255Cphi(%255Cmathbf%257Br%257D%252C%2520E%2526%252339%253B%252C%2520t)%2520dE%2526%252339%253B%2520%252B%2520S(%255Cmathbf%257Br%257D%252C%2520E%252C%2520t)%2520%255C%252C%2520.%250A" 
+alt="LaTeX: \frac{1}{v} \frac{\partial \phi}{\partial t}
+ - \nabla D(\mathbf{r}, E) \nabla \phi 
+  + \Sigma_t(\mathbf{r}, E) \phi(\mathbf{r}, E, t) 
+  = \int^{\infty}_0 \Sigma_s(\mathbf{r}, E&#39;\to E) \phi(\mathbf{r}, E&#39;, t) dE&#39;
+   + \frac{\chi(E)}{k_{\text{eff}}} \int^{\infty}_0 \bar{\nu}(\mathbf{r}, E&#39;)\Sigma_f(\mathbf{r}, E&#39;) \phi(\mathbf{r}, E&#39;, t) dE&#39; + S(\mathbf{r}, E, t) \, .
+" 
+data-equation-content="\frac{1}{v} \frac{\partial \phi}{\partial t}
+ - \nabla D(\mathbf{r}, E) \nabla \phi 
+  + \Sigma_t(\mathbf{r}, E) \phi(\mathbf{r}, E, t) 
+  = \int^{\infty}_0 \Sigma_s(\mathbf{r}, E&#39;\to E) \phi(\mathbf{r}, E&#39;, t) dE&#39;
+   + \frac{\chi(E)}{k_{\text{eff}}} \int^{\infty}_0 \bar{\nu}(\mathbf{r}, E&#39;)\Sigma_f(\mathbf{r}, E&#39;) \phi(\mathbf{r}, E&#39;, t) dE&#39; + S(\mathbf{r}, E, t) \, .
+" 
+/></p>
+<p>Whoa! That’s a bit overwhelming, no? Don’t worry! While some of the symbols may look familiar (e.g., <img 
+class="equation_image" 
+title="\phi" 
+src="/equation_images/%255Cphi" 
+alt="LaTeX: \phi" 
+data-equation-content="\phi" 
+/> is the neutron flux and <img 
+class="equation_image" 
+title="\Sigma_t" 
+src="/equation_images/%255CSigma_t" 
+alt="LaTeX: \Sigma_t" 
+data-equation-content="\Sigma_t" 
+/> is the total, macroscopic cross section), some of them are likely new to you.</p>
+<p>The same goes for the math involved: as written, the equation is an integro-differential equation, which means there are both derivatives and integrals of the unknown flux. Again, don’t worry! A big part of learning and using reactor physics is to reduce the governing equations to the simplest possible form that captures the physics of interest. An example I always include in NE 495 is the four-factor formula (<img 
+class="equation_image" 
+title="k_{\text{eff}} = f p \eta \epsilon)" 
+src="/equation_images/k_%257B%255Ctext%257Beff%257D%257D%2520%253D%2520f%2520p%2520%255Ceta%2520%255Cepsilon)" 
+alt="LaTeX: k_{\text{eff}} = f p \eta \epsilon)" 
+data-equation-content="k_{\text{eff}} = f p \eta \epsilon)" 
+/>), which one can derive from the diffusion equation by ignoring space and time and by separating neutron energies into “thermal” and “fast.” If that looks Greek to you, don’t worry: we’ll be doing that derivation later in class!</p>
+<p>During the course, we’ll follow the textbook pretty closely and cover the majority of its content. A detailed lesson schedule will be provided elsewhere, but the coarse-grained structure is as follows:</p>
+<ul>
+<li>Nuclear reactions, radioactive decay, and neutron interactions [2-3 weeks]</li>
+<li>Neutron energy distributions, and energy-integrated, steady-state reaction rates, and the multigroup method (no space, no time) [2-3 weeks]</li>
+<li>Reactor kinetics, dynamics, and depletion (i.e., time-dependent reaction rates) (no space, no energy) [4-5 weeks]</li>
+<li>Neutron spatial distributions for source-driven and critical systems (no time, either no energy or multigroup) [4-5 weeks]</li>
+</ul>
+<p>Finally, I believe it’s important for students to be able to use computers both to solve problems and to perform “experiments” (i.e., simulations) that reinforce all the “theory.” For solving problems, I will often use Jupyter, a browser-based tool that lets one combine code and words in an online “notebook.” For experiements, we’ll use the free and open-source Monte Carlo code OpenMC, which will be available on a remote cluster (e.g., Beocat). How much we use either tool for in-class activities and homework assignments will depend on your previous experience and interests.</p>

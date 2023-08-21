@@ -56,13 +56,17 @@ for i in range(len(lectures)):
     print(tmpl.format(lectures[i], i+1))
     os.system(tmpl.format(lectures[i], i+1))
 
+"""
+pages = ["course_introduction",
+         "lesson_01"]
 
 tmpl = 'python convert_to_canvas.py ../pages/{}.md {}.html'
-for mod in modules:
-    for les in modules[mod]:
-        name = '{}_{}'.format(mod, les)
+for les in pages:
+        name = les
         print(tmpl.format(name, name))
-        os.system(tmpl.format(name, name)) """
+        os.system(tmpl.format(name, name)) 
+
+
 
 os.system('python convert_to_canvas.py ../README.md syllabus.html')
 os.system('rm tmp.html')

@@ -58,7 +58,9 @@ for i in range(len(lectures)):
 
 """
 pages = ["course_introduction",
-         "lesson_01"]
+         "lesson_01",
+         "lesson_02",
+         "lesson_03"]
 
 tmpl = 'python convert_to_canvas.py ../pages/{}.md {}.html'
 for les in pages:

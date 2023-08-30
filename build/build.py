@@ -62,6 +62,9 @@ pages = ["course_introduction",
          "lesson_02",
          "lesson_03"]
 
+import glob
+pages = [page.replace(".md", "") for page in glob.glob("../pages/*.md")]
+
 tmpl = 'python convert_to_canvas.py ../pages/{}.md {}.html'
 for les in pages:
         name = les

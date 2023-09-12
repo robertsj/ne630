@@ -2,7 +2,7 @@
 
 ## Learning Objectives
 
-Students will be able to...
+Students will be able to approximate the flux distribution of thermal neutrons in a thermal-spectrum reactor.
 
 ### Macro Objectives
 
@@ -33,10 +33,7 @@ Students will be able to...
 ### Homework
 
  - Reproduce Figure 3.2, and add a curve for U enriched to 4%.
- - For the 4% values, compute the expected value of $\eta(E)$ 
-   assuming that  (a) $p(E)$ is uniform and (b) $p(E) = C/E$ for 
-   energies $10^{-3} < E < 10^{7}$ eV.  (Note: you need to 
-   define $C$ using the properties of probability density functions).
+ - Consider a 1-to-1 mixture of ${}^{238}$U and ${}^{1}$H.  Compute and plot the NR flux spectrum for $1 < E  < 10^{5}$ eV.  Clearly state any assumptions or approximations you make.
 
 
 

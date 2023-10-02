@@ -1,0 +1,11 @@
+<h1 id="installing-openmc-on-beocat">Installing OpenMC on Beocat</h1>
+<p>In the the terminal, do</p>
+<pre><code>conda create --name openmc-env -y
+conda activate openmc-env
+conda install -c conda-forge mamba -y
+mamba install -c conda-forge openmc -y
+mamba install jupyter -y
+pip install nbclassic</code></pre>
+<p>These will take several minutes!</p>
+<p>In all OpenMC notebooks, add</p>
+<pre><code>openmc.config[&quot;cross_sections&quot;] = &quot;/homes/jaroberts/data/cross_sections.xml&quot;</code></pre>

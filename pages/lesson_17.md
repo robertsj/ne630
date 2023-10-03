@@ -5,21 +5,29 @@
 ### Macro Objectives
 
 
-Students will be able to determine the flux spectra and
-multiplication factors for typical fast-spectrum reactors
-based on unit-cell analysis.
+Students will be able to use the four-factor formula to 
+characterize (quantitatively and qualitatively) the multiplication 
+factor of a thermal-spectrum reactor based on unit-cell quantities.
 
 
 ### Micro Objectives
 
- - Define the geometry of a typical, fast-spectrum reactor unit cell.
- - Define the material composition of a typical, fast-spectrum reactor unit cell.
- - Explain the dominant features of a fast reactor's flux spectrum $\phi(E)$.
+ - Define the geometry of a typical, pressurized-water reactor (PWR) unit cell.
+ - Define the material composition of a typical, PWR unit cell.
+ - Explain what each term of the four-factor formula describes about the 
+   neutron lifecycle in a thermal-spectrum nuclear reactor.
+ - Numerically evaluate each term of the four-factor formula given
+   two-group, unit-cell values of cross sections and fluxes.
+ - Show that the product of the two-group, two-region definitions for the four factors
+   simplifies to the ratio of gains to losses.
 
 ## Key Terms
 
- - pitch
- - cladding
+ - four-factor formula
+ - resonance escape probability $p$
+ - thermal utilization $f$
+ - fast-fission factor $\varepsilon$
+ - reproduction factor $\eta$
  - coolant
  - volume fraction
  - unit cell (or "pin cell")
@@ -27,15 +35,12 @@ based on unit-cell analysis.
 
 ## Before Lecture
 
-  - Read 4.3
-  - Apply for an account on Beocat; use [this link](https://account.beocat.ksu.edu/)
+  - Read 4.4
+  - Apply for an account on Beocat; use [this link](https://account.beocat.ksu.edu/).
+    We will need this for next time.
 
 ## After Lecture
 
-  The dimensions and compositions of several representative sodium-cooled, fast-reactor 
-  designs are listed in [this report](https://www.oecd-nea.org/science/wprs/sfr-taskforce/WPRS-AEN-SFR-Cores-V1.2.pdf).
-
 ### Homework
 
- - 4.1, 4.3, 4.4
- 
+ - 4.6, 4.8, 4.9.  

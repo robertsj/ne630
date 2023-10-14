@@ -1,0 +1,110 @@
+<h1 id="lesson-19">Lesson 19</h1>
+<!--
+
+4-factor analysis of a LWR pin cell, P/D.
+
+
+https://info.ornl.gov/sites/publications/Files/Pub172008.pdf
+
+https://inldigitallibrary.inl.gov/sites/sti/sti/3395100.pdf
+
+
+The formal content for this lesson is incomplete.  A few numerical 
+examples would be good.  I included the "data fit" as 
+-->
+<h2 id="learning-objectives">Learning Objectives</h2>
+<h3 id="macro-objectives">Macro Objectives</h3>
+<p>Students will be able to design unit cells that meet target
+objectives within given constraints.</p>
+<h3 id="micro-objectives">Micro Objectives</h3>
+<ul>
+<li>Apply minimization to a function <span
+class="math inline">\(f(x)\)</span> to obtain optimum values of <span
+class="math inline">\(x\)</span></li>
+<li>Explain how changes in <img 
+class="equation_image" 
+title="P/D" 
+src="/equation_images/P%252FD" 
+alt="LaTeX: P/D" 
+data-equation-content="P/D" 
+/>
+effect <img 
+class="equation_image" 
+title="f" 
+src="/equation_images/f" 
+alt="LaTeX: f" 
+data-equation-content="f" 
+/>, <span
+class="math inline">\(p\)</span>, and <span
+class="math inline">\(k_{\infty}\)</span> of a PWR unit cell.</li>
+<li>Explain how changes in the Pu fraction impact <span
+class="math inline">\(k_{\infty}\)</span> of a SFR unit cell.</li>
+<li>Fit data points to a polynomial.</li>
+</ul>
+<h2 id="key-terms">Key Terms</h2>
+<ul>
+<li>under-, over-, and optimally-moderated</li>
+<li><img 
+class="equation_image" 
+title="P/D" 
+src="/equation_images/P%252FD" 
+alt="LaTeX: P/D" 
+data-equation-content="P/D" 
+/> ratio</li>
+<li>parametric study</li>
+<li>numerical optimization</li>
+<li>high- and low-order model</li>
+</ul>
+<h2 id="before-lecture">Before Lecture</h2>
+<ul>
+<li>(Re)read the last bit of 4.4.</li>
+</ul>
+<h2 id="after-lecture">After Lecture</h2>
+<h3 id="homework">Homework</h3>
+<ul>
+<li>In the lesson 18 notebook, I explained how to transform Eqs. (4.25),
+(4.28), (4.48), and (4.49) into the two-group form forms that use fuel
+and non-fuel quantities.
+<ul>
+<li>Write these expressions down.</li>
+<li>The expression for <img 
+class="equation_image" 
+title="p" 
+src="/equation_images/p" 
+alt="LaTeX: p" 
+data-equation-content="p" 
+/> is missing
+one possible source of absorption. Write down a modified form of <span
+class="math inline">\(p\)</span> that includes this term.</li>
+<li>With that modified <img 
+class="equation_image" 
+title="p" 
+src="/equation_images/p" 
+alt="LaTeX: p" 
+data-equation-content="p" 
+/> and the
+other three factors, show that <span class="math inline">\(\eta_T f p
+\varepsilon\)</span> recovers our familiar gains (from fission in the
+fuel) to losses (from absorption anywhere) definition of <span
+class="math inline">\(k_{\infty}\)</span>.</li>
+</ul></li>
+<li>(Similar to 4.10) Use <code>LWRUnitCell</code> with the default fuel
+and cladding radii and enrichment. Then, determine the P/D ratios that
+represent <img 
+class="equation_image" 
+title="V_{nf}/V_{f} = 0.5" 
+src="/equation_images/V_%257Bnf%257D%252FV_%257Bf%257D%2520%253D%25200.5" 
+alt="LaTeX: V_{nf}/V_{f} = 0.5" 
+data-equation-content="V_{nf}/V_{f} = 0.5" 
+/> and
+<img 
+class="equation_image" 
+title="V_{nf}/V_{f} = 2.5" 
+src="/equation_images/V_%257Bnf%257D%252FV_%257Bf%257D%2520%253D%25202.5" 
+alt="LaTeX: V_{nf}/V_{f} = 2.5" 
+data-equation-content="V_{nf}/V_{f} = 2.5" 
+/>. For P/D values
+between those extremes, use <code>LWRUnitCell</code> to compute and plot
+the four factors and <span
+class="math inline">\(k_{\infty}\)</span>.</li>
+</ul>

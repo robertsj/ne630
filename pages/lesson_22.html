@@ -1,0 +1,226 @@
+<h1 id="lesson-22">Lesson 22</h1>
+<h2 id="learning-objectives">Learning Objectives</h2>
+<h3 id="macro-objectives">Macro Objectives</h3>
+<p>Students will be able to quantify the impact of xenon buildup on
+reactivity.</p>
+<h3 id="micro-objectives">Micro Objectives</h3>
+<ul>
+<li>Model the impact of reactivity control, fission products, and
+depletion by proper adjustments to the four-factor formula.</li>
+<li>Quantify how the addition of chemical shim impacts the moderator
+temperature coefficient.</li>
+<li>List the primary long-term changes in a nuclear reactor core</li>
+</ul>
+<h2 id="key-terms">Key Terms</h2>
+<ul>
+<li>reactivity control (all the methods by which <span
+class="math inline">\(\rho\)</span> can be adjusted, e.g., control
+rods)</li>
+<li>reactivity worth (the change in <span
+class="math inline">\(\rho\)</span> due to the introduction/removal of a
+specific component or material, e.g., a control rod)</li>
+<li>control rod (removable rods, blades, etc., made of neutron poisons
+like boron)</li>
+<li>chemical shim (neutron poisons like boron dissolved in the
+coolant)</li>
+<li>burnable poison (neutron poisons directly mixed with fuel)</li>
+<li>fission product yield <span
+class="math inline">\(\gamma_{\text{fp}}\)</span></li>
+<li>equilibrium xenon</li>
+</ul>
+<h2 id="before-lecture">Before Lecture</h2>
+<ul>
+<li>Read 10.1-10.3</li>
+</ul>
+<h2 id="after-lecture">After Lecture</h2>
+<h3 id="homework">Homework</h3>
+<p>The problems below may <em>look</em> very long, but the amount of
+number crunching should be reasonably small if you organize your
+calculations well. I highly recommend using a Python script or a
+spreadsheet so that values can be reused (or easily modified) at each
+step.</p>
+<ul>
+<li><p>[22.1] Consider the PWR described by Problem 4.6 in the book.
+We’ll walk through the basic steps that bring a reactor from cold
+shutdown conditions to criticality at full power conditions. Where
+needed, use cross sections listed in Table 3.2.</p>
+<ol type="a">
+<li>Compute the 4 factors for <span class="math inline">\(T_f = T_m =
+300\)</span> K (i.e., room temperature). Assume that the probability of
+non-leakage is <img 
+class="equation_image" 
+title="P_{NL} = 0.95" 
+src="/equation_images/P_%257BNL%257D%2520%253D%25200.95" 
+alt="LaTeX: P_{NL} = 0.95" 
+data-equation-content="P_{NL} = 0.95" 
+/> and
+compute the reactivity <img 
+class="equation_image" 
+title="\rho" 
+src="/equation_images/%255Crho" 
+alt="LaTeX: \rho" 
+data-equation-content="\rho" 
+/>. This
+reactivity is the <strong>excess reactivity</strong>, <span
+class="math inline">\(\rho_{\text{ex}}\)</span>, which is the core
+reactivity with all removable control (e.g., control rods and <a
+href="https://www.nuclear-power.com/glossary/boron-10/boric-acid-chemical-shim/">chemical
+shim</a>) completely removed.</li>
+<li>Suppose that the <strong>shutdown margin</strong> is -4% <span
+class="math inline">\(dk/k\)</span>, i.e., when all control rods are
+completely inserted, the core reactivity is -0.04. The total
+<strong>reactivity worth</strong> of these control rods is <span
+class="math inline">\(\Delta \rho = \rho_{\text{ex}} - 0.04\)</span>.
+What must <span
+class="math inline">\(\Sigma_{\gamma}^{\text{con}}\)</span> be in this
+<strong>cold shutdown</strong> state? You may want to re-read page
+244.<br />
+</li>
+<li>Assume that the partial insertion of control rods can be represented
+by a fraction <img 
+class="equation_image" 
+title="x" 
+src="/equation_images/x" 
+alt="LaTeX: x" 
+data-equation-content="x" 
+/> and that the
+corresponding macroscopic cross section is <span
+class="math inline">\(x\Sigma_{\gamma}^{\text{con}}\)</span>. This means
+that, as a function of <img 
+class="equation_image" 
+title="x" 
+src="/equation_images/x" 
+alt="LaTeX: x" 
+data-equation-content="x" 
+/>, the core
+reactivity should range from <span
+class="math inline">\(\rho_{\text{ex}}\)</span> (for <span
+class="math inline">\(x=0\)</span>) down to <span
+class="math inline">\(-0.04\)</span> (for <span
+class="math inline">\(x=1\)</span>). Determine <span
+class="math inline">\(x\)</span> so that our reactor is critical. We’ll
+call this <img 
+class="equation_image" 
+title="x_{\text{cc}}" 
+src="/equation_images/x_%257B%255Ctext%257Bcc%257D%257D" 
+alt="LaTeX: x_{\text{cc}}" 
+data-equation-content="x_{\text{cc}}" 
+/> (“cc” for
+cold critical).</li>
+<li>Next, the reactor coolant pumps are run until the coolant (and fuel)
+reach 600 K, i.e., <strong>hot zero-power</strong> conditions. You may
+assume the coolant density is 0.66 g/cm<span
+class="math inline">\(^3\)</span>. Recompute <span
+class="math inline">\(\rho\)</span> (with <span class="math inline">\(x
+= x_{\text{cc}}\)</span>).<br />
+This <img 
+class="equation_image" 
+title="\rho" 
+src="/equation_images/%255Crho" 
+alt="LaTeX: \rho" 
+data-equation-content="\rho" 
+/> is the
+<strong>temperature defect</strong>. Find <span
+class="math inline">\(x\)</span> so that our reactor is critical; we’ll
+call this <img 
+class="equation_image" 
+title="x_{hzp}" 
+src="/equation_images/x_%257Bhzp%257D" 
+alt="LaTeX: x_{hzp}" 
+data-equation-content="x_{hzp}" 
+/>.</li>
+<li>Finally, the reactor is brought to <strong>full power</strong>
+conditions, and the fuel temperature increases to 1200 K. Recompute
+<img 
+class="equation_image" 
+title="\rho" 
+src="/equation_images/%255Crho" 
+alt="LaTeX: \rho" 
+data-equation-content="\rho" 
+/> (with <span
+class="math inline">\(x = x_{\text{hzp}}\)</span>). This <span
+class="math inline">\(\rho\)</span> is the <strong>power
+defect</strong>. Determine <span class="math inline">\(x =
+x_{\text{fp}}\)</span>.</li>
+</ol></li>
+<li><p>[22.2] Consider the hot, full-power conditions from part (e) of
+Problem 22.1.<br />
+For PWRs, excess reactivity is most often balanced by the use of boric
+acid dissolved in the coolant, not by partial insertion of control rods
+(which would lead to asymmetric power distributions along the length of
+the fuel elements). Now, set <img 
+class="equation_image" 
+title="x = 0" 
+src="/equation_images/x%2520%253D%25200" 
+alt="LaTeX: x = 0" 
+data-equation-content="x = 0" 
+/>
+and assume that <span class="math inline">\(\Sigma_{\gamma}^m = N_H
+\sigma^H_{a} + N_O \sigma^O_{a} + N_B \sigma^B_{a}\)</span>.</p>
+<ol type="a">
+<li>What concentration (in parts-per-million or ppm) of <span
+class="math inline">\({}^{10}\)</span>B in the water is needed to
+achieve criticality? Use cross sections listed in Table 3.2.</li>
+<li>Without doing the calculation, predict how <span
+class="math inline">\(\alpha_m\)</span> changes from part (e) of Problem
+22.1 to part (a) of this problem.</li>
+</ol></li>
+<li><p>[22.3] After several days at full power, we know that the
+concentration of <img 
+class="equation_image" 
+title="{}^{135}" 
+src="/equation_images/%257B%257D%255E%257B135%257D" 
+alt="LaTeX: {}^{135}" 
+data-equation-content="{}^{135}" 
+/>Xe reaches
+equilibrium values. Assume that the thermal flux in our PWR at full
+power is <img 
+class="equation_image" 
+title="\phi = 3 \times 10^{13}" 
+src="/equation_images/%255Cphi%2520%253D%25203%2520%255Ctimes%252010%255E%257B13%257D" 
+alt="LaTeX: \phi = 3 \times 10^{13}" 
+data-equation-content="\phi = 3 \times 10^{13}" 
+/>
+1/cm<img 
+class="equation_image" 
+title="^2" 
+src="/equation_images/%255E2" 
+alt="LaTeX: ^2" 
+data-equation-content="^2" 
+/>-s.</p>
+<ol type="a">
+<li>Determine the equilibrium concentration of <span
+class="math inline">\({}^{135}\)</span>Xe.</li>
+<li>Compute the corresponding macroscopic cross section <span
+class="math inline">\(\Sigma_{a}^{\text{fp}}\)</span>. Use cross
+sections listed in Table 3.2.</li>
+<li>With <img 
+class="equation_image" 
+title="x = x_{\text{fp}}" 
+src="/equation_images/x%2520%253D%2520x_%257B%255Ctext%257Bfp%257D%257D" 
+alt="LaTeX: x = x_{\text{fp}}" 
+data-equation-content="x = x_{\text{fp}}" 
+/>,
+recompute <img 
+class="equation_image" 
+title="\rho" 
+src="/equation_images/%255Crho" 
+alt="LaTeX: \rho" 
+data-equation-content="\rho" 
+/> with the equilibrium
+<img 
+class="equation_image" 
+title="{}^{135}" 
+src="/equation_images/%257B%257D%255E%257B135%257D" 
+alt="LaTeX: {}^{135}" 
+data-equation-content="{}^{135}" 
+/>Xe. This reactivity is
+called the <strong>equilibrium xenon worth</strong>.</li>
+<li>If the reactor were shutdown, the <span
+class="math inline">\({}^{135}\)</span>Xe concentration grows because it
+is no longer being absorbed, peaks at 11.3 hours after shutdown, and
+then diminishes with decay. Repeat (c) with this peak concentration to
+compute the <strong>peak xenon worth</strong>. Does our reactor have
+sufficient excess reactivity to go back to full power?</li>
+</ol></li>
+</ul>

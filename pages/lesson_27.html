@@ -1,0 +1,80 @@
+<h1 id="lesson-27">Lesson 27</h1>
+<h2 id="learning-objectives">Learning Objectives</h2>
+<h3 id="macro-objectives">Macro Objectives</h3>
+<p>Students will be able to write down, to explain each term of a system
+of, and to solve numerically the system of first-order, ordinary
+differential equations that model the neutron density and the densities
+of delayed neutron precursors in time.</p>
+<h3 id="micro-objectives">Micro Objectives</h3>
+<ul>
+<li>Explain how neutrons can be produced relatively long after a fission
+has occured.</li>
+<li>Show how a delayed neutron precursor concentration <span
+class="math inline">\(C_i(t)\)</span> is related to the physical
+concentration of a fission product and its daughters.</li>
+<li>Provide representative values for the delayed neutron fraction of
+different fissile nuclides.</li>
+<li>Show that, in the one-group approximation, the inclusion of
+delayed-neutron precursors does not impact a steady-state system.</li>
+<li>Quantify how delayed neutrons impact the neutron lifetime.</li>
+<li>Use <code>odeint</code> or similar tools to solve numerically
+systems of first-order differential equations.</li>
+</ul>
+<h2 id="key-terms">Key Terms</h2>
+<ul>
+<li>delayed neutron precursor concentration <span
+class="math inline">\(C_i\)</span></li>
+<li>delayed neutron fraction <span
+class="math inline">\(\beta_i\)</span></li>
+<li>precursor group (indexed by the <span
+class="math inline">\(i\)</span> in <span
+class="math inline">\(C_i\)</span> and <span
+class="math inline">\(\beta_i\)</span>)</li>
+<li>average delayed neutron lifetime <span
+class="math inline">\(l_d\)</span></li>
+<li>average neutron lifetime <span
+class="math inline">\(\bar{l}\)</span></li>
+</ul>
+<h2 id="before-lecture">Before Lecture</h2>
+<ul>
+<li>Read Section 5.4.</li>
+<li>Read <a
+href="https://robertsj.github.io/me400_notes/lectures/Systems_Of_IVPs.html#SciPy&#39;s-odeint">these
+notes</a> on use of <code>odeint</code> for solving systems of
+initial-value problems.</li>
+</ul>
+<h2 id="after-lecture">After Lecture</h2>
+<h3 id="homework">Homework</h3>
+<ul>
+<li>[27.1] Problem 5.2 from the text.</li>
+<li>[27.2] Like Problem 5.16 from the text, but set <span
+class="math inline">\(\rho(t) = 0\)</span> for <span
+class="math inline">\(0 \leq t &lt; 1\)</span>, <span
+class="math inline">\(\rho(t) \pm 0.25\beta\)</span> (i.e., 0.25
+dollars) for <img 
+class="equation_image" 
+title="1 \leq t &lt; 6" 
+src="/equation_images/1%2520%255Cleq%2520t%2520%2526lt%253B%25206" 
+alt="LaTeX: 1 \leq t &lt; 6" 
+data-equation-content="1 \leq t &lt; 6" 
+/>, and
+<img 
+class="equation_image" 
+title="\rho(t) = 0" 
+src="/equation_images/%255Crho(t)%2520%253D%25200" 
+alt="LaTeX: \rho(t) = 0" 
+data-equation-content="\rho(t) = 0" 
+/> for <span
+class="math inline">\(6 \leq t \leq 10\)</span> s. By adding a second of
+<img 
+class="equation_image" 
+title="\rho(t) = 0" 
+src="/equation_images/%255Crho(t)%2520%253D%25200" 
+alt="LaTeX: \rho(t) = 0" 
+data-equation-content="\rho(t) = 0" 
+/> at the beginning, we
+can verify that the system remains in steady state. Remember, you need
+to find the appropriate precursor concentrations for steady state to use
+for initial conditions. You may assume that <span
+class="math inline">\(n(0) = 1\)</span> for simplicity.</li>
+</ul>

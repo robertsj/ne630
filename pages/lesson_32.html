@@ -1,0 +1,89 @@
+<h1 id="lesson-32">Lesson 32</h1>
+<h2 id="learning-objectives">Learning Objectives</h2>
+<h3 id="macro-objectives">Macro Objectives</h3>
+<p>Students will be able to develop solutions for the one-speed
+diffusion equation in slab geometry for single-region systems with
+constant <img 
+class="equation_image" 
+title="D" 
+src="/equation_images/D" 
+alt="LaTeX: D" 
+data-equation-content="D" 
+/>, constant <span
+class="math inline">\(\Sigma_a\)</span>, and an arbitrary volumetric
+source term <img 
+class="equation_image" 
+title="s(x)" 
+src="/equation_images/s(x)" 
+alt="LaTeX: s(x)" 
+data-equation-content="s(x)" 
+/>.</p>
+<h3 id="micro-objectives">Micro Objectives</h3>
+<ul>
+<li>Explain what is meant by “slab” geometry and under which conditions
+such a model is of use.</li>
+<li>Describe what “homogeneous” and “particular” solutions are and the
+basic techniques used to find them.</li>
+<li>Verify that a solution <img 
+class="equation_image" 
+title="\phi(x)" 
+src="/equation_images/%255Cphi(x)" 
+alt="LaTeX: \phi(x)" 
+data-equation-content="\phi(x)" 
+/>
+satisfies the diffusion equation.</li>
+<li>Verify that a solution <img 
+class="equation_image" 
+title="\phi(x)" 
+src="/equation_images/%255Cphi(x)" 
+alt="LaTeX: \phi(x)" 
+data-equation-content="\phi(x)" 
+/>
+preserves neutron balance over an arbitrary volume.</li>
+</ul>
+<h2 id="key-terms">Key Terms</h2>
+<ul>
+<li>diffusion length</li>
+<li>method of undetermined coefficients</li>
+<li>homogeneuous solution</li>
+<li>particular solution</li>
+</ul>
+<h2 id="before-lecture">Before Lecture</h2>
+<p>You are responsible for doing the following:</p>
+<ul>
+<li>Read Section 6.3.</li>
+<li>Although we’ll review some aspects of solving second-order ODEs over
+the next several lessons, you should be generally familiar with solving
+such equations, especially when the equation has “constant
+coefficients.” Here’s <a
+href="https://tutorial.math.lamar.edu/Classes/DE/IntroSecondOrder.aspx">one
+resource</a> that may help you refresh what you once learned.</li>
+</ul>
+<h2 id="after-lecture">After Lecture</h2>
+<h3 id="homework">Homework</h3>
+<ul>
+<li><p>[32.1] Consider a finite, homogeneous slab over <span
+class="math inline">\(x \in [-a, a]\)</span>, with a source <span
+class="math inline">\(s(x) = s_0 \cos(\pi x / (2a))\)</span> [1/cm<span
+class="math inline">\(^3\)</span>-s].</p>
+<ol type="a">
+<li>Determine the neutron flux <span
+class="math inline">\(\phi(x)\)</span> assuming it vanishes at the
+boundaries.</li>
+<li>For <img 
+class="equation_image" 
+title="D = 0.84" 
+src="/equation_images/D%2520%253D%25200.84" 
+alt="LaTeX: D = 0.84" 
+data-equation-content="D = 0.84" 
+/> [cm], <span
+class="math inline">\(\Sigma_a = 2.1\cdot 10^{-4}\)</span>, <span
+class="math inline">\(a = 10\)</span> cm, and <span
+class="math inline">\(s_0 = 1\)</span> [1/cm<span
+class="math inline">\(^3\)</span>-s], plot both <span
+class="math inline">\(\phi(x)\)</span> and <span
+class="math inline">\(\vec{J}\cdot \hat{i} = J_x(x)\)</span>.</li>
+<li>Verify neutron balance over slab by computing the total source rate,
+total absorption rate, and total leakage rate.</li>
+</ol></li>
+</ul>

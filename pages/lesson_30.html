@@ -1,0 +1,97 @@
+<h1 id="lesson-30">Lesson 30</h1>
+<h2 id="learning-objectives">Learning Objectives</h2>
+<h3 id="macro-objectives">Macro Objectives</h3>
+<p>Students will be able to show that neutrons are conserved (or not) in
+a spatial volume given the neutron flux and appropriate cross-section
+data.</p>
+<h3 id="micro-objectives">Micro Objectives</h3>
+<ul>
+<li>Write down, in plain English, a statement that describes neutron
+balance in a control volume.</li>
+<li>Explain what the neutron current <span
+class="math inline">\(\vec{J}\)</span> represents. Note that a vector
+<img 
+class="equation_image" 
+title="\vec{x}" 
+src="/equation_images/%255Cvec%257Bx%257D" 
+alt="LaTeX: \vec{x}" 
+data-equation-content="\vec{x}" 
+/> can also be written <span
+class="math inline">\(\mathbf{x}\)</span>.</li>
+<li>Given a neutron flux <span
+class="math inline">\(\phi(\vec{r})\)</span> and a diffusion coefficient
+<img 
+class="equation_image" 
+title="D(\mathbf{r})" 
+src="/equation_images/D(%255Cmathbf%257Br%257D)" 
+alt="LaTeX: D(\mathbf{r})" 
+data-equation-content="D(\mathbf{r})" 
+/>, compute the neutron
+current.</li>
+<li>Integrate the neutron continuity equation (Lewis, Eq. (6.10)) or the
+neutron diffusion equation (Lewis, Eq. (6.12)) over a control
+volume.</li>
+<li>Describe how the neutron diffusion equation is similar to and
+different from other conservation equations in engineering.</li>
+</ul>
+<h2 id="key-terms">Key Terms</h2>
+<ul>
+<li>leakage</li>
+<li>diffusion coefficient</li>
+<li>Fick’s law</li>
+<li>gradient (of a function), <span class="math inline">\(\vec{\nabla}
+f\)</span></li>
+<li>divergence (of a vector), <span class="math inline">\(\vec{\nabla}
+\cdot \vec{v}\)</span></li>
+<li>Laplacian (of a function), <span class="math inline">\(\vec{\nabla}
+f = \vec{\Delta} f\)</span></li>
+</ul>
+<h2 id="before-lecture">Before Lecture</h2>
+<p>You are responsible for doing the following:</p>
+<ul>
+<li>Read Sections 6.1 and 6.2, and <strong>take notes</strong>,
+<strong>upload your notes</strong> by 1 pm (before lecture), and
+<strong>bring these to class</strong>. On the Lesson 7 page, I provided
+<a
+href="https://k-state.instructure.com/courses/144758/files/33983345/download?download_frd=1">this
+example</a> of notes I took while reading Sections 3.1–3.3. In your
+notes, include questions you have as you read related to vocabulary and
+symbols, and then make an effort to answer your questions. As an
+example, if you get to Eq. (6.10) and don’t recognize <span
+class="math inline">\(\vec{\nabla}\)</span>, then you need to review
+your MATH 222 materials and add the appropriate definitions, examples,
+etc., to your notes. This is the standard of preparation I expect for
+the rest of the semester.</li>
+</ul>
+<h2 id="after-lecture">After Lecture</h2>
+<h3 id="homework">Homework</h3>
+<ul>
+<li>[30.0] Notes (4 points for proper submissions during a given
+week).</li>
+<li>[30.1] Consider a cubic, homogeneous system defined for <span
+class="math inline">\(x \in [-1, 1]\)</span>, <span
+class="math inline">\(y \in [-1, 1]\)</span>, and <span
+class="math inline">\(z \in [-1, 1]\)</span> characterized by a
+diffusion coefficient <img 
+class="equation_image" 
+title="D" 
+src="/equation_images/D" 
+alt="LaTeX: D" 
+data-equation-content="D" 
+/> and
+absorption cross section <img 
+class="equation_image" 
+title="\Sigma_a" 
+src="/equation_images/%255CSigma_a" 
+alt="LaTeX: \Sigma_a" 
+data-equation-content="\Sigma_a" 
+/>.
+For some (unknown) neutron source distribution <span
+class="math inline">\(s(\vec{r})\)</span>, suppose the steady-state
+neutron flux is <span class="math inline">\(\phi(\vec{r}) = \phi(x, y,
+z) = (1-x^2)(1-y^2)\)</span>. Compute the (1) total absorption rate in
+the system and (2) the leakage through each of its 6 faces. Assuming
+that the medium is nonmultiplying, evaluate <span
+class="math inline">\(\int^1_{-1}\int^1_{-1}\int^1_{-1}
+s(x,y,z)dxdydz\)</span>.</li>
+</ul>

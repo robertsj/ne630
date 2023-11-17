@@ -58,7 +58,8 @@ You are responsible for doing the following:
        determined by a system of linear equations.  Define this system.
     b. Use `numpy.linalg.solve` (or, if you prefer, solve the system 
        by hand) for $D^I = 1.0$, $\Sigma^I_a = 0.2$, $D^{II} = 1.5$,
-       $\Sigma_a^{II} = 0.02$, $s^I = 1$, and $s^{II} = 0$, and plot
+       $\Sigma_a^{II} = 0.02$, $s^I = 1$, $s^{II} = 0$, and
+       $a=50$, and plot
        the resulting flux.
 
   - [33.2] Consider a source-free slab of width $a$.

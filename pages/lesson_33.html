@@ -1,0 +1,115 @@
+<h1 id="lesson-33">Lesson 33</h1>
+<h2 id="learning-objectives">Learning Objectives</h2>
+<h3 id="macro-objectives">Macro Objectives</h3>
+<p>Students will be able to define and solve the equations representing
+multi-region, source-driven, slab systems subject to vacuum and
+reflecting boundary conditions.</p>
+<h3 id="micro-objectives">Micro Objectives</h3>
+<ul>
+<li>Explain in plain English what is meant by “partial current.”</li>
+<li>List the quantities involved in the diffusion equation that must be
+continuous throughout the domain.</li>
+<li>For a homogeneous region within a slab system of one or more
+regions, determine the particular solution given the source term <span
+class="math inline">\(s(x)\)</span> in that region.</li>
+<li>Given the homogeneous and particular solutions for each of <span
+class="math inline">\(N\)</span> regions of a heterogeneous slab and the
+boundary conditions at the left and ride surfaces of the slab, write
+down the system of <img 
+class="equation_image" 
+title="2N" 
+src="/equation_images/2N" 
+alt="LaTeX: 2N" 
+data-equation-content="2N" 
+/> equations
+needed to determine each constant of integration.</li>
+<li>Use <code>numpy.linalg.solve</code> or other tools (perhaps from
+MATH 551) to solve linear systems.</li>
+</ul>
+<h2 id="key-terms">Key Terms</h2>
+<ul>
+<li>boundary condition</li>
+<li>vacuum boundary condition</li>
+<li>reflective boundary condition</li>
+<li>albedo boundary condition</li>
+<li>extrapolated flux boundary condition</li>
+<li>continuity condition</li>
+<li>partial current</li>
+<li>surface source</li>
+</ul>
+<h2 id="before-lecture">Before Lecture</h2>
+<p>You are responsible for doing the following:</p>
+<ul>
+<li>Read Section 6.4.</li>
+<li>Review how to solve linear systems. As I’ve mentioned, I’m usually
+against doing pages of algebra just to find expressions for the
+constants of integration when solving ODEs (unless the resulting
+expressions are of some unique value—and that’s rare in my experience).
+Thus, I strongly recommend the use of numerical tools when appropriate,
+and for solving matrix systems, I recommend <a
+href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.solve.html">NumPy</a>.</li>
+</ul>
+<h2 id="after-lecture">After Lecture</h2>
+<h3 id="homework">Homework</h3>
+<ul>
+<li><p>[33.1] Consider a slab of width <span
+class="math inline">\(a\)</span> divided into two, equal-sized regions
+having unique but constant <img 
+class="equation_image" 
+title="D" 
+src="/equation_images/D" 
+alt="LaTeX: D" 
+data-equation-content="D" 
+/>, <span
+class="math inline">\(\Sigma_a\)</span>, and <span
+class="math inline">\(s\)</span>. The first region extends from <span
+class="math inline">\(x=0\)</span> to <span
+class="math inline">\(x=a/2\)</span> and is subject to reflection at its
+left boundary. The second region is subject to vacuum at its right
+boundary.</p>
+<ol type="a">
+<li>The full solution (after determining the particular solution)
+includes 4 constants of integration determined by a system of linear
+equations. Define this system.</li>
+<li>Use <code>numpy.linalg.solve</code> (or, if you prefer, solve the
+system by hand) for <img 
+class="equation_image" 
+title="D^I = 1.0" 
+src="/equation_images/D%255EI%2520%253D%25201.0" 
+alt="LaTeX: D^I = 1.0" 
+data-equation-content="D^I = 1.0" 
+/>,
+<img 
+class="equation_image" 
+title="\Sigma^I_a = 0.2" 
+src="/equation_images/%255CSigma%255EI_a%2520%253D%25200.2" 
+alt="LaTeX: \Sigma^I_a = 0.2" 
+data-equation-content="\Sigma^I_a = 0.2" 
+/>, <span
+class="math inline">\(D^{II} = 1.5\)</span>, <span
+class="math inline">\(\Sigma_a^{II} = 0.02\)</span>, <span
+class="math inline">\(s^I = 1\)</span>, <span
+class="math inline">\(s^{II} = 0\)</span>, and <span
+class="math inline">\(a=50\)</span>, and plot the resulting flux.</li>
+</ol></li>
+<li><p>[33.2] Consider a source-free slab of width <span
+class="math inline">\(a\)</span>. An incident partial current of <span
+class="math inline">\(J^L_{in}\)</span> enters at the left boundary,
+while the right boundary is adjacent to vacuum.</p>
+<ol type="a">
+<li><p>Determine the reflection coefficient <span
+class="math inline">\(R = J^L_{out}/J^L_{in}\)</span> and the
+transmission coefficient <span class="math inline">\(T =
+J^R_{out}/J^L_{in}\)</span>.</p></li>
+<li><p>Given <img 
+class="equation_image" 
+title="J^L_{in}" 
+src="/equation_images/J%255EL_%257Bin%257D" 
+alt="LaTeX: J^L_{in}" 
+data-equation-content="J^L_{in}" 
+/>, <span
+class="math inline">\(R\)</span>, and <span
+class="math inline">\(T\)</span>, what is <span
+class="math inline">\(\Sigma_a \int^a_0 \phi(x) dx\)</span>?</p></li>
+</ol></li>
+</ul>

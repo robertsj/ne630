@@ -13,8 +13,7 @@ in the multi-group formalism for an infinite, homogeneous system.
 
  - Describe the spectrum equation as linear system of equations (i.e., $\mathbf{Ax}=\mathbf{b}$)
  - Describe the spectrum equation as an eigenvalue problem (i.e., $\mathbf{Ax}=\lambda\mathbf{x}$)
- - Plot multigroup functions (e.g., cross sections and fluxes) as functions of energy.
- - 
+ - Plot multigroup functions (e.g., cross sections and fluxes) as functions of energy and lethargy.
 
 ## Key Terms
 
@@ -30,14 +29,5 @@ in the multi-group formalism for an infinite, homogeneous system.
 
 ### Homework
 
- - Write the two-group equations *without the multiplication factor* in terms of a
-   unit source in the fast group.
-
- - For those same equations, find $\phi_1$ and $\phi_2$.  
-
- - Use $\phi_1$ and $\phi_2$ to estimate $k_{\infty}$ as "gains over losses."
-
- - How do $\phi_1/\phi_2$ and $k_{\infty}$ from this fixed-source problem compare to 
-   the eigenvalue problem discussed in class?
-
+ - See Canvas for problem statement.
  

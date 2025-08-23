@@ -40,7 +40,8 @@ Read sections 1.6--1.7 in the book.
 
 ### Homework
 
- - Problems 1.11, 1.13, and 1.20
+See Canvas for the problem statements.
+
 
 
 

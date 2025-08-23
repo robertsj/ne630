@@ -15,25 +15,19 @@ other factors on reactivity.
 
 ### Micro Objectives
 
- - Explain the relationship between reactivity and the multiplication factor.
  - Explain why the fuel temperature coefficient (FTC) is usually strongly negative.
  - Explain how the moderator (or coolant) temperature coefficient (MTC) depends on geometry.
  - Explain how the fuel and coolant temperature coefficients for a sodium-cooled fast reactor differ from 
    those of a light-water reactor.
- - Describe how excess reactivity is balanced by the introduction of control (i.e., neutron "poisons")
+
 
 ## Key Terms
 
+ - fuel temperature coefficient (FTC)
  - moderator (or coolant) temperature coefficient (MTC) 
  - power coefficient of reactivity (PCR)
  - isothermal temperature coefficient
- - power defect
- - excess reactivity
- - shutdown margin
- - cold shutdown
- - cold critical
- - hot zero power
- - hot full power
+
 
 ## Before Lecture
 
@@ -46,4 +40,5 @@ other factors on reactivity.
 
 ### Homework
 
+See Canvas.
 

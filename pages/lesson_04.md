@@ -46,7 +46,7 @@ Read sections 2.1 and 2.2 in the book.
 
 ### Homework
 
- - Problems 2.2, 2.4, 2.8
+See Canvas for the problem statements.
 
 ### Extra Practice
 

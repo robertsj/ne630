@@ -32,11 +32,7 @@ Students will be able to...
 
 ### Homework
 
- - Reproduce Figure 3.2, and add a curve for U enriched to 4%.
- - For the 4% values, compute the expected value of $\eta(E)$ 
-   assuming that  (a) $p(E)$ is uniform and (b) $p(E) = C/E$ for 
-   energies $10^{-3} < E < 10^{7}$ eV.  (Note: you need to 
-   define $C$ using the properties of probability density functions).
+See Canvas for problem statement.
 
 
 

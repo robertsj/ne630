@@ -10,7 +10,7 @@ Students will be able to...
 
 ### Micro Objectives
 
- - For a given target nuclide, predict whether elastic or inelastic scattering dominates the slowing of neutrons.
+ - For a given target nuclide and neutron energy, predict whether elastic or inelastic scattering dominates the slowing of neutrons.
  - Compute the minimum, maximum, and expected outgoing energy of a neutron of energy $E$ after it scatters elastically (and isotropically) off of a given target nucleus.
  - Compute the probability that a neutron of energy $E$ loses a given fraction of its energy following an elastic collision.
  - Derive the slowing down decrement $\xi$ for a material with multiple nuclides.
@@ -34,7 +34,7 @@ Students will be able to...
 
 ### Homework
 
- - Problems 2.14 and 2.18 from the book.  
+See Canvas for problem statement. 
 
 
 

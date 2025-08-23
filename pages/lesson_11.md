@@ -34,23 +34,6 @@ Students will be able to approximate the flux distribution of thermal neutrons i
 
 ### Homework
 
- - For this problem, you will define and plot a complete spectrum for an infinite, homogeneous system 
- using the simple approximations we've examined.  Let 
- 
-$$
-\phi_{\infty}(E) =
-  \begin{cases}
-    \frac{\chi(E)}{\Sigma_t(E)}      & \quad  10^{5} < E < 10^7 (eV) \\
-    \frac{C_I}{E}                   & \quad  1 < E  \leq 10^{5} \\
-    C_T E e^{-E/kT}                 & \quad  10^{-3} \leq 1 \, , \\
-  \end{cases}
-$$
-
-where $C_I$ and $C_T$ are constants,  $k = 8.617 \cdot 10^{-5}$ [eV/K], and T = 300 K.
-Because our fast spectrum ignores scattering, *all* neutrons born 
-from fission must cross the energy $E=0.1$ MeV barrier.  You can use this fact to define $C_I$.
-To define $C_T$, we shall assume that the half of the neutron flux is thermal (i.e., $E < 1$ eV).
-This 1-to-1 ratio of the integrated thermal and non-thermal fluxes is reasonably 
-typical of a thermal-spectrum reactor.  Is the flux continuous at 1 eV?
+See Canvas for problem statement.
 
 

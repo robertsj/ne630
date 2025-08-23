@@ -43,8 +43,7 @@ Students will be able to approximate the flux spectra $\phi(E)$ of fast neutrons
 
 ### Homework
 
- - 3.1, 3.4, 3.7
-
+See Canvas for problem statement.
 
 
 

@@ -12,7 +12,7 @@ Students will be able to...
 
  - Provide an example fission reaction and compute its Q value.
  - List three forms of "nuclear" power.
- - List the type and fraction o particles emitted from fission.
+ - List the type and fraction of particles emitted from fission.
  - Construct a mathematical model for the multiplication of neutrons.
  - Explain criticality, subcriticality, and supercriticality.
  - Estimate the heat generation rate of spent nuclear fuel.
@@ -45,10 +45,6 @@ Read sections 1.4--1.5 in the book.
 
 ### Homework
 
- - Problem 1.9 from the book.
- - Lewis references about 40 fission fragment pairs that emerge 
-   from fission.  For fission of U-235, find three of these 
-   pairs, write the reaction, and compute Q value.
-
+See Canvas for the problem statements.
 
 

@@ -47,10 +47,10 @@ While reading, define the key terms in your notes and consider the learning obje
 
 ### Homework
 
-Do problems 1.2, 1.5, and 1.6.  For 1.6, are the numbers in the problem statement consistent with the 20 tons of nuclear fuel per year and the 10,000 tons of coal per day for a roughly 3000 MW power plant?  State your assumptions!
+See Canvas for the problem statements.
 
-Note, these problems form part of the week 1 homework.  You can solve them and upload them to Canvas alone or combine all problems.  Typically, I'll have the assignment due on the Friday following the week in which the content is covered (e.g., the first homework will be due Friday on our second week).  Because the problem value and number of problems will vary, assignment values may vary (though I'll aim for uniformity!).
+### Enrichment
 
-**Enrichment**: Check out this [article](https://arxiv.org/pdf/1511.07427.pdf) about nuclear batteries, another example of nuclear power.  How do the energy density and power density of nuclear and coal power line up on Figure 2 of the paper (which shows the energy density of various batteries against their power densities in a format known as a *Ragone plot*.)
+Check out this [article](https://arxiv.org/pdf/1511.07427.pdf) about nuclear batteries, another example of nuclear power.  How do the energy density and power density of nuclear and coal power line up on Figure 2 of the paper (which shows the energy density of various batteries against their power densities in a format known as a *Ragone plot*.)
 
 

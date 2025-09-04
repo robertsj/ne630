@@ -33,11 +33,8 @@ Students will be able to approximate the flux spectra $\phi(E)$ of epithermal ne
 
 ### Homework
 
- - 3.6
- - Use the NR approximation to approximate the flux spectrum for 
-   a 1000-to-1 mixture of ${}^1$H-to-${}^{238}$U (by atom) and plot it over $1 < E < 100$ eV.   
-   Repeat for 100-to-1, and 10-to-1 mixtures.  How does the ratio of moderator to fuel 
-   impact the energy self-shielding effect?
+See Canvas for problem statement.
+
 
 
 

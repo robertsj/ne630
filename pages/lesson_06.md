@@ -6,41 +6,46 @@ Students will be able to...
 
 ### Macro Objectives
 
- - Compute spectrum-weighted values of energy-dependent functions.
+
+ - Describe the range of neutron energies typical of nuclear reactors and the likely interactions neutrons undergo throughout that range.
 
 ### Micro Objectives
 
- - Explain what random variables are.
+ - Approximate $\sigma_x(E)$ directly from resonance data
+ - Specify the range of energies over which neutron interactions occur in nuclear reactors
+ - Provide examples of threshold reactions
  - List the properties of a probability density function.
  - Provide examples of common distributions.
  - Compute the expected value $E[f(x)]$ for $x \sim p(x)$.
- - For $y = f(x)$, find $p(y)$ given $p(x)$.
- - Use software functions to sample values from common
-   distributions.
 
 ## Key Terms
 
+ - resonance cross section
+ - quantum state
+ - energy level
+ - energy spectrum
+ - fission spectrum
+ - Maxwell-Boltzmann distribution
+ - $1/v$ cross section
+- Breit Wigner formula
+ - width $\Gamma$, $\Gamma_n$, $\Gamma_{\gamma}$
+ - wavelength $\lambda$
+ - Doppler broadening
+ - threshold reactions
  - random variable
  - probability density function (pdf)
  - cumulative density function (cdf)
  - expectation value
- - mean
- - variance
- - standard deviation
- - uniform distribution $\text{U}(x; a, b)$.
- - exponential distribution $\text{Exp}(x; \Sigma)$.
- - normal distribution $\text{N}(x; \mu, \sigma^2)$.
 
 ## Before Lecture
 
-Skim Chapters 2 and 4 of [Probability, Statistics, and Data: A fresh approach using R](https://mathstat.slu.edu/~speegle/_book/continuousrandomvariables.html).  The computational examples are in the `R` language, but NumPy and SciPy provide similar functionality.
+Nothing extra; we'll look at Sections 2.3 and 2.4 in more detail along with a deeper dive into the available cross-section data.
 
 ## After Lecture
 
 ### Homework
 
- - Problems 2.5 and 2.6.
-
+See Canvas for the problem statements.
 
 
 

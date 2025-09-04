@@ -1,0 +1,64 @@
+<h1 id="homework-32">Homework 32</h1>
+<p>Almost everyone got to the right set of equations from the boundary
+conditions but a few folks didn’t get that <span
+class="math inline">\(C_1=C_2=0\)</span>.</p>
+<h1 id="homework-33">Homework 33</h1>
+<p>For 33.1, most folks did well. Some botched the boundary conditions.
+Write these out by hand! SymPy is good for double checking (and for nice
+looking math), but you need to be able to set these up on paper. When
+plotting multiple-region fluxes, be sure not to plot the flux for one
+region over x values that belong to another region!</p>
+<p>For 33.2, a few folks were concerned by the “messy” results. Recall
+that, for a single-region slab, we will always have a system like <span
+class="math inline">\(aC_1 + bC_2 = s_1\)</span> and <span
+class="math inline">\(cC_1 + dC_2 = s_2\)</span> from the boundary
+conditions. Yes, the <img 
+class="equation_image" 
+title="a, b, c, d" 
+src="/equation_images/a%252C%2520b%252C%2520c%252C%2520d" 
+alt="LaTeX: a, b, c, d" 
+data-equation-content="a, b, c, d" 
+/> and
+maybe <img 
+class="equation_image" 
+title="s_1" 
+src="/equation_images/s_1" 
+alt="LaTeX: s_1" 
+data-equation-content="s_1" 
+/> and <span
+class="math inline">\(s_2\)</span> depend on <span
+class="math inline">\(D\)</span>, <span
+class="math inline">\(\Sigma_a\)</span>, or <span
+class="math inline">\(L\)</span>, but we don’t have to write all that
+out! So, as long as you can get to, e.g., <span
+class="math inline">\(C_1 = (d s_2 -b s_2)/(a d - bc)\)</span>, then you
+can can do integration, differention, numerical substitution, etc., all
+using the basic form <span class="math inline">\(\phi(x) = C_1 e^{x/L} +
+C_2 e^{-a/L} + \phi_p(x)\)</span>. In other words, you can evaluate
+<span class="math inline">\(J_{\mp}(x) = \phi(x)/4 \pm
+(D/2)d\phi/dx\)</span>.</p>
+<p>A handful of folks used <span class="math inline">\(\alpha =
+(1-2D/L)/(1+2D/L)\)</span> as defined by Eq. (6.41) in the text for
+<img 
+class="equation_image" 
+title="R" 
+src="/equation_images/R" 
+alt="LaTeX: R" 
+data-equation-content="R" 
+/>. Recall, though, Eq. (6.40) is
+for an <em>infinite</em> half space (Eq. 6.40 is the general definition
+for the albedo which is equivalent to the reflection coefficient). For
+our problem, we’d get <img 
+class="equation_image" 
+title="R \to \alpha" 
+src="/equation_images/R%2520%255Cto%2520%255Calpha" 
+alt="LaTeX: R \to \alpha" 
+data-equation-content="R \to \alpha" 
+/>
+in the limit that <img 
+class="equation_image" 
+title="a \to \infty" 
+src="/equation_images/a%2520%255Cto%2520%255Cinfty" 
+alt="LaTeX: a \to \infty" 
+data-equation-content="a \to \infty" 
+/>.</p>

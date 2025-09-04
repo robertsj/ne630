@@ -1,0 +1,34 @@
+\documentclass[tikz,border=6pt]{standalone}
+
+\usepackage{siunitx}
+\usepackage{xcolor}
+
+\input{cross_section_cartoon_shared.tex}
+
+
+
+\begin{document}
+\begin{tikzpicture}[scale=1]
+  % yz rectangle: width=Ly (y), height=Lz (z)
+  % We'll draw inside a clip so circles are truncated by the slab outline.
+  \begin{scope}
+    \clip (0,0) rectangle (\Ly,\Lz);
+    % Circles = intersection of each sphere with plane x = xcut
+    % r_i = sqrt( R^2 - (x_i - xcut)^2 ), clipped at 0
+    \foreach \x/\y/\z in \nuclei {
+      \pgfmathsetmacro{\dx}{\x - \xcut}
+      \pgfmathsetmacro{\rr}{sqrt(max(0, \R*\R - \dx*\dx))}
+      \ifdim \rr pt>0pt
+        \draw[cutring] (\y,\z) circle[radius=\rr cm];
+      \fi
+    }
+    \foreach \x/\y/\z in \nuclei {
+    \draw[nucleus2D, opacity=0.55, color=wcalerted] (\y,\z) circle[radius=\R cm];
+    }
+  \end{scope}
+  % Frame and labels
+  \draw[box] (0,0) rectangle (\Ly,\Lz);
+  \node[axislabel] at (\Ly/2,-0.25) {$\Delta y$};
+  \node[axislabel] at (-0.25,\Lz/2) {$\Delta z$};
+\end{tikzpicture}
+\end{document}

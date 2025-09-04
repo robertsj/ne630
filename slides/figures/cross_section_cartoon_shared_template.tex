@@ -1,0 +1,31 @@
+% shared cartoon info
+\usepackage{xcolor}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,backgrounds}
+
+\newcommand{\Lx}{1}
+\newcommand{\Ly}{3}
+\newcommand{\Lz}{3}
+\newcommand{\R}{%%%RADIUS%%%} 
+
+\def\nuclei{
+  %%%CENTERS%%%
+}
+
+\newcommand{\xcut}{%%%CUT%%%}
+
+% Colors (example)
+\definecolor{wcprimary}{RGB}{081,040,136}
+\definecolor{wcalerted}{RGB}{202,124,027}
+\definecolor{wcexample}{RGB}{000,134,086}
+
+\tikzset{
+  box/.style      = {line width=0.5pt, draw=black},
+  nucleus3D/.style= {draw=black, fill=black!15},
+  nucleus2D/.style= {draw=black, fill=black!25},
+  beam/.style     = {-{Latex[length=2.2mm,width=1.8mm]},  thick},
+  axislabel/.style= {font=\scriptsize},
+  yzplane/.style = {fill=black,fill opacity=0.15},
+  cutring/.style = {draw=black, dashed, line width=0.5pt, dash pattern=on 2pt off 1.2pt}
+}

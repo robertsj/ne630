@@ -1,0 +1,305 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+
+\usepackage{array}
+
+\usepackage{siunitx}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Neutron Attenuation \\
+       {\small\it NE 630 - Lecture 4}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+
+\begin{quote}
+\textcolor{wcprimary}{Characterize the attenuation of neutrons
+in a parallel beam or emitted from a point source as a function 
+of distance and material composition.}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review}
+
+Last time, we reviewed radioactivate decay and modeled how the number of nuclei $N_X$ of 
+of some species $X$ changes in time as 
+
+\begin{align*}
+ \frac{d N_X}{dt} &= \textcolor{wcalerted}{\text{loss rate}} + \textcolor{wcprimary}{\text{production rate}} \\
+                  &= \textcolor{wcalerted}{-\lambda_X N_X(t) + \ldots} + \textcolor{wcprimary}{R_X(t)} \, ,
+\end{align*}
+where the production $\textcolor{wcprimary}{R_X(t)}$ might represent an external source (e.g., production of a radioisotope like ${}^{99}$Mo in a reactor) or the decay of some other species $Y$ to $X$.  
+
+\vfill 
+
+The only losses considered now are from decay; however, we'll find that 
+some nuclides are also lost through transmutation (e.g., we can irradiate ${}^{98}$Mo to produce ${}^{99}$Mo through neutron capture).
+ 
+\pause 
+\vfill 
+
+{\bf Concept Check}: What are the units of   $dN_X/dt$,  $R_X(t)$, and $-\lambda_X N_X$?
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Neutronics}
+ 
+A major part of reactor physics is the {\it physics of neutrons}, sometimes 
+called {\bf neutronics}.  We're now a little familiar with 
+what neutrons do with nuclei, but how do they get from their place of birth
+to such reactions?
+
+\pause 
+\vfill 
+
+Some facts, assumptions, and implications : \\
+\begin{tabular}{c >{\raggedright\arraybackslash}p{7cm} >{\raggedright\arraybackslash}p{6cm}}
+ 1. & neutrons are neutral \pause
+    &  \textcolor{wcalerted}{no Coulombic interactions!} \\
+    \pause
+ 2. & neutrons travel in straight lines between interactions \pause
+    & \textcolor{wcalerted}{simulations are easy!} \\
+    \pause
+ 3. & upon exiting an interaction, a neutron's direction and energy 
+      are different \pause
+    & \textcolor{wcalerted}{otherwise, did it even interact?} \\
+    \pause
+ 4. & neutronic systems have enough neutrons such that {\bf averages} are 
+      useful \pause
+    &  \textcolor{wcalerted}{ {\bf continuum} models like neutron diffusion theory are justified!} \\
+    \pause
+ 5. & the neutron (number) density in these systems is much smaller than that of the surrounding 
+      medium \pause
+    &  \textcolor{wcalerted}{we can safely ignore neutron-neutron interactions!} \\
+    \pause
+ 6. & the surrounding medium is {\bf isotropic} \pause
+    &  \textcolor{wcalerted}{on the average, neutron paths through a {\bf homogeneous} medium are independent of angle} \\
+\end{tabular}
+
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{So How Dense is that Surrounding Medium?}
+
+The {\bf number density} of some species $X$ is defined as 
+\begin{equation*}
+  \boxed{n_X  =  \frac{ \rho_X N_A }{M_X}} \, ,
+\end{equation*}
+where
+\begin{itemize}
+  \item $n_X$: number density [$N_X$~\si{\per\cubic\centi\meter}]
+  \item $\rho_X$: mass density [\si{\gram} X \si{\per\cubic\centi\meter}]
+  \item $N_A$: Avogadro’s number [$N_X$~\si{\per\mole}]
+  \item $M_X$: molar mass [\si{\gram} X \si{\per\mole}]
+\end{itemize}
+and $N_X$ is to be read as ``number of [atoms|molecules|things] of X''.
+
+\vfill 
+\pause 
+
+\only<2>{%
+  \textcolor{wcalerted}{{\bf Important!} $N_X$ and X are rarely included in the units,
+  but doing so consistently will help you to avoid unit mismatches.}
+}
+
+\only<3>{%
+  {\bf Examples}: 
+  \begin{enumerate}
+   \item Compute $n_{{}^{27}\text{Al}}$ 
+     ($\rho_{{}^{27}\text{Al}} = 2.7~\si{\gram} ~ \textcolor{wcalerted}{{}^{27}\text{Al}} ~ \si{ \per \cubic\centi\meter}$)
+   \item Compute $n_{\text{H}}$ for our reactor's coolant by first 
+     computing (a) $n_{\text{H}_2\text{O}}$ and (b) $\rho_{H}$.
+  \end{enumerate}
+}
+
+\only<4>{%
+  {\bf Answers}: 
+  \begin{enumerate}
+   \item $n_{{}^{27}\text{Al}} = 6.02\cdot 10^{22} \, \si{ \per \cubic\centi\meter}$
+   \item $n_{\text{H}} = 6.69\cdot 10^{22} \, \si{ \per \cubic\centi\meter}$
+  \end{enumerate}
+}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{What Do Neutrons See?}
+
+\only<1>{
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_3D_x0p00.pdf}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_2D_x0p00.pdf}
+\end{minipage}
+}
+
+\only<2>{
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_3D_x0p25.pdf}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_2D_x0p25.pdf}
+\end{minipage}
+}
+
+\only<3>{
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_3D_x0p50.pdf}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_2D_x0p50.pdf}
+\end{minipage}
+}
+
+\only<4>{
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_3D_x0p75.pdf}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_2D_x0p75.pdf}
+\end{minipage}
+}
+
+\only<5>{
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_3D_x1p00.pdf}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.48\linewidth}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/cross_section_cartoon_2D_x1p00.pdf}
+\end{minipage}
+\pause 
+{\bf A Sneak Peak}: If each orange circle has a cross sectional area of $\sigma$,
+what does $6 \sigma / (\Delta_x \Delta_y \Delta_z)$ represent?  (6 is the number 
+of nuclei!)
+}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Counting Uncollided Neutrons}
+
+Suppose that 
+\begin{itemize}
+ \item the slice contains $N$ nuclei
+ \item each nucleus has a geometric cross sectional area of $\sigma$ [\si{cm^2}], which is called the {\bf microscopic cross section}
+ \item neutrons that pass through the area covered by any nucleus must interact and, hence, are removed from the parallel beam
+\end{itemize}
+
+The number of neutrons 
+impinging on the slice is $\Delta_y \Delta_z I_0$.  The number that emerge without interacting is
+
+\begin{equation*}
+\overbrace{I(\Delta_x)\, \Delta_y \Delta_z}^{\text{\# we keep}}
+= \overbrace{I_0\,\Delta_y \Delta_z}^{\text{\# we start with}}
+- \overbrace{I_0\,\Delta_y \Delta_z\;\underbrace{\vphantom{\Big(}\frac{N\sigma}{\Delta_y \Delta_z}}_{\text{blocked fraction}}}^{\text{\# we lose}} \, ,
+\end{equation*}
+or
+\begin{equation*}
+I(\Delta x) = I_0\!\left(1 - \frac{N\sigma}{\Delta_y \Delta_z}\right).
+\end{equation*}
+ 
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Neutron Attenuation}
+
+On the {\it average}, we expect $N = n\,\Delta_y \Delta_z\,\Delta_x$, so 
+ 
+\begin{equation*}
+ \dfrac{N\sigma}{\Delta_y \Delta_z} = n\sigma\,\Delta x \equiv \Sigma\,\Delta x \, ,
+\end{equation*}
+where $\Sigma [\si{cm^{-1}}]$ is the {\bf macroscopic cross section}.  Thus,
+\begin{equation*}
+   I(\Delta_x) \approx I_0\!\left(1 - \Sigma\,\Delta x\right) \, ,
+\end{equation*}
+and, in the usual manner, we let $\Delta_x \to 0$ to define
+\begin{equation*}
+\boxed{
+\frac{dI}{dx} = -\,\Sigma\, I(x)
+\quad\longrightarrow\quad
+I(x) = I_0\,e^{-\Sigma x} 
+} \, .
+\end{equation*}
+
+\vfill 
+\pause 
+
+\only<2>{
+\textcolor{wcalerted}{
+{\bf Important!} The product $\Sigma I(x)$ plays the same role in attenuation as does $\lambda N(t)$ in radioactive decay.  Just as $1/\lambda$ is the expected time for a radioactive nucleus to decay, $1/\Sigma$ is the expected distance a neutron travels before 
+interaction, i.e., the {\bf mean-free path}.}
+}
+ 
+
+\only<3>{
+{\bf Example}: Consider a thermal-neutron beam of intensity $I_0 = 10^{6}  \,\si{\per\centi\meter\squared\per\second}$ incident on an aluminum foil of thickness 0.05\,\si{\centi\meter}. If the measured intensity on the other side of the foil is $0.9949 I_0$, what is $\Sigma$?  What is $\sigma$?
+}
+ 
+\only<4>{
+{\bf Answer}: $\Sigma \approx 0.10 \, \si{\per\centi\meter}$ and $\sigma \approx 1.7$ b (assuming $n_{{}^{27}\text{Al}} $ from earlier)
+}
+\end{frame}
+
+
+\end{document}
+

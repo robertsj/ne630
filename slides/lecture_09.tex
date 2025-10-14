@@ -1,0 +1,238 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{The Slowing Down of Fast Neutrons \\
+       {\small\it NE 630 - Lecture 9}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{approximate the flux spectrum $\phi(E)$ of fast neutrons and epithermal neutrons subject to elastic collisions without absorption in infinite, homogeneous systems.}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review (and Preview)}
+
+Last time, we defined the energy-dependent
+{\bf reproduction factor}
+
+\begin{align*}
+  \eta(E) = \frac{\bar{\nu}(E) \Sigma_f(E)}{\Sigma_{a}(E)} \, 
+\tag{FNRP 3.3} 
+\end{align*}
+
+as a first step toward quantifying neutron balance.  We need $\eta > 1$ to have a chance at sustained chain nuclear reactions!
+
+
+\begin{figure}[h]
+    \centering
+    \resizebox{0.95\textwidth}{!}{\input{figures/eta_nat_20.pgf}}
+\end{figure}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review (and Preview)}
+
+ 
+More generally, we can write 
+
+\begin{align*}
+     \eta(E)  =  \frac{\phi(E) \bar{\nu}(E) \Sigma_f(E)}
+                   {\phi(E) \Sigma_{a}(E)} = \frac{R_{g}(E)}{R_a(E)} = \frac{\text{gains}(E)}{\text{losses}(E)} \,  ,
+\end{align*}
+where $R_a$ and $R_{g}$ are the neutron-absorption rate and neutron-generation rate densities.
+What do we get if we integrate the numerator and denominator over energy, i.e.,
+
+\begin{equation*}
+ \frac{\int^{\infty}_0  \phi( E) \bar{\nu}(E) \Sigma_f(E)  dE}
+                   {\int^{\infty}_0  \phi( E) \Sigma_{a}( E) dE} =  \, ?
+\end{equation*}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Whence $\phi(E)$?}
+
+The most fundamental way to characterize the 
+neutron population is the neutron density $n'''(E)$:
+\vfill 
+\begin{tabular}{rp{8cm}}
+  $n'''(E) dE =$  & expected number of neutrons per cm$^3$ with energies between 
+                  $E$ and $E+dE$.
+\end{tabular}
+
+\pause 
+\vfill 
+
+
+The neutron flux is defined as
+\begin{equation*}
+ \phi(E) = n'''(E) v(E) \, ,
+\end{equation*}
+where $v = \sqrt{2E/m_n}$. \pause  Then
+
+\vfill 
+
+\begin{tabular}{rp{8cm}}
+  $\phi(E) dE =$  & expected total distance traveled in 1 s by all neutrons with energies between
+                    $E$ and $E+dE$ in a 1 cm$^3$ volume\\
+  $\Sigma_t(E) \phi(E)  dE =$  & expected number of interactions per cm$^3$, per s experienced by 
+                    neutrons with energies between $E$ and $E+dE$.                 
+\end{tabular}
+ 
+
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Balancing Interactions}
+
+The total interaction rate density for neutrons of energy $E$ is 
+
+\begin{equation*}
+  R_t(E) = \Sigma_t(E) \phi(E)~\si{\per\cubic\centi\meter\per\second\per\electronvolt} \, .
+\end{equation*}
+
+
+\pause
+\vfill 
+ 
+Each interaction removes a neutron from energy E, and to balance the loss, we need neutrons 
+\textcolor{wcprimary}{(1) from another energy $E'$ to scatter to $E$}, 
+\textcolor{wcalerted}{(2) born from fission with energy $E$}, or 
+(3) born from some external source $s'''_{\text{ext}}(E)$:
+\begin{align*}
+\tag{like FNRP 3.15}
+ \Sigma_t(E) \phi(E) &= \textcolor{wcprimary}{\int^{\infty}_0 p(E'\to E)\Sigma_s(E') \phi(E') dE'} \\ 
+    &+ \textcolor{wcalerted}{ \chi(E) \int^{\infty}_0 \bar{\nu}(E')\Sigma_f(E') \phi(E') dE'} \\
+    &+ s'''_{\text{ext}}(E) \, .
+\end{align*}
+
+We call this the neutron {\bf spectrum equation}, and it comes directly from the 
+neutron diffusion equation by eliminating space and time dependence.
+
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Neutron Diffusion Equation}
+
+For reference, here's that beast of an equation from the course introduction:
+ 
+\begin{align*}
+\frac{1}{v} \frac{\partial \phi}{\partial t}
+ - \nabla D(\mathbf{r}, E) \nabla \phi 
+  &+ \Sigma_t(\mathbf{r}, E) \phi(\mathbf{r}, E, t) \\
+  &= \int^{\infty}_0 \Sigma_s(\mathbf{r}, E'\to E) \phi(\mathbf{r}, E', t) dE' \\
+  &+  \chi(E)  \int^{\infty}_0 \bar{\nu}(\mathbf{r}, E')\Sigma_f(\mathbf{r}, E') \phi(\mathbf{r}, E', t) dE' \\
+  &+ s'''_{\text{ext}}(\mathbf{r}, E, t) \, .
+\end{align*}
+ 
+With energy alone, we can tackle 4 of the 6 terms!
+ 
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Fast Spectrum}
+
+For $E > 0.1$ MeV, suppose that scattering interactions can be ignored and that our 
+only source of neutrons is from fission.  The 
+spectrum equation can be simplified to
+
+\begin{equation*}
+ \Sigma_t(E) \phi(E) \approx \chi(E) \int^{\infty}_0 \bar{\nu}(E')\Sigma_f(E') \phi(E') dE' \, , \qquad E > 0.1~\text{MeV} \, .
+\end{equation*}
+
+\vfill 
+\pause 
+
+{\bf Example}: How do we find $\phi(E)$?
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Epithermal Spectrum}
+
+In the absence of absorption and sources, the neutron flux spectrum is governed by 
+
+\begin{equation*}
+  \Sigma_s(E) \phi(E) = \int^{\infty}_0 p(E'\to E) \Sigma_s(E')\phi(E') dE' \, .
+  \tag{FNRP 3.21}
+\end{equation*}
+
+
+For elastic scattering governed by the familiar $p(E'\to E) = 1/[(1-\alpha)E']$, $\alpha E' \leq E \leq E'$, the resulting flux spectrum is 
+
+\begin{equation*}
+  \phi(E) = \frac{C}{\Sigma_s(E) E} \, .
+  \tag{FNRP 3.23}
+\end{equation*}
+
+Often, $\Sigma_s(E)$ is nearly constant, in which case $\textcolor{wcprimary}{\phi(E) = C/E}$, the well-known ``1-over-$E$'' spectrum.
+
+\pause 
+\vfill 
+
+{\bf Example}: Write FNRP 3.21 for the case of a purely hydrogeneous system.
+% 
+% The assumptions made limit this approximate spectrum to energies $1 \leq E \leq 10^{5}$ eV or so.  At higher energies, elastic scattering becomes anisotropic, inelastic scattering becomes important, and fission neutrons can contribute directly to the spectrum.  At lower energies, thermal motion of target nuclei can lead to "upscattering," which corresponds to a very different form for $p(E'\to E)$ and the associated spectrum.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Beocat}
+
+
+ 
+\end{frame}
+
+\end{document}
+

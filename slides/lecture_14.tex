@@ -1,0 +1,221 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{The Multigroup Method:  \\
+       The $k$-Eigenvalue Problem \\
+       {\small\it NE 630 - Lecture 14}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{estimate the multiplication factor and multigroup spectrum for 
+an infinite, homogeneous system.
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review: The Multigroup Equations}
+
+
+\begin{equation*}
+\boxed{
+ \Sigma_{t,g} \phi_g = 
+   \textcolor{wcprimary}{ \sum_{g'=1}^G \Sigma_{s,g\gets g'} \phi_{g'}} + 
+   \textcolor{wcalerted}{\chi_g \sum_{g'=1}^G \nu\Sigma_{f,g'}\phi_{g'}} + s_{g} \, , \quad g = 1, 2, \ldots, G 
+} \, 
+\end{equation*}
+
+{\small 
+\begin{equation*}
+\phi_g = \int_{E_g}^{E_{g-1}} \phi(E)\, dE 
+\qquad 
+\Sigma_{x,g} =
+\frac{ \displaystyle \int_{E_g}^{E_{g-1}} \Sigma_x(E)\,\phi(E)\, dE }
+     { \displaystyle \int_{E_g}^{E_{g-1}} \phi(E)\, dE }
+\qquad 
+\chi_g = \int_{E_g}^{E_{g-1}} \chi(E) dE 
+\end{equation*}
+
+% Group-to-group scattering (incident g' to outgoing g)
+\begin{equation*}
+\Sigma_{s,\,g \gets g'} =
+\frac{ \displaystyle \int_{E_g}^{E_{g-1}} dE \int_{E_{g'}}^{E_{g'-1}} dE'\,
+       \Sigma_s(E' \to E)\,\phi(E') }
+     { \displaystyle \int_{E_{g'}}^{E_{g'-1}} \phi(E')\, dE' } 
+\qquad s_g = \int_{E_g}^{E_{g-1}} s'''_{\text{ext}}(E)\, dE \, .
+\end{equation*}
+}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Group-to-Group Scattering}
+
+For energies above 1 eV, we can assume no upscattering so that
+$\sigma_s(E'\to E) = \sigma_s(E')p(E'\to E)$ where 
+\begin{equation*}
+ p(E'\to E) = 
+ \begin{cases}
+   \frac{1}{(1-\alpha)E'} & \alpha E' < E < E' \\
+   0 & \text{otherwise} \, .
+ \end{cases}
+\end{equation*}
+
+Then
+\begin{equation*}
+ \sigma_{s,\,g \gets g'} =
+\frac{ \displaystyle \int_{E_{g'}}^{E_{g'-1}} dE' \frac{\sigma_s(E')\phi(E')}{(1-\alpha)E'}            \int_{ \textcolor{wcprimary}{\max{(E_g, \alpha E')}}}^{\textcolor{wcalerted}{\min{(E_{g-1}, E')}}} dE\,
+        }
+     { \displaystyle \int_{E_{g'}}^{E_{g'-1}} \phi(E')\, dE' } \, .
+\end{equation*}
+By convention, if the inner integral (over $E$) has a lower bound $\textcolor{wcprimary}{\max{(E_g, \alpha E')}}$ greater than its upper bound $\textcolor{wcalerted}{\min{(E_{g-1}, E')}}$, the result is zero.
+
+\end{frame}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Example: Three Groups}
+
+Consider again Prof.~McNeil's tank of water with ${}^{252}$Cf emitting 10 n's \si{\per\cubic\centi\meter\per\second}. 
+Write down the set of algebraic equations we can use to find the multigroup fluxes for $E_0 = 10$ MeV, $E_1 = 0.1$ MeV, 
+$E_2 = 1$ eV, and $E_3 = 10^{-3}$ eV.
+
+\pause 
+\vfill 
+
+{\footnotesize
+{\it Answer}:  
+\begin{align*}
+   \Sigma_{t,1}\phi_1 &= \Sigma_{s,1\gets 1} \phi_1 + s_1 \\
+   \Sigma_{t,2}\phi_2 &= \Sigma_{s,2\gets 1} \phi_1 + \Sigma_{s,2\gets 1} \phi_2  \\
+   \Sigma_{t,3}\phi_3 &= \Sigma_{s,3\gets 1} \phi_1 + \Sigma_{s,3\gets 2} \phi_2 + \Sigma_{s,3\gets 3} \phi_3  \\
+\end{align*}
+
+or
+
+\begin{align*}
+   \Sigma_{r,1}\phi_1 &=  s_1 \\
+   \Sigma_{r,2}\phi_2 &= \Sigma_{s,2\gets 1} \phi_1  \\
+   \Sigma_{r,3}\phi_3 &= \Sigma_{s,3\gets 1} \phi_1 + \Sigma_{s,3\gets 2} \phi_2   \\
+\end{align*}
+where $\Sigma_{r, g} = \Sigma_{t, g} - \Sigma_{s, g\gets g}$ is the removal cross section.
+}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Example: Group-to-Group Scattering}
+
+Assuming energy bounds of $E_0 = 10$ MeV, $E_1 = 0.1$ MeV, 
+$E_2 = 1$ eV, and $E_3 = 10^{-3}$ eV, isotropic scattering in the CM system, and 
+a constant-in-energy scattering 
+cross section $\sigma_s(E) = 20$ b, compute 
+$\sigma_{s, g\gets 2}$ for ${}^1$H for $g=1, 2, 3$.
+
+\pause 
+\vfill 
+
+{\footnotesize
+{\it Answer}:  For a constant $\sigma_s(E) = \sigma_s$, $\phi(E) = 1/E$, and $\alpha = 0$, we have
+
+\begin{equation*}
+ \sigma_{s,\,g \gets g'} =
+\frac{ \displaystyle \sigma_s \int_{E_{g'}}^{E_{g'-1}} dE' \frac{1}{(E')^2} 
+      [\textcolor{wcalerted}{ \min(E_{g-1}, E') } - 
+       \textcolor{wcprimary}{ \cancelto{E_g}{\max{(E_g, \alpha E')}} } 
+       ] }    
+     { \displaystyle \int_{E_{g'}}^{E_{g'-1}} \frac{1}{E'} \, dE' } \, .
+\end{equation*}
+Here, $\textcolor{wcalerted}{ \min(E_{g-1}, E') } = E'$ if $g=g'$; otherwise, $g < g'$ (for downscatter), and 
+$\textcolor{wcalerted}{ \min(E_{g-1}, E') } = E_{g-1}$.  It then follows that
+\begin{align*}
+ \sigma_{s,1\gets 2} &= 0 \, (\text{no upscatter}) \\
+ \sigma_{s,2\gets 2} &= \sigma_0 \frac{\ln(E_1/E_2)+(E_2/E_1 - 1)}{\ln(E_1/E_2)} \approx 0.913\sigma_0 \\
+ \sigma_{s,3\gets 2} &= \sigma_0 \frac{(E_2-E_3)(1/E_2 - 1/E_1)}{\ln(E_1/E_2)} \approx 0.087\sigma_0 \, .
+\end{align*}
+Note that $\sum_{g=1}^{3} \sigma_s{s, g\gets 2} = \sigma_0$.
+}
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Example: A Source-Driven, Multiplying, Two-Group Problem}
+
+Often, the two-group formulation with $E_0 = 10$ MeV, $E_1 = 1$ eV, and $E_2 = 10^{-3}$
+is sufficient (as long as a proper $\phi(E)$ was used!).  For a source of $s_1$ neutrons \si{\per\cubic\centi\meter\per\second},
+use the data tabulated below to determine the two-group fluxes $\phi_1$ and $\phi_2$ (i.e., the non-thermal and thermal fluxes).
+
+\vfill 
+\begin{tabular}{lll}
+\toprule
+                        & $g = 1$                    & $g=2$ \\
+\midrule
+$\Sigma_{\gamma, g}$     & $2.04 \times 10^{-3}$    & $1.91 \times 10^{-2}$    \\
+$\Sigma_{f, g}$          & $2.96 \times 10^{-4}$    & $1.38 \times 10^{-2}$    \\
+$\bar{\nu}_g$   & $2.49$  &  $2.43$ \\
+$\Sigma_{s,1\gets g}$    & $7.21 \times 10^{-1}$  & $0$  \\
+$\Sigma_{s,2\gets g}$    & $4.27 \times 10^{-2}$  & $2.72 \times 10^{0}$ \\
+$v_g$ (m/s)                     & $1\times 10^{5}$    & $2\times 10^{3}$ \\
+\bottomrule
+\end{tabular}
+
+
+\pause 
+\vfill 
+
+{\small 
+{\it Answer:} $\phi_1 = 1288.5$ \si{\per\centi\meter\squared\per\second}
+and $\phi_2 = 1672.3$ \si{\per\centi\meter\squared\per\second}.  See full worked example on Canvas.
+}
+
+\end{frame}
+ 
+\end{document}
+

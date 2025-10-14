@@ -1,0 +1,266 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Understanding Cross-Section Data \\
+       {\small\it NE 630 - Lecture 6}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+
+\begin{quote}
+\textcolor{wcprimary}{Access and inspect differential cross sections using OpenMC and map features of these cross sections to the underlying nuclear physics.}
+\end{quote}
+
+\vfill 
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review}
+
+\begin{minipage}{0.55\linewidth}
+
+A small sample of a 1-to-1 mixture of water and ${}^{235}$U is {\it irradiated
+uniformly} in a flux equal to $\phi_0$~\si{\per\centi\meter\squared\per\second}. 
+
+\vspace{0.5cm}
+
+If a neutron \emph{interacts}, what is the probability that it...
+\begin{itemize}
+ \item elastically scatters off of \emph{any} nucleus? 
+ \item elastically scatters off of H-1?
+ \item is absorbed by U-235?
+\end{itemize}
+ 
+\vspace{0.5cm}
+
+
+If the neutron is \emph{absorbed}, what is the probability that it
+causes fission?
+
+
+
+\end{minipage}
+\hfill
+\begin{minipage}{0.35\linewidth}
+\begin{table}[t]
+\begin{tabular}{ccc}
+\toprule
+nuclide & quantity & value \\
+\midrule
+H-1    & \(\sigma_e\) & 20 b \\
+       & \(\sigma_{\gamma}\) & 0.1 b \\
+O-16   & \(\sigma_e\) & 4 b \\
+U-235  & \(\sigma_e\) & 15 b \\
+       & \(\sigma_{\gamma}\) & 100 b\\
+       & \(\sigma_{f}\) & 500 b \\
+       & \(\bar{\nu}\) & 2.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{minipage}
+
+
+\pause
+\vspace{0.5cm}
+
+{\footnotesize {\it Answers: 0.09, 0.06, 0.91, and 0.83.}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Exploring Cross Sections with OpenMC}
+
+We'll use OpenMC and its nuclear data libraries to
+explore common features of cross sections and to produce 
+enhanced versions of Figures 2.3--10 of FNRP.  
+
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ openmc}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\end{Highlighting}
+\end{Shaded}
+
+\vfill 
+
+The OpenMC data is stored in a single \texttt{.h5} per nuclide. 
+On Beocat, those files are located in this folder:
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{PATH }\OperatorTok{=} \StringTok{"/homes/jaroberts/openmc/data/neutron"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Preparing to Explore...}
+
+We can use OpenMC's libraries to explore cross sections, but
+it helps first to map the reactions we already know to their 
+{\tt MT} identifiers shown below:
+
+\begin{table}[t]
+\centering
+\begin{tabular}{cll}
+\toprule
+Reaction Symbol & ENDF MT Number(s) & Description \\
+\midrule
+$\sigma_{t}$            & 1        & Total cross section \\
+$\sigma_{n}$, $\sigma_{e}$ & 2        & Elastic scattering \\
+$\sigma_{n'}$, $\sigma_{\mathrm{in}}$ & 4, 51--91 & Inelastic scattering \\
+$\sigma_{2n}$           & 16       & $(n,2n)$  \\
+$\sigma_{\gamma}$       & 102      & Radiative capture $(n,\gamma)$ \\
+$\sigma_{f}$            & 18       & Fission \\
+$\sigma_{\alpha}$       & 107      & $(n,\alpha)$ \\
+\midrule
+$\bar{\nu}$ (total)     & 452      & Average total neutrons per fission \\
+$\bar{\nu}_{d}$ (delayed) & 455    & Average delayed neutrons per fission \\
+$\bar{\nu}_{p}$ (prompt)  & 456    & Average prompt neutrons per fission \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{${}^{235}$U Fission}
+
+Data for a single nuclide, e.g., U-235, can be loaded via
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{U235 }\OperatorTok{=}\NormalTok{ openmc.data.IncidentNeutron.from_hdf5(PATH}\OperatorTok{+}\StringTok{"U235.h5"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Any of the previous reactions (if it exists) can be accessed directly, e.g.,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{U235.reactions[}\DecValTok{18}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+<Reaction: MT=18 (n,fission)>
+\end{verbatim}
+
+The corresponding cross sections are stored in the dictionary 
+\texttt{xs}, whose keys are temperatures (e.g., {\tt '294K'}) and whose values 
+are callable functions of energy.  
+For example, the following defines \texttt{σ\_f\_u235} as a function for the
+${}^{235}$U fission cross section evaluated at 294K and plots it over energy:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{σ_f_U235 }\OperatorTok{=}\NormalTok{ U235.reactions[}\DecValTok{18}\NormalTok{].xs[}\StringTok{"294K"}\NormalTok{]}
+\NormalTok{E }\OperatorTok{=}\NormalTok{ np.logspace(}\OperatorTok{-}\DecValTok{2}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{10000}\NormalTok{)}
+\NormalTok{plt.loglog(E, σ_f_U235(E))}
+\end{Highlighting}
+\end{Shaded}
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{${}^{235}$U Fission}
+
+
+\begin{figure}[h]
+    \centering
+    \resizebox{0.95\textwidth}{!}{\input{figures/u235_fission.pgf}}
+\end{figure}
+ 
+Surely, this cross section is important! Moreover, this
+cross section is a complicated function of energy that varies by several
+orders of magnitude over 10 decades (powers of 10) of energy. The jagged
+spikes in between about 1 eV and 2 keV are called \textbf{resonances}
+and provide a unique connection to the underlying physics of compound
+nucleus formation.
+
+  
+\end{frame}
+
+\begin{frame}[fragile]{Potential Scattering and $1/v$ Absorption}
+
+Let's back up and consider another important nuclide, ${}^{1}$H, and inspect its elastic-scattering and capture cross sections:
+\begin{figure}[h]
+    \centering
+    \resizebox{1\textwidth}{!}{\input{figures/h1_xsec.pgf}}
+\end{figure}
+ 
+\begin{equation*}
+ \sigma_{\gamma}(E) = \sqrt{E_0/E} \,\sigma_{\gamma}(E_0) \, 
+\tag{FNRP 2.36}
+\end{equation*}
+
+  
+\end{frame}
+
+
+\begin{frame}{The Single-Level Formulas of Breit and Wigner}
+ 
+The earliest (1930's) quantum mechanical work of Breit and Wigner led to these expressions for the capture and elastic scattering cross sections near some resonance energy (or {\it level}) $E_r$:
+
+\begin{align*}
+\tag{FNRP 2.41}
+\sigma_{\gamma}(E) &= \sigma_0 \frac{\Gamma_{\gamma}}{\Gamma} \left (\frac{E_r}{E} \right)^{1/2} \frac{1}{1+ 4(E-E_r)^2/\Gamma^2} \\
+%
+\tag{FNRP 2.42}
+\sigma_{n}(E) &= \sigma_0 \frac{\Gamma_{n}}{\Gamma}  \frac{1}{1+ 4(E-E_r)^2/\Gamma^2}\\
+              & \quad + \sigma_0 \frac{2R}{\lambda_0} \frac{ 2(E-E_r)/\Gamma }{1 + 4 (E-E_r)^2/\Gamma^2} 
+              + 4\pi R^2 \, .
+\end{align*}
+ 
+To reconstruct $\sigma_{\gamma}$ and $\sigma_{n}$ given multiple resonances, Eqs.~(2.41) and (2.42) can be evaluated for each resonance (with its own location $E_r$, peak $\sigma_0$, and partial widths $\Gamma_{\gamma}$ and $\Gamma_{n}$) and then summed.
+
+\end{frame}
+
+
+
+\end{document}
+

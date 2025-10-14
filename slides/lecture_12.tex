@@ -1,0 +1,318 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Effective Cross Sections and $k_{\infty}$ \\
+       {\small\it NE 630 - Lecture 12}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{compute effective cross sections and reaction rates averaged over the entire energy range of interest in order to estimate the multiplication factor of an infinite, homogeneous system.
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review}
+
+Last week, we focused on approximate solutions of the spectrum equation,
+\begin{align*}
+\tag{like FNRP 3.15}
+ \Sigma_t(E) \phi(E) = & \textcolor{wcprimary}{\int^{\infty}_0 p(E'\to E)\Sigma_s(E') \phi(E') dE'} \\ 
+    &+ \textcolor{wcalerted}{ \chi(E) \underbrace{\int^{\infty}_0 \bar{\nu}(E')\Sigma_f(E') \phi(E') dE'}_{s_f'''}} + s'''_{\text{ext}}(E) \, ,
+\end{align*}
+and reasoned that, for a source-free, thermal-spectrum reactor,
+\begin{equation*}
+ \phi(E) \propto
+ \begin{cases}
+    \frac{\chi(E)}{\Sigma_t(E)} \, ,  & E > 0.1~\si{\mega\electronvolt} \, , \\
+    \frac{1}{\Sigma_t(E) E} \, ,      & 1~\si{\electronvolt} < E < 0.1~\si{\mega\electronvolt}  \, \\
+    E e^{-\frac{E}{kT}} \, ,          & E < 1~\si{\electronvolt} \, .
+ \end{cases}
+\end{equation*}
+
+{\bf Important}: make sure to review the approximations made for each energy range!
+
+\end{frame}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{A Balancing Act}
+
+Recall that the spectrum equation represents a balance between the processes 
+that either introduce or remove neutrons of energy $E$ to or from the system.
+If we ``add up'' both sides, we should still have balance, right?  \pause Integration 
+over all energies leads to
+
+\begin{align*}
+ \int^{\infty}_0 \Sigma_t(E) \phi(E) dE = 
+   & \int^{\infty}_0  \int^{\infty}_0 p(E'\to E)\Sigma_s(E') \phi(E') dE' dE \\ 
+    &+   \int^{\infty}_0  \chi(E) \int^{\infty}_0 \bar{\nu}(E')\Sigma_f(E') \phi(E') dE' dE \\
+    &+  \int^{\infty}_0 s'''_{\text{ext}}(E) dE \, \ldots
+\end{align*}
+
+\pause ... or   
+
+\begin{equation*}
+  R_t = R_s + s'''_f + s'''_{\text{ext}} \, .
+\end{equation*}
+ 
+ 
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{A Source-Driven System with No Multiplication}
+
+Backing up a little bit, let's assume $\bar{\nu}(E) = 0$ so that
+
+\begin{align*}
+ \int^{\infty}_0 \Sigma_t(E) \phi(E) dE = 
+   & \int^{\infty}_0  \Sigma_s(E) \phi(E)dE  +  \int^{\infty}_0 s'''_{\text{ext}}(E) dE \, .
+\end{align*}
+
+Suppose we define $\phi_{\text{total}} =  \int^{\infty}_0   \phi(E) dE$.  Can we divise
+a single algebraic equation for $\phi_{\text{total}}$ to replace our integrated spectrum equation?
+\pause
+Yes! Define $\textcolor{wcprimary}{\bar{\Sigma}_x = \int^{\infty}_0 \Sigma_x(E) \phi(E) dE / \phi_{\text{total}}}$ so that 
+
+\begin{align*}
+ \bar{\Sigma}_t \phi_{\text{total}} = 
+   & \bar{\Sigma}_s \phi_{\text{total}}   +   s'''_{\text{ext}}  \, ,
+\end{align*}
+or
+\begin{align*}
+ (\bar{\Sigma}_t - \bar{\Sigma}_s ) \phi_{\text{total}} = \boxed{ \bar{\Sigma}_a  \phi_{\text{total}} =    s'''_{\text{ext}} } \, .
+\end{align*}
+
+\end{frame}
+  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Effective Cross Section}
+
+Here's what we just did viewed in a different way:  given some reaction rate density $R_x$, 
+the only way we can {\bf preserve the reaction rate} in terms of $\phi_{\text{total}}$
+is to define the {\bf effective cross section}
+\begin{align*}
+\tag{FNRP 3.38}
+ \bar{\Sigma}_x = \frac{\int^{\infty}_0 \Sigma_x(E) \textcolor{wcprimary}{\phi(E)} dE}{ \textcolor{wcprimary}{\int^{\infty}_0   \phi(E) dE} } \, .
+\end{align*}
+ 
+In effect, we've computed an {\bf expected value} of $\Sigma_x(E)$ using the probability density
+function $\textcolor{wcprimary}{p(E)=\phi(E)/\phi_{\text{total}}}$.
+
+\vfill 
+
+For now, we'll stick to averages over the whole energy domain, but next time, we'll break 
+the integral over energy into a sum of integrals over parts of that range, or 
+\begin{equation*}
+\tag{Like FNRP 3.45}
+ \int^{\infty}_0 \to \int^{E_0=\infty}_{E_1} + \int^{E_1}_{E_2} + \ldots + \int^{E_{G-1}}_{E_G=0} \, ,
+\end{equation*}
+leading to the {\bf multigroup fluxes} $\phi_g$ and {\bf cross sections} $\Sigma_{x,g}$ for $g=1\ldots G$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Normalizing our Approximate $\phi(E)$}
+
+Let's use T, I, and F to indicate the thermal, intermediate \footnote{or epithermal},
+and fast energy ranges.  Then, define $C_T$, $C_I$, and
+$C_F$ such that 
+\begin{align*}
+ 1 =  \int^1_{10^{-3}} C_T E e^{-\frac{E}{kT}} =
+\int^{10^5}_{1} \frac{C_I}{\Sigma_t(E) E} dE =
+ \int^{10^7}_{10^5} \frac{C_F\chi(E)}{\Sigma_t(E)} dE \, ,
+\end{align*}
+i.e., so that the approximate spectral functions are normalized in each energy range.
+Finally, let's define the total thermal, intermediate,
+and fast fluxes as
+\begin{align*}
+ \phi_T  =  \int^1_{10^{-3}} \phi(E) dE \, , \,
+ \phi_I  =  \int^{10^5}_{1} \phi(E)  dE \, , \, \text{and} \,
+ \phi_F  =  \int^{10^7}_{10^5} \phi(E) dE \, .
+\end{align*}
+For now, we'll assume $\phi_T$, $\phi_I$, and $\phi_F$ are known\footnote{Do we know $\phi_T$, $\phi_I$, or $\phi_F$? Generally, no! However, we can often estimate their values in a relative sense, e.g., the ratio $(\phi_F + \phi_I)/\phi_T$.
+In fact, an important experiment in
+NE 648 is to measure such ratios of ``non-thermal'' to ``thermal'' fluxes.} so that, e.g.,
+the thermal flux can be written $\phi(E) \approx \phi_T C_T E e^{-E/(kT)}, 10^{-3} < E < 1$.
+
+\end{frame}
+  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Using Approximate $\phi(E)$ to Define $\bar{\Sigma}$}
+Armed with normalized, approximate spectra in each energy range, we can define
+{\small
+\begin{align*}
+ \bar{\Sigma}_x &=  \frac{\int^{\infty}_0 \Sigma_x(E) \phi(E) dE}{\int^{\infty}_0 \phi(E) dE} \\
+                &=  \frac{
+                  \int^{1}_{10^{-3}} \Sigma_x(E) \phi_T C_T E e^{-\frac{E}{kT}}   dE +
+                  \int^{10^5}_1      \frac{\Sigma_x(E)  \phi_I C_I}{\Sigma_t(E) E} dE +
+                  \int^{10^7}_{10^5} \frac{\Sigma_x(E)   \phi_F C_F \chi(E)}{\Sigma_t(E)}dE 
+                }
+                {
+                  \int^{1}_{10^{-3}}   \phi(E) dE + 
+                  \int^{10^5}_{1}      \phi(E) dE + 
+                  \int^{10^7}_{10^{5}} \phi(E) dE
+                } \\
+                &= \frac{ 
+                   \bar{\Sigma}_{xT} \phi_T + 
+                   \bar{\Sigma}_{xI} \phi_I +  
+                   \bar{\Sigma}_{xF} \phi_F }
+                    {\phi_T + \phi_I + \phi_F} \\
+                &= \frac{ 
+                   \bar{\Sigma}_{xT} \phi_T + 
+                   \bar{\Sigma}_{xI} \phi_I +  
+                   \bar{\Sigma}_{xF} \phi_F }
+                    {\phi_{\text{total}}} \, .                    
+\end{align*}
+}
+ 
+Thus, the effective cross section for the entire range is a weighted average of the thermal-, intermediate-, and fast-spectrum 
+averaged values, where the weights are the known total fluxes in each interval (i.e., $\phi_T$, $\phi_I$, and $\phi_F$) divided by the 
+total flux over the entire range (i.e., $\phi_{\text{total}}$).
+
+
+ 
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Fission-Spectrum and Maxwellian Averages}
+ 
+(Board Work)
+
+\end{frame}
+  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Resonance Integrals}
+ 
+(Board Work) 
+
+\end{frame}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Example}
+
+Consider Prof.~McNeil's tank of water.  Suppose someone spilled a solution of ${}^{252}$Cf into the water, resulting in a uniformly-distributed neutron source of 10  \si{\per\cubic\centi\meter\per\second}.  What is the total neutron flux?  Assume that
+$\phi_T/\phi_F = \phi_I/\phi_F = 1$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{A Source-Free System with Multiplication}
+ 
+Let's return to our energy-integrated balance equation, but instead of setting 
+$\bar{\nu}(E)=0$, let's get rid of $s'''_{\text{ext}}$.  We then have
+
+\begin{align*}
+ \int^{\infty}_0 \Sigma_t(E) \phi(E) dE = 
+   & \int^{\infty}_0  \Sigma_s(E) \phi(E)dE  +  \int^{\infty}_0 \bar{\nu}(E) \Sigma_f(E) dE \, .
+\end{align*}
+
+By using the same technique to define effective cross sections, we can rewrite this 
+integral balance in algebraic form as
+
+\begin{align*}
+ \bar{\Sigma}_a  \phi_{\text{total}} =  \bar{\nu\Sigma_{f}} \phi_{\text{total}}  \, .
+\end{align*}
+
+Clearly, we cannot solve this equation for the flux!  Moreover, this equation 
+is only satisfied if we have precisely the right materials such that 
+$\bar{\Sigma}_a  = \bar{\nu\Sigma_{f}}$, i.e.,  when losses from absorption 
+are exactly balanced by production from fission, or, when the system is {\bf critical}!
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Onto $k_{\infty}$!}
+  
+When $\bar{\Sigma}_a  \neq \bar{\nu\Sigma_{f}}$, our assumption of a steady-state
+system is violated: if $\bar{\nu\Sigma_{f}} > \bar{\Sigma}_a$, the neutron 
+population would grow, and $d\phi/dt \neq 0$.  If $\bar{\nu\Sigma_{f}} < \bar{\Sigma}_a$,
+the population would shrink, and again, $d\phi/dt \neq 0$.  
+
+\vfill 
+
+In order to analyze the system as though it were in a steady state, we can (fictiously) increase or reduce the production rate by introducing a fudge factor of sorts to our balance equation, i.e.,
+\begin{equation*}
+  \bar{\Sigma}_a  \phi_{\text{total}} =  \frac{\bar{\nu\Sigma_{f}}}{k_{\infty}} \phi_{\text{total}}  \, .
+\end{equation*}
+Clearly, it follows that 
+\begin{equation*}
+ k_{\infty} = \frac{\bar{\nu\Sigma_{f}}\phi_{\text{total}}}{\bar{\Sigma}_a  \phi_{\text{total}}} 
+ = \frac{\bar{\nu\Sigma_{f}}}{\bar{\Sigma}_a} \, ,
+\end{equation*}
+which is, of course, the {\bf multiplication factor} for our infinite system.  
+
+  
+  
+\end{frame}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Example}
+
+Consider again Prof.~McNeil's tank of water.  Suppose that, instead of  ${}^{252}$Cf,
+a solution of pure  ${}^{235}$U was spilled into the pool.  Given the ratio 
+$r = n_{\text{U-235}} / n_{\text{water}}$, determine an expression for $k_{\infty}$ if leakage from 
+the tank can be ignored.  Again, assume $\phi_T/\phi_F = \phi_I/\phi_F = 1$.
+
+
+\end{frame}
+  
+
+\end{document}
+

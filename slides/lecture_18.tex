@@ -1,0 +1,197 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Analysis of a LWR Unit Cell  \\
+       {\small\it NE 630 - Lecture 18}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{construct a detailed model of a LWR unit cell
+and compare the results to theoretical models based on the four-factor formula.
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review: the four-factor formula}
+
+Recall $k_{\infty} = \eta_T f p \varepsilon$, where
+\begin{align*}
+\tag{FNRP 4.49*}
+\eta_T &= \frac{\nu\bar{\Sigma}_{fT}^f} {\bar{\Sigma}^f_{aT}} \\
+\tag{FNRP 4.48*}
+f &= \frac{1}{1 + \zeta \left(V_{nf} \bar{\Sigma}^{nf}_{aT} \big/ V_f \bar{\Sigma}^f_{aT} \right ) } \\
+\tag{FNRP 4.28*}
+p &= 1 - \frac{V_f \bar{\Sigma}^f_{aF} \bar{\phi}^{f}_{F}}
+      {V_f \left[ \bar{\Sigma}^f_{aT} \bar{\phi}^{f}_{T} + \bar{\Sigma}^f_{aF} \bar{\phi}^{f}_{F} \right ]+ V_{nf} \bar{\Sigma}^{nf}_{aT} \bar{\phi}^{nf}_{T}} \\
+\tag{FNRP 4.25*}
+\varepsilon &= \frac{\nu\bar{\Sigma}^f_{fT} \bar{\phi}^{f}_{T} + \nu\bar{\Sigma}^f_{fF} \bar{\phi}^{f}_{F} }
+   {\nu\bar{\Sigma}^f_{fT} \bar{\phi}^{f}_{T} } 
+\end{align*}
+
+\vfill 
+
+Here, ${}^f$ and ${}^{nf}$ indicate ``fuel'' and ``non-fuel'', $_T$ and $_F$ indicate ``thermal'' and ``non-thermal'' (or $E > 1$ eV), and $\bar{\,}$ indicates averaging over space and/or energy.
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review: Averaging over Energy and Space}
+
+Suppose we have the two-group fluxes and cross sections 
+$\bar{\phi}^R_g$ and $\bar{\Sigma}^R_{x,g}$, $g \in \{1, 2\}$ in some
+homogeneous region $R$.  Then the spectrum-averaged, {\it effective} cross section is
+\begin{equation*}
+\tag{like FNRP 4.5}
+ \boxed{
+  \bar{\Sigma}^R_{x} = 
+    \frac{ \bar{\Sigma}^R_{x,1} \bar{\phi}^R_1 + \bar{\Sigma}^R_{x,2} \bar{\phi}^R_2} 
+         { \bar{\phi}^R_1 +\bar{\phi}^R_2 }
+  = \frac{ \bar{\Sigma}^R_{x,1} \bar{\phi}^R_1 + \bar{\Sigma}^R_{x,2} \bar{\phi}^R_2}
+         { \bar{\phi}^R }} \, .
+\end{equation*}
+\vfill 
+Now, suppose we have $\bar{\Sigma}^R_x$ and $\bar{\phi}^R$ for adjacent regions $R \in \{A, B\}$.  
+Then the spatially {\it homogenized} cross section is
+\begin{equation*}
+\tag{like FNRP 4.17}
+ \boxed{
+   \bar{\Sigma}_x = 
+     \frac{V^A \bar{\Sigma}^A_x  \bar{\phi}^A  + V^{B} \bar{\Sigma}^{B}_x  \bar{\phi}^{B}}
+          { V^A \bar{\phi}^A + V^B \bar{\phi}^B } =
+     \frac{V^A \bar{\Sigma}^A_x  \bar{\phi}^A  + V^{B} \bar{\Sigma}^{B}_x  \bar{\phi}^{B}}
+          { V \bar{\phi} }     
+  } \, .
+\end{equation*}
+
+These expressions emphasize {\it preserving reaction rates} while simplifying.
+\end{frame}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{An Approximate Model for $p$}
+
+Starting with
+\begin{align*}
+\tag{FNRP 4.28*}
+p &= 1 - \frac{V_f \bar{\Sigma}^f_{aI} \phi^{f}_{I}}
+      {V_f \left[ \bar{\Sigma}^f_{aT} \phi^{f}_{T} + \bar{\Sigma}^f_{aI} \phi^{f}_{I} \right ]+ 
+        V_{m} \bar{\Sigma}^{m}_{aT} \phi^{m}_{T}} \, ,
+\end{align*}
+assume all neutrons absorbed (denominator) come from the neutrons slowing down in the moderator ($q$),  or
+\begin{align*}
+\tag{FNRP 4.33*}
+  p &\approx 1 - \frac{V_f \bar{\Sigma}^f_{aI} \phi^{f}_{I}}
+      {V_{m} \xi^{m} \Sigma^{m}_s E \phi^{m}(E)} \\
+\tag{FNRP 4.35*} 
+  &= 1 - \frac{V_f  N_{fe}}{V_{m} \xi^{m} \Sigma^{m}_s  } 
+         \underbrace{\int_I \frac{ \sigma^f_{a}(E) \phi^{f}(E) }{E \phi^m(E)} dE}_{I^{\text{het}}_a} \\
+\tag{FNRP 4.40*} 
+  p &\approx \exp \left (- \frac{V_f  N_{fe} I^{\text{het}}_a}{V_{m} \xi^{m} \Sigma^{m}_s  } \right ) \, . 
+\end{align*}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Evaluating $I^{\text{het}}$}
+ 
+The heterogeneous resonance integral $I^{\text{het}}_a$ has been measured 
+for a variety of cylindrical-fuel lattices and is found to be well
+approximated by
+
+\begin{equation*}
+ I^{\text{het}}_a  = a + b\sqrt{\frac{4}{\rho_f D}} \, \text{[b]} \, ,
+\end{equation*}
+
+where $a$ and $b$ are fitted parameters, $\rho_f$ [g/cm$^3$] is the fuel mass density, and $D$~[cm] is the fuel diameter.
+
+\vfill 
+
+{\bf Example:} From Tabl 4.3, $a = 4.45$ and $b = 26.6$ for UO$_2$ fuel rods.  Estimate $p = \exp \left (- \frac{V_f  N_{fe} I^{\text{het}}_a}{V_{m} \xi^{m} \Sigma^{m}_s  } \right )$ for 4\% enriched PWR fuel assuming that $D = 1$ cm, $P=1.2$ cm, $\rho_{f} = 10$ g/cm$^3$, ${\xi \Sigma_s} = 1.28$. 
+ 
+\pause 
+
+{\bf Ans.} $p \approx 0.65)$
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{An Approximate Model for $\varepsilon$}
+ 
+\begin{align*}
+\tag{FNRP 4.25*}
+\varepsilon &= \frac{\nu\bar{\Sigma}^f_{fT} \bar{\phi}^{f}_{T} + \nu\bar{\Sigma}^f_{fF} \bar{\phi}^{f}_{F} }
+   {\nu\bar{\Sigma}^f_{fT} \bar{\phi}^{f}_{T} } \\
+   &= 1 + \frac{ (1-\tilde{e}) \bar{\nu}^{fe}_{T}\bar{\sigma}^{fe}_{fF}  + \tilde{e} \bar{\nu}^{fi}_{F}\bar{\sigma}^{fi}_{fF}}
+                     { \tilde{e} \bar{\nu}^{fi}_{T}\bar{\sigma}^{fi}_{fT}   } \times \frac{\bar{\phi}^{f}_{F}}{\bar{\phi}^{f}_{T}}\\
+\tag{FNRP 4.56}
+   &\approx 1 + \frac{ (1-\tilde{e})}{\tilde{e}} \frac{\bar{\nu}^{fe} \bar{\sigma}^{fe}_{fF} }
+                     {\bar{\nu}^{fi}\bar{\sigma}^{fi}_{fT}   }
+\end{align*}
+
+\vfill 
+\pause 
+
+{\bf Example:} Assuming $\tilde{e} = 4$\% and $\bar{\nu}=2.4$ for both nuclides, use the data from Table 3.2 to compute $\varepsilon$ using (a) Eq. (4.56) and (b) the middle equation with a fast-to-thermal ratio of 10. 
+
+ 
+\pause 
+{\tiny
+{\bf Ans}.  (a) $1+(0.96 \cdot 0.304)/(0.04  \cdot 505) \approx 1.014)$\\
+(b) $1+(0.96 \cdot 0.304 + 0.04\cdot 1.22)/(0.04  \cdot 505)\cdot 4 \approx 1.169$.
+
+}
+
+\end{frame}
+
+
+ 
+ 
+\end{document}
+

@@ -1,0 +1,230 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Thermalization \\
+       {\small\it NE 630 - Lecture 11}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{approximate the flux spectrum $\phi(E)$ of thermal neutrons in thermal-spectrum reactors.}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review}
+
+Last time, we reasoned that if
+\begin{itemize}
+ \item $(1-\alpha^m)E \gg \Gamma$,
+ \item $(1-\alpha^f)E \gg \Gamma$, and
+ \item $\Sigma_s(E) \approx \Sigma_s$ (i.e., constant),
+\end{itemize}
+then the flux spectrum between about 1 eV and 0.1 MeV can be approximated by
+\begin{equation*}
+\tag{like FNRP 3.29}
+ \boxed{ \phi_{\text{NR}}(E) \propto \frac{1}{\Sigma_t(E) E} } \, ,
+\end{equation*}
+which is the narrow-resonance (NR) approximation.  
+
+\centering
+\includegraphics{figures/sde_NR.pdf}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{How Good is the NR Approximation?}
+
+Consider the reflected sphere we use to model an infinite, homogeneous 
+system in OpenMC.  For a 2 MeV source of neutrons, the flux spectrum between
+1 eV and 0.1 MeV is shown below based on (a) direct simulation, i.e., ``truth'' and
+(b) the NR approximation for a 10-to-1 mixture of ${}^1$H and ${}^{238}$U.
+
+
+\includegraphics[width=0.95\linewidth]{figures/mc_vs_nr_u238_h1.pdf}
+
+
+{\bf Hmm.} The curves are scaled to match at 0.1 MeV.  Why does the NR approximation
+exceed the simulation value at 1 eV? \pause {\it Answer}: absorption attenuates the 
+{\bf slowing down density} $q(E)$ according to FNRP 3.20.
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{What Happens Below 1 eV?}
+
+Recall the spectrum equation (sans external source):
+\begin{align*}
+\tag{like FNRP 3.15}
+ \Sigma_t(E) \phi(E) = & \textcolor{wcprimary}{\int^{\infty}_0 p(E'\to E)\Sigma_s(E') \phi(E') dE'} \\ 
+    &+ \textcolor{wcalerted}{ \chi(E) \int^{\infty}_0 \bar{\nu}(E')\Sigma_f(E') \phi(E') dE'} \, .
+\end{align*}
+
+Above 1 eV, we know that $p(E'\to E)$ is well approximated by a uniform, {\bf downscatter}-only distribution
+based on a stationary target and isotropic scattering.
+However, for neutrons below 1 eV in energy, the thermal motion of surrounding nuclei can lead to appreciable
+neutron {\bf upscattering}, i.e., elastic collisions in which the outgoing neutron energy $E$ exceeds its
+original energy $E'$.
+
+
+
+
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Detailed Balance}
+ 
+Consider our infinite, homogeneous system, and suppose it is filled with 
+a {\bf purely-scattering medium}.  If we dump a bucket of neutrons of {\it any} 
+energies into the system, they have nothing to do but bounce around...forever.
+Given a long enough time,  these neutrons will enter 
+\only<1>{\textcolor{white}{{\bf thermal equilibrium}}}
+\only<2>{{\bf thermal equilibrium}}
+with the surrounding nuclei.
+
+\vfill 
+\pause 
+
+Once in thermal equilibrium, the neutron population must satisfy, on 
+the average, the condition of {\bf detailed balance}:
+\begin{equation*}
+\tag{FNRP 3.34}
+ \Sigma_s(E\to E')\phi(E) = \Sigma_s(E'\to E)\phi(E') \, .
+\end{equation*}
+In other words, the rate at which neutrons of energy $E$ scatter to $E'$ must be
+balanced by the rate at which neutrons of energy $E'$ scatter to $E$.  If this
+were not true, the system would not be steady, since neutrons would then 
+be moving up or down in energy on the average!
+ 
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Maxwell-Boltzmann Distribution}
+
+It turns out that, no matter the specific form of $\Sigma_s(E'\to E)$, 
+the flux spectrum that satisfied detailed balance is 
+\begin{equation*}
+\tag{FNRP 3.35}
+ \phi_{\text{MB}}(E) = \frac{E}{(kT)^2} e^{-\frac{E}{kT}} \, ,
+\end{equation*}
+the famed Maxwell-Boltzmann (or, sometimes, Maxwellian) distribution, where 
+$T$ is the temperature of the medium and $k \approx 8.617\cdot 10^{-5}~\si{\electronvolt\per\kelvin}$ is Boltzmann's constant.
+Because this is a $\phi_{\text{MB}}(E)$ is a probability density function, its 
+integral over all energies must be unity.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{What About $\Sigma_s(E'\to E)$?}
+
+Accounting for target motion automatically makes defining $\Sigma_s(E'\to E) = p(E'\to E)\Sigma_s(E')$ more challenging!
+In the simplest approximation, target nuclei are assumed to form a {\bf free gas}, and it follows (after much pain 
+and suffering) that
+\begin{align*}
+\tag{D\&H 9-38}
+  p(E'\to E) &= \frac{\theta^2}{2E'} e^{-\epsilon-\epsilon'} \times \\
+  & \Bigg \{ 
+    \Bigg [
+      \text{erf}(\theta\sqrt{\epsilon'}-\rho\sqrt{\epsilon})\pm \text{erf}(\theta\sqrt{\epsilon'}+\rho\sqrt{\epsilon})
+    \Bigg ] \\
+    &+  \Bigg [
+      \text{erf}(\theta\sqrt{\epsilon}-\rho\sqrt{\epsilon'})\mp \text{erf}(\theta\sqrt{\epsilon}+\rho\sqrt{\epsilon'})
+    \Bigg ] 
+    \Bigg \} \, , \quad E' \lessgtr E \, ,
+\end{align*}
+where $\theta = (A+1)/(2\sqrt{A})$, $\rho = (A-1)/(2\sqrt{A})$, and $\epsilon = E/kT$.
+ 
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Special Case: $\Sigma_s(E'\to E)$ for ${}^1$H}
+
+For ${}^{1}$H, the analysis simplifies somewhat to produce 
+
+\begin{align*}
+\tag{D\&H 9-23}
+p(E'\to E) = \frac{1}{E'} 
+  \begin{cases}
+       \text{erf} \sqrt{\frac{E}{kT}} \, ,  & E' > E \\
+       e^{\displaystyle\left(\frac{E'-E}{kT}\right)} \text{erf} \sqrt{\frac{E'}{kT}} \, , &  E' < E \, .
+  \end{cases}
+\end{align*}
+ 
+\centering
+\includegraphics[width=0.9\linewidth]{figures/thermal_scattering_hydrogen.pdf}
+
+ 
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Beyond the Free-Gas Approximation}
+ 
+More generally, thermal-neutron scattering cross sections are represented
+using\footnote{See \url{https://t2.lanl.gov/nis/njoy/ther02.html} 
+for more information.}
+
+\begin{equation*}
+ p(E\to E', \mu) = \frac{1}{2kT} \sqrt{\frac{E'}{E}} e^{-\beta/2} S(\alpha, \beta) \, ,
+\end{equation*}
+where 
+\begin{equation*}
+ \alpha = \frac{E' + E -2\mu\sqrt{EE'}}{A kT} \quad \text{and} \quad \beta = \frac{E'-E}{kT} \, 
+\end{equation*}
+represent a reduced momentum and reduced energy, respectively.
+
+\vfill 
+
+The ``scattering law'' $S(\alpha, \beta)$ is measured experimental and/or estimated 
+by molecular dynamics simulations.  Such laws are defined for many important 
+moderators and some fuel compositions (e.g., UO$_2$).  
+ 
+\end{frame}
+
+\end{document}
+

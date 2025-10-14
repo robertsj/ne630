@@ -1,0 +1,140 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{The Reproduction Factor $\eta$ \\
+       {\small\it NE 630 - Lecture 8}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{Explain in a ``big picture'' sense what the goals of thermal and fast reactor designs are and how they differ based on $\eta(E)$, $\xi$, $\Sigma_s$ and $\Sigma_a$}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review}
+
+
+The {\bf average logarithmic energy loss} aka {\bf slowing down
+decrement} is
+
+\begin{equation*}
+  \xi = \overline{\ln(E/E')} 
+    = 1 + \frac{\alpha}{1-\alpha}\ln\alpha 
+  \tag{FNRP 2.54 and 2.56}
+\end{equation*}
+
+The number of elastic collisions \(n\) needed to reduce a neutron's
+energy from \(E_0\) to \(E_n\) is approximately
+
+\begin{equation*}
+  n = \frac{1}{\xi} \ln(E_0/E_n) \, .
+  \tag{FNRP 2.59}
+\end{equation*}
+
+\pause 
+\vfill
+
+{\bf Hmm.} How would one measure $n$ experimentally?
+ 
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{How to Measure Neutron Production?}
+
+The expected number of neutrons produced from fission per neutron absorbed at 
+some location
+can be expressed as
+
+\pause 
+
+\begin{equation*}
+  \eta(E) = \frac{\bar{\nu}(E) \Sigma_f(E)}{\Sigma_{a}(E)} \, ,
+\end{equation*}
+
+where 
+   
+\begin{itemize}
+ \item  $E$ is the energy of the incident neutron
+ \item  $\bar{\nu}(E)$ is the average number of neutrons produced from fission due to incident neutrons of energy $E$ (and is typically between 2 and 3)
+ \item  $\Sigma_f(E)$ is the macroscopic fission cross section for the fuel
+ \item   $\Sigma_a(E)$ is the macroscopic absorption cross section for the fuel and includes capture, fission, and other absorption processes
+\end{itemize}
+
+\pause
+   
+Often the product $\bar{\nu}(E) \Sigma_f(E)$ is written $\nu \Sigma_f(E)$, as in 
+\begin{equation*}
+  \eta(E) = \frac{\nu\Sigma_f(E)}{\Sigma_a(E)} = \frac{\text{fission neutrons produced}}{\text{neutrons absorbed}} \, .
+\tag{FNRP 3.3} 
+\end{equation*}
+
+
+\end{frame}
+ 
+\begin{frame}[fragile]{OpenMC Examples on Beocat}
+
+The computational demos shown so far are on Beocat.  You can 
+copy the one for today by executing the following in the 
+terminal after logging into Beocat:
+
+{\tiny
+\begin{verbatim}
+  cp /homes/jaroberts/openmc/ne630_examples/NeutronReproductionFactor.ipynb .
+\end{verbatim}
+
+You can see all the examples present by executing
+\begin{verbatim}
+  ls /homes/jaroberts/openmc/ne630_examples/ 
+\end{verbatim}
+}
+
+ 
+\end{frame}
+
+
+\end{document}
+

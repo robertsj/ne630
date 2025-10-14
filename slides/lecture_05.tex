@@ -1,0 +1,167 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+
+\usepackage{array}
+
+\usepackage{siunitx}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Using Cross-Section Data \\
+       {\small\it NE 630 - Lecture 5}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+
+\begin{quote}
+\textcolor{wcprimary}{Determine the probability that a neutron of energy $E$ undergoes a particular reaction.}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review}
+
+Consider again the $\vec{x}$-directed neutron beam of 
+intensity $I_0 \, \si{\per\centi\meter\squared\per\second}$ incident 
+on a slice of material with volume $V = \Delta_x\Delta_y \Delta_z$.
+The number of neutrons 
+impinging on the slice is $\Delta_y \Delta_z I_0$, while the number that exit the slice is
+\begin{equation*}
+\overbrace{I(\Delta_x)\, \Delta_y \Delta_z}^{\text{\# we keep}}
+= \overbrace{I_0\,\Delta_y \Delta_z}^{\text{\# we start with}}
+- \overbrace{I_0\,\Delta_y \Delta_z\;\vphantom{\Big(}\frac{N\sigma}{\Delta_y \Delta_z}}^{\text{\# we lose}} \, .
+\end{equation*}
+\pause
+We {\it expect} $N = n\,\Delta_x\Delta_y \Delta_z$ target nuclei in the slice, so  
+\begin{equation*}
+ \dfrac{N\sigma}{\Delta_y \Delta_z} = n\sigma\,\Delta_x \equiv \Sigma\,\Delta_x
+    \quad \longrightarrow \quad 
+ I(\Delta_x) \approx I_0 [ 1 - \Sigma\,\Delta_x ] \, ,
+\end{equation*}
+where $\sigma [\si{\centi\meter\squared}]$ is the {\bf microscopic cross section} and $\Sigma [\si{\per\centi\meter}]$ is the {\bf macroscopic cross section}. \pause  In the usual manner, we let $\Delta_x \to 0$ to define
+\begin{equation*}
+\boxed{
+\frac{dI}{dx} = -\,\Sigma\, I(x)
+\quad\longrightarrow\quad
+I(x) = I_0\,e^{-\Sigma x} 
+} \, ,
+\end{equation*}
+which describes the {\bf exponential attenuation} of neutrons through material interactions.  What about {\bf geometric attenuation}?
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{What Do Neutrons Do?}
+ 
+Let $\sigma_x$ represent the microscopic cross section for a particular 
+reaction (or interaction) $x$ that neutrons can induce in target nuclei.
+What are the primary reactions of interest?
+
+\pause 
+
+\begin{table}
+\begin{tabular}{ll}
+\toprule
+  $\sigma_x$ & reaction \\
+\midrule
+  $\sigma_n$ or  $\sigma_e$      & elastic scattering \\
+  $\sigma_{n'}$ or $\sigma_{in}$  & inelastic scattering \\
+  $\sigma_s$      & scattering (usually $\sigma_n + \sigma_{n'}$,  but can be ambiguous!) \\
+  $\sigma_{2n}$    & $(n, 2n)$, and $3n, 4n, \ldots$ \\
+\midrule
+  $\sigma_{\gamma}$  & capture (i.e., $(n, \gamma)$) \\
+  $\sigma_f$      & fission \\
+  $\sigma_{\alpha}$  & $(n, \alpha)$ \\
+  $\sigma_a$         & absorption ($= \sigma_{\gamma} + \sigma_f + \sigma_{\alpha} + \ldots$) \\
+\midrule
+  $\sigma_t$       & total (i.e., the sum of all individual $\sigma_x$'s) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Reaction Rates}
+ 
+Reactor physics analysis is driven by {\it reaction-rate densities} $R_x$ [reactions of type $x$ \si{\per\cubic\centi\meter\per\second}].  The total number of interations per unit volume and time is given by
+\begin{equation*}
+   R_t =  \Sigma_t \phi \, ,
+\end{equation*}
+where $\phi$ [\si{\per\centi\meter\squared\per\second}] is the flux of neutrons.  
+\pause
+We can decompose this total reaction rate density by nuclide and reaction:
+\begin{equation*}
+ \begin{split}
+  R_t =   \Sigma_t \phi
+      &= \left ( \sum_{i \in \text{nuclides}} \Sigma^i_t \right ) \phi  \\
+    &= \left ( \sum_{i \in \text{nuclides}} n_i \sigma^i_t \right ) \phi \\
+    &= \left ( \sum_{i \in \text{nuclides}} n_i \sum_{x \in [e, \gamma, \ldots]} \sigma^i_x \right ) \phi 
+    = \sum_{i} \sum_{x} R^i_x  \, .
+\end{split}
+\end{equation*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Interaction Probabilities}
+
+If the reaction rates are sufficiently large, then ratios of partial rates
+can be used to define various probabilities:
+
+\begin{itemize}
+  \item $\frac{R_x}{R_t}$ = fraction of all reactions that are $x$ (this answers the question, ``if a neutron interacts, what is the probability that $x$ is the interaction?'')
+  
+ \item $\frac{R^i_t}{R_t}$ = fraction of all reactions that are with nuclide $i$
+  
+ \item $\frac{R^i_x}{R^i_t}$ = ??
+  \item $\frac{R^i_x}{R_x}$ = ??
+ \item $\frac{R_f}{R_a}$ = ??
+  \item $\bar{\nu}^{\text{U-235}} R_f^{\text{U-235}}$ = ??
+  \item $\displaystyle\frac{\bar{\nu}^{\text{U-235}} R_f^{\text{U-235}} + \bar{\nu}^{\text{U-238}} R_f^{\text{U-238}}}{R_f}$ = ??
+\end{itemize}
+
+\end{frame}
+
+
+
+\end{document}
+

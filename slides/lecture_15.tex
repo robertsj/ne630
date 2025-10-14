@@ -1,0 +1,180 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Lumps, Piles, and Lattices \\
+       {\small\it NE 630 - Lecture 15}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{estimate the largest multiplication factor possible for a 
+homogeneous mixture of water and natural uranium and propose ways to increase 
+that value+.  
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review: The Two-Group Equations}
+
+Let $E_0 = 10$ MeV, $E_1 = 1$ eV, and $E_2 = 10^{-3}$ eV.  Then, the 
+two-group equations for a \textcolor{wcprimary}{source-driven} system (including multiplication) are
+\begin{align*}
+\Sigma_{r,1} \phi_1 &= \nu\Sigma_{f,1}\phi_1 + \nu\Sigma_{f,2}\phi_2 + \textcolor{wcprimary}{s_1} \\
+ \Sigma_{a,2} \phi_2 &= \Sigma_{s,2\gets 1}\phi_1 + \textcolor{wcprimary}{s_2} \, ,
+\end{align*}
+where $\Sigma_{r,1} = \Sigma_{t,1}-\Sigma_{s,1\gets 1}$, $\chi_1 = 1$, $\chi_2 = 0$, and
+$\Sigma_{s,1\gets 2} = 0$.  Without sources, we introduce the \textcolor{wcalerted}{multiplication
+factor $k_{\infty}$} for balance, or
+\begin{align*}
+ \Sigma_{r,1} \phi_1 &= \frac{\nu\Sigma_{f,1}\phi_1 + \nu\Sigma_{f,2}\phi_2}{\textcolor{wcalerted}{k_{\infty}}}  \\
+ \Sigma_{a,2} \phi_2 &= \Sigma_{s,2\gets 1}\phi_1  \, .
+\end{align*}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Two Groups in Matrix Form}
+ 
+We can write these equations using matrix notation as
+\begin{equation*}
+\begin{split}
+\overbrace{
+ \begin{pmatrix}
+  \Sigma_{t,1}-\Sigma_{s,1\gets 1} & \Sigma_{s,1\gets 2}              \\
+  \Sigma_{s,2\gets 1}              & \Sigma_{t,2}-\Sigma_{s,2\gets 2}
+ \end{pmatrix}
+}^{\mathbf{A}}
+ &
+ \begin{pmatrix}
+   \phi_1        \\
+   \phi_2
+ \end{pmatrix} = \\
+ \frac{1}{ \textcolor{wcalerted}{k_{\infty}} } 
+\underbrace{
+ \begin{pmatrix}
+   \chi_1        \\
+   \chi_2 
+ \end{pmatrix}
+ \begin{pmatrix}
+    \nu\Sigma_{f,1}  & \nu\Sigma_{f,2}
+ \end{pmatrix}
+ }_{\mathbf{F}}
+ &
+ \begin{pmatrix}
+   \phi_1        \\
+   \phi_2
+ \end{pmatrix}
+ +
+ \textcolor{wcprimary}{
+ \begin{pmatrix}
+   s_1        \\
+   s_2
+ \end{pmatrix}
+ } \, ,
+ \end{split}
+\end{equation*}
+or, for source-driven systems,
+\begin{equation*}
+  (\mathbf{A}-\mathbf{F})\boldsymbol{\phi} = \mathbf{s} \, ,
+\end{equation*}
+and for source-free systems,
+\begin{equation*}
+   \mathbf{A}^{-1}\mathbf{F} \boldsymbol{\phi} = k_{\infty} \boldsymbol{\phi} \, .
+\end{equation*}
+
+{\bf Quick Check}: Write out $\mathbf{F}$ explicitly!
+\end{frame}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Example: Many Groups!}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{A Trip Down Memory Lane}
+
+\begin{enumerate}
+  \item 1932: James Chadwick discovers the neutron, establishing the missing building block of the nucleus.
+  \item 1934: Enrico Fermi and collaborators bombard elements with neutrons, discovering many new radioisotopes and the principle of neutron-induced reactions.
+  \item 1938: Otto Hahn and Fritz Strassmann observe barium among the products of neutron bombardment of uranium, providing the first experimental evidence of nuclear fission.
+  \item 1939: Lise Meitner and Otto Frisch correctly interpret Hahn and Strassmann’s results as fission, explaining the process in terms of nuclear binding energy and mass defect.
+  \item 1939: Niels Bohr and John Wheeler publish a theoretical framework for fission, identifying fissile materials and energy release mechanisms.
+  \item \textcolor{wcprimary}{1939–1940: Experimental confirmation of secondary neutrons emitted in fission establishes the possibility of a self-sustaining chain reaction.}
+  \item December 2, 1942: Enrico Fermi directs the first controlled, self-sustaining chain reaction in Chicago Pile-1 (CP-1).
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Lumps, Piles, and Lattices}
+ 
+(Discussion of Fermi's Patent)
+ 
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Exam 1}
+
+\begin{enumerate}
+ \item Reece will have normal session tomorrow.
+ \item Practice exam and solution are posted.
+ \item Check solutions even if you earned full credit.
+ \item 8.5'' x 11'' sheet, front and back, and a calculator
+\end{enumerate}
+
+\vfill 
+\pause
+
+{\Large Questions?}
+
+\end{frame}
+ 
+\end{document}
+

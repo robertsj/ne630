@@ -1,0 +1,164 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Resonance Absorption \\
+       {\small\it NE 630 - Lecture 10}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{approximate the flux spectrum $\phi(E)$ of epithermal neutrons subject to elastic collisions and resonance absorption in infinite, homogeneous systems.}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review}
+
+Last time, we discussed the {\bf spectrum equation}:
+\begin{align*}
+\tag{like FNRP 3.15}
+ \Sigma_t(E) \phi(E) &= \textcolor{wcprimary}{\int^{\infty}_0 p(E'\to E)\Sigma_s(E') \phi(E') dE'} \\ 
+    &+ \textcolor{wcalerted}{ \chi(E) \int^{\infty}_0 \bar{\nu}(E')\Sigma_f(E') \phi(E') dE'}  
+     + s'''_{\text{ext}}(E) \, .
+\end{align*}
+
+For $E > 0.1$ MeV, the spectrum can be approximated by
+\begin{equation*}
+ \phi(E) = \frac{\chi(E) s_f'''}{\Sigma_t(E)} \, ,
+\end{equation*}
+and for $1~\si{\electronvolt} < E < 0.1~\si{\mega\electronvolt}$, 
+the spectrum {\it without absorption} 
+follows
+\begin{equation*}
+  \phi(E) \propto \frac{1}{\Sigma_s(E) E} \, .
+  \tag{FNRP 3.23}
+\end{equation*}
+
+
+\end{frame}
+
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Slowing-Down in a Single Moderator}
+
+For neutrons slowing down in a purely (elastic) scattering system with a single 
+moderating nuclide, the spectrum equation becomes
+
+\begin{equation*}
+  \Sigma_s(E) \phi(E) = \int^{E/\alpha}_E \frac{1}{(1-\alpha)E'} \Sigma_s(E') \phi(E') dE' \, .
+  \tag{FNRP 3.22}
+\end{equation*}
+
+Those integral bounds are {\bf important}: any neutron landing at energy $E$ after a collision 
+must have had an initial energy $E'$ between $E$ (no energy loss) and $E/\alpha$ (maximum energy loss).
+For ${}^{1}$H, that upper bound is, of course $\infty$.
+
+\vfill 
+
+{\bf Example}: If the system has two moderating nuclei (e.g., water), how would we extend FNRP 3.22?
+
+\pause
+
+{\small {\it Ans. The right-hand side would be split into a sum of integrals for each nuclide.}}
+
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Slowing Down with Absorption}
+ 
+Consider a system with one moderator ($m$) nuclide and one fuel ($f$) nuclide.
+The slowing-down equation is then 
+ 
+\begin{align*}
+  \tag{FNRP 3.28}
+  \Sigma_t(E) \phi(E) 
+   =& \textcolor{wcalerted}{\int^{E/\alpha^f}_E \frac{1}{(1-\alpha^f)E'} \Sigma^f_s(E') \phi(E') dE'} \\
+   &+ \textcolor{wcprimary}{\int^{E/\alpha^m}_E \frac{1}{(1-\alpha^m)E'} \Sigma^m_s(E') \phi(E') dE'} \, . 
+\end{align*}
+
+In order to extract an approximate $\phi(E)$, we need to eliminate the integrals!
+
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{How Wide is a Resonance?}
+ 
+\centering
+\includegraphics{figures/sde_NR.pdf}
+ 
+\includegraphics{figures/sde_WR.pdf}
+
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Narrow Resonance Approximation}
+
+The energy loss due to scattering off moderating nuclei is always much larger 
+than the resonance width.  Assuming {\it negligible absorption between resonances} and 
+a {\it constant scattering cross section}, we can approximate
+\begin{align*}
+   \int^{E/\alpha^m}_E  & \frac{1}{(1-\alpha^m)E'} \Sigma^m_s(E') \phi(E') dE' \\
+  &\approx \int^{E/\alpha^m}_E \frac{1}{(1-\alpha^m)E'} \Sigma^m_s  \textcolor{wcprimary}{\left ( \frac{1}{E'} \right )} dE' \\
+  &= ? 
+\end{align*}
+
+\pause
+
+If the energy loss due to scattering off resonant nuclei is also much larger than 
+the resonance width, we can perform the same trick.  The resulting spectrum is
+
+\begin{equation*}
+\tag{like FNRP 3.29}
+ \boxed{ \phi_{\text{NR}}(E) \propto \frac{1}{\Sigma_t(E) E} } \, .
+\end{equation*}
+
+
+\end{frame}
+ 
+
+\end{document}
+

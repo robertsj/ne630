@@ -1,0 +1,342 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{The Multigroup Method:  \\
+       Two- and Three-Group Analysis \\
+       {\small\it NE 630 - Lecture 13}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{estimate the multiplication factor, thermal flux, and fast flux 
+using the two- and three-group formalisms for an infinite, homogeneous system.
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review - Normalization of $\phi(E)$}
+
+
+Let's use T, I, and F to indicate the thermal, intermediate \footnote{or epithermal},
+and fast energy ranges.  Then, define $C_T$, $C_I$, and
+$C_F$ such that 
+\begin{align*}
+ 1 =  \int^1_{10^{-3}} C_T E e^{-\frac{E}{kT}} =
+\int^{10^5}_{1} \frac{C_I}{\Sigma_t(E) E} dE =
+ \int^{10^7}_{10^5} \frac{C_F\chi(E)}{\Sigma_t(E)} dE \, ,
+\end{align*}
+i.e., so that the approximate spectral functions are normalized in each energy range.
+Finally, let's define the total thermal, intermediate,
+and fast fluxes as
+\begin{align*}
+ \phi_T  =  \int^1_{10^{-3}} \phi(E) dE \, , \,
+ \phi_I  =  \int^{10^5}_{1} \phi(E)  dE \, , \, \text{and} \,
+ \phi_F  =  \int^{10^7}_{10^5} \phi(E) dE \, .
+\end{align*}
+For now, we'll assume $\phi_T$, $\phi_I$, and $\phi_F$ are known\footnote{Do we know $\phi_T$, $\phi_I$, or $\phi_F$? Generally, no! However, we can often estimate their values in a relative sense, e.g., the ratio $(\phi_F + \phi_I)/\phi_T$.
+In fact, an important experiment in
+NE 648 is to measure such ratios of ``non-thermal'' to ``thermal'' fluxes.} so that, e.g.,
+the thermal flux can be written $\phi(E) \approx \phi_T C_T E e^{-E/(kT)}, 10^{-3} < E < 1$.
+
+\end{frame}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review - Effective Cross Section}
+
+Armed with normalized, approximate spectra in each energy range, we can define
+the {\bf effective} or {\bf spectrum-averaged} cross section:
+{\small
+\begin{align*}
+ \bar{\Sigma}_x &=  \frac{\int^{\infty}_0 \Sigma_x(E) \phi(E) dE}{\int^{\infty}_0 \phi(E) dE} \\
+                &=  \frac{
+                  \int^{1}_{10^{-3}} \Sigma_x(E) \phi_T C_T E e^{-\frac{E}{kT}}   dE +
+                  \int^{10^5}_1      \frac{\Sigma_x(E)  \phi_I C_I}{\Sigma_t(E) E} dE +
+                  \int^{10^7}_{10^5} \frac{\Sigma_x(E)   \phi_F C_F \chi(E)}{\Sigma_t(E)}dE 
+                }
+                {
+                  \int^{1}_{10^{-3}}   \phi(E) dE + 
+                  \int^{10^5}_{1}      \phi(E) dE + 
+                  \int^{10^7}_{10^{5}} \phi(E) dE
+                } \\
+                &= \frac{ 
+                   \bar{\Sigma}_{xT} \phi_T + 
+                   \bar{\Sigma}_{xI} \phi_I +  
+                   \bar{\Sigma}_{xF} \phi_F }
+                    {\phi_T + \phi_I + \phi_F} 
+                 = \frac{ 
+                   \bar{\Sigma}_{xT} \phi_T + 
+                   \bar{\Sigma}_{xI} \phi_I +  
+                   \bar{\Sigma}_{xF} \phi_F }
+                    {\phi_{\text{total}}} \, .                    
+\end{align*}
+}
+ 
+{\bf Simply, Simplify!}  If we neglect absorption in the intermediate range and 
+assume $\Sigma_t(E)$ is approximately constant in the fast range, then 
+$\phi_I(E) \propto E^{-1}$ and $\phi_F(E) \propto \chi(E)$.  By making these 
+approximations, the resonance integrals and $\chi$-averaged cross sections 
+of Table 3.2 in FNRP can be used directly!
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review - Balance Over All Energies}
+
+Integration of the spectrum equation over all energies leads to
+\begin{align*}
+ \int^{\infty}_0 \Sigma_t(E) \phi(E) dE = 
+    \int^{\infty}_0 \Sigma_s(E) \phi(E)  dE 
+   & +  \textcolor{wcprimary}{\int^{\infty}_0 \bar{\nu}(E)\Sigma_f(E) \phi(E) dE} \\
+    &+  \textcolor{wcalerted}{\int^{\infty}_0 s'''_{\text{ext}}(E) dE} \, 
+\end{align*}
+
+or
+
+\begin{equation*}
+   \bar{\Sigma}_a  \phi_{\text{total}} =  
+     \textcolor{wcprimary}{\nu\bar{\Sigma}_f  \phi_{\text{total}}} + 
+     \textcolor{wcalerted}{s'''_{\text{ext}}} \, .
+\end{equation*}
+ 
+If $\textcolor{wcprimary}{\nu\bar{\Sigma}_f} > 0$, the system has multiplication,
+and if $ \textcolor{wcalerted}{s'''_{\text{ext}}} > 0$, the system is driven
+by a source.  A system can be source driven, multiplying, or both.  (If neither,
+then it's a pretty boring system!)
+
+\vfill
+
+{\bf Ponderable}: What's $\phi_{\text{total}}$ for a source-free, multiplying system?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review - McNeil's Source-Driven Tank}
+
+Consider Prof.~McNeil's tank of water.  Suppose someone spilled a solution of ${}^{252}$Cf into the water, resulting in a uniformly-distributed neutron source of 10  \si{\per\cubic\centi\meter\per\second}.  What is the total neutron flux?  Assume that
+$\phi_T/\phi_F = \phi_I/\phi_F = 1$.
+
+\vfill 
+
+A template for solving these problems:
+\begin{enumerate}
+ \item State assumptions, e.g., ``Treat as an infinite, homogeneous pool of water for which
+ the approximate spectra just derived can be used to define suitable, effective cross sections.  Assume that the concentration of ${}^{252}$Cf is small enough\footnote{specific activity is $\approx 20\cdot 10^{12}$ Bq/g!} to ignore neutron interactions with it.''
+ \item Write down the governing equations, e.g., $\bar{\Sigma}_a \phi_{\text{total}} = s'''_{\text{ext}}$.
+ \item Compute $\bar{\Sigma}_a$ for water at room temperature.\footnote{Easy back-of-the-envelope sanity check: we know absorption is greater in water at thermal energies, so, as a bounding estimate of sorts, set $\bar{\Sigma}_a \approx (1/3)\bar{\Sigma}_{aT} \approx 0.007~\si{\per\centi\meter}$, i.e., completely ignore absorption above 1 eV. }
+ \item Set $s'''_{\text{ext}} = 10 ~ \si{\per\cubic\centi\meter\per\second}$.
+ \item Determine the flux, i.e., $\phi_{\text{total}}  = s'''_{\text{ext}}/\bar{\Sigma}_a$.
+\end{enumerate}
+
+
+\end{frame}
+  
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Multigroup Equations}
+
+Starting again with
+\begin{align*}
+\tag{like FNRP 3.15}
+ \Sigma_t(E) \phi(E) = & \textcolor{wcprimary}{\int^{\infty}_0 p(E'\to E)\Sigma_s(E') \phi(E') dE'} \\ 
+    &+ \textcolor{wcalerted}{ \chi(E) \int^{\infty}_0 \bar{\nu}(E')\Sigma_f(E') \phi(E') dE'} + s'''_{\text{ext}}(E) \, ,
+\end{align*}
+
+we break up the integrals on the right according to
+
+\begin{equation*}
+\tag{like FNRP 3.45}
+ \int^{\infty}_0 \to \int^{E_0=\infty}_{E_1} + \int^{E_1}_{E_2} + \ldots +  \int^{E_{g'-1}}_{E_{g'}} + \ldots + \int^{E_{G-1}}_{E_G=0} \, ,
+\end{equation*}
+
+and then integrate both sides over $E \in [E_{g-1}, E_{g}]$ to get 
+
+\begin{equation*}
+ \Sigma_{t,g} \phi_g = 
+   \textcolor{wcprimary}{ \sum_{g'=1}^G \Sigma_{s,g\gets g'} \phi_{g'}} + 
+   \textcolor{wcalerted}{\chi_g \sum_{g'=1}^G \nu\Sigma_{f,g'}\phi_{g'}} + s_{g} \, , \quad g = 1, 2, \ldots, G 
+ \, .
+\end{equation*}
+ 
+\vfill
+
+\end{frame}
+  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Summary of Multigroup Parameters}
+
+\begin{equation*}
+\boxed{
+ \Sigma_{t,g} \phi_g = 
+   \textcolor{wcprimary}{ \sum_{g'=1}^G \Sigma_{s,g\gets g'} \phi_{g'}} + 
+   \textcolor{wcalerted}{\chi_g \sum_{g'=1}^G \nu\Sigma_{f,g'}\phi_{g'}} + s_{g} \, , \quad g = 1, 2, \ldots, G 
+} \, 
+\end{equation*}
+
+{\small 
+\begin{equation*}
+\phi_g = \int_{E_g}^{E_{g-1}} \phi(E)\, dE 
+\qquad 
+\Sigma_{x,g} =
+\frac{ \displaystyle \int_{E_g}^{E_{g-1}} \Sigma_x(E)\,\phi(E)\, dE }
+     { \displaystyle \int_{E_g}^{E_{g-1}} \phi(E)\, dE }
+\qquad 
+\chi_g = \int_{E_g}^{E_{g-1}} \chi(E) dE 
+\end{equation*}
+
+% Group-to-group scattering (incident g' to outgoing g)
+\begin{equation*}
+\Sigma_{s,\,g \gets g'} =
+\frac{ \displaystyle \int_{E_g}^{E_{g-1}} dE \int_{E_{g'}}^{E_{g'-1}} dE'\,
+       \Sigma_s(E' \to E)\,\phi(E') }
+     { \displaystyle \int_{E_{g'}}^{E_{g'-1}} \phi(E')\, dE' } 
+\qquad s_g = \int_{E_g}^{E_{g-1}} s'''_{\text{ext}}(E)\, dE \, .
+\end{equation*}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Group-to-Group Scattering}
+
+For energies above 1 eV, we can assume no upscattering so that
+$\sigma_s(E'\to E) = \sigma_s(E')p(E'\to E)$ where 
+\begin{equation*}
+ p(E'\to E) = 
+ \begin{cases}
+   \frac{1}{(1-\alpha)E'} & \alpha E' < E < E' \\
+   0 & \text{otherwise} \, .
+ \end{cases}
+\end{equation*}
+
+Then
+\begin{equation*}
+ \sigma_{s,\,g \gets g'} =
+\frac{ \displaystyle \int_{E_{g'}}^{E_{g'-1}} dE' \frac{\sigma_s(E')\phi(E')}{(1-\alpha)E'}            \int_{ \textcolor{wcprimary}{\max{(E_g, \alpha E')}}}^{\textcolor{wcalerted}{\min{(E_{g-1}, E')}}} dE\,
+        }
+     { \displaystyle \int_{E_{g'}}^{E_{g'-1}} \phi(E')\, dE' } \, .
+\end{equation*}
+By convention, if the inner integral (over $E$) has a lower bound $\textcolor{wcprimary}{\max{(E_g, \alpha E')}}$ greater than its upper bound $\textcolor{wcalerted}{\min{(E_{g-1}, E')}}$, the result is zero.
+
+\end{frame}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Example: Three Groups}
+
+Consider again Prof.~McNeil's tank of water with ${}^{252}$Cf emitting 10 n's \si{\per\cubic\centi\meter\per\second}. 
+Write down the set of algebraic equations we can use to find the multigroup fluxes for $E_0 = 10$ MeV, $E_1 = 0.1$ MeV, 
+$E_2 = 1$ eV, and $E_3 = 10^{-3}$ eV.
+
+\pause 
+\vfill 
+
+{\footnotesize
+{\it Answer}:  
+\begin{align*}
+   \Sigma_{t,1}\phi_1 &= \Sigma_{s,1\gets 1} \phi_1 + s_1 \\
+   \Sigma_{t,2}\phi_2 &= \Sigma_{s,2\gets 1} \phi_1 + \Sigma_{s,2\gets 1} \phi_2  \\
+   \Sigma_{t,3}\phi_3 &= \Sigma_{s,3\gets 1} \phi_1 + \Sigma_{s,3\gets 2} \phi_2 + \Sigma_{s,3\gets 3} \phi_3  \\
+\end{align*}
+
+or
+
+\begin{align*}
+   \Sigma_{r,1}\phi_1 &=  s_1 \\
+   \Sigma_{r,2}\phi_2 &= \Sigma_{s,2\gets 1} \phi_1  \\
+   \Sigma_{r,3}\phi_3 &= \Sigma_{s,3\gets 1} \phi_1 + \Sigma_{s,3\gets 2} \phi_2   \\
+\end{align*}
+where $\Sigma_{r, g} = \Sigma_{t, g} - \Sigma_{s, g\gets g}$ is the removal cross section.
+}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Example: Group-to-Group Scattering}
+
+Assuming energy bounds of $E_0 = 10$ MeV, $E_1 = 0.1$ MeV, 
+$E_2 = 1$ eV, and $E_3 = 10^{-3}$ eV, isotropic scattering in the CM system, and 
+a constant-in-energy scattering 
+cross section $\sigma_s(E) = 20$ b, compute 
+$\sigma_{s, g\gets 2}$ for ${}^1$H for $g=1, 2, 3$.
+
+\pause 
+\vfill 
+
+{\footnotesize
+{\it Answer}:  For a constant $\sigma_s(E) = \sigma_s$, $\phi(E) = 1/E$, and $\alpha = 0$, we have
+
+\begin{equation*}
+ \sigma_{s,\,g \gets g'} =
+\frac{ \displaystyle \sigma_s \int_{E_{g'}}^{E_{g'-1}} dE' \frac{1}{(E')^2} 
+      [\textcolor{wcalerted}{ \min(E_{g-1}, E') } - 
+       \textcolor{wcprimary}{ \cancelto{E_g}{\max{(E_g, \alpha E')}} } 
+       ] }    
+     { \displaystyle \int_{E_{g'}}^{E_{g'-1}} \frac{1}{E'} \, dE' } \, .
+\end{equation*}
+Here, $\textcolor{wcalerted}{ \min(E_{g-1}, E') } = E'$ if $g=g'$; otherwise, $g < g'$ (for downscatter), and 
+$\textcolor{wcalerted}{ \min(E_{g-1}, E') } = E_{g-1}$.  It then follows that
+\begin{align*}
+ \sigma_{s,1\gets 2} &= 0 \, (\text{no upscatter}) \\
+ \sigma_{s,2\gets 2} &= \sigma_0 \frac{\ln(E_1/E_2)+(E_2/E_1 - 1)}{\ln(E_1/E_2)} \approx 0.913\sigma_0 \\
+ \sigma_{s,3\gets 2} &= \sigma_0 \frac{(E_2-E_3)(1/E_2 - 1/E_1)}{\ln(E_1/E_2)} \approx 0.087\sigma_0 \, .
+\end{align*}
+Note that $\sum_{g=1}^{3} \sigma_s{s, g\gets 2} = \sigma_0$.
+}
+
+
+\end{frame}
+
+ 
+\end{document}
+

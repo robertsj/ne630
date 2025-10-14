@@ -1,0 +1,303 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Unit Cells and Thermal Reactors  \\
+       {\small\it NE 630 - Lecture 17}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{use the four-factor formula to 
+characterize (quantitatively and qualitatively) the multiplication 
+factor of a thermal-spectrum reactor based on unit-cell quantities. 
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review: $k_{\infty}$}
+
+Generally, the neutron flux depends on energy {\it and} space, i.e., 
+
+$$
+  \phi = \phi(\mathbf{r}, E) \, .
+$$
+
+Thus, total reaction-rate densities require integration over both space and energy, e.g.,
+
+$$
+  k_{\infty} = \frac{\iiint\limits_{V} \int\limits^{\infty}_0 \nu(E) \Sigma_f(E) \phi(\mathbf{r}, E) d^3 r}
+                    { \iiint\limits_{V} \int\limits^{\infty}_0 \Sigma_a(E) \phi(\mathbf{r}, E) d^3 r } \, .
+$$
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Review: $k_{\infty}$ and Fast Spectrum Reactors}
+
+
+For a fast reactor composed of fuel ($f$), coolant ($c$), and structural material ($st$),
+the multiplication factor can be approximated by
+
+\begin{equation*}
+\tag{FNRP 4.8}
+k_{\infty} = \frac{ V_f \nu\bar{\Sigma}_f^f }
+                  { V_f \bar{\Sigma}_a^f + V_c \bar{\Sigma}_a^{c} + V_{st} \bar{\Sigma}_a^{st}} \, .
+\end{equation*}
+
+What does this approximation assume about $\phi(\mathbf{r}, E)$?  Is that valid?
+ 
+
+\end{frame}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{$k_{\infty}$ for Thermal Reactors}
+
+
+For thermal-spectrum reactors, we can no longer factor out an energy-dependent flux spectrum, and, from Eq. (4.18), we have
+ 
+\begin{equation*}
+  k_{\infty} = \frac{V_f \int^{\infty}_0 \nu\Sigma^f_f(E) \phi_f(E) dE}
+   {V_f \int^{\infty}_0 \Sigma_a^f \phi_f(E) dE 
+     + V_m \int^{\infty}_0 \Sigma_a^m(E) \phi_m(E) dE} \, .
+  \tag{FNRP 4.18} 
+\end{equation*}
+
+Note that this expression {\it does} assume that $\phi(\mathbf{r}, E)$ is spatially uniform within a region, e.g.,
+
+\begin{equation*}
+  \phi_f(\mathbf{r}, E) = \phi_f(E), \qquad \mathbf{r} \in V_f \, .
+\end{equation*}
+
+If there is spatial variation, then we can still use Eq. (4.18) if we use a volume averaged flux, e.g.,
+
+\begin{equation*}
+  \phi_f(E) = \phi_f(\mathbf{r}, E) = \frac{\iiint\limits_{V_f} \phi_f(\mathbf{r}, E) d^3 r}{V_f} \, .
+\end{equation*}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Reproduction Factor}
+
+\begin{equation*}
+  \eta_T = \frac{\nu\bar{\Sigma}_{fT}^f} {\bar{\Sigma}^f_{aT}}
+  \tag{FNRP 4.49}
+\end{equation*}
+
+\vfill 
+
+In plain English, $\eta_T$ is...?
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Thermal Utilization Factor}
+
+\begin{equation*}
+ f = \frac{1}{1 + \zeta \left(V_m \bar{\Sigma}^m_{aT} \big/ V_f \bar{\Sigma}^f_{aT} \right ) } \, ,
+ \tag{FNRP 4.48}
+\end{equation*}
+
+where 
+
+\begin{equation*}
+  \zeta = \frac{\bar{\phi}_{mT}}{\bar{\phi}_{fT}} \, ,
+ \tag{FNRP 4.50}
+\end{equation*}
+is the {\it thermal disadvantage factor}.
+
+
+\vfill 
+
+In plain English, $f$ is...?
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Resonance Escape Probability}
+
+{\small
+\begin{equation*}
+ p = 1 - \frac{V_f \int_I \Sigma_a^f(E) \phi_f(E) dE} 
+              {V_f \left [ \int_T \Sigma_a^f(E) \phi_f(E) dE + \int_T \Sigma_a^f(E) \phi_f(E) dE \right ] 
+               + V_m \int_T \Sigma_a^m(E) \phi_m(E) dE } \, .
+ \tag{FNRP 4.28} 
+\end{equation*}
+}
+
+\vfill 
+
+In plain English, $p$ is...?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Fast Fission Factor}
+
+\begin{equation*}
+ \varepsilon = \frac{\int_T \nu\Sigma_f^f(E) \phi_f(E) dE + \int_F \nu\Sigma_f^f(E) \phi_f(E) dE}
+ {\int_T \nu\Sigma_f^f(E) \phi_f(E) dE} \, .
+ \tag{FNRP 4.25}
+\end{equation*}
+
+\vfill 
+
+In plain English, $\varepsilon$ is...?
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Using Group Fluxes}
+
+In the expressions for $p$ and $\varepsilon$, integrals over energies are 
+taken.  With use of effective cross sections, one can write, e.g.,
+
+\begin{equation*}
+    V_f \int_T \Sigma^f_a(E) \phi_f(E) dE = V_f \bar{\Sigma}_{aT} \phi_{fT} .
+\end{equation*}
+
+{\bf Exercise}: Simplify  Eqs. (4.25) and (4.28) in terms of the effective cross sections and group-wise fluxes.  Here they are again:
+
+{\small
+\begin{equation*}
+ p = 1 - \frac{V_f \int_I \Sigma_a^f(E) \phi_f(E) dE} 
+              {V_f \left [ \int_T \Sigma_a^f(E) \phi_f(E) dE + \int_T \Sigma_a^f(E) \phi_f(E) dE \right ] 
+               + V_m \int_T \Sigma_a^m(E) \phi_m(E) dE } \, .
+ \tag{FNRP 4.28} 
+\end{equation*}
+
+\begin{equation*}
+ \varepsilon = \frac{\int_T \nu\Sigma_f^f(E) \phi_f(E) dE + \int_F \nu\Sigma_f^f(E) \phi_f(E) dE}
+ {\int_T \nu\Sigma_f^f(E) \phi_f(E) dE} \, .
+ \tag{FNRP 4.25}
+\end{equation*}
+}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Using Two-Group Fluxes}
+
+If we treat all energies above 1 eV as fast (F) and combine all non-fuel (nf)
+quantities, the four factors can be written as
+
+
+\begin{align*}
+\tag{FNRP 4.49*}
+\eta_T &= \frac{\nu\bar{\Sigma}_{fT}^f} {\bar{\Sigma}^f_{aT}} \\
+\tag{FNRP 4.48*}
+f &= \frac{1}{1 + \zeta \left(V_{nf} \bar{\Sigma}^{nf}_{aT} \big/ V_f \bar{\Sigma}^f_{aT} \right ) } \\
+\tag{FNRP 4.28*}
+p &= 1 - \frac{V_f \bar{\Sigma}^f_{aF} \phi^{f}_{F}}
+      {V_f \left[ \bar{\Sigma}^f_{aT} \phi^{f}_{T} + \bar{\Sigma}^f_{aF} \phi^{f}_{F} \right ]+ V_{nf} \bar{\Sigma}^{nf}_{aT} \phi^{nf}_{T}} \\
+\tag{FNRP 4.25*}
+\varepsilon &= \frac{\nu\bar{\Sigma}^f_{fT} \phi^{f}_{T} + \nu\bar{\Sigma}^f_{fF} \phi^{f}_{F} }
+   {\nu\bar{\Sigma}^f_{fF} \phi^{f}_{F} } 
+\end{align*}
+
+
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Spatial Homogenization}
+ 
+We can preserve reaction rates over multiple volumes just like 
+we did over energy ranges.  This process is called {\it spatial homogenization}.
+For some reaction $x$ and volumes $A$ and $B$, we seek $\bar{\Sigma}_x$ and $\bar{\phi}$
+that satisfies
+
+\begin{equation*}
+  V \bar{\Sigma}_x \bar{\phi}= (V^A + V^{B}) \bar{\Sigma}_x \bar{\phi} = V^A  \bar{\Sigma}^A_x  \bar{\phi}^A  + V^{B}  \bar{\Sigma}^{B}_x  \bar{\phi}^{B}  \
+\end{equation*}
+
+\vfill 
+
+To preserve the number of neutrons in the combined volume, we need
+\begin{equation*}
+  (V^A + V^{B})   \bar{\phi} =  V^A \bar{\phi}^A  + V^{B} \bar{\phi}^{B} \longrightarrow  \boxed{ \bar{\phi} = \frac{V^A}{V} \bar{\phi}^A + \frac{V^B}{V} \bar{\phi}^B } \, .
+\end{equation*}
+It then follows that
+\begin{equation*}
+ \boxed{\bar{\Sigma}_x = \frac{V^A  \bar{\Sigma}^A_x  \bar{\phi}^A  + V^{B}  \bar{\Sigma}^{B}_x  \bar{\phi}^{B}}
+                       { V^A \bar{\phi}^A + V^B \bar{\phi}^B } } \, .
+\end{equation*}
+
+
+% 
+% {\bf Example}:  Consider a unit cell in which the fuel is surrounded by a thin shell of metallic cladding (cl).
+% We wish to combine the moderator and cladding fluxes, cross sections and volumes into single non-fuel terms
+% so that reacion rates
+% are preserved.
+% Given $V^r$, $\bar{\Sigma}^{r}_{aT}$, $\phi^{r}_{T}$ for $r \in \{m, cl\}$, compute $V^{nf}$, $\bar{\Sigma}^{nf}_{aT}$, $\phi^{nf}_{T}$.
+% 
+% 
+% 
+% \vfill 
+% \pause
+% 
+% {\bf Solution}:  To preserve the overall absorption rate, we require 
+% \begin{equation*}
+%  V^{nf} \phi^{nf} \bar{\Sigma}^{nf}_{aT} = V^{m} \phi^{m} \bar{\Sigma}^{m}_{aT} + V^{cl} \phi^{cl} \bar{\Sigma}^{cl}_{aT} \, .
+% \end{equation*}
+% To preserve volume, we require $V^{nf} = V^m + V^{cl}$.
+% Finally, to preserve neutrons, recall that $\phi = n''' v$, so $V^{nf} n'''_{nf} = V^{m} n'''_m + V^{cl} n'''_{cl}$ implies
+% $\phi^{nf}_T = \frac{V^m}{V^{nf}} \phi^m_T + \frac{V^m}{V^{nf}} \phi^m_T
+
+
+\end{frame}
+ 
+ 
+ 
+\end{document}
+

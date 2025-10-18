@@ -1,0 +1,342 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Reactivity Impacts of \\Xenon and Samarium \\
+       {\small\it NE 630 - Lecture 22}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{quantify the impact of xenon and samarium buildup on reactivity.
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Reactivity}
+ 
+The multiplication factor ($k$) and the reactivity ($\rho$)
+are related by
+\begin{equation*}
+  \rho = \frac{k - 1}{k} \qquad \pause \longrightarrow \qquad
+  k =  \frac{1}{1-\rho} \, .
+\end{equation*}
+
+\vfill 
+\pause 
+
+Reactivity is given in units of $\Delta k/k$,  $\%\Delta k/k$, pcm, or \$,
+and changes in $\rho$ are characterized by {\bf (integral) worths}  ($\Delta \rho$)
+and {\bf reactivity coefficients} $\alpha_x = (\partial \rho/\partial x)|_{\text{non-}x\text{ fixed}}$.
+
+ 
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Reactivity in Time}
+ 
+As a reactor operates (at power), its excess reactivity typically 
+descreases because \textcolor{wcprimary}{${}^{235}$U is consumed} and
+\textcolor{wcprimary}{parasitic fission products (FPs) are born}.  However,
+that excess reactivity must \textcolor{wcalerted}{be balanced by control}.
+
+\vfill 
+
+To represent these processes, define a time-varying multiplication factor as
+\begin{equation*}
+\tag{FNRP 10.4*}
+  k(t) = \frac{ \textcolor{wcprimary}{\nu\bar{\Sigma}_{fT}^F(t)} 
+                \cdot p \cdot \varepsilon \cdot P_{\text{NL}}}
+    {\bar{\Sigma}_{aT}^F(t)  + \textcolor{wcprimary}{\bar{\Sigma}_{aT}^{\text{FP}}(t)}
+      + 
+        \varsigma \frac{V_M}{V_F} \left ( \bar{\Sigma}_{aT}^{M} + \textcolor{wcalerted}{\bar{\Sigma}_{aT}^{\text{control}}(t) } \right )  } \, ,
+\end{equation*}
+where $P_{\text{NL}}$ is the probability that neutrons do not leak from the system.  
+
+\vfill 
+
+During operation, the value of $\textcolor{wcalerted}{\bar{\Sigma}_{aT}^{\text{control}}(t)}$ must be adjusted to maintain $k(t) = 1$.  The equation above implies that \textcolor{wcalerted}{adjustable control} is introduced within the moderator volume, consistent with typical LWRs, whether by way of changing the \textcolor{wcalerted}{rod position} or \textcolor{wcalerted}{soluble poison concentration}.
+
+\end{frame}
+
+ 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Fission Products}
+ 
+
+\begin{columns}[T,onlytextwidth]
+
+\begin{column}{0.5\textwidth}
+ 
+Fission of ${}^{235}$U (or ${}^{239}$Pu, ...) produces two
+massive fragments called {\bf fission products} (FPs).
+
+\vspace{0.25cm}
+
+Often, FPs are
+\begin{itemize}
+ \item {\it radioactive} (which mode(s) dominate?)
+ \item {\it parasitic 
+       neutron absorbers} with large $\sigma_a$ (thermal and/or intermediate)
+\end{itemize}
+
+\vspace{0.25cm}
+
+Each fission produces a given FP a fraction 
+$\gamma_{fp}$ of the time called the {\bf fission yield}. 
+
+\vspace{0.25cm}
+{\bf Ponderable}: $\sum_{fp \, \in \text{all FPs}} \gamma_{fp} = ?$
+
+ 
+\end{column}
+
+\begin{column}{0.5\textwidth}
+
+\begin{table}
+ \begin{tabular}{cc}
+  \toprule
+  nuclide &  $\gamma_{fp}$ \\
+  \midrule
+  ${}^{134}$Xe & 0.078\\
+  ${}^{133}$Cs & 0.067\\
+  ${}^{95}$Mo & 0.065\\
+  ${}^{137}$Cs & 0.063\\
+  ${}^{135}$I & 0.063\\
+  ${}^{99}$Tc & 0.061\\
+  \bottomrule
+ \end{tabular}
+ \caption{Selected fission yields for ${}^{235}$U from the WIMS Library Update project; see \url{https://www-nds.iaea.org/wimsd/fpyield.htm}.}
+\end{table}
+
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Evolution of Fission-Product Concentrations}
+ 
+For a FP produced directly from fission, the rate of change of 
+its concentration can be modeled as
+
+\begin{equation*}
+ \tag{FNRP 10.7}
+ \frac{dN_{fp}}{dt} = -\lambda_{fp} N_{fp}(t) - \overbrace{\bar{\sigma}^{fp}_a N_{fp}(t)}^{\bar{\Sigma}_{a}^{fp} (t)} \phi 
+ + \gamma_{fp} \bar{\Sigma}_f \phi \, ,
+\end{equation*}
+where, as usual, the $\,\bar{}\,$ indicates spectrum averaging over all energies, i.e.,
+\begin{equation*}
+ \bar{\sigma}_{a}^{fp} = \frac{ \int^{\infty}_{0} \sigma_a^{fp}(E) \phi(E) dE}
+ { \int^{\infty}_{0}\phi(E) dE} \, .
+\end{equation*}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Most Important Duo: ${}^{135}$I and ${}^{135}$Xe}
+ 
+\begin{columns}[T,onlytextwidth]
+
+\begin{column}{0.5\textwidth}
+ 
+\vspace{0.25cm}
+
+Of all FPs,  \textcolor{wcprimary}{${}^{135}$Xe} is perhaps most important (see evidence at  right!), but its yield is only  \textcolor{wcprimary}{$\gamma_{Xe} \approx 0.00258$}.  
+
+\vspace{0.5cm}
+
+However, \textcolor{wcprimary}{${}^{135}$Xe} is a daughter of \textcolor{wcalerted}{${}^{135}$I}, whose yield is  \textcolor{wcalerted}{$\gamma_I \approx 0.063$}. 
+
+\vspace{0.5cm}
+
+Neglecting absorption in  \textcolor{wcalerted}{${}^{135}$I}, the evolution equations are 
+
+\end{column}
+
+\begin{column}{0.5\textwidth}
+
+\includegraphics[width=0.95\textwidth]{./figures/xe135_comparison.pdf}
+ 
+\end{column}
+
+\end{columns}
+ 
+\begin{align*}
+\tag{FNRP 10.12}
+ \textcolor{wcalerted}{\frac{dN_{I}}{dt}} &= 
+   \textcolor{wcalerted}{-\lambda_{I} N_{I}(t)} + 
+    \textcolor{wcalerted}{\gamma_{I} \bar{\Sigma}_f \phi} \, ,\\
+ \tag{FNRP 10.13}
+ \textcolor{wcprimary}{\frac{dN_{Xe}}{dt}} &= 
+  \textcolor{wcprimary}{-\lambda_{Xe} N_{Xe}(t)} +  \textcolor{wcalerted}{\lambda_{I} N_{I}(t)} \\
+    &\quad + \textcolor{wcprimary}{\gamma_{Xe} \bar{\Sigma}_f \phi} -  
+    \textcolor{wcprimary}{\bar{\sigma}^{Xe}_a N_{Xe}(t)\phi} \, .
+\end{align*}
+ 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Equilibrium Xenon Worth}
+ 
+Assuming constant $\bar{\Sigma}_f$ and $\phi$, the ${}^{135}$I and ${}^{135}$Xe
+concentrations will reach saturation levels that satisfy
+\begin{align*}
+ 0 &= 
+   \textcolor{wcalerted}{-\lambda_{I} N_{I}(\infty)} + 
+    \textcolor{wcalerted}{\gamma_{I} \bar{\Sigma}_f \phi} \, ,\\
+ 0 &= 
+  \textcolor{wcprimary}{-\lambda_{Xe} N_{Xe}(\infty)} +  \textcolor{wcalerted}{\lambda_{I} N_{I}(\infty)} \\
+    &\quad + \textcolor{wcprimary}{\gamma_{Xe} \bar{\Sigma}_f \phi} -  
+    \textcolor{wcprimary}{\bar{\sigma}^{Xe}_a N_{Xe}(\infty)\phi} \, 
+\end{align*}
+or 
+\begin{equation*}
+   \textcolor{wcalerted}{N_{I}(\infty)}   = \textcolor{wcalerted}{\frac{\gamma_I \bar{\Sigma}_f \phi}  {\lambda_I}} \qquad \text{and} \qquad
+    \textcolor{wcprimary}{N_{Xe}(\infty)}  =  \textcolor{wcprimary}{\frac{(\gamma_I + \gamma_{Xe})\bar{\Sigma}_f \phi}
+                     { \lambda_{Xe}+\bar{\sigma}^{Xe}_a \phi }}
+\end{equation*}
+
+\vfill 
+
+{\bf Example}. Suppose we have $\phi = 2\cdot 10^{14}\, \si{\per\centi\meter\squared\per\second}$, $\bar{\Sigma}_f=0.16 \, \si{\per\centi\meter}$, and $\bar{\sigma}^{Xe} = 2.6\cdot 10^6$ b (averaged over the core.  Compute $\bar{\Sigma}_a^{Xe}$.  What is the equilibrium Xe worth ($\Delta \rho_{Xe}$) if the reactor 
+is initially critical with $\bar{\Sigma}_a=0.34\, \si{\per\centi\meter}$?\\
+\pause
+
+{\small {\bf Ans.} $\Sigma_a^{Xe} \approx 0.01 \si{\per\centi\meter}$, $\Delta \rho_{Xe} = \bar{\Sigma}_a^{Xe}/\bar{\Sigma}_a \approx -2.9 \, \% \Delta k/k$}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Xenon Transient: The Problem}
+ 
+The solution of FNRP Eqs.~(10.12) and (10.13) is straightforward for 
+a constant flux using normal techniques, but when the flux varies in 
+time, numerical techniques are useful.  Almost all tools for solving
+systems of initial-value problems require that we write the problem
+in the form 
+\begin{equation*}
+ \frac{d\mathbf{y}}{dt} = \mathbf{f}(t, \mathbf{y}(t)) \, , 
+   \qquad \mathbf{y}(0) = \mathbf{y}_0 \, .
+\end{equation*}
+For our problem, that looks like
+\begin{align*}
+ \frac{d}{dt} 
+ \overbrace{
+ \begin{pmatrix}
+    N_I \\ N_{Xe} 
+ \end{pmatrix}}^{\mathbf{y}(t)} = 
+ \overbrace{
+ \begin{pmatrix}
+     -\lambda_{I}    &  0 \\
+      \lambda_{I}   & -\lambda_{Xe} -  \bar{\sigma}^{Xe}_a \phi(t)
+ \end{pmatrix} 
+ \begin{pmatrix}
+    N_I \\ N_{Xe} 
+ \end{pmatrix}
+ +
+ \begin{pmatrix}
+   \gamma_{I} \bar{\Sigma}_f \phi \\
+   \gamma_{Xe} \bar{\Sigma}_f \phi
+ \end{pmatrix}}^{\mathbf{f}(t,\mathbf{y}(t))}
+\end{align*}
+with initial concentration $N_{I,0}$ and $N_{Xe,0}$.  We'll 
+start with the following:
+\begin{minted}[frame=single,framesep=5pt]{python}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+\end{minted} 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Xenon Transient: The Code}
+ 
+\begin{minted}[frame=single,framesep=5pt]{python}
+def dNdt(t, N, ϕ, σa_Xe, Σf):
+  γ_I, γ_Xe = 0.0639, 0.00237
+  λ_I, λ_Xe = 0.693/(6.7*3600), 0.693/(9.2*3600)
+  σa_Xe = σa_Xe*1e-24
+  N_I, N_Xe = N
+  dN_Idt = -λ_I*N_I + γ_I*Σf*ϕ(t)
+  dN_Xdt = -λ_X*N_Xe + λ_I*N_I + (γ_X*Σf-σa_X*N_Xe)*ϕ(t)
+  return dN_Idt, dN_Xdt
+hour=3600; day = 24*hour;
+flux = lambda t: 2e14 if t < 3*day else 0.0
+result = solve_ivp(fun=dNdt, t_span=(0.0, 5*day), 
+  y0=(0, 0), args=(flux, 2.3e6, 0.16), max_step=1*hour)
+t = result.t/3600; N_I, N_Xe = result.y
+plt.plot(t, N_I, color=orange, lw=1, label="I")
+plt.plot(t, N_Xe, color=purple, lw=1, ls="-.", label="Xe")
+plt.xlabel("$t$ (h)"); plt.ylabel("N(t) (cm$^{-3}$)")
+plt.legend();
+\end{minted} 
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Xenon Transient: The Result}
+ 
+\centering
+\includegraphics[width=0.9\textwidth]{./figures/Xe_transient.pdf}
+
+\end{frame}
+
+\end{document}
+

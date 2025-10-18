@@ -21,8 +21,8 @@
 \everymath=\expandafter{\the\everymath\displaystyle}
 
 
-\title{Designing a PWR Unit Cell  \\
-       {\small\it NE 630 - Lecture 19}}
+\title{Reactivity: Units, \\ Coefficients, and Control \\
+       {\small\it NE 630 - Lecture 20}}
 
 \date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
 
@@ -48,8 +48,7 @@ Students will be able to
 \vfill
 
 \begin{quote}
-\textcolor{wcprimary}{construct a detailed model of a LWR unit cell
-and compare the results to theoretical models based on the four-factor formula.
+\textcolor{wcprimary}{quantify changes in reactivity due to changes in operating conditions.
 }
 \end{quote}
 
@@ -58,409 +57,385 @@ and compare the results to theoretical models based on the four-factor formula.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Review: the four-factor formula}
-
-Recall $k_{\infty} = \eta_T f p \varepsilon$, where
-\begin{align*}
-\eta_T &= \frac{\nu\bar{\Sigma}_{fT}^f} {\bar{\Sigma}^f_{aT}} \\
-f &= \frac{1}{1 + \zeta \left(V_{nf} \bar{\Sigma}^{nf}_{aT} \big/ V_f \bar{\Sigma}^f_{aT} \right ) } \\
-p &= 1 - \frac{V_f \bar{\Sigma}^f_{aF} \bar{\phi}^{f}_{F}}
-      {V_f \left[ \bar{\Sigma}^f_{aT} \bar{\phi}^{f}_{T} + \bar{\Sigma}^f_{aF} \bar{\phi}^{f}_{F} \right ]+ V_{nf} \bar{\Sigma}^{nf}_{aT} \bar{\phi}^{nf}_{T}} 
-  \approx \textcolor{wcprimary}{\exp \left (- \frac{V_f  N_{fe} I^{\text{het}}_a}{V_{m} \xi^{m} \Sigma^{m}_s  } \right )} \\
-\varepsilon &= \frac{\nu\bar{\Sigma}^f_{fT} \bar{\phi}^{f}_{T} + \nu\bar{\Sigma}^f_{fF} \bar{\phi}^{f}_{F} }
-   {\nu\bar{\Sigma}^f_{fT} \bar{\phi}^{f}_{T} } 
- \approx \textcolor{wcprimary}{ 1 + \frac{ (1-\tilde{e})}{\tilde{e}} \frac{\bar{\nu}^{fe} \bar{\sigma}^{fe}_{fF} }
-                     {\bar{\nu}^{fi}\bar{\sigma}^{fi}_{fT}   }}
-\end{align*}
+\begin{frame}[fragile]{Review: OpenMC and the PWR Unit Cell}
+ 
+If you are on Beocat, there should be no problems with the example as given.
+However, if you are on Docker, the included data is actually a bit 
+incomplete.  
 
 \vfill 
 
-Here, ${}^f$ and ${}^{nf}$ indicate ``fuel'' and ``non-fuel'', $_T$ and $_F$ indicate ``thermal'' and ``non-thermal'' (or $E > 1$ eV), and $\bar{\,}$ indicates averaging over space and/or energy.
+First, add the following {\bf at the top of your notebook} to avoid any errors related to missing nuclides:
+\begin{minted}[frame=single,framesep=5pt]{python}
+import os
+os.environ["OPENMC_CROSS_SECTIONS"] = \
+  "/root/nndc_hdf5/cross_sections.xml"
+\end{minted}
+
+\vfill 
+
+Then, because the data included is only available for 294 K, you cannot set other temperatures!  Sorry :(
+
 \end{frame}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Reactivity}
+ 
+Recall that
+
+\begin{equation*}
+  k_{\infty} = \frac{\text{total production rate}}{\text{total absorption rate}} \, .
+\end{equation*}
+
+\vfill 
+
+Then the {\bf reactivity} is defined as
+
+\begin{equation*}
+  \rho_{\infty} = \frac{k_{\infty} - 1}{k_{\infty}} \, 
+  \tag{Like FNRP  9.1}
+\end{equation*}
+
+\vfill 
+
+{\bf Example}.  Compute the reactivity of a reactor with $k_{\infty} = 1.01$.
+
+\pause 
+
+{\small {\bf Ans}. $\rho_{\infty} = 0.00990$.}
+ 
+\end{frame}
+
+ 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Designing a PWR Unit Cell in OpenMC}
+\begin{frame}[fragile]{Reactivity Units}
 
+Although $\rho$ (and $k$) are unitless, the small magnitude of 
+reactivities suggests different units.  By example, these are 
+\begin{align*}
+ \rho    &= 0.00990 \, (\Delta k/k) \\
+               &= 0.990 \, (\% \Delta k/k) \\ 
+               &= 990 \, (\text{pcm}) \, ,
+\end{align*}
+where ``pcm'' stands for ``percent milli'' (or, $1$ part in $10^5$).
+
+\vfill  
+\pause 
+
+An alternative unit used by operators is the {\it dollar} of reactivity.
+Given the {\bf delayed neutron precursor fraction} $\beta$, we say that\footnote{Because $\beta$ depends on the fissioning species, reactivities reported in dollars are generally specific to the particular system!} 
+\begin{equation*}
+    \rho \, (\Delta k/k) = \frac{\rho}{\beta} \, (\$) \, .
+\end{equation*}
+
+{\bf Example}:  If $\beta = 0.007$, what is $\rho$ in \$?
+
+\pause 
+
+{\small {\bf Ans.}  $0.0099/0.007 = 1.4\$ $.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Reactivity Units}
+
+Although $\rho$ (and $k$) are unitless, the small magnitude of 
+reactivities suggests different units.  By example, these are 
+\begin{align*}
+ \rho    &= 0.00990 \, (\Delta k/k) \\
+               &= 0.990 \, (\% \Delta k/k) \\ 
+               &= 990 \, (\text{pcm}) \, ,
+\end{align*}
+where ``pcm'' stands for ``percent milli'' (or, $1$ part in $10^5$).
+
+\vfill  
+\pause 
+
+An alternative unit used by operators is the {\it dollar} of reactivity.
+Given the {\bf delayed neutron precursor fraction} $\beta$, we say that\footnote{Because $\beta$ depends on the fissioning species, reactivities reported in dollars are generally specific to the particular system!} 
+\begin{equation*}
+    \rho \, (\Delta k/k) = \frac{\rho}{\beta} \, (\$) \, .
+\end{equation*}
+
+{\bf Example}:  If $\beta = 0.007$, what is $\rho$ in \$?
+
+\pause 
+
+{\small {\bf Ans.}  $0.0099/0.007 = 1.4\$ $.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Excess Reactivity and Control}
+
+Reactors must have a positive or {\bf excess reactivity} to operate; otherwise, the first fission would bring an initial $\rho = 0$ to $\rho < 0$!  To  maintain a critical state, some form of adjustable {\bf reactivity control} is used to decrease (or increase) $\rho$ to balance  \textcolor{wcprimary}{short-} and \textcolor{wcalerted}{long-term} changes in the operating conditions that include 
+\begin{itemize}
+ \item \textcolor{wcprimary}{temperature (of the fuel)}
+ \item \textcolor{wcprimary}{density (of the coolant)}
+ \item \textcolor{wcprimary}{control configuration (e.g., soluble boron concentration; rod positions)}
+ \item \textcolor{wcalerted}{xenon (from zero to equilibrium)}
+ \item \textcolor{wcalerted}{depletion (we lose ${}^{235}$U with each fission)}
+\end{itemize}
+
+\vfill
+
+The impact of these changes on $\rho$ are characterized via
+\begin{itemize}
+ \item reactivity worths $\Delta \rho$ (e.g., power defect)
+ \item reactivity coefficients $\alpha_x = \frac{\partial \rho}{\partial x}\Big |_{\text{non-}x\text{ fixed}}$ (e.g., $x = T_F$)
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Excess Reactivity from Shutdown to Full Power}
+ 
 \begin{columns}[T,onlytextwidth]
-% ----------------------------------------------------------
-\begin{column}{0.45\textwidth}
-\centering
-\begin{tikzpicture}[>=Stealth, line cap=round, line join=round, scale=4]
 
-% --- Parameters (cm) ---
-\def\P{1.2}       % pitch
-\def\rfuel{0.45}  % fuel radius
-\def\rclad{0.50}  % cladding outer radius
-\def\halfP{0.6}   % P/2
+\begin{column}{0.5\textwidth}
 
-% --- Colors (for standalone compilation) ---
-\definecolor{skyblue}{RGB}{180,220,255}
-\definecolor{wcprimary}{HTML}{512888}
-\definecolor{wcalerted}{HTML}{CA7C1B}
+\begin{tikzpicture}[
+  >=Stealth,
+  thick,
+  dot/.style={circle,fill,inner sep=2pt},
+  lab/.style={font=\footnotesize},
+  every node/.style={ }
+]
 
-% --- Background water ---
-\fill[skyblue, draw=skyblue!70!black, thin] (-\halfP,-\halfP) rectangle (\halfP,\halfP);
+% --- x locations for the four conditions
+\def\xMin{0} 
+\def\xMax{3.5} 
+\def\xA{0.0*\xMax}   % cold shutdown
+\def\xB{0.3*\xMax}   % cold critical
+\def\xC{0.6*\xMax}   % hot zero power
+\def\xD{0.9*\xMax}   % full power
 
-% --- Cladding and fuel ---
-\filldraw[wcalerted, fill=wcalerted!70, thick] (0,0) circle (\rclad);
-\filldraw[wcprimary, fill=wcprimary!80, thick] (0,0) circle (\rfuel);
 
-% --- Dimension arrows ---
-\def\angfuel{45}
-\def\angclad{-45}
+% --- y values of the excess-reactivity curve (adjust to taste)
+\def\yMax{6.0}
+\def\yMin{0.0}
+\def\yA{0.9*\yMax}
+\def\yB{0.65*\yMax}
+\def\yC{0.4*\yMax}
+\def\yD{0.2*\yMax}
 
-% Fuel radius arrow
-\draw[->, thick, white]
-  (0,0) -- ++(\angfuel:\rfuel)
-  node[midway, above left=0.5pt and 1pt, font=\scriptsize, text=white]
-  {$r_f$};
+% --- Axes
+\draw[->] (\xMin,\yMin) -- (\xMax,\yMin);
+\draw[->] (\xMin,\yMin) -- (\xMin,\yMax);
+\node[lab, rotate=90] at (-0.4, 3) {$\rho_{\text{ex}}$};
+\node[lab] at (-0.4, \yMin) {$0$};
 
-% Cladding radius arrow
-\draw[->, thick, white]
-  (0,0) -- ++(\angclad:\rclad)
-  node[midway, below left=2pt and 0.5pt, font=\scriptsize, text=white]
-  {$r_c$};
+% --- Zero markers under each operating condition
+%\foreach \x in {\xA,\xB,\xC,\xD}{\fill (\x,0) circle (2.2pt);}
 
-% Pitch label (bottom)
-\draw[|<->|]
-  (-\halfP,-\halfP-0.05) -- (\halfP,-\halfP-0.05)
-  node[midway, below=4pt, font=\scriptsize] {$P$};
+\foreach \x in  {\xA,\xB,\xC,\xD}
+   \draw [shift={(\x,0)}, color=black] (0pt,-2pt) -- (0pt,2pt);
+   
+\foreach \y in  {\yMin, \yA,\yB,\yC,\yD}
+   \draw [shift={(0,\y)}, color=black] (-2pt,0pt) -- (2pt,0pt);
+
+% --- Trend line (dashed) and the four points
+%\draw[dashed] (\xA,\yA) -- (\xD,\yD);
+\fill (\xA,\yA) circle (2.2pt);
+\fill (\xB,\yB) circle (2.2pt);
+\fill (\xC,\yC) circle (2.2pt);
+\fill (\xD,\yD) circle (2.2pt);
+
+% --- Braces and labels
+% Shutdown margin: between cold-shutdown dot and cold-critical point
+\draw[decorate,decoration={brace,amplitude=5pt,mirror}]
+      (\xB+0.1,\yB) -- node[right=7pt,lab]{shutdown margin $|\Delta \rho_{\text{sd}}|$} (\xB+0.1,\yA);
+
+% Temperature defect: cold critical -> hot zero power
+\draw[decorate,decoration={brace,amplitude=5pt,mirror}]
+      (\xC+0.1,\yC) -- node[right=7pt,lab]{temperature defect $|\Delta \rho_{\text{td}}|$} (\xC+0.1,\yB);
+
+% Power defect: hot zero power -> full power
+\draw[decorate,decoration={brace,amplitude=5pt,mirror}]
+      (\xD+0.1,\yD) -- node[right=7pt,lab]{power defect $|\Delta \rho_{\text{pd}}|$} (\xD+0.1,\yC);
+
+% "How to handle?" from zero to the full-power point
+\draw[decorate,decoration={brace,amplitude=5pt,mirror}]
+      (\xMax,\yMin+0.1) -- node[right=7pt,lab]{variable control} (\xMax,\yD);
+
+% --- Operating-condition labels
+\node[below=8pt,align=center,lab] at (\xA,0) {cold\\shutdown};
+\node[below=8pt,align=center,lab] at (\xB,0) {cold\\critical};
+\node[below=8pt,align=center,lab] at (\xC,0) {hot zero\\power};
+\node[below=8pt,align=center,lab] at (\xD,0) {hot full\\power};
+
+% --- Temperature annotations
+\node[below=28pt,lab,align=center] at ({(\xA+\xB)/2},0)
+  {$T_M=300\,\text{K}$\\$T_F=300\,\text{K}$};
+\node[below=28pt,lab,align=center] at (\xC,0)
+  {$600\, \text{K}$\\$600\,\text{K}$};
+\node[below=28pt,lab,align=center] at (\xD,0)
+  {$600\,\mathrm{K}$\\$1200\,\mathrm{K}$};
+
+% --- Startup time arrow
+\draw[->] (\xB,-2) -- node[below,lab]{startup time} (\xD,-2);
 
 \end{tikzpicture}
+
 \end{column}
 
-% ----------------------------------------------------------
-\begin{column}{0.55\textwidth}
-\small
+\begin{column}{0.5\textwidth}
 
-\begin{table}
-\begin{tabular}{ccc}
-\toprule
- {\bf Region} & {\bf ``Volume''} & {\bf Material} \\
-\midrule
- \textcolor{wcprimary}{Fuel} &  \textcolor{wcprimary}{$\pi r_f^2$} &  \textcolor{wcprimary}{(enriched) UO$_2$} \\
-\midrule
- \textcolor{wcalerted}{Cladding}  & \textcolor{wcalerted}{$\pi (r_c^2 - r_f^2)$} & \textcolor{wcalerted}{Zircaloy-4}\\
-\midrule
- Moderator  & $P^2 - \pi r_c^2$ & (borated) water\\
-\bottomrule
-\end{tabular}
-\end{table}
+ 
+
+$\Delta\rho_{\text{sd}}$: Amount by which reactor is subcritical with all control rods inserted.  The total control-rod worth is $\Delta \rho_{\text{ex}}+|\Delta \rho_{\text{sd}}|$.
 
 \vspace{0.25cm}
 
-{\bf The Initial Goal}: Given $r_f$ and $r_c$, determine $P$ such that
-we maximize $k_{\infty}$.  Equivalently, find the value of $P/D$ that maximizes $k_{\infty}$, where $D$ is the fuel diameter.
+$\Delta\rho_{\text{td}}$: Negative change in reactivity when core goes from 300 K to 600 K due to fuel Doppler broadening and moderator density reduction.
+
 
 \vspace{0.25cm}
 
-{\bf Ponderables}: Which of the four factors depend on $r_f$ and $P$, or, equivalently, $P/D$?
-What range of values can $P/D$ have?
+
+$\Delta\rho_{\text{pd}}$: Additional negative reactivity inserted as power increases from hot zero power to full power, further shifting temperature and density.
+
+\vspace{0.25cm}
+
+
+Variable control: soluble boron or control rods bring $\rho_{\text{ex}}$ to 0. 
+
+\vspace{0.25cm}
+
+
 
 \end{column}
-% ----------------------------------------------------------
+
 \end{columns}
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Model Initialization and Parameters}
+\begin{frame}[fragile]{Understanding $\alpha_x$ Through the Four Factors}
 
-\begin{minted}[frame=single,framesep=5pt]{python}
-import numpy as np, matplotlib.pyplot as plt, openmc
-model = openmc.Model()
-enrichment = 4.0   # % by atom
-fuel_radius = 0.45 # cm
-clad_radius = 0.46 # cm
-pitch = 1.2        # cm
-enrichment = 4.0   # weight percent
-boron_ppm = 0.0    # parts per million 
-pressure = 15.5    # MPa
-T_fuel = 1200.0    # K
-T_cool = 600.0     # K
-# volumes for each region 
-fuel_volume = np.pi*fuel_radius**2 
-clad_volume = np.pi*clad_radius**2 - fuel_volume
-cool_volume = pitch**2 - np.pi*clad_radius**2
-\end{minted}
+The instantaneous change in $\rho$ due to a change in some 
+system parameter $x$ (with all other parameters fixed) is
 
-\end{frame}
-  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Model Materials}
+\begin{align*}
+ \alpha_x = \frac{\partial \rho}{\partial x}
+ \approx \frac{1}{k} \frac{\partial k}{\partial x}  
+ = \frac{1}{\eta_T} \frac{\partial \eta_T}{\partial x}
+  + \frac{1}{f} \frac{\partial f}{\partial x}
+  + \frac{1}{p} \frac{\partial p}{\partial x}
+  + \frac{1}{\varepsilon} \frac{\partial \varepsilon}{\partial x}
+\end{align*}
 
-\begin{minted}[frame=single,framesep=5pt]{python}
-uo2 = openmc.Material(name="uo2")
-uo2.add_element('U', 1.0, enrichment=enrichment)
-uo2.add_element('O', 2.0)
-uo2.set_density('g/cc', 10.5)
-uo2.temperature = T_fuel
-# Zircaloy-4 has < 2% Fe, Cr, and Sn
-zirconium = openmc.Material(name="zirconium")
-zirconium.add_element('Zr', 1.0)
-zirconium.set_density('g/cc', 6.6)
-zirconium.temperature = 0.5*(T_fuel + T_cool)
-# Helper function automatically computes density
-water = openmc.model.borated_water(
-  boron_ppm=boron_ppm, temperature=T_cool, temp_unit='K',
-  pressure=pressure,  press_unit='MPa')
-model.materials = [uo2, zirconium, water]
-\end{minted}
+where $x \in \{T_F, T_M, \ldots \}$.  
+
+\vfill 
+
+The most important coefficients of reactivity are
+
+\begin{equation*}
+ \alpha_F = \text{fuel temperature coefficient (FTC)}
+\end{equation*}
+and
+\begin{equation*}
+ \alpha_M = \text{moderator temperature coefficient (MTC)} \, .
+\end{equation*}
+
+\vfill 
+
+{\bf Ponderable}.  Which of the four factors explicitly depend 
+on $T_F$?  $T_M$?
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Model Geometry}
+\begin{frame}[fragile]{Fuel Temperature Coefficient}
 
-\begin{minted}[frame=single,framesep=5pt]{python}
-fuel_surface = openmc.ZCylinder(r=fuel_radius)
-clad_surface = openmc.ZCylinder(r=clad_radius)
-outer_surface = openmc.model.RectangularPrism(
-  width=pitch, height=pitch, boundary_type='reflective')  
-fuel_region = -fuel_surface
-clad_region = +fuel_surface & -clad_surface
-cool_region = +clad_surface & -outer_surface          
-fuel_cell = openmc.Cell(name='fuel', 
-  fill=uo2, region=fuel_region)
-clad_cell = openmc.Cell(name='cladding', 
-  fill=zirconium, region=clad_region)
-cool_cell = openmc.Cell(name='coolant', 
-  fill=water, region=cool_region)
-root_universe = openmc.Universe(
-  cells=(fuel_cell, clad_cell, cool_cell))
-model.geometry.root_universe = root_universe
-\end{minted}
+Recall for a UO$_2$ fuel element of mass density $\rho$ and diameter $D$ that 
+\begin{equation*}
+\tag{FNRP 4.40}
+p(T_F) = e^{-\displaystyle\frac{V_f N_{fe} I_{\text{het}}(T_F)}{V_m \xi^m \bar{\Sigma}_s^m}} \, ,
+\end{equation*}
+where we write $p$ as a function of $T_F$, and 
+\begin{align*}
+\tag{FNRP 9.13}
+ I_{\text{het}}(T_F) = I_{\text{het}}(300) [ 1 + \tilde{\gamma} (\sqrt{T_F} - \sqrt{300})] \\
+\tag{FNRP Table 4.3}
+ I_{\text{het}}(300) = 4.45 + 26.6\sqrt{4/(\rho D)} \\
+\tag{FNRP 9.14 and Table 9.1}
+ \tilde{\gamma} = 0.0061 + 0.0047(4/(\rho D)) \, .
+\end{align*}
 
-\end{frame}
+\pause 
+\vfill 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Model Source and Settings}
+Since $p$ is the only factor with (explicit) $T_F$ dependence, we have 
+\begin{align*}
+\tag{FNRP 9.16}
+  \alpha_F = \frac{1}{p} \frac{\partial p}{\partial T_F} 
+    = -\ln{\left ( \frac{1}{p(300)} \right ) }\frac{\tilde{\gamma}}{2\sqrt{T_F}} \, .
+\end{align*}
 
-\begin{minted}[frame=single,framesep=5pt]{python}
-# distributions in space, angle, and energy
-d_space = openmc.stats.Point((0, 0, 0))
-d_angle = openmc.stats.Isotropic()
-d_energy = openmc.stats.Watt()
-# initial neutron distribution
-source = openmc.IndependentSource(
-  space=d_space, angle=d_angle, energy=d_energy)
-# settings that govern simulation
-model.settings.batches = 100    # number of "generations"
-model.settings.inactive = 10    # number to skip
-model.settings.particles = 1000 # number of n's per "gen"
-model.settings.run_mode = 'eigenvalue' # solve for k_oo
-model.settings.temperature = {"method": "interpolation"}
-\end{minted}
+\vfill 
+
+For PWR's, $|\alpha_F| \approx 2--3$ pcm/K, while for our TRIGA, $|\alpha_F| \approx -10$ pcm/K!
 
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Model Tallies (i.e., What We Compute Beyond $k_{\infty}$)}
 
-The following sets up the computation of $\phi_{g}^{R}$ for 
-\begin{itemize}
- \item $R \in \{\text{fuel, cladding, moderator} \}$
- \item $g \in \{ 1, 2, \ldots, G=70 \}$
-\end{itemize}
-Explore {\tt openmc.mgxs.GROUP\_STRUCTURES} for other options.
- 
-\begin{minted}[frame=single,framesep=5pt]{python}
-spectrum_bounds = openmc.mgxs.GROUP_STRUCTURES["CASMO-70"]
-energy_filter = openmc.EnergyFilter(spectrum_bounds)
-cell_filter = openmc.CellFilter(
-  [fuel_cell, clad_cell, cool_cell])
-spectrum_tally = openmc.Tally()
-spectrum_tally.filters = [cell_filter, energy_filter]
-spectrum_tally.scores = ['flux']
-model.tallies.append(spectrum_tally)
-\end{minted}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Moderator Temperature Coefficient}
+
+Further, recall that 
+\begin{equation*}
+ f = \frac{1}{1 + \varsigma\left ( \frac{V_m}{V_f} \frac{\bar{\Sigma}^m_{aT}}{\bar{\Sigma}^f_{aT}} \right )}
+\end{equation*}
+Both $p$ and $f$ depend on $T_m$ through the moderator densitites: 
+if $\rho_{\text{H}_2\text{O}} \downarrow$, then $\bar{\Sigma}^m_{aT}\downarrow$ and $\xi^m \bar{\Sigma}_s^m \downarrow$.
+
+\vfill 
+Based on our simple models for $p$ and $f$, the net result is 
+\begin{equation*}
+\tag{FNRP 9.XX}
+ \alpha_{M}
+  = -\beta_M \left ( \textcolor{wcprimary}{\ln(1/p)} - \textcolor{wcalerted}{(1-f)} \right) \, ,
+\end{equation*}
+where $\beta_M$ is the volumetric coefficient of thermal expansion of the moderator.  To ensure $\alpha_M < 0$ (negative feedback) requires that
+$\textcolor{wcprimary}{\ln(1/p)} > \textcolor{wcalerted}{(1-f)}$.
+
+\vfill 
+
+{\bf Example}. If $p=0.6$, $f=0.95$, and $\beta_M \approx 2.9\cdot 10^{-4} \si{\per\kelvin}$, determine $\alpha_M$.
+\pause 
+
+{\small {\bf Ans}. $\alpha_M = -2.9\cdot 10^{-4} (\ln(1/0.6) - (1-0.95) \approx -13$ pcm/K}.
 
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Multigroup Cross Sections}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Addendum: On the Use of OpenMC for $\alpha_x$}
 
-The following sets up the computation of $\bar{\Sigma}_{x,g}^{R}$, etc., for 
-\begin{itemize}
- \item $R \in \{\text{fuel, cladding, moderator} \}$
- \item $g \in \{ 1, 2, \ldots, G=70 \}$
- \item $x \in \{t, a, f, s \}$, etc.
-\end{itemize}
- 
-\begin{minted}[frame=single,framesep=5pt]{python}
-mgxs_lib = openmc.mgxs.Library(model.geometry)
-mgxs_lib.energy_groups = \
-  openmc.mgxs.EnergyGroups(group_edges=[1e-3,1,1e7])
-mgxs_lib.mgxs_types = ['total', 'absorption', 'nu-fission', 
-  'fission', 'scatter matrix', 'chi']
-mgxs_lib.domain_type = 'cell'
-mgxs_lib.domains = \
-  model.geometry.get_all_material_cells().values()
-mgxs_lib.by_nuclide = False # True for microscopic 
-mgxs_lib.build_library()
-mgxs_lib.add_to_tallies_file(model.tallies, merge=True)
-\end{minted}
+Perhaps the easiest way to approximate, e.g., $\alpha_F$ is by using a 
+{\bf finite-difference approximation}.  Suppose we run our PWR unit cell 
+model with a fuel temperature at 1200 K and get $k_{1200}$.  Doing the 
+same for $T_F = 1300$ K, we get $k_{1300}$.  It follows that
+\begin{equation*}
+ \alpha_F \approx \frac{\rho_{1300}-\rho_{1200}}{1300-1200} \, .
+\end{equation*}
+Note, however, that the uncertainties in $k$ can easily be on the order of
+several pcm, so it's very easy for $\alpha_F$ to have overwhelmingly large
+relative errors!
 
-\end{frame}
+\vfill
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Running Simulation and Loading Results}
-
-
-\begin{minted}[frame=single,framesep=5pt]{python}
-# Run the model and return the statepoint (result file) path
-sp_path = model.run(output=True)
-
-# Load the results and cross sections
-sp = openmc.StatePoint(sp_path)
-mgxs_lib.load_from_statepoint(sp)
-
-# OpenMC places all the values in a 1-D array.  Reshaping 
-# and transposing gives us a 2-D array with the multigroup 
-# flux for each of the 3 regions by column.
-phi = sp.tallies[spectrum_tally.id].mean.reshape((3, 
-  len(spectrum_bounds)-1)).T
-\end{minted}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Processing the Spectra}
-
-The fluxes computed by OpenMC are actually equal to $V^R \phi^R_g$.  In short,
-OpenMC tracks neutrons and, by group and region, adds up the total distance 
-all neutrons travel.  This gives a unit of [cm] (per source particle).  To get 
-the per cm$^2$, we need to divide by volume.  To get per $eV$, we further divide 
-by the group widths.  The per s depends on our assumed source strength, which 
-would have to be scaled to some known fission rate or power.
-
-\begin{minted}[frame=single,framesep=5pt]{python}
-# Define the group widths 
-dE = np.diff(spectrum_bounds)
-
-# Divide by the region volume and group widths
-phi_fuel = phi[:, 0]/dE/fuel_volume
-phi_clad = phi[:, 1]/dE/clad_volume
-phi_cool = phi[:, 2]/dE/cool_volume
-\end{minted}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Processing the Multigroup Cross Sections}
-
-Now, collect the two-group data into a form for easily computing the four factors:
-
-\begin{minted}[frame=single,framesep=5pt]{python}
-# Place volumes and cells in dictionary
-V = {"fuel": fuel_volume, "clad": clad_volume, 
-  "cool": cool_volume}
-cells = {"fuel": fuel_cell, "clad": clad_cell, 
-  "cool": cool_cell}
-
-# Extract region-wise, multigroup parameters
-φ = {}; Σ_a = {}; νΣ_f = {}
-for R in ["fuel", "clad", "cool"]:
-  φ[R] = mgxs_lib.get_mgxs(cells[R],"total").get_flux()/V[R]
-  Σ_a[R] = mgxs_lib.get_mgxs(cells[R],"absorption").get_xs()
-  νΣ_f[R] = mgxs_lib.get_mgxs(cells[R],"nu-fission").get_xs()
-# Now, e.g., the thermal fuel flux is φ["fuel"][1] while 
-# the fast (or non-thermal) absorption cross section is 
-# Σ_a["fuel"][0]
-\end{minted}
-
-
-\end{frame}
- 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Computing the Four Factors and $k_{\infty}$}
-
-To keep things tidy, start by defining volume-integrated reaction rates.  
-For example, the total rate of thermal absorption in the moderator is
-\begin{minted}[frame=single,framesep=5pt]{python}
-R_a_m_T = V["cool"]*φ["cool"][1]*Σ_a["cool"][1]
-# do also for R_a_m_F, R_a_c_T, ..., R_n_f_T, R_a_f_F
-\end{minted}
-where, e.g., {\tt R\_n\_f\_T} indicates the neutron generation rate in the fuel 
-from fission due to thermal neutrons.  
-Then, define  {\tt R\_a\_nf\_T} and   {\tt R\_a\_nf\_T} for non-fuel 
-absorption rates.  
-Finally, define the four factors
-\begin{minted}[frame=single,framesep=5pt]{python}
-η_T =
-f = 
-p = 
-ε =
-\end{minted}
-from which 
-\begin{minted}[frame=single,framesep=5pt]{python}
-k_oo =
-\end{minted}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Back to $P/D$ and Maximizing $k_{\infty}$}
-
-Although OpenMC models can be set up with loops over geometric or material 
-properties, the Jupyter notebook is not the ideal environment.  A simpler 
-approach that is less prone to user errors is simply to 
-\begin{enumerate}
- \item Set the desired value for, e.g., $P = P_0$.
- \item Restart the Kernel and Run All 
- \item Record the desired outputs.
- \item Repeat for $P = P_1, P_2, \ldots$.
-\end{enumerate}
-
- 
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Looping OpenMC Runs}
-
-For automating with loops, I recommend writing a Python file of the form 
-\begin{minted}[frame=single,framesep=5pt]{python}
-# my_model.py
-import openmc
-def run_it(P):
-  model = openmc.Model()
-  ...
-  pitch = P
-  ...
-  return η_T, f, p, ε
-\end{minted}
-
-Then, in Jupyter, you can do things like 
-
-\begin{minted}[frame=single,framesep=5pt]{python}
-import my_model 
-for P in [1.1, 1.3, 1.5]:
-  η_T, f, p, ε = my_model.run_it(P)
-  # do whatever you want to do with these!
-\end{minted}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Some Exploratory Exercises}
-
-Given this basic model, you can now provide quantitative answers to 
-questions like... 
-\begin{enumerate}
- \item What $P$ maximizes $k_{\infty}$?
- \item How do the four factors vary with $P/D$?
- \item How do the answers to (1) and (2) change if we put 800 ppm of boron in the coolant?
- \item What happens to the four factors and $k_{\infty}$ if we replace our (light) water 
-       with heavy water?  Graphite?  Does $k_{\infty}$ peak at the same $P/D$?
- \item What happens to $k_{\infty}$ if we replace the zirconium with stainless steel?  
-       SiC?
- \item If our 3400 MW$_{\text{th}}$ reactor has 50,000 of these rods (3 m in length), what are the 
-       fast and thermal fluxes in each region?  What is the fast-to-thermal ratio in each region?
-\end{enumerate}
-
+Finally, most Monte Carlo tools, including OpenMC, provide microscopic cross sections 
+that are evaluated at several fixed temperatures that span conditions of 
+interest.  How values are produced at intermediate temperatures depends on 
+the tool; by default, OpenMC uses interpolation, which might not be accurate enough 
+to capture the impact of Doppler broadening!
 
 \end{frame}
 

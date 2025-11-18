@@ -1,0 +1,340 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Step Insertions of Reactivity \\
+       {\small\it NE 630 - Lecture 28}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{solve the kinetics equations subject to step insertions of reactivity and to predict neutron and precursor densities and reactor periods from those solutions and approximations thereof. 
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: The Point Kinetics Equations}
+
+The time evolution of the neutron population (or density!) is described by
+\begin{equation*}
+  \tag{FNRP 5.47}
+  \frac{dn}{dt} = 
+     \left ( \frac{\rho(t) - \beta}{\Lambda} \right ) n(t) + 
+     \sum^N_{i=1} \lambda_i C_i (t) + S(t) \, ,
+\end{equation*}
+while the precursor populations (or densities!) evolve according to
+\begin{align*}
+  \tag{FNRP 5.48}
+  \frac{d C_i}{dt} = -\lambda_i C_i(t) + \frac{\beta_i}{\Lambda} n(t) \, \quad i = 1, 2, \ldots, N \, ,
+\end{align*}
+where $\beta = \sum_i \beta_i$ is the total delayed neutron precursor fraction.  
+These delayed neutrons increase the average neutron lifetime\footnote{Without delayed neutrons, the growth of a neutron population follows $e^{[(k-1)/l]t}$, so increasing $l$ even a little slows that growth a lot!} according to
+\begin{align*}
+\tag{FNRP 5.36}
+ \bar{l} &= (1-\beta)l + \beta l_d \\
+         &= l + \beta/\lambda \, .
+\end{align*}
+
+\end{frame}
+
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: A Single Precursor Group}
+
+One can reduce the $N$ precursor equations to one by defining
+\begin{equation*}
+\tag{FNRP 5.31 \& 5.34}
+ \beta = \sum^N_{i=1} \beta_i \qquad \text{and} \qquad 
+\frac{1}{\lambda} = \left(\frac{1}{\beta} \sum_{i=1}^N \frac{\beta_i}{\lambda_i}\right) \, .
+\end{equation*}
+
+Then the PKEs reduce to
+\begin{align*}
+ \frac{dn}{dt} = \frac{\rho(t)-\beta}{\Lambda}n(t) + \lambda C(t) \qquad \text{and} \qquad
+ \frac{dC}{dt} = -\lambda C(t) + \frac{\beta}{\Lambda} n(t) \, .
+\end{align*}
+
+
+\vfill 
+\pause
+
+{\bf Example}: Assume a ${}^{235}$U-fueled reactor is initially critical, i.e., $\rho(t<0)=0$, with $n(0) = 10^9$.  
+With $\Lambda = 10^{-4}$ and $\rho(t\geq 0)=\rho_0=0.25\$$, write down the equations, with numerical
+coefficients, needed to find $n(t)$ and $C(t)$.
+
+\pause 
+\textcolor{wcprimary}
+{{\small
+{\bf Ans}.  Using data from Table 5.1, $\beta = 0.00650$ and $\lambda = 0.07664$.  Then, FNRP (5.29) gives $C(0) = \beta n(0) / (\lambda \Lambda) \approx 8.48 \cdot 10^{11}$.  Finally, $\rho_0 = 0.25~(\$) = 0.25\beta~(\Delta k/k)=  162.5~(\text{pcm})$.
+}}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Step Insertions and the In-Hour Equation}
+
+
+\begin{columns}[T]
+
+\begin{column}{0.4\textwidth}
+
+ 
+
+Whether we have $N$ precursor groups or just one group, the PKEs can be solved
+analytically only for special cases in which $\rho(t)$ and $S(t)$ are simple functions of
+time (e.g., a constant or a sinusoid).  
+
+\vspace{0.35cm}
+
+For a constant, {\bf step insertion of reactivity} $\rho(t) = \rho$, the PKEs have {\it constant coefficients}.
+
+\vspace{0.35cm}
+
+If we further take $S(t) = 0$, then the solutions (i.e., $n(t)$, $C_i(t)$) must be sums of exponential functions 
+with different time constants.
+\end{column}
+
+\begin{column}{0.58\textwidth}
+ 
+In other words,
+\begin{align*}
+   n(t)   &= \sum_{j=1}^{N+1} A_j e^{\omega_j t} \\
+   C_i(t) &= \sum_{j=1}^{N+1} B_{ij} e^{\omega_j t} \, ,  \,i = 1, \ldots, N \, ,
+\end{align*}
+
+\vspace{-0.25cm}
+
+whose time constants $\omega_j$ satisfy
+
+\vspace{-0.25cm}
+
+\begin{equation*}
+\tag{FNRP 5.53}
+   \boxed{\rho = \left ( \Lambda + \sum_{i=1}^N \frac{\beta_i}{\omega + \lambda_i} \right ) \omega} \, .
+\end{equation*}
+This result is the {\bf inhour equation} and represents a polynomial of degree $N+1$ whose 
+roots are the $\omega_j$.
+ 
+\end{column}
+
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Reactor Period}
+ 
+\begin{columns}[T]
+
+\begin{column}{0.6\textwidth}
+
+\resizebox{0.99\textwidth}{!}{\input{figures/traces.pgf}}
+
+\end{column}
+
+\begin{column}{0.4\textwidth}
+
+Shown at the left are {\it traces} for several step insertions of reactivity.  
+In all cases, after the immediate {\it jump} or {\it drop}, the solution follows
+\begin{equation*}
+   n(t) \approx A_1 e^{\omega_1 t} = A_1 e^{t/T} \, ,
+\end{equation*}
+where $T$ is the {\bf (stable) reactor period}.
+ 
+\vspace{0.25cm}
+
+{\bf Example}: Estimate the period {\it graphically} for $\rho = 0.2\beta$, $\rho = \rho_A$, and $\rho = \rho_B$.
+Then, use the inhour equation to estimate $\rho_A$ and $\rho_B$.
+
+\pause 
+
+\textcolor{wcprimary}{
+{\bf Ans.}
+}
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Step Insertions with One Precursor Group}
+ 
+{\small
+
+Write the PKEs as
+\begin{equation*}
+ \frac{d}{dt}  
+   \overbrace{\left [ 
+     \begin{array}{c} n(t) \\ 
+                      C(t) 
+      \end{array} \right ]}^{\mathbf{y}(t)}
+ =
+   \overbrace{\left [ \begin{array}{cc}
+       (\rho-\beta)/\Lambda    & \lambda \\
+       \beta /\Lambda          & -\lambda \\
+   \end{array} \right ]}^{\mathbf{M}} 
+   \left [ \begin{array}{c} n(t) \\ C(t) \end{array} \right ] \, , \quad \left [ 
+     \begin{array}{c} n(0) \\ 
+                      C(0) 
+      \end{array} \right ] = \left [ 
+     \begin{array}{c} n_0 \\ 
+                      C_0
+      \end{array} \right ] \, .
+\end{equation*}
+
+The eigenvalues $\omega$ of $\mathbf{M}$ satisfy
+\begin{equation*}
+ \overbrace{1}^{a} \omega^2 + 
+           \overbrace{\left (\lambda - \frac{\rho - \beta}{\Lambda} \right )}^{b} \omega + 
+            \overbrace{\left ( -\frac{\lambda \beta}{\Lambda} -\frac{\lambda(\rho - \beta)}{\Lambda} \right )}^{c} = 0  \longrightarrow \boxed{\omega_{1/2} = \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}} \, .
+\end{equation*}
+
+The solutions are then
+\begin{equation*}
+  n(t) = A_1 e^{\omega_1 t} + A_2 e^{\omega_2 t} \qquad \text{and} \qquad 
+  C(t) = B_1 e^{\omega_1 t} + B_2 e^{\omega_2 t} \, .
+\end{equation*}
+
+We need to find the four unknowns $A_1$, $A_2$, $B_1$, and $B_2$ noting that
+\begin{itemize}
+ \item the initial conditions give two equations.
+ \item the PKEs give two more equations, and setting $t = 0$ eliminates the exponentials!
+\end{itemize}
+
+}
+ 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Step Insertions with One Precursor Group}
+ 
+
+\begin{columns}[T]
+
+\begin{column}{0.6\textwidth}
+
+\begin{minted}[]{python}
+from math import sqrt
+def step_insert(ρ, β, Λ, λ, n0):
+  c0 = β*n0/(λ*Λ)
+  a = 1
+  b = λ*(1-(ρ-β)/(λ*Λ))
+  c = -1*(λ*(ρ-β)/Λ + λ*β/Λ)
+  d = sqrt(b**2-4*a*c)
+  ω1 = (-b+d)/(2*a)
+  ω2 = (-b-d)/(2*a)
+  A1 = (ρ*n0/Λ - n0*ω2)/(ω1-ω2)
+  A2 = n0 - A1
+  B1 = (-β*n0*ω2/(λ*Λ))/(ω1-ω2)
+  B2 = β*n0/(λ*Λ) - B1
+  return ω1, ω2, A1, A2, B1, B2
+\end{minted} 
+
+\end{column}
+
+
+\begin{column}{0.4\textwidth}
+
+$\rho=-0.5\beta$, $\Lambda = 5\cdot 10^{-5}$
+
+\resizebox{0.99\textwidth}{!}{\input{figures/prompt_drop_illustration.pgf}}
+
+\end{column}
+
+\end{columns}
+
+ 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Prompt Jump/Drop Approximation}
+
+As the traces illustrate, after a small insertion $\Delta \rho \ll \beta$, the population swiftly jumps or drops.  On the linear scale, the population appears to jump immediately from $n_0$ to some new value $n_1$.  The ratio of this new value to the initial value satisfies 
+\begin{equation*}
+\boxed{\frac{n_1}{n_0} = \frac{\beta - \rho_0}{\beta - \rho_1}} \, ,
+  \tag{Prompt Jump Approximation}
+\end{equation*}
+where $\rho_0$ is the initial reactivity (usually zero, but $|\rho_0| \ll \beta$ always) and the new reactivity $\rho_1 = \rho_0 + \Delta \rho$.
+
+\vfill 
+
+{\bf Example}. Use the prompt jump approximation to verify
+the $\pm 0.2\beta$ traces.  What is $\rho \pm 0.2\beta$ in \$? pcm?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Periods for Very Small and Very Large Insertions}
+
+A ``small'' reactivity is any $|\rho| \ll \beta$.  In this case,                        
+
+\begin{equation*}
+\tag{FNRP 5.57}
+ T \approx \frac{\beta}{\rho \lambda}\, .
+\end{equation*}
+
+For reactivities $\rho > \beta$, the neutron population grows exponentially with prompt neutrons alone and, hence, the period is very small and well approximated by
+
+\begin{equation*}
+\tag{FNRP 5.58}
+ T \approx \frac{\Lambda}{\rho - \beta} \, .
+\end{equation*}
+
+Finally, for large {\it negative} insertions, $T \approx 1/\lambda$, or, for multiple precursor groups, $T \approx 1/\lambda_1$, where $\lambda_1$ corresponds to the longest lives group.
+
+\end{frame}
+
+\end{document}
+

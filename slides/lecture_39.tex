@@ -1,0 +1,402 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Neutrons in Space \\
+       {\small\it NE 630 - Lecture 31}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+% --- Shortcuts ---
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\bO}{\hat{\Omega}}
+\newcommand{\bn}{\hat{\mathbf{n}}}
+\newcommand{\JJ}{\mathbf{J}}
+\newcommand{\jj}{\mathbf{j}}
+\newcommand{\flux}{\phi}
+\newcommand{\angflux}{\psi}
+\newcommand{\dV}{\,d^3\br}
+\newcommand{\dE}{\,dE}
+\newcommand{\dO}{\,d\hat{\Omega}}
+\newcommand{\ds}{\,d\mathbf{S}}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{show that neutrons are conserved (or not!) in a spatial 
+volume given the neutron flux and appropriate cross-section data.
+}
+\end{quote}
+
+\vfill 
+
+These notes represent a condensed summary of D\&H, Ch.~4 with connections 
+to Ch.~6 of FNRP and the diffusion equation.  Equations numbered like 
+(4--8) are from D\&H, but I've modified nomenclature slightly in some 
+places to match what we've previously adopted.
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Characterizing Neutron Fields}
+ 
+Let the \textbf{angular density} of neutrons be described by
+\begin{equation}
+  n(\br, E, \bO, t)\, \dV\, \dE\, \dO \quad [ \si{\per\centi\meter\cubed\per\electronvolt\per\steradian} ] \, ,
+  \tag{4--8}
+\end{equation}
+which is the expected number of neutrons in the differential \emph{phase-space} volume
+centered at $(\br, E, \bO)$ at time $t$. The direction unit vector is
+$\bO = \mathbf{v}/\lVert\mathbf{v}\rVert$ where $\mathbf{v}$ is the neutron velocity.
+ 
+% FIG 1. PHASE SPACE diagram
+
+\vfill
+
+The \textbf{angular flux} and \textbf{angular current} are
+\begin{align}
+  \tag{4--9}
+  \angflux(\br, E, \bO, t) = v\, n(\br, E, \bO, t)  \quad  [\si{\per\centi\meter\squared\per\electronvolt\per\steradian\per\second}] \, ,
+\end{align}
+and
+\begin{align}
+  \tag{4--10}
+  \jj(\br, E, \bO, t) = \bO\, \angflux(\br, E, \bO, t) \quad  [\si{\per\centi\meter\squared\per\electronvolt\per\steradian\per\second}] \, ,
+\end{align}
+where $v = \lVert\mathbf{v}\rVert$ is the neutron speed.
+
+% FIG 2. ANGULAR CURRENT diagram
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Scalar Quantities}
+
+
+Integrating over all angles gives the \textbf{scalar density} and \textbf{scalar flux}
+\begin{align}
+  n(\br,E,t) &= \int_{4\pi} n(\br, E, \bO, t)\, \dO, 
+  \tag{4--14}\\
+  \flux(\br,E,t) &= \int_{4\pi} \angflux(\br, E, \bO, t)\, \dO.
+  \tag{4--15}
+\end{align}
+\vfill 
+
+The \textbf{current density} (or just \textbf{current}) is
+\begin{equation}
+  \tag{4--19}
+  \JJ(\br,E,t) \;=\; \int_{4\pi} \jj(\br, E, \bO, t)\, \dO,
+\end{equation}
+so that $\JJ\!\cdot d\mathbf{A}$ is the net rate at which neutrons pass through a surface element~$d\mathbf{A}$ per unit energy at time $t$.
+Although $\JJ$ and $\flux$ have the same units, $\JJ$ is a vector and represents net flow.
+
+
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Integration over $4\pi$}
+ 
+Integrals of the form 
+\begin{equation*}
+ \int_{4\pi} \ldots \dO
+\end{equation*}
+are sometimes hard to imagine.
+
+\vfill 
+\pause 
+
+An explicit example, in {\it spherical coordinates}, might be
+this solid-angle integral:
+\begin{equation*}
+  \int_{4\pi} f(\bO)\, \dO = \int_{0}^{2\pi}\!\!\int_{0}^{\pi} f(\theta,\phi)\, \sin\theta\, d\theta\, d\phi.
+\end{equation*}
+
+
+\end{frame} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Balancing Act}
+
+Consider some volume $V$ with boundary surface $S$ and outward normal~$d\mathbf{s}$.
+The total number of neutrons in $V$ with energies in $(E,E{+}dE)$ and directions in $\dO$ about $\bO$ is
+\begin{equation*}
+  N(t) = \int_V n(\br, E, \bO, t)\, \dV \; \dE\, \dO.
+\end{equation*}
+\vfill 
+
+If $V$ does not depend on time, then differentiating $N(t)$ with respect to time gives
+\begin{equation}
+  \int_V \frac{\partial n}{\partial t}(\br, E, \bO, t)\, \dV \; \dE\,\dO
+  = \textcolor{wcprimary}{\text{{\bf gains}}} - \textcolor{wcalerted}{\text{{\bf losses}}} \, .
+  \tag{4--24/25}
+\end{equation}
+
+\vfill 
+\pause 
+
+\begin{tabular}{ll}
+ \textcolor{wcprimary}{(1) any sources of n's}  &  \\
+ \textcolor{wcprimary}{(2) n's ``stream'' into $V$ through $S$} &
+       \textcolor{wcalerted}{(4) n's ``stream'' out of $V$ through $S$} \\
+ \textcolor{wcprimary}{(3) n's  scatter from $(E',\bO')$ to $(E,\bO)$}  & 
+       \textcolor{wcalerted}{(5) n's that experience \emph{any} interaction}.
+\end{tabular}
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Inside the Volume}
+ 
+
+Let $s(\br, E, \bO, t)$ be a source density, so that $s(\cdots)\,\dV\,\dE\,\dO$ is the number of neutrons 
+added to the volume per second. Then
+\begin{equation*}
+\tag{4--26}
+ \textcolor{wcprimary}{\text{(1)}  = \left[ \int_V s(\br,E,\bO,t)\,\dV \right] \dE\,\dO} \, .
+\end{equation*}
+
+\vfill 
+
+Given $\Sigma_t(\br,E)$,
+the total interaction rate in the volume is
+\begin{equation*}
+\tag{4--29}
+  \textcolor{wcalerted}{\text{(5)} = \left[ \int_V \Sigma_t(\br,E)\, \angflux(\br,E,\bO,t)\,\dV \right] \dE\,\dO } \, .
+\end{equation*}
+This assumes an {\it isotropic} medium in which $\Sigma_t$ does {\it not} depend on $\bO$.
+Finally, {\it in-scattering} from $(E',\bO')$ to $(E,\bO)$ contributes
+\begin{equation}
+\tag{4--31}
+   \textcolor{wcprimary}{\text{(3)} = \int_V \left[ \int_0^\infty \!\!\int_{4\pi} \Sigma_s(\br, E'\!\to\!E, \bO'\!\to\!\bO)\,
+  \angflux(\br, E', \bO', t) \dO' \dE' \right] \dV } \, .
+\end{equation}
+
+\end{frame}
+
+\begin{frame}[fragile]{Through the Surface}
+
+ The rate at which neutrons are gained or lost through a surface element is
+\begin{equation}
+\tag{4--32}
+  \jj(\br,E,\bO,t)\cdot \ds \;=\; \bO\, \angflux(\br,E,\bO,t)\cdot \ds.
+\end{equation}
+Integrating over the entire surface, the {\it net} number \emph{leaving} is
+\begin{equation*}
+   \textcolor{wcalerted}{\text{(4)}}  - \textcolor{wcprimary}{\text{(2)}} = \int_S \bO\, \angflux(\br,E,\bO,t)\cdot \ds .
+  \tag{4--33}
+\end{equation*}
+Recall Gauss' (divergence) theorem, i.e.,
+\begin{equation*}
+\tag{4--34}
+  \int_S \mathbf{F}(\br)\cdot \ds \;=\; \int_V \nabla\!\cdot\! \mathbf{F}(\br)\, \dV \, ,
+\end{equation*}
+which, because $\bO$ is independent of $\br$, lets us write
+\begin{equation*}
+ \textcolor{wcalerted}{\text{(4)}}  - \textcolor{wcprimary}{\text{(2)}} 
+ = \int_S \bO\, \angflux\cdot \ds
+  \;=\; \int_V \nabla\!\cdot\!\big(\bO\, \angflux\big)\, \dV
+  \;=\; \textcolor{wcalerted}{ \int_V \bO\cdot \nabla \angflux \, \dV } \, .
+\end{equation*}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Shrinking $V$ for Differential Balance}
+
+If $V$ is arbitrary, then we collect the terms, take $V \to 0$ to eliminate the integrals,
+and welcome our new friend, the {\bf neutron transport equation}:
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \angflux}{\partial t}
+  +  \textcolor{wcalerted}{ \bO\cdot\nabla \angflux}
+  &+   \textcolor{wcalerted}{ \Sigma_t(\br,E)\, \angflux(\br,E,\bO,t)}
+   = \\
+  & \textcolor{wcprimary}{\int_0^\infty \!\!\int_{4\pi}
+  \Sigma_s(\br, E'\!\to\!E, \bO'\!\to\!\bO)\,
+  \angflux(\br,E',\bO',t)\, \dO'\, \dE'} \\
+  & + \textcolor{wcprimary}{ s(\br,E,\bO,t) }.
+  \tag{4--40}
+\end{align*}
+
+\vfill 
+{\bf Food for thought}: what term would we add to include multiplication (fission)?
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Eliminating $\bO$}
+
+While scary, the various terns comprising the NTE are familiar enough, but the dependence on $\bO$ remains a challenge for another day.  Integrating the NTE over $4 \pi$ leads to
+
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \flux}{\partial t}
+  &+ \nabla\!\cdot\! \JJ(\br,E,t)
+   +\Sigma_t(\br,E)\, \flux(\br,E,t)\\
+  &=
+  \int_0^\infty \Sigma_s(\br, E'\!\to\!E)\, \flux(\br,E',t)\, \dE'
+  + S(\br,E,t) \, ,
+  \tag{4--79}
+\end{align*}
+which is called the {\bf neutron continuity equation} (or NCE). 
+
+\vfill 
+\pause  
+
+{\bf Ponderable}.  Have we simplified our life? \pause
+Unfortunately, we went from the NTE with one unknown ($\psi$) to the new NCE 
+with two unknowns ($\phi$ and $\mathbf{J}$)!
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Finding Closure}
+
+We can't really do much with one equation and the unknowns $\phi$ and $\mathbf{J}$.  
+The fix is a simple one: assume that the flow points where the neutron density, or,
+rather, flux falls:
+\begin{equation*}
+   \mathbf{J} \propto -\nabla \phi \, .
+\end{equation*}
+{\bf Ponderable}: How do we go from $\propto$ to $=$?
+\pause 
+Let $D$ be that constant of proportionality so that
+\begin{equation*}
+\tag{FNRP 6.11}
+   \mathbf{J} = -D \nabla \phi \, ,
+\end{equation*}
+which is known as {\bf Fick's law}.  Substitution of Fick's law 
+into the NCE yields
+
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \flux}{\partial t}
+  &- \nabla\!\cdot\! D(\br,E) \nabla \phi(\br,E,t)
+   +\Sigma_t(\br,E)\, \flux(\br,E,t)\\
+  &=
+  \int_0^\infty \Sigma_s(\br, E'\!\to\!E)\, \flux(\br,E',t)\, \dE'
+  + S(\br,E,t) \, ,
+\end{align*}
+which is, of course, a long lost friend!  
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Simplify, Simplify}
+
+Now that we have space, it's time to say goodbye to $t$ and to 
+replace $E$ by $g$:
+
+\begin{align*}
+ - \nabla\!\cdot\! D_g(\br) \nabla \phi_g(\br)
+   + \Sigma_{tg}(\br)\, \flux_g(\br)
+  = \sum_{g'=1}^{G} \Sigma_{sg\gets g'} \phi_{g'}(\br) +  S_g(\br) \, .
+\end{align*}
+
+{\bf Example}: For $G=2$ and no upscatter, show that
+\begin{align*}
+ - \nabla\!\cdot\! D_1(\br) \nabla \phi_1(\br)
+   + \Sigma_{r,1}(\br)\, \flux_1(\br)
+  &=  S_1(\br,t) \\ 
+ - \nabla\!\cdot\! D_2(\br) \nabla \phi_2(\br)
+   + \Sigma_{a,2}(\br)\, \flux_2(\br)
+  &=  \Sigma_{s,2\gets 1} \phi_{1}(\br) + S_2(\br) 
+\end{align*}
+What if $G=1$ and we introduce multiplication?
+\pause 
+
+\begin{align*}
+\tag{FNRP 6.12}
+\boxed{ - \nabla\!\cdot\! D(\br) \nabla \phi(\br)
+   + \Sigma_{a}(\br)\, \flux(\br) 
+  =  S(\br) + \bar{\nu}\Sigma_{f}(\br)\, \flux(\br) 
+}
+\end{align*}
+
+\end{frame}
+
+\begin{frame}[fragile]{Onto Slab Geometry}
+
+Much like integration over $4\pi$ hides some detail, so, too, does $\nabla\!\cdot\! D(\br) \nabla \phi(\br)$.  Recall that, for Cartesian (or $xyz$) coordinates, the gradient and divergence operators act on scalar and vector functions according to
+\begin{align*}
+\nabla \phi(\mathbf{r})
+= \mathbf{i} \,\frac{\partial \phi}{\partial x}
+ + \mathbf{j}  \,\frac{\partial \phi}{\partial y}
+ + \mathbf{k}  \,\frac{\partial \phi}{\partial z} \quad \text{and} \quad
+\nabla\!\cdot\!\mathbf{J}(\mathbf{r})
+= \frac{\partial J_x}{\partial x}
+ + \frac{\partial J_y}{\partial y}
+ + \frac{\partial J_z}{\partial z} \, ,
+\end{align*}
+so that
+\begin{align*}
+\nabla\!\cdot\!\big(D(\mathbf{r})\,\nabla \phi(\mathbf{r})\big)
+&= \frac{\partial}{\partial x}\!\left(D\,\frac{\partial \phi}{\partial x}\right)
+ + \frac{\partial}{\partial y}\!\left(D\,\frac{\partial \phi}{\partial y}\right)
+ + \frac{\partial}{\partial z}\!\left(D\,\frac{\partial \phi}{\partial z}\right) \\[4pt]
+&= D(\mathbf{r})\,\nabla^2 \phi(\mathbf{r})
+  + \big(\nabla D(\mathbf{r})\big)\!\cdot\!\big(\nabla \phi(\mathbf{r})\big).
+\end{align*}
+
+If we make the bold assumption that $\phi(\mathbf{r}) = \phi(x)$, we find 
+\begin{align*}
+\boxed{ - \frac{d}{dx} \left ( D(x) \frac{d\phi}{dx}   \right )
+   + \Sigma_{a}(x)\, \flux(x) 
+  =  \bar{\nu}\Sigma_{f}(x)\, \flux(x) +  S(x) 
+} \, ,
+\end{align*}
+the one-speed diffusion equation in slab geometry.
+\end{frame}
+
+
+
+
+\end{document}
+

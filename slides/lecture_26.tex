@@ -1,0 +1,268 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Neutron Kinetics with Multiplication\\
+       {\small\it NE 630 - Lecture 26}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{write down, solve, and explain each term of a first-order, ordinary differential 
+equation that models the neutron flux, the neutron density, or the number of 
+neutrons in a multiplying system as a function of time.
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Kinetics without Multiplication}
+
+By first eliminating space from the diffusion equation 
+and then assuming $\phi(E, t) = \phi(t)\varphi(E)$ for 
+some known $\varphi(E)$, we found
+\begin{equation*}
+\tag{25.1 \to 25.3}
+ \frac{1}{\bar{v}}\frac{d\phi}{dt}
+ + \bar{\Sigma}_t \phi(t) 
+  = \bar{\Sigma}_s \phi(t) 
+  + \cancelto{0}{\frac{1}{\textcolor{wcprimary}{k_{\text{eff}}}} \bar{\nu}\bar{\Sigma}_f}  \phi(t) + \textcolor{wcalerted}{S(t)}\, ,
+\end{equation*}
+or, with $\phi = n''' \bar{v}$,
+\begin{equation*}
+\tag{Like FNRP 5.2 and 5.7}
+ \frac{dn'''}{dt} +  \left ( \frac{1}{l_{\infty}} \right ) n'''(t)  = S(t) \, ,
+\end{equation*}
+where the mean neutron speed and lifetime are
+\begin{equation*}
+ \bar v=\frac{\displaystyle \int_0^\infty \varphi(E)\,dE}{\displaystyle \int_0^\infty \frac{\varphi(E)}{v(E)}\,dE}\;
+ \quad \text{and} \quad 
+ l_{\infty} = \frac{1}{\bar{v} \bar{\Sigma}_a} \, ,
+\end{equation*}
+and the neutron speed is $v(E) \approx 1.384\cdot 10^{6}\sqrt{E} \, \si{\centi\meter\per\second}$ for $E$ in \si{\electronvolt}.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: The Neutron Lifetime}
+
+{\bf Example}. What's $l_{\infty} = \frac{1}{\bar{v} \bar{\Sigma}_a}$ for thermal neutrons in room-temperature water?  Assume $\bar{\sigma}^{\text{H}_2\text{O}}_a = 0.6$ [b].
+
+\pause 
+\vspace{0.25cm}
+
+\textcolor{wcprimary}{ 
+{\bf Ans.}
+$N=6.022\cdot 10^{23}/18$, so $\Sigma_a = N\,\bar\sigma_a \approx 2.0\times10^{-2}\ \text{cm}^{-1}$.  For thermal neutrons, $\bar{v}\approx2.5\times10^5$ cm/s.  Thus $l_{\infty} \approx 2.0\times10^{-4} = 200$ $\mu$s.  Compare to  \url{https://journals.aps.org/pr/abstract/10.1103/PhysRev.61.152}.
+}
+ 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Adding Back Multiplication}
+
+With multiplication, we have\footnote{For source-free, {\it steady-state} problems, the multiplication factor $\textcolor{wcprimary}{k_{\text{eff}}}$ allowed us to adjust the fission rate and enforce a steady state solution.  For kinetics problems, we need no such adjustment!}
+\begin{equation*}
+\tag{26.1}
+  \frac{1}{\bar{v}}\frac{d\phi}{dt}
+ + \bar{\Sigma}_t \phi(t) 
+  = \bar{\Sigma}_s \phi(t)  +  \bar{\nu}\bar{\Sigma}_f \phi(t) +  S(t)  \, .
+\end{equation*}
+   
+
+\vfill 
+
+Let $\bar{\Sigma}_a = \bar{\Sigma}_t - \bar{\Sigma}_s$ and $\phi(t) = n'''(t)\bar{v}$ in (26.1). Then, multiply by volume so that
+\begin{align*}
+  \frac{dn}{dt}
+ &= \bar{v} (\bar{\nu}\bar{\Sigma}_f - \bar{\Sigma}_a) n(t) 
+  + S(t) \\
+ &= \bar{\Sigma}_a\bar{v} \left ( \frac{\bar{\nu}\bar{\Sigma}_f}{\bar{\Sigma}_a} - 1 \right ) n(t) 
+  + S(t) \\
+ \tag{FNRP 5.12}
+ \Aboxed{\frac{dn}{dt} &= \left ( \frac{k_{\infty} - 1}{l_{\infty}} \right ) n(t) 
+  + S(t)} \, . 
+\end{align*}
+ 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Kinetics with Multiplication}
+
+For finite systems with leakage, the text explains how to incorporate the non-leakage probability $P_{NL}$, and the resulting FNRP (5.22) is identical FNRP (5.12) without the $\infty$'s on $k$ and $l$:
+\begin{equation*}
+\tag{FNRP 5.22}
+\frac{dn}{dt}  = \left ( \frac{k - 1}{l} \right ) n(t) + S(t)
+\end{equation*}
+   
+\vfill 
+\pause 
+
+{\bf Example}: Let $S(t) = 0$ and $n(0) = n_0$.  Determine $n(t)$.
+
+\pause 
+\textcolor{wcprimary}{
+{\small {\bf Ans}.  The equation is separable, i.e., $dn/n = [(k-1)/l]dt$, and direct integration yields
+\begin{equation*}
+  \tag{FNRP 5.24}
+  \boxed{ n(t)  =  n_0 e^{\left ( \displaystyle \frac{k - 1}{l}  \right ) t} } \, ,
+\end{equation*}
+or, recalling, $\rho = (k-1)/k$,
+\begin{equation*}
+  \tag{FNRP 5.24}
+  \boxed{ n(t)  =  n_0 e^{ (\rho/\Lambda) t} } \, ,
+\end{equation*}
+where $\Lambda = l/k$ is the {\bf prompt generation time}.
+}}
+
+\pause 
+\vfill 
+
+
+ 
+\end{frame}
+%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Kinetics of Source-Driven, Subcritical Systems}
+
+
+When $S(t) \neq 0$, we go from
+
+\begin{equation*}
+   \frac{d}{dt} \left ( n(t) e^{-\left(\frac{k-1}{l}\right )t} \right ) = S(t) e^{-\left(\frac{k-1}{l}\right )t} .
+\end{equation*}
+
+to
+
+\begin{equation*}
+   n(t') =  \frac{\displaystyle\int^{t'}_0  \left( S(t) e^{-\left(\frac{k-1}{l}\right )t} \right ) dt + n(0)}
+                 {e^{-\left(\frac{k-1}{l}\right )t'}}
+\end{equation*}
+
+If $S(t) = S_0$, then
+
+\begin{equation*}
+   n(t) = \frac{l S_0}{k-1}
+     \left (  e^{\frac{k-1}{l}t} - 1 \right )
+     + n(0) e^{\frac{k-1}{l}t} \, .
+\end{equation*}
+
+If we further set $n(0) = 0$, we get FNRP (5.26).
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Revisiting Subcritical Multiplication}
+
+Let $n(0) = 0$, $S_0 = 1$, and $l_{\infty} = 10^{-2}$.  What happens to $n(t)$ for $0 \leq t \leq 10$ s as $k_{\infty}$ increases from 0 to 1?\footnote{Recall that, for an infinite, homogeneous medium, $\phi = S_0/(\bar{\Sigma}_a-\bar{\nu}\bar{\Sigma}_f) = (S_0/\bar{\Sigma}_a)/(1-k_{\infty})$!}
+
+\resizebox{0.95\textwidth}{!}{\input{figures/subcrit_mult.pgf}}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Appendix: Solve $dn/dt = [(k-1)/l]n(t)$}
+
+{\bf Problem.} Let $S(t) = 0$ and $n(0) = n_0$. Determine $n(t)$.
+
+\vfill
+
+\begin{columns}[T]
+  \begin{column}{0.48\textwidth}
+  {\small
+  {\bf 1. Write Down the Equations}  
+  \begin{equation*}
+   \frac{dn}{dt} =
+    \left(\frac{k - 1}{l}\right)n(t),
+    \quad n(0) = n_0 \, .
+  \end{equation*}
+  
+  \vspace{0.25cm}
+  
+  {\bf 2. Identify Type and Familiar Form}  \\
+  \vspace{0.25cm}
+
+  This first-order, initial-value problem is {\bf separable}, and we can write
+  \begin{equation*}
+     \frac{dn}{n(t)} =
+     \left(\frac{k - 1}{l}\right) dt \, .
+  \end{equation*}
+  }
+  \end{column}
+  %
+  \begin{column}{0.48\textwidth}
+  {\small
+  {\bf 3. Integrate Using Appropriate Technique}
+  \begin{align*}
+    \int^{n(t)}_{n(0)} \frac{dn}{n(t')} &=
+     \left(\frac{k - 1}{l}\right)
+     \int^{t}_{0} dt' \\[4pt]
+    \ln\!\left(\frac{n(t)}{n(0)}\right)
+      &= \left(\frac{k - 1}{l}\right)t \\[4pt]
+    \Rightarrow \quad n(t)
+      &= n(0)\, e^{\left(\displaystyle\frac{k - 1}{l}\right)t}
+  \end{align*}
+  {\bf 4. Apply Initial Conditions}
+  \begin{equation*}
+    \boxed{ n(t)  =  n_0 e^{\left ( \displaystyle\frac{k - 1}{l}  \right ) t} }
+  \end{equation*}
+  }
+  \end{column}
+\end{columns}
+
+\end{frame}
+
+\end{document}
+

@@ -1,0 +1,328 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Linear Reactivity Model\\
+       {\small\it NE 630 - Lecture 24}}
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{estimate cycle lengths and discharge burnups using the linear reactivity model.
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Reactivity and Depletion}
+
+Our simple model for depletion consists of
+
+\begin{equation*}
+\tag{10.27 $\rightarrow$ 10.31}
+\begin{split}
+N^{\text{U}235}(t) = N^{\text{U}235}(0) e^{-\bar{\sigma}^{\text{U}235}_a \phi t} \, ,
+\end{split}
+\end{equation*}
+
+\begin{equation*}
+\tag{10.27 $\rightarrow$  10.34}
+\begin{split}
+N^{\text{U}238}(t) = N^{\text{U}238}(0) \, ,
+\end{split}
+\end{equation*}
+and
+\begin{equation*}
+\tag{10.30 $\rightarrow$  10.37}
+\begin{split}
+N^{\text{Pu}239}(t) 
+  = \frac{\bar{\sigma}^{\text{U}238}_{\gamma}}{\bar{\sigma}^{\text{Pu}239}_a} 
+    N^{\text{U}238}(0) \left [1 - e^{-\bar{\sigma}^{\text{Pu}239}_a \phi t} \right ] \, .
+\end{split}    
+\end{equation*}
+These can be used directly to evaluate 
+
+ \begin{equation*}
+  \tag{10.39}
+  k(t) = \frac{\big(\nu\bar{\sigma}^{\text{U}235}_{fT} N^{\text{U}235}(t) + \nu\bar{\sigma}^{\text{Pu}239}_{fT} N^{\text{Pu}239}(t)\big)\varepsilon p P_{NL}}
+  {\bar{\sigma}^{\text{U}235}_{aT} N^{\text{U}235}(t) + \bar{\sigma}^{\text{Pu}239}_{aT} N^{\text{Pu}239}(t) + \Sigma_{aT}^{\text{U}238} + \varsigma \frac{V_m }{V_f}\Sigma_{aT}^m} ]\, ,
+\end{equation*}
+with which $\rho = (k-1)/k$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Some Basic Numbers}
+
+Let's do some back-of-the-evelope calculations to get rough (1 or 2 significant figures) numbers to describe a typical PWR. 
+
+\pause
+\vfill
+
+{\bf Example 1}: Estimate the total volume of fuel in a $P=3000~\si{\mega\watt_{th}}$ PWR. 
+{\it Hint}:~there are $\approx 50,000$ rods roughly $3~\si{\meter}$ in height.
+
+\pause
+\vfill
+
+\textcolor{wcprimary}{ {\bf Ans.} Assuming a fuel radius $r \approx 0.5~\si{\centi\meter}$, 
+$V \approx (5\times 10^4)\,\pi r^2 h \approx  10^7~\si{\centi\meter^3}$.}
+
+\vfill
+\pause
+
+{\bf Example 2}: Suppose the total fuel volume is $V = 10^7~\si{\centi\meter^3}$ and the effective macroscopic fission cross section is 
+$\bar{\Sigma}_f = 0.05~\si{\per\centi\meter}$. Estimate the total flux $\phi$ for a $\dot{q}=3000~\si{\mega\watt_{th}}$ reactor.
+
+\vfill
+\pause
+
+
+\textcolor{wcprimary}{ {\bf Ans.} With $P = V\,\phi\,\bar{\Sigma}_f\,\kappa$ and $\kappa \approx 200~\si{\mega\electronvolt} = 3.2\times 10^{-11}~\si{\joule}$, 
+$\phi \approx \dfrac{3\times 10^9~\si{\watt}}{(10^7~\si{\centi\meter^3})(0.05~\si{\per\centi\meter})(3.2\times 10^{-11}~\si{\joule})}
+\approx 2\times 10^{14}~\si{\per\centi\meter\squared\per\second}$.}
+
+\vfill
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Some Basic Numbers}
+
+{\bf Example 3}: What’s the total fuel mass corresponding to that volume? Assume $\rho_{\mathrm{UO_2}} = 10~\si{\gram\per\centi\meter^3}$.
+
+\vfill
+\pause
+
+\textcolor{wcprimary}{{\bf Ans.} $m_{\mathrm{UO_2}} = (10^7~\si{\centi\meter^3})(10~\si{\gram\per\centi\meter^3})
+= 10^8~\si{\gram} = 1.0\times 10^5~\si{\kilo\gram}$; the heavy-metal mass is $m_{\mathrm{U}} \approx \tfrac{238}{270}\,m_{\mathrm{UO_2}}
+\approx 8.8\times 10^4~\si{\kilo\gram}$.}
+
+\vfill
+\pause
+
+{\bf Example 4}: What is the fuel burnup after one day at that flux? After $5$ years?
+
+\vfill
+\pause
+
+\textcolor{wcprimary}{{\bf Ans.} Since $P=3000~\si{\mega\watt_{th}}$, the energy in one day is $3000~\si{\mega\watt\day}$; thus 
+$B_{1\,\mathrm{day}} \approx \dfrac{3000~\si{\mega\watt\day}}{8.8\times 10^4~\si{\kilogram}}
+\approx 0.034~\si{\mega\watt\day\per\kilo\gram}$. Over 5 years at full power, 
+$B_{5\,\mathrm{yr}} \approx 5(365) \times 0.034 \approx 62~\si{\mega\watt\day\per\kilo\gram}$.}
+
+\vfill
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{A More Realistic Reactivity}
+
+The $\rho(t)$ we computed using the simplified depletion model is reasonable for small 
+burnups (or times), but we'll use the more realistic reactivity curve shown below
+to explore the linear reactivity model (LRM) and its three assumptions:
+
+\begin{center}
+\includegraphics[width=0.9\textwidth]{./figures/realistic_rho.pdf}
+\end{center}
+
+\vfill 
+{\bf Example}: Using the grid lines to guide you, at 
+what burnup does (a) the reactivity go subcritical? (b) $\rho_{\infty} = \rho_L$?
+
+\pause 
+\textcolor{wcprimary}{{\small {\bf Ans}. About 30 MWd/kg and 27.5 MWd/kg, respectively.}}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{LRM: Assumption 1}
+
+\begin{center}
+{\bf {\large \textcolor{wcprimary}{A reactor core is fueled with $N$ batches of identical fuel.}}}
+\end{center} 
+
+\vfill 
+
+{\it Some nomenclature by example}:
+\vfill
+
+\begin{itemize}
+\item Suppose that $N = 3$. When a reactor like Wolf Creek is refueled, one third of the core is replaced with fresh fuel, one third is ``once burned'', and one third is ``twice burned''.  The fuel that is removed from the core is ``thrice burned''.  
+\item We say the reactor is at its {\bf beginning of cycle (BOC)} after refueling and at its  {\bf end of cycle (EOC)} before refueling.  The EOC occurs when the core has no excess reactivity.  The BOC may or may not correspond to the core's maximum excess reactivity (due to burnable poisons).
+\item The burnup $B_c$ that takes us from the BOC to the EOC is called the  {\bf cycle length}.  The burnup of the ``thrice burned'' fuel is equal to burnup accumulated over all 3 cycles and is called the  {\bf discharge burnup} or $B_d$.
+\end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{LRM: Assumption 2}
+
+\begin{center}
+{\bf {\large \textcolor{wcprimary}{
+The fuel reactivity is linear with burnup: 
+ $\boxed{\rho_{\infty}(B) = \rho_0 - aB}$.
+}}}
+\end{center} 
+
+\vfill 
+
+The $\infty$ indicates that the reactivity is computed for an infinite reactor, e.g., the reflected unit cells that we've been using in OpenMC.  A leakage penalty $\rho_L$ can be accounted for later.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{LRM: Assumption 3}
+
+\begin{center}
+{\bf {\large \textcolor{wcprimary}{
+The core reactivity is  
+ $\boxed{\rho_{\text{core}} = \sum^N_{i=1} w_i \rho_i - \rho_{L}}$ where $\boxed{\sum_{i=1}^N w_i = 1}$.
+}}}
+\end{center} 
+
+\vfill 
+
+In other words, the core reactivity is a weighted sum of the batch reactivities minus a leakage penalty.  The simplest LRM sets $\boxed{w_i = w = 1/N}$.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Using LRM to Determine $B_c$ and $B_d$}
+ 
+A primary use of LRM is to determine the {\bf cycle length} and {\bf discharge burnup} for $N$-batch cores.
+
+\vspace{0.25cm}
+
+{\bf Example}: Refer back to example 4 and write down a linear model for the fuel reactivity.  Then, assume $N=2$, $\rho_L=0.05$, and $B_c = 10$ GWd/MTU.  What is the core reactivity at 0 and 10 GWd/MTU? Is this cycle well designed?
+
+\vfill 
+
+\pause 
+
+\textcolor{wcprimary}{{\small {\bf Ans.} Given $\rho = \rho_0 - A  B$, we use the points at $B=20$ and $B=50$ to estimate $A = (-0.1 - 0.1)/(50-20) \approx 0.00667$.  Then the intercept (or initial reactivity) satisfies $\rho(20) = 0.1 = \rho_0 - (0.00667)10$ so that $\rho_0 = 0.233333$.  Finally,the BOC and EOC reactivities are
+\begin{align*}
+ \rho_{\text{core}}^{\text{BOC}} &= \frac{1}{2} ( [\rho_0 - A\cdot 0] + [\rho_0 - A\cdot 10]) = 0.2 - 0.05 = 0.15 \\
+ \rho_{\text{core}}^{\text{EOC}} &= \frac{1}{2} ( [\rho_0 - A\cdot 10] + [\rho_0 - A\cdot 20]) = 0.13 - 0.05 = 0.08
+\end{align*}
+Because $\rho_{\text{core}}^{\text{EOC}} > 0$, our cycle length should be longer or we're ``throwing away'' fuel!}}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Using LRM to Determine $B_c$ and $B_d$}
+
+{\bf Example cont.}: Now, determine the cycle length and discharge burnup for the two-batch core (such that $\rho_{\text{core}}^{\text{EOC}} = 0$).  How do these values compare to a single-batch core?
+
+\vfill 
+
+\pause 
+
+\textcolor{wcprimary}{{\small {\bf Ans.}  
+With $\rho(B)=\rho_0-AB$ (from the previous slide, $A\simeq 0.006667\ \text{(GWd/MTU)}^{-1}$ and $\rho_0\simeq 0.233333$) and a constant leakage penalty $\rho_L=0.05$, a 2-batch core at EOC has one batch at $B_c$ and the other at $2B_c$, so the weighted average is
+\[
+\bar{\rho}_\infty^{\text{EOC}}
+=\frac{1}{2}\!\left[(\rho_0-AB_c)+(\rho_0-A(2B_c))\right]
+=\rho_0-\tfrac{3}{2}AB_c.
+\]
+Setting $\rho_{\text{core}}^{\text{EOC}}=\bar{\rho}_\infty^{\text{EOC}}-\rho_L=0$ gives
+\[
+B_c=\frac{2(\rho_0-\rho_L)}{3A}
+\quad\Rightarrow\quad
+B_c\approx \frac{2(0.233333-0.05)}{3(0.006667)}
+\approx \boxed{18.33\ \text{GWd/MTU}}.
+\]
+Thus the discharge burnup is $B_d=2B_c\approx \boxed{36.67\ \text{GWd/MTU}}$.
+For $N=1$, $\rho_{\text{core}}^{\text{EOC}}=(\rho_0-AB_c)-\rho_L=0$,
+so $B_c^{(1)} =  B_d^{(1)} \approx 27.50\ \text{GWd/MTU}$.
+Hence a 2-batch core has a shorter cycle ($B_c^{(2)}=\tfrac{2}{3}B_c^{(1)}$) but a higher discharge burnup ($B_d^{(2)}=\tfrac{4}{3}B_d^{(1)}$; about 33\% higher).
+}}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{$B_c$ and $B_d$ for $N$-batch Cores}
+
+More generally, the EOC reactivity of each batch in an $N$-batch core is
+
+\begin{align*}
+  \rho_1 &= \rho_0 -  AB_c \\
+  \rho_2 &= \rho_0 - 2AB_c \\
+         & \vdots \\
+  \rho_N &= \rho_0 - NAB_c \, ,
+\end{align*}
+
+and the core EOC reactivity is 
+
+\begin{equation*}
+  \rho_{\text{core}} = \frac{1}{N} [ N\rho_0 - (A + 2A + \ldots + NA)B_c ] - \rho_L = 0 \, .
+\end{equation*}
+
+For $\rho_L = 0$, we have $B_c^{(N)} = \frac{2}{N+1}\,B_c^{(1)}$.
+
+\vfill 
+\pause 
+
+{\bf Example}:  How is $B_d^{(N)}$ related to $B_d^{(1)}$?
+\pause 
+
+\textcolor{wcprimary}{{\small {\bf Ans.} $B_d^{(N)} = \frac{2N}{N+1}\,B_d^{(1)}$.}}
+
+
+\end{frame}
+ 
+\end{document}
+

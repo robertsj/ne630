@@ -1,0 +1,204 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{One-Speed Diffusion in \\ Heterogeneous Slabs \\
+       {\small\it NE 630 - Lecture 33}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+% --- Shortcuts ---
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\bO}{\hat{\Omega}}
+\newcommand{\bn}{\hat{\mathbf{n}}}
+\newcommand{\jj}{\mathbf{j}}
+\newcommand{\angflux}{\psi}
+\newcommand{\dV}{\,d^3\br}
+\newcommand{\dE}{\,dE}
+\newcommand{\dO}{\,d\hat{\Omega}}
+\newcommand{\ds}{\,d\mathbf{S}}
+\newcommand{\mnote}[1]{\marginpar{\raggedright\footnotesize\color{ksupurple}{#1}}}
+
+% --- Common shortcuts ---
+\newcommand{\flux}{\phi}
+\newcommand{\JJ}{\mathbf{J}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\SigT}{\Sigma_t}
+\newcommand{\SigA}{\Sigma_a}
+\newcommand{\SigS}{\Sigma_s}
+\newcommand{\SigF}{\Sigma_f}
+\newcommand{\nuSigF}{\nu\Sigma_f}
+\newcommand{\D}{D}
+\newcommand{\Ldiff}{L}
+\newcommand{\xhat}{\hat{\mathbf{x}}}
+\newcommand{\rhat}{\hat{\mathbf{r}}}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{develop solutions for the one-speed diffusion equation in 
+slab geometry for systems with multiple homogeneous regions subject to continuity conditions and boundary conditions (\emph{vacuum} and \emph{reflecting}).
+}
+\end{quote}
+
+ 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Diffusion in a Homogeneous Slab}
+
+Last time, we considered the one-speed diffusion equation
+\begin{align*}
+   \frac{d^2 \phi}{d x^2}
+  - \frac{1}{L^2}\flux(x) 
+  = -\frac{S(x)}{D} \, \qquad \text{subject to} \qquad \phi(0) = \phi(a) = 0 \, ,
+\end{align*}
+where 
+\begin{equation*}
+ L = \sqrt{\frac{D}{\Sigma_a}} \quad \text{and} \quad D = \frac{1}{3\Sigma_{tr}} \, . 
+\end{equation*}
+
+For $S(x) = S_0$, we applied the ``algorithm''  to find the equivalent to
+\begin{equation*}
+ \flux(x)=\frac{S_0}{\SigA}\left[1-\frac{\cosh\!\big(\tfrac{x-a/2}{\Ldiff}\big)}{\cosh\!\big(\tfrac{a}{2\Ldiff}\big)}\right] \, .
+ \label{eq:ex1sol}
+\end{equation*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: $\psi$, $\phi$, $\mathbf{J}$, and a new friend, $J^{\pm}$}
+ 
+Skipping any proofs, diffusion theory in slab geometry leads to
+\begin{align*}
+  \psi(x, \theta)  &= \frac{1}{4\pi} {\phi}(x) + \frac{3}{4\pi} \overbrace{\cos(\theta) \, \hat{\mathbf{i}} \cdot \mathbf{J}(x)}^{J(x)} \\
+\text{or} \quad \psi(x, \mu)   &= \frac{1}{4\pi} \phi(x) - \frac{3}{4\pi} \mu D \frac{d\phi}{dx}   \, ,
+\end{align*}
+where $x$ is the polar axis, $\theta$ is the polar angle, and $\mu = \cos(\theta)$.  It follows that
+\begin{align*}
+  \phi(x) &= \int^{2 \pi}_0 d\varphi \int^1_{-1} \psi(x, \mu) d\mu \quad \text{and} \quad
+  J(x)    = \int^{2 \pi}_0 d\varphi \int^1_{-1} \mu \psi(x, \mu)  d\mu \, .
+\end{align*}
+
+\vfill 
+\pause 
+
+Then the rightward (leftward) {\bf partial current} is defined as 
+\begin{align*}
+ J^{\pm} = \int^{2 \pi}_0 d\varphi \int_{\mu \gtrless 0} \mu \psi(x, \mu)  d\mu \rightarrow
+   \boxed{ J^{\pm} = \frac{1}{4}\,\flux(x) \mp \frac{D}{2}\,\frac{d\phi}{dx} }\, .
+\end{align*}
+
+\vfill 
+\pause 
+
+{\small 
+{\bf Example}.  Write $\phi$ and $J$ in terms of $J^{\pm}$.  \\
+\pause 
+{\bf Ans.} $\phi=(J^+ + J^-)/2$ and $J = J^+ - J^-$.
+}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Boundary Conditions: }
+
+Three common scenarios at a boundary $x_b$
+we want to model: 
+
+\begin{enumerate}
+ \item {\bf vacuum} (empty space; no neutrons)
+ \item {\bf reflection} (no net flow, i.e., $J(x_b) = 0$ or $(d\phi/dx)|_{x=x_b} = 0$)
+ \item {\bf boundary source} (specified {\it inward} flow, i.e., $J^{in}(x_b) = S_b$)
+\end{enumerate}
+
+\begin{columns}[T]
+
+\begin{column}{0.5\textwidth}
+
+\resizebox{0.99\textwidth}{!}{\input{figures/slab_bc.pgf}}
+
+\end{column}
+
+\begin{column}{0.5\textwidth}
+{\small {\bf Example}: Solve $-D\phi'' + \Sigma_a \phi(x) + S_0$, subject to reflection at $x = 0$ and modeling vacuum at $x=a$ using (a) $\phi(a)=0$ and (b)  $J^{in}(b) = 0$. Plot both results for $a = 10$ cm, $S_0 = 1$ \si{\per\centi\meter\cubed\per\second}, $D = 1.0$ cm, and $\Sigma_a = 0.1$ \si{\per\centi\meter}.}
+\end{column}
+
+\end{columns}
+
+Note that $J^{in}(a) = J^-(a) = 0$ is the natural way to define vacuum conditions!  On the other hand, the zero-flux condition $\phi(a)=0$ actually imposes a {\it negative} incident current that eats neutrons and decreases $\phi(x)$ everywhere! {\bf Avoid!}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Continuity Conditions}
+
+In addition to boundary conditions, we must maintain continuity of
+
+\begin{enumerate}
+ \item the scalar flux $\phi(x)$
+ \item the current $J(x) = -D \frac{d\phi}{dx}$
+\end{enumerate}
+
+{\bf everywhere} in the domain--even across boundaries between 
+different material regions!
+
+\pause 
+\vfill 
+
+{\bf Example}. Consider a two-region slab with an interface at $x = a$.  For $x \lessgtr a$, denote the flux by $\phi^{\text{I}/\text{II}}$ and the diffusion coefficient by $D^{\text{I}/\text{II}}$.  Write down the two equations imposed by continuity. 
+
+\pause 
+
+{\bf Ans}. Flux continuity requires $\phi^{\text{I}}(a) = \phi^{\text{II}}(a)$, while current continuity requires 
+$-D^{\text{I}} \frac{d\phi^{\text{I}}}{dx}\Big |_{x=a} = -D^{\text{II}} \frac{d\phi^{\text{II}}}{dx}\Big |_{x=a}$.
+Importantly, this means that the flux gradient {\it can} exhibit discontinuities (if $D^{\text{I}} \neq D^{\text{II}}$)!
+
+\end{frame}
+
+\end{document}
+

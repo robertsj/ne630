@@ -1,0 +1,396 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Criticality in Slabs, Cylinders, and Spherical Elephants \\
+       {\small\it NE 630 - Lecture 35}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+% --- Shortcuts ---
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\bO}{\hat{\Omega}}
+\newcommand{\bn}{\hat{\mathbf{n}}}
+\newcommand{\JJ}{\mathbf{J}}
+\newcommand{\jj}{\mathbf{j}}
+\newcommand{\flux}{\phi}
+\newcommand{\angflux}{\psi}
+\newcommand{\dV}{\,d^3\br}
+\newcommand{\dE}{\,dE}
+\newcommand{\dO}{\,d\hat{\Omega}}
+\newcommand{\ds}{\,d\mathbf{S}}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{define and evaluate criticality conditions for slab
+and cylindrical systems.
+}
+\end{quote}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Review: Diffusion with Multiplication}
+
+To solve
+\begin{equation*}
+  - \frac{d^2 \phi}{dx^2} + \frac{1 - k_{\infty}}{L^2} \phi(x) = \frac{S(x)}{D} \, ,
+\end{equation*}
+we let
+\begin{align*}
+ \textcolor{wcprimary}{\alpha^2} =  \frac{1-k_{\infty}}{L^2} \, , \quad \textcolor{wcprimary}{k_{\infty} < 1} 
+ \qquad \text{and} \qquad 
+ \overbrace{\textcolor{wcalerted}{B^2} =  \frac{k_{\infty}-1}{L^2}}^{\text{material buckling}} \, , \quad  \textcolor{wcalerted}{k_{\infty} > 1} \, ,
+\end{align*}
+so that 
+\begin{align*}
+ \phi_h(x) = 
+ \begin{cases}
+  \textcolor{wcprimary}{C_1 e^{\alpha x} + C_2 e^{-\alpha x}} \quad \text{-or-} & \\
+  \textcolor{wcprimary}{  C_1 \cosh(\alpha x) + C_2 \sinh(\alpha x)} & \textcolor{wcprimary}{k_{\infty}} < 1 \\
+   \textcolor{wcalerted}{ C_1 \cos(B x) + C_2 \sin(B x)} & \textcolor{wcalerted}{ k_{\infty} > 1} \, .
+ \end{cases}
+\end{align*}
+The 5-step process is otherwise unchanged: find $\phi_p(x)$, 
+apply BC's and CC's to determine constants, and verify!
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{A Critical Breakdown}
+
+We made three important observations about $\phi(x)$ while analyzing a source-driven, 
+multiplying slab subject to zero-flux conditions: 
+\begin{enumerate}
+ \item it increases quickly as $B \to \pi/a$
+ \item it blows up at $B = \pi/a$ (due to $\cos(Ba/2)$ vanishing in a denominator)
+ \item it becomes {\it negative} as $B$ is increased beyond $\pi/a$.
+\end{enumerate}
+
+
+ \pause
+This condition can be written and understood as follows:
+\begin{align*}
+ B^2  = \frac{k_{\infty}-1}{L^2} &= \left ( \frac{\pi}{a} \right )^2 = B_g^2 = \text{geometric buckling} \\
+ \tag{a}
+ \longrightarrow 1 = \frac{k_{\infty}}{1 + L^2  \left ( \frac{\pi}{a} \right )^2}
+                   &= k_{\infty} P_{\text{NL}} \\
+ \tag{b}
+                   &= \frac{\bar{\nu}\Sigma_f}{\Sigma_a + D  \left ( \frac{\pi}{a} \right )^2 } \\
+ \tag{c}
+                   &= k_{\text{eff}}
+\end{align*}
+All three statements (a), (b), and (c) correspond to {\bf criticality}.  Just as in real critical 
+systems, we can only have a steady-state flux if there is no source!
+ 
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{In Search of $k_{\text{eff}}$}
+ 
+When $B^2 \neq B_g^2$, we resort to the same trick we used 
+for infinite, homogeneous systems: scale $\bar{\nu}\Sigma_f$ by $k_{\text{eff}}$ to obtain
+\begin{equation*}
+  -D \frac{d^2 \phi}{dx^2} + \Sigma_s \phi(x) = \frac{\bar{\nu}\Sigma_f}{k_{\text{eff}}} \phi(x) \, ,
+\end{equation*}
+or
+\begin{equation*}
+  \frac{d^2 \phi}{dx^2} + \overbrace{\frac{k_{\infty}/k_{\text{eff}} -1}{L^2}}^{B^2} \phi(x) = 0 \, .
+\end{equation*}
+In other words, $k_{\text{eff}}$ adjusts $k_{\infty}$ (or $\bar{\nu}\Sigma_f$) so that $B^2 = B^2_g$.  
+Armed with this ``fission knob'', our goals will be to determine
+\begin{enumerate}
+ \item $k_{\text{eff}}$ given material and geometry properties
+ \item the value of some material or geometry property (e.g., enrichment or slab width) that produces a desired $k_{\text{eff}}$ (usually 1!)
+\end{enumerate}
+
+
+\end{frame} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Interlude: Some Critical Thinking}
+
+{\bf Example 1}. Consider a homogeneous, multiplying slab of width $a$ subject to zero-flux
+boundary conditions.  If $D=1$, $\Sigma_a = 0.1$, and $k_{\infty} = 1.5$,
+what value of $a$ makes the reactor critical?
+
+\pause 
+{\small \textcolor{wcprimary}{ {\bf Ans.}  $1 = k_{\infty}/(1+L^2 (\pi/a)^2)$ or
+$a = \sqrt{ (\pi^2 L^2)(k_{\infty}-1)} \approx 14.05$ cm.
+}}
+
+\vfill 
+\pause
+
+{\bf Example 2}.  If we replace $\phi(\pm a/2) = 0$ with $J^{\pm}(\mp a/2) = 0$, how
+would that value of $a$ change?
+
+\pause 
+{\small \textcolor{wcprimary}{ {\bf Ans.}  Zero-flux conditions impose negative incident currents, so $a$ should be {\it smaller} than above since we remove the negative contributions.  Prove it!
+}}
+
+\vfill 
+\pause
+
+{\bf Example 3}.  If we modify the material in Example 1 so that $k_{\infty} = 0.99$, how does 
+the critical value of $a$ change?
+
+\pause 
+{\small \textcolor{wcprimary}{ {\bf Ans.}  If the slab ain't critical {\it without} leakage, it ain't critical {\it with} leakage!
+}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Inside the Volume}
+ 
+
+Let $s(\br, E, \bO, t)$ be a source density, so that $s(\cdots)\,\dV\,\dE\,\dO$ is the number of neutrons 
+added to the volume per second. Then
+\begin{equation*}
+\tag{4--26}
+ \textcolor{wcprimary}{\text{(1)}  = \left[ \int_V s(\br,E,\bO,t)\,\dV \right] \dE\,\dO} \, .
+\end{equation*}
+
+\vfill 
+
+Given $\Sigma_t(\br,E)$,
+the total interaction rate in the volume is
+\begin{equation*}
+\tag{4--29}
+  \textcolor{wcalerted}{\text{(5)} = \left[ \int_V \Sigma_t(\br,E)\, \angflux(\br,E,\bO,t)\,\dV \right] \dE\,\dO } \, .
+\end{equation*}
+This assumes an {\it isotropic} medium in which $\Sigma_t$ does {\it not} depend on $\bO$.
+Finally, {\it in-scattering} from $(E',\bO')$ to $(E,\bO)$ contributes
+\begin{equation}
+\tag{4--31}
+   \textcolor{wcprimary}{\text{(3)} = \int_V \left[ \int_0^\infty \!\!\int_{4\pi} \Sigma_s(\br, E'\!\to\!E, \bO'\!\to\!\bO)\,
+  \angflux(\br, E', \bO', t) \dO' \dE' \right] \dV } \, .
+\end{equation}
+
+\end{frame}
+
+\begin{frame}[fragile]{Through the Surface}
+
+ The rate at which neutrons are gained or lost through a surface element is
+\begin{equation}
+\tag{4--32}
+  \jj(\br,E,\bO,t)\cdot \ds \;=\; \bO\, \angflux(\br,E,\bO,t)\cdot \ds.
+\end{equation}
+Integrating over the entire surface, the {\it net} number \emph{leaving} is
+\begin{equation*}
+   \textcolor{wcalerted}{\text{(4)}}  - \textcolor{wcprimary}{\text{(2)}} = \int_S \bO\, \angflux(\br,E,\bO,t)\cdot \ds .
+  \tag{4--33}
+\end{equation*}
+Recall Gauss' (divergence) theorem, i.e.,
+\begin{equation*}
+\tag{4--34}
+  \int_S \mathbf{F}(\br)\cdot \ds \;=\; \int_V \nabla\!\cdot\! \mathbf{F}(\br)\, \dV \, ,
+\end{equation*}
+which, because $\bO$ is independent of $\br$, lets us write
+\begin{equation*}
+ \textcolor{wcalerted}{\text{(4)}}  - \textcolor{wcprimary}{\text{(2)}} 
+ = \int_S \bO\, \angflux\cdot \ds
+  \;=\; \int_V \nabla\!\cdot\!\big(\bO\, \angflux\big)\, \dV
+  \;=\; \textcolor{wcalerted}{ \int_V \bO\cdot \nabla \angflux \, \dV } \, .
+\end{equation*}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Shrinking $V$ for Differential Balance}
+
+If $V$ is arbitrary, then we collect the terms, take $V \to 0$ to eliminate the integrals,
+and welcome our new friend, the {\bf neutron transport equation}:
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \angflux}{\partial t}
+  +  \textcolor{wcalerted}{ \bO\cdot\nabla \angflux}
+  &+   \textcolor{wcalerted}{ \Sigma_t(\br,E)\, \angflux(\br,E,\bO,t)}
+   = \\
+  & \textcolor{wcprimary}{\int_0^\infty \!\!\int_{4\pi}
+  \Sigma_s(\br, E'\!\to\!E, \bO'\!\to\!\bO)\,
+  \angflux(\br,E',\bO',t)\, \dO'\, \dE'} \\
+  & + \textcolor{wcprimary}{ s(\br,E,\bO,t) }.
+  \tag{4--40}
+\end{align*}
+
+\vfill 
+{\bf Food for thought}: what term would we add to include multiplication (fission)?
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Eliminating $\bO$}
+
+While scary, the various terns comprising the NTE are familiar enough, but the dependence on $\bO$ remains a challenge for another day.  Integrating the NTE over $4 \pi$ leads to
+
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \flux}{\partial t}
+  &+ \nabla\!\cdot\! \JJ(\br,E,t)
+   +\Sigma_t(\br,E)\, \flux(\br,E,t)\\
+  &=
+  \int_0^\infty \Sigma_s(\br, E'\!\to\!E)\, \flux(\br,E',t)\, \dE'
+  + S(\br,E,t) \, ,
+  \tag{4--79}
+\end{align*}
+which is called the {\bf neutron continuity equation} (or NCE). 
+
+\vfill 
+\pause  
+
+{\bf Ponderable}.  Have we simplified our life? \pause
+Unfortunately, we went from the NTE with one unknown ($\psi$) to the new NCE 
+with two unknowns ($\phi$ and $\mathbf{J}$)!
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Finding Closure}
+
+We can't really do much with one equation and the unknowns $\phi$ and $\mathbf{J}$.  
+The fix is a simple one: assume that the flow points where the neutron density, or,
+rather, flux falls:
+\begin{equation*}
+   \mathbf{J} \propto -\nabla \phi \, .
+\end{equation*}
+{\bf Ponderable}: How do we go from $\propto$ to $=$?
+\pause 
+Let $D$ be that constant of proportionality so that
+\begin{equation*}
+\tag{FNRP 6.11}
+   \mathbf{J} = -D \nabla \phi \, ,
+\end{equation*}
+which is known as {\bf Fick's law}.  Substitution of Fick's law 
+into the NCE yields
+
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \flux}{\partial t}
+  &- \nabla\!\cdot\! D(\br,E) \nabla \phi(\br,E,t)
+   +\Sigma_t(\br,E)\, \flux(\br,E,t)\\
+  &=
+  \int_0^\infty \Sigma_s(\br, E'\!\to\!E)\, \flux(\br,E',t)\, \dE'
+  + S(\br,E,t) \, ,
+\end{align*}
+which is, of course, a long lost friend!  
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Simplify, Simplify}
+
+Now that we have space, it's time to say goodbye to $t$ and to 
+replace $E$ by $g$:
+
+\begin{align*}
+ - \nabla\!\cdot\! D_g(\br) \nabla \phi_g(\br)
+   + \Sigma_{tg}(\br)\, \flux_g(\br)
+  = \sum_{g'=1}^{G} \Sigma_{sg\gets g'} \phi_{g'}(\br) +  S_g(\br) \, .
+\end{align*}
+
+{\bf Example}: For $G=2$ and no upscatter, show that
+\begin{align*}
+ - \nabla\!\cdot\! D_1(\br) \nabla \phi_1(\br)
+   + \Sigma_{r,1}(\br)\, \flux_1(\br)
+  &=  S_1(\br,t) \\ 
+ - \nabla\!\cdot\! D_2(\br) \nabla \phi_2(\br)
+   + \Sigma_{a,2}(\br)\, \flux_2(\br)
+  &=  \Sigma_{s,2\gets 1} \phi_{1}(\br) + S_2(\br) 
+\end{align*}
+What if $G=1$ and we introduce multiplication?
+\pause 
+
+\begin{align*}
+\tag{FNRP 6.12}
+\boxed{ - \nabla\!\cdot\! D(\br) \nabla \phi(\br)
+   + \Sigma_{a}(\br)\, \flux(\br) 
+  =  S(\br) + \bar{\nu}\Sigma_{f}(\br)\, \flux(\br) 
+}
+\end{align*}
+
+\end{frame}
+
+\begin{frame}[fragile]{Onto Slab Geometry}
+
+Much like integration over $4\pi$ hides some detail, so, too, does $\nabla\!\cdot\! D(\br) \nabla \phi(\br)$.  Recall that, for Cartesian (or $xyz$) coordinates, the gradient and divergence operators act on scalar and vector functions according to
+\begin{align*}
+\nabla \phi(\mathbf{r})
+= \mathbf{i} \,\frac{\partial \phi}{\partial x}
+ + \mathbf{j}  \,\frac{\partial \phi}{\partial y}
+ + \mathbf{k}  \,\frac{\partial \phi}{\partial z} \quad \text{and} \quad
+\nabla\!\cdot\!\mathbf{J}(\mathbf{r})
+= \frac{\partial J_x}{\partial x}
+ + \frac{\partial J_y}{\partial y}
+ + \frac{\partial J_z}{\partial z} \, ,
+\end{align*}
+so that
+\begin{align*}
+\nabla\!\cdot\!\big(D(\mathbf{r})\,\nabla \phi(\mathbf{r})\big)
+&= \frac{\partial}{\partial x}\!\left(D\,\frac{\partial \phi}{\partial x}\right)
+ + \frac{\partial}{\partial y}\!\left(D\,\frac{\partial \phi}{\partial y}\right)
+ + \frac{\partial}{\partial z}\!\left(D\,\frac{\partial \phi}{\partial z}\right) \\[4pt]
+&= D(\mathbf{r})\,\nabla^2 \phi(\mathbf{r})
+  + \big(\nabla D(\mathbf{r})\big)\!\cdot\!\big(\nabla \phi(\mathbf{r})\big).
+\end{align*}
+
+If we make the bold assumption that $\phi(\mathbf{r}) = \phi(x)$, we find 
+\begin{align*}
+\boxed{ - \frac{d}{dx} \left ( D(x) \frac{d\phi}{dx}   \right )
+   + \Sigma_{a}(x)\, \flux(x) 
+  =  \bar{\nu}\Sigma_{f}(x)\, \flux(x) +  S(x) 
+} \, ,
+\end{align*}
+the one-speed diffusion equation in slab geometry.
+\end{frame}
+
+
+
+
+\end{document}
+

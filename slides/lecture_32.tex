@@ -1,0 +1,321 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{One-Speed Diffusion in \\ a Homogeneous Slab\\
+       {\small\it NE 630 - Lecture 32}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+% --- Shortcuts ---
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\bO}{\hat{\Omega}}
+\newcommand{\bn}{\hat{\mathbf{n}}}
+\newcommand{\jj}{\mathbf{j}}
+\newcommand{\angflux}{\psi}
+\newcommand{\dV}{\,d^3\br}
+\newcommand{\dE}{\,dE}
+\newcommand{\dO}{\,d\hat{\Omega}}
+\newcommand{\ds}{\,d\mathbf{S}}
+\newcommand{\mnote}[1]{\marginpar{\raggedright\footnotesize\color{ksupurple}{#1}}}
+
+% --- Common shortcuts ---
+\newcommand{\flux}{\phi}
+\newcommand{\JJ}{\mathbf{J}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\SigT}{\Sigma_t}
+\newcommand{\SigA}{\Sigma_a}
+\newcommand{\SigS}{\Sigma_s}
+\newcommand{\SigF}{\Sigma_f}
+\newcommand{\nuSigF}{\nu\Sigma_f}
+\newcommand{\D}{D}
+\newcommand{\Ldiff}{L}
+\newcommand{\xhat}{\hat{\mathbf{x}}}
+\newcommand{\rhat}{\hat{\mathbf{r}}}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{develop solutions for the one-speed diffusion equation in 
+slab geometry for single-region systems with constant $\D$, $\SigA$, and a uniform volumetric source $S(x)$
+}
+\end{quote}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: from Continuity to Diffusion}
+ 
+Last time, we developed the neutron transport equation and integrated it 
+over all angles to produce the neutron continuity equation
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \flux}{\partial t}
+  &+ \nabla\!\cdot\! \JJ(\br,E,t)
+   +\Sigma_t(\br,E)\, \flux(\br,E,t) = \overbrace{\textcolor{wcprimary}{Q(\mathbf{r}, E, t)}}^{\text{in-scatter + source}} \, ,
+  \tag{4--79}
+\end{align*}
+where $\phi$ is the (scalar) flux, $\mathbf{J}$ is the current density, and 
+the {\it emission density} $Q$ represents all \textcolor{wcprimary}{gains}.
+Closure of the continuity equation  comes from Fick's law, 
+\begin{equation*}
+\tag{FNRP 6.11}
+   \mathbf{J} = -D \nabla \phi \, ,
+\end{equation*}
+substitution of which into (4--79) produces the {\bf neutron diffusion equation}
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \flux}{\partial t}
+  - \nabla\!\cdot\! D(\br,E) \nabla \phi(\br,E,t)
+   +\Sigma_t(\br,E)\, \flux(\br,E,t)
+  = Q(\mathbf{r}, E, t)\, .
+\end{align*}
+ 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Steady-State, One-Speed Diffusion}
+
+
+Now that we have space, it's time to say goodbye to $t$ and to 
+replace $E$ by $g$:
+\begin{align*}
+ - \nabla\!\cdot\! D_g(\br) \nabla \phi_g(\br)
+   + \Sigma_{tg}(\br)\, \flux_g(\br)
+  = \sum_{g'=1}^{G} \Sigma_{sg\gets g'} \phi_{g'}(\br) +  S_g(\br) \, .
+\end{align*}
+
+{\bf Example}: For $G=2$ and no upscatter, show that
+\begin{align*}
+ - \nabla\!\cdot\! D_1(\br) \nabla \phi_1(\br)
+   + \Sigma_{r,1}(\br)\, \flux_1(\br)
+  &=  S_1(\br,t) \\ 
+ - \nabla\!\cdot\! D_2(\br) \nabla \phi_2(\br)
+   + \Sigma_{a,2}(\br)\, \flux_2(\br)
+  &=  \Sigma_{s,2\gets 1} \phi_{1}(\br) + S_2(\br) 
+\end{align*}
+\vfill 
+
+What if $G=1$ and we introduce multiplication?
+\pause 
+\begin{align*}
+\tag{FNRP 6.12}
+\boxed{ - \nabla\!\cdot\! D(\br) \nabla \phi(\br)
+   + \Sigma_{a}(\br)\, \flux(\br) 
+  =  S(\br) + \bar{\nu}\Sigma_{f}(\br)\, \flux(\br) 
+}
+\end{align*}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Applying $\nabla$ and $\nabla^2$}
+
+Much like integration over $4\pi$ hides some detail, so, too, does $\nabla\!\cdot\! D(\br) \nabla \phi(\br)$!
+
+\vfill 
+
+For Cartesian (or $xyz$) coordinates, the gradient and divergence operators act on scalar and vector functions according to
+\begin{align*}
+\nabla \phi(\mathbf{r})
+= \mathbf{i} \,\frac{\partial \phi}{\partial x}
+ + \mathbf{j}  \,\frac{\partial \phi}{\partial y}
+ + \mathbf{k}  \,\frac{\partial \phi}{\partial z} \quad \text{and} \quad
+\nabla\!\cdot\!\mathbf{J}(\mathbf{r})
+= \frac{\partial J_x}{\partial x}
+ + \frac{\partial J_y}{\partial y}
+ + \frac{\partial J_z}{\partial z} \, ,
+\end{align*}
+so that
+\begin{align*}
+\nabla\!\cdot\!\big(D(\mathbf{r})\,\nabla \phi(\mathbf{r})\big)
+&= \frac{\partial}{\partial x}\!\left(D\,\frac{\partial \phi}{\partial x}\right)
+ + \frac{\partial}{\partial y}\!\left(D\,\frac{\partial \phi}{\partial y}\right)
+ + \frac{\partial}{\partial z}\!\left(D\,\frac{\partial \phi}{\partial z}\right) \\[4pt]
+&= D(\mathbf{r})\,\nabla^2 \phi(\mathbf{r})
+  + \big(\nabla D(\mathbf{r})\big)\!\cdot\!\big(\nabla \phi(\mathbf{r})\big).
+\end{align*}
+
+\vfill 
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Homogeneous Slab}
+ 
+For homogeneous regions (i.e., $\Sigma_a(\mathbf{r}) = \Sigma_a$ and $D(\mathbf{r}) = D$),
+the one-speed diffusion equation can be written as 
+\begin{align*}
+  -D \left (\frac{\partial^2 \phi}{\partial x^2} +
+            \frac{\partial^2 \phi}{\partial y^2} + 
+            \frac{\partial^2 \phi}{\partial z^2} \right )
+  + \Sigma_{a}\flux(\br) 
+  = \bar{\nu}\Sigma_{f} \flux(\br)  +  S(\br) \, .
+\end{align*}
+
+\vfill 
+
+Now, suppose this region is very (infinitely) large in the $y$ and $z$ directions but finite along the $x$.  If $S(\mathbf{r}) = S(x)$, then everything in this {\it homogeneous slab} is uniform along the $y$ and $z$ directions, and, hence, we should have $\phi(\mathbf{r}) = \phi(x)$.  Thus, the one-speed diffusion equation in slab geometry is 
+\begin{align*}
+  -D \frac{d^2 \phi}{d x^2}
+  + \Sigma_{a}\flux(x) 
+  = \bar{\nu}\Sigma_{f} \flux(x)  +  S(x) \, .
+\end{align*}
+\vfill 
+
+This is a second-order, inhomogeneous, ordinary differential equation with constant coefficients.
+
+\end{frame} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Diffusion Coefficient $D$}
+
+The {\bf diffusion coefficient} is defined\footnote{through the formal derivation of the diffusion equation from the transport equation} as
+\begin{equation*}
+ \D \;=\; \frac{1}{3\,\Sigma_{\mathrm{tr}}} \, ,
+\end{equation*}
+where $\Sigma_{\mathrm{tr}} \equiv \SigT - \bar{\mu}\,\SigS$ is the {\bf transport cross section}, and 
+$\bar{\mu}$ is the average cosine of the scattering angle in the {\it laboratory} system. 
+
+\vfill 
+
+For isotropic elastic scattering in the 
+{\it center-of-mass system} and a single 
+nuclide of mass number $A$,  
+\begin{equation*}
+\tag{FNRP 2.X}
+ \bar{\mu} = \frac{2}{3A} \, .
+\end{equation*}
+When neither $\Sigma_{\mathrm{tr}}$ nor $\bar{\mu}$ is specified, we set $\Sigma_{\mathrm{tr}} \approx \Sigma_{t}$.
+
+\vfill 
+
+{\bf Ponderable}: What does $\Sigma_{\mathrm{tr}} \approx \Sigma_{t}$ imply about scattering?
+ 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Diffusion Length $L$ and A First Example}
+
+To simplify things a bit, let's define the {\bf diffusion length}
+\begin{equation*}
+ L = \sqrt{\frac{D}{\Sigma_a}} \, , 
+\end{equation*}
+so that the diffusion equation sans multiplication becomes
+\begin{align*}
+   \frac{d^2 \phi}{d x^2}
+  - \frac{1}{L^2}\flux(x) 
+  = -\frac{1}{D} S(x) \, .
+\end{align*}
+
+{\bf Example}. Consider a slab of thickness $a$ with known $\SigA$ and $\D$. If there is a uniform source $S_0$ throughout, determine $\flux(x)$ in $0\le x\le a$ subject to
+the boundary conditions\footnote{We'll see other boundary conditions next time, but the zero-flux conditions are an approximate way to model a slab surrounded by ``nothing'' (i.e., a vacuum}
+\begin{equation*}
+ \flux(0) = 0  \qquad \text{and} \qquad \flux(a) = 0 \, .
+\end{equation*}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{A First Example: Solution}
+
+
+\textbf{Step 1 (Write the Equations)}. We have (with $L=\sqrt{D/\Sigma_a}$)
+\begin{equation*}
+\tag{ODE and BCs}
+ \frac{d^2\flux}{dx^2} - \frac{1}{\Ldiff^2}\,\flux = -\frac{S_0}{\D}  \quad \text{subject to} \quad  \flux(0) = 0  \,\, \text{and} \,\, \flux(a) = 0 \, .
+\end{equation*}
+\textbf{Step 2 (Homogeneous Solution)}. Try $\flux_h(x)=e^{\lambda x}$ to obtain $\lambda=\pm \Ldiff^{-1}$, and, hence,
+\begin{equation*}
+ \flux_h(x)=C_1 e^{x/\Ldiff}+C_2 e^{-x/\Ldiff}.
+\end{equation*}
+\textbf{Step 3 (Particular Solution)}. Since $S_0$ is constant, take $\flux_p(x)=C_3$; substitution into ODE gives $C_3=L^2 S_0 /D = S_0/\SigA$.\\[4pt]
+\textbf{Step 4 (Apply BCs)}. Plugging the general solution $\phi_h+\phi_p$ into the BCs leads to
+\begin{align*}
+\tag{left BC}
+ \flux(0) &=\frac{S_0}{\SigA}+C_1 e^{0/\Ldiff}+C_2 e^{-0/\Ldiff} = 0\\
+\tag{right BC}
+ \flux(a) &=\frac{S_0}{\SigA}+C_1 e^{a/\Ldiff}+C_2 e^{-a/\Ldiff} = 0 \, ,
+\end{align*}
+which represent two equations for the two unknowns, $C_1$ and $C_2$.  {\bf Find them!}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{A First Example: Verification and Inspection}
+
+We can write the solution compactly\footnote{We can define any two independent, linear combinations 
+of $e^{x/L}$ and $e^{-x/L}$, say $f_{\pm}(x) =  (e^{x/L} \pm e^{-x/L})/2$ 
+instead define $\phi_h(x) = \tilde{C}_1 f_+(x) + \tilde{C}_2 f_-(x)$.  For many slab problems, 
+we'll find that these functions $f_+(x) = \cosh(x/L)$ and $f_-(x) =\sinh(x/L)$ can produce
+simpler solutions.
+}
+\begin{equation*}
+ \tag{***}
+ \flux(x)=\frac{S_0}{\SigA}\left[1-\frac{\cosh\!\big(\tfrac{x-a/2}{\Ldiff}\big)}{\cosh\!\big(\tfrac{a}{2\Ldiff}\big)}\right] \, .
+ \label{eq:ex1sol}
+\end{equation*}
+To verify this is correct, we should 
+\begin{enumerate}
+ \item Plug (***) into the ODE.
+ \item Plug (***) into the BCs.
+ \item Plot $\flux(x)$ to inspect the shape and boundary values.  
+\end{enumerate} 
+When we aren't given numerical values for $S_0$, $\Sigma_a$, and $D$, we can simply assume reasonable values. 
+%We've computed enough $\Sigma$'s to have a feel for (or, at least, examples of) $\Sigma_a$, $\Sigma_s$, and $\Sigma_t$.  
+
+\vfill 
+
+{\bf Example}: Plot $\phi(x)$ with $\SigA=0.1$ \si{\per\centi\meter}, $\D=1$ \si{\centi\meter}, $S_0=1$ \si{\per\centi\meter\per\second} for (a) $a=10$ \si{\centi\meter} and (b) $a=100$ \si{\centi\meter}.  What's the maximum possible flux for any $a$? 
+
+\end{frame}
+
+
+\end{document}
+

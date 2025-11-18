@@ -1,0 +1,252 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Semi-Analytical Solution of the \\ 
+       Multigroup Diffusion Equations in \\ Piecewise Homogeneous Slabs\\
+       {\small\it NE 630 - Appendix Z}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+% --- Shortcuts ---
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\bO}{\hat{\Omega}}
+\newcommand{\bn}{\hat{\mathbf{n}}}
+\newcommand{\jj}{\mathbf{j}}
+\newcommand{\angflux}{\psi}
+\newcommand{\dV}{\,d^3\br}
+\newcommand{\dE}{\,dE}
+\newcommand{\dO}{\,d\hat{\Omega}}
+\newcommand{\ds}{\,d\mathbf{S}}
+\newcommand{\mnote}[1]{\marginpar{\raggedright\footnotesize\color{ksupurple}{#1}}}
+
+% --- Common shortcuts ---
+\newcommand{\flux}{\phi}
+\newcommand{\JJ}{\mathbf{J}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\SigT}{\Sigma_t}
+\newcommand{\SigA}{\Sigma_a}
+\newcommand{\SigS}{\Sigma_s}
+\newcommand{\SigF}{\Sigma_f}
+\newcommand{\nuSigF}{\nu\Sigma_f}
+\newcommand{\D}{D}
+\newcommand{\Ldiff}{L}
+\newcommand{\xhat}{\hat{\mathbf{x}}}
+\newcommand{\rhat}{\hat{\mathbf{r}}}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{develop solutions for the multigroup diffusion equation in 
+slab geometry for systems with multiple homogeneous regions subject to continuity conditions and boundary conditions.
+}
+\end{quote}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Multigroup Diffusion}
+
+The multigroup diffusion equations for a slab comprised of $R$ homogeneous regions are 
+\begin{align*}
+\tag{MGD}
+ - D_{g}^i \frac{d^2 \phi_{g}^i}{dx^2} &
+   + \Sigma_{t,g}^i \, \phi_{g}^i(x) \\
+  &= \sum_{g'=1}^{G} \Sigma_{s,g\gets g'}^i \phi_{g'}^i(x) 
+   + \frac{\chi^i_g}{k_{\text{eff}}} \sum_{g'=1}^{G} \bar{\nu}\Sigma_{f, g'}^i \phi_{g'}^i(x) 
+   +  S_{g}^i \, , \\
+   g &= 1, 2, \ldots, G \, , \qquad i = 1, 2, \ldots, R \, , 
+\end{align*}
+subject to the continuity conditions
+\begin{align*}
+\tag{CC}
+ \phi_g^i(x_{i+\frac{1}{2}}) &=  \phi_g^{i+1}(x_{i+\frac{1}{2}}) \\
+ -D^i_g \frac{d\phi_g^i}{dx}\big |_{x = x_{i+\frac{1}{2}}} 
+   &=  -D^{i+1}_g \frac{d\phi_g^{i+1}}{dx}\big |_{x = x_{i+\frac{1}{2}}} \, , \quad i = 1 \ldots R-1 \, ,
+\end{align*}
+and appropriate boundary conditions.  For a source-driven problkem, $k_{\text{eff}} = 1$; otherwise, it is the multiplication factor.
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{The Process}
+
+The basic procedure for solving Eq. (MGD) is straightforward.  For a given region, rewrite the equations as 
+
+\begin{align*}
+ \frac{d^2 \boldsymbol{\phi}_i}{dx} &
+   - \mathbf{B}^2_i \boldsymbol{\phi}_i(x) 
+   =  -\mathbf{D}_i^{-1} \mathbf{S}_i \, ,
+\end{align*}
+where $\ldots$.
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Regionwise Matrix Form}
+For region $i=1,\dots,R$, stack the group fluxes into $\boldsymbol\phi_i(x)\in\mathbb{R}^G$ and define
+\[
+\mathbf{D}_i=\mathrm{diag}(D_1^i,\dots,D_G^i),\quad
+\boldsymbol\Sigma_{t,i}=\mathrm{diag}(\Sigma^i_{t,1},\dots,\Sigma^i_{t,G}),
+\]
+\[
+\boldsymbol\Sigma_{s,i}=[\,\Sigma^i_{s,g\gets g'}\,]_{g,g'=1}^G,\qquad
+\mathbf{F}_i=\frac{1}{k_{\text{eff}}}\,\boldsymbol\chi_i\,(\bar\nu\boldsymbol\Sigma_{f,i})^{\!\top},
+\]
+\[
+\mathbf{S}_i=\begin{bmatrix}S_1^i\\[-2pt]\vdots\\S_G^i\end{bmatrix},\qquad
+\mathbf{R}_i=\boldsymbol\Sigma_{t,i}-\boldsymbol\Sigma_{s,i}-\mathbf{F}_i,\qquad
+\mathbf{B}_i^2=\mathbf{D}_i^{-1}\mathbf{R}_i.
+\]
+Then (MGD) in region $i$ becomes the constant-coefficient ODE
+\[
+\mathbf{D}_i\,\frac{d^2\boldsymbol\phi_i}{dx^2}-\mathbf{R}_i\,\boldsymbol\phi_i(x)=-\,\mathbf{S}_i
+\qquad\Longleftrightarrow\qquad
+\frac{d^2\boldsymbol\phi_i}{dx^2}-\mathbf{B}_i^{2}\boldsymbol\phi_i(x)=-\,\mathbf{D}_i^{-1}\mathbf{S}_i.
+\]
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Decouple by Modes}
+
+\textbf{Diagonalize the pair $(\mathbf{R}_i,\mathbf{D}_i)$:}
+solve the generalized eigenproblem
+\[
+\mathbf{R}_i\,\mathbf{V}_i=\mathbf{D}_i\,\mathbf{V}_i\,\boldsymbol\Lambda_i,
+\qquad
+\text{scale so that }\;\mathbf{V}_i^{\top}\mathbf{D}_i\mathbf{V}_i=\mathbf{I}.
+\]
+ 
+\vfill 
+
+\textbf{Go to modal space:} write $\boldsymbol\phi_i=\mathbf{V}_i\,\boldsymbol\psi_i$ and multiply the ODE by $\mathbf{V}_i^{\top}$:
+\[
+\boldsymbol\psi_i''(x)-\boldsymbol\Lambda_i\,\boldsymbol\psi_i(x)
+= -\,\mathbf{V}_i^{\top}\mathbf{S}_i
+\;\;\Longrightarrow\;\;
+ \;\psi_{im}''-\lambda_{im}\psi_{im}=-s_{im},
+\]
+with $s_{im}=(\mathbf{V}_i^{\top}\mathbf{S}_i)_m$ and $\kappa_{im}=\sqrt{\lambda_{im}}$.
+
+\vfill 
+
+\textbf{Closed-form per mode ($y=x-x_{i,c}$):}
+\[
+\psi_{im}(y)=A_{im}\cosh(\kappa_{im}y)+B_{im}\sinh(\kappa_{im}y)+\frac{s_{im}}{\lambda_{im}}
+\quad(\lambda_{im}>0).
+\]
+If a rare $\lambda_{im}=0$ occurs: $\psi_{im}''=-s_{im}$ gives a quadratic particular $-\tfrac{s_{im}}{2}y^2$.
+
+\vfill 
+
+\textbf{From modes to groups:} $\displaystyle \boldsymbol\phi_i(y)=\mathbf{V}_i\!\left[
+\mathbf{A}_i\!\odot\!\cosh(\boldsymbol\kappa_i y)+
+\mathbf{B}_i\!\odot\!\sinh(\boldsymbol\kappa_i y)+
+\boldsymbol\Lambda_i^{-1}\mathbf{V}_i^{\top}\mathbf{S}_i\right]\!,
+$
+where $\boldsymbol\kappa_i=\mathrm{diag}(\kappa_{i1},\ldots,\kappa_{iG})$ and $\odot$ is elementwise.
+
+\vfill
+
+{\small \emph{Why cosh/sinh?} They are numerically stable on symmetric intervals $y\in[-\ell_i/2,\ell_i/2]$ and keep things real when $\lambda_{im}>0$ (use $\cos/\sin$ if $\lambda_{im}<0$).}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Glue regions \& apply BCs $\Rightarrow$ one linear solve}
+
+\textbf{Interface matching (vector form at $x_{i+\frac12}$):}
+\[
+\boldsymbol\phi_i=\boldsymbol\phi_{i+1}\quad\text{and}\quad
+\mathbf{D}_i\,\boldsymbol\phi_i'=\mathbf{D}_{i+1}\,\boldsymbol\phi_{i+1}'.
+\]
+In modal variables (evaluate at $y=\pm\,\ell_i/2$),
+\[
+\begin{aligned}
+\boldsymbol\psi_i^R &= \mathbf{C}_i\,\mathbf{A}_i + \mathbf{S}_i\,\mathbf{B}_i + \boldsymbol\psi_i^p,
+&
+\boldsymbol\psi_i^{\prime R} &= \boldsymbol\kappa_i\!\left(\mathbf{S}_i\,\mathbf{A}_i + \mathbf{C}_i\,\mathbf{B}_i\right),\\
+\boldsymbol\psi_i^L &= \mathbf{C}_i\,\mathbf{A}_i - \mathbf{S}_i\,\mathbf{B}_i + \boldsymbol\psi_i^p,
+&
+\boldsymbol\psi_i^{\prime L} &= \boldsymbol\kappa_i\!\left(-\mathbf{S}_i\,\mathbf{A}_i + \mathbf{C}_i\,\mathbf{B}_i\right),
+\end{aligned}
+\]
+with $\mathbf{C}_i=\cosh(\boldsymbol\kappa_i\ell_i/2)$, $\mathbf{S}_i=\sinh(\boldsymbol\kappa_i\ell_i/2)$, $\boldsymbol\psi_i^p=\boldsymbol\Lambda_i^{-1}\mathbf{V}_i^{\top}\mathbf{S}_i$,
+and $\boldsymbol\phi_{i}^{R/L}=\mathbf{V}_i\boldsymbol\psi_{i}^{R/L}$, $\boldsymbol\phi_{i}^{\prime\,R/L}=\mathbf{V}_i\boldsymbol\psi_{i}^{\prime\,R/L}$.
+
+\textbf{Boundary conditions (examples, per group):}
+\[
+\text{Vacuum:}\quad \alpha^-\,\boldsymbol\phi - \mathbf{D}_1\,\boldsymbol\phi'=\mathbf{0}\;\text{at left},\qquad
+\alpha^+\,\boldsymbol\phi + \mathbf{D}_R\,\boldsymbol\phi'=\mathbf{0}\;\text{at right},
+\]
+(choose $\alpha^\pm$ to match your preferred extrapolated/Robin form), or reflective: $\boldsymbol\phi'=0$.
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Glue regions \& apply BCs $\Rightarrow$ one linear solve}
+
+
+\medskip
+\textbf{Unknowns \& solve:} Collect all modal constants $\{\mathbf{A}_i,\mathbf{B}_i\}$ ($2GR$ unknowns).  
+Interface conditions ($2G$ per internal interface) $+$ boundary conditions ($2G$ total) $\Rightarrow$ one linear system
+\[
+\mathbf{M}\,\mathbf{c}=\mathbf{b}.
+\]
+Solve once for a source-driven problem ($k_{\text{eff}}=1$). For an eigenvalue problem, include $\mathbf{F}_i/k$ in $\mathbf{R}_i$ and do a simple outer loop:
+\begin{enumerate}\item pick $k^{(0)}$,
+\item build $\mathbf{M}(k^{(n)})$, solve for $\boldsymbol\phi^{(n)}$,
+\item update $k^{(n+1)}$ via a Rayleigh quotient / fission-source normalization,
+\item repeat until $k,\boldsymbol\phi$ converge.
+\end{enumerate}
+
+\smallskip
+\textbf{Practical tips.} Work in local $y\in[-\ell_i/2,\ell_i/2]$ to keep $\cosh/\sinh$ arguments modest; prefer the generalized eigensolve $(\mathbf{R}_i,\mathbf{D}_i)$ to avoid explicitly forming $\mathbf{D}_i^{-1}$; if complex conjugate pairs appear, keep real solutions by using $\cos/\sin$ forms.
+\end{frame}
+
+\end{document}
+

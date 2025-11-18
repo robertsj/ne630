@@ -1,0 +1,276 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Diffusion with Multiplication and \\
+      an Approach to Criticality \\
+       {\small\it NE 630 - Lecture 34}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+% --- Shortcuts ---
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\bO}{\hat{\Omega}}
+\newcommand{\bn}{\hat{\mathbf{n}}}
+\newcommand{\JJ}{\mathbf{J}}
+\newcommand{\jj}{\mathbf{j}}
+\newcommand{\flux}{\phi}
+\newcommand{\angflux}{\psi}
+\newcommand{\dV}{\,d^3\br}
+\newcommand{\dE}{\,dE}
+\newcommand{\dO}{\,d\hat{\Omega}}
+\newcommand{\ds}{\,d\mathbf{S}}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{obtain solutions of the one-speed diffusion equation for multiplying, source-driven slabs.}
+\end{quote}
+
+ 
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Review: Boundary Conditions}
+ 
+Last time, we considered the one-speed diffusion equation
+\begin{align*}
+   \frac{d^2 \phi}{d x^2}
+  - \frac{1}{L^2}\phi(x) 
+  = -\frac{S(x)}{D} \, ,
+\end{align*}
+subject to boundary conditions at some boundary $x_b$ of one of the forms
+\begin{align*}
+  \tag{fixed flux}
+  \phi(x_b) = \phi_0 \\
+  \tag{reflection}
+  J(x_b) =  -D \frac{d\phi}{dx} \Big |_{x=x_b} 0 \\
+  \tag{fixed incident partial current}
+  J^{in}(x_b) = J_0 \\
+  \tag{vacuum}
+  J^{in}(x_b) = 0 \, ,
+\end{align*}
+where $J^{in}(x_b)$ is the incident partial current
+at the (\textcolor{wcprimary}{left/right}) boundary defined by
+the (\textcolor{wcalerted}{right-})  and (\textcolor{wcalerted}{left})-directed partial currents
+\begin{align*}
+   J^{\textcolor{wcalerted}{\pm}} = \frac{1}{4} \phi(x) \textcolor{wcalerted}{\mp} \frac{D}{2} \frac{d\phi}{dx} \, .
+\end{align*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Boundary Conditions}
+
+
+{\small {\bf Example}: Solve $-D\phi'' + \Sigma_a \phi(x) + S_0$, subject to reflection at $x = 0$ and modeling vacuum at $x=a$ using (a) $\phi(a)=0$ and (b)  $J^{in}(b) = 0$. Plot both results for $a = 10$ cm, $S_0 = 1$ \si{\per\centi\meter\cubed\per\second}, $D = 1.0$ cm, and $\Sigma_a = 0.1$ \si{\per\centi\meter}.}
+
+
+\begin{center}
+\resizebox{0.7\textwidth}{!}{\input{figures/slab_bc.pgf}}
+\end{center}
+
+
+Note that $J^{in}(a) = J^-(a) = 0$ is the natural way to define vacuum conditions!  On the other hand, the zero-flux condition $\phi(a)=0$ actually imposes a {\it negative} incident current that eats neutrons and decreases $\phi(x)$ everywhere! {\bf Avoid!}
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Continuity Conditions}
+
+For systems comprised of two or more adjacent (but homogeneous) regions $i=1, 2,\ldots $, 
+continuity of the neutron density requires that, at the interface $x=x_{i+\frac{1}{2}}$ 
+between regions $i$ and $i+1$, the flux and current are continuous. 
+
+\vfill
+
+In other words, if $\phi^{i}(x)$ and $\phi^{i+1}(x)$ are the scalar fluxes in 
+regions $i$ and $i+1$, then the {\bf continuity conditions} require that
+\begin{align*}
+\tag{flux continuity}
+ \phi^{i}(x_{i+\frac{1}{2}}) &= \phi^{i+2}(x_{i+\frac{1}{2}})  \\
+\tag{current continuity}
+ -D^{i} \frac{d\phi^{i}}{dx}\Big |_{x=x_{i+\frac{1}{2}}} &= -D^{i+1} \frac{d\phi^{i+1}}{dx}\Big |_{x=x_{i+\frac{1}{2}}}  \, .
+\end{align*}
+
+For a system of $N$ regions, we have $N-1$ such interfaces.  In each region $i$, the 
+diffusion equation yields a general solution $\phi^{i}(x)$ with two unknown 
+coefficients $C^i_1$ and $C^i_2$ for a total of $2N$ unknowns.  The $N-1$ interfaces
+provide $2N-2$ equations, while the two boundary conditions provide the remaining
+two conditions. Thus, we have {\bf $2N$ equations for $2N$ unknowns}.
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Diffusion with Multiplication}
+ 
+The neutron diffusion equation with multiplication is
+\begin{equation*}
+  -D \frac{d^2 \phi}{dx^2} + \Sigma_a \phi(x) = \bar{\nu}\Sigma_f \phi(x) + S(x) \, ,
+\end{equation*}
+or
+\begin{align*}
+ - \frac{d^2 \phi}{dx^2} + \alpha^2 \phi(x) &=  \frac{S(x)}{D} \, ,
+\end{align*}
+where 
+\begin{align*}
+\alpha^2 = \frac{1-k_{\infty}}{L^2} \, , \quad L^2 = \frac{D}{\Sigma_a} \, 
+   \quad \text{and} \quad k_{\infty} = \frac{\bar{\nu}\Sigma_f}{\Sigma_a} \, .
+\end{align*}
+\vfill 
+If $k_{\infty} < 1$, our process is unchanged. Assuming $S(x) = S_0$, then
+\begin{equation*}
+  \phi(x) = \overbrace{C_1 e^{\alpha x} + C_2 e^{-\alpha x}}^{\phi_h(x)} + 
+     \overbrace{\textcolor{wcprimary}{\frac{S_0}{\alpha^2 D}}}^{\phi_p(x)} \, .
+\end{equation*}
+However, as $k_{\infty} \to 1$,  $\alpha \to 0$, and  that \textcolor{wcprimary}{third term} spells trouble!
+
+\end{frame} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Handling $k_{\infty} > 1$}
+ 
+If $k_{\infty}$ {\it is} greater than one\footnote{Even if $k_{\infty} > 1$ for some regions, a system as a whole may or may not be subcritical depending on losses in neighboring cells and leakage from boundaries!}, then
+\begin{equation*}
+  \alpha = \pm i \sqrt{\frac{k_{\infty}-1}{L^2}} \, ,
+\end{equation*}
+and, using Euler's formula\footnote{Euler's formula is $e^{ix} = \cos(x) + i \sin(x)$}, we can write
+\begin{align*}
+ \phi_h(x) &=  C_1 e^{i | \alpha| x} + C_2 e^{-i|\alpha| x} \\
+           &=  C_1[\cos(|\alpha|x)+i\sin(|\alpha x|)] + C_2[\cos(|\alpha|x)-i\sin(|\alpha x|)] \\
+           &=  (C_1+C_2) \cos(|\alpha|x) +  (C_1-C_2) \sin(|\alpha x|) \\
+           &=  \tilde{C}_{1} \cos(|\alpha|x) +  \tilde{C}_{2} \sin(|\alpha x|) \, .
+\end{align*}
+ 
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Handling All(?) Values of $k_{\infty}$}
+ 
+Because it helps to differentiate between cases in which $k_{\infty} < 1$
+and $k_{\infty} > 1$, let
+\begin{align*}
+ \textcolor{wcprimary}{\alpha^2} =  \frac{1-k_{\infty}}{L^2} \, , \quad \textcolor{wcprimary}{k_{\infty} < 1} 
+ \qquad \text{and} \qquad 
+ \textcolor{wcalerted}{B^2}      =  \frac{k_{\infty}-1}{L^2} \, , \quad  \textcolor{wcalerted}{k_{\infty} > 1} \, ,
+\end{align*}
+so that\footnote{The undetermined $C_1$ and $C_2$ represent different values in each of the three expressions!}
+\begin{align*}
+ \phi_h(x) = 
+ \begin{cases}
+  \textcolor{wcprimary}{C_1 e^{\alpha x} + C_2 e^{-\alpha x}} \quad \text{-or-} & \\
+  \textcolor{wcprimary}{  C_1 \cosh(\alpha x) + C_2 \sinh(\alpha x)} & \textcolor{wcprimary}{k_{\infty}} < 1 \\
+   \textcolor{wcalerted}{ C_1 \cos(B x) + C_2 \sin(B x)} & \textcolor{wcalerted}{ k_{\infty} > 1} \, .
+ \end{cases}
+\end{align*}
+
+The new term $B^2$ is the {\bf buckling} and will be essential for 
+defining $P_{\text{NL}}$ and $k_{\text{eff}}$.
+
+\vfill 
+
+{\bf Ponderable}: What about $k_{\infty} = 0$?  (Hint: go back to the original ODE!)
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Putting It All Together}
+ 
+{\bf Example}.  Consider a homogeneous, multiplying slab of width $a$ and uniform 
+source density $S_0$ subject to zero-flux
+boundary conditions.  Determine $\phi(x)$ and explore its behavior as a function of 
+$k_{\infty}$.  
+
+\vfill 
+
+
+\begin{columns}[T]
+
+
+\begin{column}{0.5\textwidth}
+{\small 
+\begin{align*}
+ &\phi(x) = \\
+ &\begin{cases}
+       \frac{S_0}{\alpha^2 D}\left ( 1-\frac{\cosh(\alpha x)}{\cosh(\alpha a/2)} \right ) & k_{\infty} < 0 \\      
+      \frac{S_0}{B^2 D}\left ( \frac{\cos(B x)}{\cos(B a/2)} - 1 \right ) & k_{\infty} > 0 \\      
+ \end{cases}
+\end{align*}
+}
+
+The results at right use $S_0 = 1$, $D=1$, and $\Sigma_a = 0.1$.\\
+
+\vspace{0.25cm}
+
+
+{\bf Ponderable}: How high can we take $k_{\infty}$?
+\pause 
+{\small {\bf Ans.}  Our solution breaks down at $B = \pi/a$ or $k_{\infty} = 1 + (D/\Sigma_a)(\pi/a)^2$. }
+
+\end{column}
+
+
+\begin{column}{0.4\textwidth}
+
+\resizebox{0.95\textwidth}{!}{\input{figures/multiplying_slab.pgf}}
+
+\end{column}
+
+\end{columns}
+ 
+\end{frame}
+
+\end{document}
+

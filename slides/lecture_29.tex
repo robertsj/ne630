@@ -1,0 +1,243 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Point Kinetics with Feedback \\
+       {\small\it NE 630 - Lecture 29}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{solve the kinetics equations subject to step insertions of reactivity and to predict neutron and precursor densities and reactor periods from those solutions and approximations thereof. 
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: PKEs with One Precursor Group}
+
+With just one group of precursors, the PKEs are
+\begin{align*}
+ \frac{dn}{dt} = \frac{\rho(t)-\beta}{\Lambda}n(t) + \lambda C(t) \qquad \text{and} \qquad
+ \frac{dC}{dt} = -\lambda C(t) + \frac{\beta}{\Lambda} n(t) \, ,
+\end{align*}
+with $n(0)$ and $C(0)$ given as initial conditions.   
+For a step insertion of reactivity $\rho$, the solutions can be written as
+\begin{equation*}
+  n(t) = A_1 e^{\omega_1 t} + A_2 e^{\omega_2 t} \qquad \text{and} \qquad 
+  C(t) = B_1 e^{\omega_1 t} + B_2 e^{\omega_2 t} \, , 
+\end{equation*}
+where $A_1$, $A_2$, $B_1$, and $B_2$ are undetermined, and $\omega_1 \geq \omega_2$ are the roots of
+\begin{equation*}
+ \omega^2 + 
+         \left (\lambda - \frac{\rho - \beta}{\Lambda} \right ) \omega -
+           \frac{\lambda \rho}{\Lambda}  = 0  \, .
+\end{equation*}
+
+\vfill
+\pause 
+
+{\bf Example}: Solve this equation for $\rho$. \pause 
+
+\textcolor{wcprimary}{Ans. 
+\begin{equation*}
+\tag{``One-Group Inhour Equation''}
+\boxed{\rho = \omega \left ( \Lambda + \frac{\beta}{\omega+\lambda} \right )} \, 
+\end{equation*}
+}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: The Reactor Period}
+ 
+\begin{columns}[T]
+
+\begin{column}{0.6\textwidth}
+
+\resizebox{0.99\textwidth}{!}{\input{figures/traces.pgf}}
+
+\end{column}
+
+\begin{column}{0.46\textwidth}
+
+Shown at the left are {\it traces} for several step insertions of reactivity.  
+In all cases, after the immediate {\it jump} or {\it drop}, the solution follows
+\begin{equation*}
+   n(t) \approx A_1 e^{\omega_1 t} = A_1 e^{t/T} \, ,
+\end{equation*}
+where $T$ is the {\bf (stable) reactor period}.
+ 
+\vspace{0.25cm}
+
+{\bf Example}: Estimate the period {\it graphically} for $\rho = 0.2\beta$, $\rho = \rho_A$, and $\rho = \rho_B$.
+Then, estimate $\rho_A$ and $\rho_B$ assuming $\beta =  0.0065$, $\Lambda = 50$ $\mu$s, and $\lambda= 0.08$.
+
+\pause 
+
+\textcolor{wcprimary}{
+{\bf Ans.}  52.9 s, 75.56 s, -98.97 s \\
+$\rho_A \approx 0.15\$$, $\rho_B \approx -0.15\$$.
+}
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Prompt Jump/Drop Approximation}
+
+As the traces illustrate, after a small insertion $\Delta \rho \ll \beta$, the population swiftly jumps or drops.  On the linear scale, the population appears to jump immediately from $n_0$ to some new value $n_1$.  The ratio of this new value to the initial value satisfies 
+\begin{equation*}
+\boxed{\frac{n_1}{n_0} = \frac{\beta - \rho_0}{\beta - \rho_1}} \, ,
+  \tag{Prompt Jump Approximation}
+\end{equation*}
+where $\rho_0$ is the initial reactivity (usually zero, but $|\rho_0| \ll \beta$ always) and the new reactivity $\rho_1 = \rho_0 + \Delta \rho$.
+
+\vfill 
+
+{\bf Example}. Use the prompt jump approximation to verify
+the $\pm 0.2\beta$ traces.  What is $\rho \pm 0.2\beta$ in \$? pcm?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Periods for Very Small and Very Large Insertions}
+
+A ``small'' reactivity is any $|\rho| \ll \beta$.  In this case,                        
+
+\begin{equation*}
+\tag{FNRP 5.57}
+ T \approx \frac{\beta}{\rho \lambda}\, .
+\end{equation*}
+
+For reactivities $\rho > \beta$, the neutron population grows exponentially with prompt neutrons alone and, hence, the period is very small and well approximated by
+
+\begin{equation*}
+\tag{FNRP 5.58}
+ T \approx \frac{\Lambda}{\rho - \beta} \, .
+\end{equation*}
+
+Finally, for large {\it negative} insertions, $T \approx 1/\lambda$, or, for multiple precursor groups, $T \approx 1/\lambda_1$, where $\lambda_1$ corresponds to the longest lives group.
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{PKEs with Feedback}
+
+Above, we had
+\begin{align*}
+ \frac{dn}{dt} = \frac{\rho(t)-\beta}{\Lambda}n(t) + \lambda C(t) \qquad \text{and} \qquad
+ \frac{dC}{dt} = -\lambda C(t) + \frac{\beta}{\Lambda} n(t) \, .
+\end{align*}
+
+\vfill
+\pause 
+
+Recall that reactivity depends on the fuel temperature, at least approximately, according to 
+
+\begin{equation*}
+\rho(t) = \rho_0 - \alpha_{f}  T_f(t)
+\end{equation*}
+where
+\begin{equation*}
+  \frac{d\rho}{dT_f} \equiv \alpha_{f} \quad (\approx \text{-3 pcm/K for a PWR}) \, .
+\end{equation*}
+
+Hence, we have
+
+\begin{equation*}
+  \frac{d\rho}{dt} = \frac{d\rho}{dT_f} \frac{dT_f}{dt} = \alpha_{T_f} \frac{dT_f}{dt} \, .
+\end{equation*}
+
+
+What comes next?
+
+\vfill
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Temperature Models}
+
+One simple model for the fuel temperature is
+\begin{equation*}
+  \tag{Model A}
+  \frac{d T_f}{dt} = a \frac{dn}{dt} \, .
+\end{equation*}
+Another simple model sets
+\begin{equation*}
+  \tag{Model B}
+  \frac{d T_f}{dt} = b  n(t) \, .
+\end{equation*}
+
+These models represent the extremes of the true physical situation, in which (a) the kinetic energy of fission fragments is transferred to fuel nuclei, causing the temperature of the fuel to rises (or fall) in time;  (b) the temperature difference between the fuel and coolant drives transfer of heat to the coolant; and (b) the coolant absorbs the heat and carries it away from the fuel.
+
+\vfill 
+
+{\bf Ponderable}: What assumptions about the transfer of heat leads to each model?
+
+{\small 
+\textcolor{wcprimary}
+{
+ {\bf Ans.} Model A assumes instantaneous heat transfer from the fuel.  Model B assumes no heat transfer from the fuel (i.e., the fuel is perfectly insulated).
+}
+} 
+\end{frame}
+
+
+
+\end{document}
+

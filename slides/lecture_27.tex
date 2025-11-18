@@ -1,0 +1,348 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+\usepackage{mathtools}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Neutron Kinetics with Delayed Neutrons\\
+       {\small\it NE 630 - Lecture 27}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{write down, solve, and explain each term of a first-order, ordinary differential 
+equation that models the populations of neutrons and delayed-neutron precursors as functions of time.
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Subcritical Multiplication }
+
+Consider 
+\begin{equation*}
+\tag{FNRP 5.22}
+ \frac{dn}{dt}  = \overbrace{ [(k_{\infty} - 1)/l_{\infty}] }^{\rho_{\infty}/\Lambda_{\infty}} n(t) + S_0 \, .
+\end{equation*}
+What happens to $n(t)$ as $k_{\infty} \to 1$? 
+
+\resizebox{0.9\textwidth}{!}{\input{figures/subcrit_mult.pgf}}
+
+\end{frame}
+
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Delayed Neutron Precursors}
+
+\begin{columns}[T]
+
+\begin{column}{0.48\textwidth}
+   
+Each fission produces two, neutron-rich fission fragments.
+\vspace{0.25cm}
+
+Some of these fragments produce radioactive daughters that decay by neutron emission, and we call the initial nuclide a {\bf delayed neutron precursor}  or just {\bf precursor}.  The total fraction of all neutrons (eventually) produced by fission that are delayed is called $\beta$.
+
+\vspace{0.25cm}
+
+
+For thermal fission of ${}^{235}$U, about two-thirds of these delayed neutrons are produced by 
+just 10 nuclides (out of hundreds).
+
+\end{column}
+  
+\begin{column}{0.48\textwidth}
+
+\begin{table}[h!]
+\begin{tabular}{rrr}
+\toprule
+\textbf{Precursor} & \textbf{$t_{1/2}$ (s)}  & \textbf{\%$\beta$} \\
+\midrule
+$^{137}$I  & 24.5 & 12.8 \\
+$^{94}$Rb  & 2.8  & 9.6 \\
+$^{89}$Br  & 4.4  & 9.3 \\
+$^{90}$Br  & 1.9  & 8.1 \\
+$^{88}$Br  & 16.3 & 6.7 \\
+$^{85}$As  & 2.1  & 5.4 \\
+$^{138}$I  & 6.5  & 4.6 \\
+$^{139}$I  & 2.3  & 4.1 \\
+$^{95}$Rb  & 0.4  & 3.9 \\
+$^{87}$Br  & 55.7 & 2.9 \\
+\midrule 
+\textbf{subtotal} &  & \textbf{67.5} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{column}
+
+\end{columns}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Precursors By Example}
+
+Among the most important precursors is ${}^{87}$Br, which leads to neutron emission via
+\begin{equation*}
+   {}^{236}\text{U}^* \xrightarrow[\gamma = 0.01274]{\text{fission}}
+     {}^{87}\text{Br} \xrightarrow[t_{1/2}=55.65~\text{s}]{\beta^{-}} 
+     {}^{87}\text{Kr}^*  \xrightarrow[f = 0.0260]{n} {}^{86}\text{Kr} \, ,
+\end{equation*}
+and where the final decay of ${}^{87}\text{Kr}^*$ is essentially instantaneous.
+
+\vfill 
+
+As we did for ${}^{135}$Xe, we can explicitly track the concentration of ${}^{87}$Br in time for a {\it constant} flux by solving
+
+\begin{equation*}
+\tag{27.1}
+  \frac{d N_{\text{Br-87}}}{dt} = -\lambda_{\text{Br-87}} N_{\text{Br-87}}(t) + \gamma_{\text{Br-87}} \Sigma_f \phi \, .
+\end{equation*}
+
+{\bf Example}: What is the steady-state concentration of ${}^{87}$Br? 
+\pause 
+
+\textcolor{wcprimary}{
+{\bf Ans.} $N^{\infty}_{\text{Br-87}} = \frac{\gamma_{\text{Br-87}} \Sigma_f \phi}{\lambda_{\text{Br-87}}}$.
+}
+
+\end{frame}
+%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{The Delayed Neutron Precursor Fraction}
+
+The total neutron emission rate density (in steady state!) is
+\begin{align*}
+  R_n 
+    = \bar{\nu}\Sigma_f \phi 
+    &=  \bar{\nu}_p\Sigma_f \phi + f^n_{\text{Br-87}} \lambda_{\text{Br-87}} N^{\infty}_{\text{Br-87}} \\
+    &= (\bar{\nu}_p + f^n_{\text{Br-87}} \gamma)\Sigma_f \phi \\
+    &= (\bar{\nu}_p  + \bar{\nu}_d)\Sigma_f \phi  \, ,
+\end{align*}
+where $p$ and $d$ indicate {\it prompt} and {\it delayed}.
+Thus, the fraction of all neutrons emitted from an initial fission event that are delayed is
+\begin{align*}
+ \frac{ \bar{\nu}_d}{\bar{\nu}} =  \frac{f^n_{\text{Br-87}} \gamma_{\text{Br-87}}}{\bar{\nu}} = \frac{f^n_{\text{Br-87}} \gamma_{\text{Br-87}}}{\bar{\nu}_p + f^n_{\text{Br-87}} \gamma_{\text{Br-87}}} \equiv \beta_{\text{Br-87}} \, .
+\end{align*}
+
+
+{\bf Example}: Compute $\beta_{\text{Br-87}}$ for ${}^{235}$U (for which $\bar{\nu} = 2.43$).
+
+\pause  
+
+{\small {\bf Ans}. $\beta_{\text{Br-87}} = 0.0260(0.01274)/2.43 \approx 0.000136$.
+}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Delayed Neutron Precursor Concentration}
+
+With $\beta_{\text{Br-87}}$, we can modify the neutron kinetics equation (FNRP 5.22) with the equation for $N_{\text{Br-87}}$, or 
+\begin{align*}
+  \frac{dn}{dt} &= 
+    \left ( \frac{\rho - \beta_{\text{Br-87}}}{\Lambda} \right ) n(t) +  
+       f_{\text{Br-87}} \lambda_{\text{Br-87}} N_{\text{Br-87}} (t) + S(t) \\
+  \frac{d N_{\text{Br-87}}}{dt} &= -\lambda_{\text{Br-87}} N_{\text{Br-87}}(t) + \gamma_{\text{Br-87}} \Sigma_f \phi(t) \, .
+\end{align*}
+
+Although complete, we can simplify the notation a little bit by defining
+\begin{equation*}
+    C_{\text{Br-87}} = f_n N_{\text{Br-87}}
+\end{equation*}
+where $C_{\text{Br-87}}$ represents the concentration of only 
+those ${}^{87}$Br nuclei that ultimately decay by neutron emission. 
+\end{frame}
+
+\begin{frame}[fragile]{The Single-Precursor Equations}
+
+Rewriting the equations in terms of $ C_{\text{Br-87}}$ leads to
+\begin{equation*}
+\boxed{
+  \frac{dn}{dt} = \left ( \frac{\rho - \beta}{\Lambda} \right ) n(t) +  \lambda_{\text{Br-87}} C_{\text{Br-87}} (t) + S(t)}  \, ,
+\end{equation*}
+and
+\begin{equation*}
+  \boxed{\frac{d C_{\text{Br-87}}}{dt} = -\lambda_{\text{Br-87}} C_{\text{Br-87}}(t) + \beta_{\text{Br-87}} \bar{\nu} \Sigma_f \overbrace{\bar{v}n(t)}^{\phi(t)} }\, .
+\end{equation*}
+Though specific to ${}^{87}$Br, these equations have the proper form for single-precursor kinetics!
+
+\vfill 
+\pause 
+
+{\bf Example}. Suppose the only precursor were Br-87.  If $l = l_p = 10^{-5}$ s, what is the average lifetime of all neutrons? Assume that a delayed neutron's lifetime starts at the fission and ends with its death.
+
+\pause 
+
+\textcolor{wcprimary}{{\small {\bf Ans.} $l_d = l_p + 55.54/\ln(2)$ and 
+$\bar{l} = (1-\beta) l_p + \beta l_d\approx 0.01$ s.
+}}
+
+\end{frame}
+
+\begin{frame}[fragile]{The Kinetics Equations with Multiple Precursors}
+
+Because there are hundreds of precursors, it a universal practice is to lump the precursors into groups defined by effective $\beta$'s and $\lambda$'s for each fissile nuclide of interest as in Table 5.1 from FNRP:
+
+\begin{table}[h!]
+\begin{tabular}{lccc}
+\toprule
+\multicolumn{1}{c}{\textbf{Approximate Half-life (s)}} & 
+\multicolumn{3}{c}{\textbf{Delayed Neutron Fraction} $\beta_i$} \\
+\cmidrule(lr){2-4}
+ & $^{233}$U & $^{235}$U & $^{239}$Pu \\
+\midrule
+56   & 0.00023 & 0.00021 & 0.00007 \\
+23   & 0.00078 & 0.00142 & 0.00063 \\
+6.2  & 0.00064 & 0.00128 & 0.00044 \\
+2.3  & 0.00074 & 0.00257 & 0.00069 \\
+0.61 & 0.00014 & 0.00075 & 0.00018 \\
+0.23 & 0.00008 & 0.00027 & 0.00009 \\
+\midrule
+\textbf{Total delayed fraction}, $\beta = \sum^N_{i=1} \beta_i$  & 
+  \textbf{0.00261} & \textbf{0.00650} & \textbf{0.00210} \\
+\textbf{Total neutrons/fission}, $\bar{\nu} = \bar{\nu}_p + \bar{\nu}_d $ & 
+  \textbf{2.50} & \textbf{2.43} & \textbf{2.90} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}[fragile]{The Point Kinetics Equations (PKEs)}
+
+Using data from Table 5.1, the point kinetics equations are defined as
+\begin{equation*}
+  \tag{FNRP 5.47}
+  \boxed{\frac{dn}{dt} = 
+     \left ( \frac{\rho(t) - \beta}{\Lambda} \right ) n(t) + 
+     \sum^N_{i=1} \lambda_i C_i (t) + S(t)
+  }  
+\end{equation*}
+and
+\begin{align*}
+  \frac{d C_i}{dt} &= -\lambda_i C_i(t) + \beta_i\bar{\nu} \Sigma_f \bar{v} n(t) \, \quad i = 1, 2, \ldots, N \\
+  \tag{FNRP 5.48}
+  \Aboxed{\frac{d C_i}{dt} &= -\lambda_i C_i(t) + \frac{\beta_i}{\Lambda} n(t) \, \quad i = 1, 2, \ldots, N } \, .
+\end{align*}
+where $\Lambda = (\bar{\nu}\Sigma_f \bar{v})^{-1}$. 
+\vfill 
+
+{\bf Ponderable}: Above, $\rho(t)$ is a function of time.  What real-world things could lead to a time-dependent reactivity?
+
+\end{frame}
+
+\begin{frame}[fragile]{Specifying Initial Conditions for PKEs}
+
+Of course, such sets of {\it first-order, ordinary differential equations} are not complete without appropriate {\bf initial conditions}!  The most common initial condition for reactor kinetics is to start from a critical, steady-state configuration at a known power.
+
+\vfill 
+
+{\bf Example}. Suppose a reactor is operating at a constant power $P_0$ such that the neutron population is $n_0$.  
+\begin{itemize} 
+ \item Determine an expression for the initial values $C_i(0)$.
+ \item Using the precursor data from Table 5.1, $n_0 = 10^{8}$, and $\Lambda = 5\cdot 10^{-5}$ s, determine each of the initial precursor concentrations.
+\end{itemize}
+
+\textcolor{wcprimary}{{\small 
+{\bf Ans.} From FNRP 5.48, set $d C_i/dt$ to zero and find $C_i(0) = (\beta_i n_0)/(\lambda_i \Lambda)$ for $i = 1, 2, \ldots, 6$. 
+Then, substitute numerical data from Table 5.1 to find, e.g., $C_1(0) \approx 3.39\cdot 10^{10}$ cm$^{-3}$.  Quite often, $C_i(0) \gg n(0)$!  
+}}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Numerical Solutions of PKEs}
+
+Most computer tools for solving systems of first-order equations require that the system be written in the following form:
+\begin{equation*}
+  \frac{d}{dt} \mathbf{y} = \mathbf{f}(\mathbf{y}(t), t) \, .
+\end{equation*}
+
+
+Equations (5.47) and (5.48) can be written as
+{\small
+\begin{align*}
+ \frac{d}{dt}  
+   \overbrace{\left [ \begin{array}{c} n(t) \\ C_1(t) \\  \vdots \\ C_N(t) \end{array} \right ]}^{\mathbf{y}}
+ =
+   \overbrace{\left [ \begin{array}{cccc}
+       (\rho(t)-\beta)/\Lambda        & \lambda_1 & \ldots & \lambda_N \\
+       \beta_1 /\Lambda  & -\lambda_1 & \ldots & 0        \\
+                             \vdots & \vdots & \ddots & \vdots        \\
+       \beta_N /\Lambda  & 0 & \ldots & -\lambda_N \\
+   \end{array} \right ]}^{\mathbf{A}} \times
+   \left [ \begin{array}{c} n(t) \\ C_1(t) \\  \vdots \\ C_N(t) \end{array} \right ] +
+   \overbrace{\left [ \begin{array}{c} S(t) \\ 0 \\  \vdots \\ 0 \end{array} \right ]}^{\mathbf{b}} \, .
+\end{align*}
+}
+
+so we already have the form needed where $\mathbf{f}(\mathbf{y},t) = \mathbf{A}\mathbf{y}+\mathbf{b}$.  Example code based on SciPy's {\tt odeint} is available on Canvas in the Jupyter notebook.
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Numerical Solutions of PKEs}
+
+Using the precursor data from Table 5.1, $n_0 = 10^{8}$, and $\Lambda = 5\cdot 10^{-5}$ s, $n(t)$ and $C_i(t)$ are shown below for a small step insertion of reactivity between 1 and 2 seconds.  Example code is on Canvas.
+
+\resizebox{0.95\textwidth}{!}{\input{figures/example_kinetics.pgf}}
+
+\end{frame}
+
+\end{document}
+

@@ -1,0 +1,325 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[T1]{fontenc}
+\usetheme{wildcat}
+\usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{cancel}
+\usepackage{jupyter}
+\usepackage{minted}
+\usepackage{xfrac}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+
+\title{Neutron Kinetics without Multiplication\\
+       {\small\it NE 630 - Lecture 25}}
+
+\date{\input{term.txt} \\ {\footnotesize Git SHA: \input{git_sha.txt}}}
+
+\author{Jeremy Roberts}
+
+
+\definecolor{ksupurple}{HTML}{512888}
+\definecolor{orange}{HTML}{CA7C1B}
+\definecolor{skyblue}{RGB}{180,220,255}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Primary Objective}
+
+Students will be able to 
+
+\vfill
+
+\begin{quote}
+\textcolor{wcprimary}{write down, solve, and explain each term of a first-order, ordinary differential 
+equation that models the neutron flux, the neutron density, or the number of 
+neutrons in a non-multiplying system as a function of time.
+}
+\end{quote}
+
+\vfill 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: Linear Reactivity Model}
+
+LRM is based on three assumptions:
+\vfill
+\begin{enumerate}
+ \item A reactor core is fueled with $N$ batches of identical fuel.
+ \vfill 
+ \item The fuel reactivity is linear with burnup: 
+ $\boxed{\rho_{\infty}(B) = \rho_0 - AB}$.
+ \vfill
+ \item The core reactivity is  
+ $\boxed{\rho_{\text{core}} = \sum^N_{i=1} w_i \rho_i - \rho_{L}}$ where $\boxed{\sum_{i=1}^N w_i = 1}$. 
+\end{enumerate}
+\vfill 
+
+Important terms: $N$-batch cycle length $B^{(N)}_c$, discharge burnup $B^{(N)}_d$, leakage penalty $\rho_L$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Review: $B_c$ and $B_d$ for $N$-batch Cores}
+
+The EOC reactivities of each batch in an $N$-batch core are
+
+\begin{align*}
+  \rho_1 &= \rho_0 -  AB^{(N)}_c \\
+  \rho_2 &= \rho_0 - 2AB^{(N)}_c \\
+         & \vdots \\
+  \rho_N &= \rho_0 - NAB^{(N)}_c \, ,
+\end{align*}
+
+and the core EOC reactivity is
+
+\begin{equation*}
+  \rho_{\text{core}} = \frac{1}{N} [ N\rho_0 - (A + 2A + \ldots + NA)B_c ] - \rho_L = 0 \, .
+\end{equation*}
+
+For $\rho_L = 0$, we have $B_c^{(N)} = \frac{2}{N+1}\,B_c^{(1)}$.
+
+\vfill 
+\pause 
+
+{\bf Example}:  How is $B_d^{(N)}$ related to $B_d^{(1)}$ if $\rho_L = 0$?
+\pause 
+
+\textcolor{wcprimary}{{\small {\bf Ans.} $B_d^{(N-\text{batch})} = \frac{2N}{N+1}\,B_d^{(1)}$.}}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Revisiting the BIG PICTURE\texttrademark}
+
+In the course introduction, I wrote the following horror:
+\begin{align*}
+\frac{1}{v}\frac{\partial \phi}{\partial t}
+&\;-\;\nabla \!\cdot\! D(\mathbf r,E)\,\nabla \phi(\mathbf r,E,t)
++\Sigma_t(\mathbf r,E)\,\phi(\mathbf r,E,t) \\
+&= \int_0^\infty \!\Sigma_s(\mathbf r,E'\!\to\!E)\,\phi(\mathbf r,E',t)\,dE' \\
+&+ \frac{\chi(E)}{\textcolor{wcprimary}{k_{\text{eff}}}}\!\int_0^\infty \!\bar\nu(\mathbf r,E')\Sigma_f(\mathbf r,E')\phi(\mathbf r,E',t)\,dE' 
+ + \textcolor{wcalerted}{S(\mathbf r,E,t)}\, ,
+\end{align*}
+ 
+
+which is the time-dependent, multigroup diffusion equation.  
+\vfill 
+
+As for steady-state problems, we'll have 
+$\textcolor{wcalerted}{S(\mathbf r,E,t)}$ for source-driven problems (with or without multiplication) and 
+$\textcolor{wcprimary}{k_{\text{eff}}}$ for source-free problems with multiplication.  For time-dependent
+problems, $\textcolor{wcprimary}{k_{\text{eff}}}$ can first be computed for a steady-state model and then used
+to enforce a steady-state, initial condition.
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Kinetics Equation}
+
+We'll still ignore space. We won't {\it ignore} energy, but instead integrate it away:
+
+\begin{align*}
+\int^{\infty}_0 dE \Bigg \{
+\frac{1}{v} \frac{\partial \phi}{\partial t} 
+ &+ \Sigma_t(E) \phi( E, t) \\
+  &= \int^{\infty}_0 \Sigma_s(E'\to E) \phi(E', t) dE' \\
+  &+ \frac{\chi(E)}{k_{\text{eff}}} \int^{\infty}_0 \bar{\nu}(E')\Sigma_f(E') \phi(E', t) dE'  \\
+  &+ S(E, t) \Bigg \} \, .
+\end{align*}
+
+\end{frame}
+
+\begin{frame}[fragile]{Flux Separability}
+
+If we assume\footnote{In other words, we'll assume the spectrum is independent of time but the overall neutron population is not.  This is an imperfect but reasonably accurate assumption for many systems.} that $\phi(E, t) = \phi(t)\varphi(E)$, then we can write:
+
+\begin{align*}
+\frac{d\phi}{dt} \times \int^{\infty}_0  
+\left ( \frac{\varphi(E)}{v(E)} \right ) dE
+ + \bar{\Sigma}_t \phi(t) 
+  = \bar{\Sigma}_s \phi(t)  + \frac{1}{k_{\text{eff}}} \bar{\nu}\bar{\Sigma}_f \phi(t) + S(t)  \, .
+\end{align*}
+or
+\begin{align*}
+\tag{25.1}
+  \boxed{ \frac{1}{\bar{v}}\frac{d\phi}{dt}
+ + \bar{\Sigma}_t \phi(t) 
+  = \bar{\Sigma}_s \phi(t)  + \frac{1}{k_{\text{eff}}} \bar{\nu}\bar{\Sigma}_f \phi(t) + S(t)  } \, .
+\end{align*}
+where %the effective macroscopic cross section and mean neutron speed are
+\begin{equation*}
+\bar\Sigma_x=\frac{\displaystyle \int_0^\infty \Sigma_x(E)\,\varphi(E)\,dE}{\displaystyle \int_0^\infty \varphi(E)\,dE}
+\qquad \text{and} \qquad
+\tag{25.2}
+\boxed{\;\bar v=\frac{\displaystyle \int_0^\infty \varphi(E)\,dE}{\displaystyle \int_0^\infty \frac{\varphi(E)}{v(E)}\,dE}\;}
+\end{equation*}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{The Mean Neutron Speed}
+ 
+%$\bar v=\frac{ \int_0^\infty \varphi(E)\,dE}{ \int_0^\infty \frac{\varphi(E)}{v(E)}\,dE}$
+The mean speed $\bar{v}$ represents a spectrum-averaged speed, and its numerical values are worth 
+quantifying over the thermal, intermediate, and fast energy ranges we've
+previously explored.
+
+\vfill 
+\pause
+
+{\bf Example}:  Assuming classical physics (i.e., $E = (1/2)mv^2$) applies, 
+derive $v(E)~\si{\centi\meter\per\second}$, where $E$ is given in \si{\electronvolt}.
+
+\vfill 
+\pause
+
+\textcolor{wcprimary}{ 
+\textbf{Ans.} The neutron mass is $m_n = 939.655 \, \si{\mega\electronvolt}/c^2$. Thus
+\begin{align*}
+ v(E)/c = \beta(E)
+        &= \sqrt{ (2 E~\si{\electronvolt} \cdot 10^{-6} \si{\mega\electronvolt\per\electronvolt} ) / (939.655\,  \si{\mega\electronvolt}/c^2)} \\
+        &= 4.614\cdot 10^{-5}\sqrt{E/c^2} \, , 
+\end{align*}
+and, with $c=3\cdot 10^{10}~\si{\centi\meter\per\second}$, we have
+\begin{equation*}
+ \boxed{v(E) = 1.384\cdot 10^{6}\sqrt{E} \, \si{\centi\meter\per\second} } \, .
+\end{equation*}
+A helpful sanity check: $v(0.0253~\si{\electronvolt}) \approx 220,000~\si{\centi\meter\per\second} = 2200~\si{\meter\per\second}$.
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{The Mean Neutron Speed}
+ 
+{\bf Example}:  Assuming $v(E) = a\sqrt{E} = 1.384\cdot 10^{6}\sqrt{E}~\si{\centi\meter\per\second}$ ($E$ in \si{\electronvolt}), compute the mean neutron speed if 
+\begin{enumerate}[label=(\alph*)]
+ \item $\varphi(E) = E e^{-E/kT}$, $10^{-3} < E < 1$ eV, $T = 294$ K, $k = 8.6173\cdot 10^{-5}~\si{\electronvolt\per\kelvin}$.
+ \item $\varphi(E) = 1/E$, $1 < E < 10^5$ eV
+ \item $\varphi(E) = \chi(E)$ (as defined by FNRP 2.31),  $10^5 < E < 10^7$ eV .
+ \item $\varphi(E)$, piecewise as above, with $\phi_T=\phi_I=\phi_F$.
+\end{enumerate}
+
+\vfill 
+\pause
+
+\textcolor{wcprimary}{\small 
+  \textbf{Ans.} Either numerical or, with suitable approximations, analytical techniques can be used.  Here, just the numerical 
+  results based on {\tt scipy.integrate.quad} are given:
+\begin{enumerate}[label=(\alph*)]
+ \item $2.498\cdot 10^{5}~\si{\centi\meter\per\second}$  
+ \item $7.992\cdot 10^{7}~\si{\centi\meter\per\second}$
+ \item $1.513\cdot 10^{9}~\si{\centi\meter\per\second}$
+ \item $7.266\cdot 10^{5}~\si{\centi\meter\per\second}$ (notice how heavily weighted thermal neutrons are!)
+\end{enumerate}
+}
+
+\vfill 
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Kinetics Sans Multiplication}
+
+Set $\bar\Sigma_f=0$ in (25.1) to obtain
+\begin{equation*}
+\tag{25.3}
+\frac{1}{\bar v}\frac{d\phi}{dt} + \bar\Sigma_a\,\phi(t) = S(t)\, .
+\end{equation*}
+
+\vfill 
+\pause 
+
+{\bf Example}: Rewrite (25.3) in terms of the neutron density $n'''(t)$.
+
+\pause
+
+\textcolor{wcprimary}{{\small 
+{\bf Ans.}
+Recall $\phi = n''' \bar{v}$.  Thus,
+\begin{equation*}
+\tag{Like FNRP 5.2}
+ \sfrac{dn'''}{dt} + \bar\Sigma_a \bar{v} n'''(t)  = S(t) \, ,
+\end{equation*}
+which is equivalent to FNRP (5.2) both sides are multiplied by the system volume.
+}}
+
+\vfill 
+\pause 
+
+{\bf Example}: Suppose that $S(t) = S_0 \delta(t)$ and that $n'''(0) = 0$. Find $n'''(t)$.
+
+\pause 
+
+\textcolor{wcprimary}{{\small 
+{\bf Ans.}
+$n'''(t) = S_0 e^{-\Sigma_a \bar{v} t}$
+}}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{The Neutron Lifetime}
+
+If we consider $n(t)$ (or $n'''(t)$) as just found, or, if $S_0 = 0$ and we let $n(0) = n_0$ such that
+\begin{equation*}
+ n(t) = n_0 e^{-\Sigma_a \bar{v} t} \, ,
+\end{equation*}
+one may immediately see a similarity to 
+\begin{equation*}
+    I(x) = I_0 e^{-\Sigma x} \qquad \text{and} \qquad n(t) = n(0) e^{-\lambda t} \, .
+\end{equation*}
+
+\pause
+
+All three represent {\it exponential attenuation} in which
+\begin{itemize}
+ \item $\Sigma^{-1} = \tau$ is the mean(-free) path to collision
+ \item $\lambda^{-1} = \bar{t}$ is the mean time to decay
+ \pause 
+ \item  $\boxed{l_{\infty} = [\bar{\Sigma}_a \bar{v}]^{-1} = \bar{t}}$ is also a mean time, but here it is the time a neutron travels, on the average, before being absorbed (and, hence, ``dying'').
+\end{itemize}
+
+\vfill 
+\pause 
+
+{\bf Example}. What's $l_{\infty}$ for thermal neutrons in room-temperature water?  Assume $\bar{\sigma}^{\text{H}_2\text{O}}_a = 0.6$ [b].
+\pause 
+\textcolor{wcprimary}{{\small 
+{\bf Ans.}
+$N=6.022\cdot 10^{23}/18$, so $\Sigma_a = N\,\bar\sigma_a \approx 2.0\times10^{-2}\ \text{cm}^{-1}$.  For thermal neutrons, $\bar{v}\approx2.5\times10^5$ cm/s.  Thus $l_{\infty} \approx 2.0\times10^{-4} = 200$ $\mu$s.  Compare to  \url{https://journals.aps.org/pr/abstract/10.1103/PhysRev.61.152}.
+}}
+ 
+
+\end{frame}
+
+ 
+\end{document}
+

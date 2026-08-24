@@ -1,0 +1,3 @@
+Course materials are provided for use by students enrolled in NE 630. Do not sell course notes, homework solutions, recordings, or related materials, and do not upload them to commercial course-material sites without written permission.
+
+The syllabus is the foundational course overview. The detailed schedule, readings, examples, and minor assignment details may evolve through Canvas as the semester progresses. Substantive changes to grading structures, major assignments, exam dates, attendance policy, or core course expectations will be communicated to students in writing and retained as a dated syllabus addendum.

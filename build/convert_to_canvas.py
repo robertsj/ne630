@@ -59,7 +59,7 @@ def convert(s):
     return s
     
 
-test = """<p>A discrete <em>random variable</em> <span class="math inline">\(X\)</span> can have only the discrete values <span class="math inline">\(X_1, X_2, X_3, \ldots, X_N\)</span>. Any of these values can be observed when a <em>sample</em> of <span class="math inline">\(X\)</span> is made. The <em>frequency</em> of observing each value of <span class="math inline">\(X\)</span> is governed by the <em>probability mass function</em> (pmf) <span class="math inline">\(f(X=x_i)\)</span> that must satisfy</p>
+test = r"""<p>A discrete <em>random variable</em> <span class="math inline">\(X\)</span> can have only the discrete values <span class="math inline">\(X_1, X_2, X_3, \ldots, X_N\)</span>. Any of these values can be observed when a <em>sample</em> of <span class="math inline">\(X\)</span> is made. The <em>frequency</em> of observing each value of <span class="math inline">\(X\)</span> is governed by the <em>probability mass function</em> (pmf) <span class="math inline">\(f(X=x_i)\)</span> that must satisfy</p>
 <p><span class="math display">\[lala
    f_i = f(X_i) \geq 0 \, i = 1 \leq x \leq N \, .
    g_i = x^2

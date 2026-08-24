@@ -1,0 +1,1251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NE 630 CourseDog Copy Board</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --ink: #1b1f24;
+      --muted: #5d6773;
+      --line: #d7dde5;
+      --accent: #2451a6;
+      --accent-dark: #17356d;
+      --ok: #1c6b45;
+      --warn: #8a4d00;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+    .page-header {
+      margin-bottom: 24px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 2.7vw, 2.6rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    p {
+      margin: 0 0 1rem;
+    }
+    .note {
+      max-width: 78ch;
+      color: var(--muted);
+    }
+    .field {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 16px 0;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+    .field-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+    .kicker {
+      margin: 0 0 2px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .filename {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    button {
+      appearance: none;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 650;
+      min-height: 36px;
+      padding: 7px 11px;
+    }
+    button + button {
+      background: #fff;
+      color: var(--accent);
+    }
+    button:hover,
+    button:focus {
+      border-color: var(--accent-dark);
+      outline: 2px solid rgba(36, 81, 166, 0.18);
+      outline-offset: 1px;
+    }
+    .status {
+      min-height: 1.4rem;
+      margin: 0;
+      padding: 8px 18px 0;
+      color: var(--ok);
+      font-size: 0.92rem;
+    }
+    .status.warn {
+      color: var(--warn);
+    }
+    .field-body {
+      padding: 12px 18px 18px;
+    }
+    .field-body > :first-child {
+      margin-top: 0;
+    }
+    .field-body > :last-child {
+      margin-bottom: 0;
+    }
+    ul,
+    ol {
+      padding-left: 1.35rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.75rem 0 1rem;
+    }
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #eef2f7;
+      font-weight: 700;
+    }
+    a {
+      color: var(--accent);
+    }
+    details {
+      border-top: 1px solid var(--line);
+      padding: 10px 18px 14px;
+      background: #fbfcfe;
+    }
+    summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-weight: 650;
+    }
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      font: 0.9rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      resize: vertical;
+    }
+    @media (max-width: 720px) {
+      main {
+        width: min(100% - 20px, 1120px);
+        padding-top: 18px;
+      }
+      .field-header {
+        display: block;
+      }
+      .actions {
+        justify-content: flex-start;
+        margin-top: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="page-header">
+      <h1>NE 630 CourseDog Copy Board</h1>
+      <p class="note">Generated from <code>administrivia/syllabus.md</code>. Click <strong>Copy rich text</strong>, then paste into the matching CourseDog WYSIWYG box. If the browser blocks clipboard access, the rendered field will be selected so Ctrl+C can copy it.</p>
+    </header>
+
+<article class="field" id="course-information">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Course Information</h2>
+      <p class="filename">course-information.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<ul>
+<li>Course title: Nuclear Reactor Theory</li>
+<li>Course prefix and number: NE 630</li>
+<li>Credit hours: 3</li>
+<li>Term: Fall 2026</li>
+<li>Meeting pattern: MWF, 1:30-2:20 p.m.</li>
+<li>Location: Ward 135</li>
+<li>Instructional modality: In-person/face-to-face</li>
+<li>Official learning management system: Canvas</li>
+<li>Official syllabus repository: CourseDog</li>
+</ul>
+<p>The official CourseDog and KSIS course records control section
+number, enrollment, room assignment, and other registrar-managed
+details.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>- Course title: Nuclear Reactor Theory
+- Course prefix and number: NE 630
+- Credit hours: 3
+- Term: Fall 2026
+- Meeting pattern: MWF, 1:30-2:20 p.m.
+- Location: Ward 135
+- Instructional modality: In-person/face-to-face
+- Official learning management system: Canvas
+- Official syllabus repository: CourseDog
+
+The official CourseDog and KSIS course records control section number, enrollment, room assignment, and other registrar-managed details.</textarea>
+  </details>
+</article>
+<article class="field" id="course-instructor-information">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Course Instructor Information</h2>
+      <p class="filename">course-instructor-information.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<ul>
+<li>Instructor: Jeremy A. Roberts</li>
+<li>Role: Primary Instructor of Record</li>
+<li>Office: 137D Ward Hall</li>
+<li>K-State email: <a
+href="mailto:jaroberts@k-state.edu">jaroberts@k-state.edu</a></li>
+<li>Phone: 785-532-5610</li>
+<li>Office hours: Tuesdays, 3:00-5:00 p.m., or by appointment</li>
+</ul>
+<p>Canvas messages are the preferred way to contact me about course
+logistics. For anything sensitive, use K-State email. If the posted
+office-hour window changes, I will announce the update in Canvas.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>- Instructor: Jeremy A. Roberts
+- Role: Primary Instructor of Record
+- Office: 137D Ward Hall
+- K-State email: jaroberts@k-state.edu
+- Phone: 785-532-5610
+- Office hours: Tuesdays, 3:00-5:00 p.m., or by appointment
+
+Canvas messages are the preferred way to contact me about course logistics. For anything sensitive, use K-State email. If the posted office-hour window changes, I will announce the update in Canvas.</textarea>
+  </details>
+</article>
+<article class="field" id="course-description">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Course Description</h2>
+      <p class="filename">course-description.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>Theory of neutron diffusion and thermalization with application to
+steady-state nuclear reactors.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>Theory of neutron diffusion and thermalization with application to steady-state nuclear reactors.</textarea>
+  </details>
+</article>
+<article class="field" id="additional-course-information">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Additional Course Information</h2>
+      <p class="filename">additional-course-information.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>Catalog note: Three hours recitation a week.</p>
+<p>Prerequisites: MATH 340 and NE 495.</p>
+<p>This course develops the mathematical and physical machinery used to
+describe neutron behavior in multiplying media. We will connect nuclear
+reactions, cross-section data, slowing down, resonance absorption,
+multiplication, reactivity, kinetics, and diffusion theory to the
+engineering analysis of nuclear reactor systems.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>Catalog note: Three hours recitation a week.
+
+Prerequisites: MATH 340 and NE 495.
+
+This course develops the mathematical and physical machinery used to describe neutron behavior in multiplying media. We will connect nuclear reactions, cross-section data, slowing down, resonance absorption, multiplication, reactivity, kinetics, and diffusion theory to the engineering analysis of nuclear reactor systems.</textarea>
+  </details>
+</article>
+<article class="field" id="required-course-materials">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Required Course Materials</h2>
+      <p class="filename">required-course-materials.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>Required textbook: E. E. Lewis, <em>Fundamentals of Nuclear Reactor
+Physics</em>, Academic Press, 2008, ISBN 9780123706317.</p>
+<p>The textbook is available through the K-State Libraries: <a
+href="https://k-state.primo.exlibrisgroup.com/discovery/fulldisplay?docid=alma9942839834602401&amp;context=L&amp;vid=01KSU_INST:NewUI&amp;search_scope=MyInstitution&amp;tab=LibraryCatalog&amp;lang=en">https://k-state.primo.exlibrisgroup.com/discovery/fulldisplay?docid=alma9942839834602401&amp;context=L&amp;vid=01KSU_INST:NewUI&amp;search_scope=MyInstitution&amp;tab=LibraryCatalog&amp;lang=en</a></p>
+<p>Additional notes, examples, readings, homework statements, and
+computational resources will be posted in Canvas or in this public
+course repository.</p>
+<p>Computational work may use Python, Jupyter notebooks, and OpenMC
+examples. No paid software license is required for student work in this
+course. Students may use K-State computing resources when local
+installation is inconvenient.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>Required textbook: E. E. Lewis, *Fundamentals of Nuclear Reactor Physics*, Academic Press, 2008, ISBN 9780123706317.
+
+The textbook is available through the K-State Libraries: https://k-state.primo.exlibrisgroup.com/discovery/fulldisplay?docid=alma9942839834602401&amp;context=L&amp;vid=01KSU_INST:NewUI&amp;search_scope=MyInstitution&amp;tab=LibraryCatalog&amp;lang=en
+
+Additional notes, examples, readings, homework statements, and computational resources will be posted in Canvas or in this public course repository.
+
+Computational work may use Python, Jupyter notebooks, and OpenMC examples. No paid software license is required for student work in this course. Students may use K-State computing resources when local installation is inconvenient.</textarea>
+  </details>
+</article>
+<article class="field" id="canvas-course-link">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Canvas Course Link</h2>
+      <p class="filename">canvas-course-link.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>K-State uses Canvas as its official learning management system: <a
+href="https://k-state.instructure.com">https://k-state.instructure.com</a></p>
+<p>Canvas will contain announcements, homework instructions, grades,
+detailed schedule updates, supplemental readings, and other course
+communications. Students are responsible for checking Canvas regularly
+and keeping Canvas notification settings usable. Changes to routine
+pacing, readings, or minor assignment details will be communicated
+through Canvas.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>K-State uses Canvas as its official learning management system: https://k-state.instructure.com
+
+Canvas will contain announcements, homework instructions, grades, detailed schedule updates, supplemental readings, and other course communications. Students are responsible for checking Canvas regularly and keeping Canvas notification settings usable. Changes to routine pacing, readings, or minor assignment details will be communicated through Canvas.</textarea>
+  </details>
+</article>
+<article class="field" id="student-learning-outcomes">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Student Learning Outcomes</h2>
+      <p class="filename">student-learning-outcomes.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>By the end of the course, a successful student will be able to:</p>
+<ol type="1">
+<li>Interpret microscopic and macroscopic nuclear data for neutron
+interaction problems.</li>
+<li>Analyze neutron slowing down, thermalization, resonance absorption,
+and spectrum effects in reactor materials.</li>
+<li>Formulate one-group and multigroup neutron balance models for
+multiplying systems.</li>
+<li>Apply reactor multiplication, reactivity, and feedback concepts to
+steady and transient reactor behavior.</li>
+<li>Solve point-kinetics and simple diffusion-theory models and explain
+the assumptions behind those models.</li>
+<li>Use computational tools to investigate representative unit-cell or
+reactor physics problems.</li>
+<li>Judge when a reactor-theory approximation is useful and when a more
+detailed transport treatment is needed.</li>
+</ol>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>By the end of the course, a successful student will be able to:
+
+1. Interpret microscopic and macroscopic nuclear data for neutron interaction problems.
+2. Analyze neutron slowing down, thermalization, resonance absorption, and spectrum effects in reactor materials.
+3. Formulate one-group and multigroup neutron balance models for multiplying systems.
+4. Apply reactor multiplication, reactivity, and feedback concepts to steady and transient reactor behavior.
+5. Solve point-kinetics and simple diffusion-theory models and explain the assumptions behind those models.
+6. Use computational tools to investigate representative unit-cell or reactor physics problems.
+7. Judge when a reactor-theory approximation is useful and when a more detailed transport treatment is needed.</textarea>
+  </details>
+</article>
+<article class="field" id="grading-scale">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Grading Scale</h2>
+      <p class="filename">grading-scale.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>The default grading scale is:</p>
+<table>
+<thead>
+<tr>
+<th>Letter grade</th>
+<th style="text-align: right;">Course average</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">90-100%</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">80-89.99%</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">70-79.99%</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align: right;">60-69.99%</td>
+</tr>
+<tr>
+<td>F</td>
+<td style="text-align: right;">below 60%</td>
+</tr>
+</tbody>
+</table>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>The default grading scale is:
+
+| Letter grade | Course average |
+| --- | ---: |
+| A | 90-100% |
+| B | 80-89.99% |
+| C | 70-79.99% |
+| D | 60-69.99% |
+| F | below 60% |</textarea>
+  </details>
+</article>
+<article class="field" id="course-specific-grading-policies-and-procedures">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Course Specific Grading Policies and Procedures</h2>
+      <p class="filename">course-specific-grading-policies-and-procedures.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>Final grades are based on:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th style="text-align: right;">Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Homework</td>
+<td style="text-align: right;">25%</td>
+</tr>
+<tr>
+<td>Exam 1</td>
+<td style="text-align: right;">25%</td>
+</tr>
+<tr>
+<td>Exam 2</td>
+<td style="text-align: right;">25%</td>
+</tr>
+<tr>
+<td>Exam 3</td>
+<td style="text-align: right;">25%</td>
+</tr>
+</tbody>
+</table>
+<p>I may lower grade thresholds if the final distribution warrants it,
+but I will not raise them after the course begins.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>Final grades are based on:
+
+| Component | Weight |
+| --- | ---: |
+| Homework | 25% |
+| Exam 1   | 25% |
+| Exam 2   | 25% |
+| Exam 3   | 25% |
+
+I may lower grade thresholds if the final distribution warrants it, but I will not raise them after the course begins.</textarea>
+  </details>
+</article>
+<article class="field" id="assessments-and-evaluation-methods">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Assessments and Evaluation Methods</h2>
+      <p class="filename">assessments-and-evaluation-methods.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<h3 id="homework">Homework</h3>
+<p>Homework is assigned regularly. Unless Canvas says otherwise,
+homework associated with lesson N is due by the start of lesson N + 2.
+Every homework submission must follow exactly one of the two routes
+below.</p>
+<h4 id="route-a-no-generative-ai-used-for-the-assignment">Route A: No
+Generative AI Used for the Assignment</h4>
+<p>If no generative AI informed any part of the submitted work, submit
+one PDF. The PDF may be typeset or may contain clean scans of
+handwritten work. Your name, the course name, and the homework number
+must appear on the first page. Start each problem on a new page, include
+the full problem statement, clearly mark final answers, and write enough
+plain English that I can follow the reasoning.</p>
+<p>Handwritten work must be scanned as US-letter pages at 300 dpi, in
+grayscale or color, with pages upright, tightly cropped, and free of
+shadows or visible background clutter. Do not submit photographs
+embedded in a PDF when a scan is reasonably available. I will allow one
+no-penalty resubmission during the semester solely to correct scan or
+document-formatting problems. Later nonconforming submissions may be
+returned for correction, with the original deadline still controlling
+unless I approve an exception.</p>
+<h4 id="route-b-generative-ai-used-for-the-assignment">Route B:
+Generative AI Used for the Assignment</h4>
+<p>If generative AI informed any part of the submitted work, submit one
+<code>.zip</code> archive rather than a stand-alone PDF. This route
+applies even when AI was used only for an explanation, derivation,
+calculation, code, debugging, checking, editing, formatting, or
+preparation of a supporting file. When in doubt about whether a tool or
+interaction counts, use Route B.</p>
+<p>The archive must contain, at minimum:</p>
+<ul>
+<li><code>solution.tex</code>, the polished final solution;</li>
+<li><code>solution.pdf</code>, compiled from
+<code>solution.tex</code>;</li>
+<li><code>discourse.tex</code>, containing the complete visible AI
+dialogue as defined in the Artificial Intelligence and Technology Use
+policy below;</li>
+<li><code>discourse.pdf</code>, compiled from
+<code>discourse.tex</code>;</li>
+<li><code>Makefile</code>, whose default target builds both PDFs;
+and</li>
+<li>every script, notebook, data file, bibliography, figure source,
+input file, or other artifact needed to reproduce or understand the
+submitted work.</li>
+</ul>
+<p><code>discourse.tex</code> may contain the transcript directly or may
+typeset an included plain-text export such as
+<code>discourse.txt</code>; any file it reads must also be in the
+archive.</p>
+<p>The archive must be self-contained, use relative paths, and unpack
+into one ordinary directory without nested archives. Running
+<code>make</code> from the top level must produce
+<code>solution.pdf</code> and <code>discourse.pdf</code> without
+requiring files stored elsewhere on your computer. Do not include
+virtual environments, package caches, or unrelated files. When a
+specialized program or package is required, identify it clearly in a
+short <code>README.txt</code>.</p>
+<p>The final solution must meet the same readability requirements as
+Route A: include the full problem statement, begin each problem on a new
+page, clearly mark final answers, and provide enough explanation to make
+the reasoning traceable. AI output does not need to be copied into the
+final solution merely because it appears in the discourse;
+<code>solution.tex</code> should be the coherent submission you intend
+me to grade.</p>
+<p>The complete discourse is a submission requirement, but it is not
+graded for prompt count, speed, polish, or absence of false starts.
+Unsuccessful attempts, corrections, and changes of direction are normal
+and useful. The final solution and your demonstrated understanding
+remain the primary bases for the homework grade.</p>
+<p>The lowest homework score is dropped. Late homework is not accepted
+after solutions have been posted, which, by default, is at the due
+time.</p>
+<h3 id="exams">Exams</h3>
+<p>The course has three exams. The first two are in-class exams. The
+third exam uses the university final exam period for the section unless
+Canvas announces an approved alternative.</p>
+<p>Exams are not AI-enabled. Unless I announce otherwise, they are
+completed without generative AI, internet access, external
+communication, or access to prior AI dialogues. Allowed resources are
+limited by default to a writing utensil, a calculator, and an
+instructor-provided page of notes. That page will be provided no later
+than the class meeting before the exam.</p>
+<p>A practice exam will be provided at least one class meeting before
+each exam. Exam problems will parallel selected portions of homework
+assignments and lesson examples in structure, required skills, and
+expected depth, although numbers, settings, and combinations of ideas
+may change.</p>
+<p>The documented problem-solving progression and session timing in
+AI-assisted homework give both of us useful evidence about where time is
+being spent and how quickly the material is becoming usable. I may use
+that evidence, together with in-class work and the practice exam, to
+calibrate exam scope and length so that the exam measures reactor-theory
+mastery rather than merely rewarding unusual speed. The pace or number
+of prompts in an individual transcript is not itself a graded
+quantity.</p>
+<p>To encourage timely and complete TEVAL responses, I will add one
+percentage point to every student's final course average if, and only
+if, the class TEVAL completion rate is 100% before the final examination
+begins.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>### Homework
+
+Homework is assigned regularly. Unless Canvas says otherwise, homework associated with lesson N is due by the start of lesson N + 2. Every homework submission must follow exactly one of the two routes below.
+
+#### Route A: No Generative AI Used for the Assignment
+
+If no generative AI informed any part of the submitted work, submit one PDF. The PDF may be typeset or may contain clean scans of handwritten work. Your name, the course name, and the homework number must appear on the first page. Start each problem on a new page, include the full problem statement, clearly mark final answers, and write enough plain English that I can follow the reasoning.
+
+Handwritten work must be scanned as US-letter pages at 300 dpi, in grayscale or color, with pages upright, tightly cropped, and free of shadows or visible background clutter. Do not submit photographs embedded in a PDF when a scan is reasonably available. I will allow one no-penalty resubmission during the semester solely to correct scan or document-formatting problems. Later nonconforming submissions may be returned for correction, with the original deadline still controlling unless I approve an exception.
+
+#### Route B: Generative AI Used for the Assignment
+
+If generative AI informed any part of the submitted work, submit one `.zip` archive rather than a stand-alone PDF. This route applies even when AI was used only for an explanation, derivation, calculation, code, debugging, checking, editing, formatting, or preparation of a supporting file. When in doubt about whether a tool or interaction counts, use Route B.
+
+The archive must contain, at minimum:
+
+- `solution.tex`, the polished final solution;
+- `solution.pdf`, compiled from `solution.tex`;
+- `discourse.tex`, containing the complete visible AI dialogue as defined in the Artificial Intelligence and Technology Use policy below;
+- `discourse.pdf`, compiled from `discourse.tex`;
+- `Makefile`, whose default target builds both PDFs; and
+- every script, notebook, data file, bibliography, figure source, input file, or other artifact needed to reproduce or understand the submitted work.
+
+`discourse.tex` may contain the transcript directly or may typeset an included plain-text export such as `discourse.txt`; any file it reads must also be in the archive.
+
+The archive must be self-contained, use relative paths, and unpack into one ordinary directory without nested archives. Running `make` from the top level must produce `solution.pdf` and `discourse.pdf` without requiring files stored elsewhere on your computer. Do not include virtual environments, package caches, or unrelated files. When a specialized program or package is required, identify it clearly in a short `README.txt`.
+
+The final solution must meet the same readability requirements as Route A: include the full problem statement, begin each problem on a new page, clearly mark final answers, and provide enough explanation to make the reasoning traceable. AI output does not need to be copied into the final solution merely because it appears in the discourse; `solution.tex` should be the coherent submission you intend me to grade.
+
+The complete discourse is a submission requirement, but it is not graded for prompt count, speed, polish, or absence of false starts. Unsuccessful attempts, corrections, and changes of direction are normal and useful. The final solution and your demonstrated understanding remain the primary bases for the homework grade.
+
+The lowest homework score is dropped. Late homework is not accepted after solutions have been posted, which, by default, is at the due time.
+
+### Exams
+
+The course has three exams. The first two are in-class exams. The third exam uses the university final exam period for the section unless Canvas announces an approved alternative.
+
+Exams are not AI-enabled. Unless I announce otherwise, they are completed without generative AI, internet access, external communication, or access to prior AI dialogues. Allowed resources are limited by default to a writing utensil, a calculator, and an instructor-provided page of notes. That page will be provided no later than the class meeting before the exam.
+
+A practice exam will be provided at least one class meeting before each exam. Exam problems will parallel selected portions of homework assignments and lesson examples in structure, required skills, and expected depth, although numbers, settings, and combinations of ideas may change.
+
+The documented problem-solving progression and session timing in AI-assisted homework give both of us useful evidence about where time is being spent and how quickly the material is becoming usable. I may use that evidence, together with in-class work and the practice exam, to calibrate exam scope and length so that the exam measures reactor-theory mastery rather than merely rewarding unusual speed. The pace or number of prompts in an individual transcript is not itself a graded quantity.
+
+To encourage timely and complete TEVAL responses, I will add one percentage point to every student&#x27;s final course average if, and only if, the class TEVAL completion rate is 100% before the final examination begins.</textarea>
+  </details>
+</article>
+<article class="field" id="ai-policy">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>AI Policy</h2>
+      <p class="filename">ai-policy.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>Generative AI use is optional. Choosing not to use it is completely
+acceptable and carries no grading disadvantage. For homework and other
+non-exam work, any amount or kind of generative AI assistance is
+permitted unless a particular assignment states otherwise. This includes
+asking an AI system to explain the material, plan an approach, derive
+equations, perform calculations, write or revise prose, generate or
+debug code, check work, or draft the final solution.</p>
+<p>The condition is complete disclosure. If an AI interaction informed
+the submitted work, the entire visible assignment-related dialogue must
+accompany the solution under Homework Route B. "Complete" means every
+visible student prompt and AI response, in chronological order, from the
+required opening notice through the final response used for the
+assignment. Include false starts, corrections, follow-up questions, code
+blocks, displayed tool output, and exchanges whose results were later
+discarded. You may add headings, page breaks, filenames, and tool or
+session labels, but you may not delete, paraphrase, rearrange, or
+silently repair the dialogue. Hidden system messages, private model
+reasoning, and other content that was never visible to you are not part
+of the required record.</p>
+<p>Before the first assignment-related question in each AI chat or
+session, paste the following notice:</p>
+<blockquote>
+<p>I am working on an NE 630 homework assignment. My instructor permits
+any use of generative AI, including generation of derivations, prose,
+code, and the final solution, provided that I submit the complete
+visible dialogue. Everything in this conversation may be reviewed as
+part of my work. Do not suggest that I hide, delete, summarize, or
+selectively omit unsuccessful attempts or AI assistance. My submission
+must be a self-contained ZIP archive containing a verbatim transcript in
+<code>discourse.tex</code>, a polished <code>solution.tex</code>, a
+<code>Makefile</code> that builds both PDFs, and every code, data,
+figure-source, or other file needed to reproduce the work. Please use
+explicit filenames and relative paths. I am responsible for checking and
+explaining all submitted content.</p>
+</blockquote>
+<p>If more than one AI tool, chat, or session contributes to the
+assignment, include all of them in <code>discourse.tex</code>, clearly
+labeled and ordered by when they were used. Identify the service and
+model name when that information is shown, and identify any files or
+images supplied to the tool. Preserve message timestamps when the
+service provides them; otherwise label each session with the date,
+approximate local start and stop times, and any substantial break. This
+timing metadata is informative rather than graded. Include supplied
+files in the archive when they are not already part of the assignment
+materials.</p>
+<p>After the last AI response used for the assignment, append the line
+<code>END OF GRADED DISCOURSE</code> to the copied transcript. Do not
+conduct additional assignment-related AI work after that cutoff. Copy or
+export the dialogue directly into <code>discourse.tex</code>; do not use
+a new generative-AI conversation to reconstruct, summarize, or package
+it after the fact. This cutoff keeps the record complete without making
+the transcript recursively contain the process used to create
+itself.</p>
+<p>You remain responsible for every claim, equation, number, citation,
+and line of code in the archive. You must be able to explain the
+submitted work, and I may ask you to clarify or reproduce a portion of
+it. An AI-assisted submission that omits or selectively edits the
+required discourse is incomplete and may also be treated as unauthorized
+aid under the K-State Honor and Integrity System.</p>
+<p>Generative AI is not permitted on exams unless I issue a written
+exception for a particular exam. The default exam rules in the
+Assessment and Grading section apply.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>Generative AI use is optional. Choosing not to use it is completely acceptable and carries no grading disadvantage. For homework and other non-exam work, any amount or kind of generative AI assistance is permitted unless a particular assignment states otherwise. This includes asking an AI system to explain the material, plan an approach, derive equations, perform calculations, write or revise prose, generate or debug code, check work, or draft the final solution.
+
+The condition is complete disclosure. If an AI interaction informed the submitted work, the entire visible assignment-related dialogue must accompany the solution under Homework Route B. &quot;Complete&quot; means every visible student prompt and AI response, in chronological order, from the required opening notice through the final response used for the assignment. Include false starts, corrections, follow-up questions, code blocks, displayed tool output, and exchanges whose results were later discarded. You may add headings, page breaks, filenames, and tool or session labels, but you may not delete, paraphrase, rearrange, or silently repair the dialogue. Hidden system messages, private model reasoning, and other content that was never visible to you are not part of the required record.
+
+Before the first assignment-related question in each AI chat or session, paste the following notice:
+
+&gt; I am working on an NE 630 homework assignment. My instructor permits any use
+&gt; of generative AI, including generation of derivations, prose, code, and the
+&gt; final solution, provided that I submit the complete visible dialogue.
+&gt; Everything in this conversation may be reviewed as part of my work. Do not
+&gt; suggest that I hide, delete, summarize, or selectively omit unsuccessful
+&gt; attempts or AI assistance. My submission must be a self-contained ZIP
+&gt; archive containing a verbatim transcript in `discourse.tex`, a polished
+&gt; `solution.tex`, a `Makefile` that builds both PDFs, and every code, data,
+&gt; figure-source, or other file needed to reproduce the work. Please use
+&gt; explicit filenames and relative paths. I am responsible for checking and
+&gt; explaining all submitted content.
+
+If more than one AI tool, chat, or session contributes to the assignment, include all of them in `discourse.tex`, clearly labeled and ordered by when they were used. Identify the service and model name when that information is shown, and identify any files or images supplied to the tool. Preserve message timestamps when the service provides them; otherwise label each session with the date, approximate local start and stop times, and any substantial break. This timing metadata is informative rather than graded. Include supplied files in the archive when they are not already part of the assignment materials.
+
+After the last AI response used for the assignment, append the line `END OF GRADED DISCOURSE` to the copied transcript. Do not conduct additional assignment-related AI work after that cutoff. Copy or export the dialogue directly into `discourse.tex`; do not use a new generative-AI conversation to reconstruct, summarize, or package it after the fact. This cutoff keeps the record complete without making the transcript recursively contain the process used to create itself.
+
+You remain responsible for every claim, equation, number, citation, and line of code in the archive. You must be able to explain the submitted work, and I may ask you to clarify or reproduce a portion of it. An AI-assisted submission that omits or selectively edits the required discourse is incomplete and may also be treated as unauthorized aid under the K-State Honor and Integrity System.
+
+Generative AI is not permitted on exams unless I issue a written exception for a particular exam. The default exam rules in the Assessment and Grading section apply.</textarea>
+  </details>
+</article>
+<article class="field" id="course-attendance-policies-and-procedures">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Course Attendance Policies and Procedures</h2>
+      <p class="filename">course-attendance-policies-and-procedures.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>Attendance and participation are expected because the course is built
+around worked examples, discussion, and problem-solving practice.
+Attendance is not a separate graded category, but missing class can
+affect performance on graded work. Absences for university-sanctioned
+activities, religious observances, and other absences protected by
+university policy or law will be handled consistent with University
+Handbook Section F62.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>Attendance and participation are expected because the course is built around worked examples, discussion, and problem-solving practice. Attendance is not a separate graded category, but missing class can affect performance on graded work. Absences for university-sanctioned activities, religious observances, and other absences protected by university policy or law will be handled consistent with University Handbook Section F62.</textarea>
+  </details>
+</article>
+<article class="field" id="late-submission-policy-make-up-class-policy">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Late Submission Policy / Make-up class policy</h2>
+      <p class="filename">late-submission-policy-make-up-class-policy.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>Late homework is accepted only when Canvas explicitly extends the
+deadline or when university policy, documented emergency, or prior
+arrangement applies. Once solutions are posted, late homework is not
+accepted. Students who miss an exam for an excused reason should contact
+me as soon as possible so we can arrange an appropriate make-up
+path.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>Late homework is accepted only when Canvas explicitly extends the deadline or when university policy, documented emergency, or prior arrangement applies. Once solutions are posted, late homework is not accepted. Students who miss an exam for an excused reason should contact me as soon as possible so we can arrange an appropriate make-up path.</textarea>
+  </details>
+</article>
+<article class="field" id="course-specific-policy-regarding-academic-honesty">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Course Specific Policy Regarding Academic Honesty</h2>
+      <p class="filename">course-specific-policy-regarding-academic-honesty.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>You are encouraged to discuss concepts and general problem-solving
+approaches with classmates. Submitted work must be your own. Do not copy
+another student's solution, do not let another student copy yours, and
+do not submit a solution you cannot explain.</p>
+<p>Unless an assignment explicitly authorizes group work, each student
+must prepare an independent final solution and, when AI is used, submit
+the complete discourse from that student's own AI interactions. Sharing
+or reusing another student's AI transcript, prompts, generated files, or
+final solution is not an acceptable substitute for collaboration.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>You are encouraged to discuss concepts and general problem-solving approaches with classmates. Submitted work must be your own. Do not copy another student&#x27;s solution, do not let another student copy yours, and do not submit a solution you cannot explain.
+
+Unless an assignment explicitly authorizes group work, each student must prepare an independent final solution and, when AI is used, submit the complete discourse from that student&#x27;s own AI interactions. Sharing or reusing another student&#x27;s AI transcript, prompts, generated files, or final solution is not an acceptable substitute for collaboration.</textarea>
+  </details>
+</article>
+<article class="field" id="additional-course-specific-policies">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Additional Course Specific Policies</h2>
+      <p class="filename">additional-course-specific-policies.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>Course materials are provided for use by students enrolled in NE 630.
+Do not sell course notes, homework solutions, recordings, or related
+materials, and do not upload them to commercial course-material sites
+without written permission.</p>
+<p>The syllabus is the foundational course overview. The detailed
+schedule, readings, examples, and minor assignment details may evolve
+through Canvas as the semester progresses. Substantive changes to
+grading structures, major assignments, exam dates, attendance policy, or
+core course expectations will be communicated to students in writing and
+retained as a dated syllabus addendum.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>Course materials are provided for use by students enrolled in NE 630. Do not sell course notes, homework solutions, recordings, or related materials, and do not upload them to commercial course-material sites without written permission.
+
+The syllabus is the foundational course overview. The detailed schedule, readings, examples, and minor assignment details may evolve through Canvas as the semester progresses. Substantive changes to grading structures, major assignments, exam dates, attendance policy, or core course expectations will be communicated to students in writing and retained as a dated syllabus addendum.</textarea>
+  </details>
+</article>
+<article class="field" id="student-resources-available">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Student Resources Available</h2>
+      <p class="filename">student-resources-available.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>K-State has resources to support academic work, well-being,
+technology access, and student success. This course points students
+especially to:</p>
+<ul>
+<li>Student Support and Accountability: <a
+href="https://www.k-state.edu/student-support/studentsupport/">https://www.k-state.edu/student-support/studentsupport/</a></li>
+<li>Counseling and Psychological Services: <a
+href="https://www.k-state.edu/counseling/">https://www.k-state.edu/counseling/</a></li>
+<li>Student Access Center: <a
+href="https://www.k-state.edu/accesscenter/">https://www.k-state.edu/accesscenter/</a></li>
+<li>IT Service Desk: <a
+href="https://www.k-state.edu/it/">https://www.k-state.edu/it/</a></li>
+<li>Academic Achievement Center: <a
+href="https://www.k-state.edu/aac/">https://www.k-state.edu/aac/</a></li>
+</ul>
+<p>Students who are unsure where to start may contact Student Support
+and Accountability or ask me for help finding the right office.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>K-State has resources to support academic work, well-being, technology access, and student success. This course points students especially to:
+
+- Student Support and Accountability: https://www.k-state.edu/student-support/studentsupport/
+- Counseling and Psychological Services: https://www.k-state.edu/counseling/
+- Student Access Center: https://www.k-state.edu/accesscenter/
+- IT Service Desk: https://www.k-state.edu/it/
+- Academic Achievement Center: https://www.k-state.edu/aac/
+
+Students who are unsure where to start may contact Student Support and Accountability or ask me for help finding the right office.</textarea>
+  </details>
+</article>
+<article class="field" id="course-schedule-of-activities">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Anticipated Course Schedule and Outline (Subject to change to best fit needs of students and course learning outcomes)</h2>
+      <p class="filename">course-schedule-of-activities.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>The syllabus intentionally uses a general roadmap instead of a
+detailed day-by-day schedule. The detailed living schedule is maintained
+in Canvas.</p>
+<table>
+<thead>
+<tr>
+<th>Instructional unit</th>
+<th>Anticipated pacing</th>
+<th>Major topics</th>
+<th>Major graded components</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit 1</td>
+<td>Weeks 1-2</td>
+<td>Nuclear reactions, fission, chain reactions, radioactive decay</td>
+<td>Homework begins</td>
+</tr>
+<tr>
+<td>Unit 2</td>
+<td>Weeks 2-3</td>
+<td>Neutron attenuation, cross-section data, scattering kinematics</td>
+<td>Homework</td>
+</tr>
+<tr>
+<td>Unit 3</td>
+<td>Weeks 3-5</td>
+<td>Neutron spectra, slowing down, resonance absorption,
+thermalization</td>
+<td>Homework</td>
+</tr>
+<tr>
+<td>Unit 4</td>
+<td>Weeks 5-6</td>
+<td>Effective cross sections, multiplication, multigroup methods,
+k-eigenvalue problems</td>
+<td>Exam 1 planned for Friday, October 2, 2026</td>
+</tr>
+<tr>
+<td>Unit 5</td>
+<td>Weeks 6-7</td>
+<td>Reactor core survey, fast and thermal unit-cell analysis, OpenMC
+examples</td>
+<td>Homework</td>
+</tr>
+<tr>
+<td>Unit 6</td>
+<td>Weeks 8-9</td>
+<td>Reactivity, feedback, poisons, depletion, conversion, breeding,
+burnup</td>
+<td>Homework</td>
+</tr>
+<tr>
+<td>Unit 7</td>
+<td>Weeks 9-11</td>
+<td>Point kinetics, delayed neutron precursors, step reactivity changes,
+feedback in kinetics</td>
+<td>Exam 2 planned for Friday, November 6, 2026</td>
+</tr>
+<tr>
+<td>Unit 8</td>
+<td>Weeks 11-13</td>
+<td>Conservation of neutrons, diffusion equation, one-speed
+source-driven diffusion</td>
+<td>Homework</td>
+</tr>
+<tr>
+<td>Unit 9</td>
+<td>Weeks 13-15</td>
+<td>Multiplying diffusion systems, criticality, reflected reactors,
+perturbation theory, control</td>
+<td>Homework</td>
+</tr>
+<tr>
+<td>Unit 10</td>
+<td>Week 16 and finals</td>
+<td>Diffusion validity, preview of transport theory, synthesis and
+review</td>
+<td>Exam 3 planned for Friday, December 18, 2026, 11:50 a.m.-1:40
+p.m.</td>
+</tr>
+</tbody>
+</table>
+<p>If the official meeting pattern changes, the final exam block must be
+checked against the K-State Registrar's final examination schedule.</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>The syllabus intentionally uses a general roadmap instead of a detailed day-by-day schedule. The detailed living schedule is maintained in Canvas.
+
+| Instructional unit | Anticipated pacing | Major topics | Major graded components |
+| --- | --- | --- | --- |
+| Unit 1 | Weeks 1-2 | Nuclear reactions, fission, chain reactions, radioactive decay | Homework begins |
+| Unit 2 | Weeks 2-3 | Neutron attenuation, cross-section data, scattering kinematics | Homework |
+| Unit 3 | Weeks 3-5 | Neutron spectra, slowing down, resonance absorption, thermalization | Homework |
+| Unit 4 | Weeks 5-6 | Effective cross sections, multiplication, multigroup methods, k-eigenvalue problems | Exam 1 planned for Friday, October 2, 2026 |
+| Unit 5 | Weeks 6-7 | Reactor core survey, fast and thermal unit-cell analysis, OpenMC examples | Homework |
+| Unit 6 | Weeks 8-9 | Reactivity, feedback, poisons, depletion, conversion, breeding, burnup | Homework |
+| Unit 7 | Weeks 9-11 | Point kinetics, delayed neutron precursors, step reactivity changes, feedback in kinetics | Exam 2 planned for Friday, November 6, 2026 |
+| Unit 8 | Weeks 11-13 | Conservation of neutrons, diffusion equation, one-speed source-driven diffusion | Homework |
+| Unit 9 | Weeks 13-15 | Multiplying diffusion systems, criticality, reflected reactors, perturbation theory, control | Homework |
+| Unit 10 | Week 16 and finals | Diffusion validity, preview of transport theory, synthesis and review | Exam 3 planned for Friday, December 18, 2026, 11:50 a.m.-1:40 p.m. |
+
+If the official meeting pattern changes, the final exam block must be checked against the K-State Registrar&#x27;s final examination schedule.</textarea>
+  </details>
+</article>
+<article class="field" id="course-specific-language">
+  <header class="field-header">
+    <div>
+      <p class="kicker">CourseDog field</p>
+      <h2>Course Specific Language</h2>
+      <p class="filename">course-specific-language.md</p>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="copy-rich">Copy rich text</button>
+      <button type="button" data-action="copy-markdown">Copy Markdown</button>
+    </div>
+  </header>
+  <p class="status" aria-live="polite"></p>
+  <div class="field-body">
+<p>The current K-State official syllabus statements apply in this course
+and are incorporated by direct accessible link. The Office of the
+Provost and CourseDog maintain the current required statement text:</p>
+<p><a
+href="https://www.k-state.edu/provost/policies-resources/classroom-policies-teaching-resources/course-syllabi-statements/">https://www.k-state.edu/provost/policies-resources/classroom-policies-teaching-resources/course-syllabi-statements/</a></p>
+<p>As of the Fall 2026 Course Syllabus Policy, the required statement
+categories are Academic Honesty, Students with Disabilities, Classroom
+Conduct, Mutual Respect and Inclusion, Discrimination/Harassment/Sexual
+Harassment, and Campus Safety and Emergency Procedures.</p>
+<p>The Campus Safety and Emergency Procedures statement category is
+included because the June 10, 2026 University Handbook syllabus policy
+makes it mandatory for Fall 2026 and later syllabi.</p>
+<p>The K-State Honor Pledge applies to assignments, examinations, and
+other course work whether or not it is repeated on the assignment: "On
+my honor, as a student, I have neither given nor received unauthorized
+aid on this academic work."</p>
+  </div>
+  <details>
+    <summary>Markdown source</summary>
+    <textarea readonly>The current K-State official syllabus statements apply in this course and are incorporated by direct accessible link. The Office of the Provost and CourseDog maintain the current required statement text:
+
+https://www.k-state.edu/provost/policies-resources/classroom-policies-teaching-resources/course-syllabi-statements/
+
+As of the Fall 2026 Course Syllabus Policy, the required statement categories are Academic Honesty, Students with Disabilities, Classroom Conduct, Mutual Respect and Inclusion, Discrimination/Harassment/Sexual Harassment, and Campus Safety and Emergency Procedures.
+
+The Campus Safety and Emergency Procedures statement category is included because the June 10, 2026 University Handbook syllabus policy makes it mandatory for Fall 2026 and later syllabi.
+
+The K-State Honor Pledge applies to assignments, examinations, and other course work whether or not it is repeated on the assignment: &quot;On my honor, as a student, I have neither given nor received unauthorized aid on this academic work.&quot;</textarea>
+  </details>
+</article>
+  </main>
+  <script>
+    function setStatus(field, message, warn) {
+      const status = field.querySelector(".status");
+      status.textContent = message;
+      status.classList.toggle("warn", Boolean(warn));
+    }
+
+    function selectElementContents(element) {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+
+    function copySelection(element) {
+      selectElementContents(element);
+      try {
+        const copied = document.execCommand("copy");
+        if (copied) {
+          window.getSelection().removeAllRanges();
+        }
+        return copied;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    async function copyRich(button) {
+      const field = button.closest(".field");
+      const body = field.querySelector(".field-body");
+      const htmlText = body.innerHTML.trim();
+      const plainText = body.innerText.trim();
+
+      try {
+        if (navigator.clipboard && window.ClipboardItem) {
+          await navigator.clipboard.write([
+            new ClipboardItem({
+              "text/html": new Blob([htmlText], { type: "text/html" }),
+              "text/plain": new Blob([plainText], { type: "text/plain" })
+            })
+          ]);
+          setStatus(field, "Copied rich text.");
+          return;
+        }
+      } catch (error) {
+      }
+
+      if (copySelection(body)) {
+        setStatus(field, "Copied rich text.");
+      } else {
+        selectElementContents(body);
+        setStatus(field, "Selected rendered content. Press Ctrl+C, then paste into CourseDog.", true);
+      }
+    }
+
+    async function copyMarkdown(button) {
+      const field = button.closest(".field");
+      const textarea = field.querySelector("textarea");
+
+      try {
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(textarea.value.trim());
+          setStatus(field, "Copied Markdown.");
+          return;
+        }
+      } catch (error) {
+      }
+
+      textarea.focus();
+      textarea.select();
+      if (document.execCommand("copy")) {
+        setStatus(field, "Copied Markdown.");
+      } else {
+        setStatus(field, "Selected Markdown. Press Ctrl+C.", true);
+      }
+    }
+
+    document.addEventListener("click", function (event) {
+      const button = event.target.closest("button[data-action]");
+      if (!button) {
+        return;
+      }
+      if (button.dataset.action === "copy-rich") {
+        copyRich(button);
+      }
+      if (button.dataset.action === "copy-markdown") {
+        copyMarkdown(button);
+      }
+    });
+  </script>
+</body>
+</html>

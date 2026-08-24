@@ -1,0 +1,1 @@
+Late homework is accepted only when Canvas explicitly extends the deadline or when university policy, documented emergency, or prior arrangement applies. Once solutions are posted, late homework is not accepted. Students who miss an exam for an excused reason should contact me as soon as possible so we can arrange an appropriate make-up path.

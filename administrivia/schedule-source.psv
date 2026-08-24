@@ -1,0 +1,50 @@
+date|kind|meeting|topic|reading|work
+2026-08-24|class|Lesson 1|Nuclear reactions|FNRP 1.1-1.3|Homework begins
+2026-08-26|class|Lesson 2|Nuclear fission and chain reactions|FNRP 1.4-1.5|
+2026-08-28|class|Lesson 3|Radioactive decay|FNRP 1.6-1.7|
+2026-08-31|class|Lesson 4|Neutron attenuation|FNRP 2.1-2.2|
+2026-09-02|class|Lesson 5|Using cross-section data|FNRP 2.3-2.4; BNL Sigma|
+2026-09-04|class|Lesson 6|Understanding cross-section data|FNRP 2.3-2.4|
+2026-09-07|no-class|No class|Labor Day - no class||
+2026-09-09|class|Lesson 7|Scattering kinematics|FNRP 2.5|
+2026-09-11|class|Lesson 8|Eta as simplest k; moderators|FNRP 3.1-3.3|
+2026-09-14|class|Lesson 9|Fast spectrum; slowing down and 1/E|FNRP 3.4|
+2026-09-16|class|Lesson 10|Slowing down with resonance absorption and the narrow-resonance approximation|FNRP 3.4; NR/WR supplement|
+2026-09-18|class|Lesson 11|Thermal spectrum|FNRP 3.4|
+2026-09-21|class|Lesson 12|Effective cross sections and k|FNRP 3.5-3.6|
+2026-09-23|class|Lesson 13|Multigroup method and two-group equations|Multigroup supplement|
+2026-09-25|class|Lesson 14|k-eigenvalue problem in two or more groups|Multigroup supplement|
+2026-09-28|class|Lesson 15|Survey of power reactor cores|FNRP 4.1-4.2|
+2026-09-30|class|Lesson 16|Fast reactor unit-cell analysis|FNRP 4.3|
+2026-10-02|exam|Exam 1|Exam 1||Covers lessons 1-14
+2026-10-05|class|Lesson 17|Thermal reactor unit-cell analysis; four factors|FNRP 4.4|
+2026-10-07|class|Lesson 18|Modeling unit cells in OpenMC I|OpenMC supplement|
+2026-10-09|no-class|No class|Fall break / Wildcat Pause Day - no class||
+2026-10-12|class|Lesson 19|Unit-cell design considerations: SFR enrichment and PWR P/D|FNRP 4.4|
+2026-10-14|class|Lesson 20|Reactivity|FNRP 9.1-9.4|
+2026-10-16|class|Lesson 21|Reactivity feedback|FNRP 9.1-9.4|
+2026-10-19|class|Lesson 22|Long-term effects I: xenon-135 and samarium-149|FNRP 10.1-10.3|
+2026-10-21|class|Lesson 23|Long-term effects II: depletion, conversion, and breeding|FNRP 10.4|
+2026-10-23|class|Lesson 24|Long-term effects III: linear-reactivity model|FNRP 10.5; supplement|
+2026-10-26|class|Lesson 25|Kinetics I: point kinetics without multiplication; lifetime|FNRP 5.1-5.2 through Eq. 5.8|
+2026-10-28|class|Lesson 26|Kinetics II: point kinetics with multiplication|FNRP 5.2-5.3|
+2026-10-30|class|Lesson 27|Kinetics III: point kinetics equations with precursors|FNRP 5.4|
+2026-11-02|class|Lesson 28|Kinetics IV: step changes in reactivity|FNRP 5.5|
+2026-11-04|class|Lesson 29|Kinetics V: step changes with reactivity feedback|FNRP 5.6; supplement|
+2026-11-06|exam|Exam 2|Exam 2||Covers lessons 15-28
+2026-11-09|class|Lesson 30|Review and synthesis before diffusion|Canvas notes|
+2026-11-11|class|Lesson 31|Conservation of neutrons and the diffusion equation|FNRP 6.1-6.2|
+2026-11-13|class|Lesson 32|One-speed, single-region, source-driven diffusion in slabs|FNRP 6.3|
+2026-11-16|class|Lesson 33|One-speed, multi-region, source-driven diffusion in slabs|FNRP 6.4|
+2026-11-18|class|Lesson 34|One-speed diffusion with multiplication|FNRP 6.5 and 6.7|
+2026-11-20|class|Lesson 35|Criticality in slabs and cylinders|FNRP 7.1-7.3|
+2026-11-23|no-class|No class|Fall break - no class||
+2026-11-25|no-class|No class|Fall break - no class||
+2026-11-27|no-class|No class|Fall break / Thanksgiving holiday - no class||
+2026-11-30|class|Lesson 36|Two-group criticality models|Duderstadt and Hamilton 7.III.B-C; FNRP 7.4|
+2026-12-02|class|Lesson 37|Reflected reactors|FNRP 7.5|
+2026-12-04|class|Lesson 38|Perturbation theory and control|FNRP 7.6|
+2026-12-07|class|Lesson 39|Testing when diffusion is good enough|Canvas notes|
+2026-12-09|class|Lesson 40|Preview of neutron transport theory|Canvas notes|
+2026-12-11|class|Lesson 41|Review|Canvas review materials|
+2026-12-18|final|Exam 3|Final exam||11:50 a.m.-1:40 p.m.; official final exam period

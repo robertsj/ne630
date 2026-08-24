@@ -1,0 +1,3 @@
+You are encouraged to discuss concepts and general problem-solving approaches with classmates. Submitted work must be your own. Do not copy another student's solution, do not let another student copy yours, and do not submit a solution you cannot explain.
+
+Unless an assignment explicitly authorizes group work, each student must prepare an independent final solution and, when AI is used, submit the complete discourse from that student's own AI interactions. Sharing or reusing another student's AI transcript, prompts, generated files, or final solution is not an acceptable substitute for collaboration.

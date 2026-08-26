@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NE 630 Homework 01–03</title>
+  <style>
+    :root {
+      --ksu-purple: #512888;
+      --ksu-deep-purple: #3b1b64;
+      --ksu-purple-soft: #f2edf8;
+      --ink: #202124;
+      --muted: #62636a;
+      --line: #d8d1df;
+      --paper: #ffffff;
+      --background: #f5f3f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--background);
+      font-family: "Myriad Pro", "Segoe UI", Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: var(--ksu-purple);
+    }
+
+    a:hover {
+      color: var(--ksu-deep-purple);
+    }
+
+    .page-header {
+      color: white;
+      background: var(--ksu-purple);
+      border-bottom: 5px solid var(--ksu-deep-purple);
+    }
+
+    .page-header-inner,
+    main {
+      width: min(960px, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+
+    .page-header-inner {
+      padding: 2.3rem 0 2rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.2rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      max-width: 44rem;
+      margin: 0.75rem 0 0;
+      color: #eee7f5;
+    }
+
+    main {
+      padding: 1.5rem 0 4rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      padding: 0.55rem 0.9rem;
+      color: var(--ksu-purple);
+      background: white;
+      border: 1px solid var(--ksu-purple);
+      border-radius: 0.3rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover,
+    button:focus-visible {
+      color: white;
+      background: var(--ksu-purple);
+      outline: none;
+    }
+
+    details {
+      background: var(--paper);
+    }
+
+    summary {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      list-style: none;
+      cursor: pointer;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "+";
+      display: grid;
+      width: 1.6rem;
+      height: 1.6rem;
+      margin-left: auto;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    details[open] > summary::after {
+      content: "−";
+    }
+
+    summary:focus-visible {
+      outline: 3px solid #b49bd0;
+      outline-offset: 3px;
+    }
+
+    .homework-card {
+      margin-bottom: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 0.45rem;
+      box-shadow: 0 0.2rem 0.7rem rgb(59 27 100 / 8%);
+      overflow: hidden;
+    }
+
+    .homework-card > summary {
+      padding: 1rem 1.15rem;
+      color: white;
+      background: var(--ksu-purple);
+    }
+
+    .homework-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .homework-meta {
+      color: #eee7f5;
+      font-size: 0.92rem;
+    }
+
+    .homework-body {
+      padding: 1rem;
+    }
+
+    .source-link {
+      margin: 0 0 0.8rem;
+      text-align: right;
+      font-size: 0.9rem;
+    }
+
+    .homework-intro {
+      margin-bottom: 1rem;
+    }
+
+    .problem-card {
+      margin: 0.75rem 0;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--ksu-purple);
+      border-radius: 0.3rem;
+      overflow: hidden;
+    }
+
+    .problem-card > summary {
+      padding: 0.8rem 0.9rem;
+      color: var(--ksu-deep-purple);
+      background: var(--ksu-purple-soft);
+      font-weight: 700;
+    }
+
+    .fold-label {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 400;
+    }
+
+    .problem-card[open] .fold-label {
+      visibility: hidden;
+    }
+
+    .problem-body {
+      padding: 0.25rem 1rem 1rem;
+      overflow-x: auto;
+    }
+
+    .problem-body > :last-child {
+      margin-bottom: 0;
+    }
+
+    .problem-body li + li {
+      margin-top: 0.35rem;
+    }
+
+    mjx-container[display="true"] {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.3rem 0;
+    }
+
+    @media (max-width: 620px) {
+      .page-header-inner,
+      main {
+        width: calc(100% - 1rem);
+      }
+
+      .homework-card > summary {
+        position: relative;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.15rem;
+        padding-right: 3.4rem;
+      }
+
+      .homework-card > summary::after {
+        position: absolute;
+        right: 1.3rem;
+      }
+
+      .fold-label {
+        display: none;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .page-header {
+        color: black;
+        background: white;
+        border-bottom-color: var(--ksu-purple);
+      }
+
+      .subtitle,
+      .eyebrow {
+        color: black;
+      }
+
+      .controls,
+      .source-link,
+      summary::after,
+      .fold-label {
+        display: none;
+      }
+
+      .homework-card,
+      .problem-card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+
+      .homework-card > summary {
+        color: white;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      loader: {load: ["[tex]/cancel"]},
+      tex: {
+        inlineMath: [["$", "$"]],
+        displayMath: [["$$", "$$"]],
+        packages: {"[+]": ["cancel"]}
+      },
+      options: {
+        skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <header class="page-header">
+    <div class="page-header-inner">
+      <p class="eyebrow">NE 630</p>
+      <h1>Homework 01–03</h1>
+      <p class="subtitle">
+        Choose a homework, then open individual problems as needed.
+        All sections are folded by default.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <div class="controls" aria-label="Folding controls">
+      <button id="expand-all" type="button">Expand all</button>
+      <button id="collapse-all" type="button">Collapse all</button>
+    </div>
+
+
+      <details class="homework-card">
+        <summary>
+          <span class="homework-title">Homework 01: Lesson 01</span>
+          <span class="homework-meta">3 problems</span>
+        </summary>
+        <div class="homework-body">
+          <div class="source-link">
+            <a href="../markdown/HW01.md">View Markdown source</a>
+          </div>
+          
+
+          <details class="problem-card">
+            <summary>
+              <span>Problem 1 [FNRP 1.3]</span>
+              <span class="fold-label">Show problem</span>
+            </summary>
+            <div class="problem-body">
+<p>Complete the following reactions and compute the corresponding Q values using the <a href="https://www-nds.iaea.org/amdc/ame2020/mass_1.mas20.txt">AME2020 mass data</a>:</p>
+<p>$$
+\begin{aligned}
+{}^{9}_{?}\mathrm{Be} + {}^{4}_{2}\mathrm{He} &\rightarrow ? + {}^{1}_{1}\mathrm{H} \\
+{}^{60}_{?}\mathrm{Co} &\rightarrow ? + {}^{0}_{-1}\mathrm{e} \\
+{}^{7}_{3}\mathrm{Li} + {}^{1}_{1}\mathrm{H} &\rightarrow ? + {}^{4}_{2}\mathrm{He} \\
+{}^{10}_{5}\mathrm{B} + {}^{4}_{2}\mathrm{He} &\rightarrow ? + {}^{1}_{1}\mathrm{H}
+\end{aligned}
+$$</p>
+<p><em>When computing Q values, be careful not to round prematurely!</em></p>
+            </div>
+          </details>
+
+          <details class="problem-card">
+            <summary>
+              <span>Problem 2 [FNRP 1.5]</span>
+              <span class="fold-label">Show problem</span>
+            </summary>
+            <div class="problem-body">
+<p>The average kinetic energy of a fission neutron is 2.0 MeV. Defining the kinetic energy as $K = E_{\text{total}} - m_0 c^2$, what is the percent error introduced into the kinetic energy from using Eq. (1.12) instead of Eq. (1.9)? <em>(Note that $v$ should be computed using relativistic expressions and that the error should be defined relative to the true value, i.e., $\%\text{err} = 100(K_{\text{approximate}}-K_{\text{true}})/K_{\text{true}}$, where the “true” value comes from Eq. 1.9 and the “approximate” value comes from Eq. 1.12.)</em></p>
+            </div>
+          </details>
+
+          <details class="problem-card">
+            <summary>
+              <span>Problem 3 [FNRP 1.6]</span>
+              <span class="fold-label">Show problem</span>
+            </summary>
+            <div class="problem-body">
+<p>Consider the following nuclear and chemical reactions:</p>
+<ul>
+<li><strong>(a)</strong> A uranium-235 nucleus fissions as a result of being bombarded by a slow neutron. If the energy of fission is 200 MeV, approximately what fraction of the reactants mass is converted to energy?</li>
+<li><strong>(b)</strong> A carbon-12 atom undergoes combustion following collision with an oxygen-16 molecule ($\mathrm{O}_2$), forming carbon dioxide. If four eV of energy are released, approximately what fraction of the reactants mass is converted to energy?</li>
+<li><strong>(c)</strong> Are the numbers in (a) and (b) consistent with the estimated 20 tons of nuclear fuel per year or the 10,000 tons of coal per day needed for a 1000 MWe nuclear or coal power plant? State your assumptions! <em>(Hint: remember from NE 495 that the number of atoms $N$ in a given mass $m$ is given by $N=mN_a/M$, where $N_a=6.022\cdot 10^{23}~\mathrm{g\,mol^{-1}}$ is Avogadro's number and $M$ is the atomic mass that we often approximate as the mass number $A=Z+N$ in units of grams per mole. Example: in 100 g of ${}^{235}\mathrm{U}$, there are approximately $100(6.022\cdot 10^{23})/235 \approx 2.56\cdot 10^{23}$ atoms.)</em></li>
+</ul>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="homework-card">
+        <summary>
+          <span class="homework-title">Homework 02: Lesson 02</span>
+          <span class="homework-meta">3 problems</span>
+        </summary>
+        <div class="homework-body">
+          <div class="source-link">
+            <a href="../markdown/HW02.md">View Markdown source</a>
+          </div>
+          
+
+          <details class="problem-card">
+            <summary>
+              <span>Problem 1 [FNRP 1.9]</span>
+              <span class="fold-label">Show problem</span>
+            </summary>
+            <div class="problem-body">
+<p>A reactor operates at a power of $10^3~\mathrm{MW(t)}$ for 1 year. Calculate the power from decay heat:</p>
+<ul>
+<li><strong>(a)</strong> 1 day following shutdown.</li>
+<li><strong>(b)</strong> 1 month following shutdown.</li>
+<li><strong>(c)</strong> 1 year following shutdown.</li>
+<li><strong>(d)</strong> Repeat (a), (b), and (c), assuming only one month of operation, and compare results.</li>
+</ul>
+            </div>
+          </details>
+
+          <details class="problem-card">
+            <summary>
+              <span>Problem 2 [Lewis Eq. (1.24); adapted from DHNRA 2.19]</span>
+              <span class="fold-label">Show problem</span>
+            </summary>
+            <div class="problem-body">
+<p>Lewis states that more than 40 fission-fragment pairs can emerge from the fission of ${}^{235}\mathrm{U}$. Equation (1.24) gives one example, ${}^{140}\mathrm{Xe}$ and ${}^{94}\mathrm{Sr}$. Find one additional representative fission channel published for thermal-neutron-induced fission of ${}^{235}\mathrm{U}$. Your source must identify both fragments and the prompt-neutron multiplicity; cite it.</p>
+<ul>
+<li><strong>(a)</strong> Write the complete reaction, verify its nucleon-number and charge balance, and compute its Q value using tabulated atomic masses.</li>
+<li><strong>(b)</strong> For either Lewis's fragment pair or the pair you selected, compare each fragment's neutron-to-proton ratio with that of a stable isobar having the same mass number.</li>
+<li><strong>(c)</strong> Explain why fission fragments are generally neutron rich.</li>
+<li><strong>(d)</strong> Predict the principal decay mode of each fragment and explain how that decay moves the products toward stability.</li>
+<li><strong>(e)</strong> Identify the particles emitted promptly during fission and those emitted later as the fission products decay. Which contribution to the fission energy is effectively unrecoverable for power production?</li>
+</ul>
+            </div>
+          </details>
+
+          <details class="problem-card">
+            <summary>
+              <span>Problem 3 [Lewis Eqs. (1.21)--(1.23)]</span>
+              <span class="fold-label">Show problem</span>
+            </summary>
+            <div class="problem-body">
+<p>An idealized prompt-neutron chain begins with $n_0$ neutrons. Each neutron generation takes an average time $\ell$, and the multiplication factor $k$ is constant.</p>
+<ul>
+<li>
+<p><strong>(a)</strong> Beginning with $n_{i+1}=kn_i$, derive</p>
+<p>$$
+  n(t)=n_0 k^{t/\ell}.
+  $$</p>
+</li>
+<li>
+<p><strong>(b)</strong> For $k\approx 1$, show that</p>
+<p>$$
+  n(t)\approx n_0\exp\left(\frac{k-1}{\ell}t\right).
+  $$</p>
+</li>
+<li>
+<p><strong>(c)</strong> Classify systems having $k=0.995$, $k=1.000$, and $k=1.005$ as subcritical, critical, or supercritical, and describe the long-term behavior of the neutron population in each system.</p>
+</li>
+<li>
+<p><strong>(d)</strong> A reactor initially produces $1.25~\mathrm{MW(t)}$, with $k=1.010$ and $\ell=10^{-5}~\mathrm{s}$. Assuming $P(t)\propto n(t)$, estimate the time required to reach $2.00~\mathrm{MW(t)}$ using both the exact and approximate expressions.</p>
+</li>
+</ul>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="homework-card">
+        <summary>
+          <span class="homework-title">Homework 03: Lesson 03</span>
+          <span class="homework-meta">3 problems</span>
+        </summary>
+        <div class="homework-body">
+          <div class="source-link">
+            <a href="../markdown/HW03.md">View Markdown source</a>
+          </div>
+          
+
+          <details class="problem-card">
+            <summary>
+              <span>Problem 1 [FNRP 1.11]</span>
+              <span class="fold-label">Show problem</span>
+            </summary>
+            <div class="problem-body">
+<p>Uranium-238 has a half-life of $4.51 \times 10^9$ yr, whereas the half-life of uranium-235 is only $7.13 \times 10^8$ yr. Thus, since the earth was formed 4.5 billion years ago, the isotopic abundance of uranium-235 has been steadily decreasing.</p>
+<ul>
+<li>(a) What was the enrichment of uranium when the earth was formed?</li>
+<li>(b) How long ago was the enrichment 4% (by atoms, not mass)?</li>
+</ul>
+            </div>
+          </details>
+
+          <details class="problem-card">
+            <summary>
+              <span>Problem 2 [FNRP 1.13]</span>
+              <span class="fold-label">Show problem</span>
+            </summary>
+            <div class="problem-body">
+<p>Suppose that a specimen is placed in a reactor, and neutron bombardment causes a radioisotope to be produced at a rate of $2 \times 10^{12}$ nuclei/s. The radioisotope has a half-life of 2 weeks. How long should the specimen be irradiated to produce 25 Ci of the radioisotope?</p>
+            </div>
+          </details>
+
+          <details class="problem-card">
+            <summary>
+              <span>Problem 3 [FNRP 1.19]</span>
+              <span class="fold-label">Show problem</span>
+            </summary>
+            <div class="problem-body">
+<p>Consider the fission product chain</p>
+<p>$$
+A \xrightarrow{\beta} B \xrightarrow{\beta} C
+$$</p>
+<p>with decay constants $\lambda_A$ and $\lambda_B$. A reactor is started up at $t=0$ and produces fission product $A$ at a rate of $A_0$ thereafter. Assuming that $B$ and $C$ are not produced directly from fission:</p>
+<ul>
+<li>(a) Find $N_A(t)$ and $N_B(t)$.</li>
+<li>(b) What are $N_A(\infty)$ and $N_B(\infty)$?</li>
+</ul>
+            </div>
+          </details>
+        </div>
+      </details>
+  </main>
+
+  <script>
+    const details = Array.from(document.querySelectorAll("details"));
+    const originalPrintState = new Map();
+
+    document.getElementById("expand-all").addEventListener("click", () => {
+      details.forEach((item) => {
+        item.open = true;
+      });
+    });
+
+    document.getElementById("collapse-all").addEventListener("click", () => {
+      details.slice().reverse().forEach((item) => {
+        item.open = false;
+      });
+    });
+
+    window.addEventListener("beforeprint", () => {
+      details.forEach((item) => {
+        originalPrintState.set(item, item.open);
+        item.open = true;
+      });
+    });
+
+    window.addEventListener("afterprint", () => {
+      details.forEach((item) => {
+        item.open = originalPrintState.get(item);
+      });
+      originalPrintState.clear();
+    });
+  </script>
+</body>
+</html>

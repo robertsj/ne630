@@ -1,0 +1,265 @@
+\HandoutSetup
+  {NE 630}
+  {03}
+  {Radioactive Decay}
+  {Read FNRP Sections 1.6--1.7 and define the key terms before class.}
+
+\begin{document}
+\MakeHandoutTitle
+
+\begin{handoutcolumns}
+
+\begin{fixedbox}{Macro objective}
+Determine the amounts of a radioactive species and its daughters at any point
+in time from initial inventories, production rates, and decay constants.
+\end{fixedbox}
+
+\TermStrip{radioactivity; $\lambda$; half-life; mean lifetime; activity; Bq; Ci; initial-value problem; saturation; steady state; secular equilibrium}
+
+\HandoutSection{1}{Why radioactive species appear}
+
+\begin{fixedbox}{Fission-product bridge from Lesson 2}
+Fission fragments are neutron rich. Their $\beta^-$ decays produce delayed
+$\beta$, $\bar\nu$, and $\gamma$ energy. When a daughter state is formed above
+its neutron-separation energy, one decay branch can emit a delayed neutron:
+\scriptsize
+\begin{align*}
+{}^{87}_{35}\mathrm{Br}
+ &\xrightarrow[55.65\unit{s}]{\beta^-}
+ {}^{87}_{36}\mathrm{Kr}^{*}
+ \xrightarrow{n}{}^{86}_{36}\mathrm{Kr},\\[-1pt]
+{}^{137}_{53}\mathrm{I}
+ &\xrightarrow[24.5\unit{s}]{\beta^-}
+ {}^{137}_{54}\mathrm{Xe}^{*}
+ \xrightarrow{n}{}^{136}_{54}\mathrm{Xe}.
+\end{align*}
+\normalsize
+The notes give delayed-neutron energies of roughly
+\RevealBlank[0.80in]{$0.2$--$0.6\unit{MeV}$}. Neutron emission is a branch,
+not the result of every $\beta^-$ decay. Deposited $\beta$ and $\gamma$ energy
+drives spent-fuel decay heat; antineutrino energy escapes.
+\end{fixedbox}
+
+\HandoutSection{2}{The single-nuclide decay law}
+
+\begin{boardbox}{From a short-time probability to $N(t)$}
+For $N(t)$ radioactive nuclei,
+\[
+ \Delta N\approx-\lambda N(t)\Delta t
+ \quad\Longrightarrow\quad
+ \boxed{N'=-\lambda N},\qquad N(0)=N_0.
+\]
+Separate and integrate:
+\[
+ \frac{dN}{N}=-\lambda\,dt,
+ \qquad
+ \ln\!\frac{N(t)}{N_0}=\Blank[0.72in],
+\]
+\[
+ \boxed{N(t)=\MathBlank[1.25in]{N_0e^{-\lambda t}}}.
+\]
+Here $\lambda$ is the decay probability per unit time for one nucleus.
+\end{boardbox}
+
+\begin{checkpoint}[Half-life check]
+\[
+ \frac{N(nt_{1/2})}{N_0}=\MathBlank[0.72in]{2^{-n}},
+ \qquad
+ \frac{A(nt_{1/2})}{A_0}=\MathBlank[0.72in]{2^{-n}}.
+\]
+What assumptions make both ratios equal to $2^{-n}$?
+\RuledLines{1}
+\end{checkpoint}
+
+\switchcolumn
+
+\HandoutSection{3}{Clocks, number, mass, and activity}
+
+\begin{fixedbox}{Fixed relations and unit conversions}
+\[
+ \boxed{\lambda=\frac{\ln 2}{t_{1/2}}=\frac{1}{\bar t}},
+ \qquad
+ \boxed{A(t)=\lambda N(t)}.
+\]
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X@{}}
+number--mass & $N=(m/M)N_A$\\
+activity & decays per unit time\\
+Bq & $1\unit{Bq}=1\unit{s^{-1}}$\\
+Ci & $1\unit{Ci}=3.7\times10^{10}\unit{Bq}$
+\end{tabularx}
+\normalsize
+When there is no production, $A(t)=-dN/dt$. Thus, for a pure radionuclide,
+\[
+ m\ \xrightarrow{\div M}\ \mathrm{mol}
+ \ \xrightarrow{\times N_A}\ N
+ \ \xrightarrow{\times\lambda}\ A.
+\]
+\end{fixedbox}
+
+\begin{checkpoint}[Reverse the conversion route]
+Express the radionuclide mass in terms of measured activity:
+\[
+ m=\MathBlank[2.05in]{\frac{AM}{\lambda N_A}}.
+\]
+List the units you would use for each quantity.
+\end{checkpoint}
+
+\HandoutSection{4}{Production and saturation}
+
+\begin{boardbox}{Decay with a source and saturation}
+\footnotesize
+If nuclei are added at rate $R(t)$,
+\[
+ \boxed{N'=-\lambda N+R(t)},\qquad N(t_0)\ \text{given}.
+\]
+The integrating factor $e^{\lambda t}$ gives
+\[
+ \frac{d}{dt}\!\left(Ne^{\lambda t}\right)=R(t)e^{\lambda t},
+\]
+\[
+ \boxed{\begin{aligned}
+ N(t)={}&N(t_0)e^{-\lambda(t-t_0)}\\[-2pt]
+ &+\int_{t_0}^{t}R(t')e^{-\lambda(t-t')}\,dt'.
+ \end{aligned}}
+\]
+For $R(t)=R_0$ and $t_0=0$,
+\[
+ \boxed{N(t)=N_0e^{-\lambda t}
+ +\frac{R_0}{\lambda}\left(1-e^{-\lambda t}\right)}.
+\]
+For $N_0=0$,
+\[
+ \begin{aligned}
+ A(t)&=\MathBlank[1.30in]{R_0(1-e^{-\lambda t})},\\[-2pt]
+ N_{\mathrm{sat}}&=\MathBlank[0.60in]{R_0/\lambda},\qquad
+ A_{\mathrm{sat}}=\MathBlank[0.46in]{R_0}.
+ \end{aligned}
+\]
+After $n$ half-lives, $A/A_{\mathrm{sat}}=1-2^{-n}$; one, three, five, and
+seven half-lives give 50\%, 87.5\%, 96.9\%, and 99.2\% of saturation.
+\normalsize
+\end{boardbox}
+
+\end{handoutcolumns}
+
+\newpage
+\begin{handoutcolumns}
+
+\HandoutSection{5}{The $A=94$ fission-product chain}
+
+\begin{fixedbox}{Chain and initial data from the notes}
+\[
+{}^{94}_{38}\mathrm{Sr}
+ \xrightarrow[75\unit{s}]{\beta^-}
+{}^{94}_{39}\mathrm{Y}
+ \xrightarrow[18.7\unit{min}]{\beta^-}
+{}^{94}_{40}\mathrm{Zr}\quad(\text{stable}).
+\]
+Assume $N_{\mathrm{Sr}}(0)=N_0$,
+$N_{\mathrm{Y}}(0)=N_{\mathrm{Zr}}(0)=0$, and no production after $t=0$.
+\end{fixedbox}
+
+\begin{boardbox}{Balance each nuclide}
+\begin{align*}
+ N_{\mathrm{Sr}}'&=-\lambda_{\mathrm{Sr}}N_{\mathrm{Sr}},\\
+ N_{\mathrm{Y}}'&=\lambda_{\mathrm{Sr}}N_{\mathrm{Sr}}
+                  -\lambda_{\mathrm{Y}}N_{\mathrm{Y}},\\
+ N_{\mathrm{Zr}}'&=\lambda_{\mathrm{Y}}N_{\mathrm{Y}}.
+\end{align*}
+Label each term as a gain or loss.  Why can this one-way chain be solved from
+the parent downstream?
+\RuledLines{1}
+\end{boardbox}
+
+\begin{fixedbox}{Sequential solution}
+\[
+ N_{\mathrm{Sr}}(t)=N_0e^{-\lambda_{\mathrm{Sr}}t},
+\]
+\[
+ N_{\mathrm{Y}}(t)
+ =\frac{\lambda_{\mathrm{Sr}}N_0}
+ {\lambda_{\mathrm{Y}}-\lambda_{\mathrm{Sr}}}
+ \left(e^{-\lambda_{\mathrm{Sr}}t}-e^{-\lambda_{\mathrm{Y}}t}\right),
+\]
+\[
+ \begin{aligned}
+ N_{\mathrm{Zr}}(t)
+ &=\int_0^t\lambda_{\mathrm{Y}}N_{\mathrm{Y}}(t')\,dt'\\[-1pt]
+ &=N_0-N_{\mathrm{Sr}}(t)-N_{\mathrm{Y}}(t).
+ \end{aligned}
+\]
+The last line also follows from conservation of the $A=94$ nuclei.
+\end{fixedbox}
+
+\begin{checkpoint}[Inventory after one hour]
+At $t=1\unit{h}$,
+\[
+ \frac{N_{\mathrm{Sr}}}{N_0}=\MathBlank[0.52in]{3.6\times10^{-15}},\quad
+ \frac{N_{\mathrm{Y}}}{N_0}=\MathBlank[0.52in]{0.116},\quad
+ \frac{N_{\mathrm{Zr}}}{N_0}=\MathBlank[0.52in]{0.884}.
+\]
+Which half-life controls the long-time approach to stable zirconium?
+\RuledLines{1}
+\end{checkpoint}
+
+\switchcolumn
+
+\HandoutSection{6}{General chains and equilibrium}
+
+\begin{fixedbox}{One-way chain with production}
+For species $i=0,1,\ldots$,
+\[
+ \boxed{N_i'
+ =-\lambda_iN_i
+ +\lambda_{i-1}N_{i-1}
+ +R_i(t)},
+ \qquad \lambda_{-1}N_{-1}\equiv0.
+\]
+Read each equation as
+\[
+ \text{rate of change}=\text{parent gain}+\text{external gain}-\text{decay loss}.
+\]
+Initial values $N_i(0)$ complete the system.  Solve the first equation, insert
+it into the second, and continue downstream.  Branching ratios multiply the
+corresponding parent-gain terms.
+\end{fixedbox}
+
+\begin{boardbox}{FNRP extension: secular equilibrium}
+For a parent $1$ and daughter $2$ with $N_1(0)=N_{1,0}$, $N_2(0)=0$, no direct
+sources, and a 100\% parent-to-daughter branch,
+\[
+ N_2(t)=\frac{\lambda_1N_{1,0}}{\lambda_2-\lambda_1}
+ \left(e^{-\lambda_1t}-e^{-\lambda_2t}\right).
+\]
+If $\lambda_1\ll\lambda_2$, then after several daughter half-lives but before
+the parent changes appreciably,
+\[
+ A_2(t)\approx\MathBlank[0.66in]{A_1(t)},
+ \qquad
+ \frac{N_2}{N_1}\approx\MathBlank[0.82in]{\frac{\lambda_1}{\lambda_2}}.
+\]
+Explain why equal activities do not imply equal inventories.
+\RuledLines{1}
+\end{boardbox}
+
+\begin{fixedbox}{Steady state versus secular equilibrium}
+\textbf{Steady state:} production balances removal for one species, so
+$N'=0$ and its inventory is constant.\par
+\smallskip
+\textbf{Secular equilibrium:} a short-lived daughter tracks a much
+longer-lived parent, so their activities are approximately equal while both
+may vary slowly.
+\end{fixedbox}
+
+\begin{takeawaybox}[Choose the model before solving]
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X@{}}
+no source, one species & $N'=-\lambda N$\\
+source, one species & $N'=-\lambda N+R(t)$\\
+one-way chain & coupled gain--loss equations\\
+long-lived parent & test for secular equilibrium
+\end{tabularx}
+\end{takeawaybox}
+
+\end{handoutcolumns}
+\end{document}

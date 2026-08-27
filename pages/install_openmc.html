@@ -1,11 +1,39 @@
-<h1 id="installing-openmc-on-beocat">Installing OpenMC on Beocat</h1>
-<p>In the the terminal, do</p>
-<pre><code>conda create --name openmc-env -y
-conda activate openmc-env
-conda install -c conda-forge mamba -y
-mamba install -c conda-forge openmc -y
-mamba install jupyter -y
-pip install nbclassic</code></pre>
-<p>These will take several minutes!</p>
-<p>In all OpenMC notebooks, add</p>
-<pre><code>openmc.config[&quot;cross_sections&quot;] = &quot;/homes/jaroberts/data/cross_sections.xml&quot;</code></pre>
+<h1 id="installing-openmc-for-ne-630-on-windows">Installing OpenMC for
+NE 630 on Windows</h1>
+<p>Use the OpenMC Class Windows installer provided for this course. It
+installs OpenMC, Python, JupyterLab, the scientific Python packages we
+will use, and the course nuclear data in one local environment.</p>
+<h2 id="install">Install</h2>
+<ol type="1">
+<li><p>Download <code>OpenMC-Class-2026.1.dev0-Windows-x86_64.exe</code>
+from the course Canvas site.</p></li>
+<li><p>Run the installer.</p></li>
+<li><p>Select <strong>Just Me</strong> unless you have a specific reason
+to install for all users.</p></li>
+<li><p>Keep the default install location:</p>
+<pre><code>%LOCALAPPDATA%\OpenMC-Class</code></pre></li>
+<li><p>Leave <strong>Create shortcuts</strong> and <strong>Run the
+post-install script</strong> checked.</p></li>
+<li><p>Click <strong>Install</strong> and wait for the setup wizard to
+finish. This can take several minutes.</p></li>
+</ol>
+<h2 id="start-openmc">Start OpenMC</h2>
+<p>After installation, open <strong>OpenMC JupyterLab</strong> from the
+Windows Start menu. Use that JupyterLab shortcut for course
+notebooks.</p>
+<p>The installer configures the bundled course nuclear data
+automatically. When using this installer, you do not need to add a
+manual <code>cross_sections.xml</code> path to your notebooks.</p>
+<h2 id="quick-check">Quick Check</h2>
+<p>In a new notebook, run:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openmc</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(openmc.__version__)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(os.environ.get(<span class="st">&quot;OPENMC_CROSS_SECTIONS&quot;</span>))</span></code></pre></div>
+<p>The second line should print a path inside your
+<code>OpenMC-Class</code> installation.</p>
+<p>If you see a command-window prompt that says no OpenMC nuclear data
+path is configured, stop and ask for help before running course
+examples.</p>

@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NE 630 Objective Mapping: Lessons 01-03</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f4;
+      --panel: #ffffff;
+      --ink: #202124;
+      --muted: #61666c;
+      --line: #d9dedb;
+      --line-strong: #aeb8b3;
+      --accent: #176b70;
+      --accent-soft: #d8eeee;
+      --accent-mid: #87c5c2;
+      --book-lewis: #2d6cdf;
+      --book-dhnra: #b35f00;
+      --book-lamarsh: #6f4bb2;
+      --warn: #bc6c25;
+      --shadow: 0 8px 24px rgba(22, 32, 38, 0.08);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: #fbfbf9;
+    }
+
+    .wrap {
+      width: min(1420px, calc(100vw - 40px));
+      margin: 0 auto;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: end;
+      padding: 24px 0 18px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(92px, 1fr));
+      gap: 8px;
+      min-width: 420px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 9px 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    main {
+      padding: 18px 0 30px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: auto auto minmax(240px, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .segmented, .search {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      min-height: 38px;
+    }
+
+    .segmented {
+      display: inline-flex;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      min-height: 30px;
+      padding: 0 10px;
+    }
+
+    button.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 8px;
+    }
+
+    .search span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfbf9;
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .matrix-wrap {
+      overflow: auto;
+      max-height: calc(100vh - 205px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 880px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #fbfbf9;
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td {
+      padding: 8px;
+    }
+
+    .objective-cell {
+      width: 34%;
+      min-width: 290px;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+
+    .objective-id {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .lesson-pill {
+      border-radius: 5px;
+      background: var(--accent-soft);
+      color: #174f52;
+      padding: 2px 6px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .objective-text {
+      margin-top: 6px;
+      color: #33383d;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    tr.selected .objective-cell {
+      background: #eef7f6;
+      box-shadow: inset 4px 0 0 var(--accent);
+    }
+
+    .book-cell {
+      width: 22%;
+      min-width: 170px;
+    }
+
+    .heat {
+      min-height: 52px;
+      border-radius: 7px;
+      border: 1px solid transparent;
+      padding: 7px;
+      cursor: pointer;
+    }
+
+    .heat:hover {
+      border-color: var(--line-strong);
+    }
+
+    .count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .exercise-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(0, 0, 0, 0.07);
+      padding: 2px 5px;
+      font-size: 11px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .empty {
+      color: #a0a6a8;
+      font-size: 13px;
+      padding: 8px;
+    }
+
+    .detail {
+      position: sticky;
+      top: 14px;
+    }
+
+    .detail-body {
+      padding: 14px;
+    }
+
+    .detail-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    .detail-text {
+      color: #343a3f;
+      font-size: 13px;
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+
+    .detail-section {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .detail-section h3 {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .edge-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px;
+      margin-bottom: 8px;
+    }
+
+    .edge-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .basis {
+      color: #3c4248;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 7px;
+    }
+
+    .tag {
+      border-radius: 5px;
+      background: #f1eee8;
+      color: #59432b;
+      padding: 2px 5px;
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    .network {
+      display: none;
+      min-height: 680px;
+      overflow: auto;
+    }
+
+    svg {
+      display: block;
+      min-width: 1000px;
+      width: 100%;
+      height: auto;
+      background: #ffffff;
+    }
+
+    .node rect {
+      rx: 7;
+      ry: 7;
+      stroke: var(--line-strong);
+    }
+
+    .node text {
+      fill: var(--ink);
+      font-size: 12px;
+      dominant-baseline: middle;
+    }
+
+    .node .sub {
+      fill: var(--muted);
+      font-size: 10px;
+    }
+
+    .edge {
+      fill: none;
+      stroke: rgba(33, 72, 86, 0.22);
+      stroke-width: 1.4;
+    }
+
+    .edge.highlight {
+      stroke: var(--accent);
+      stroke-width: 2.4;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .swatch {
+      width: 13px;
+      height: 13px;
+      border-radius: 4px;
+      display: inline-block;
+      vertical-align: -2px;
+      margin-right: 4px;
+    }
+
+    .source-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .top, .toolbar, .layout {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        min-width: 0;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .detail {
+        position: static;
+      }
+      .matrix-wrap {
+        max-height: none;
+      }
+      .wrap {
+        width: min(100vw - 24px, 1420px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap top">
+      <div>
+        <h1>NE 630 Objective Mapping: Lessons 01-03</h1>
+        <p class="subtitle">Direct exercise alignments, coverage density, and reusable orthogonal tags.</p>
+      </div>
+      <div class="stats" aria-label="Mapping statistics">
+        <div class="stat"><strong id="stat-objectives">0</strong><span>Objectives</span></div>
+        <div class="stat"><strong id="stat-exercises">0</strong><span>Exercises</span></div>
+        <div class="stat"><strong id="stat-edges">0</strong><span>Edges</span></div>
+        <div class="stat"><strong id="stat-tags">0</strong><span>Tags</span></div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="wrap">
+      <div class="toolbar">
+        <div class="segmented" id="lesson-controls" aria-label="Lesson filter"></div>
+        <div class="segmented" id="view-controls" aria-label="View selector">
+          <button type="button" data-view="matrix" class="active">Matrix</button>
+          <button type="button" data-view="network">Network</button>
+        </div>
+        <label class="search" for="search-box"><span>Search</span><input id="search-box" type="search" placeholder="objective, exercise, book, tag"></label>
+        <div class="segmented" id="book-controls" aria-label="Book filter"></div>
+      </div>
+
+      <div class="layout">
+        <section class="panel">
+          <div class="panel-head">
+            <h2 id="primary-title">Coverage Matrix</h2>
+            <span class="small" id="visible-count"></span>
+          </div>
+          <div class="matrix-wrap" id="matrix-wrap">
+            <table id="matrix-table"></table>
+          </div>
+          <div class="network" id="network-wrap">
+            <svg id="network-svg" role="img" aria-label="Objective to exercise network"></svg>
+          </div>
+          <div class="legend">
+            <span><span class="swatch" style="background:#e8f5f4"></span>Light coverage</span>
+            <span><span class="swatch" style="background:#87c5c2"></span>Moderate coverage</span>
+            <span><span class="swatch" style="background:#176b70"></span>Dense coverage</span>
+            <span><span class="swatch" style="background:#f1eee8"></span>Orthogonal tag</span>
+          </div>
+        </section>
+
+        <aside class="panel detail">
+          <div class="panel-head">
+            <h2>Selected Objective</h2>
+            <span class="small" id="detail-count"></span>
+          </div>
+          <div class="detail-body" id="detail-body"></div>
+        </aside>
+      </div>
+      <p class="source-note">Generated from <code>lesson_01_03_catalog.yml</code> and <code>lesson_01_03_exercise_edges.psv</code>.</p>
+    </div>
+  </main>
+  <script id="mapping-data" type="application/json">{"objectives": [{"id": "L01.MACRO", "lesson": "L01", "level": "macro", "text": "Determine and quantify the reactants, products, and energy inputs/outputs of nuclear reactions."}, {"id": "L01.M01", "lesson": "L01", "level": "micro", "text": "Compare the energy densities of different reaction types."}, {"id": "L01.M02", "lesson": "L01", "level": "micro", "text": "Compute the total energy of a particle of rest mass m0 with a speed v."}, {"id": "L01.M03", "lesson": "L01", "level": "micro", "text": "Explain the nomenclature A_Z X."}, {"id": "L01.M04", "lesson": "L01", "level": "micro", "text": "Provide an example of a binary nuclear reaction of the form A(B,C)D."}, {"id": "L01.M05", "lesson": "L01", "level": "micro", "text": "Compute the Q value for A(B,C)D."}, {"id": "L01.M06", "lesson": "L01", "level": "micro", "text": "Provide an example of radioactive decay of the form A -> B + C."}, {"id": "L01.M07", "lesson": "L01", "level": "micro", "text": "Demonstrate that the kinematics of neutrons with energies below about 10 MeV can be well approximated classically."}, {"id": "L01.M08", "lesson": "L01", "level": "micro", "text": "Compute the mass defect of A_Z X."}, {"id": "L01.M09", "lesson": "L01", "level": "micro", "text": "Compute the binding energy per nucleon of A_Z X."}, {"id": "L01.M10", "lesson": "L01", "level": "micro", "text": "Explain how Q values relate to decay."}, {"id": "L02.MACRO", "lesson": "L02", "level": "macro", "text": "Characterize the neutron population and energy produced as a function of time in terms of the neutron lifetime, the energy released from fission, and the multiplication factor k."}, {"id": "L02.M01", "lesson": "L02", "level": "micro", "text": "Provide an example fission reaction and compute its Q value."}, {"id": "L02.M02", "lesson": "L02", "level": "micro", "text": "List three forms of nuclear power."}, {"id": "L02.M03", "lesson": "L02", "level": "micro", "text": "List the type and fraction of particles emitted from fission."}, {"id": "L02.M04", "lesson": "L02", "level": "micro", "text": "Construct a mathematical model for the multiplication of neutrons."}, {"id": "L02.M05", "lesson": "L02", "level": "micro", "text": "Explain criticality, subcriticality, and supercriticality."}, {"id": "L02.M06", "lesson": "L02", "level": "micro", "text": "Estimate the heat generation rate of spent nuclear fuel."}, {"id": "L02.M07", "lesson": "L02", "level": "micro", "text": "Compare fissile and fertile materials."}, {"id": "L02.M08", "lesson": "L02", "level": "micro", "text": "List the major fissile and fertile nuclides."}, {"id": "L02.M09", "lesson": "L02", "level": "micro", "text": "Explain why fission products are neutron rich."}, {"id": "L02.M10", "lesson": "L02", "level": "micro", "text": "Describe the trend of stable nuclei as functions of Z and A."}, {"id": "L03.MACRO", "lesson": "L03", "level": "macro", "text": "Determine the amounts of a radioactive species and its daughters at any point in time given initial amounts."}, {"id": "L03.M01", "lesson": "L03", "level": "micro", "text": "Convert t_1/2 to mean lifetime and lambda."}, {"id": "L03.M02", "lesson": "L03", "level": "micro", "text": "Solve N' = -lambda N(t), N(0) given."}, {"id": "L03.M03", "lesson": "L03", "level": "micro", "text": "Solve N' = -lambda N(t) + R(t), N(0) and R(t) given."}, {"id": "L03.M04", "lesson": "L03", "level": "micro", "text": "Convert between Ci, Bq, kg, and number or moles."}, {"id": "L03.M05", "lesson": "L03", "level": "micro", "text": "Describe saturation activity and how long it takes to achieve."}, {"id": "L03.M06", "lesson": "L03", "level": "micro", "text": "Solve multi-member radioactive-chain systems with production terms."}, {"id": "L03.M07", "lesson": "L03", "level": "micro", "text": "Describe secular equilibrium."}], "orthogonal": [{"id": "ORTHO_ATOM_DENSITY_COMPOSITION", "text": "Convert material density, isotopic abundance, enrichment, or chemical composition to atom densities."}, {"id": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "text": "Use microscopic or macroscopic cross sections, flux, and target density to compute reaction rates."}, {"id": "ORTHO_DECAY_HEAT_WAY_WIGNER", "text": "Use empirical fission-product decay heat correlations or delayed heat-release models."}, {"id": "ORTHO_DELAYED_NEUTRON_KINETICS", "text": "Model delayed neutron precursors and reactor periods beyond the simple generation model."}, {"id": "ORTHO_ENRICHMENT_ISOTOPICS", "text": "Reason about enrichment, isotopic mixtures, atom fractions, and changing isotopic abundance."}, {"id": "ORTHO_FISSION_PRODUCT_POISONS", "text": "Model xenon, samarium, iodine, promethium, or other reactor poison inventories and worth."}, {"id": "ORTHO_FISSION_SPECTRA_DISTRIBUTIONS", "text": "Work with prompt fission spectra, yields, averages, or distribution integrals."}, {"id": "ORTHO_FUEL_CYCLE_BURNUP", "text": "Analyze conversion ratio, breeding, burnup, fuel lifetime, fissile production, or depletion."}, {"id": "ORTHO_MATERIALS_DATA_LOOKUP", "text": "Use tabulated nuclear masses, cross sections, yields, or reactor design data."}, {"id": "ORTHO_NEUTRON_KINEMATICS_CM_LAB", "text": "Transform between center-of-mass and laboratory frames or compute reaction/scattering kinematics."}, {"id": "ORTHO_NUMERICAL_PLOTTING", "text": "Plot or numerically evaluate a physics function as part of the exercise."}, {"id": "ORTHO_REACTIVITY_CONTROL", "text": "Compute reactivity, control worth, shutdown margin, poison worth, or feedback effects."}, {"id": "ORTHO_REACTOR_CRITICALITY_DESIGN", "text": "Compute critical size, critical composition, nonleakage, or other reactor design criticality quantities."}, {"id": "ORTHO_REACTOR_POWER_CONVERSION", "text": "Convert between thermal power, electrical output, fission rate, efficiency, and fuel consumption."}, {"id": "ORTHO_REACTOR_THERMAL_HYDRAULICS", "text": "Relate reactor power to temperature, heat removal, or coolant behavior."}, {"id": "ORTHO_RESONANCE_NUCLEAR_STRUCTURE", "text": "Interpret resonance widths, excited states, compound-nucleus levels, or threshold structure."}, {"id": "ORTHO_SHIELDING_ATTENUATION", "text": "Use attenuation, mean free paths, shielding thickness, or source geometry."}, {"id": "ORTHO_TRANSPORT_DIFFUSION", "text": "Use transport, diffusion, leakage, flux-shape, or source-response models."}, {"id": "ORTHO_UNIT_CONVERSIONS", "text": "Convert between time, activity, mass, power, energy, fluence, counts, and SI or reactor units."}], "edges": [{"objective_id": "L01.MACRO", "book": "Lewis", "exercise_id": "1.3", "problem_path": "books/Lewis/chapter_1_problem_3.md", "direct_basis": "Completes nuclear reactions by conserving A and Z", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.MACRO", "book": "DHNRA", "exercise_id": "2.1", "problem_path": "books/DHNRA/chapter_2_problem_1.md", "direct_basis": "Infers reactants needed to form a compound nucleus", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.MACRO", "book": "Lamarsh", "exercise_id": "1.11", "problem_path": "books/Lamarsh/chapter_1_problem_11.md", "direct_basis": "Completes reactions and computes Q values from masses", "orthogonal_objectives": "ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.MACRO", "book": "Lamarsh", "exercise_id": "2.29", "problem_path": "books/Lamarsh/chapter_2_problem_29.md", "direct_basis": "Uses reaction mass balances and Q values to compute thresholds", "orthogonal_objectives": "ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M01", "book": "Lewis", "exercise_id": "1.6", "problem_path": "books/Lewis/chapter_1_problem_6.md", "direct_basis": "Compares mass-energy conversion for fission and chemical combustion", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M01", "book": "Lamarsh", "exercise_id": "3.11", "problem_path": "books/Lamarsh/chapter_3_problem_11.md", "direct_basis": "Converts fission energy per event into fuel consumed for useful work", "orthogonal_objectives": "ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M01", "book": "Lamarsh", "exercise_id": "3.12", "problem_path": "books/Lamarsh/chapter_3_problem_12.md", "direct_basis": "Derives energy released per metric ton of fuel consumed", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M02", "book": "Lewis", "exercise_id": "1.5", "problem_path": "books/Lewis/chapter_1_problem_5.md", "direct_basis": "Compares relativistic and nonrelativistic kinetic energy for a fission neutron", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M02", "book": "Lamarsh", "exercise_id": "1.6", "problem_path": "books/Lamarsh/chapter_1_problem_6.md", "direct_basis": "Derives neutron speed from kinetic energy using the classical low-energy limit", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M03", "book": "Lewis", "exercise_id": "1.1", "problem_path": "books/Lewis/chapter_1_problem_1.md", "direct_basis": "Asks for element symbols and names from isotope notation", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M03", "book": "Lewis", "exercise_id": "1.2", "problem_path": "books/Lewis/chapter_1_problem_2.md", "direct_basis": "Requires interpreting A and Z notation to complete decay reactions", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M03", "book": "Lewis", "exercise_id": "1.3", "problem_path": "books/Lewis/chapter_1_problem_3.md", "direct_basis": "Requires interpreting A and Z notation to complete reactions", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M03", "book": "Lewis", "exercise_id": "1.4", "problem_path": "books/Lewis/chapter_1_problem_4.md", "direct_basis": "Uses projectile and compound-nucleus notation to identify target isotopes", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M03", "book": "Lewis", "exercise_id": "1.7", "problem_path": "books/Lewis/chapter_1_problem_7.md", "direct_basis": "Tracks isotope identity after neutron capture and beta decay", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M03", "book": "DHNRA", "exercise_id": "2.1", "problem_path": "books/DHNRA/chapter_2_problem_1.md", "direct_basis": "Uses A and Z notation to identify target isotopes", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M03", "book": "Lamarsh", "exercise_id": "1.11", "problem_path": "books/Lamarsh/chapter_1_problem_11.md", "direct_basis": "Uses nuclide and reaction notation throughout reaction completion", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "Lewis", "exercise_id": "1.3", "problem_path": "books/Lewis/chapter_1_problem_3.md", "direct_basis": "Completes binary nuclear reactions written with projectiles and products", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "Lewis", "exercise_id": "1.4", "problem_path": "books/Lewis/chapter_1_problem_4.md", "direct_basis": "Identifies targets for projectile-induced compound-nucleus formation", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "Lewis", "exercise_id": "1.12", "problem_path": "books/Lewis/chapter_1_problem_12.md", "direct_basis": "Connects alpha decay to a Be alpha-n neutron source reaction", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "DHNRA", "exercise_id": "2.1", "problem_path": "books/DHNRA/chapter_2_problem_1.md", "direct_basis": "Identifies target isotopes for neutron proton and alpha projectiles", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "Lamarsh", "exercise_id": "1.11", "problem_path": "books/Lamarsh/chapter_1_problem_11.md", "direct_basis": "Completes several A(B,C)D-style reactions", "orthogonal_objectives": "ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "Lamarsh", "exercise_id": "1.15", "problem_path": "books/Lamarsh/chapter_1_problem_15.md", "direct_basis": "Uses a deuteron-induced sodium activation reaction", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "Lamarsh", "exercise_id": "2.13", "problem_path": "books/Lamarsh/chapter_2_problem_13.md", "direct_basis": "Analyzes the H3(d,n)He4 binary reaction", "orthogonal_objectives": "ORTHO_NEUTRON_KINEMATICS_CM_LAB", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "Lamarsh", "exercise_id": "2.15", "problem_path": "books/Lamarsh/chapter_2_problem_15.md", "direct_basis": "Uses the B10(d,p)B11 reaction to infer excited-state energies", "orthogonal_objectives": "ORTHO_RESONANCE_NUCLEAR_STRUCTURE;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "Lamarsh", "exercise_id": "2.16", "problem_path": "books/Lamarsh/chapter_2_problem_16.md", "direct_basis": "Uses Li7(n,2n) and related reaction thresholds", "orthogonal_objectives": "ORTHO_RESONANCE_NUCLEAR_STRUCTURE;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M04", "book": "Lamarsh", "exercise_id": "2.29", "problem_path": "books/Lamarsh/chapter_2_problem_29.md", "direct_basis": "Lists multiple threshold reactions in compact reaction notation", "orthogonal_objectives": "ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M05", "book": "Lamarsh", "exercise_id": "1.11", "problem_path": "books/Lamarsh/chapter_1_problem_11.md", "direct_basis": "Directly asks for Q values of completed reactions", "orthogonal_objectives": "ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M05", "book": "Lamarsh", "exercise_id": "2.10", "problem_path": "books/Lamarsh/chapter_2_problem_10.md", "direct_basis": "Interprets Q value as kinetic-energy difference in another frame", "orthogonal_objectives": "ORTHO_NEUTRON_KINEMATICS_CM_LAB", "review_status": "draft_curated"}, {"objective_id": "L01.M05", "book": "Lamarsh", "exercise_id": "2.13", "problem_path": "books/Lamarsh/chapter_2_problem_13.md", "direct_basis": "Computes emergent neutron energies using the reaction Q value", "orthogonal_objectives": "ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M05", "book": "Lamarsh", "exercise_id": "2.15", "problem_path": "books/Lamarsh/chapter_2_problem_15.md", "direct_basis": "Uses a given reaction Q value to place compound-nucleus levels", "orthogonal_objectives": "ORTHO_RESONANCE_NUCLEAR_STRUCTURE", "review_status": "draft_curated"}, {"objective_id": "L01.M05", "book": "Lamarsh", "exercise_id": "2.16", "problem_path": "books/Lamarsh/chapter_2_problem_16.md", "direct_basis": "Uses threshold and binding energy information tied to reaction Q values", "orthogonal_objectives": "ORTHO_RESONANCE_NUCLEAR_STRUCTURE;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M05", "book": "Lamarsh", "exercise_id": "2.29", "problem_path": "books/Lamarsh/chapter_2_problem_29.md", "direct_basis": "Computes Q values and threshold energies from mass tables", "orthogonal_objectives": "ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M05", "book": "Lamarsh", "exercise_id": "3.2", "problem_path": "books/Lamarsh/chapter_3_problem_2.md", "direct_basis": "Uses a fission Q value to estimate the critical fission energy", "orthogonal_objectives": "ORTHO_RESONANCE_NUCLEAR_STRUCTURE", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "Lewis", "exercise_id": "1.2", "problem_path": "books/Lewis/chapter_1_problem_2.md", "direct_basis": "Completes particle-emission decay reactions", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "Lewis", "exercise_id": "1.3", "problem_path": "books/Lewis/chapter_1_problem_3.md", "direct_basis": "Completes a beta-minus decay reaction", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "Lewis", "exercise_id": "1.7", "problem_path": "books/Lewis/chapter_1_problem_7.md", "direct_basis": "Tracks beta decay after neutron captures", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "Lewis", "exercise_id": "1.12", "problem_path": "books/Lewis/chapter_1_problem_12.md", "direct_basis": "Uses Ra-226 alpha decay as part of a neutron-source chain", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "Lewis", "exercise_id": "1.19", "problem_path": "books/Lewis/chapter_1_problem_19.md", "direct_basis": "Uses Po-210 alpha decay to compute activity and heat", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "DHNRA", "exercise_id": "2.2", "problem_path": "books/DHNRA/chapter_2_problem_2.md", "direct_basis": "Uses radioactive delayed-neutron emission as an exponential decay process", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "DHNRA", "exercise_id": "2.8", "problem_path": "books/DHNRA/chapter_2_problem_8.md", "direct_basis": "Uses free-neutron beta decay as the radioactive process", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "DHNRA", "exercise_id": "2.19", "problem_path": "books/DHNRA/chapter_2_problem_19.md", "direct_basis": "Describes beta decay of neutron-rich fission products", "orthogonal_objectives": "ORTHO_FISSION_SPECTRA_DISTRIBUTIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "Lamarsh", "exercise_id": "1.13", "problem_path": "books/Lamarsh/chapter_1_problem_13.md", "direct_basis": "Uses post-irradiation radioactive decay of activated indium", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "Lamarsh", "exercise_id": "1.15", "problem_path": "books/Lamarsh/chapter_1_problem_15.md", "direct_basis": "Uses production and decay of Na-24 after activation", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "Lamarsh", "exercise_id": "1.17", "problem_path": "books/Lamarsh/chapter_1_problem_17.md", "direct_basis": "Models the radioactive chain A -> B -> C", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M06", "book": "Lamarsh", "exercise_id": "2.7", "problem_path": "books/Lamarsh/chapter_2_problem_7.md", "direct_basis": "Uses neutron radioactive decay competing with absorption", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L01.M07", "book": "Lewis", "exercise_id": "1.5", "problem_path": "books/Lewis/chapter_1_problem_5.md", "direct_basis": "Quantifies the small error from classical neutron kinematics at 2 MeV", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M07", "book": "Lamarsh", "exercise_id": "1.6", "problem_path": "books/Lamarsh/chapter_1_problem_6.md", "direct_basis": "Derives the classical neutron speed-energy relation for MeV energies", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L01.M08", "book": "Lewis", "exercise_id": "1.6", "problem_path": "books/Lewis/chapter_1_problem_6.md", "direct_basis": "Converts mass difference to energy release fraction", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M08", "book": "Lamarsh", "exercise_id": "1.9", "problem_path": "books/Lamarsh/chapter_1_problem_9.md", "direct_basis": "Computes neutron separation energies from mass differences", "orthogonal_objectives": "ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M08", "book": "Lamarsh", "exercise_id": "1.10", "problem_path": "books/Lamarsh/chapter_1_problem_10.md", "direct_basis": "Computes total binding energy from mass defects", "orthogonal_objectives": "ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M08", "book": "Lamarsh", "exercise_id": "1.11", "problem_path": "books/Lamarsh/chapter_1_problem_11.md", "direct_basis": "Computes reaction Q values from mass differences", "orthogonal_objectives": "ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M08", "book": "Lamarsh", "exercise_id": "2.29", "problem_path": "books/Lamarsh/chapter_2_problem_29.md", "direct_basis": "Uses mass differences to compute reaction thresholds", "orthogonal_objectives": "ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M09", "book": "Lamarsh", "exercise_id": "1.10", "problem_path": "books/Lamarsh/chapter_1_problem_10.md", "direct_basis": "Directly computes binding energy per nucleon for several nuclides", "orthogonal_objectives": "ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M10", "book": "Lewis", "exercise_id": "1.19", "problem_path": "books/Lewis/chapter_1_problem_19.md", "direct_basis": "Relates alpha-decay energy to radioactive heat output", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L01.M10", "book": "Lamarsh", "exercise_id": "1.11", "problem_path": "books/Lamarsh/chapter_1_problem_11.md", "direct_basis": "Uses sign and magnitude of Q to classify reaction energetics", "orthogonal_objectives": "ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M10", "book": "Lamarsh", "exercise_id": "2.29", "problem_path": "books/Lamarsh/chapter_2_problem_29.md", "direct_basis": "Connects negative Q values to reaction thresholds", "orthogonal_objectives": "ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L01.M10", "book": "Lamarsh", "exercise_id": "3.2", "problem_path": "books/Lamarsh/chapter_3_problem_2.md", "direct_basis": "Relates fission Q value to the extra excitation needed for fission", "orthogonal_objectives": "ORTHO_RESONANCE_NUCLEAR_STRUCTURE", "review_status": "draft_curated"}, {"objective_id": "L02.MACRO", "book": "Lewis", "exercise_id": "1.9", "problem_path": "books/Lewis/chapter_1_problem_9.md", "direct_basis": "Computes fission-product decay heat versus time after shutdown", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER", "review_status": "draft_curated"}, {"objective_id": "L02.MACRO", "book": "Lewis", "exercise_id": "5.4", "problem_path": "books/Lewis/chapter_5_problem_4.md", "direct_basis": "Uses prompt neutron lifetime and reactivity to control power growth", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.MACRO", "book": "DHNRA", "exercise_id": "2.20", "problem_path": "books/DHNRA/chapter_2_problem_20.md", "direct_basis": "Converts fission rate density to thermal power density", "orthogonal_objectives": "ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L02.MACRO", "book": "DHNRA", "exercise_id": "3.9", "problem_path": "books/DHNRA/chapter_3_problem_9.md", "direct_basis": "Models neutron population with a source for k less than equal to or greater than 1", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L02.MACRO", "book": "Lamarsh", "exercise_id": "3.11", "problem_path": "books/Lamarsh/chapter_3_problem_11.md", "direct_basis": "Uses energy per fission to connect reactor power and fuel consumption", "orthogonal_objectives": "ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L02.MACRO", "book": "Lamarsh", "exercise_id": "12.1", "problem_path": "books/Lamarsh/chapter_12_problem_1.md", "direct_basis": "Computes prompt neutron lifetime in infinite thermal reactors", "orthogonal_objectives": "ORTHO_TRANSPORT_DIFFUSION", "review_status": "draft_curated"}, {"objective_id": "L02.MACRO", "book": "Lamarsh", "exercise_id": "12.2", "problem_path": "books/Lamarsh/chapter_12_problem_2.md", "direct_basis": "Computes mean life of fission neutrons in critical mixtures", "orthogonal_objectives": "ORTHO_TRANSPORT_DIFFUSION", "review_status": "draft_curated"}, {"objective_id": "L02.MACRO", "book": "Lamarsh", "exercise_id": "12.18", "problem_path": "books/Lamarsh/chapter_12_problem_18.md", "direct_basis": "Analyzes time response of a subcritical multiplying assembly after source removal", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_CRITICALITY_DESIGN", "review_status": "draft_curated"}, {"objective_id": "L02.M01", "book": "Lamarsh", "exercise_id": "3.2", "problem_path": "books/Lamarsh/chapter_3_problem_2.md", "direct_basis": "Uses an explicit fission Q value in an energy calculation", "orthogonal_objectives": "ORTHO_RESONANCE_NUCLEAR_STRUCTURE", "review_status": "draft_curated"}, {"objective_id": "L02.M02", "book": "DHNRA", "exercise_id": "3.7", "problem_path": "books/DHNRA/chapter_3_problem_7.md", "direct_basis": "Compares fossil LWR HTGR LMFBR and fusion plant heat rejection", "orthogonal_objectives": "ORTHO_REACTOR_POWER_CONVERSION;ORTHO_REACTOR_THERMAL_HYDRAULICS", "review_status": "draft_curated"}, {"objective_id": "L02.M03", "book": "Lewis", "exercise_id": "2.5", "problem_path": "books/Lewis/chapter_2_problem_5.md", "direct_basis": "Computes fractions of fission neutrons in specified energy ranges", "orthogonal_objectives": "ORTHO_FISSION_SPECTRA_DISTRIBUTIONS", "review_status": "draft_curated"}, {"objective_id": "L02.M03", "book": "DHNRA", "exercise_id": "2.19", "problem_path": "books/DHNRA/chapter_2_problem_19.md", "direct_basis": "Lists prompt neutrons gammas delayed neutrons betas and antineutrinos from fission", "orthogonal_objectives": "ORTHO_FISSION_SPECTRA_DISTRIBUTIONS", "review_status": "draft_curated"}, {"objective_id": "L02.M03", "book": "Lamarsh", "exercise_id": "3.7", "problem_path": "books/Lamarsh/chapter_3_problem_7.md", "direct_basis": "Finds average fission-product gamma-ray energy", "orthogonal_objectives": "ORTHO_FISSION_SPECTRA_DISTRIBUTIONS", "review_status": "draft_curated"}, {"objective_id": "L02.M03", "book": "Lamarsh", "exercise_id": "3.8", "problem_path": "books/Lamarsh/chapter_3_problem_8.md", "direct_basis": "Normalizes and analyzes the prompt fission neutron spectrum", "orthogonal_objectives": "ORTHO_FISSION_SPECTRA_DISTRIBUTIONS;ORTHO_NUMERICAL_PLOTTING", "review_status": "draft_curated"}, {"objective_id": "L02.M03", "book": "Lamarsh", "exercise_id": "3.10", "problem_path": "books/Lamarsh/chapter_3_problem_10.md", "direct_basis": "Computes fraction of prompt fission neutrons above a fission threshold", "orthogonal_objectives": "ORTHO_FISSION_SPECTRA_DISTRIBUTIONS;ORTHO_MATERIALS_DATA_LOOKUP", "review_status": "draft_curated"}, {"objective_id": "L02.M04", "book": "Lewis", "exercise_id": "5.3", "problem_path": "books/Lewis/chapter_5_problem_3.md", "direct_basis": "Sketches neutron population response for source-driven subcritical and critical cases", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS", "review_status": "draft_curated"}, {"objective_id": "L02.M04", "book": "Lewis", "exercise_id": "5.4", "problem_path": "books/Lewis/chapter_5_problem_4.md", "direct_basis": "Uses prompt neutron lifetime in a neutron-population growth model", "orthogonal_objectives": "ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M04", "book": "Lewis", "exercise_id": "5.5", "problem_path": "books/Lewis/chapter_5_problem_5.md", "direct_basis": "Derives reactivity and generation-time forms from k and prompt lifetime", "orthogonal_objectives": "ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M04", "book": "DHNRA", "exercise_id": "3.1", "problem_path": "books/DHNRA/chapter_3_problem_1.md", "direct_basis": "Asks for the maximum multiplication factor possible in reactor design", "orthogonal_objectives": "ORTHO_REACTOR_CRITICALITY_DESIGN", "review_status": "draft_curated"}, {"objective_id": "L02.M04", "book": "DHNRA", "exercise_id": "3.2", "problem_path": "books/DHNRA/chapter_3_problem_2.md", "direct_basis": "Derives the six-factor formula from neutron balance", "orthogonal_objectives": "ORTHO_REACTOR_CRITICALITY_DESIGN", "review_status": "draft_curated"}, {"objective_id": "L02.M04", "book": "DHNRA", "exercise_id": "3.9", "problem_path": "books/DHNRA/chapter_3_problem_9.md", "direct_basis": "Builds the time behavior of neutron population for k cases with a source", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L02.M04", "book": "Lamarsh", "exercise_id": "12.7", "problem_path": "books/Lamarsh/chapter_12_problem_7.md", "direct_basis": "Solves one-delayed-group flux response after a reactivity change", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M04", "book": "Lamarsh", "exercise_id": "12.13", "problem_path": "books/Lamarsh/chapter_12_problem_13.md", "direct_basis": "Derives prompt-jump behavior by summing neutron generations", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M04", "book": "Lamarsh", "exercise_id": "12.18", "problem_path": "books/Lamarsh/chapter_12_problem_18.md", "direct_basis": "Models source-driven neutron population in a subcritical multiplying assembly", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "Lewis", "exercise_id": "5.3", "problem_path": "books/Lewis/chapter_5_problem_3.md", "direct_basis": "Contrasts subcritical and critical source-driven neutron populations", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "Lewis", "exercise_id": "5.17", "problem_path": "books/Lewis/chapter_5_problem_17.md", "direct_basis": "Solves source-removal response of a subcritical reactor", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "DHNRA", "exercise_id": "3.3", "problem_path": "books/DHNRA/chapter_3_problem_3.md", "direct_basis": "Discusses how modifications change a critical reactor multiplication", "orthogonal_objectives": "ORTHO_REACTOR_CRITICALITY_DESIGN", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "DHNRA", "exercise_id": "3.8", "problem_path": "books/DHNRA/chapter_3_problem_8.md", "direct_basis": "Finds fuel-to-moderator ratios that render infinite systems critical", "orthogonal_objectives": "ORTHO_REACTOR_CRITICALITY_DESIGN", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "DHNRA", "exercise_id": "3.9", "problem_path": "books/DHNRA/chapter_3_problem_9.md", "direct_basis": "Requires interpreting k less than equal to and greater than 1", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "DHNRA", "exercise_id": "15.11", "problem_path": "books/DHNRA/chapter_15_problem_11.md", "direct_basis": "Discusses a subcritical assembly as reactivity is slowly inserted", "orthogonal_objectives": "ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "Lamarsh", "exercise_id": "12.4", "problem_path": "books/Lamarsh/chapter_12_problem_4.md", "direct_basis": "Starts from a critical system and estimates reactivity after geometry change", "orthogonal_objectives": "ORTHO_REACTOR_CRITICALITY_DESIGN;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "Lamarsh", "exercise_id": "12.5", "problem_path": "books/Lamarsh/chapter_12_problem_5.md", "direct_basis": "Evaluates reactivity change after loss of reflector from a critical system", "orthogonal_objectives": "ORTHO_REACTOR_CRITICALITY_DESIGN;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "Lamarsh", "exercise_id": "12.12", "problem_path": "books/Lamarsh/chapter_12_problem_12.md", "direct_basis": "Asks for the maximum possible reactivity insertion in a critical reactor", "orthogonal_objectives": "ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M05", "book": "Lamarsh", "exercise_id": "12.18", "problem_path": "books/Lamarsh/chapter_12_problem_18.md", "direct_basis": "Analyzes a subcritical assembly and its flux response", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M06", "book": "Lewis", "exercise_id": "1.9", "problem_path": "books/Lewis/chapter_1_problem_9.md", "direct_basis": "Directly computes decay heat after reactor shutdown", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER", "review_status": "draft_curated"}, {"objective_id": "L02.M06", "book": "DHNRA", "exercise_id": "15.1", "problem_path": "books/DHNRA/chapter_15_problem_1.md", "direct_basis": "Asks what happens to power output after shutdown and ties restart to poison buildup", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M06", "book": "DHNRA", "exercise_id": "15.21", "problem_path": "books/DHNRA/chapter_15_problem_21.md", "direct_basis": "Uses Way-Wigner delayed heat release in a power-programming calculation", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L02.M06", "book": "Lamarsh", "exercise_id": "3.4", "problem_path": "books/Lamarsh/chapter_3_problem_4.md", "direct_basis": "Computes fission-product activity after reactor operation and cooling", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L02.M06", "book": "Lamarsh", "exercise_id": "3.5", "problem_path": "books/Lamarsh/chapter_3_problem_5.md", "direct_basis": "Computes activity of fuel one year after shutdown", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L02.M06", "book": "Lamarsh", "exercise_id": "3.6", "problem_path": "books/Lamarsh/chapter_3_problem_6.md", "direct_basis": "Uses fission-product activity decay law to integrate fallout dose", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "Lewis", "exercise_id": "1.7", "problem_path": "books/Lewis/chapter_1_problem_7.md", "direct_basis": "Tracks neutron captures and beta decay that produce transuranic nuclides", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "Lewis", "exercise_id": "10.14", "problem_path": "books/Lewis/chapter_10_problem_14.md", "direct_basis": "States fertile thorium transmutation to fissile uranium-233 and solves the chain", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_FISSION_PRODUCT_POISONS", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "DHNRA", "exercise_id": "3.4", "problem_path": "books/DHNRA/chapter_3_problem_4.md", "direct_basis": "Uses fissile loading and breeding ratio to derive breeder doubling time", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "DHNRA", "exercise_id": "7.13", "problem_path": "books/DHNRA/chapter_7_problem_13.md", "direct_basis": "Defines conversion ratio as fissile production over fissile destruction", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "DHNRA", "exercise_id": "15.14", "problem_path": "books/DHNRA/chapter_15_problem_14.md", "direct_basis": "Uses enrichment and conversion ratio to bound burnup", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "DHNRA", "exercise_id": "15.15", "problem_path": "books/DHNRA/chapter_15_problem_15.md", "direct_basis": "Develops Th to Pa to U conversion of fertile material into fissile material", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "DHNRA", "exercise_id": "15.18", "problem_path": "books/DHNRA/chapter_15_problem_18.md", "direct_basis": "Discusses LMFBR fuel cycle and fast-reactor fuel options", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "DHNRA", "exercise_id": "15.19", "problem_path": "books/DHNRA/chapter_15_problem_19.md", "direct_basis": "Models a thorium MSBR breeder chain and critical operation", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "DHNRA", "exercise_id": "15.22", "problem_path": "books/DHNRA/chapter_15_problem_22.md", "direct_basis": "Asks for a reactor production scheme and precursor equations for Pu-238", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "Lamarsh", "exercise_id": "4.4", "problem_path": "books/Lamarsh/chapter_4_problem_4.md", "direct_basis": "Uses fertile conversion and fissile production through generations", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "Lamarsh", "exercise_id": "4.5", "problem_path": "books/Lamarsh/chapter_4_problem_5.md", "direct_basis": "Derives breeder doubling time from fissile inventory and breeding gain", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "Lamarsh", "exercise_id": "13.28", "problem_path": "books/Lamarsh/chapter_13_problem_28.md", "direct_basis": "Models Th-232 conversion to Pa-233 and U-233 in a mixed fuel", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_FISSION_PRODUCT_POISONS", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "Lamarsh", "exercise_id": "13.34", "problem_path": "books/Lamarsh/chapter_13_problem_34.md", "direct_basis": "Derives fissile-fueled research reactor life at constant flux", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M08", "book": "Lewis", "exercise_id": "10.14", "problem_path": "books/Lewis/chapter_10_problem_14.md", "direct_basis": "Identifies Th-232 as fertile and U-233 as fissile in a production chain", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M08", "book": "DHNRA", "exercise_id": "15.18", "problem_path": "books/DHNRA/chapter_15_problem_18.md", "direct_basis": "Discusses uranium and plutonium roles in LMFBR fuel cycles", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M08", "book": "DHNRA", "exercise_id": "15.19", "problem_path": "books/DHNRA/chapter_15_problem_19.md", "direct_basis": "Identifies Th-232 feed and bred U-233 in an MSBR cycle", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M08", "book": "DHNRA", "exercise_id": "15.22", "problem_path": "books/DHNRA/chapter_15_problem_22.md", "direct_basis": "Identifies Pu-238 production pathway and precursors", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M08", "book": "Lamarsh", "exercise_id": "13.28", "problem_path": "books/Lamarsh/chapter_13_problem_28.md", "direct_basis": "Identifies U-235 Th-232 Pa-233 and U-233 roles in a mixed fuel chain", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L02.M09", "book": "DHNRA", "exercise_id": "2.19", "problem_path": "books/DHNRA/chapter_2_problem_19.md", "direct_basis": "Explicitly describes neutron-rich fission products undergoing beta-minus decay", "orthogonal_objectives": "ORTHO_FISSION_SPECTRA_DISTRIBUTIONS", "review_status": "draft_curated"}, {"objective_id": "L02.M10", "book": "DHNRA", "exercise_id": "2.19", "problem_path": "books/DHNRA/chapter_2_problem_19.md", "direct_basis": "Connects long-lived daughters to the valley of beta stability", "orthogonal_objectives": "ORTHO_FISSION_SPECTRA_DISTRIBUTIONS", "review_status": "draft_curated"}, {"objective_id": "L03.MACRO", "book": "Lewis", "exercise_id": "1.10", "problem_path": "books/Lewis/chapter_1_problem_10.md", "direct_basis": "Computes buildup of Pu-239 from radioactive precursors under constant production", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L03.MACRO", "book": "Lewis", "exercise_id": "1.20", "problem_path": "books/Lewis/chapter_1_problem_20.md", "direct_basis": "Solves a produced fission-product chain A to B to C", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER", "review_status": "draft_curated"}, {"objective_id": "L03.MACRO", "book": "DHNRA", "exercise_id": "2.3", "problem_path": "books/DHNRA/chapter_2_problem_3.md", "direct_basis": "Asks for rate equations and stepwise solution of an arbitrary decay chain", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.MACRO", "book": "DHNRA", "exercise_id": "2.4", "problem_path": "books/DHNRA/chapter_2_problem_4.md", "direct_basis": "Sets up and solves iodine-xenon rate equations with fission production", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.MACRO", "book": "Lamarsh", "exercise_id": "1.17", "problem_path": "books/Lamarsh/chapter_1_problem_17.md", "direct_basis": "Solves activities in a produced two-member chain before and after shutdown", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.MACRO", "book": "Lamarsh", "exercise_id": "13.28", "problem_path": "books/Lamarsh/chapter_13_problem_28.md", "direct_basis": "Solves time-dependent U-235 Pa-233 U-233 concentrations", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lewis", "exercise_id": "1.10", "problem_path": "books/Lewis/chapter_1_problem_10.md", "direct_basis": "Uses precursor half-lives to set decay constants in a buildup calculation", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lewis", "exercise_id": "1.11", "problem_path": "books/Lewis/chapter_1_problem_11.md", "direct_basis": "Converts U isotope half-lives to decay constants over geologic time", "orthogonal_objectives": "ORTHO_ENRICHMENT_ISOTOPICS", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lewis", "exercise_id": "1.14", "problem_path": "books/Lewis/chapter_1_problem_14.md", "direct_basis": "Converts a decay constant to half-life and decay times", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lewis", "exercise_id": "1.16", "problem_path": "books/Lewis/chapter_1_problem_16.md", "direct_basis": "Infers half-life from fractional decay data", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lewis", "exercise_id": "1.17", "problem_path": "books/Lewis/chapter_1_problem_17.md", "direct_basis": "Uses half-life to compute saturation and buildup times", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lewis", "exercise_id": "1.18", "problem_path": "books/Lewis/chapter_1_problem_18.md", "direct_basis": "Uses half-lives to compare residual activities", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lewis", "exercise_id": "1.19", "problem_path": "books/Lewis/chapter_1_problem_19.md", "direct_basis": "Uses half-life to compute activity from mass", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "DHNRA", "exercise_id": "2.2", "problem_path": "books/DHNRA/chapter_2_problem_2.md", "direct_basis": "Uses a decay constant to compute a power-decrease time", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "DHNRA", "exercise_id": "2.3", "problem_path": "books/DHNRA/chapter_2_problem_3.md", "direct_basis": "Uses differing half-lives in a general decay-chain solution", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "DHNRA", "exercise_id": "2.8", "problem_path": "books/DHNRA/chapter_2_problem_8.md", "direct_basis": "Uses neutron half-life in a competing decay and absorption probability", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "DHNRA", "exercise_id": "2.21", "problem_path": "books/DHNRA/chapter_2_problem_21.md", "direct_basis": "Uses In-116m half-life to compute a survival probability from count data", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lamarsh", "exercise_id": "1.13", "problem_path": "books/Lamarsh/chapter_1_problem_13.md", "direct_basis": "Uses a half-life to back-calculate activity at another time", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lamarsh", "exercise_id": "1.15", "problem_path": "books/Lamarsh/chapter_1_problem_15.md", "direct_basis": "Uses Na-24 half-life in buildup and decay calculations", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lamarsh", "exercise_id": "1.17", "problem_path": "books/Lamarsh/chapter_1_problem_17.md", "direct_basis": "Uses relative half-lives to reason about a two-member decay chain", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lamarsh", "exercise_id": "2.7", "problem_path": "books/Lamarsh/chapter_2_problem_7.md", "direct_basis": "Uses neutron radioactive decay constant in competing-process probability", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M01", "book": "Lamarsh", "exercise_id": "12.7", "problem_path": "books/Lamarsh/chapter_12_problem_7.md", "direct_basis": "Uses delayed-neutron mean life in a one-group kinetics response", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "Lewis", "exercise_id": "1.11", "problem_path": "books/Lewis/chapter_1_problem_11.md", "direct_basis": "Solves pure exponential decay for U-235 and U-238 isotope abundances", "orthogonal_objectives": "ORTHO_ENRICHMENT_ISOTOPICS", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "Lewis", "exercise_id": "1.14", "problem_path": "books/Lewis/chapter_1_problem_14.md", "direct_basis": "Solves pure radioactive decay to a specified residual fraction", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "Lewis", "exercise_id": "1.16", "problem_path": "books/Lewis/chapter_1_problem_16.md", "direct_basis": "Solves exponential decay from a specified decay fraction", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "Lewis", "exercise_id": "1.18", "problem_path": "books/Lewis/chapter_1_problem_18.md", "direct_basis": "Solves residual activities after source decay", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "Lewis", "exercise_id": "1.19", "problem_path": "books/Lewis/chapter_1_problem_19.md", "direct_basis": "Uses simple radioactive decay activity for Po-210 heat output", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "DHNRA", "exercise_id": "2.2", "problem_path": "books/DHNRA/chapter_2_problem_2.md", "direct_basis": "Solves an exponential decrease in reactor power tied to radioactive decay", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "DHNRA", "exercise_id": "2.8", "problem_path": "books/DHNRA/chapter_2_problem_8.md", "direct_basis": "Uses exponential decay probability for free neutrons competing with absorption", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "DHNRA", "exercise_id": "2.21", "problem_path": "books/DHNRA/chapter_2_problem_21.md", "direct_basis": "Computes probability that activated nuclei remain after several half-lives", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "Lamarsh", "exercise_id": "1.13", "problem_path": "books/Lamarsh/chapter_1_problem_13.md", "direct_basis": "Uses simple post-irradiation decay of activity", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "Lamarsh", "exercise_id": "1.15", "problem_path": "books/Lamarsh/chapter_1_problem_15.md", "direct_basis": "Uses simple decay after activation ceases", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M02", "book": "Lamarsh", "exercise_id": "2.7", "problem_path": "books/Lamarsh/chapter_2_problem_7.md", "direct_basis": "Uses radioactive decay probability for neutrons before absorption", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lewis", "exercise_id": "1.13", "problem_path": "books/Lewis/chapter_1_problem_13.md", "direct_basis": "Solves activation with constant production and radioactive loss", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lewis", "exercise_id": "1.14", "problem_path": "books/Lewis/chapter_1_problem_14.md", "direct_basis": "Includes buildup to a saturation fraction under constant production", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lewis", "exercise_id": "1.16", "problem_path": "books/Lewis/chapter_1_problem_16.md", "direct_basis": "Computes long-time inventory under constant production", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lewis", "exercise_id": "1.17", "problem_path": "books/Lewis/chapter_1_problem_17.md", "direct_basis": "Computes fission-product saturation activity and buildup time", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lewis", "exercise_id": "1.20", "problem_path": "books/Lewis/chapter_1_problem_20.md", "direct_basis": "Solves the first produced member of a fission-product chain", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "DHNRA", "exercise_id": "2.4", "problem_path": "books/DHNRA/chapter_2_problem_4.md", "direct_basis": "Includes fission production and decay/removal in iodine-xenon equations", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "DHNRA", "exercise_id": "14.9", "problem_path": "books/DHNRA/chapter_14_problem_9.md", "direct_basis": "Determines burnable poison concentration as a function of time at constant power", "orthogonal_objectives": "ORTHO_REACTIVITY_CONTROL;ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "DHNRA", "exercise_id": "15.4", "problem_path": "books/DHNRA/chapter_15_problem_4.md", "direct_basis": "Computes time to xenon and samarium saturation under a maintained flux", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "DHNRA", "exercise_id": "15.8", "problem_path": "books/DHNRA/chapter_15_problem_8.md", "direct_basis": "Determines samarium concentration behavior after a flux-level change", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lamarsh", "exercise_id": "1.14", "problem_path": "books/Lamarsh/chapter_1_problem_14.md", "direct_basis": "Derives general production plus decay and absorption solution", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lamarsh", "exercise_id": "1.15", "problem_path": "books/Lamarsh/chapter_1_problem_15.md", "direct_basis": "Computes activity after finite production and subsequent decay", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lamarsh", "exercise_id": "1.16", "problem_path": "books/Lamarsh/chapter_1_problem_16.md", "direct_basis": "Models recurring coolant activation and decay over repeated cycles", "orthogonal_objectives": "ORTHO_REACTOR_THERMAL_HYDRAULICS", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lamarsh", "exercise_id": "2.1", "problem_path": "books/Lamarsh/chapter_2_problem_1.md", "direct_basis": "Computes saturated tritium activity from a beam-induced production rate", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lamarsh", "exercise_id": "2.3", "problem_path": "books/Lamarsh/chapter_2_problem_3.md", "direct_basis": "Finds neutron beam intensity needed for target activation to specified activity", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lamarsh", "exercise_id": "13.20", "problem_path": "books/Lamarsh/chapter_13_problem_20.md", "direct_basis": "Computes time for Sm-149 concentration to reach saturation under flux", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lamarsh", "exercise_id": "13.23", "problem_path": "books/Lamarsh/chapter_13_problem_23.md", "direct_basis": "Derives samarium concentration under constant power", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lamarsh", "exercise_id": "13.33", "problem_path": "books/Lamarsh/chapter_13_problem_33.md", "direct_basis": "Derives burnable poison concentration versus fuel concentration and time", "orthogonal_objectives": "ORTHO_REACTIVITY_CONTROL;ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lewis", "exercise_id": "1.12", "problem_path": "books/Lewis/chapter_1_problem_12.md", "direct_basis": "Converts activity in curies to neutron source strength through decay", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lewis", "exercise_id": "1.13", "problem_path": "books/Lewis/chapter_1_problem_13.md", "direct_basis": "Converts target curies to disintegrations per second and production fraction", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lewis", "exercise_id": "1.15", "problem_path": "books/Lewis/chapter_1_problem_15.md", "direct_basis": "Converts mass and half-life to equal activity in curies", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lewis", "exercise_id": "1.17", "problem_path": "books/Lewis/chapter_1_problem_17.md", "direct_basis": "Converts saturation activity between disintegrations per second and curies", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lewis", "exercise_id": "1.19", "problem_path": "books/Lewis/chapter_1_problem_19.md", "direct_basis": "Converts grams of Po-210 to curies and watts", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "DHNRA", "exercise_id": "2.20", "problem_path": "books/DHNRA/chapter_2_problem_20.md", "direct_basis": "Converts thermal power density to fission-rate density", "orthogonal_objectives": "ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "DHNRA", "exercise_id": "2.21", "problem_path": "books/DHNRA/chapter_2_problem_21.md", "direct_basis": "Converts count rate and detector efficiency to remaining nuclei probability", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "1.13", "problem_path": "books/Lamarsh/chapter_1_problem_13.md", "direct_basis": "Uses counts and half-life to infer activity at another time", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "1.15", "problem_path": "books/Lamarsh/chapter_1_problem_15.md", "direct_basis": "Uses microcurie activity units in activation and decay", "orthogonal_objectives": "ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "2.1", "problem_path": "books/Lamarsh/chapter_2_problem_1.md", "direct_basis": "Converts target density cross section production and activity in curies", "orthogonal_objectives": "ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "2.3", "problem_path": "books/Lamarsh/chapter_2_problem_3.md", "direct_basis": "Solves for beam intensity needed to reach microcurie activation", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "3.11", "problem_path": "books/Lamarsh/chapter_3_problem_11.md", "direct_basis": "Converts reactor work and fission energy to kilograms of U-235 consumed", "orthogonal_objectives": "ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lewis", "exercise_id": "1.10", "problem_path": "books/Lewis/chapter_1_problem_10.md", "direct_basis": "Asks for times to reach one-half ninety percent and ninety-nine percent saturation", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lewis", "exercise_id": "1.13", "problem_path": "books/Lewis/chapter_1_problem_13.md", "direct_basis": "Solves irradiation time to reach a target fraction of saturation", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lewis", "exercise_id": "1.14", "problem_path": "books/Lewis/chapter_1_problem_14.md", "direct_basis": "Asks time to reach ninety-five percent of saturation under production", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lewis", "exercise_id": "1.16", "problem_path": "books/Lewis/chapter_1_problem_16.md", "direct_basis": "Asks for long-time inventory under constant production", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lewis", "exercise_id": "1.17", "problem_path": "books/Lewis/chapter_1_problem_17.md", "direct_basis": "Directly asks for saturation activity and time to ninety percent", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "DHNRA", "exercise_id": "2.4", "problem_path": "books/DHNRA/chapter_2_problem_4.md", "direct_basis": "Determines saturated xenon concentration under constant production and removal", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "DHNRA", "exercise_id": "15.3", "problem_path": "books/DHNRA/chapter_15_problem_3.md", "direct_basis": "Determines equilibrium xenon density ratio as a function of flux", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "DHNRA", "exercise_id": "15.4", "problem_path": "books/DHNRA/chapter_15_problem_4.md", "direct_basis": "Asks time for xenon and samarium to reach ninety percent saturation", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "1.13", "problem_path": "books/Lamarsh/chapter_1_problem_13.md", "direct_basis": "Starts from an irradiated-to-saturation foil and applies decay afterward", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "1.15", "problem_path": "books/Lamarsh/chapter_1_problem_15.md", "direct_basis": "Directly asks maximum possible saturation activity", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "1.16", "problem_path": "books/Lamarsh/chapter_1_problem_16.md", "direct_basis": "Finds maximum coolant activity after repeated activation cycles", "orthogonal_objectives": "ORTHO_REACTOR_THERMAL_HYDRAULICS", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "1.17", "problem_path": "books/Lamarsh/chapter_1_problem_17.md", "direct_basis": "Analyzes saturation and maximum daughter activity in a chain", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "2.1", "problem_path": "books/Lamarsh/chapter_2_problem_1.md", "direct_basis": "Computes maximum tritium activity induced by a neutron beam", "orthogonal_objectives": "ORTHO_CROSS_SECTIONS_REACTION_RATES;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "13.11", "problem_path": "books/Lamarsh/chapter_13_problem_11.md", "direct_basis": "Computes equilibrium Xe-135 density ratio versus flux", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "13.12", "problem_path": "books/Lamarsh/chapter_13_problem_12.md", "direct_basis": "Computes time for Xe-135 and Sm-149 to reach ninety percent equilibrium", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "13.20", "problem_path": "books/Lamarsh/chapter_13_problem_20.md", "direct_basis": "Computes time after startup for Sm-149 to reach ninety percent saturation", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "13.22", "problem_path": "books/Lamarsh/chapter_13_problem_22.md", "direct_basis": "Compares Xe and Sm equilibrium worth and ninety percent buildup times", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lewis", "exercise_id": "1.10", "problem_path": "books/Lewis/chapter_1_problem_10.md", "direct_basis": "Solves U-239 to Np-239 to Pu-239 buildup under constant production", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lewis", "exercise_id": "1.17", "problem_path": "books/Lewis/chapter_1_problem_17.md", "direct_basis": "Includes daughter activity in A to B to C decay after finite time", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lewis", "exercise_id": "1.20", "problem_path": "books/Lewis/chapter_1_problem_20.md", "direct_basis": "Directly solves produced fission-product chain equations", "orthogonal_objectives": "ORTHO_DECAY_HEAT_WAY_WIGNER", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lewis", "exercise_id": "10.1", "problem_path": "books/Lewis/chapter_10_problem_1.md", "direct_basis": "Solves xenon-135 post-shutdown buildup from iodine decay", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lewis", "exercise_id": "10.10", "problem_path": "books/Lewis/chapter_10_problem_10.md", "direct_basis": "Solves promethium concentration over a repeated daily power cycle", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lewis", "exercise_id": "10.14", "problem_path": "books/Lewis/chapter_10_problem_14.md", "direct_basis": "Solves Th to Pa to U concentration equations with production and decay", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "2.3", "problem_path": "books/DHNRA/chapter_2_problem_3.md", "direct_basis": "Directly asks for general N-member decay-chain equations and solutions", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "2.4", "problem_path": "books/DHNRA/chapter_2_problem_4.md", "direct_basis": "Directly asks for iodine-xenon rate equations and saturated solution", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "6.14", "problem_path": "books/DHNRA/chapter_6_problem_14.md", "direct_basis": "Sets up two-stage delayed-neutron precursor equations", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.2", "problem_path": "books/DHNRA/chapter_15_problem_2.md", "direct_basis": "Solves xenon buildup rate equations after startup", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.10", "problem_path": "books/DHNRA/chapter_15_problem_10.md", "direct_basis": "Plots iodine-xenon phase-plane buildup through startup and shutdown", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.13", "problem_path": "books/DHNRA/chapter_15_problem_13.md", "direct_basis": "Determines U-235 Pu-239 and Pu-241 concentrations from chosen chains", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.15", "problem_path": "books/DHNRA/chapter_15_problem_15.md", "direct_basis": "Develops and solves U-235 Pa-233 U-233 concentration equations", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.16", "problem_path": "books/DHNRA/chapter_15_problem_16.md", "direct_basis": "Analyzes a capture-fission-decay chain with secular equilibrium", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.17", "problem_path": "books/DHNRA/chapter_15_problem_17.md", "direct_basis": "Solves plutonium-isotope buildup equations in fluence", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.19", "problem_path": "books/DHNRA/chapter_15_problem_19.md", "direct_basis": "Models Th Pa U and fission-product removal equations for an MSBR", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.22", "problem_path": "books/DHNRA/chapter_15_problem_22.md", "direct_basis": "Asks for precursor equations governing Pu-238 production", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "1.17", "problem_path": "books/Lamarsh/chapter_1_problem_17.md", "direct_basis": "Solves activities in the A to B to C chain before and after shutdown", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "12.3", "problem_path": "books/Lamarsh/chapter_12_problem_3.md", "direct_basis": "Computes delayed-neutron precursor concentrations at steady power", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "12.10", "problem_path": "books/Lamarsh/chapter_12_problem_10.md", "direct_basis": "Sets up flux and twelve delayed-precursor equations for two fissile species", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "12.16", "problem_path": "books/Lamarsh/chapter_12_problem_16.md", "direct_basis": "Treats photoneutron-producing fission products as delayed precursor groups", "orthogonal_objectives": "ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_FISSION_SPECTRA_DISTRIBUTIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.13", "problem_path": "books/Lamarsh/chapter_13_problem_13.md", "direct_basis": "Derives iodine-xenon table coefficients through flux changes", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.15", "problem_path": "books/Lamarsh/chapter_13_problem_15.md", "direct_basis": "Derives post-shutdown xenon maximum from iodine-xenon chain equations", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.28", "problem_path": "books/Lamarsh/chapter_13_problem_28.md", "direct_basis": "Solves U-235 Pa-233 U-233 coupled concentration equations", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.31", "problem_path": "books/Lamarsh/chapter_13_problem_31.md", "direct_basis": "Computes U-235 Pu-239 Pu-241 concentrations from earlier chain formulas", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_NUMERICAL_PLOTTING", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.33", "problem_path": "books/Lamarsh/chapter_13_problem_33.md", "direct_basis": "Derives burnable poison inventory coupled to fuel depletion", "orthogonal_objectives": "ORTHO_REACTIVITY_CONTROL;ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.35", "problem_path": "books/Lamarsh/chapter_13_problem_35.md", "direct_basis": "Plots excess reactivity over time with fuel and burnable poison changes", "orthogonal_objectives": "ORTHO_REACTIVITY_CONTROL;ORTHO_FUEL_CYCLE_BURNUP;ORTHO_NUMERICAL_PLOTTING", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "Lewis", "exercise_id": "1.10", "problem_path": "books/Lewis/chapter_1_problem_10.md", "direct_basis": "Uses approach to a long-time production-rate limit in a chain", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "Lewis", "exercise_id": "1.17", "problem_path": "books/Lewis/chapter_1_problem_17.md", "direct_basis": "Compares daughter activity buildup when parent and daughter half-lives match", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "Lewis", "exercise_id": "1.20", "problem_path": "books/Lewis/chapter_1_problem_20.md", "direct_basis": "Asks for infinite-time inventories in a produced decay chain", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "DHNRA", "exercise_id": "2.3", "problem_path": "books/DHNRA/chapter_2_problem_3.md", "direct_basis": "Asks for long-time chain composition when one half-life is much longer", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "DHNRA", "exercise_id": "15.3", "problem_path": "books/DHNRA/chapter_15_problem_3.md", "direct_basis": "Determines equilibrium xenon concentration relative to fuel", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "DHNRA", "exercise_id": "15.16", "problem_path": "books/DHNRA/chapter_15_problem_16.md", "direct_basis": "Explicitly assumes secular equilibrium near end of fuel lifetime", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "Lamarsh", "exercise_id": "1.17", "problem_path": "books/Lamarsh/chapter_1_problem_17.md", "direct_basis": "Analyzes limiting behavior when daughter half-life is much longer than parent", "orthogonal_objectives": "", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "Lamarsh", "exercise_id": "13.11", "problem_path": "books/Lamarsh/chapter_13_problem_11.md", "direct_basis": "Computes equilibrium Xe-135 concentration versus flux", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "Lamarsh", "exercise_id": "13.12", "problem_path": "books/Lamarsh/chapter_13_problem_12.md", "direct_basis": "Computes times to equilibrium for Xe and Sm in a subcritical assembly", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "Lamarsh", "exercise_id": "13.20", "problem_path": "books/Lamarsh/chapter_13_problem_20.md", "direct_basis": "Computes time to Sm-149 saturation equilibrium", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "Lamarsh", "exercise_id": "13.21", "problem_path": "books/Lamarsh/chapter_13_problem_21.md", "direct_basis": "Compares equilibrium Xe and Sm effects across fissile fuels", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "Lamarsh", "exercise_id": "13.22", "problem_path": "books/Lamarsh/chapter_13_problem_22.md", "direct_basis": "Finds equality of equilibrium Xe and Sm reactivity and buildup time", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L02.M07", "book": "Lewis", "exercise_id": "10.13", "problem_path": "books/Lewis/chapter_10_problem_13.md", "direct_basis": "Computes conversion ratio and Pu-239 power fraction as fuel evolves", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L03.M03", "book": "Lewis", "exercise_id": "10.12", "problem_path": "books/Lewis/chapter_10_problem_12.md", "direct_basis": "Compares decay against neutron-capture removal in a produced actinide", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "1.1", "problem_path": "books/Lamarsh/chapter_1_problem_1.md", "direct_basis": "Converts ordinary-water density and isotope abundance to atom densities", "orthogonal_objectives": "ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_ENRICHMENT_ISOTOPICS", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "1.2", "problem_path": "books/Lamarsh/chapter_1_problem_2.md", "direct_basis": "Converts uranium density and enrichment to isotope atom densities", "orthogonal_objectives": "ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_ENRICHMENT_ISOTOPICS", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "1.3", "problem_path": "books/Lamarsh/chapter_1_problem_3.md", "direct_basis": "Converts chemical formula and material density to atom densities", "orthogonal_objectives": "ORTHO_ATOM_DENSITY_COMPOSITION", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "1.4", "problem_path": "books/Lamarsh/chapter_1_problem_4.md", "direct_basis": "Relates thermal expansion to fractional atom-density change", "orthogonal_objectives": "ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_REACTOR_THERMAL_HYDRAULICS", "review_status": "draft_curated"}, {"objective_id": "L03.M04", "book": "Lamarsh", "exercise_id": "1.5", "problem_path": "books/Lamarsh/chapter_1_problem_5.md", "direct_basis": "Converts uranium-to-water number-density ratio to grams per liter", "orthogonal_objectives": "ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_UNIT_CONVERSIONS", "review_status": "draft_curated"}, {"objective_id": "L03.M05", "book": "Lamarsh", "exercise_id": "13.14", "problem_path": "books/Lamarsh/chapter_13_problem_14.md", "direct_basis": "Derives early xenon approach to its equilibrium value after startup", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lewis", "exercise_id": "10.11", "problem_path": "books/Lewis/chapter_10_problem_11.md", "direct_basis": "Writes and solves the Pu-240 buildup equation using Pu-239 concentration", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lewis", "exercise_id": "10.12", "problem_path": "books/Lewis/chapter_10_problem_12.md", "direct_basis": "Analyzes competing capture and decay in the neptunium-to-plutonium chain", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lewis", "exercise_id": "10.13", "problem_path": "books/Lewis/chapter_10_problem_13.md", "direct_basis": "Uses actinide buildup approximations to compute conversion and Pu power share", "orthogonal_objectives": "ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.5", "problem_path": "books/DHNRA/chapter_15_problem_5.md", "direct_basis": "Derives the condition for post-shutdown xenon buildup from the chain model", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.6", "problem_path": "books/DHNRA/chapter_15_problem_6.md", "direct_basis": "Determines the time of maximum xenon concentration after shutdown", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "DHNRA", "exercise_id": "15.7", "problem_path": "books/DHNRA/chapter_15_problem_7.md", "direct_basis": "Computes xenon-precluded restart and deadtime after scram", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.14", "problem_path": "books/Lamarsh/chapter_13_problem_14.md", "direct_basis": "Derives approximate Xe-135 concentration after startup from iodine decay", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.16", "problem_path": "books/Lamarsh/chapter_13_problem_16.md", "direct_basis": "Derives a no-post-shutdown-xenon-buildup condition from iodine-xenon balance", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.17", "problem_path": "books/Lamarsh/chapter_13_problem_17.md", "direct_basis": "Computes xenon deadtime after scram from pre-shutdown operation", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.18", "problem_path": "books/Lamarsh/chapter_13_problem_18.md", "direct_basis": "Computes reactivity rise after restart following xenon deadtime", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL;ORTHO_NUMERICAL_PLOTTING", "review_status": "draft_curated"}, {"objective_id": "L03.M06", "book": "Lamarsh", "exercise_id": "13.19", "problem_path": "books/Lamarsh/chapter_13_problem_19.md", "direct_basis": "Determines power-drop limit for avoiding xenon deadtime", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}, {"objective_id": "L03.M07", "book": "DHNRA", "exercise_id": "15.9", "problem_path": "books/DHNRA/chapter_15_problem_9.md", "direct_basis": "Compares equilibrium xenon and samarium effects across fissile fuels", "orthogonal_objectives": "ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL", "review_status": "draft_curated"}]}</script>
+  <script>
+    const DATA = JSON.parse(document.getElementById("mapping-data").textContent);
+    const BOOKS = ["Lewis", "DHNRA", "Lamarsh"];
+    const LESSONS = ["All", "L01", "L02", "L03"];
+    const state = { lesson: "All", book: "All", view: "matrix", query: "", selected: null };
+
+    const objectivesById = new Map(DATA.objectives.map((objective) => [objective.id, objective]));
+    const orthogonalById = new Map(DATA.orthogonal.map((tag) => [tag.id, tag]));
+    const exerciseKey = (edge) => `${edge.book} ${edge.exercise_id}`;
+    const objectiveSort = (a, b) => a.id.localeCompare(b.id, undefined, { numeric: true });
+    const edgeSort = (a, b) => {
+      const byBook = BOOKS.indexOf(a.book) - BOOKS.indexOf(b.book);
+      return byBook || a.exercise_id.localeCompare(b.exercise_id, undefined, { numeric: true });
+    };
+
+    function init() {
+      state.selected = DATA.objectives[0]?.id ?? null;
+      renderControls();
+      bindControls();
+      renderAll();
+    }
+
+    function renderControls() {
+      const lessonControls = document.getElementById("lesson-controls");
+      lessonControls.innerHTML = LESSONS.map((lesson) => `<button type="button" data-lesson="${lesson}" class="${lesson === state.lesson ? "active" : ""}">${lesson}</button>`).join("");
+
+      const bookControls = document.getElementById("book-controls");
+      bookControls.innerHTML = ["All", ...BOOKS].map((book) => `<button type="button" data-book="${book}" class="${book === state.book ? "active" : ""}">${book}</button>`).join("");
+    }
+
+    function bindControls() {
+      document.getElementById("lesson-controls").addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-lesson]");
+        if (!button) return;
+        state.lesson = button.dataset.lesson;
+        renderControls();
+        ensureSelectedVisible();
+        renderAll();
+      });
+
+      document.getElementById("book-controls").addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-book]");
+        if (!button) return;
+        state.book = button.dataset.book;
+        renderControls();
+        ensureSelectedVisible();
+        renderAll();
+      });
+
+      document.getElementById("view-controls").addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-view]");
+        if (!button) return;
+        state.view = button.dataset.view;
+        document.querySelectorAll("#view-controls button").forEach((node) => node.classList.toggle("active", node.dataset.view === state.view));
+        renderAll();
+      });
+
+      document.getElementById("search-box").addEventListener("input", (event) => {
+        state.query = event.target.value.trim().toLowerCase();
+        ensureSelectedVisible();
+        renderAll();
+      });
+    }
+
+    function filteredObjectives() {
+      return DATA.objectives.filter((objective) => {
+        if (state.lesson !== "All" && objective.lesson !== state.lesson) return false;
+        if (!state.query) return true;
+        const edges = edgesForObjective(objective.id);
+        const text = [
+          objective.id,
+          objective.text,
+          ...edges.flatMap((edge) => [
+            edge.book,
+            edge.exercise_id,
+            edge.problem_path,
+            edge.direct_basis,
+            edge.orthogonal_objectives,
+          ]),
+        ].join(" ").toLowerCase();
+        return text.includes(state.query);
+      }).sort(objectiveSort);
+    }
+
+    function filteredEdges() {
+      return DATA.edges.filter((edge) => {
+        const objective = objectivesById.get(edge.objective_id);
+        if (!objective) return false;
+        if (state.lesson !== "All" && objective.lesson !== state.lesson) return false;
+        if (state.book !== "All" && edge.book !== state.book) return false;
+        if (!state.query) return true;
+        const text = [
+          edge.objective_id,
+          objective.text,
+          edge.book,
+          edge.exercise_id,
+          edge.problem_path,
+          edge.direct_basis,
+          edge.orthogonal_objectives,
+        ].join(" ").toLowerCase();
+        return text.includes(state.query);
+      }).sort(edgeSort);
+    }
+
+    function edgesForObjective(objectiveId) {
+      return filteredEdges().filter((edge) => edge.objective_id === objectiveId);
+    }
+
+    function rawEdgesForObjective(objectiveId) {
+      return DATA.edges.filter((edge) => edge.objective_id === objectiveId).sort(edgeSort);
+    }
+
+    function ensureSelectedVisible() {
+      const visible = filteredObjectives();
+      if (!visible.some((objective) => objective.id === state.selected)) {
+        state.selected = visible[0]?.id ?? null;
+      }
+    }
+
+    function renderAll() {
+      const visibleObjectives = filteredObjectives();
+      const visibleEdges = filteredEdges();
+      const visibleExercises = new Set(visibleEdges.map(exerciseKey));
+      const visibleTags = new Set(visibleEdges.flatMap(splitTags));
+
+      document.getElementById("stat-objectives").textContent = visibleObjectives.length;
+      document.getElementById("stat-exercises").textContent = visibleExercises.size;
+      document.getElementById("stat-edges").textContent = visibleEdges.length;
+      document.getElementById("stat-tags").textContent = visibleTags.size;
+      document.getElementById("visible-count").textContent = `${visibleObjectives.length} rows, ${visibleEdges.length} edges`;
+
+      document.getElementById("matrix-wrap").style.display = state.view === "matrix" ? "block" : "none";
+      document.getElementById("network-wrap").style.display = state.view === "network" ? "block" : "none";
+      document.getElementById("primary-title").textContent = state.view === "matrix" ? "Coverage Matrix" : "Objective-Exercise Network";
+
+      renderMatrix(visibleObjectives);
+      renderNetwork(visibleObjectives, visibleEdges);
+      renderDetail();
+    }
+
+    function renderMatrix(objectives) {
+      const table = document.getElementById("matrix-table");
+      const maxCount = Math.max(1, ...objectives.flatMap((objective) => BOOKS.map((book) => edgesForObjective(objective.id).filter((edge) => edge.book === book).length)));
+
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Objective</th>
+            ${BOOKS.map((book) => `<th>${book}</th>`).join("")}
+          </tr>
+        </thead>
+        <tbody>
+          ${objectives.map((objective) => renderObjectiveRow(objective, maxCount)).join("")}
+        </tbody>
+      `;
+    }
+
+    function renderObjectiveRow(objective, maxCount) {
+      const selected = objective.id === state.selected ? "selected" : "";
+      return `
+        <tr class="${selected}" data-objective="${objective.id}">
+          <td class="objective-cell" onclick="selectObjective('${objective.id}')">
+            <div class="objective-id"><span class="lesson-pill">${objective.lesson}</span>${objective.id}</div>
+            <div class="objective-text">${escapeHtml(objective.text)}</div>
+          </td>
+          ${BOOKS.map((book) => renderBookCell(objective.id, book, maxCount)).join("")}
+        </tr>
+      `;
+    }
+
+    function renderBookCell(objectiveId, book, maxCount) {
+      const edges = edgesForObjective(objectiveId).filter((edge) => edge.book === book);
+      if (!edges.length) {
+        return `<td class="book-cell"><div class="empty">-</div></td>`;
+      }
+      const intensity = edges.length / maxCount;
+      const bg = heatColor(book, intensity);
+      return `
+        <td class="book-cell">
+          <div class="heat" style="background:${bg}" onclick="selectObjective('${objectiveId}')" title="${escapeAttr(edges.map((edge) => `${edge.book} ${edge.exercise_id}: ${edge.direct_basis}`).join("\n"))}">
+            <span class="count">${edges.length}</span>
+            <div class="exercise-list">
+              ${edges.map((edge) => `<span class="chip">${escapeHtml(edge.exercise_id)}</span>`).join("")}
+            </div>
+          </div>
+        </td>
+      `;
+    }
+
+    function heatColor(book, intensity) {
+      const base = {
+        Lewis: [45, 108, 223],
+        DHNRA: [179, 95, 0],
+        Lamarsh: [111, 75, 178],
+      }[book];
+      const alpha = 0.16 + Math.min(0.62, intensity * 0.62);
+      return `rgba(${base[0]}, ${base[1]}, ${base[2]}, ${alpha.toFixed(3)})`;
+    }
+
+    function renderNetwork(objectives, edges) {
+      const svg = document.getElementById("network-svg");
+      const objectiveIds = objectives.map((objective) => objective.id);
+      const exerciseGroups = new Map();
+      for (const edge of edges) {
+        const key = exerciseKey(edge);
+        if (!exerciseGroups.has(key)) {
+          exerciseGroups.set(key, { key, book: edge.book, exercise_id: edge.exercise_id, path: edge.problem_path, objectives: new Set() });
+        }
+        exerciseGroups.get(key).objectives.add(edge.objective_id);
+      }
+      const exercises = Array.from(exerciseGroups.values()).sort((a, b) => {
+        const byBook = BOOKS.indexOf(a.book) - BOOKS.indexOf(b.book);
+        return byBook || a.exercise_id.localeCompare(b.exercise_id, undefined, { numeric: true });
+      });
+
+      const rowHeight = 58;
+      const width = 1120;
+      const height = Math.max(680, Math.max(objectiveIds.length, exercises.length) * rowHeight + 80);
+      const leftX = 36;
+      const rightX = 728;
+      const nodeWidth = 324;
+      const nodeHeight = 38;
+      const top = 42;
+      const objectiveY = new Map(objectiveIds.map((id, index) => [id, top + index * rowHeight]));
+      const exerciseY = new Map(exercises.map((exercise, index) => [exercise.key, top + index * rowHeight]));
+
+      const edgeLines = edges.map((edge) => {
+        const y1 = objectiveY.get(edge.objective_id) + nodeHeight / 2;
+        const y2 = exerciseY.get(exerciseKey(edge)) + nodeHeight / 2;
+        const highlight = edge.objective_id === state.selected ? "highlight" : "";
+        return `<path class="edge ${highlight}" d="M ${leftX + nodeWidth} ${y1} C 520 ${y1}, 610 ${y2}, ${rightX} ${y2}"></path>`;
+      }).join("");
+
+      const objectiveNodes = objectives.map((objective) => nodeTemplate(leftX, objectiveY.get(objective.id), nodeWidth, nodeHeight, objective.id, objective.text, "objective", objective.id === state.selected)).join("");
+      const exerciseNodes = exercises.map((exercise) => nodeTemplate(rightX, exerciseY.get(exercise.key), nodeWidth, nodeHeight, `${exercise.book} ${exercise.exercise_id}`, exercise.path.replace("books/", ""), "exercise", exercise.objectives.has(state.selected))).join("");
+
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = `
+        <text x="${leftX}" y="22" fill="#61666c" font-size="12" font-weight="700">Objectives</text>
+        <text x="${rightX}" y="22" fill="#61666c" font-size="12" font-weight="700">Exercises</text>
+        ${edgeLines}
+        ${objectiveNodes}
+        ${exerciseNodes}
+      `;
+    }
+
+    function nodeTemplate(x, y, width, height, label, sublabel, kind, active) {
+      const fill = active ? "#e1f1f0" : "#ffffff";
+      const stroke = kind === "objective" ? "#176b70" : "#aeb8b3";
+      const clippedSub = sublabel.length > 52 ? `${sublabel.slice(0, 49)}...` : sublabel;
+      return `
+        <g class="node" onclick="selectObjective('${kind === "objective" ? label : state.selected}')" style="cursor:${kind === "objective" ? "pointer" : "default"}">
+          <rect x="${x}" y="${y}" width="${width}" height="${height}" fill="${fill}" stroke="${stroke}"></rect>
+          <text x="${x + 12}" y="${y + 14}" font-weight="700">${escapeSvg(label)}</text>
+          <text class="sub" x="${x + 12}" y="${y + 29}">${escapeSvg(clippedSub)}</text>
+        </g>
+      `;
+    }
+
+    function renderDetail() {
+      const body = document.getElementById("detail-body");
+      const count = document.getElementById("detail-count");
+      if (!state.selected) {
+        count.textContent = "";
+        body.innerHTML = `<p class="detail-text">No objective selected.</p>`;
+        return;
+      }
+      const objective = objectivesById.get(state.selected);
+      const edges = edgesForObjective(state.selected);
+      const allEdges = rawEdgesForObjective(state.selected);
+      const tags = Array.from(new Set(edges.flatMap(splitTags)));
+      count.textContent = `${edges.length} visible / ${allEdges.length} total`;
+      body.innerHTML = `
+        <h2 class="detail-title">${objective.id}</h2>
+        <div class="detail-text">${escapeHtml(objective.text)}</div>
+        <div class="detail-section">
+          <h3>Exercises</h3>
+          ${edges.length ? edges.map(renderEdgeCard).join("") : `<div class="small">No visible exercises under the current filters.</div>`}
+        </div>
+        <div class="detail-section">
+          <h3>Orthogonal Tags</h3>
+          ${tags.length ? `<div class="tag-row">${tags.map(renderTag).join("")}</div>` : `<div class="small">No visible orthogonal tags.</div>`}
+        </div>
+      `;
+    }
+
+    function renderEdgeCard(edge) {
+      return `
+        <div class="edge-card">
+          <div class="edge-meta">
+            <span>${escapeHtml(edge.book)} ${escapeHtml(edge.exercise_id)}</span>
+            <span class="small">${escapeHtml(edge.review_status)}</span>
+          </div>
+          <div class="basis">${escapeHtml(edge.direct_basis)}</div>
+          ${splitTags(edge).length ? `<div class="tag-row">${splitTags(edge).map(renderTag).join("")}</div>` : ""}
+        </div>
+      `;
+    }
+
+    function renderTag(tagId) {
+      const tag = orthogonalById.get(tagId);
+      const label = tagId.replace(/^ORTHO_/, "").replaceAll("_", " ").toLowerCase();
+      return `<span class="tag" title="${escapeAttr(tag?.text ?? tagId)}">${escapeHtml(label)}</span>`;
+    }
+
+    function splitTags(edge) {
+      const value = typeof edge === "string" ? edge : edge.orthogonal_objectives;
+      return value ? value.split(";").map((tag) => tag.trim()).filter(Boolean) : [];
+    }
+
+    function selectObjective(id) {
+      if (!id) return;
+      state.selected = id;
+      renderAll();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/\n/g, "&#10;");
+    }
+
+    function escapeSvg(value) {
+      return escapeHtml(value);
+    }
+
+    window.selectObjective = selectObjective;
+    init();
+  </script>
+</body>
+</html>

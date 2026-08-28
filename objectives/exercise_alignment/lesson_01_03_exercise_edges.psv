@@ -1,0 +1,256 @@
+objective_id|book|exercise_id|problem_path|direct_basis|orthogonal_objectives|review_status
+L01.MACRO|Lewis|1.3|books/Lewis/chapter_1_problem_3.md|Completes nuclear reactions by conserving A and Z||draft_curated
+L01.MACRO|DHNRA|2.1|books/DHNRA/chapter_2_problem_1.md|Infers reactants needed to form a compound nucleus||draft_curated
+L01.MACRO|Lamarsh|1.11|books/Lamarsh/chapter_1_problem_11.md|Completes reactions and computes Q values from masses|ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.MACRO|Lamarsh|2.29|books/Lamarsh/chapter_2_problem_29.md|Uses reaction mass balances and Q values to compute thresholds|ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M01|Lewis|1.6|books/Lewis/chapter_1_problem_6.md|Compares mass-energy conversion for fission and chemical combustion|ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M01|Lamarsh|3.11|books/Lamarsh/chapter_3_problem_11.md|Converts fission energy per event into fuel consumed for useful work|ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M01|Lamarsh|3.12|books/Lamarsh/chapter_3_problem_12.md|Derives energy released per metric ton of fuel consumed|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M02|Lewis|1.5|books/Lewis/chapter_1_problem_5.md|Compares relativistic and nonrelativistic kinetic energy for a fission neutron||draft_curated
+L01.M02|Lamarsh|1.6|books/Lamarsh/chapter_1_problem_6.md|Derives neutron speed from kinetic energy using the classical low-energy limit||draft_curated
+L01.M03|Lewis|1.1|books/Lewis/chapter_1_problem_1.md|Asks for element symbols and names from isotope notation||draft_curated
+L01.M03|Lewis|1.2|books/Lewis/chapter_1_problem_2.md|Requires interpreting A and Z notation to complete decay reactions||draft_curated
+L01.M03|Lewis|1.3|books/Lewis/chapter_1_problem_3.md|Requires interpreting A and Z notation to complete reactions||draft_curated
+L01.M03|Lewis|1.4|books/Lewis/chapter_1_problem_4.md|Uses projectile and compound-nucleus notation to identify target isotopes||draft_curated
+L01.M03|Lewis|1.7|books/Lewis/chapter_1_problem_7.md|Tracks isotope identity after neutron capture and beta decay||draft_curated
+L01.M03|DHNRA|2.1|books/DHNRA/chapter_2_problem_1.md|Uses A and Z notation to identify target isotopes||draft_curated
+L01.M03|Lamarsh|1.11|books/Lamarsh/chapter_1_problem_11.md|Uses nuclide and reaction notation throughout reaction completion||draft_curated
+L01.M04|Lewis|1.3|books/Lewis/chapter_1_problem_3.md|Completes binary nuclear reactions written with projectiles and products||draft_curated
+L01.M04|Lewis|1.4|books/Lewis/chapter_1_problem_4.md|Identifies targets for projectile-induced compound-nucleus formation||draft_curated
+L01.M04|Lewis|1.12|books/Lewis/chapter_1_problem_12.md|Connects alpha decay to a Be alpha-n neutron source reaction|ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M04|DHNRA|2.1|books/DHNRA/chapter_2_problem_1.md|Identifies target isotopes for neutron proton and alpha projectiles||draft_curated
+L01.M04|Lamarsh|1.11|books/Lamarsh/chapter_1_problem_11.md|Completes several A(B,C)D-style reactions|ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M04|Lamarsh|1.15|books/Lamarsh/chapter_1_problem_15.md|Uses a deuteron-induced sodium activation reaction|ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M04|Lamarsh|2.13|books/Lamarsh/chapter_2_problem_13.md|Analyzes the H3(d,n)He4 binary reaction|ORTHO_NEUTRON_KINEMATICS_CM_LAB|draft_curated
+L01.M04|Lamarsh|2.15|books/Lamarsh/chapter_2_problem_15.md|Uses the B10(d,p)B11 reaction to infer excited-state energies|ORTHO_RESONANCE_NUCLEAR_STRUCTURE;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M04|Lamarsh|2.16|books/Lamarsh/chapter_2_problem_16.md|Uses Li7(n,2n) and related reaction thresholds|ORTHO_RESONANCE_NUCLEAR_STRUCTURE;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M04|Lamarsh|2.29|books/Lamarsh/chapter_2_problem_29.md|Lists multiple threshold reactions in compact reaction notation|ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M05|Lamarsh|1.11|books/Lamarsh/chapter_1_problem_11.md|Directly asks for Q values of completed reactions|ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M05|Lamarsh|2.10|books/Lamarsh/chapter_2_problem_10.md|Interprets Q value as kinetic-energy difference in another frame|ORTHO_NEUTRON_KINEMATICS_CM_LAB|draft_curated
+L01.M05|Lamarsh|2.13|books/Lamarsh/chapter_2_problem_13.md|Computes emergent neutron energies using the reaction Q value|ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M05|Lamarsh|2.15|books/Lamarsh/chapter_2_problem_15.md|Uses a given reaction Q value to place compound-nucleus levels|ORTHO_RESONANCE_NUCLEAR_STRUCTURE|draft_curated
+L01.M05|Lamarsh|2.16|books/Lamarsh/chapter_2_problem_16.md|Uses threshold and binding energy information tied to reaction Q values|ORTHO_RESONANCE_NUCLEAR_STRUCTURE;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M05|Lamarsh|2.29|books/Lamarsh/chapter_2_problem_29.md|Computes Q values and threshold energies from mass tables|ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M05|Lamarsh|3.2|books/Lamarsh/chapter_3_problem_2.md|Uses a fission Q value to estimate the critical fission energy|ORTHO_RESONANCE_NUCLEAR_STRUCTURE|draft_curated
+L01.M06|Lewis|1.2|books/Lewis/chapter_1_problem_2.md|Completes particle-emission decay reactions||draft_curated
+L01.M06|Lewis|1.3|books/Lewis/chapter_1_problem_3.md|Completes a beta-minus decay reaction||draft_curated
+L01.M06|Lewis|1.7|books/Lewis/chapter_1_problem_7.md|Tracks beta decay after neutron captures|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L01.M06|Lewis|1.12|books/Lewis/chapter_1_problem_12.md|Uses Ra-226 alpha decay as part of a neutron-source chain|ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M06|Lewis|1.19|books/Lewis/chapter_1_problem_19.md|Uses Po-210 alpha decay to compute activity and heat|ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M06|DHNRA|2.2|books/DHNRA/chapter_2_problem_2.md|Uses radioactive delayed-neutron emission as an exponential decay process|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L01.M06|DHNRA|2.8|books/DHNRA/chapter_2_problem_8.md|Uses free-neutron beta decay as the radioactive process|ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L01.M06|DHNRA|2.19|books/DHNRA/chapter_2_problem_19.md|Describes beta decay of neutron-rich fission products|ORTHO_FISSION_SPECTRA_DISTRIBUTIONS|draft_curated
+L01.M06|Lamarsh|1.13|books/Lamarsh/chapter_1_problem_13.md|Uses post-irradiation radioactive decay of activated indium|ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M06|Lamarsh|1.15|books/Lamarsh/chapter_1_problem_15.md|Uses production and decay of Na-24 after activation|ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M06|Lamarsh|1.17|books/Lamarsh/chapter_1_problem_17.md|Models the radioactive chain A -> B -> C||draft_curated
+L01.M06|Lamarsh|2.7|books/Lamarsh/chapter_2_problem_7.md|Uses neutron radioactive decay competing with absorption|ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L01.M07|Lewis|1.5|books/Lewis/chapter_1_problem_5.md|Quantifies the small error from classical neutron kinematics at 2 MeV||draft_curated
+L01.M07|Lamarsh|1.6|books/Lamarsh/chapter_1_problem_6.md|Derives the classical neutron speed-energy relation for MeV energies||draft_curated
+L01.M08|Lewis|1.6|books/Lewis/chapter_1_problem_6.md|Converts mass difference to energy release fraction|ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M08|Lamarsh|1.9|books/Lamarsh/chapter_1_problem_9.md|Computes neutron separation energies from mass differences|ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M08|Lamarsh|1.10|books/Lamarsh/chapter_1_problem_10.md|Computes total binding energy from mass defects|ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M08|Lamarsh|1.11|books/Lamarsh/chapter_1_problem_11.md|Computes reaction Q values from mass differences|ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M08|Lamarsh|2.29|books/Lamarsh/chapter_2_problem_29.md|Uses mass differences to compute reaction thresholds|ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M09|Lamarsh|1.10|books/Lamarsh/chapter_1_problem_10.md|Directly computes binding energy per nucleon for several nuclides|ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M10|Lewis|1.19|books/Lewis/chapter_1_problem_19.md|Relates alpha-decay energy to radioactive heat output|ORTHO_UNIT_CONVERSIONS|draft_curated
+L01.M10|Lamarsh|1.11|books/Lamarsh/chapter_1_problem_11.md|Uses sign and magnitude of Q to classify reaction energetics|ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M10|Lamarsh|2.29|books/Lamarsh/chapter_2_problem_29.md|Connects negative Q values to reaction thresholds|ORTHO_NEUTRON_KINEMATICS_CM_LAB;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L01.M10|Lamarsh|3.2|books/Lamarsh/chapter_3_problem_2.md|Relates fission Q value to the extra excitation needed for fission|ORTHO_RESONANCE_NUCLEAR_STRUCTURE|draft_curated
+L02.MACRO|Lewis|1.9|books/Lewis/chapter_1_problem_9.md|Computes fission-product decay heat versus time after shutdown|ORTHO_DECAY_HEAT_WAY_WIGNER|draft_curated
+L02.MACRO|Lewis|5.4|books/Lewis/chapter_5_problem_4.md|Uses prompt neutron lifetime and reactivity to control power growth|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.MACRO|DHNRA|2.20|books/DHNRA/chapter_2_problem_20.md|Converts fission rate density to thermal power density|ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS|draft_curated
+L02.MACRO|DHNRA|3.9|books/DHNRA/chapter_3_problem_9.md|Models neutron population with a source for k less than equal to or greater than 1||draft_curated
+L02.MACRO|Lamarsh|3.11|books/Lamarsh/chapter_3_problem_11.md|Uses energy per fission to connect reactor power and fuel consumption|ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS|draft_curated
+L02.MACRO|Lamarsh|12.1|books/Lamarsh/chapter_12_problem_1.md|Computes prompt neutron lifetime in infinite thermal reactors|ORTHO_TRANSPORT_DIFFUSION|draft_curated
+L02.MACRO|Lamarsh|12.2|books/Lamarsh/chapter_12_problem_2.md|Computes mean life of fission neutrons in critical mixtures|ORTHO_TRANSPORT_DIFFUSION|draft_curated
+L02.MACRO|Lamarsh|12.18|books/Lamarsh/chapter_12_problem_18.md|Analyzes time response of a subcritical multiplying assembly after source removal|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_CRITICALITY_DESIGN|draft_curated
+L02.M01|Lamarsh|3.2|books/Lamarsh/chapter_3_problem_2.md|Uses an explicit fission Q value in an energy calculation|ORTHO_RESONANCE_NUCLEAR_STRUCTURE|draft_curated
+L02.M02|DHNRA|3.7|books/DHNRA/chapter_3_problem_7.md|Compares fossil LWR HTGR LMFBR and fusion plant heat rejection|ORTHO_REACTOR_POWER_CONVERSION;ORTHO_REACTOR_THERMAL_HYDRAULICS|draft_curated
+L02.M03|Lewis|2.5|books/Lewis/chapter_2_problem_5.md|Computes fractions of fission neutrons in specified energy ranges|ORTHO_FISSION_SPECTRA_DISTRIBUTIONS|draft_curated
+L02.M03|DHNRA|2.19|books/DHNRA/chapter_2_problem_19.md|Lists prompt neutrons gammas delayed neutrons betas and antineutrinos from fission|ORTHO_FISSION_SPECTRA_DISTRIBUTIONS|draft_curated
+L02.M03|Lamarsh|3.7|books/Lamarsh/chapter_3_problem_7.md|Finds average fission-product gamma-ray energy|ORTHO_FISSION_SPECTRA_DISTRIBUTIONS|draft_curated
+L02.M03|Lamarsh|3.8|books/Lamarsh/chapter_3_problem_8.md|Normalizes and analyzes the prompt fission neutron spectrum|ORTHO_FISSION_SPECTRA_DISTRIBUTIONS;ORTHO_NUMERICAL_PLOTTING|draft_curated
+L02.M03|Lamarsh|3.10|books/Lamarsh/chapter_3_problem_10.md|Computes fraction of prompt fission neutrons above a fission threshold|ORTHO_FISSION_SPECTRA_DISTRIBUTIONS;ORTHO_MATERIALS_DATA_LOOKUP|draft_curated
+L02.M04|Lewis|5.3|books/Lewis/chapter_5_problem_3.md|Sketches neutron population response for source-driven subcritical and critical cases|ORTHO_DELAYED_NEUTRON_KINETICS|draft_curated
+L02.M04|Lewis|5.4|books/Lewis/chapter_5_problem_4.md|Uses prompt neutron lifetime in a neutron-population growth model|ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M04|Lewis|5.5|books/Lewis/chapter_5_problem_5.md|Derives reactivity and generation-time forms from k and prompt lifetime|ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M04|DHNRA|3.1|books/DHNRA/chapter_3_problem_1.md|Asks for the maximum multiplication factor possible in reactor design|ORTHO_REACTOR_CRITICALITY_DESIGN|draft_curated
+L02.M04|DHNRA|3.2|books/DHNRA/chapter_3_problem_2.md|Derives the six-factor formula from neutron balance|ORTHO_REACTOR_CRITICALITY_DESIGN|draft_curated
+L02.M04|DHNRA|3.9|books/DHNRA/chapter_3_problem_9.md|Builds the time behavior of neutron population for k cases with a source||draft_curated
+L02.M04|Lamarsh|12.7|books/Lamarsh/chapter_12_problem_7.md|Solves one-delayed-group flux response after a reactivity change|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M04|Lamarsh|12.13|books/Lamarsh/chapter_12_problem_13.md|Derives prompt-jump behavior by summing neutron generations|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M04|Lamarsh|12.18|books/Lamarsh/chapter_12_problem_18.md|Models source-driven neutron population in a subcritical multiplying assembly|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M05|Lewis|5.3|books/Lewis/chapter_5_problem_3.md|Contrasts subcritical and critical source-driven neutron populations|ORTHO_DELAYED_NEUTRON_KINETICS|draft_curated
+L02.M05|Lewis|5.17|books/Lewis/chapter_5_problem_17.md|Solves source-removal response of a subcritical reactor|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M05|DHNRA|3.3|books/DHNRA/chapter_3_problem_3.md|Discusses how modifications change a critical reactor multiplication|ORTHO_REACTOR_CRITICALITY_DESIGN|draft_curated
+L02.M05|DHNRA|3.8|books/DHNRA/chapter_3_problem_8.md|Finds fuel-to-moderator ratios that render infinite systems critical|ORTHO_REACTOR_CRITICALITY_DESIGN|draft_curated
+L02.M05|DHNRA|3.9|books/DHNRA/chapter_3_problem_9.md|Requires interpreting k less than equal to and greater than 1||draft_curated
+L02.M05|DHNRA|15.11|books/DHNRA/chapter_15_problem_11.md|Discusses a subcritical assembly as reactivity is slowly inserted|ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M05|Lamarsh|12.4|books/Lamarsh/chapter_12_problem_4.md|Starts from a critical system and estimates reactivity after geometry change|ORTHO_REACTOR_CRITICALITY_DESIGN;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M05|Lamarsh|12.5|books/Lamarsh/chapter_12_problem_5.md|Evaluates reactivity change after loss of reflector from a critical system|ORTHO_REACTOR_CRITICALITY_DESIGN;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M05|Lamarsh|12.12|books/Lamarsh/chapter_12_problem_12.md|Asks for the maximum possible reactivity insertion in a critical reactor|ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M05|Lamarsh|12.18|books/Lamarsh/chapter_12_problem_18.md|Analyzes a subcritical assembly and its flux response|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M06|Lewis|1.9|books/Lewis/chapter_1_problem_9.md|Directly computes decay heat after reactor shutdown|ORTHO_DECAY_HEAT_WAY_WIGNER|draft_curated
+L02.M06|DHNRA|15.1|books/DHNRA/chapter_15_problem_1.md|Asks what happens to power output after shutdown and ties restart to poison buildup|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M06|DHNRA|15.21|books/DHNRA/chapter_15_problem_21.md|Uses Way-Wigner delayed heat release in a power-programming calculation|ORTHO_DECAY_HEAT_WAY_WIGNER;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L02.M06|Lamarsh|3.4|books/Lamarsh/chapter_3_problem_4.md|Computes fission-product activity after reactor operation and cooling|ORTHO_DECAY_HEAT_WAY_WIGNER;ORTHO_UNIT_CONVERSIONS|draft_curated
+L02.M06|Lamarsh|3.5|books/Lamarsh/chapter_3_problem_5.md|Computes activity of fuel one year after shutdown|ORTHO_DECAY_HEAT_WAY_WIGNER;ORTHO_UNIT_CONVERSIONS|draft_curated
+L02.M06|Lamarsh|3.6|books/Lamarsh/chapter_3_problem_6.md|Uses fission-product activity decay law to integrate fallout dose|ORTHO_DECAY_HEAT_WAY_WIGNER;ORTHO_UNIT_CONVERSIONS|draft_curated
+L02.M07|Lewis|1.7|books/Lewis/chapter_1_problem_7.md|Tracks neutron captures and beta decay that produce transuranic nuclides|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M07|Lewis|10.14|books/Lewis/chapter_10_problem_14.md|States fertile thorium transmutation to fissile uranium-233 and solves the chain|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_FISSION_PRODUCT_POISONS|draft_curated
+L02.M07|DHNRA|3.4|books/DHNRA/chapter_3_problem_4.md|Uses fissile loading and breeding ratio to derive breeder doubling time|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L02.M07|DHNRA|7.13|books/DHNRA/chapter_7_problem_13.md|Defines conversion ratio as fissile production over fissile destruction|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M07|DHNRA|15.14|books/DHNRA/chapter_15_problem_14.md|Uses enrichment and conversion ratio to bound burnup|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L02.M07|DHNRA|15.15|books/DHNRA/chapter_15_problem_15.md|Develops Th to Pa to U conversion of fertile material into fissile material|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M07|DHNRA|15.18|books/DHNRA/chapter_15_problem_18.md|Discusses LMFBR fuel cycle and fast-reactor fuel options|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L02.M07|DHNRA|15.19|books/DHNRA/chapter_15_problem_19.md|Models a thorium MSBR breeder chain and critical operation|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M07|DHNRA|15.22|books/DHNRA/chapter_15_problem_22.md|Asks for a reactor production scheme and precursor equations for Pu-238|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M07|Lamarsh|4.4|books/Lamarsh/chapter_4_problem_4.md|Uses fertile conversion and fissile production through generations|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M07|Lamarsh|4.5|books/Lamarsh/chapter_4_problem_5.md|Derives breeder doubling time from fissile inventory and breeding gain|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L02.M07|Lamarsh|13.28|books/Lamarsh/chapter_13_problem_28.md|Models Th-232 conversion to Pa-233 and U-233 in a mixed fuel|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_FISSION_PRODUCT_POISONS|draft_curated
+L02.M07|Lamarsh|13.34|books/Lamarsh/chapter_13_problem_34.md|Derives fissile-fueled research reactor life at constant flux|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M08|Lewis|10.14|books/Lewis/chapter_10_problem_14.md|Identifies Th-232 as fertile and U-233 as fissile in a production chain|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M08|DHNRA|15.18|books/DHNRA/chapter_15_problem_18.md|Discusses uranium and plutonium roles in LMFBR fuel cycles|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M08|DHNRA|15.19|books/DHNRA/chapter_15_problem_19.md|Identifies Th-232 feed and bred U-233 in an MSBR cycle|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M08|DHNRA|15.22|books/DHNRA/chapter_15_problem_22.md|Identifies Pu-238 production pathway and precursors|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M08|Lamarsh|13.28|books/Lamarsh/chapter_13_problem_28.md|Identifies U-235 Th-232 Pa-233 and U-233 roles in a mixed fuel chain|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L02.M09|DHNRA|2.19|books/DHNRA/chapter_2_problem_19.md|Explicitly describes neutron-rich fission products undergoing beta-minus decay|ORTHO_FISSION_SPECTRA_DISTRIBUTIONS|draft_curated
+L02.M10|DHNRA|2.19|books/DHNRA/chapter_2_problem_19.md|Connects long-lived daughters to the valley of beta stability|ORTHO_FISSION_SPECTRA_DISTRIBUTIONS|draft_curated
+L03.MACRO|Lewis|1.10|books/Lewis/chapter_1_problem_10.md|Computes buildup of Pu-239 from radioactive precursors under constant production|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L03.MACRO|Lewis|1.20|books/Lewis/chapter_1_problem_20.md|Solves a produced fission-product chain A to B to C|ORTHO_DECAY_HEAT_WAY_WIGNER|draft_curated
+L03.MACRO|DHNRA|2.3|books/DHNRA/chapter_2_problem_3.md|Asks for rate equations and stepwise solution of an arbitrary decay chain||draft_curated
+L03.MACRO|DHNRA|2.4|books/DHNRA/chapter_2_problem_4.md|Sets up and solves iodine-xenon rate equations with fission production|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.MACRO|Lamarsh|1.17|books/Lamarsh/chapter_1_problem_17.md|Solves activities in a produced two-member chain before and after shutdown||draft_curated
+L03.MACRO|Lamarsh|13.28|books/Lamarsh/chapter_13_problem_28.md|Solves time-dependent U-235 Pa-233 U-233 concentrations|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M01|Lewis|1.10|books/Lewis/chapter_1_problem_10.md|Uses precursor half-lives to set decay constants in a buildup calculation|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L03.M01|Lewis|1.11|books/Lewis/chapter_1_problem_11.md|Converts U isotope half-lives to decay constants over geologic time|ORTHO_ENRICHMENT_ISOTOPICS|draft_curated
+L03.M01|Lewis|1.14|books/Lewis/chapter_1_problem_14.md|Converts a decay constant to half-life and decay times||draft_curated
+L03.M01|Lewis|1.16|books/Lewis/chapter_1_problem_16.md|Infers half-life from fractional decay data||draft_curated
+L03.M01|Lewis|1.17|books/Lewis/chapter_1_problem_17.md|Uses half-life to compute saturation and buildup times|ORTHO_DECAY_HEAT_WAY_WIGNER|draft_curated
+L03.M01|Lewis|1.18|books/Lewis/chapter_1_problem_18.md|Uses half-lives to compare residual activities||draft_curated
+L03.M01|Lewis|1.19|books/Lewis/chapter_1_problem_19.md|Uses half-life to compute activity from mass|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M01|DHNRA|2.2|books/DHNRA/chapter_2_problem_2.md|Uses a decay constant to compute a power-decrease time|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L03.M01|DHNRA|2.3|books/DHNRA/chapter_2_problem_3.md|Uses differing half-lives in a general decay-chain solution||draft_curated
+L03.M01|DHNRA|2.8|books/DHNRA/chapter_2_problem_8.md|Uses neutron half-life in a competing decay and absorption probability|ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M01|DHNRA|2.21|books/DHNRA/chapter_2_problem_21.md|Uses In-116m half-life to compute a survival probability from count data|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M01|Lamarsh|1.13|books/Lamarsh/chapter_1_problem_13.md|Uses a half-life to back-calculate activity at another time|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M01|Lamarsh|1.15|books/Lamarsh/chapter_1_problem_15.md|Uses Na-24 half-life in buildup and decay calculations|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M01|Lamarsh|1.17|books/Lamarsh/chapter_1_problem_17.md|Uses relative half-lives to reason about a two-member decay chain||draft_curated
+L03.M01|Lamarsh|2.7|books/Lamarsh/chapter_2_problem_7.md|Uses neutron radioactive decay constant in competing-process probability|ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M01|Lamarsh|12.7|books/Lamarsh/chapter_12_problem_7.md|Uses delayed-neutron mean life in a one-group kinetics response|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M02|Lewis|1.11|books/Lewis/chapter_1_problem_11.md|Solves pure exponential decay for U-235 and U-238 isotope abundances|ORTHO_ENRICHMENT_ISOTOPICS|draft_curated
+L03.M02|Lewis|1.14|books/Lewis/chapter_1_problem_14.md|Solves pure radioactive decay to a specified residual fraction||draft_curated
+L03.M02|Lewis|1.16|books/Lewis/chapter_1_problem_16.md|Solves exponential decay from a specified decay fraction||draft_curated
+L03.M02|Lewis|1.18|books/Lewis/chapter_1_problem_18.md|Solves residual activities after source decay||draft_curated
+L03.M02|Lewis|1.19|books/Lewis/chapter_1_problem_19.md|Uses simple radioactive decay activity for Po-210 heat output|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M02|DHNRA|2.2|books/DHNRA/chapter_2_problem_2.md|Solves an exponential decrease in reactor power tied to radioactive decay|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L03.M02|DHNRA|2.8|books/DHNRA/chapter_2_problem_8.md|Uses exponential decay probability for free neutrons competing with absorption|ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M02|DHNRA|2.21|books/DHNRA/chapter_2_problem_21.md|Computes probability that activated nuclei remain after several half-lives|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M02|Lamarsh|1.13|books/Lamarsh/chapter_1_problem_13.md|Uses simple post-irradiation decay of activity||draft_curated
+L03.M02|Lamarsh|1.15|books/Lamarsh/chapter_1_problem_15.md|Uses simple decay after activation ceases|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M02|Lamarsh|2.7|books/Lamarsh/chapter_2_problem_7.md|Uses radioactive decay probability for neutrons before absorption|ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M03|Lewis|1.13|books/Lewis/chapter_1_problem_13.md|Solves activation with constant production and radioactive loss|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M03|Lewis|1.14|books/Lewis/chapter_1_problem_14.md|Includes buildup to a saturation fraction under constant production||draft_curated
+L03.M03|Lewis|1.16|books/Lewis/chapter_1_problem_16.md|Computes long-time inventory under constant production||draft_curated
+L03.M03|Lewis|1.17|books/Lewis/chapter_1_problem_17.md|Computes fission-product saturation activity and buildup time|ORTHO_DECAY_HEAT_WAY_WIGNER|draft_curated
+L03.M03|Lewis|1.20|books/Lewis/chapter_1_problem_20.md|Solves the first produced member of a fission-product chain|ORTHO_DECAY_HEAT_WAY_WIGNER|draft_curated
+L03.M03|DHNRA|2.4|books/DHNRA/chapter_2_problem_4.md|Includes fission production and decay/removal in iodine-xenon equations|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M03|DHNRA|14.9|books/DHNRA/chapter_14_problem_9.md|Determines burnable poison concentration as a function of time at constant power|ORTHO_REACTIVITY_CONTROL;ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L03.M03|DHNRA|15.4|books/DHNRA/chapter_15_problem_4.md|Computes time to xenon and samarium saturation under a maintained flux|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M03|DHNRA|15.8|books/DHNRA/chapter_15_problem_8.md|Determines samarium concentration behavior after a flux-level change|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M03|Lamarsh|1.14|books/Lamarsh/chapter_1_problem_14.md|Derives general production plus decay and absorption solution|ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M03|Lamarsh|1.15|books/Lamarsh/chapter_1_problem_15.md|Computes activity after finite production and subsequent decay|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M03|Lamarsh|1.16|books/Lamarsh/chapter_1_problem_16.md|Models recurring coolant activation and decay over repeated cycles|ORTHO_REACTOR_THERMAL_HYDRAULICS|draft_curated
+L03.M03|Lamarsh|2.1|books/Lamarsh/chapter_2_problem_1.md|Computes saturated tritium activity from a beam-induced production rate|ORTHO_CROSS_SECTIONS_REACTION_RATES;ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M03|Lamarsh|2.3|books/Lamarsh/chapter_2_problem_3.md|Finds neutron beam intensity needed for target activation to specified activity|ORTHO_CROSS_SECTIONS_REACTION_RATES;ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M03|Lamarsh|13.20|books/Lamarsh/chapter_13_problem_20.md|Computes time for Sm-149 concentration to reach saturation under flux|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING|draft_curated
+L03.M03|Lamarsh|13.23|books/Lamarsh/chapter_13_problem_23.md|Derives samarium concentration under constant power|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M03|Lamarsh|13.33|books/Lamarsh/chapter_13_problem_33.md|Derives burnable poison concentration versus fuel concentration and time|ORTHO_REACTIVITY_CONTROL;ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L03.M04|Lewis|1.12|books/Lewis/chapter_1_problem_12.md|Converts activity in curies to neutron source strength through decay|ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M04|Lewis|1.13|books/Lewis/chapter_1_problem_13.md|Converts target curies to disintegrations per second and production fraction||draft_curated
+L03.M04|Lewis|1.15|books/Lewis/chapter_1_problem_15.md|Converts mass and half-life to equal activity in curies||draft_curated
+L03.M04|Lewis|1.17|books/Lewis/chapter_1_problem_17.md|Converts saturation activity between disintegrations per second and curies||draft_curated
+L03.M04|Lewis|1.19|books/Lewis/chapter_1_problem_19.md|Converts grams of Po-210 to curies and watts|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M04|DHNRA|2.20|books/DHNRA/chapter_2_problem_20.md|Converts thermal power density to fission-rate density|ORTHO_REACTOR_POWER_CONVERSION;ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M04|DHNRA|2.21|books/DHNRA/chapter_2_problem_21.md|Converts count rate and detector efficiency to remaining nuclei probability|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M04|Lamarsh|1.13|books/Lamarsh/chapter_1_problem_13.md|Uses counts and half-life to infer activity at another time|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M04|Lamarsh|1.15|books/Lamarsh/chapter_1_problem_15.md|Uses microcurie activity units in activation and decay|ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M04|Lamarsh|2.1|books/Lamarsh/chapter_2_problem_1.md|Converts target density cross section production and activity in curies|ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M04|Lamarsh|2.3|books/Lamarsh/chapter_2_problem_3.md|Solves for beam intensity needed to reach microcurie activation|ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M04|Lamarsh|3.11|books/Lamarsh/chapter_3_problem_11.md|Converts reactor work and fission energy to kilograms of U-235 consumed|ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L03.M05|Lewis|1.10|books/Lewis/chapter_1_problem_10.md|Asks for times to reach one-half ninety percent and ninety-nine percent saturation||draft_curated
+L03.M05|Lewis|1.13|books/Lewis/chapter_1_problem_13.md|Solves irradiation time to reach a target fraction of saturation||draft_curated
+L03.M05|Lewis|1.14|books/Lewis/chapter_1_problem_14.md|Asks time to reach ninety-five percent of saturation under production||draft_curated
+L03.M05|Lewis|1.16|books/Lewis/chapter_1_problem_16.md|Asks for long-time inventory under constant production||draft_curated
+L03.M05|Lewis|1.17|books/Lewis/chapter_1_problem_17.md|Directly asks for saturation activity and time to ninety percent||draft_curated
+L03.M05|DHNRA|2.4|books/DHNRA/chapter_2_problem_4.md|Determines saturated xenon concentration under constant production and removal|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M05|DHNRA|15.3|books/DHNRA/chapter_15_problem_3.md|Determines equilibrium xenon density ratio as a function of flux|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M05|DHNRA|15.4|books/DHNRA/chapter_15_problem_4.md|Asks time for xenon and samarium to reach ninety percent saturation|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M05|Lamarsh|1.13|books/Lamarsh/chapter_1_problem_13.md|Starts from an irradiated-to-saturation foil and applies decay afterward||draft_curated
+L03.M05|Lamarsh|1.15|books/Lamarsh/chapter_1_problem_15.md|Directly asks maximum possible saturation activity||draft_curated
+L03.M05|Lamarsh|1.16|books/Lamarsh/chapter_1_problem_16.md|Finds maximum coolant activity after repeated activation cycles|ORTHO_REACTOR_THERMAL_HYDRAULICS|draft_curated
+L03.M05|Lamarsh|1.17|books/Lamarsh/chapter_1_problem_17.md|Analyzes saturation and maximum daughter activity in a chain||draft_curated
+L03.M05|Lamarsh|2.1|books/Lamarsh/chapter_2_problem_1.md|Computes maximum tritium activity induced by a neutron beam|ORTHO_CROSS_SECTIONS_REACTION_RATES;ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M05|Lamarsh|13.11|books/Lamarsh/chapter_13_problem_11.md|Computes equilibrium Xe-135 density ratio versus flux|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING|draft_curated
+L03.M05|Lamarsh|13.12|books/Lamarsh/chapter_13_problem_12.md|Computes time for Xe-135 and Sm-149 to reach ninety percent equilibrium|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M05|Lamarsh|13.20|books/Lamarsh/chapter_13_problem_20.md|Computes time after startup for Sm-149 to reach ninety percent saturation|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING|draft_curated
+L03.M05|Lamarsh|13.22|books/Lamarsh/chapter_13_problem_22.md|Compares Xe and Sm equilibrium worth and ninety percent buildup times|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lewis|1.10|books/Lewis/chapter_1_problem_10.md|Solves U-239 to Np-239 to Pu-239 buildup under constant production|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L03.M06|Lewis|1.17|books/Lewis/chapter_1_problem_17.md|Includes daughter activity in A to B to C decay after finite time|ORTHO_DECAY_HEAT_WAY_WIGNER|draft_curated
+L03.M06|Lewis|1.20|books/Lewis/chapter_1_problem_20.md|Directly solves produced fission-product chain equations|ORTHO_DECAY_HEAT_WAY_WIGNER|draft_curated
+L03.M06|Lewis|10.1|books/Lewis/chapter_10_problem_1.md|Solves xenon-135 post-shutdown buildup from iodine decay|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lewis|10.10|books/Lewis/chapter_10_problem_10.md|Solves promethium concentration over a repeated daily power cycle|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L03.M06|Lewis|10.14|books/Lewis/chapter_10_problem_14.md|Solves Th to Pa to U concentration equations with production and decay|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L03.M06|DHNRA|2.3|books/DHNRA/chapter_2_problem_3.md|Directly asks for general N-member decay-chain equations and solutions||draft_curated
+L03.M06|DHNRA|2.4|books/DHNRA/chapter_2_problem_4.md|Directly asks for iodine-xenon rate equations and saturated solution|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M06|DHNRA|6.14|books/DHNRA/chapter_6_problem_14.md|Sets up two-stage delayed-neutron precursor equations|ORTHO_DELAYED_NEUTRON_KINETICS|draft_curated
+L03.M06|DHNRA|15.2|books/DHNRA/chapter_15_problem_2.md|Solves xenon buildup rate equations after startup|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|DHNRA|15.10|books/DHNRA/chapter_15_problem_10.md|Plots iodine-xenon phase-plane buildup through startup and shutdown|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING|draft_curated
+L03.M06|DHNRA|15.13|books/DHNRA/chapter_15_problem_13.md|Determines U-235 Pu-239 and Pu-241 concentrations from chosen chains|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M06|DHNRA|15.15|books/DHNRA/chapter_15_problem_15.md|Develops and solves U-235 Pa-233 U-233 concentration equations|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M06|DHNRA|15.16|books/DHNRA/chapter_15_problem_16.md|Analyzes a capture-fission-decay chain with secular equilibrium|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|DHNRA|15.17|books/DHNRA/chapter_15_problem_17.md|Solves plutonium-isotope buildup equations in fluence|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M06|DHNRA|15.19|books/DHNRA/chapter_15_problem_19.md|Models Th Pa U and fission-product removal equations for an MSBR|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|DHNRA|15.22|books/DHNRA/chapter_15_problem_22.md|Asks for precursor equations governing Pu-238 production|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L03.M06|Lamarsh|1.17|books/Lamarsh/chapter_1_problem_17.md|Solves activities in the A to B to C chain before and after shutdown||draft_curated
+L03.M06|Lamarsh|12.3|books/Lamarsh/chapter_12_problem_3.md|Computes delayed-neutron precursor concentrations at steady power|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L03.M06|Lamarsh|12.10|books/Lamarsh/chapter_12_problem_10.md|Sets up flux and twelve delayed-precursor equations for two fissile species|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lamarsh|12.16|books/Lamarsh/chapter_12_problem_16.md|Treats photoneutron-producing fission products as delayed precursor groups|ORTHO_DELAYED_NEUTRON_KINETICS;ORTHO_FISSION_SPECTRA_DISTRIBUTIONS|draft_curated
+L03.M06|Lamarsh|13.13|books/Lamarsh/chapter_13_problem_13.md|Derives iodine-xenon table coefficients through flux changes|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lamarsh|13.15|books/Lamarsh/chapter_13_problem_15.md|Derives post-shutdown xenon maximum from iodine-xenon chain equations|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lamarsh|13.28|books/Lamarsh/chapter_13_problem_28.md|Solves U-235 Pa-233 U-233 coupled concentration equations|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M06|Lamarsh|13.31|books/Lamarsh/chapter_13_problem_31.md|Computes U-235 Pu-239 Pu-241 concentrations from earlier chain formulas|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_NUMERICAL_PLOTTING|draft_curated
+L03.M06|Lamarsh|13.33|books/Lamarsh/chapter_13_problem_33.md|Derives burnable poison inventory coupled to fuel depletion|ORTHO_REACTIVITY_CONTROL;ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L03.M06|Lamarsh|13.35|books/Lamarsh/chapter_13_problem_35.md|Plots excess reactivity over time with fuel and burnable poison changes|ORTHO_REACTIVITY_CONTROL;ORTHO_FUEL_CYCLE_BURNUP;ORTHO_NUMERICAL_PLOTTING|draft_curated
+L03.M07|Lewis|1.10|books/Lewis/chapter_1_problem_10.md|Uses approach to a long-time production-rate limit in a chain|ORTHO_FUEL_CYCLE_BURNUP|draft_curated
+L03.M07|Lewis|1.17|books/Lewis/chapter_1_problem_17.md|Compares daughter activity buildup when parent and daughter half-lives match||draft_curated
+L03.M07|Lewis|1.20|books/Lewis/chapter_1_problem_20.md|Asks for infinite-time inventories in a produced decay chain||draft_curated
+L03.M07|DHNRA|2.3|books/DHNRA/chapter_2_problem_3.md|Asks for long-time chain composition when one half-life is much longer||draft_curated
+L03.M07|DHNRA|15.3|books/DHNRA/chapter_15_problem_3.md|Determines equilibrium xenon concentration relative to fuel|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M07|DHNRA|15.16|books/DHNRA/chapter_15_problem_16.md|Explicitly assumes secular equilibrium near end of fuel lifetime|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M07|Lamarsh|1.17|books/Lamarsh/chapter_1_problem_17.md|Analyzes limiting behavior when daughter half-life is much longer than parent||draft_curated
+L03.M07|Lamarsh|13.11|books/Lamarsh/chapter_13_problem_11.md|Computes equilibrium Xe-135 concentration versus flux|ORTHO_FISSION_PRODUCT_POISONS|draft_curated
+L03.M07|Lamarsh|13.12|books/Lamarsh/chapter_13_problem_12.md|Computes times to equilibrium for Xe and Sm in a subcritical assembly|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M07|Lamarsh|13.20|books/Lamarsh/chapter_13_problem_20.md|Computes time to Sm-149 saturation equilibrium|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_NUMERICAL_PLOTTING|draft_curated
+L03.M07|Lamarsh|13.21|books/Lamarsh/chapter_13_problem_21.md|Compares equilibrium Xe and Sm effects across fissile fuels|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M07|Lamarsh|13.22|books/Lamarsh/chapter_13_problem_22.md|Finds equality of equilibrium Xe and Sm reactivity and buildup time|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L02.M07|Lewis|10.13|books/Lewis/chapter_10_problem_13.md|Computes conversion ratio and Pu-239 power fraction as fuel evolves|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L03.M03|Lewis|10.12|books/Lewis/chapter_10_problem_12.md|Compares decay against neutron-capture removal in a produced actinide|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M04|Lamarsh|1.1|books/Lamarsh/chapter_1_problem_1.md|Converts ordinary-water density and isotope abundance to atom densities|ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_ENRICHMENT_ISOTOPICS|draft_curated
+L03.M04|Lamarsh|1.2|books/Lamarsh/chapter_1_problem_2.md|Converts uranium density and enrichment to isotope atom densities|ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_ENRICHMENT_ISOTOPICS|draft_curated
+L03.M04|Lamarsh|1.3|books/Lamarsh/chapter_1_problem_3.md|Converts chemical formula and material density to atom densities|ORTHO_ATOM_DENSITY_COMPOSITION|draft_curated
+L03.M04|Lamarsh|1.4|books/Lamarsh/chapter_1_problem_4.md|Relates thermal expansion to fractional atom-density change|ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_REACTOR_THERMAL_HYDRAULICS|draft_curated
+L03.M04|Lamarsh|1.5|books/Lamarsh/chapter_1_problem_5.md|Converts uranium-to-water number-density ratio to grams per liter|ORTHO_ATOM_DENSITY_COMPOSITION;ORTHO_UNIT_CONVERSIONS|draft_curated
+L03.M05|Lamarsh|13.14|books/Lamarsh/chapter_13_problem_14.md|Derives early xenon approach to its equilibrium value after startup|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lewis|10.11|books/Lewis/chapter_10_problem_11.md|Writes and solves the Pu-240 buildup equation using Pu-239 concentration|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M06|Lewis|10.12|books/Lewis/chapter_10_problem_12.md|Analyzes competing capture and decay in the neptunium-to-plutonium chain|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_CROSS_SECTIONS_REACTION_RATES|draft_curated
+L03.M06|Lewis|10.13|books/Lewis/chapter_10_problem_13.md|Uses actinide buildup approximations to compute conversion and Pu power share|ORTHO_FUEL_CYCLE_BURNUP;ORTHO_REACTOR_POWER_CONVERSION|draft_curated
+L03.M06|DHNRA|15.5|books/DHNRA/chapter_15_problem_5.md|Derives the condition for post-shutdown xenon buildup from the chain model|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|DHNRA|15.6|books/DHNRA/chapter_15_problem_6.md|Determines the time of maximum xenon concentration after shutdown|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|DHNRA|15.7|books/DHNRA/chapter_15_problem_7.md|Computes xenon-precluded restart and deadtime after scram|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lamarsh|13.14|books/Lamarsh/chapter_13_problem_14.md|Derives approximate Xe-135 concentration after startup from iodine decay|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lamarsh|13.16|books/Lamarsh/chapter_13_problem_16.md|Derives a no-post-shutdown-xenon-buildup condition from iodine-xenon balance|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lamarsh|13.17|books/Lamarsh/chapter_13_problem_17.md|Computes xenon deadtime after scram from pre-shutdown operation|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M06|Lamarsh|13.18|books/Lamarsh/chapter_13_problem_18.md|Computes reactivity rise after restart following xenon deadtime|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL;ORTHO_NUMERICAL_PLOTTING|draft_curated
+L03.M06|Lamarsh|13.19|books/Lamarsh/chapter_13_problem_19.md|Determines power-drop limit for avoiding xenon deadtime|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated
+L03.M07|DHNRA|15.9|books/DHNRA/chapter_15_problem_9.md|Compares equilibrium xenon and samarium effects across fissile fuels|ORTHO_FISSION_PRODUCT_POISONS;ORTHO_REACTIVITY_CONTROL|draft_curated

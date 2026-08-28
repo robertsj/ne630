@@ -1,0 +1,177 @@
+schema_version: 1
+scope:
+  lessons:
+    - L01
+    - L02
+    - L03
+  objective_sources:
+    - ne630:pages/lesson_01.md
+    - ne630:pages/lesson_02.md
+    - ne630:pages/lesson_03.md
+  exercise_sources:
+    - ne630_problems:books/Lewis
+    - ne630_problems:books/DHNRA
+    - ne630_problems:books/Lamarsh
+  status: draft_curated
+
+objectives:
+  - id: L01.MACRO
+    lesson: L01
+    level: macro
+    text: Determine and quantify the reactants, products, and energy inputs/outputs of nuclear reactions.
+  - id: L01.M01
+    lesson: L01
+    level: micro
+    text: Compare the energy densities of different reaction types.
+  - id: L01.M02
+    lesson: L01
+    level: micro
+    text: Compute the total energy of a particle of rest mass m0 with a speed v.
+  - id: L01.M03
+    lesson: L01
+    level: micro
+    text: Explain the nomenclature A_Z X.
+  - id: L01.M04
+    lesson: L01
+    level: micro
+    text: Provide an example of a binary nuclear reaction of the form A(B,C)D.
+  - id: L01.M05
+    lesson: L01
+    level: micro
+    text: Compute the Q value for A(B,C)D.
+  - id: L01.M06
+    lesson: L01
+    level: micro
+    text: Provide an example of radioactive decay of the form A -> B + C.
+  - id: L01.M07
+    lesson: L01
+    level: micro
+    text: Demonstrate that the kinematics of neutrons with energies below about 10 MeV can be well approximated classically.
+  - id: L01.M08
+    lesson: L01
+    level: micro
+    text: Compute the mass defect of A_Z X.
+  - id: L01.M09
+    lesson: L01
+    level: micro
+    text: Compute the binding energy per nucleon of A_Z X.
+  - id: L01.M10
+    lesson: L01
+    level: micro
+    text: Explain how Q values relate to decay.
+  - id: L02.MACRO
+    lesson: L02
+    level: macro
+    text: Characterize the neutron population and energy produced as a function of time in terms of the neutron lifetime, the energy released from fission, and the multiplication factor k.
+  - id: L02.M01
+    lesson: L02
+    level: micro
+    text: Provide an example fission reaction and compute its Q value.
+  - id: L02.M02
+    lesson: L02
+    level: micro
+    text: List three forms of nuclear power.
+  - id: L02.M03
+    lesson: L02
+    level: micro
+    text: List the type and fraction of particles emitted from fission.
+  - id: L02.M04
+    lesson: L02
+    level: micro
+    text: Construct a mathematical model for the multiplication of neutrons.
+  - id: L02.M05
+    lesson: L02
+    level: micro
+    text: Explain criticality, subcriticality, and supercriticality.
+  - id: L02.M06
+    lesson: L02
+    level: micro
+    text: Estimate the heat generation rate of spent nuclear fuel.
+  - id: L02.M07
+    lesson: L02
+    level: micro
+    text: Compare fissile and fertile materials.
+  - id: L02.M08
+    lesson: L02
+    level: micro
+    text: List the major fissile and fertile nuclides.
+  - id: L02.M09
+    lesson: L02
+    level: micro
+    text: Explain why fission products are neutron rich.
+  - id: L02.M10
+    lesson: L02
+    level: micro
+    text: Describe the trend of stable nuclei as functions of Z and A.
+  - id: L03.MACRO
+    lesson: L03
+    level: macro
+    text: Determine the amounts of a radioactive species and its daughters at any point in time given initial amounts.
+  - id: L03.M01
+    lesson: L03
+    level: micro
+    text: Convert t_1/2 to mean lifetime and lambda.
+  - id: L03.M02
+    lesson: L03
+    level: micro
+    text: Solve N' = -lambda N(t), N(0) given.
+  - id: L03.M03
+    lesson: L03
+    level: micro
+    text: Solve N' = -lambda N(t) + R(t), N(0) and R(t) given.
+  - id: L03.M04
+    lesson: L03
+    level: micro
+    text: Convert between Ci, Bq, kg, and number or moles.
+  - id: L03.M05
+    lesson: L03
+    level: micro
+    text: Describe saturation activity and how long it takes to achieve.
+  - id: L03.M06
+    lesson: L03
+    level: micro
+    text: Solve multi-member radioactive-chain systems with production terms.
+  - id: L03.M07
+    lesson: L03
+    level: micro
+    text: Describe secular equilibrium.
+
+orthogonal_objectives:
+  - id: ORTHO_ATOM_DENSITY_COMPOSITION
+    text: Convert material density, isotopic abundance, enrichment, or chemical composition to atom densities.
+  - id: ORTHO_CROSS_SECTIONS_REACTION_RATES
+    text: Use microscopic or macroscopic cross sections, flux, and target density to compute reaction rates.
+  - id: ORTHO_DECAY_HEAT_WAY_WIGNER
+    text: Use empirical fission-product decay heat correlations or delayed heat-release models.
+  - id: ORTHO_DELAYED_NEUTRON_KINETICS
+    text: Model delayed neutron precursors and reactor periods beyond the simple generation model.
+  - id: ORTHO_ENRICHMENT_ISOTOPICS
+    text: Reason about enrichment, isotopic mixtures, atom fractions, and changing isotopic abundance.
+  - id: ORTHO_FISSION_PRODUCT_POISONS
+    text: Model xenon, samarium, iodine, promethium, or other reactor poison inventories and worth.
+  - id: ORTHO_FISSION_SPECTRA_DISTRIBUTIONS
+    text: Work with prompt fission spectra, yields, averages, or distribution integrals.
+  - id: ORTHO_FUEL_CYCLE_BURNUP
+    text: Analyze conversion ratio, breeding, burnup, fuel lifetime, fissile production, or depletion.
+  - id: ORTHO_MATERIALS_DATA_LOOKUP
+    text: Use tabulated nuclear masses, cross sections, yields, or reactor design data.
+  - id: ORTHO_NEUTRON_KINEMATICS_CM_LAB
+    text: Transform between center-of-mass and laboratory frames or compute reaction/scattering kinematics.
+  - id: ORTHO_NUMERICAL_PLOTTING
+    text: Plot or numerically evaluate a physics function as part of the exercise.
+  - id: ORTHO_REACTIVITY_CONTROL
+    text: Compute reactivity, control worth, shutdown margin, poison worth, or feedback effects.
+  - id: ORTHO_REACTOR_CRITICALITY_DESIGN
+    text: Compute critical size, critical composition, nonleakage, or other reactor design criticality quantities.
+  - id: ORTHO_REACTOR_POWER_CONVERSION
+    text: Convert between thermal power, electrical output, fission rate, efficiency, and fuel consumption.
+  - id: ORTHO_REACTOR_THERMAL_HYDRAULICS
+    text: Relate reactor power to temperature, heat removal, or coolant behavior.
+  - id: ORTHO_RESONANCE_NUCLEAR_STRUCTURE
+    text: Interpret resonance widths, excited states, compound-nucleus levels, or threshold structure.
+  - id: ORTHO_SHIELDING_ATTENUATION
+    text: Use attenuation, mean free paths, shielding thickness, or source geometry.
+  - id: ORTHO_TRANSPORT_DIFFUSION
+    text: Use transport, diffusion, leakage, flux-shape, or source-response models.
+  - id: ORTHO_UNIT_CONVERSIONS
+    text: Convert between time, activity, mass, power, energy, fluence, counts, and SI or reactor units.

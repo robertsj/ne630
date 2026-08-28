@@ -18,36 +18,63 @@
 \RequirePackage{fontspec}
 \RequirePackage{microtype}
 
-% Use the locally installed Adobe fonts without redistributing them.
-% The first path supports WSL; the second supports native Windows TeX.
-\newcommand{\MyriadProPath}{}
-\IfFileExists{/mnt/c/Windows/Fonts/Myriad-Pro-Regular.OTF}{%
-  \renewcommand{\MyriadProPath}{/mnt/c/Windows/Fonts/}%
-}{%
-  \IfFileExists{C:/Windows/Fonts/Myriad-Pro-Regular.OTF}{%
-    \renewcommand{\MyriadProPath}{C:/Windows/Fonts/}%
-  }{%
-    \ClassError{ne630boardhandout}
-      {Myriad Pro was not found}
-      {Install Myriad Pro in the Windows Fonts directory.}%
-  }%
+\defaultfontfeatures{Ligatures=TeX}
+
+\newcommand{\SetHandoutFileFonts}[4]{%
+  \setmainfont{#2}[
+    Path={#1},
+    BoldFont=#3,
+    ItalicFont=#2,
+    ItalicFeatures={FakeSlant=0.18},
+    BoldItalicFont=#4
+  ]%
+  \setsansfont{#2}[
+    Path={#1},
+    BoldFont=#3,
+    ItalicFont=#2,
+    ItalicFeatures={FakeSlant=0.18},
+    BoldItalicFont=#4
+  ]%
 }
 
-\defaultfontfeatures{Ligatures=TeX}
-\setmainfont{Myriad-Pro-Regular.OTF}[
-  Path=\MyriadProPath,
-  BoldFont=Myriad-Pro-Semibold.OTF,
-  ItalicFont=Myriad-Pro-Regular.OTF,
-  ItalicFeatures={FakeSlant=0.18},
-  BoldItalicFont=Myriad-Pro-Semibold-It.OTF
-]
-\setsansfont{Myriad-Pro-Regular.OTF}[
-  Path=\MyriadProPath,
-  BoldFont=Myriad-Pro-Semibold.OTF,
-  ItalicFont=Myriad-Pro-Regular.OTF,
-  ItalicFeatures={FakeSlant=0.18},
-  BoldItalicFont=Myriad-Pro-Semibold-It.OTF
-]
+\newcommand{\SetHandoutFallbackFonts}{%
+  \ClassWarningNoLine{ne630boardhandout}
+    {Myriad Pro was not found in a known file path; using TeX Gyre Heros for text}%
+  \setmainfont{texgyreheros-regular.otf}[
+    BoldFont=texgyreheros-bold.otf,
+    ItalicFont=texgyreheros-italic.otf,
+    BoldItalicFont=texgyreheros-bolditalic.otf
+  ]%
+  \setsansfont{texgyreheros-regular.otf}[
+    BoldFont=texgyreheros-bold.otf,
+    ItalicFont=texgyreheros-italic.otf,
+    BoldItalicFont=texgyreheros-bolditalic.otf
+  ]%
+}
+
+% Use locally installed Adobe fonts without redistributing them.
+\IfFileExists{/mnt/c/Windows/Fonts/Myriad-Pro-Regular.OTF}{%
+  \SetHandoutFileFonts{/mnt/c/Windows/Fonts/}
+    {Myriad-Pro-Regular.OTF}
+    {Myriad-Pro-Semibold.OTF}
+    {Myriad-Pro-Semibold-It.OTF}%
+}{%
+  \IfFileExists{C:/Windows/Fonts/Myriad-Pro-Regular.OTF}{%
+    \SetHandoutFileFonts{C:/Windows/Fonts/}
+      {Myriad-Pro-Regular.OTF}
+      {Myriad-Pro-Semibold.OTF}
+      {Myriad-Pro-Semibold-It.OTF}%
+  }{%
+    \IfFileExists{/home/robertsj/.local/share/fonts/adobe-cc/MyriadPro-Regular.otf}{%
+      \SetHandoutFileFonts{/home/robertsj/.local/share/fonts/adobe-cc/}
+        {MyriadPro-Regular.otf}
+        {MyriadPro-Semibold.otf}
+        {MyriadPro-SemiboldIt.otf}%
+    }{%
+      \SetHandoutFallbackFonts
+    }%
+  }%
+}
 \RequirePackage[
   letterpaper,
   left=0.48in,

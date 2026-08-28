@@ -13,10 +13,12 @@ The default layout uses US Letter paper, two columns, approximately half-inch ma
 ## Typography
 
 The handouts use Adobe Myriad Pro for text and Libertinus Math for equations.
-The class loads Myriad Pro from the local Windows font installation rather than
-copying the proprietary font into this repository. It detects the standard font
-directory from both WSL (/mnt/c/Windows/Fonts/) and native Windows TeX
-(C:/Windows/Fonts/).
+The class loads Myriad Pro from a local font installation rather than copying
+the proprietary font into this repository. It detects the standard Windows font
+directory from WSL (/mnt/c/Windows/Fonts/), native Windows TeX
+(C:/Windows/Fonts/), and Jeremy's local Adobe CC font cache
+(/home/robertsj/.local/share/fonts/adobe-cc/). If Myriad Pro is unavailable, it
+falls back to TeX Gyre Heros so drafts still compile.
 
 The configured text faces are Myriad Pro Regular, Semibold, and Semibold Italic.
 Because this installation does not include the regular italic face, regular

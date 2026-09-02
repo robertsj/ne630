@@ -1,0 +1,75 @@
+:root {
+  --ne630-purple: #512888;
+  --ne630-deep-purple: #3b1b64;
+  --ne630-light-purple: #f4f0f8;
+  --ne630-border: #d9d3df;
+}
+
+body {
+  color: #26222a;
+}
+
+div.document {
+  max-width: 1040px;
+}
+
+div.body h1,
+div.body h2 {
+  color: var(--ne630-deep-purple);
+}
+
+div.body h1 {
+  border-bottom: 4px solid var(--ne630-purple);
+  padding-bottom: 0.35rem;
+}
+
+table.handout-table {
+  border: 1px solid var(--ne630-border);
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.handout-table th {
+  background: var(--ne630-purple);
+  color: white;
+}
+
+table.handout-table th,
+table.handout-table td {
+  border: 1px solid var(--ne630-border);
+  padding: 0.65rem 0.75rem;
+  vertical-align: top;
+}
+
+table.handout-table tbody tr:nth-child(even) {
+  background: var(--ne630-light-purple);
+}
+
+table.handout-table a[href$=".pdf"] {
+  font-weight: 700;
+}
+
+div.body a {
+  color: var(--ne630-purple);
+}
+
+div.body a:hover,
+div.body a:focus {
+  color: var(--ne630-deep-purple);
+}
+
+@media print {
+  div.sphinxsidebar,
+  div.related {
+    display: none;
+  }
+
+  div.document,
+  div.documentwrapper,
+  div.bodywrapper {
+    margin: 0;
+    max-width: none;
+    width: 100%;
+  }
+}
+

@@ -6,6 +6,7 @@ import sys
 import re
 import urllib.parse
 import os
+import subprocess
 
 def encodemath(s):
     """Given a LaTeX blurb, return the URI string in Canvas form.
@@ -74,9 +75,16 @@ def canvas(in_file, out_file):
     
     assert os.path.exists(in_file)
 
-    pandoc = 'pandoc      --mathjax   {} -o tmp.html'.format(in_file)
-    
-    assert os.system(pandoc) == 0
+    pandoc = [
+        'pandoc',
+        '--mathjax',
+        '--wrap=none',
+        in_file,
+        '-o',
+        'tmp.html',
+    ]
+
+    subprocess.run(pandoc, check=True)
     
     s = None
     with open('tmp.html', 'r') as f:

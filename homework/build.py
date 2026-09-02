@@ -17,7 +17,7 @@ from markdown_it import MarkdownIt
 
 ROOT = Path(__file__).resolve().parent
 MARKDOWN_DIR = ROOT / "markdown"
-OUTPUT = ROOT / "html" / "HW01-03.html"
+OUTPUT = ROOT / "html" / "HW01-05.html"
 CANVAS_OUTPUT_DIR = ROOT / "html"
 CANVAS_CONVERTER = ROOT.parent / "build" / "convert_to_canvas.py"
 CANVAS_TEMP_OUTPUT = CANVAS_CONVERTER.parent / "tmp.html"
@@ -33,6 +33,8 @@ HOMEWORK = (
     Homework("HW01.md", 3),
     Homework("HW02.md", 3),
     Homework("HW03.md", 3),
+    Homework("HW04.md", 3),
+    Homework("HW05.md", 6),
 )
 
 HEADING_RE = re.compile(r"^##[ \t]+(.+?)[ \t]*$", re.MULTILINE)
@@ -43,7 +45,7 @@ MATH_RE = re.compile(
     re.DOTALL,
 )
 
-MARKDOWN = MarkdownIt("commonmark", {"html": False})
+MARKDOWN = MarkdownIt("commonmark", {"html": False}).enable("table")
 
 
 def render_with_math(
@@ -177,7 +179,7 @@ TEMPLATE = """<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NE 630 Homework 01–03</title>
+  <title>NE 630 Homework 01–05</title>
   <style>
     :root {
       --ksu-purple: #512888;
@@ -391,6 +393,26 @@ TEMPLATE = """<!doctype html>
       margin-top: 0.35rem;
     }
 
+    .problem-body table {
+      width: 100%;
+      min-width: 32rem;
+      margin: 1rem 0;
+      border-collapse: collapse;
+    }
+
+    .problem-body th,
+    .problem-body td {
+      padding: 0.45rem 0.55rem;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .problem-body th {
+      color: var(--ksu-deep-purple);
+      background: var(--ksu-purple-soft);
+    }
+
     mjx-container[display="true"] {
       overflow-x: auto;
       overflow-y: hidden;
@@ -476,7 +498,7 @@ TEMPLATE = """<!doctype html>
   <header class="page-header">
     <div class="page-header-inner">
       <p class="eyebrow">NE 630</p>
-      <h1>Homework 01–03</h1>
+      <h1>Homework 01–05</h1>
       <p class="subtitle">
         Choose a homework, then open individual problems as needed.
         All sections are folded by default.

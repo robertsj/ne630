@@ -1,0 +1,329 @@
+% Keep this content-dense lesson within the framework's two-page limit without
+% changing the global layout used by the other handouts.
+\tcbset{handout base/.append style={before skip=3pt,after skip=3pt}}
+
+\HandoutSetup
+  {NE 630}
+  {04}
+  {Neutron Attenuation}
+  {Read FNRP Sections 2.1--2.2. Define the key terms and distinguish material attenuation from geometric attenuation before class.}
+
+\begin{document}
+\MakeHandoutTitle
+
+\begin{handoutcolumns}
+
+\begin{fixedbox}{Macro objective}
+Characterize the attenuation of neutrons in a parallel beam or emitted from a
+point source as a function of distance and material composition.
+\end{fixedbox}
+
+\TermStrip{transport; target number density $n_X$; beam intensity $I$; microscopic cross section $\sigma$; barn; macroscopic cross section $\Sigma$; survival fraction; first collision; mean free path; uncollided flux $\phi_u$; point source; material/geometric attenuation; atom enrichment (a/o); mass/weight enrichment (w/o)}
+
+\HandoutSection{1}{What moves, and what attenuates?}
+
+\begin{fixedbox}{Idealized neutron-transport picture}
+\footnotesize
+\begin{itemize}
+  \item Neutrons are neutral.
+  \item Neutrons travel in straight lines between interactions.
+  \item Upon exiting an interaction, a neutron's direction and energy are different.
+  \item Neutronic systems have enough neutrons such that {\bf averages} are useful.
+  \item The neutron (number) density in these systems is much smaller than that of the surrounding medium.
+  \item The surrounding medium is {\bf isotropic}.
+\end{itemize}
+For a one-direction beam,
+\[
+ I(x)=v\,n'''_u(x)=\phi_u(x),
+ \qquad [I]=\unit{n\,cm^{-2}\,s^{-1}}.
+\]
+\normalsize
+\end{fixedbox}
+
+\begin{checkpoint}[Attenuation is not necessarily absorption]
+A neutron scatters without being absorbed. Does it still contribute to
+(a) the original beam and (b) the total neutron population?
+\[
+ (a)\ \RevealBlank[0.54in]{no}
+ \qquad
+ (b)\ \RevealBlank[0.54in]{yes}
+\]
+\end{checkpoint}
+
+\HandoutSection{2}{From material density to target density}
+
+\begin{fixedbox}{Number-density conversion}
+\[
+ \boxed{n_X=\frac{\rho_XN_A}{M_X}},
+ \qquad N_A=6.022\times10^{23}\unit{entities/mol}.
+\]
+Here $n_X$ means \emph{target} atoms or molecules per volume (Lewis writes
+$N$), not neutron density. Keep the species label in the units.
+\end{fixedbox}
+
+\begin{boardbox}{Examples}
+\footnotesize
+\textbf{Al:} $\rho=2.70\unit{g/cm^3}$, $M=26.98\unit{g/mol}$,
+\[
+ n_{\mathrm{Al}}=\MathBlank[1.30in]{6.03\times10^{22}}
+ \unit{Al\ atoms/cm^3}.
+\]
+\textbf{Water:} $\rho=1.00\unit{g/cm^3}$, $M=18.015\unit{g/mol}$,
+\[
+ \begin{aligned}
+ n_{\mathrm{H_2O}}&=\MathBlank[1.22in]{3.34\times10^{22}}
+   \unit{molecules/cm^3},\\
+ n_{\mathrm H}&=2n_{\mathrm{H_2O}}
+   =\MathBlank[1.02in]{6.69\times10^{22}}
+   \unit{H\ atoms/cm^3}.
+ \end{aligned}
+\]
+Why is stoichiometry applied after counting molecules?
+\RuledLines{1}
+\normalsize
+\end{boardbox}
+
+% Instructor cue: require a complete species-labeled unit chain for the first
+% calculation; for water, count molecules before applying stoichiometry.
+
+\switchcolumn
+
+\HandoutSection{3}{From a nuclear area to a material coefficient}
+
+\begin{boardbox}{Count what a thin slice removes}
+Let $A=\Delta_y\Delta_z$ be the beam area, $\Delta x$ the slice thickness,
+$n$ the target-nucleus density, and $\sigma$ the area presented by one
+nucleus. The slice contains
+\[
+ N_{\mathrm{slice}}=nA\,\Delta x.
+\]
+Complete the blocked-area fraction:
+\[
+ \frac{N_{\mathrm{slice}}\sigma}{A}
+ =\MathBlank[1.00in]{n\sigma\,\Delta x}
+ \equiv\Sigma\,\Delta x,
+ \qquad \boxed{\Sigma=\MathBlank[0.72in]{n\sigma}}.
+\]
+For a thin slice, the balance on uncollided intensity is
+\[
+ I(x+\Delta x)\approx I(x)\bigl(1-\Sigma\Delta x\bigr).
+\]
+Subtract $I(x)$, divide by $\Delta x$, and take $\Delta x\to0$:
+\[
+ \boxed{\frac{dI}{dx}=\MathBlank[0.88in]{-\Sigma I(x)}}
+ \quad\Longrightarrow\quad
+ \boxed{I(x)=\MathBlank[1.12in]{I_0e^{-\Sigma x}}}.
+\]
+\end{boardbox}
+
+\begin{fixedbox}{Microscopic versus macroscopic}
+\footnotesize
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X X@{}}
+\toprule
+quantity & meaning & units\\
+\midrule
+$\sigma$ & effective area of one target nucleus & $\unit{cm^2/nucleus}$ or b\\
+$\Sigma=n\sigma$ & interaction probability per unit path length in a material & $\unit{cm^{-1}}$\\
+$\Sigma x$ & dimensionless path length through the material & 1\\
+\bottomrule
+\end{tabularx}
+\footnotesize
+\smallskip
+$1\unit{b}=10^{-24}\unit{cm^2}$. For attenuation,
+$\sigma=\sigma_t=\sigma_s+\sigma_a$ and $\Sigma=\Sigma_t$: any collision
+counts. At fixed nuclide and neutron energy, changing density changes
+\RevealBlank[0.62in]{$\Sigma$}, not \RevealBlank[0.62in]{$\sigma$}.
+\normalsize
+\end{fixedbox}
+
+\begin{fixedbox}{The Lesson 3 analogy}
+\centering\scriptsize
+\begin{tabular}{@{}lll@{}}
+\toprule
+ & radioactive decay & attenuation\\
+\midrule
+independent variable & $t$ & $x$\\
+uncollided/undecayed amount & $N(t)$ & $I(x)$\\
+removal coefficient & $\lambda\ [\unit{s^{-1}}]$ & $\Sigma\ [\unit{cm^{-1}}]$\\
+characteristic scale & $1/\lambda$ & $1/\Sigma$\\
+\bottomrule
+\end{tabular}
+\end{fixedbox}
+
+\begin{boardbox}{Infer a cross section from transmission}
+A thermal-neutron beam crosses $0.050\unit{cm}$ of aluminum and emerges with
+$I/I_0=0.9949$. Using $n_{\mathrm{Al}}$ from Section 2,
+\[
+ \Sigma=-\frac{\ln(I/I_0)}{x}
+ =\MathBlank[0.82in]{0.102\unit{cm^{-1}}},
+\]
+\[
+ \sigma=\frac{\Sigma}{n_{\mathrm{Al}}}
+ =\MathBlank[0.82in]{1.70\unit{b}}.
+\]
+Why is the measured loss fraction not itself a cross section?
+\RuledLines{1}
+\end{boardbox}
+
+\end{handoutcolumns}
+
+\newpage
+\begin{handoutcolumns}
+
+\HandoutSection{4}{Read attenuation as a probability law}
+
+\begin{fixedbox}{First-flight distribution in a uniform material}
+\footnotesize
+Let $X$ be the distance to a neutron's first collision. Then
+\[
+ \underbrace{P(X>x)}_{\text{survive to }x}=e^{-\Sigma x},
+ \qquad
+ \underbrace{p_X(x)}_{\text{first-collision density}}
+ =\Sigma e^{-\Sigma x},
+\]
+\[
+ P(X\le x)=1-e^{-\Sigma x}.
+\]
+The mean free path is
+\[
+ \boxed{\ell\equiv E[X]
+ =\int_0^\infty x\,\Sigma e^{-\Sigma x}\,dx
+ =\frac{1}{\Sigma}}.
+\]
+Lewis uses $\lambda$ for mean free path; $\ell$ avoids confusion with the
+Lesson 3 decay constant.
+\normalsize
+\end{fixedbox}
+
+\begin{checkpoint}[One mean free path]
+At $x=\ell$, the fraction still uncollided is
+\[
+ P(X>\ell)=\MathBlank[0.70in]{e^{-1}}=
+ \RevealBlank[0.70in]{0.368},
+\]
+and the fraction having collided is
+\[
+ P(X\le\ell)=\MathBlank[0.84in]{1-e^{-1}}=
+ \RevealBlank[0.70in]{0.632}.
+\]
+Is $\ell$ the distance by which one-half survive? Explain.
+\RuledLines{1}
+\end{checkpoint}
+
+\begin{checkpoint}[Probability-density checks]
+\[
+ \int_0^\infty p_X(x)\,dx=\MathBlank[0.48in]{1},
+ \qquad [p_X]=\MathBlank[0.72in]{\unit{cm^{-1}}}.
+\]
+Why does $p_X$ carry units while $P(X>x)$ does not?
+\RuledLines{1}
+\end{checkpoint}
+
+\HandoutSection{5}{Parallel beam versus point source}
+
+\begin{fixedbox}{Two uncollided-flux geometries}
+\footnotesize
+\textbf{Collimated parallel beam:}
+\[
+ \phi_u(x)=\phi_u(0)\,\underbrace{e^{-\Sigma x}}_{\text{material}}.
+\]
+\textbf{Isotropic point source of strength $s_p$ $[\unit{n/s}]$:}
+\[
+ \phi_u(r)=s_p\,
+ \underbrace{\frac{1}{4\pi r^2}}_{\text{geometric}}
+ \underbrace{e^{-\Sigma r}}_{\text{material}}.
+\]
+Geometry spreads surviving neutrons over a larger area; material attenuation
+removes neutrons from their uncollided first flight.
+For $r_2=2r_1$ in the same medium,
+\[
+ \frac{\phi_u(2r_1)}{\phi_u(r_1)}
+ =\MathBlank[1.18in]{\frac14e^{-\Sigma r_1}}.
+\]
+In vacuum this becomes \RevealBlank[0.48in]{$1/4$}. Which attenuation remains,
+and why does a parallel beam not have this factor?
+\RuledLines{1}
+\normalsize
+\end{fixedbox}
+
+\switchcolumn
+
+\HandoutSection{6}{Build a material from its composition}
+
+\begin{fixedbox}{Three reusable composition routes}
+\footnotesize
+For a compound with molecular number density $n_m$ and $\nu_i$ atoms of
+species $i$ per molecule,
+\[
+ n_m=\frac{\rho N_A}{M_m},
+ \qquad n_i=\nu_i n_m,
+ \qquad \boxed{\Sigma=\sum_i n_i\sigma_i}.
+\]
+For isotope atom fractions $x_i=n_i/(\sum_j n_j)$,
+\[
+ \bar M=\sum_i x_iM_i,
+ \qquad n_i=x_i\frac{\rho N_A}{\bar M}.
+\]
+For isotope mass fractions $w_i=m_i/(\sum_jm_j)$,
+\[
+ \boxed{n_i=\frac{\rho w_iN_A}{M_i}}.
+\]
+Use cross sections at the same neutron energy and for the same reaction
+category (total here). Atom and mass fractions enter through $n_i$; volume
+fractions instead weight the constituents' macroscopic cross sections.
+For water, $n_{\mathrm H}:n_{\mathrm O}=\MathBlank[0.45in]{2:1}$ and
+$\Sigma_{\mathrm{H_2O}}=n_{\mathrm{H_2O}}
+\MathBlank[1.25in]{(2\sigma_{\mathrm H}+\sigma_{\mathrm O})}$.
+\normalsize
+\end{fixedbox}
+
+\begin{checkpoint}[Composition logic]
+If the water density decreases while its molecular composition stays fixed,
+which of $n_i$, $\sigma_i$, and $\Sigma$ change?
+\RevealBlank[3.00in]{$n_i$ and $\Sigma$ decrease; $\sigma_i$ is unchanged.}
+\end{checkpoint}
+
+\HandoutSection{7}{Translate uranium enrichment}
+
+\begin{fixedbox}{Atom and mass (weight) enrichment}
+For a ${}^{235}$U--${}^{238}$U mixture,
+\[
+ e_a=\frac{n_{235}}{n_{235}+n_{238}},
+ \qquad
+ e_w=\frac{m_{235}}{m_{235}+m_{238}}.
+\]
+Convert a stated mass enrichment to atom enrichment with
+\[
+ \boxed{
+ e_a=\frac{e_w/M_{235}}
+ {e_w/M_{235}+(1-e_w)/M_{238}} }.
+\]
+\end{fixedbox}
+
+\begin{boardbox}{Uranium enriched to $4.00$ wt\% ${}^{235}$U}
+Choose a $100\unit{g}$ uranium basis and neglect ${}^{234}$U:
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X X@{}}
+\toprule
+isotope & mass & amount ($\unit{mol}$)\\
+\midrule
+${}^{235}$U & $4.00\unit{g}$ & \RevealBlank[0.72in]{0.0170}\\
+${}^{238}$U & $96.00\unit{g}$ & \RevealBlank[0.72in]{0.403}\\
+\bottomrule
+\end{tabularx}
+\normalsize
+\[
+ e_a=\MathBlank[0.90in]{0.0405}
+ =\RevealBlank[0.76in]{4.05 atom\%}.
+\]
+Why is the atom percent slightly larger than the mass percent?
+\RevealBlank[3.00in]{The lighter isotope supplies more atoms per gram.}
+\end{boardbox}
+
+% Instructor cue: close by asking students to say, in words, why sigma is a
+% property of a nuclide/reaction/energy while Sigma is a property of a material,
+% and why e^{-Sigma x} and 1/(4 pi r^2) represent different mechanisms.
+
+\end{handoutcolumns}
+\end{document}

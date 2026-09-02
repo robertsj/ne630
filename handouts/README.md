@@ -1,7 +1,7 @@
 # NE 630 board-supported handout framework
 
 This package contains a reusable LaTeX class and two-page handouts for Lessons
-1--3.
+1--5.
 The design separates three kinds of content:
 
 1. **Fixed inputs** -- reading, objectives, notation, constants, data tables, and problem statements that students should not have to copy from the board.
@@ -50,7 +50,13 @@ as labeled blank axes; the instructor version overlays the completed curves.
 - `lesson_03_handout_body.tex` -- shared Lesson 3 radioactive-decay content.
 - `lesson_03_handout.tex` -- Lesson 3 student wrapper.
 - `lesson_03_handout_instructor.tex` -- Lesson 3 instructor wrapper with selected results revealed.
-- `NE630_Lesson02_board_handout_package.zip` -- original downloaded Lesson 2 package retained for provenance.
+- `lesson_04_handout_body.tex` -- shared Lesson 4 neutron-attenuation content.
+- `lesson_04_handout.tex` -- Lesson 4 student wrapper.
+- `lesson_04_handout_instructor.tex` -- Lesson 4 instructor wrapper with selected results revealed.
+- `lesson_05_handout_body.tex` -- shared Lesson 5 cross-section-data and reaction-probability content.
+- `lesson_05_handout.tex` -- Lesson 5 student wrapper, with a spectrum reference and reaction-probability workspaces.
+- `lesson_05_handout_instructor.tex` -- Lesson 5 instructor wrapper with selected interpretations and results revealed.
+- `spectra.pdf` -- supporting spectrum figure used by Lesson 5.
 - `Makefile` -- builds both PDFs with `latexmk`.
 
 ## Build

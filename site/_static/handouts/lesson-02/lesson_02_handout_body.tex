@@ -1,0 +1,365 @@
+\HandoutSetup
+  {NE 630}
+  {02}
+  {Nuclear Fission and Chain Reactions}
+  {Read FNRP Sections 1.4--1.5. Revisit binding energy per nucleon from Lesson 1 and define the key terms before class.}
+
+\begin{document}
+\MakeHandoutTitle
+
+\begin{handoutcolumns}
+
+\begin{fixedbox}{Macro objective}
+Characterize the neutron population and energy
+produced as functions of time using the neutron lifetime, the energy released
+per fission, and the multiplication factor $k$.
+\end{fixedbox}
+
+\TermStrip{fusion; fission; fission product; fission-product yield; prompt; delayed; decay heat; fissionable; fissile; fertile; generation; neutron lifetime; multiplication factor; criticality}
+
+\HandoutSection{1}{Stability, fusion, and fission}
+
+\begin{fixedbox}{Binding-energy relations}
+Using \emph{nuclear} masses,
+\[
+ B=\bigl[Zm_p+Nm_n-m_X\bigr]c^2.
+\]
+Using the \emph{atomic} mass $m({}^{A}_{Z}X)$ and neglecting electron
+binding energies,
+\[
+ B=\bigl[Z\,m({}^{1}_{1}\mathrm H)+Nm_n-m({}^{A}_{Z}X)\bigr]c^2,
+ \qquad \frac{B}{A}=\frac{B}{N+Z}.
+\]
+\end{fixedbox}
+
+\begin{boardbox}{Read the binding-energy curve}
+\centering
+\begin{tikzpicture}[x=0.0305\linewidth,y=0.23cm,>=Latex]
+  \draw[->,KSUGray] (0,0) -- (29,0) node[right,black] {$A$};
+  \draw[->,KSUGray] (0,0) -- (0,9.8) node[above,black] {$B/A$};
+
+\end{tikzpicture}
+
+\RaggedRight
+Why can either process release energy? What competing effects produce the
+maximum near the middle of the chart?
+\RuledLines{2}
+\end{boardbox}
+
+
+\begin{fixedbox}{Two fusion examples from the notes}
+\begin{align*}
+{}^{2}_{1}\mathrm H+{}^{3}_{1}\mathrm H
+ &\longrightarrow{}^{4}_{2}\mathrm{He}+{}^{1}_{0}\mathrm n+17.59\unit{MeV},\\
+{}^{2}_{1}\mathrm H+{}^{2}_{1}\mathrm H
+ &\longrightarrow{}^{3}_{1}\mathrm H+{}^{1}_{1}\mathrm H+4.02\unit{MeV}.
+\end{align*}
+The energy is favorable; bringing two positive nuclei close enough to react
+is the engineering challenge.
+For D--T fusion, estimate the Coulomb energy
+$V_C=(4\pi\epsilon_0)^{-1}e^2/r$ at $r\approx 4\unit{fm}$ and convert it to an
+equivalent temperature $T=V_C/k_B$; what does the
+resulting $\approx 0.36\unit{MeV}$ ($\approx 4\times10^9\unit{K}$) tell you about the need for quantum tunneling?
+\end{fixedbox}
+
+\begin{fixedbox}{Three forms of nuclear power}
+\scriptsize
+\textbf{1.}\ \RevealBlank[1.28in]{}\hfill
+\textbf{2.}\ \RevealBlank[1.28in]{}\par
+\textbf{3.}\ \RevealBlank[3.00in]{}
+\normalsize
+\end{fixedbox}
+
+\switchcolumn
+
+\HandoutSection{2}{Anatomy of neutron-induced fission}
+
+\begin{fixedbox}{Prompt sequence and time scales}
+\centering
+\begin{tikzpicture}[
+  node distance=0.24in and 0.26in,
+  >=Latex,
+  every node/.style={font=\scriptsize,align=center}
+]
+
+  \node (n) {$n$};
+
+  \node[
+    draw,
+    circle,
+    minimum size=0.38in,
+    right=of n
+  ] (u5) {$^{235}\mathrm{U}$};
+
+  \node[
+    draw,
+    circle,
+    minimum size=0.43in,
+    right=of u5
+  ] (u6) {$^{236}\mathrm{U}^*$};
+
+  \node[
+    draw,
+    ellipse,
+    minimum width=0.56in,
+    minimum height=0.32in,
+    right=of u6
+  ] (def) {deform};
+
+  \node[
+    minimum width=0.66in,
+    minimum height=0.34in,
+    right=of def
+  ] (neck) {};
+
+  \begin{scope}[shift={(neck.center)}]
+    \draw[smooth cycle,tension=0.75]
+      plot coordinates {
+        (-0.31in,  0.00in)
+        (-0.25in,  0.13in)
+        (-0.12in,  0.15in)
+        (-0.045in, 0.055in)
+        ( 0.045in, 0.055in)
+        ( 0.12in,  0.15in)
+        ( 0.25in,  0.13in)
+        ( 0.31in,  0.00in)
+        ( 0.25in, -0.13in)
+        ( 0.12in, -0.15in)
+        ( 0.045in,-0.055in)
+        (-0.045in,-0.055in)
+        (-0.12in, -0.15in)
+        (-0.25in, -0.13in)
+      };
+  \end{scope}
+
+
+  \draw[->] (n)    -- (u5);
+  \draw[->] (u5)   -- (u6);
+  \draw[->] (u6)   -- (def);
+  \draw[->] (def)  -- (neck);
+
+\end{tikzpicture}
+
+\RaggedRight
+A heavy nucleus usually splits into two energetic fragments. Excitation
+energy produces prompt $\gamma$ rays and approximately
+\RevealBlank[0.46in]{} neutrons (about
+\RevealBlank[0.46in]{} on average in the board sketch).
+
+\smallskip
+The split occurs within roughly \RevealBlank[0.66in]{}; prompt
+emissions are complete within roughly \RevealBlank[0.66in]{}
+of the initiating neutron absorption.
+\end{fixedbox}
+
+\begin{boardbox}{Why are fission products neutron rich?}
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\begin{tikzpicture}[x=0.032\linewidth,y=0.032\linewidth,>=Latex]
+  \draw[->,KSUGray] (0,0)--(12,0) node[right,black] {$Z$};
+  \draw[->,KSUGray] (0,0)--(0,15) node[above,black] {$N$};
+
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\begin{tikzpicture}[x=0.031\linewidth,y=0.034\linewidth]
+  \draw[->,KSUGray] (0,0)--(25,0) node[right,black] {$A$};
+  \draw[->,KSUGray] (0,0)--(0,15) node[above,black,rotate=90] {yield};
+
+\end{tikzpicture}
+\end{minipage}
+
+The parent has a large neutron-to-proton ratio. Splitting it near the usual
+two fission-yield peaks leaves fragments on which side of the stability line?
+How do they move toward stability?
+\RuledLines{2}
+\end{boardbox}
+
+
+\begin{checkpoint}[Prompt versus delayed]
+Sort the emissions or energy carriers discussed on the board:
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X@{}}
+prompt & fragment K.E.; \Blank[1.95in]\\[2pt]
+delayed & $\beta$; $\gamma$; delayed $n$; \Blank[1.05in]
+\end{tabularx}
+Which contribution is effectively lost for heat production?
+\RevealBlank[1.40in]{}
+\end{checkpoint}
+
+\begin{boardbox}{Reading completion: fuel vocabulary}
+\scriptsize
+\textbf{Fissionable:} \Blank[2.52in]\\[-1pt]
+\emph{Examples:} \Blank[2.82in]\\[2pt]
+\textbf{Fissile:} \Blank[2.80in]\\[-1pt]
+\emph{Examples:} \Blank[2.82in]\\[2pt]
+\textbf{Fertile:} \Blank[2.80in]\\[-1pt]
+\emph{Pathways:} \Blank[2.72in]
+\normalsize
+\end{boardbox}
+
+\end{handoutcolumns}
+
+\newpage
+\begin{handoutcolumns}
+
+\HandoutSection{3}{Energy release and decay heat}
+
+\begin{boardbox}{Symmetric-fission bookkeeping}
+Consider
+\[
+ n+{}^{235}_{92}\mathrm U
+ \longrightarrow 2\,{}^{117}_{46}\mathrm{Pd}+2n.
+\]
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l >{\raggedleft\arraybackslash}X@{}}
+$m({}^{235}\mathrm U)$ & $235.043928\unit{u}$\\
+$m({}^{117}\mathrm{Pd})$ & $116.917956\unit{u}$\\
+$m_n$ & $1.0086649\unit{u}$
+\end{tabularx}
+\normalsize
+{\small
+\[
+\begin{aligned}
+Q_{\mathrm{prompt}}
+ &=\bigl[m({}^{235}\mathrm U)-2m({}^{117}\mathrm{Pd})-m_n\bigr]c^2,\\
+ &=\RevealBlank[0.92in]{}.
+\end{aligned}
+\]
+}
+Show the mass cancellation and arithmetic here:
+\RuledLines{2}
+\end{boardbox}
+
+\begin{boardbox}{After the neutron-rich fragments decay}
+For each fragment,
+\[
+{}^{117}_{46}\mathrm{Pd}\to{}^{117}_{47}\mathrm{Ag}
+\to{}^{117}_{48}\mathrm{Cd}\to{}^{117}_{49}\mathrm{In}
+\to{}^{117}_{50}\mathrm{Sn}.
+\]
+With $m({}^{117}\mathrm{Sn})=116.902955\unit{u}$,
+{\small
+\[
+\begin{aligned}
+Q_{\mathrm{total}}
+ &=\bigl[m({}^{235}\mathrm U)-2m({}^{117}\mathrm{Sn})-m_n\bigr]c^2,\\
+ &=\RevealBlank[0.92in]{}.
+\end{aligned}
+\]
+}
+Why can atomic masses be used directly for the complete $\beta^-$ chain?
+\RuledLines{1}
+\end{boardbox}
+
+
+\begin{takeawaybox}[Fission-energy scale]
+The board estimate is roughly \RevealBlank[0.66in]{} released per
+thermal fission of ${}^{235}$U, with about
+\RevealBlank[0.72in]{} recoverable. Most prompt energy appears as
+fragment kinetic energy; each prompt neutron carries roughly
+\RevealBlank[0.56in]{}.
+\end{takeawaybox}
+
+\begin{checkpoint}[Decay heat immediately after shutdown]
+Delayed $\beta$ and $\gamma$ energy continues as fission products and their
+daughters decay. The board note marks an immediate decay-heat level of about
+\RevealBlank[0.54in]{} of the pre-shutdown power:
+\[
+ P_{\mathrm{decay}}(0^+)\approx\MathBlank[0.62in]{}\,P_0.
+\]
+For a reactor operating at $P_0$, what heat-removal obligation remains after
+fission power is terminated?
+\RuledLines{1}
+\end{checkpoint}
+
+\switchcolumn
+
+\HandoutSection{4}{Multiplication and chain reactions}
+
+\begin{fixedbox}{Generation model}
+\[
+ k=\frac{n_i}{n_{i-1}},
+ \qquad n_i=n_0k^i.
+\]
+If one generation lasts $\ell$ seconds, then $i=t/\ell$ and
+\[
+\begin{aligned}
+ n(t)&=n_0k^{t/\ell}
+     =n_0\exp\!\left(\frac{\ln k}{\ell}t\right),\\[-1pt]
+ n(t)&\approx n_0\exp\!\left(\frac{k-1}{\ell}t\right)
+ \quad (k\approx1),\\[-1pt]
+ \frac{dn}{dt}&\approx\frac{k-1}{\ell}n(t).
+\end{aligned}
+\]
+Here $k$ is the generation-to-generation multiplication factor and $\ell$ is
+the neutron lifetime used in this simple model.
+\end{fixedbox}
+
+\begin{boardbox}{Build the generation picture}
+\centering
+\begin{tikzpicture}[x=0.45in,y=0.27in,>=Latex,
+  neutron/.style={circle,fill=KSUPurple,inner sep=1.5pt},
+  fiss/.style={circle,draw=KSUGray,minimum size=0.22in}]
+  \node[neutron] (n0) at (0,0) {};
+  \node[fiss] (f0) at (0.7,0) {};
+  \node[neutron] (n11) at (1.4,0.42) {};
+  \node[neutron] (n12) at (1.4,-0.42) {};
+  \node[fiss] (f11) at (2.1,0.42) {};
+  \node[fiss] (f12) at (2.1,-0.42) {};
+  \node[neutron] at (2.9,0.78) {};
+  \node[neutron] at (2.9,0.30) {};
+  \node[neutron] at (2.9,-0.30) {};
+  \node[neutron] at (2.9,-0.78) {};
+  \draw[->] (n0)--(f0);
+  \draw[->] (f0)--(n11);
+  \draw[->] (f0)--(n12);
+  \draw[->] (n11)--(f11);
+  \draw[->] (n12)--(f12);
+  \draw[->] (f11)--(2.9,0.78);
+  \draw[->] (f11)--(2.9,0.30);
+  \draw[->] (f12)--(2.9,-0.30);
+  \draw[->] (f12)--(2.9,-0.78);
+  \node[below=0.10in of n0] {generation 0};
+  \node[below=0.43in of n12] {generation 1};
+  \node[below=0.10in] at (2.9,-0.78) {generation 2};
+\end{tikzpicture}
+
+\RaggedRight
+Which neutrons count toward $k$? Why is ``neutrons emitted per fission'' not
+itself the reactor multiplication factor?
+\RuledLines{1}
+\end{boardbox}
+
+
+\begin{boardbox}{Criticality table}
+\begin{tabularx}{\linewidth}{@{}c >{\bfseries}l X@{}}
+\toprule
+condition & name & neutron population\\
+\midrule
+$k<1$ & \RevealBlank[0.82in]{} & \RevealBlank[1.22in]{}\\[2pt]
+$k=1$ & \RevealBlank[0.82in]{} & \RevealBlank[1.22in]{}\\[2pt]
+$k>1$ & \RevealBlank[0.82in]{} & \RevealBlank[1.22in]{}\\
+\bottomrule
+\end{tabularx}
+\end{boardbox}
+
+\begin{checkpoint}[Connect neutron population to power]
+\[
+\begin{aligned}
+ P(t)&=\MathBlank[0.52in]{}\,\MathBlank[0.70in]{},\\[-1pt]
+ \frac{P(t)}{P(0)}&\approx\MathBlank[1.05in]{}.
+\end{aligned}
+\]
+Why can even a small departure of $k$ from one matter when $\ell$ is short?
+\RuledLines{1}
+\end{checkpoint}
+
+\begin{takeawaybox}[The three controls]
+$E_f$ sets energy per fission; $k$ sets the generation-to-generation change;
+$\ell$ sets the time scale. Together they set the scale and rate of energy
+production.
+\end{takeawaybox}
+
+\end{handoutcolumns}
+\end{document}

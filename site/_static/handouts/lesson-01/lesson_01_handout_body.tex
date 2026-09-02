@@ -1,0 +1,259 @@
+\HandoutSetup
+  {NE 630}
+  {01}
+  {Mass, Energy, and Nuclear Reactions}
+  {Read FNRP Sections 1.1--1.3. Define the key terms in your notes and use the learning objectives to guide the reading.}
+
+\begin{document}
+\MakeHandoutTitle
+
+\begin{handoutcolumns}
+
+\begin{fixedbox}{Macro objective}
+Determine and quantify the reactants, products,
+and energy inputs/outputs of nuclear reactions.
+\end{fixedbox}
+
+\TermStrip{nuclide; atomic number; atomic mass; mass number; nucleon; rest mass; total energy; kinetic energy; binary reaction; radioactive decay; $Q$ value; binding energy; energy density}
+
+\HandoutSection{1}{Nuclides and reaction language}
+
+\begin{boardbox}{Read the symbol}
+\[
+  {}^{A}_{Z}X,
+  \qquad A=Z+N
+\]
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X@{}}
+$X$ & \Blank[1.85in]\\[1pt]
+$Z$ & \Blank[1.85in]\\[1pt]
+$A$ & \Blank[1.85in]\\[1pt]
+$N$ & \Blank[1.85in]
+\end{tabularx}
+\end{boardbox}
+
+\begin{fixedbox}{Reaction forms used in this lesson}
+\[
+  A+B\longrightarrow C+D,
+  \qquad A(B,C)D
+\]
+\[
+  A\longrightarrow B+C
+  \qquad\text{(radioactive decay)}
+\]
+Organize the initial and final values before using mass data:
+\[
+\begin{array}{c|cc}
+ & \text{initial} & \text{final}\\ \hline
+\text{mass number} & \Blank[0.46in] & \Blank[0.46in]\\
+\text{atomic number} & \Blank[0.46in] & \Blank[0.46in]
+\end{array}
+\]
+\end{fixedbox}
+
+
+\HandoutSection{2}{Mass change and $Q$ values}
+
+\begin{fixedbox}{Relations and conversion}
+\[
+  \Delta E=\Delta m c^2,
+  \qquad
+  Q=\left(\sum m_{\mathrm{initial}}-\sum m_{\mathrm{final}}\right)c^2
+\]
+\[
+  1\unit{u}=931.5\unit{MeV}/c^2
+\]
+The reaction rearranges bound nucleons (or electrons in a chemical
+reaction). Nuclear changes are typically on the $\unit{MeV}$ scale;
+chemical changes are typically on the $\unit{eV}$ scale.
+\textbf{Board check:} If $Q>0$, which mass sum is larger, and what does
+that imply for a decay?
+\end{fixedbox}
+
+\switchcolumn
+
+\HandoutSection{3}{Relating neutron energies}
+
+\begin{fixedbox}{Exact and classical expressions}
+\[
+  E=mc^2,
+  \qquad
+  m=\frac{m_0}{\sqrt{1-(v/c)^2}},
+  \qquad \beta=\frac{v}{c}
+\]
+\[
+  \Ktrue=m_0c^2\left(\frac{1}{\sqrt{1-\beta^2}}-1\right),
+  \qquad
+  \Kclassical=\frac12m_0v^2
+\]
+\[
+  \%\,\mathrm{err}=100\frac{\Kclassical-\Ktrue}{\Ktrue}
+\]
+\textbf{Neutron data:}
+$m_0=1.008664\unit{u}$,
+$m_0c^2\approx 939.57\unit{MeV}$,
+$c=2.9979\times10^8\unit{m/s}$.
+\end{fixedbox}
+
+\begin{boardbox}{Speed associated with a given $\Ktrue$}
+Starting from the exact kinetic energy, isolate $\beta^2$:
+\[
+  \beta^2
+  =1-\left(\frac{m_0c^2}{\Ktrue+m_0c^2}\right)^2
+  =\frac{v^2}{c^2}.
+\]
+Use this result to express $\Kclassical$ entirely in terms of $\Ktrue$
+and $m_0c^2$.
+\RuledLines{2}
+\end{boardbox}
+
+\begin{checkpoint}[Threshold question]
+Find the maximum true neutron kinetic energy for which the magnitude of
+the classical error is no more than $1\%$.
+\RuledLines{2}
+\textbf{Board result:}
+$\Ktrue\approx\RevealBlank[0.78in]{}$.
+\end{checkpoint}
+
+\begin{boardbox}{Homework bridge: a $2.0\unit{MeV}$ fission neutron}
+\begin{tabularx}{\linewidth}{@{}l X l X@{}}
+$\beta^2$ & \Blank[0.72in] & $v$ & \Blank[0.72in]\\[2pt]
+$\Kclassical$ & \Blank[0.72in] & error & \Blank[0.72in]
+\end{tabularx}
+\end{boardbox}
+
+\begin{takeawaybox}[Interpret the approximation]
+The classical expression \RevealBlank[1.05in]{} the exact
+kinetic energy. Connect the $1\%$ threshold to the lesson objective that
+neutron kinematics below about $10\unit{MeV}$ can often be treated classically.
+\end{takeawaybox}
+
+
+\end{handoutcolumns}
+
+\newpage
+\begin{handoutcolumns}
+
+\HandoutSection{4}{Reaction completion and $Q$-value practice}
+
+\begin{boardbox}{Complete each reaction; then compute $Q$}
+Use one reaction as the board example; retain the others for practice.
+\begin{enumerate}[label=(\alph*)]
+\item ${}^{9}_{\Blank[0.24in]}\mathrm{Be}+{}^{4}_{2}\mathrm{He}
+      \longrightarrow \Blank[0.88in]+{}^{1}_{1}\mathrm{H}$
+\item ${}^{60}_{\Blank[0.24in]}\mathrm{Co}
+      \longrightarrow \Blank[0.92in]+{}^{0}_{-1}\mathrm{e}$
+\item ${}^{7}_{3}\mathrm{Li}+{}^{1}_{1}\mathrm{H}
+      \longrightarrow \Blank[0.88in]+{}^{4}_{2}\mathrm{He}$
+\item ${}^{10}_{5}\mathrm{B}+{}^{4}_{2}\mathrm{He}
+      \longrightarrow \Blank[0.88in]+{}^{1}_{1}\mathrm{H}$
+\end{enumerate}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X >{\bfseries}l X@{}}
+$Q_a$ & \Blank[0.74in] & $Q_b$ & \Blank[0.74in]\\[1pt]
+$Q_c$ & \Blank[0.74in] & $Q_d$ & \Blank[0.74in]
+\end{tabularx}
+\end{boardbox}
+
+\begin{fixedbox}{Atomic-mass data used in the assigned problems ($\unit{u}$)}
+\centering\scriptsize
+\begin{tabular}{@{}lr@{\quad}lr@{}}
+\toprule
+nuclide & mass & nuclide & mass\\
+\midrule
+${}^{1}\mathrm{H}$   & 1.007825031898 & ${}^{4}\mathrm{He}$ & 4.00260325413\\
+${}^{7}\mathrm{Li}$  & 7.01600343426  & ${}^{9}\mathrm{Be}$ & 9.012183062\\
+${}^{10}\mathrm{B}$  & 10.012936862   & ${}^{12}\mathrm{B}$ & 12.014352638\\
+${}^{13}\mathrm{C}$  & 13.00335483534 & ${}^{60}\mathrm{Co}$& 59.933815536\\
+${}^{60}\mathrm{Ni}$ & 59.930785129   & $n$                   & 1.008664\\
+\bottomrule
+\end{tabular}
+\end{fixedbox}
+
+\begin{checkpoint}[Atomic masses and decay]
+Before evaluating the $\beta^-$-decay $Q$ value with the supplied
+\emph{atomic} masses, show which electron masses are already contained in
+the parent and daughter entries.
+\RuledLines{1}
+\end{checkpoint}
+
+\begin{boardbox}{Mass defect and binding energy per nucleon}
+Reconstruct the definitions from Sections 1.1--1.3:
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X@{}}
+$\Delta m =$ & \Blank[2.22in]\\[3pt]
+$B =$ & \Blank[2.22in]\\[3pt]
+$B/A =$ & \Blank[2.22in]
+\end{tabularx}
+Use ${}^{4}_{2}\mathrm{He}$ and the fixed mass data as a quick check.
+\RuledLines{2}
+\end{boardbox}
+
+\switchcolumn
+
+\HandoutSection{5}{Energy density of reactions}
+
+\begin{fixedbox}{Plant-scale fixed inputs from the board notes}
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X X@{}}
+\toprule
+ & nuclear plant & coal plant\\
+\midrule
+electric power & $1\unit{GW_e}$ & $1\unit{GW_e}$\\
+efficiency & $0.30$ & $0.40$\\
+material basis & $100\unit{t}$ $\mathrm{UO_2}$ over $5\unit{y}$ & $10{,}000\unit{t}$ per day\\
+\bottomrule
+\end{tabularx}
+\end{fixedbox}
+
+\begin{boardbox}{Energy per unit material mass}
+Use $E=P\,\Delta t$ and account for thermal efficiency:
+\[
+\left.\frac{E}{m}\right|_{\mathrm{nuc}}
+\approx
+\frac{1\times10^9\unit{W_e}}{0.30}
+\frac{5(365)(24)\unit{h}}{100\times10^3\unit{kg}}
+=\RevealBlank[0.78in]{}
+\]
+\[
+\left.\frac{E}{m}\right|_{\mathrm{coal}}
+\approx
+\frac{1\times10^9\unit{W_e}}{0.40}
+\frac{24\unit{h}}{10{,}000\times10^3\unit{kg}}
+=\RevealBlank[0.78in]{}
+\]
+\textbf{Ratio and interpretation:} \Blank[1.90in]
+\end{boardbox}
+
+\begin{boardbox}{Reaction-scale mass conversion}
+\[
+\left.\frac{\Delta m}{m_0}\right|_{\mathrm{fission}}
+\approx \frac{200}{236(931.5)}
+=\Blank[0.78in]
+\]
+\[
+\left.\frac{\Delta m}{m_0}\right|_{\mathrm{combustion}}
+\approx \frac{4\times10^{-6}}{44(931.5)}
+=\Blank[0.78in]
+\]
+How do these fractions explain the plant-scale comparison?
+\RuledLines{1}
+\end{boardbox}
+
+\begin{takeawaybox}[Three related scales]
+For pure matter,
+\[
+  \frac{E}{m}=c^2\approx\RevealBlank[1.45in]{}.
+\]
+From the board notes,
+\[
+  \left.\frac{P}{m}\right|_{\mathrm{nuc}}
+  \approx\RevealBlank[0.92in]{},
+  \qquad
+  \left.\frac{P}{m}\right|_{\mathrm{coal}}
+  \approx\RevealBlank[0.92in]{}.
+\]
+Why is the power-density contrast smaller than the energy-density contrast?
+\RuledLines{1}
+\end{takeawaybox}
+
+
+\end{handoutcolumns}
+\end{document}

@@ -1,0 +1,12 @@
+/_build/
+__pycache__/
+*.py[cod]
+
+# Handout build intermediates and instructor-only rendered copies.
+/handouts/*.aux
+/handouts/*.fdb_latexmk
+/handouts/*.fls
+/handouts/*.log
+/handouts/*.out
+/handouts/*.xdv
+/handouts/*_instructor.pdf

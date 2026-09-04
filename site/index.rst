@@ -53,6 +53,14 @@ work.
        `wrapper <_static/handouts/lesson-05/lesson_05_handout.tex>`__ |middot|
        `body <_static/handouts/lesson-05/lesson_05_handout_body.tex>`__ |middot|
        `spectrum figure <_static/handouts/lesson-05/spectra.pdf>`__
+   * - 6
+     - Understanding Cross-Section Data
+     - `PDF <_static/handouts/lesson-06/lesson_06_handout.pdf>`__
+     - `Source bundle <_static/handouts/lesson-06/lesson_06_handout_source.zip>`__
+
+       `wrapper <_static/handouts/lesson-06/lesson_06_handout.tex>`__ |middot|
+       `body <_static/handouts/lesson-06/lesson_06_handout_body.tex>`__ |middot|
+       `U-238 threshold figure <_static/handouts/lesson-06/figures/u238_threshold.pdf>`__
 
 Shared LaTeX support
 --------------------

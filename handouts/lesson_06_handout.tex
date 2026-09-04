@@ -1,0 +1,12 @@
+\documentclass[student]{ne630boardhandout}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{arrows.meta}
+% ne630boardhandout defines a lightweight \unit macro; release the name so
+% the PGF figures from the former slide deck can use siunitx if present.
+\let\unit\relax
+\usepackage{siunitx}
+% Matplotlib's PGF exports use this wrapper around tick-label mathematics.
+\providecommand{\mathdefault}[1]{#1}
+\input{lesson_06_handout_body.tex}

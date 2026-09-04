@@ -1,0 +1,299 @@
+\tcbset{handout base/.append style={before skip=2.5pt,after skip=2.5pt}}
+
+\HandoutSetup
+  {NE 630}
+  {06}
+  {Understanding Cross-Section Data}
+  {Re-read FNRP Sections 2.3--2.4. Focus on how features of $\sigma_x(E)$ reveal the physics of the underlying reaction.}
+
+\begin{document}
+\MakeHandoutTitle
+
+\begin{handoutcolumns}
+
+\begin{fixedbox}{Primary objective}
+Access and inspect differential cross sections using OpenMC and map features
+of these cross sections to the underlying nuclear physics.
+\end{fixedbox}
+
+\TermStrip{resonance cross section; quantum state; energy level; energy spectrum; fission spectrum; Maxwell--Boltzmann distribution; $1/v$ cross section; threshold reaction; Breit--Wigner formula; $E_r$; $\Gamma$, $\Gamma_n$, $\Gamma_\gamma$; wavelength $\lambda$; Doppler broadening; random variable; probability density function (pdf); cumulative density function (cdf); expectation value}
+
+
+
+\HandoutSection{1}{H-1: a simple place to start}
+
+\begin{fixedbox}{Potential scattering and $1/v$ absorption}
+\centering
+\IfFileExists{figures/h1_xsec.pgf}{  \resizebox{0.98\linewidth}{!}{\input{figures/h1_xsec.pgf}}}{  \fbox{\parbox[c][1.32in][c]{0.92\linewidth}{\centering\sffamily\small
+    H-1 cross-section figure\\[3pt]
+    elastic scattering and radiative capture\\[3pt]
+    \texttt{figures/h1\_xsec.pgf}}}}
+\end{fixedbox}
+
+\begin{fixedbox}{Low-energy capture}
+The capture cross section in the slide example follows
+\[
+ \boxed{\sigma_{\gamma}(E)
+   = \sqrt{\frac{E_0}{E}}\,\sigma_{\gamma}(E_0)}
+ \qquad\text{(FNRP 2.36)}.
+\]
+Thus $\sigma_\gamma\propto E^{-1/2}\propto 1/v$ for a nonrelativistic neutron.
+\end{fixedbox}
+
+\begin{checkpoint}[$1/v$ check]
+If the neutron energy increases by a factor of $100$, the $1/v$ capture cross
+section changes by a factor of \MathBlank[0.72in]{}.
+What feature of the H-1 elastic curve makes it qualitatively different?
+\RuledLines{2}
+\end{checkpoint}
+
+\switchcolumn
+
+\HandoutSection{2}{Threshold reactions: a channel can turn on}
+
+\begin{fixedbox}{${}^{238}$U threshold cross sections}
+\centering
+\IfFileExists{figures/u238_threshold.pdf}{  \includegraphics[width=0.98\linewidth]{figures/u238_threshold.pdf}}{\begin{minipage}[t]{0.48\linewidth}
+\centering
+\fbox{\parbox[c][1.42in][c]{0.91\linewidth}{\centering\sffamily\scriptsize
+${}^{238}$U fission\\[4pt]
+$\sigma_f(E)$\\[7pt]
+\emph{insert threshold-reaction plot}}}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\fbox{\parbox[c][1.42in][c]{0.91\linewidth}{\centering\sffamily\scriptsize
+${}^{238}$U inelastic\\[4pt]
+$\sigma_{in}(E)$\\[7pt]
+\emph{insert threshold-reaction plot}}}
+\end{minipage}
+}
+\end{fixedbox}
+
+\begin{boardbox}{What is a threshold telling us?}
+For a threshold channel $x$,
+\[
+\begin{aligned}
+ \sigma_x(E)&\approx 0, && E<E_{\mathrm{th}},\\
+ \sigma_x(E)&>0,       && E\gtrsim E_{\mathrm{th}}.
+\end{aligned}
+\]
+On the plots, mark $E_{\mathrm{th}}$ and compare how ${}^{238}$U fission and
+inelastic scattering turn on.
+\RuledLines{4}
+\end{boardbox}
+
+\begin{checkpoint}[Connect shape to physics]
+A threshold is qualitatively different from a $1/v$ trend because the
+reaction channel is \RevealBlank[1.45in]{}.
+What physical energy requirement must be met for inelastic scattering?
+\RuledLines{2}
+\end{checkpoint}
+
+\begin{fixedbox}{Reaction identifiers used in OpenMC}
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}l c X@{}}
+\toprule
+$\sigma_{t}$            & 1        & Total cross section \\
+$\sigma_{n}$, $\sigma_{e}$ & 2        & Elastic scattering \\
+$\sigma_{n'}$, $\sigma_{\mathrm{in}}$ & 4, 51--91 & Inelastic scattering \\
+$\sigma_{2n}$           & 16       & $(n,2n)$  \\
+$\sigma_{\gamma}$       & 102      & Radiative capture $(n,\gamma)$ \\
+$\sigma_{f}$            & 18       & Fission \\
+$\sigma_{\alpha}$       & 107      & $(n,\alpha)$ \\
+\midrule
+$\bar{\nu}$ (total)     & 452      & Average total neutrons per fission \\
+$\bar{\nu}_{d}$ (delayed) & 455    & Average delayed neutrons per fission \\
+$\bar{\nu}_{p}$ (prompt)  & 456    & Average prompt neutrons per fission \\
+\bottomrule
+\end{tabularx}
+\normalsize
+\end{fixedbox}
+
+\end{handoutcolumns}
+
+\newpage
+\begin{handoutcolumns}
+
+\HandoutSection{3}{Resonances expose nuclear levels}
+
+\resizebox{\linewidth}{!}{\begin{tikzpicture}[
+  x=1cm,
+  y=0.72cm,
+  >=Latex,
+  every node/.style={font=\scriptsize},
+  level/.style={line width=0.9pt},
+  positive level/.style={level,draw=KSUPurple},
+  negative level/.style={level,draw=KSUOrange},
+  threshold/.style={line width=0.8pt,densely dashed},
+  measure/.style={<->,line width=0.75pt},
+  guide/.style={draw=KSUGray,densely dotted}
+]
+
+  \draw[threshold] (1.5,0) -- (8.0,0);
+
+  \node[anchor=west,align=left] at (8.15,-0.10)
+    {$^{238}\mathrm{U}+n$ threshold\\
+     $E_n=0,\quad E_x=S_n$};
+
+  \node[font=\scriptsize\bfseries] at (5.5,3.65)
+    {$^{239}\mathrm{U}$ compound-nucleus levels};
+
+  \draw[level] (4.2,-4.4) -- (6.8,-4.4);
+
+  \node[anchor=north,align=center] at (5.5,-4.52)
+    {ground state, $E_x=0$};
+
+  \foreach \y in {-3.35,-2.25,-1.05}
+    \draw[negative level] (4.2,\y) -- (6.8,\y);
+
+  \node[
+    anchor=west,
+    align=left,
+    text=KSUOrange
+  ] at (7.05,-2.20)
+    {subthreshold levels\\
+     negative resonances\\
+     $E_r=E_x-S_n<0$};
+
+  \foreach \y in {0.65,1.30,2.20,3.05}
+    \draw[positive level] (4.2,\y) -- (6.8,\y);
+
+  \node[
+    anchor=east,
+    align=right,
+    text=KSUPurple
+  ] at (3.90,1.70)
+    {positive-energy\\
+     resonances, $E_r>0$};
+
+  \draw[measure] (2.55,-4.4) -- (2.55,0);
+
+  \node[anchor=east,align=right] at (2.30,-2.20)
+    {neutron binding\\
+     (separation) energy\\
+     $S_n$};
+
+  \draw[measure] (7.55,0) -- (7.55,2.20);
+
+  \node[anchor=west,align=left] at (7.80,1.10)
+    {incident-neutron\\
+     kinetic energy $E_n$};
+
+  \draw[measure] (11.25,-4.4) -- (11.25,2.20);
+
+  \node[anchor=west,align=left] at (11.50,-1.10)
+    {compound-nucleus\\
+     excitation energy\\
+     $E_x=S_n+E_n$};
+
+  \draw[guide] (6.8,2.20) -- (11.25,2.20);
+  \draw[guide] (6.8,-4.4) -- (11.25,-4.4);
+
+\end{tikzpicture}}
+
+\begin{fixedbox}{${}^{235}$U fission cross section}
+\centering
+\IfFileExists{figures/u235_fission.pgf}{  \resizebox{0.98\linewidth}{!}{\input{figures/u235_fission.pgf}}}{  \fbox{\parbox[c][1.58in][c]{0.92\linewidth}{\centering\sffamily\small
+    ${}^{235}$U fission cross section\\[3pt]
+    $\sigma_f(E)$ over reactor-neutron energies\\[3pt]
+    \texttt{figures/u235\_fission.pgf}}}}
+
+The fission cross section varies by several orders of magnitude over roughly
+ten decades of neutron energy. The jagged peaks between about
+$1\unit{eV}$ and $2\unit{keV}$ are \textbf{resonances}: a direct connection
+between the measured cross section and discrete states of the compound
+nucleus.
+\end{fixedbox}
+
+\begin{boardbox}{Read one resonance before writing a formula}
+Choose one resolved peak and identify:
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X@{}}
+location & $E_r=$ \Blank[1.55in]\\[3pt]
+height & $\sigma(E_r)\approx$ \Blank[1.30in]\\[3pt]
+width & characteristic $\Gamma\approx$ \Blank[1.10in]
+\end{tabularx}
+What does changing $E_r$ do? What does changing $\Gamma$ do?
+\RuledLines{2}
+\end{boardbox}
+
+\begin{takeawaybox}[Three useful shapes]
+Across the examples in this lesson, recognize at sight:
+\begin{itemize}
+\item a smooth low-energy $1/v$ trend,
+\item a reaction threshold,
+\item a resonance peak associated with a nuclear level.
+\end{itemize}
+\end{takeawaybox}
+
+\switchcolumn
+
+\HandoutSection{4}{Single-level Breit--Wigner (SLBW)}
+
+\begin{fixedbox}{Capture near one resonance}
+For a resonance centered at $E_r$,
+\[
+\boxed{\sigma_{\gamma}(E)
+ = \sigma_0\frac{\Gamma_{\gamma}}{\Gamma}
+   \left(\frac{E_r}{E}\right)^{1/2}
+   \frac{1}{1+4(E-E_r)^2/\Gamma^2}}
+\tag{FNRP 2.41}
+\]
+\end{fixedbox}
+
+\begin{fixedbox}{Elastic scattering near one resonance}
+\footnotesize
+\begin{align*}
+\sigma_n(E)
+ &= \sigma_0\frac{\Gamma_n}{\Gamma}
+    \frac{1}{1+4(E-E_r)^2/\Gamma^2} \\
+ &\quad +\sigma_0\frac{2R}{\lambda_0}
+    \frac{2(E-E_r)/\Gamma}{1+4(E-E_r)^2/\Gamma^2}
+    +4\pi R^2 .
+\tag{FNRP 2.42}
+\end{align*}
+\normalsize
+\end{fixedbox}
+
+\begin{boardbox}{What do $E_r$ and $\Gamma$ control?}
+For the Lorentzian factor
+\[
+ L(E)=\frac{1}{1+4(E-E_r)^2/\Gamma^2},
+\]
+complete the two checks:
+\[
+ L(E_r)=\MathBlank[0.58in]{},
+ \qquad
+ L(E_r\pm\Gamma/2)=\MathBlank[0.58in]{}.
+\]
+Hence $E_r$ locates the peak and $\Gamma$ sets its characteristic width.
+How do $\Gamma_\gamma/\Gamma$ and $\Gamma_n/\Gamma$ partition the resonance
+between channels?
+\RuledLines{2}
+\end{boardbox}
+
+\begin{fixedbox}{Many resonances}
+To reconstruct a cross section over a region containing several resonances,
+evaluate the single-level expression for each resonance---with its own
+$E_r$, $\sigma_0$, $\Gamma_\gamma$, and $\Gamma_n$---and sum the contributions.
+\end{fixedbox}
+
+\begin{fixedbox}{Minimal OpenMC lookup}
+\scriptsize
+For a nuclide loaded as \texttt{data}, a reaction is selected by its MT number,
+and its temperature-dependent cross section is a callable function of energy:
+
+\begin{verbatim}
+# Once OpenMC is loaded, you can use the following.
+xs_path = os.environ.get("OPENMC_CROSS_SECTIONS")
+xs_path = xs_path.replace("cross_sections.xml", "neutron/")
+u235_fission = U235[18].xs["294K"]
+u235_capture = U235[102].xs["294K"]
+\end{verbatim}
+
+For example, MT 18 selects fission and MT 102 selects radiative capture.
+\normalsize
+\end{fixedbox}
+
+\end{handoutcolumns}
+\end{document}

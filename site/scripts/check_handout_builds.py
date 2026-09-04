@@ -14,7 +14,7 @@ from pathlib import Path
 
 REPOSITORY = Path(__file__).resolve().parents[2]
 PUBLIC_DIRECTORY = REPOSITORY / "site" / "_static" / "handouts"
-LESSONS = (1, 2, 3, 4, 5)
+LESSONS = (1, 2, 3, 4, 5, 6)
 REQUIRED_TOOLS = ("latexmk", "pdftoppm")
 
 

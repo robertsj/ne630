@@ -1,7 +1,7 @@
 # NE 630 public course site
 
 This directory is the Sphinx source for the public NE 630 course-materials
-site. The initial page publishes student handouts for Lessons 1--5.
+site. The initial page publishes student handouts for Lessons 1--6.
 
 ## Build
 
@@ -39,7 +39,7 @@ Canonical handouts remain in `handouts/`. Running `make html` first invokes
 `site/scripts/export_handouts.py`, which creates the public files beneath
 `site/_static/handouts/`.
 
-The canonical Lesson 1--5 wrappers, bodies, class, student PDFs, and referenced
+The canonical Lesson 1--6 wrappers, bodies, class, student PDFs, and referenced
 supporting figures must be version-controlled along with the public exports;
 the build intentionally stops if any required input is absent.
 

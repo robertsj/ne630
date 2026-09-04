@@ -15,9 +15,14 @@ from pathlib import Path
 REPOSITORY = Path(__file__).resolve().parents[2]
 SOURCE_DIRECTORY = REPOSITORY / "handouts"
 OUTPUT_DIRECTORY = REPOSITORY / "site" / "_static" / "handouts"
-LESSONS = (1, 2, 3, 4, 5)
+LESSONS = (1, 2, 3, 4, 5, 6)
 LESSON_SUPPORT_FILES = {
     5: ("spectra.pdf",),
+    6: (
+        "figures/h1_xsec.pgf",
+        "figures/u235_fission.pgf",
+        "figures/u238_threshold.pdf",
+    ),
 }
 REDACTION_COMMANDS = (
     "RevealBlank",
@@ -32,6 +37,7 @@ EXPECTED_REDACTIONS = {
     3: (1, 12, 0, 0, 0),
     4: (12, 17, 0, 0, 0),
     5: (12, 10, 0, 0, 0),
+    6: (1, 3, 0, 0, 0),
 }
 
 
@@ -192,14 +198,30 @@ def _student_conditional_branch(text: str) -> str:
         text = text[:conditional_start] + student_text + text[conditional_end[1] :]
 
 
-def _strip_comment_lines(text: str) -> str:
-    """Remove comment-only lines so no private note can enter public source."""
+def _strip_comments(text: str) -> str:
+    """Remove unescaped TeX comments without changing line-continuation semantics."""
 
-    return "".join(
-        re.sub(r"[ \t]+(?=\r?\n?$)", "", line)
-        for line in text.splitlines(keepends=True)
-        if re.match(r"^\s*%", line) is None
-    )
+    public_lines: list[str] = []
+    for line in text.splitlines(keepends=True):
+        comment_start = next(
+            (
+                position
+                for position, character in enumerate(line)
+                if character == "%" and not _is_escaped(line, position)
+            ),
+            None,
+        )
+        if comment_start is None:
+            public_lines.append(re.sub(r"[ \t]+(?=\r?\n?$)", "", line))
+            continue
+
+        prefix = line[:comment_start]
+        if prefix.strip():
+            # TeX discards both the comment and its line ending. Keeping only
+            # the prefix joins it directly to the following physical line.
+            public_lines.append(prefix)
+
+    return "".join(public_lines)
 
 
 def _audit_redaction_counts(source: str, lesson: int) -> None:
@@ -223,7 +245,7 @@ def sanitize_body(source: str) -> str:
     public = _remove_commands(public, "InstructorCue")
     public = _empty_last_arguments(public, "RevealBlank")
     public = _empty_last_arguments(public, "MathBlank")
-    public = _strip_comment_lines(public)
+    public = _strip_comments(public)
 
     if re.search(r"\binstructor\b", public, flags=re.IGNORECASE):
         raise ExportError("sanitized body still contains the word 'instructor'")

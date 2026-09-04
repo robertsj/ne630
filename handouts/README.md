@@ -1,7 +1,7 @@
 # NE 630 board-supported handout framework
 
 This package contains a reusable LaTeX class and two-page handouts for Lessons
-1--5.
+1--6.
 The design separates three kinds of content:
 
 1. **Fixed inputs** -- reading, objectives, notation, constants, data tables, and problem statements that students should not have to copy from the board.
@@ -56,8 +56,11 @@ as labeled blank axes; the instructor version overlays the completed curves.
 - `lesson_05_handout_body.tex` -- shared Lesson 5 cross-section-data and reaction-probability content.
 - `lesson_05_handout.tex` -- Lesson 5 student wrapper, with a spectrum reference and reaction-probability workspaces.
 - `lesson_05_handout_instructor.tex` -- Lesson 5 instructor wrapper with selected interpretations and results revealed.
+- `lesson_06_handout_body.tex` -- shared Lesson 6 cross-section-shape and resonance content.
+- `lesson_06_handout.tex` -- Lesson 6 student wrapper, including the cross-section figures from the slide deck.
+- `figures/` -- supporting PGF figures used by Lesson 6.
 - `spectra.pdf` -- supporting spectrum figure used by Lesson 5.
-- `Makefile` -- builds both PDFs with `latexmk`.
+- `Makefile` -- builds the available student and instructor PDFs with `latexmk`.
 
 ## Build
 
@@ -65,10 +68,30 @@ as labeled blank axes; the instructor version overlays the completed curves.
 make
 ```
 
-or compile a single version:
+Build only one student handout with its uppercase lesson target:
+
+```bash
+make L06
+```
+
+The lowercase legacy targets (for example, `make lesson05`) build both the
+student and instructor versions when both wrappers exist. You can also compile
+a single version directly:
 
 ```bash
 latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_02_handout.tex
+```
+
+Remove temporary LaTeX files while retaining compiled PDFs:
+
+```bash
+make tidy
+```
+
+Remove temporary files and compiled PDFs:
+
+```bash
+make clean
 ```
 
 ## Core interface

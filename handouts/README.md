@@ -61,7 +61,8 @@ as labeled blank axes; the instructor version overlays the completed curves.
 - `lesson_07_handout_body.tex` -- shared two-page Lesson 7 scattering-kinematics content.
 - `lesson_07_handout.tex` -- Lesson 7 student wrapper with worked results left as reveal blanks.
 - `lesson_07_handout_instructor.tex` -- Lesson 7 instructor wrapper with selected example results revealed.
-- `figures/` -- supporting figures used by Lessons 6 and 7.
+- `figures/` -- supporting figures used by Lessons 6 and 7, including the
+  OpenMC notebook that generates the U-238 threshold plot.
 - `spectra.pdf` -- supporting spectrum figure used by Lesson 5.
 - `Makefile` -- builds the available student and instructor PDFs with `latexmk`.
 

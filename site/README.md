@@ -40,7 +40,7 @@ Canonical handouts remain in `handouts/`. Running `make html` first invokes
 `site/_static/handouts/`.
 
 The canonical Lesson 1--7 wrappers, bodies, class, student PDFs, and referenced
-supporting figures must be version-controlled along with the public exports;
+supporting files must be version-controlled along with the public exports;
 the build intentionally stops if any required input is absent.
 
 Do not edit those generated files directly. The exporter copies each student
@@ -61,7 +61,8 @@ make check-handouts
 
 The public TeX requires XeLaTeX or LuaLaTeX. Each lesson bundle contains the
 student wrapper, sanitized body, shared `ne630boardhandout.cls`, any supporting
-figures referenced by that lesson, and brief build instructions. No
+figures or reproducibility notebooks referenced by that lesson, and brief build
+instructions. No
 repository-local `.sty` file is currently required.
 
 Deployment to a `gh-pages` branch is intentionally separate from the local

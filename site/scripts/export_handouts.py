@@ -21,9 +21,13 @@ LESSON_SUPPORT_FILES = {
     6: (
         "figures/h1_xsec.pgf",
         "figures/u235_fission.pgf",
+        "figures/u238_threshold.ipynb",
         "figures/u238_threshold.pdf",
     ),
-    7: ("figures/u238_threshold.pdf",),
+    7: (
+        "figures/u238_threshold.ipynb",
+        "figures/u238_threshold.pdf",
+    ),
 }
 REDACTION_COMMANDS = (
     "RevealBlank",
@@ -284,7 +288,11 @@ def _source_readme(lesson: int, support_files: tuple[str, ...]) -> bytes:
         f"  {basename}_body.tex  student-safe handout body",
         "  ne630boardhandout.cls     shared document class",
     ]
-    file_lines.extend(f"  {name:<24} supporting figure" for name in support_files)
+    file_lines.extend(
+        f"  {name:<24} "
+        + ("OpenMC plot-source notebook" if name.endswith(".ipynb") else "supporting figure")
+        for name in support_files
+    )
     files = "\n".join(file_lines)
     content = f"""NE 630 Lesson {lesson:02d} student handout source
 

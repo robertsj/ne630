@@ -15,7 +15,7 @@ from pathlib import Path
 REPOSITORY = Path(__file__).resolve().parents[2]
 SOURCE_DIRECTORY = REPOSITORY / "handouts"
 OUTPUT_DIRECTORY = REPOSITORY / "site" / "_static" / "handouts"
-LESSONS = (1, 2, 3, 4, 5, 6)
+LESSONS = (1, 2, 3, 4, 5, 6, 7)
 LESSON_SUPPORT_FILES = {
     5: ("spectra.pdf",),
     6: (
@@ -23,6 +23,7 @@ LESSON_SUPPORT_FILES = {
         "figures/u235_fission.pgf",
         "figures/u238_threshold.pdf",
     ),
+    7: ("figures/u238_threshold.pdf",),
 }
 REDACTION_COMMANDS = (
     "RevealBlank",
@@ -38,6 +39,7 @@ EXPECTED_REDACTIONS = {
     4: (12, 17, 0, 0, 0),
     5: (12, 10, 0, 0, 0),
     6: (1, 3, 0, 0, 0),
+    7: (1, 3, 0, 0, 0),
 }
 
 

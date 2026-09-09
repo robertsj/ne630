@@ -61,6 +61,14 @@ work.
        `wrapper <_static/handouts/lesson-06/lesson_06_handout.tex>`__ |middot|
        `body <_static/handouts/lesson-06/lesson_06_handout_body.tex>`__ |middot|
        `U-238 threshold figure <_static/handouts/lesson-06/figures/u238_threshold.pdf>`__
+   * - 7
+     - Scattering Kinematics
+     - `PDF <_static/handouts/lesson-07/lesson_07_handout.pdf>`__
+     - `Source bundle <_static/handouts/lesson-07/lesson_07_handout_source.zip>`__
+
+       `wrapper <_static/handouts/lesson-07/lesson_07_handout.tex>`__ |middot|
+       `body <_static/handouts/lesson-07/lesson_07_handout_body.tex>`__ |middot|
+       `U-238 threshold figure <_static/handouts/lesson-07/figures/u238_threshold.pdf>`__
 
 Shared LaTeX support
 --------------------

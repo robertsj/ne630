@@ -1,7 +1,7 @@
 # NE 630 board-supported handout framework
 
 This package contains a reusable LaTeX class and two-page handouts for Lessons
-1--6.
+1--7.
 The design separates three kinds of content:
 
 1. **Fixed inputs** -- reading, objectives, notation, constants, data tables, and problem statements that students should not have to copy from the board.
@@ -58,7 +58,10 @@ as labeled blank axes; the instructor version overlays the completed curves.
 - `lesson_05_handout_instructor.tex` -- Lesson 5 instructor wrapper with selected interpretations and results revealed.
 - `lesson_06_handout_body.tex` -- shared Lesson 6 cross-section-shape and resonance content.
 - `lesson_06_handout.tex` -- Lesson 6 student wrapper, including the cross-section figures from the slide deck.
-- `figures/` -- supporting PGF figures used by Lesson 6.
+- `lesson_07_handout_body.tex` -- shared two-page Lesson 7 scattering-kinematics content.
+- `lesson_07_handout.tex` -- Lesson 7 student wrapper with worked results left as reveal blanks.
+- `lesson_07_handout_instructor.tex` -- Lesson 7 instructor wrapper with selected example results revealed.
+- `figures/` -- supporting figures used by Lessons 6 and 7.
 - `spectra.pdf` -- supporting spectrum figure used by Lesson 5.
 - `Makefile` -- builds the available student and instructor PDFs with `latexmk`.
 
@@ -71,7 +74,7 @@ make
 Build only one student handout with its uppercase lesson target:
 
 ```bash
-make L06
+make L07
 ```
 
 The lowercase legacy targets (for example, `make lesson05`) build both the

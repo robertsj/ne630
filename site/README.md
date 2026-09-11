@@ -1,7 +1,8 @@
 # NE 630 public course site
 
 This directory is the Sphinx source for the public NE 630 course-materials
-site. The initial page publishes student handouts for Lessons 1--7.
+site. The initial page publishes student handouts for Lessons 1--7 and a
+standalone notebook for Lesson 8.
 
 ## Build
 
@@ -42,6 +43,16 @@ Canonical handouts remain in `handouts/`. Running `make html` first invokes
 The canonical Lesson 1--7 wrappers, bodies, class, student PDFs, and referenced
 supporting files must be version-controlled along with the public exports;
 the build intentionally stops if any required input is absent.
+
+Standalone lesson notebooks remain canonical in `notebooks/`. Public download
+copies live beneath `site/_static/notebooks/` and must be byte-for-byte
+identical to their canonical files. Lesson 8 intentionally has no handout; its
+notebook is published as an independent course resource. Verify its publication
+copy with:
+
+```bash
+cmp notebooks/lesson_8.ipynb site/_static/notebooks/lesson_8.ipynb
+```
 
 Do not edit those generated files directly. The exporter copies each student
 PDF, creates a complete source bundle, and removes instructor-only reveal

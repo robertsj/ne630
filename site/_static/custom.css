@@ -34,6 +34,10 @@ table.handout-table th {
   color: white;
 }
 
+table.handout-table th p {
+  hyphens: none;
+}
+
 table.handout-table th,
 table.handout-table td {
   border: 1px solid var(--ne630-border);

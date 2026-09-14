@@ -1,0 +1,334 @@
+
+\providecommand{\SourceEq}[1]{\par\nobreak\hfill{\sffamily\scriptsize\color{KSUGray}#1}\par}
+\usetikzlibrary{arrows.meta,decorations.pathreplacing}
+
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{3pt plus 1pt}
+\setlength{\belowdisplayshortskip}{3pt plus 1pt}
+\setlength{\jot}{2pt}
+\tcbset{handout base/.append style={before skip=2.5pt,after skip=2.5pt}}
+
+\providecommand{\LessonEightPureFuelSketch}{\begin{tikzpicture}[x=.88cm,y=.76cm,>=Latex,font=\scriptsize,
+                   line cap=round,line join=round]
+  \path[use as bounding box] (-.68,-.65) rectangle (8.18,3.07);
+  \draw[->,semithick] (0,-.06)--(0,2.67);
+  \draw[->,semithick] (-.1,0)--(8.0,0);
+  \node[above] at (0,2.67) {$\eta(E)$};
+  \draw (-.10,1.26)--(.10,1.26);
+  \node[left=2pt] at (0,1.26) {$\sim2$};
+  \foreach \x in {2.25,5.00,7.40}{\draw (\x,-.06)--(\x,.06);}
+  \node[below=4pt] at (2.25,0) {$1\unit{eV}$};
+  \node[below=4pt] at (5.00,0) {$0.1\unit{MeV}$};
+  \node[below=4pt] at (7.40,0) {$10\unit{MeV}$};
+  \draw[KSUPurple,thick] (0,1.26)--(2.17,1.26)
+    .. controls (2.20,1.28) and (2.21,1.06) .. (2.25,.87)
+    .. controls (2.28,.77) and (2.32,1.23) .. (2.39,1.26)
+    .. controls (2.45,1.15) and (2.46,.88) .. (2.55,.87)
+    .. controls (2.63,.94) and (2.65,1.18) .. (2.74,1.27)
+    .. controls (2.80,1.08) and (2.84,.78) .. (2.94,.88)
+    .. controls (3.02,.98) and (3.05,1.20) .. (3.14,1.27)
+    .. controls (3.22,1.02) and (3.25,.73) .. (3.35,.85)
+    .. controls (3.44,.94) and (3.50,1.16) .. (3.57,1.27)
+    .. controls (3.67,1.02) and (3.70,.78) .. (3.80,.87)
+    .. controls (3.91,1.00) and (3.91,1.20) .. (4.01,1.26)
+    .. controls (4.08,1.03) and (4.13,.86) .. (4.20,.93)
+    .. controls (4.28,1.02) and (4.31,1.19) .. (4.40,1.27)
+    .. controls (4.47,1.02) and (4.51,.94) .. (4.60,1.04)
+    .. controls (4.75,1.18) and (4.82,1.25) .. (5.00,1.26)
+    .. controls (6.15,1.28) and (6.92,1.57) .. (7.56,2.38);
+  \draw[KSUPurple,thin,densely dashed] (4.83,1.18)--(4.95,.22)--(5.14,1.27);
+  \draw[KSUOrange,semithick,decorate,
+        decoration={brace,amplitude=3pt,raise=2pt}]
+        (2.24,1.66)--(4.98,1.66)
+        node[midway,above=7pt,font=\scriptsize\bfseries]{avoid!};
+  \node[align=center,text=KSUGray,inner sep=1pt] (nu) at (6.35,2.65)
+       {larger $\nu(E)$};
+  \draw[->,KSUGray] (nu.south east) to[out=-25,in=150] (7.25,2.05);
+\end{tikzpicture}}
+\providecommand{\LessonEightMixtureSketch}{\begin{tikzpicture}[x=.85cm,y=.73cm,>=Latex,font=\scriptsize,
+                   line cap=round,line join=round]
+  \path[use as bounding box] (-.72,-1.16) rectangle (8.40,3.13);
+  \draw[->,semithick] (0,-.06)--(0,2.65);
+  \draw[->,semithick] (-.1,0)--(8.27,0);
+  \node[above] at (0,2.65) {$\eta(E)$};
+  \draw (-.10,1.40)--(.10,1.40);
+  \node[left=2pt] at (0,1.40) {$\sim2$};
+  \draw[KSUOrange] (-.10,.88)--(.10,.88);
+  \node[left=2pt,text=KSUOrange] at (0,.88) {$\sim1.4$};
+  \draw[KSUGray,densely dashed] (2.36,0)--(2.36,2.15);
+  \draw[KSUGray,densely dashed] (6.04,0)--(6.04,2.15);
+  \draw[KSUPurple,thick] (0,1.40)--(2.35,1.40)
+    .. controls (2.45,1.17) and (2.48,.75) .. (2.60,.85)
+    .. controls (2.70,1.04) and (2.75,1.29) .. (2.82,1.34)
+    .. controls (2.91,1.13) and (2.94,.82) .. (3.05,.89)
+    .. controls (3.15,1.02) and (3.20,1.30) .. (3.26,1.32)
+    .. controls (3.37,.93) and (3.51,.65) .. (3.66,.80)
+    .. controls (3.75,.97) and (3.82,1.25) .. (3.89,1.34)
+    .. controls (3.96,1.12) and (3.96,.91) .. (4.08,.91)
+    .. controls (4.21,.96) and (4.21,1.27) .. (4.30,1.32)
+    .. controls (4.34,1.00) and (4.39,.79) .. (4.51,.94)
+    .. controls (4.61,1.12) and (4.70,1.43) .. (4.80,1.38)
+    .. controls (4.94,1.26) and (4.94,1.53) .. (5.02,1.41)
+    .. controls (5.17,1.08) and (5.70,.99) .. (6.10,1.07)
+    .. controls (7.11,1.26) and (7.44,1.54) .. (8.12,2.54);
+  \draw[KSUOrange,thick] (0,.88)
+    .. controls (.18,.86) and (.23,.97) .. (.34,.88)
+    .. controls (.47,.81) and (.57,.91) .. (.71,.87)
+    .. controls (.91,.83) and (.96,.91) .. (1.09,.86)
+    .. controls (1.25,.80) and (1.36,.93) .. (1.49,.85)
+    .. controls (1.65,.78) and (1.82,.91) .. (1.96,.86)
+    --(2.28,.86)
+    .. controls (2.36,.81) and (2.38,.27) .. (2.48,.24)
+    .. controls (2.62,.22) and (2.76,.47) .. (2.83,.57)
+    .. controls (2.87,.42) and (2.96,.35) .. (3.05,.44)
+    .. controls (3.13,.30) and (3.29,.27) .. (3.37,.29)
+    .. controls (3.48,.37) and (3.51,.28) .. (3.66,.27)
+    .. controls (3.85,.18) and (3.88,.38) .. (4.01,.27)
+    .. controls (4.17,.20) and (4.28,.27) .. (4.41,.22)
+    .. controls (4.55,.21) and (4.59,.42) .. (4.72,.37)
+    .. controls (4.81,.52) and (4.84,.25) .. (4.98,.27)
+    .. controls (5.13,.23) and (5.20,.34) .. (5.34,.29)
+    .. controls (5.57,.23) and (5.64,.29) .. (5.85,.27)
+    .. controls (6.89,.30) and (7.49,.92) .. (7.87,1.63);
+  \node[text=KSUPurple,inner sep=1pt] (twenty) at (6.64,2.72) {$20\%$};
+  \draw[->,KSUPurple] (twenty.east) to[out=0,in=140] (8.01,2.31);
+  \node[text=KSUOrange,anchor=east,inner sep=1pt] (nat) at (7.20,.58) {natural U};
+  \draw[->,KSUOrange] (nat.east) to[out=0,in=-70] (7.64,1.08);
+  \node[below=4pt] at (2.36,0) {$\sim1\unit{eV}$};
+  \node[below=4pt] at (6.04,0) {$\sim0.1\unit{MeV}$};
+  \node[below=4pt] at (8.18,0) {$E$};
+  \node[text=KSUDeepPurple] at (1.0,-.91) {thermal};
+  \node[text=KSUGray] at (4.1,-.91) {intermediate};
+  \node[text=KSUDeepPurple] at (7.3,-.91) {fast};
+\end{tikzpicture}}
+
+\HandoutSetup
+  {NE 630}
+  {08}
+  {Fuels, Moderators, and Reactor Spectra}
+  {Lewis \S\S3.1--3.3}
+
+\begin{document}
+\MakeHandoutTitle
+
+\textcolor{KSUDeepPurple}{\textbf{Primary objective.}}
+Explain the different goals of thermal- and fast-spectrum reactor designs
+using $\eta(E)$, $\xi$, $\Sigma_s$, and $\Sigma_a$.
+\par\vspace{5pt}
+
+\begin{handoutcolumns}
+\HandoutSection{1}{Energy and the multiplication factor}
+Recall the generation-to-generation definition:
+$$
+k=\frac{\#\text{ neutrons in generation }i}
+       {\#\text{ neutrons in generation }i-1}.
+$$
+What determines this value? Chapter 3 focuses on \textbf{energy}:
+neutron cross sections are strongly energy dependent.
+
+\begin{fixedbox}{The model for this chapter}
+\renewcommand{\arraystretch}{1.10}
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\textbf{Infinite} & Set aside spatial diffusion and leakage.\\
+\textbf{Homogeneous} & Use a spatially uniform composition.\\
+\textbf{Steady state} & Set aside time-dependent phenomena, including delayed-neutron dynamics.
+\end{tabularx}
+\medskip
+The notes write the multiplication factor as $k_\infty$.
+\end{fixedbox}
+
+\textbf{Chapter roadmap.} Fuels $\to$ moderators $\to$ energy distributions
+$\to$ energy averaging $\to$ $k_\infty$ in terms of
+energy-averaged (``effective'') cross sections.
+
+\textbf{Energy range of interest.} Roughly
+$$
+0.001\unit{eV}\ \lesssim E\ \lesssim\ 10\unit{MeV}.
+$$
+
+\HandoutSection{2}{Fuel: neutrons produced per absorption}
+\begin{fixedbox}{The energy-dependent ratio $\eta(E)$}
+$$
+\eta(E)=\frac{\nu(E)\,\Sigma_f(E)}{\Sigma_a(E)}
+       =\frac{\text{fission neutrons produced}}{\text{neutrons absorbed}}.
+$$
+\par
+\renewcommand{\arraystretch}{1.10}
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+$\nu(E)$ & Mean neutrons produced per fission.\\
+$\Sigma_f(E)$ & Macroscopic fission cross section.\\
+$\Sigma_a(E)$ & Macroscopic absorption cross section.
+\end{tabularx}\par
+Use the same fuel composition in the numerator and denominator.
+\end{fixedbox}
+
+\begin{checkpoint}[What do the two ratios count?]
+How does $\eta(E)$ differ from $k_\infty$? Which compares generations,
+and which counts production per absorption at a specified energy?
+\RuledLines{2}
+\end{checkpoint}
+
+\begin{boardbox}{Board work: absorption in a fuel mixture}
+What nuclide densities and microscopic data are needed to construct
+$\Sigma_a(E)$ for a uranium mixture?
+\RuledLines{3}
+\end{boardbox}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{3}{Read the fuel sketches}
+\begin{fixedbox}{Pure fissile material}
+\centering
+\LessonEightPureFuelSketch\par
+\end{fixedbox}
+
+\begin{fixedbox}{Natural uranium and an enriched mixture}
+\centering
+\LessonEightMixtureSketch\par
+\end{fixedbox}
+{\sffamily\scriptsize\itshape\color{KSUGray}
+Note, these are cartoons to illustrate the concepts!\par}
+
+
+
+\begin{checkpoint}[Ponderable]
+If $\eta(E)$ represents an upper bound on $k_{\infty}$, why do you think
+we rarely see reactors operating in the intermediate spectrum?
+\RuledLines{2}
+\end{checkpoint}
+
+\HandoutSection{4}{Enrichment: How Much is Enough?}
+Naval reactors typically use very high enrichment,
+while civilian fuels range from natural uranium to $20\%$ enrichment,
+the arbitrary(?) cutoff between low-enriched uranium \textbf{LEU} and \textbf{HEU}.
+Traditional power reactors typically use enrichments below $5\%$; enrichments
+between 5 and 20\% are known as High-Assay LEU or HALEU.
+
+\begin{checkpoint}[Reading follow-up]
+Why might a design favor high enrichment?
+Why might a design favor low enrichment?
+\RuledLines{2}
+\end{checkpoint}
+\end{handoutcolumns}
+
+\newpage
+
+\begin{handoutcolumns}
+\HandoutSection{5}{Thermal and fast design strategies}
+\begin{fixedbox}{Thermal-spectrum reactors}
+Use \textbf{low-mass moderators} to move neutrons from fast to thermal
+energies with as \textbf{few collisions in the resonance range} as possible.
+The notes connect suitable fuel--moderator choices with low or no enrichment.
+\end{fixedbox}
+
+\begin{fixedbox}{Fast-spectrum reactors}
+Choose materials that do not slow neutrons effectively:
+\textbf{avoid low-mass materials} and \textbf{minimize inelastic scattering}.
+\end{fixedbox}
+
+\textbf{Keep the mechanisms distinct.} The moderator measures below concern
+\textbf{elastic} scattering. At higher energies, \textbf{inelastic}
+scattering becomes significant, affecting fast spectra.
+
+\HandoutSection{6}{What makes a good moderator?}
+\begin{fixedbox}{Three desirable properties}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\textbf{Large $\xi$} & A light target gives a large average logarithmic energy loss per elastic collision.\\
+\textbf{Large $\Sigma_s$} & Large number density and/or large $\sigma_s$ favors collisions in the moderator.\\
+\textbf{Small $\Sigma_a$} & Prefer scattering to absorption; the notes emphasize $\sigma_a\ll\sigma_s$.
+\end{tabularx}
+\end{fixedbox}
+
+\begin{fixedbox}{Review from Lesson 07: decrement and collision count}
+For elastic scattering isotropic in the CM frame, with target-to-neutron
+mass ratio $A$,
+$$
+\alpha=\frac{(A-1)^2}{(A+1)^2},\qquad
+\xi=1+\frac{\alpha\ln\alpha}{1-\alpha}.
+$$
+At $A=1$, use the limiting value $\xi=1$.
+$$
+n\approx\frac{1}{\xi}\ln\frac{E_0}{E_n}.
+$$
+For compounds, use the effective mixture decrement; the Lesson 07
+water example uses $\xi_{\mathrm{water}}=0.93$.
+\end{fixedbox}
+
+\begin{checkpoint}[One favorable property is not enough]
+Which moderator in the table gives the fewest collisions for a specified
+$E_0/E_n$? Does the same moderator have the largest slowing-down ratio?
+\RuledLines{2}
+\end{checkpoint}
+
+\begin{boardbox}{Notes: connecting the three properties}
+\RuledLines{3}
+\end{boardbox}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{7}{Slowing-down power and ratio}
+\begin{fixedbox}{Combine the moderator properties}
+$$
+\text{slowing-down power}=\xi\Sigma_s,
+$$
+$$
+\text{slowing-down ratio}=\frac{\xi\Sigma_s}{\Sigma_a}.
+$$
+The first combines energy loss and scattering; the second compares that
+combination with absorption.
+\end{fixedbox}
+
+\begin{fixedbox}{Moderator comparison}
+\centering
+\renewcommand{\arraystretch}{1.20}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{@{}lrrr@{}}
+\hline
+ & $\xi$ & $\xi\Sigma_s$ & $\xi\Sigma_s/\Sigma_a$\\
+\hline
+$\mathrm{H_2O}$ & $0.93$ & $1.28$ & \textcolor{KSUOrange}{\textbf{58}}\\
+$\mathrm{D_2O}$ & $0.51$ & $0.18$ & \textcolor{KSUDeepPurple}{\textbf{21,000}}\\
+$\mathrm{C}$ & $0.158$ & $0.056$ & \textcolor{KSUDeepPurple}{\textbf{200}}\\
+\hline
+\end{tabular}\par
+\medskip
+\RaggedRight
+{\footnotesize\textit{Source limitation.} Values are reproduced as transcribed.
+The notes do not specify reference conditions or the units used for
+$\xi\Sigma_s$.}\par
+\end{fixedbox}
+
+\textbf{Natural-uranium connection.} Heavy water and graphite
+are moderators with which natural-U fuel can be used; graphite
+was using in Fermi's pile.
+
+\HandoutSection{8}{Use the measures}
+\begin{checkpoint}[Recover absorption from the table]
+Rearrange the slowing-down ratio to obtain
+$$
+\Sigma_a=\MathBlank[1.25in]{}.
+$$
+Then compute the implied absorption cross sections:
+\begin{align*}
+\mathrm{H_2O}:\quad&\Sigma_a=\frac{1.28}{58}
+                 \approx\MathBlank[.85in]{},\\[5pt]
+\mathrm{D_2O}:\quad&\Sigma_a=\frac{0.18}{21{,}000}
+                 \approx\MathBlank[.85in]{}.
+\end{align*}
+The results have the same inverse-length units as the table's
+slowing-down power; no numerical unit convention is supplied here.
+\end{checkpoint}
+
+\begin{checkpoint}[Compare the design choices]
+Why can water have the largest slowing-down power in the table but the
+smallest slowing-down ratio? How does this connect to different fuel
+choices?
+\RuledLines{3}
+\end{checkpoint}
+
+\end{handoutcolumns}
+
+
+\end{document}

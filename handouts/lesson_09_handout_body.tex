@@ -1,0 +1,281 @@
+% Lesson 09: shared student/instructor board-supported handout.
+% Content: ne630_lesson09_transcription.tex (handwritten notes, pp. 1--3).
+% Structure: lesson_07_handout_body(2).tex.
+% Like the supplied body file, this file includes \begin{document}/\end{document}
+% and is intended to be read after the course handout preamble.
+%
+% DRAFT / SOURCE NOTES
+% - The source's scope is no absorption, not merely no resonance absorption.
+% - The density is defined below per unit energy; the source's literal
+%   "between E and dE" wording is not reused. The E to E+dE interval appears
+%   explicitly in the source's path-length and reaction-rate definitions.
+% - phi_fast is an explicitly declared label for the fast-range approximation;
+%   the transcription flags its original subscript (read as g=1) as uncertain.
+% - The source uses bar-nu in the general balance and nu in the separately
+%   written fission-strength integral. That distinction is retained here.
+% - The source's phi=C/E and phi=q/[xi Sigma_s(E) E] are both retained.
+%   Their compatibility is a checkpoint, not a silently supplied hypothesis.
+% - The inelastic-scattering figure and OpenMC activity remain board prompts;
+%   no missing data, illustration, or example has been invented.
+% - Reading location: the supplied Project lesson_09.md specifies Section 3.4.
+
+\providecommand{\ndensity}{n^{\prime\prime\prime}}
+\providecommand{\sfission}{s_f^{\prime\prime\prime}}
+\providecommand{\dd}{\,\mathrm{d}}
+\providecommand{\SourceEq}[1]{\par\nobreak\hfill{\sffamily\scriptsize\color{KSUGray}#1}\par}
+
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{3pt plus 1pt}
+\setlength{\belowdisplayshortskip}{3pt plus 1pt}
+\setlength{\jot}{2pt}
+\tcbset{handout base/.append style={before skip=2.5pt,after skip=2.5pt}}
+
+\HandoutSetup
+  {NE 630}
+  {09}
+  {Fast and Epithermal Spectra}
+  {Textbook \S3.4}
+
+\begin{document}
+\MakeHandoutTitle
+
+\textcolor{KSUDeepPurple}{\textbf{Primary objective.}}
+Approximate the flux spectrum $\phi(E)$ of fast and epithermal neutrons
+subject to elastic collisions without absorption.
+\par\vspace{5pt}
+
+% =================== PAGE 1: DEFINITIONS AND BALANCE ===================
+\begin{handoutcolumns}
+\HandoutSection{1}{Review: why do we need a spectrum?}
+Last time, $\eta(E)$ was a first step toward $k$: an energy average
+would give a single value approximately bounding $k$ from above.
+Before that, we developed the energy-transfer distribution $P(E\!\to\!E')$.
+
+\begin{checkpoint}[The missing weighting function]
+The distribution of neutron energies comes from competition between
+\textbf{scattering and absorption}. What weighting function should we
+use when averaging over energy?
+\RuledLines{1}
+\end{checkpoint}
+
+\HandoutSection{2}{Neutron density, flux, and reaction rates}
+All particle counts, distances, and interaction counts below are
+\textbf{expected} quantities.
+
+\begin{fixedbox}{Density and flux distributions}
+$\ndensity(E)$ is the neutron density per unit energy, with units
+$\mathrm{cm}^{-3}\,\mathrm{eV}^{-1}$. The \textbf{neutron flux} is
+$$
+\phi(E)=\ndensity(E)\,v(E),\qquad
+v(E)=\sqrt{\frac{2E}{m}}.
+$$
+Here $m$ is the neutron mass and $E=\tfrac12 mv^2$.
+The units of $\phi(E)$ are
+$\mathrm{cm}^{-2}\,\mathrm{s}^{-1}\,\mathrm{eV}^{-1}$.
+\end{fixedbox}
+
+\textbf{Path-length interpretation.}
+$\phi(E)\dd E$ is the total distance traveled in one second by all
+neutrons with energies between $E$ and $E+\mathrm{d}E$ in a
+$1\unit{cm^3}$ volume. This interpretation is especially useful for
+\textbf{Monte Carlo simulation}.
+
+\begin{fixedbox}{Differential and integrated reaction rates}
+$$
+\phi(E)\,\Sigma_x(E)\dd E
+$$
+is the number of interactions of type $x$, per second per
+$\mathrm{cm}^3$, for neutrons in the same energy interval.
+Integrating over energy gives
+$$
+R_x=\int_0^\infty\Sigma_x(E)\,\phi(E)\dd E,
+\qquad [R_x]=\mathrm{cm}^{-3}\,\mathrm{s}^{-1}.
+$$
+\end{fixedbox}
+
+\begin{checkpoint}[Units and meaning]
+What distinguishes $\phi(E)$ from $\phi(E)\dd E$? What does multiplying
+by $\Sigma_x(E)$ count?
+\RuledLines{2}
+\end{checkpoint}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{3}{Balance at a neutron energy $E$}
+The \textbf{total interaction rate density} is
+$$
+\Sigma_t(E)\,\phi(E)
+\quad [\mathrm{cm}^{-3}\,\mathrm{s}^{-1}\,\mathrm{eV}^{-1}].
+$$
+Each interaction removes a neutron from energy $E$. To balance that
+loss, neutrons must scatter into $E$, be born at $E$ by fission, or
+arrive from an external source.
+
+\begin{fixedbox}{The slowing-down (or spectrum) equation}
+\begin{align*}
+\Sigma_t(E)\,\phi(E)
+ &=\int_0^\infty P(E'\!\to\!E)\,\Sigma_s(E')\phi(E')\dd E'\\
+ &\quad+\chi(E)\int_0^\infty\bar\nu(E')\Sigma_f(E')\phi(E')\dd E'\\
+ &\quad+s_{\mathrm{ext}}(E).
+\end{align*}
+\SourceEq{Like FNRP 3.15}
+\end{fixedbox}
+
+The right-hand terms describe \textbf{in-scattering}, \textbf{fission
+births}, and an \textbf{external source}, respectively. The
+energy-transfer cross section is
+$$
+\Sigma_s(E'\!\to\!E)=P(E'\!\to\!E)\,\Sigma_s(E').
+$$
+This balance follows from the energy-dependent diffusion equation
+when space and time are eliminated.
+
+\HandoutSection{4}{Three energy ranges}
+\begin{fixedbox}{Approximations by energy range}
+\renewcommand{\arraystretch}{1.13}
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\textbf{Fast} & $0.1$--$10\unit{MeV}$; $\chi(E)>0$.\\
+ & $\Sigma_s(E'\!\to\!E)=0$ for $E'<E$.\\[3pt]
+\textbf{Epithermal} & $1\unit{eV}$--$0.1\unit{MeV}$; $\chi(E)=0$.\\
+ & $\Sigma_s(E'\!\to\!E)=0$ for $E'<E$.\\[3pt]
+\textbf{Thermal} & $10^{-3}$--$1\unit{eV}$; $\chi(E)=0$.\\
+ & $\Sigma_s(E'\!\to\!E)\ne0$ can occur for $E'<E$.
+\end{tabularx}
+\end{fixedbox}
+
+\textbf{Why can thermal neutrons gain energy?}
+Their kinetic energies can be comparable to those of surrounding
+nuclei, so a collision can transfer energy \emph{to} the neutron.
+
+\textbf{Why neglect low-energy fission births?}
+Most fission neutrons have energies around $1$--$2\unit{MeV}$;
+very few are born below $0.1\unit{MeV}$.
+
+\begin{checkpoint}[Read the direction of transfer]
+In $P(E'\!\to\!E)$, which energy is before the collision? Why does
+$E'<E$ describe an energy gain?
+\RuledLines{1}
+\end{checkpoint}
+\end{handoutcolumns}
+
+\newpage
+
+% ================== PAGE 2: FAST AND SLOWING-DOWN FORMS ==================
+\begin{handoutcolumns}
+\HandoutSection{5}{A first approximation to the fast spectrum}
+The \textbf{uncollided flux} in the fast range provides a first
+approximation to the fast spectrum. We label this approximation
+$\phi_{\mathrm{fast}}(E)$ here.
+
+\begin{fixedbox}{Uncollided fast-spectrum approximation}
+$$
+\phi_{\mathrm{fast}}(E)\simeq
+\frac{\chi(E)}{\Sigma_t(E)}\,\sfission.
+$$
+\SourceEq{FNRP 3.16}
+The fission-source strength is
+$$
+\sfission=\int_0^\infty\nu(E')\Sigma_f(E')\phi(E')\dd E'.
+$$
+\end{fixedbox}
+
+\begin{checkpoint}[The flux depends on the flux!]
+Where does $\phi$ appear on the right-hand side? Which factors set
+the spectral shape, and which quantity sets its amplitude?
+\RuledLines{2}
+\end{checkpoint}
+
+\textbf{Scattering changes the fast spectrum.}
+Any light nuclei cause energy degradation through elastic scattering.
+Inelastic scattering with heavy nuclei is also very important.
+
+\begin{boardbox}{Board sketch: inelastic-scattering energy losses}
+\begin{minipage}[t][0.65in][t]{\linewidth}
+{\footnotesize\itshape Sketch the inelastic-scattering energy changes, $\Delta E$.}
+\end{minipage}
+\end{boardbox}
+
+\HandoutSection{6}{Epithermal slowing down: assumptions}
+Return to the spectrum balance and assume:
+\begin{enumerate}[leftmargin=1.55em,itemsep=1pt,topsep=2pt]
+  \item $E<0.1\unit{MeV}$: no direct fission births at $E$.
+  \item No absorption.
+  \item No external source term in this energy range.
+\end{enumerate}
+Absorption is deferred to the next lesson.
+
+\begin{fixedbox}{Scattering-only balance}
+$$
+\Sigma_s(E)\phi(E)=
+\int_0^\infty P(E'\!\to\!E)\Sigma_s(E')\phi(E')\dd E'.
+$$
+\SourceEq{FNRP 3.21}
+\end{fixedbox}
+
+\begin{boardbox}{OpenMC example / observations}
+\RuledLines{3}
+\end{boardbox}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{7}{The energy-transfer kernel and its limits}
+For a single moderator species of mass number $A$, recall
+$$
+\alpha=\frac{(A-1)^2}{(A+1)^2}.
+$$
+\begin{fixedbox}{Elastic-scattering energy distribution}
+$$
+P(E'\!\to\!E)=
+\begin{cases}
+\dfrac{1}{(1-\alpha)E'},&\alpha E'<E<E',\\[4pt]
+0,&\text{otherwise}.
+\end{cases}
+$$
+\end{fixedbox}
+\textbf{Note the switched prime!} $E'$ is now the incident energy;
+$E$ is the outgoing energy at which we write the balance.
+
+\begin{checkpoint}[Exercise: determine the integration limits]
+With $E$ fixed, solve $\alpha E'<E<E'$ for the incident energies
+$E'$ that can contribute. For $\alpha>0$,
+$$
+\MathBlank[0.45in]{E}<E'<\MathBlank[0.55in]{E/\alpha}.
+$$
+\RuledLines{1}
+\end{checkpoint}
+
+The resulting reduced balance is
+$$
+\Sigma_s(E)\phi(E)=
+\int_E^{E/\alpha}\frac{\Sigma_s(E')\phi(E')}{(1-\alpha)E'}\dd E'.
+$$
+
+\HandoutSection{8}{Spectrum and slowing-down density}
+\begin{fixedbox}{Forms to examine}
+Candidate shape to verify:
+$$
+\phi(E)=\frac{C}{E}.
+$$
+In terms of the slowing-down density:
+$$
+\boxed{\displaystyle\phi(E)=\frac{q}{\xi\,\Sigma_s(E)\,E}}.
+$$
+Here $q$ is the \textbf{slowing-down density} and $\xi$ is the
+slowing-down decrement. In the absence of absorption,
+$$
+q=\sfission.
+$$
+\end{fixedbox}
+
+\begin{checkpoint}[Verification and consistency check]
+Substitute the proposed $C/E$ form into the reduced balance.
+Compare it with $q/[\xi\Sigma_s(E)E]$: what must be true of
+$\Sigma_s(E)$ for both forms to describe the same flux with constant
+$C$, $q$, and $\xi$?
+\RuledLines{3}
+\end{checkpoint}
+\end{handoutcolumns}
+
+\end{document}

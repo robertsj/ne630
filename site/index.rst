@@ -41,8 +41,11 @@ resource is currently available for that lesson.
      - `U-238 threshold figure <_static/handouts/lesson-07/figures/u238_threshold.pdf>`__ |middot|
        `OpenMC notebook <_static/handouts/lesson-07/figures/u238_threshold.ipynb>`__
    * - **Lesson 8** — The Reproduction Factor, η
-     - —
+     - [`PDF <_static/handouts/lesson-08/lesson_08_handout.pdf>`__][`TeX <_static/handouts/lesson-08/lesson_08_handout.tex>`__]
      - `OpenMC notebook <_static/notebooks/lesson_8.ipynb>`__
+   * - **Lesson 9** — Fast and Epithermal Spectra
+     - [`PDF <_static/handouts/lesson-09/lesson_09_handout.pdf>`__][`TeX <_static/handouts/lesson-09/lesson_09_handout.tex>`__]
+     - `OpenMC notebook <_static/notebooks/lesson_9.ipynb>`__
 
 Handout source and support files
 --------------------------------
@@ -65,6 +68,10 @@ file and the shared class.
   `body <_static/handouts/lesson-06/lesson_06_handout_body.tex>`__
 * **Lesson 7:** `source bundle <_static/handouts/lesson-07/lesson_07_handout_source.zip>`__ |middot|
   `body <_static/handouts/lesson-07/lesson_07_handout_body.tex>`__
+* **Lesson 8:** `source bundle <_static/handouts/lesson-08/lesson_08_handout_source.zip>`__ |middot|
+  `body <_static/handouts/lesson-08/lesson_08_handout_body.tex>`__
+* **Lesson 9:** `source bundle <_static/handouts/lesson-09/lesson_09_handout_source.zip>`__ |middot|
+  `body <_static/handouts/lesson-09/lesson_09_handout_body.tex>`__
 
 All bundles include the shared
 `ne630boardhandout.cls <_static/handouts/ne630boardhandout.cls>`__ class. No

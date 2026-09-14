@@ -15,7 +15,7 @@ from pathlib import Path
 REPOSITORY = Path(__file__).resolve().parents[2]
 SOURCE_DIRECTORY = REPOSITORY / "handouts"
 OUTPUT_DIRECTORY = REPOSITORY / "site" / "_static" / "handouts"
-LESSONS = (1, 2, 3, 4, 5, 6, 7)
+LESSONS = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 LESSON_SUPPORT_FILES = {
     5: ("spectra.pdf",),
     6: (
@@ -44,6 +44,8 @@ EXPECTED_REDACTIONS = {
     5: (12, 10, 0, 0, 0),
     6: (1, 3, 0, 0, 0),
     7: (1, 3, 0, 0, 0),
+    8: (0, 3, 0, 0, 0),
+    9: (0, 2, 0, 0, 0),
 }
 
 

@@ -2,11 +2,11 @@ LATEXMK = latexmk
 FLAGS = -xelatex -interaction=nonstopmode -halt-on-error
 WRAPPERS := $(wildcard lesson_??_handout.tex lesson_??_handout_instructor.tex) handout_template.tex
 
-.PHONY: all L01 L02 L03 L04 L05 L06 L07 \
-	lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07 \
+.PHONY: all L01 L02 L03 L04 L05 L06 L07 L08 L09 \
+	lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07 lesson08 lesson09 \
 	template tidy clean
 
-all: lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07
+all: lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07 lesson08 lesson09
 
 L01: lesson_01_handout.pdf
 
@@ -22,6 +22,10 @@ L06: lesson_06_handout.pdf
 
 L07: lesson_07_handout.pdf
 
+L08: lesson_08_handout.pdf
+
+L09: lesson_09_handout.pdf
+
 lesson01: L01 lesson_01_handout_instructor.pdf
 
 lesson02: L02 lesson_02_handout_instructor.pdf
@@ -35,6 +39,10 @@ lesson05: L05 lesson_05_handout_instructor.pdf
 lesson06: L06
 
 lesson07: L07 lesson_07_handout_instructor.pdf
+
+lesson08: L08 lesson_08_handout_instructor.pdf
+
+lesson09: L09 lesson_09_handout_instructor.pdf
 
 lesson_01_handout.pdf: lesson_01_handout.tex lesson_01_handout_body.tex ne630boardhandout.cls
 	$(LATEXMK) $(FLAGS) lesson_01_handout.tex
@@ -74,6 +82,18 @@ lesson_07_handout.pdf: lesson_07_handout.tex lesson_07_handout_body.tex ne630boa
 
 lesson_07_handout_instructor.pdf: lesson_07_handout_instructor.tex lesson_07_handout_body.tex ne630boardhandout.cls figures/u238_threshold.pdf
 	$(LATEXMK) $(FLAGS) lesson_07_handout_instructor.tex
+
+lesson_08_handout.pdf: lesson_08_handout.tex lesson_08_handout_body.tex ne630boardhandout.cls
+	$(LATEXMK) $(FLAGS) lesson_08_handout.tex
+
+lesson_08_handout_instructor.pdf: lesson_08_handout_instructor.tex lesson_08_handout_body.tex ne630boardhandout.cls
+	$(LATEXMK) $(FLAGS) lesson_08_handout_instructor.tex
+
+lesson_09_handout.pdf: lesson_09_handout.tex lesson_09_handout_body.tex ne630boardhandout.cls
+	$(LATEXMK) $(FLAGS) lesson_09_handout.tex
+
+lesson_09_handout_instructor.pdf: lesson_09_handout_instructor.tex lesson_09_handout_body.tex ne630boardhandout.cls
+	$(LATEXMK) $(FLAGS) lesson_09_handout_instructor.tex
 
 handout_template.pdf: handout_template.tex ne630boardhandout.cls
 	$(LATEXMK) $(FLAGS) handout_template.tex

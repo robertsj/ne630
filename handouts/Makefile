@@ -99,10 +99,10 @@ lesson_09_handout.pdf: lesson_09_handout.tex lesson_09_handout_body.tex ne630boa
 lesson_09_handout_instructor.pdf: lesson_09_handout_instructor.tex lesson_09_handout_body.tex ne630boardhandout.cls
 	$(LATEXMK) $(FLAGS) lesson_09_handout_instructor.tex
 
-lesson_10_handout.pdf: lesson_10_handout.tex lesson_10_handout_body.tex ne630boardhandout.cls
+lesson_10_handout.pdf: lesson_10_handout.tex lesson_10_handout_body.tex ne630boardhandout.cls figures/nr.pdf figures/wr.pdf
 	$(LATEXMK) $(FLAGS) lesson_10_handout.tex
 
-lesson_10_handout_instructor.pdf: lesson_10_handout_instructor.tex lesson_10_handout_body.tex ne630boardhandout.cls
+lesson_10_handout_instructor.pdf: lesson_10_handout_instructor.tex lesson_10_handout_body.tex ne630boardhandout.cls figures/nr.pdf figures/wr.pdf
 	$(LATEXMK) $(FLAGS) lesson_10_handout_instructor.tex
 
 handout_template.pdf: handout_template.tex ne630boardhandout.cls

@@ -15,7 +15,7 @@ from pathlib import Path
 REPOSITORY = Path(__file__).resolve().parents[2]
 SOURCE_DIRECTORY = REPOSITORY / "handouts"
 OUTPUT_DIRECTORY = REPOSITORY / "site" / "_static" / "handouts"
-LESSONS = (1, 2, 3, 4, 5, 6, 7, 8, 9)
+LESSONS = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 LESSON_SUPPORT_FILES = {
     5: ("spectra.pdf",),
     6: (
@@ -27,6 +27,10 @@ LESSON_SUPPORT_FILES = {
     7: (
         "figures/u238_threshold.ipynb",
         "figures/u238_threshold.pdf",
+    ),
+    10: (
+        "figures/nr.pdf",
+        "figures/wr.pdf",
     ),
 }
 REDACTION_COMMANDS = (
@@ -46,6 +50,7 @@ EXPECTED_REDACTIONS = {
     7: (1, 3, 0, 0, 0),
     8: (0, 3, 0, 0, 0),
     9: (0, 2, 0, 0, 0),
+    10: (0, 7, 0, 0, 0),
 }
 
 

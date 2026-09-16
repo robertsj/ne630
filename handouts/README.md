@@ -1,7 +1,7 @@
 # NE 630 board-supported handout framework
 
 This package contains a reusable LaTeX class and two-page handouts for Lessons
-1--9.
+1--10.
 The design separates three kinds of content:
 
 1. **Fixed inputs** -- reading, objectives, notation, constants, data tables, and problem statements that students should not have to copy from the board.
@@ -67,7 +67,10 @@ as labeled blank axes; the instructor version overlays the completed curves.
 - `lesson_09_handout_body.tex` -- shared two-page Lesson 9 fast- and epithermal-spectrum content.
 - `lesson_09_handout.tex` -- Lesson 9 student wrapper with integration limits left as reveal blanks.
 - `lesson_09_handout_instructor.tex` -- Lesson 9 instructor wrapper with the integration limits revealed.
-- `figures/` -- supporting figures used by Lessons 6 and 7, including the
+- `lesson_10_handout_body.tex` -- shared two-page Lesson 10 resonance-absorption content.
+- `lesson_10_handout.tex` -- Lesson 10 student wrapper with derivation and arithmetic results left as reveal blanks.
+- `lesson_10_handout_instructor.tex` -- Lesson 10 instructor wrapper with the selected results revealed.
+- `figures/` -- supporting figures used by Lessons 6, 7, and 10, including the
   OpenMC notebook that generates the U-238 threshold plot.
 - `spectra.pdf` -- supporting spectrum figure used by Lesson 5.
 - `Makefile` -- builds the available student and instructor PDFs with `latexmk`.

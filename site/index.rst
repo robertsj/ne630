@@ -46,6 +46,9 @@ resource is currently available for that lesson.
    * - **Lesson 9** — Fast and Epithermal Spectra
      - [`PDF <_static/handouts/lesson-09/lesson_09_handout.pdf>`__][`TeX <_static/handouts/lesson-09/lesson_09_handout.tex>`__]
      - `OpenMC notebook <_static/notebooks/lesson_9.ipynb>`__
+   * - **Lesson 10** — Resonance Absorption
+     - [`PDF <_static/handouts/lesson-10/lesson_10_handout.pdf>`__][`TeX <_static/handouts/lesson-10/lesson_10_handout.tex>`__]
+     - `OpenMC notebook <_static/notebooks/lesson_10.ipynb>`__
 
 Handout source and support files
 --------------------------------
@@ -72,6 +75,8 @@ file and the shared class.
   `body <_static/handouts/lesson-08/lesson_08_handout_body.tex>`__
 * **Lesson 9:** `source bundle <_static/handouts/lesson-09/lesson_09_handout_source.zip>`__ |middot|
   `body <_static/handouts/lesson-09/lesson_09_handout_body.tex>`__
+* **Lesson 10:** `source bundle <_static/handouts/lesson-10/lesson_10_handout_source.zip>`__ |middot|
+  `body <_static/handouts/lesson-10/lesson_10_handout_body.tex>`__
 
 All bundles include the shared
 `ne630boardhandout.cls <_static/handouts/ne630boardhandout.cls>`__ class. No

@@ -1,0 +1,152 @@
+% Assignment source: ne630/homework/html/HW07.html.
+% Legacy foundation: ne630_problems/lesson_07/statement.tex @ e1fba66.
+% Problem 1 retains the legacy solution while updating part (e) to the OpenMC
+% 294 K values requested in Fall 2026. The missing square in the legacy
+% definition of alpha is corrected; the worked examples already used it.
+
+% --------------------------------------------------------------------------
+% Problem 1
+% --------------------------------------------------------------------------
+\noindent{\bf Problem 1}. Neutrons scatter elastically at $1.0~\mathrm{MeV}$.
+After one scattering collision, determine the fraction of the neutrons that
+will have energies less than $0.5~\mathrm{MeV}$ if they scatter from each of
+the following:
+\begin{enumerate}[label=(\alph*)]
+\item Hydrogen
+\item Deuterium
+\item Carbon-12
+\item Uranium-238
+\item Light water
+\end{enumerate}
+For part (e), obtain the H-1 and O-16 elastic-scattering cross sections at
+$1.0~\mathrm{MeV}$ using OpenMC's Python nuclear-data interface
+(\texttt{openmc.data.IncidentNeutron}). Use the elastic-scattering reaction
+(ENDF MT 2) and the \texttt{"294K"} cross section.
+
+\begin{adaptedsolution}
+The probability that a neutron of energy $E$ will scatter down to an energy
+between $E'$ and $E'+dE'$ after colliding with a target nucleus of mass number
+$A$ is given by
+\[
+ p(E\to E')\,dE'=
+ \begin{cases}
+ \dfrac{1}{(1-\alpha)E}\,dE',&\alpha E\leq E'\leq E,\\
+ 0,&\text{otherwise},
+ \end{cases}
+ \tag{FNRP 2.47}
+\]
+where
+\[
+ \alpha=\left(\frac{A-1}{A+1}\right)^2.
+\]
+Then, the probability that a neutron of energy $E$ scatters to an energy
+equal to or less than $E_0$ is
+\[
+ P(E'\leq E_0)=
+ \begin{cases}
+ \displaystyle\int_{\alpha E}^{E_0}
+ \frac{1}{(1-\alpha)E}\,dE'
+ =\dfrac{E_0-\alpha E}{(1-\alpha)E},&E_0>\alpha E,\\[3pt]
+ 0,&\text{otherwise}.
+ \end{cases}
+\]
+Thus, for $E=1~\mathrm{MeV}$ and $E_0=0.5~\mathrm{MeV}$, we have for each
+target nucleus
+\begin{enumerate}[label=(\alph*)]
+\item $\alpha_{\mathrm H}=(1-1)^2/(1+1)^2=0$, and
+\[
+ \boxed{P(E'\leq0.5~\mathrm{MeV})=\frac{0.5}{1}=0.5}.
+\]
+
+\item $\alpha_{\mathrm D}=(2-1)^2/(2+1)^2=1/9$, and
+\[
+ \boxed{P(E'\leq0.5~\mathrm{MeV})
+ =\frac{0.5-(1/9)1}{(1-1/9)1}=0.4375}.
+\]
+
+\item $\alpha_{\mathrm C}=(12-1)^2/(12+1)^2\approx0.716$ and, hence,
+$0.5=E_0<\alpha_{\mathrm C}E=0.716$, so
+\[
+ \boxed{P(E'\leq0.5~\mathrm{MeV})=0}.
+\]
+
+\item $\alpha_{\mathrm U}=(238-1)^2/(238+1)^2\approx0.983$, so again
+\[
+ \boxed{P(E'\leq0.5~\mathrm{MeV})=0}.
+\]
+\end{enumerate}
+
+For (e), we have a mixture of two nuclides and, hence, we need
+\[
+ p(E\to E')=\frac{1}{\Sigma_s(E)}
+ \sum_i\Sigma_{s i}(E)p_i(E\to E').
+ \tag{FNRP 2.53}
+\]
+For $1~\mathrm{MeV}$ neutrons, the 294~K OpenMC elastic-scattering cross
+sections are
+\[
+ \sigma_s^{\isoA{H}{1}}=4.249507~\mathrm b,
+ \qquad
+ \sigma_s^{\isoA{O}{16}}=8.125790~\mathrm b.
+\]
+Because $\alpha_{\isoA{O}{16}}=(15/17)^2\approx0.779$, a $1~\mathrm{MeV}$
+neutron cannot scatter off \isoA{O}{16} to energies below
+$0.5~\mathrm{MeV}$. We already found that half of $1~\mathrm{MeV}$ neutrons
+scatter off \isoA{H}{1} to energies below $0.5~\mathrm{MeV}$. Hence, we just
+need
+\[
+ \frac{\Sigma_s^{\isoA{H}{1}}}{\Sigma_s^{\text{water}}}
+ =\frac{2n_w\sigma_s^{\isoA{H}{1}}}
+ {2n_w\sigma_s^{\isoA{H}{1}}+n_w\sigma_s^{\isoA{O}{16}}}
+ =\frac{2(4.249507)}{2(4.249507)+8.125790}
+ \approx0.511225,
+\]
+where $n_w$ is the number density of water molecules. Therefore,
+\[
+ \boxed{P(E'\leq0.5~\mathrm{MeV})
+ =0.511225(0.5)\approx0.255612}.
+\]
+\end{adaptedsolution}
+
+\newpage
+
+% --------------------------------------------------------------------------
+% Problem 2: solution language retained from the legacy source. One omitted
+% line of algebra is displayed explicitly in place of the source's ellipsis.
+% --------------------------------------------------------------------------
+\noindent{\bf Problem 2}. Show that, for elastic scattering,
+\[
+ \overline{E-E'}\equiv
+ \int_0^E(E-E')p(E\to E')\,dE'
+ =\frac{(1-\alpha)E}{2}.
+\]
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent{\bf SOLUTION}:
+
+Given a probability density function $p(x)$, recall that the expected value
+of some function $f(x)$ is given by $\bar{f}=\int f(x)p(x)\,dx$, where the
+integral is over the domain of $x$. Here, our density is $p(E\to E')$, which
+can also be written as $p(E';E)$ (i.e., the probability for $E'$ given $E$ as
+a known parameter). Then, with $f(E')=E-E'$, we have
+\begin{align*}
+ \overline{E-E'}
+ &=\int_0^E(E-E')p(E\to E')\,dE'\\
+ &=\int_{\alpha E}^E(E-E')\frac{1}{(1-\alpha)E}\,dE'\\
+ &=\left[\frac{E'}{1-\alpha}
+ -\frac{E'^2}{2(1-\alpha)E}\right]_{\alpha E}^E\\
+ &=\frac{E}{1-\alpha}
+ \left(\frac12-\alpha+\frac{\alpha^2}{2}\right)\\
+ &=\boxed{\frac{(1-\alpha)E}{2}}.
+\end{align*}
+
+}
+\else
+% NOTHING
+\fi
+
+\clearpage

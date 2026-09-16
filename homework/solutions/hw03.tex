@@ -1,0 +1,192 @@
+% Original source: ne630_problems/lesson_03/statement.tex @ e1fba66, lines 92--281.
+% Original problem and solution language retained.
+\noindent{\bf Problem 1 [FNRP 1.11]}. Uranium-238 has a half-life of $4.51 \times 10^9$ yr, whereas the half-life of uranium-235 is only $7.13\times10^8$ yr. Thus since the earth
+was formed 4.5 billion years ago, the isotopic abundance of
+uranium-235 has been steadily decreasing.
+
+\begin{enumerate}[label=(\alph*)]
+\item What was the enrichment of uranium when the earth was
+formed?
+\item How long ago was the enrichment 4\% (by atoms, not mass)?
+\end{enumerate}
+
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent{\bf SOLUTION}:
+\begin{enumerate}[label=(\alph*)]
+\item First, the enrichment is defined as the fraction of the uranium that is \ISOA{U}{235}.  One can define enrichment with respect to either mass or number of atoms; here, we'll use the latter.  Further, we {\bf assume} that the only isotopes of uranium are \ISOA{U}{235} and \ISOA{U}{238}. Then, at any point in time, the enrichment is
+\begin{equation*}
+  e(t) = \frac{N_{235}(t)}{N_{235}(t) + N_{238}(t)}
+       = \frac{\frac{N_{235}(t)}{N_{238}(t)}} {\frac{N_{235}(t)}{N_{238}(t)}+1}
+       = \frac{R(t)} {R(t)+1}
+\end{equation*}
+where, e.g., $N_{235}(t)$ is the number of \ISOA{U}{235} nuclei on earth at any given time $t$ after the earth was formed, and $R(t)=N_{235}(t)/N_{238}(t)$.  Because the number of nuclei of either isotope falls due to radioactive decay, we have
+\begin{equation*}
+ N_{235}(t) = N_{235}(0) e^{-\lambda_{235} t} \quad \text{and} \quad
+ N_{238}(t) = N_{238}(0) e^{-\lambda_{238} t} \, .
+\end{equation*}
+We don't (and don't need to) know what $N_{235}(0)$ or $N_{238}(0)$ are.  It follows that the enrichment is
+\begin{equation*}
+\begin{split}
+ e(t) &= \frac{N_{235}(0) e^{-\lambda_{235} t}}{N_{235}(0) e^{-\lambda_{235} t}+N_{238}(0) e^{-\lambda_{238} t}}
+      = \frac{ R(0) e^{(\lambda_{238}-\lambda_{235}) t}}{R(0) e^{(\lambda_{238}-\lambda_{235}) t}+ 1} \, .
+\end{split}
+\tag{***}
+\end{equation*}
+Today (i.e., $t = 4.5\cdot 10^9~\text{y}$ ), the isotopic abundance of \ISOA{U}{235} is 0.72\%, so we have
+\begin{equation*}
+\begin{split}
+ 0.0072 = \frac{ R(0) e^{(\lambda_{238}-\lambda_{235}) 4.5\cdot 10^9}}
+  {R(0) e^{(\lambda_{238}-\lambda_{235}) 4.5\cdot 10^9}+ 1} \, .
+\end{split}
+\end{equation*}
+From the given half lives and $\lambda = \ln{2}/t_{1/2}$, we have
+\begin{equation*}
+ \lambda_{238} = 1.5369 \cdot 10^{-10}~\text{y}^{-1}
+ \quad \text{and} \quad
+ \lambda_{235} = 9.7216 \cdot 10^{-10}~\text{y}^{-1} \, .
+\end{equation*}
+Then the initial ratio of \ISOA{U}{235} to \ISOA{U}{238} is
+\begin{equation*}
+ R(0)=\frac{N_{235}(0)}{N_{238}(0)} = \frac{0.0072}{e^{(1.5369-9.7216)\cdot 10^{-10} \cdot 4.5\cdot 10^9}(1-0.0072)} \approx 0.2884 \, .
+\end{equation*}
+Finally, the initial enrichment is then
+\begin{equation*}
+  e(0) = \frac{0.2884}{0.2884+1} \approx \boxed{0.2239 = 22.39\%} \, .
+\end{equation*}
+
+
+
+\item Using (***) with $e(t)=0.04$ and the now known value for $R(0)$, we have
+\begin{equation*}
+ 0.04 = \frac{ R(0) e^{(\lambda_{238}-\lambda_{235})t}}
+  {R(0) e^{(\lambda_{238}-\lambda_{235}) t}+ 1} \, ,
+\end{equation*}
+and solving for the unknown time yields
+\begin{equation*}
+  t = \frac{\ln{ \left ( \frac{e}{R_0 (1-e)}\right )}  }{\lambda_{238}-\lambda_{235}}
+    =  \frac{\ln{ \left ( \frac{0.04}{0.2884 (1-0.04)}\right )}  }{(1.5369-9.7216)\cdot 10^{-10}}
+    \approx \boxed{2.36\cdot 10^9~\text{y}} \, .
+\end{equation*}
+However, because the question asks for ``how long ago'', we take the current time of 4.5 billion years and subtract $t$ to get $\boxed{2.14\cdot 10^{9}~\text{y}}$.
+
+
+
+\end{enumerate}
+
+}
+\newpage
+\else
+% NOTHING
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\noindent{\bf Problem 2 [FNRP 1.13]}.
+Suppose that a specimen is placed in a reactor, and neutron
+bombardment causes a radioisotope to be produced at a rate of
+$2\times 10^{12}$ nuclei/s. The radioisotope has a half-life of 2 weeks.
+How long should the specimen be irradiated to produce 25 Ci of
+the radioisotope?
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent {\bf SOLUTION}:
+
+The appropriate model for this problem is
+\begin{equation*}
+ \frac{dN}{dt} = -\lambda N(t) + R \, , \qquad N(0) = 0 \, ,
+\end{equation*}
+the solution of which is
+\begin{equation*}
+ N(t) = \frac{R}{\lambda} (1 - e^{-\lambda t}) \, .
+\end{equation*}
+The corresponding activity is
+\begin{equation*}
+ A(t) = \lambda N(t) = R(1-e^{-\lambda t}) \, ,
+\end{equation*}
+and, for a target activity of $A_{\text{target}}$, we solve for $t$, or
+\begin{equation*}
+  t =  -\frac{\log{\left( 1-\frac{A_{\text{target}}}{R} \right ) }}{\lambda} \, .
+\end{equation*}
+Substitition of $\lambda = \log{2}/(14\cdot 24\cdot 3600)\approx 5.73\cdot 10^{-7}~\text{s}^{-1}$, $R=2\cdot 10^{12}$ ns$^{-1}$, and
+$A_{\text{target}} = 25\cdot 3.7\cdot 10^{10} \approx 9.25\cdot 10^{11}$ ns$^{-1}$ into this result yields
+\begin{equation*}
+  t = -\frac{ \log{ \left( 1-\frac{9.25\cdot 10^{11}}{2\cdot 10^{12}} \right ) }}
+  {5.73\cdot 10^{-7}} \approx \boxed{1.083\cdot 10^{6}~\text{s} \approx 12.54~\text{d}} \, .
+\end{equation*}
+
+
+
+
+} %%%%%%%%%%%%%%%%%%
+\newpage
+\else
+% NOTHING
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\noindent{\bf Problem 3 [FNRP 1.19]}.
+Consider the fission product chain $A \xrightarrow[]{\,\, \beta \,\,} B \xrightarrow[]{\,\, \beta \,\,}  C$ with decay
+constants $\lambda_A$ and $\lambda_B$. A reactor is started up at $t = 0$ and produces fission product $A$ at a rate of $A_0$ thereafter. Assuming
+that $B$ and $C$ are not produced directly from fission:
+\begin{enumerate}[label=(\alph*)]
+\item Find $N_A(t)$ and $N_B(t)$.
+\item What are $N_A(\infty)$ and $N_B(\infty)$?
+\end{enumerate}
+
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent {\bf SOLUTION}:
+
+The equations governing the number of each species are
+\begin{equation*}
+\begin{split}
+ \frac{dN_A}{dt} &= -\lambda_A N_A(t) + A_0 \\
+ \frac{dN_B}{dt} &= \lambda_A N_A(t) - \lambda_B N_B(t) \\
+ \frac{dN_C}{dt} &= \lambda_B N_B(t) \\
+\end{split}
+\end{equation*}
+where $N_A(0) = N_B(0) = N_C(0) = 0$.  The first equation is decay with constant generation and can be solved using the integrating factor $e^{\lambda_A t}$ as follows:
+\begin{align*}
+%\begin{split}
+  \int^{t}_0 \frac{d}{dt'} \left ( N_A(t') e^{\lambda_A t'} \right ) dt'
+     &= \int^{t}_0 A_0 e^{\lambda_A t'} dt' \\
+  N_A(t) e^{\lambda_A t} - \cancel{N_A(0)}
+     &= \frac{A_0}{\lambda_A} ( e^{\lambda_A t} - 1) \\
+     \Aboxed{ N_A(t) &= \frac{A_0}{\lambda_A} ( 1 - e^{-\lambda_A t} )}
+\end{align*}
+Now the second equation can be solved using the integrating factor $e^{\lambda_B t}$:
+\begin{align*}
+  \int^{t}_0 \frac{d}{dt'} \left ( N_B(t') e^{\lambda_B t'} \right ) dt'
+     &= \int^{t}_0  \overbrace{\lambda_A \left(\frac{A_0}{\lambda_A} ( 1 - e^{-\lambda_A t'} )\right )}^{\lambda_A N_A(t')} e^{\lambda_B t'} dt' \\
+  N_B(t) e^{\lambda_B t} - \cancel{N_B(0)}
+     &= A_0 \int^{t}_0  (  e^{\lambda_B t'} - e^{(\lambda_B-\lambda_A) t'} ) dt' \\
+     N_B(t) e^{\lambda_B t} &= \frac{A_0}{\lambda_B} (e^{\lambda_B t}-1) - \frac{A_0}{\lambda_B-\lambda_A}(e^{(\lambda_B-\lambda_A)t}-1) \\
+    \Aboxed{ N_B(t) &=  \frac{A_0}{\lambda_B} (1 - e^{-\lambda_B t}) -
+                 \frac{A_0}{\lambda_B-\lambda_A}(e^{-\lambda_A t}-e^{-\lambda_B t}) } \, .
+\end{align*}
+It follows that
+\begin{equation*}
+ \boxed{N_A(\infty) = \frac{A_0}{\lambda_A} \quad \text{and} \quad N_B(\infty) = \frac{A_0}{\lambda_B}} \, .
+\end{equation*}
+Note that for $t=\infty$, the activities of A and B are both equal to $A_0$, the rate at which A is produced by the reactor.
+
+} %%%%%%%%%%%%%%%%%%
+\newpage
+\else
+% NOTHING
+\fi

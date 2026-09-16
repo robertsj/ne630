@@ -1,0 +1,292 @@
+<h1 id="homework-10-lesson-10">Homework 10: Lesson 10</h1>
+<p>Submit the code used to generate every numerical result and figure. Label all plot axes, include units, and identify the nuclear-data temperature used in OpenMC. Use energy meshes fine enough to resolve the narrow resonances.</p>
+<h2 id="problem-1">Problem 1</h2>
+<p>Use the narrow-resonance (NR) approximation to compare the epithermal flux spectra of homogeneous mixtures of <img 
+class="equation_image" 
+title="{}^{1}\mathrm{H}" 
+src="/equation_images/%257B%257D%255E%257B1%257D%255Cmathrm%257BH%257D" 
+alt="LaTeX: {}^{1}\mathrm{H}" 
+data-equation-content="{}^{1}\mathrm{H}" 
+/> and <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/>. Consider hydrogen-to-uranium atom ratios</p>
+<p><img 
+class="equation_image" 
+title="R=\frac{N_{{}^{1}\mathrm{H}}}{N_{{}^{238}\mathrm{U}}}
+=1000,\ 100,\ \text{and }10.
+" 
+src="/equation_images/R%253D%255Cfrac%257BN_%257B%257B%257D%255E%257B1%257D%255Cmathrm%257BH%257D%257D%257D%257BN_%257B%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D%257D%257D%250A%253D1000%252C%255C%2520100%252C%255C%2520%255Ctext%257Band%2520%257D10.%250A" 
+alt="LaTeX: R=\frac{N_{{}^{1}\mathrm{H}}}{N_{{}^{238}\mathrm{U}}}
+=1000,\ 100,\ \text{and }10.
+" 
+data-equation-content="R=\frac{N_{{}^{1}\mathrm{H}}}{N_{{}^{238}\mathrm{U}}}
+=1000,\ 100,\ \text{and }10.
+" 
+/></p>
+<p>Use OpenMC’s Python nuclear-data interface to obtain the <img 
+class="equation_image" 
+title="{}^{1}\mathrm{H}" 
+src="/equation_images/%257B%257D%255E%257B1%257D%255Cmathrm%257BH%257D" 
+alt="LaTeX: {}^{1}\mathrm{H}" 
+data-equation-content="{}^{1}\mathrm{H}" 
+/> and <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/> total microscopic cross sections (ENDF MT 1) at <img 
+class="equation_image" 
+title="294~\mathrm{K}" 
+src="/equation_images/294~%255Cmathrm%257BK%257D" 
+alt="LaTeX: 294~\mathrm{K}" 
+data-equation-content="294~\mathrm{K}" 
+/>. Follow the <code>openmc.data.DataLibrary</code> and <code>openmc.data.IncidentNeutron</code> workflow used in the Lesson 10 notebook. No transport calculation is required for this problem.</p>
+<p>For a mixture with atom ratio <img 
+class="equation_image" 
+title="R" 
+src="/equation_images/R" 
+alt="LaTeX: R" 
+data-equation-content="R" 
+/>, the total macroscopic cross section is proportional to</p>
+<p><img 
+class="equation_image" 
+title="\Sigma_{t,R}(E)\propto
+R\,\sigma_t^{{}^{1}\mathrm{H}}(E)
++\sigma_t^{{}^{238}\mathrm{U}}(E).
+" 
+src="/equation_images/%255CSigma_%257Bt%252CR%257D(E)%255Cpropto%250AR%255C%252C%255Csigma_t%255E%257B%257B%257D%255E%257B1%257D%255Cmathrm%257BH%257D%257D(E)%250A%252B%255Csigma_t%255E%257B%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D%257D(E).%250A" 
+alt="LaTeX: \Sigma_{t,R}(E)\propto
+R\,\sigma_t^{{}^{1}\mathrm{H}}(E)
++\sigma_t^{{}^{238}\mathrm{U}}(E).
+" 
+data-equation-content="\Sigma_{t,R}(E)\propto
+R\,\sigma_t^{{}^{1}\mathrm{H}}(E)
++\sigma_t^{{}^{238}\mathrm{U}}(E).
+" 
+/></p>
+<p>The NR spectrum has the shape</p>
+<p><img 
+class="equation_image" 
+title="\widetilde{\phi}_R(E)
+=\frac{1}{\Sigma_{t,R}(E)E}.
+" 
+src="/equation_images/%255Cwidetilde%257B%255Cphi%257D_R(E)%250A%253D%255Cfrac%257B1%257D%257B%255CSigma_%257Bt%252CR%257D(E)E%257D.%250A" 
+alt="LaTeX: \widetilde{\phi}_R(E)
+=\frac{1}{\Sigma_{t,R}(E)E}.
+" 
+data-equation-content="\widetilde{\phi}_R(E)
+=\frac{1}{\Sigma_{t,R}(E)E}.
+" 
+/></p>
+<p>The omitted NR scattering-source factor is constant with energy for a given mixture and therefore cancels when the spectrum is normalized. For each value of <img 
+class="equation_image" 
+title="R" 
+src="/equation_images/R" 
+alt="LaTeX: R" 
+data-equation-content="R" 
+/>, use</p>
+<p><img 
+class="equation_image" 
+title="\phi_R(E)=
+\frac{\widetilde{\phi}_R(E)}
+{\widetilde{\phi}_R(1~\mathrm{eV})},
+" 
+src="/equation_images/%255Cphi_R(E)%253D%250A%255Cfrac%257B%255Cwidetilde%257B%255Cphi%257D_R(E)%257D%250A%257B%255Cwidetilde%257B%255Cphi%257D_R(1~%255Cmathrm%257BeV%257D)%257D%252C%250A" 
+alt="LaTeX: \phi_R(E)=
+\frac{\widetilde{\phi}_R(E)}
+{\widetilde{\phi}_R(1~\mathrm{eV})},
+" 
+data-equation-content="\phi_R(E)=
+\frac{\widetilde{\phi}_R(E)}
+{\widetilde{\phi}_R(1~\mathrm{eV})},
+" 
+/></p>
+<p>so that <img 
+class="equation_image" 
+title="\phi_R(1~\mathrm{eV})=1" 
+src="/equation_images/%255Cphi_R(1~%255Cmathrm%257BeV%257D)%253D1" 
+alt="LaTeX: \phi_R(1~\mathrm{eV})=1" 
+data-equation-content="\phi_R(1~\mathrm{eV})=1" 
+/>.</p>
+<ul>
+<li><p><strong>(a)</strong> Plot the three normalized spectra over <img 
+class="equation_image" 
+title="1\le E\le100~\mathrm{eV}" 
+src="/equation_images/1%255Cle%2520E%255Cle100~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 1\le E\le100~\mathrm{eV}" 
+data-equation-content="1\le E\le100~\mathrm{eV}" 
+/>. Use a linear energy axis and a logarithmic flux axis.</p></li>
+<li><p><strong>(b)</strong> In a second panel or figure, plot <img 
+class="equation_image" 
+title="E\phi_R(E)" 
+src="/equation_images/E%255Cphi_R(E)" 
+alt="LaTeX: E\phi_R(E)" 
+data-equation-content="E\phi_R(E)" 
+/> over the same interval so that departures from the undisturbed <img 
+class="equation_image" 
+title="1/E" 
+src="/equation_images/1%252FE" 
+alt="LaTeX: 1/E" 
+data-equation-content="1/E" 
+/> spectrum are easy to see.</p></li>
+<li><p><strong>(c)</strong> Explain how the moderator-to-fuel ratio affects the depth of the resonance flux depressions and the strength of energy self-shielding.</p></li>
+<li><p><strong>(d)</strong> Without performing an additional numerical integration, rank the three mixtures by their expected <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/> capture rate per <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/> nucleus,</p>
+<p><img 
+class="equation_image" 
+title="\frac{R_{\gamma,R}}{N_{{}^{238}\mathrm{U}}}
+=\int_{1~\mathrm{eV}}^{100~\mathrm{eV}}
+\sigma_\gamma^{{}^{238}\mathrm{U}}(E)\phi_R(E)\,dE,
+" 
+src="/equation_images/%255Cfrac%257BR_%257B%255Cgamma%252CR%257D%257D%257BN_%257B%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D%257D%257D%250A%253D%255Cint_%257B1~%255Cmathrm%257BeV%257D%257D%255E%257B100~%255Cmathrm%257BeV%257D%257D%250A%255Csigma_%255Cgamma%255E%257B%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D%257D(E)%255Cphi_R(E)%255C%252CdE%252C%250A" 
+alt="LaTeX: \frac{R_{\gamma,R}}{N_{{}^{238}\mathrm{U}}}
+=\int_{1~\mathrm{eV}}^{100~\mathrm{eV}}
+\sigma_\gamma^{{}^{238}\mathrm{U}}(E)\phi_R(E)\,dE,
+" 
+data-equation-content="\frac{R_{\gamma,R}}{N_{{}^{238}\mathrm{U}}}
+=\int_{1~\mathrm{eV}}^{100~\mathrm{eV}}
+\sigma_\gamma^{{}^{238}\mathrm{U}}(E)\phi_R(E)\,dE,
+" 
+/></p>
+<p>when all three spectra have the normalization given above. Explain your ranking using the flux depressions near the capture resonances. Neglect absorption in hydrogen for this comparison.</p></li>
+</ul>
+<h2 id="problem-2">Problem 2</h2>
+<p><em>Adapted from FNRP 3.6.</em></p>
+<p>Consider an infinite, homogeneous mixture containing a moderator <img 
+class="equation_image" 
+title="m" 
+src="/equation_images/m" 
+alt="LaTeX: m" 
+data-equation-content="m" 
+/> and a resonant fuel <img 
+class="equation_image" 
+title="f" 
+src="/equation_images/f" 
+alt="LaTeX: f" 
+data-equation-content="f" 
+/>. In the epithermal range, the slowing-down balance is</p>
+<p><img 
+class="equation_image" 
+title="\begin{aligned}
+\Sigma_t(E)\phi(E)={}&amp;
+\int_E^{E/\alpha_f}
+\frac{\Sigma_s^f(E&#x27;)\phi(E&#x27;)}{(1-\alpha_f)E&#x27;}\,dE&#x27;\\
+&amp;+\int_E^{E/\alpha_m}
+\frac{\Sigma_s^m(E&#x27;)\phi(E&#x27;)}{(1-\alpha_m)E&#x27;}\,dE&#x27;\\
+={}&amp;I_f(E)+I_m(E).
+\end{aligned}
+" 
+src="/equation_images/%255Cbegin%257Baligned%257D%250A%255CSigma_t(E)%255Cphi(E)%253D%257B%257D%2526%250A%255Cint_E%255E%257BE%252F%255Calpha_f%257D%250A%255Cfrac%257B%255CSigma_s%255Ef(E%2527)%255Cphi(E%2527)%257D%257B(1-%255Calpha_f)E%2527%257D%255C%252CdE%2527%255C%255C%250A%2526%252B%255Cint_E%255E%257BE%252F%255Calpha_m%257D%250A%255Cfrac%257B%255CSigma_s%255Em(E%2527)%255Cphi(E%2527)%257D%257B(1-%255Calpha_m)E%2527%257D%255C%252CdE%2527%255C%255C%250A%253D%257B%257D%2526I_f(E)%252BI_m(E).%250A%255Cend%257Baligned%257D%250A" 
+alt="LaTeX: \begin{aligned}
+\Sigma_t(E)\phi(E)={}&amp;
+\int_E^{E/\alpha_f}
+\frac{\Sigma_s^f(E&#x27;)\phi(E&#x27;)}{(1-\alpha_f)E&#x27;}\,dE&#x27;\\
+&amp;+\int_E^{E/\alpha_m}
+\frac{\Sigma_s^m(E&#x27;)\phi(E&#x27;)}{(1-\alpha_m)E&#x27;}\,dE&#x27;\\
+={}&amp;I_f(E)+I_m(E).
+\end{aligned}
+" 
+data-equation-content="\begin{aligned}
+\Sigma_t(E)\phi(E)={}&amp;
+\int_E^{E/\alpha_f}
+\frac{\Sigma_s^f(E&#x27;)\phi(E&#x27;)}{(1-\alpha_f)E&#x27;}\,dE&#x27;\\
+&amp;+\int_E^{E/\alpha_m}
+\frac{\Sigma_s^m(E&#x27;)\phi(E&#x27;)}{(1-\alpha_m)E&#x27;}\,dE&#x27;\\
+={}&amp;I_f(E)+I_m(E).
+\end{aligned}
+" 
+/></p>
+<p>In the wide-resonance (WR) approximation, also called the narrow-resonance infinite-mass approximation, take <img 
+class="equation_image" 
+title="A_f\to\infty" 
+src="/equation_images/A_f%255Cto%255Cinfty" 
+alt="LaTeX: A_f\to\infty" 
+data-equation-content="A_f\to\infty" 
+/> so that <img 
+class="equation_image" 
+title="\alpha_f\to1" 
+src="/equation_images/%255Calpha_f%255Cto1" 
+alt="LaTeX: \alpha_f\to1" 
+data-equation-content="\alpha_f\to1" 
+/>. Retain the NR assumptions for the moderator contribution: the moderator scattering cross section is smooth, and the surrounding flux has the background shape <img 
+class="equation_image" 
+title="C/E" 
+src="/equation_images/C%252FE" 
+alt="LaTeX: C/E" 
+data-equation-content="C/E" 
+/>.</p>
+<ul>
+<li><p><strong>(a)</strong> Evaluate <img 
+class="equation_image" 
+title="I_m(E)" 
+src="/equation_images/I_m(E)" 
+alt="LaTeX: I_m(E)" 
+data-equation-content="I_m(E)" 
+/> under the moderator NR assumptions.</p></li>
+<li><p><strong>(b)</strong> Show that</p>
+<p><img 
+class="equation_image" 
+title="\lim_{\alpha_f\to1} I_f(E)
+=\Sigma_s^f(E)\phi(E).
+" 
+src="/equation_images/%255Clim_%257B%255Calpha_f%255Cto1%257D%2520I_f(E)%250A%253D%255CSigma_s%255Ef(E)%255Cphi(E).%250A" 
+alt="LaTeX: \lim_{\alpha_f\to1} I_f(E)
+=\Sigma_s^f(E)\phi(E).
+" 
+data-equation-content="\lim_{\alpha_f\to1} I_f(E)
+=\Sigma_s^f(E)\phi(E).
+" 
+/></p>
+<p>You may interpret the shrinking integration interval as a one-rectangle Riemann sum or evaluate the limit algebraically.</p></li>
+<li><p><strong>(c)</strong> Substitute the two scattering-in contributions into the balance equation and solve for <img 
+class="equation_image" 
+title="\phi_{\mathrm{WR}}(E)" 
+src="/equation_images/%255Cphi_%257B%255Cmathrm%257BWR%257D%257D(E)" 
+alt="LaTeX: \phi_{\mathrm{WR}}(E)" 
+data-equation-content="\phi_{\mathrm{WR}}(E)" 
+/>.</p></li>
+<li><p><strong>(d)</strong> Compare your WR spectrum with the NR result</p>
+<p><img 
+class="equation_image" 
+title="\phi_{\mathrm{NR}}(E)
+\approx
+\frac{C\left(\Sigma_{s,0}^m+\Sigma_{s,0}^f\right)}
+{\Sigma_t(E)E}.
+" 
+src="/equation_images/%255Cphi_%257B%255Cmathrm%257BNR%257D%257D(E)%250A%255Capprox%250A%255Cfrac%257BC%255Cleft(%255CSigma_%257Bs%252C0%257D%255Em%252B%255CSigma_%257Bs%252C0%257D%255Ef%255Cright)%257D%250A%257B%255CSigma_t(E)E%257D.%250A" 
+alt="LaTeX: \phi_{\mathrm{NR}}(E)
+\approx
+\frac{C\left(\Sigma_{s,0}^m+\Sigma_{s,0}^f\right)}
+{\Sigma_t(E)E}.
+" 
+data-equation-content="\phi_{\mathrm{NR}}(E)
+\approx
+\frac{C\left(\Sigma_{s,0}^m+\Sigma_{s,0}^f\right)}
+{\Sigma_t(E)E}.
+" 
+/></p>
+<p>Normalize both spectra to the same off-resonance <img 
+class="equation_image" 
+title="C/E" 
+src="/equation_images/C%252FE" 
+alt="LaTeX: C/E" 
+data-equation-content="C/E" 
+/> background. Which approximation predicts the deeper resonance flux depression and therefore more energy self-shielding?</p></li>
+<li><p><strong>(e)</strong> Explain the comparison physically. In particular, describe why elastic scattering from an infinite-mass fuel nucleus does not provide a broad scattering-in source across the resonance.</p></li>
+</ul>

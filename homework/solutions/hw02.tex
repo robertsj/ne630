@@ -1,0 +1,267 @@
+% Problem 1 source: ne630_problems/lesson_02/statement.tex @ e1fba66, lines 89--153.
+% Original problem and solution language retained.
+\noindent{\bf Problem 1 [FNRP 1.9]}. A reactor operates at a power of $10^3$ MW(t) for 1 year.  Calculate the power from decay heat
+\begin{enumerate}[label=(\alph*)]
+\item 1 day following shutdown
+\item 1 month following shutdown
+\item 1 year following shutdown
+\item Repeat a, b, and c, assuming only one month of operation, and compare results.
+\end{enumerate}
+
+
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent{\bf SOLUTION}:
+
+Equation (1.27) provides the Wigner-Way formula for decay heat:
+\begin{equation*}
+ P_d(t) = 0.0622 P_0 (t^{-0.2} - (t_0 + t)^{-0.2}) \, .
+\end{equation*}
+For all parts, $P_0 = 10^3$ \mega\watt. For (a)--(c), $t_0 = 1~\text{y} = 31536000\second$.
+Then, for (a), $t = 24\times 3600 = 86400\second$ and
+\begin{equation*}
+ \begin{split}
+   P_d(86400)
+    &= 0.0622 \times 10^3 \times (86400^{-0.2} - (31536000+86400)^{-0.2}) \approx \boxed{4.44~\mega\watt} \\
+ \end{split}
+\end{equation*}
+For (b), assume that an average month has 30 days so that
+$t\approx 30\times24\times 3600=2592000$ and
+\begin{equation*}
+ \begin{split}
+   P_d(2592000)
+    &= 0.0622 \times 10^3 \times (2592000^{-0.2} - (31536000+2592000)^{-0.2}) \approx \boxed{1.31~\mega\watt} \\
+ \end{split}
+\end{equation*}
+For (c), $t=t_0$ and
+\begin{equation*}
+ \begin{split}
+   P_d(31536000)
+    &= 0.0622 \times 10^3 \times (31536000^{-0.2} \\
+    &- (31536000+31536000)^{-0.2}) \approx \boxed{0.255~\mega\watt} \\
+ \end{split}
+\end{equation*}
+For (d), $t_0 = 30\times 24\times 3600 =2592000\second$ and
+\begin{equation*}
+ \begin{split}
+   P_d(86400)
+    &= 0.0622 \times 10^3 \times (86400^{-0.2} - (2592000+86400)^{-0.2}) \approx \boxed{3.182~\mega\watt} \\
+   P_d(2592000)
+    &= 0.0622 \times 10^3 \times (2592000^{-0.2} - (2592000+2592000)^{-0.2}) \approx \boxed{0.420\mega\watt} \\
+   P_d(31536000)
+    &= 0.0622 \times 10^3 \times (31536000^{-0.2} \\
+    &- (2592000+31536000)^{-0.2}) \approx \boxed{0.031~\mega\watt} \\
+ \end{split}
+\end{equation*}
+
+The primary impact of a shorter $t_0$ is that fewer radioactive fission products are generated and, thus, the decay heat is substantially reduced.
+
+}
+\newpage
+\else
+% NOTHING
+\fi
+
+% Problem 2 assignment source: ne630/homework/markdown/HW02.md.
+% The Fall 2026 prompt substantially expands the older lesson_02 problem.
+\noindent{\bf Problem 2 [Lewis Eq.~(1.24); adapted from DHNRA 2.19]}.  Lewis
+states that more than 40 fission-fragment pairs can emerge from the fission of
+\isoA{U}{235}.  Equation~(1.24) gives one example, \isoA{Xe}{140} and
+\isoA{Sr}{94}.  Find one additional representative fission channel published
+for thermal-neutron-induced fission of \isoA{U}{235}.  Your source must identify
+both fragments and the prompt-neutron multiplicity; cite it.
+
+\begin{enumerate}[label=(\alph*)]
+\item Write the complete reaction, verify its nucleon-number and charge balance,
+and compute its $Q$ value using tabulated atomic masses.
+\item For either Lewis's fragment pair or the pair you selected, compare each
+fragment's neutron-to-proton ratio with that of a stable isobar having the same
+mass number.
+\item Explain why fission fragments are generally neutron rich.
+\item Predict the principal decay mode of each fragment and explain how that
+decay moves the products toward stability.
+\item Identify the particles emitted promptly during fission and those emitted
+later as the fission products decay.  Which contribution to the fission energy
+is effectively unrecoverable for power production?
+\end{enumerate}
+
+\begin{adaptedsolution}
+% The introductory sentence and calculation structure below follow the legacy
+% solution.  The published Sr-96/Xe-138 pair and expanded discussion are new.
+Basic Googling can yield several examples.  In addition, there are computer
+codes that can simulate the fission event using tabulated data.  Here, I use a
+channel identified in the prompt gamma-coincidence measurements of
+Mukhopadhyay et al.~\cite{mukhopadhyay2012}:
+\[
+ \isoAZ{U}{235}{92}+\isoAZ{n}{1}{0}
+ \longrightarrow
+ \isoAZ{Sr}{96}{38}+\isoAZ{Xe}{138}{54}
+ +2\,\isoAZ{n}{1}{0}.
+\]
+The nucleon-number balance is
+\[
+ 235+1=96+138+2=236,
+\]
+and the charge balance is
+\[
+ 92+0=38+54+2(0)=92.
+\]
+Thus, the reaction conserves both nucleon number and charge.  Using AME2020
+atomic masses~\cite{wang2021}, the corresponding $Q$ value is
+\begin{align*}
+ Q
+ &=931.494\left[(235.043928117+1.00866491590)\right.\\
+ &\hspace{2.7cm}\left.
+ -(95.921719045+137.914146268+2(1.00866491590))\right]\ \mathrm{MeV}\\
+ &\approx \boxed{185.74\ \mathrm{MeV}}.
+\end{align*}
+
+For the selected products,
+\[
+ \left(\frac{N}{Z}\right)_{\isoA{Sr}{96}}
+ =\frac{58}{38}\approx1.526,
+ \qquad
+ \left(\frac{N}{Z}\right)_{\isoA{Xe}{138}}
+ =\frac{84}{54}\approx1.556.
+\]
+For comparison, stable isobars \isoA{Mo}{96} and \isoA{Ba}{138} have
+\[
+ \left(\frac{N}{Z}\right)_{\isoA{Mo}{96}}
+ =\frac{54}{42}\approx1.286,
+ \qquad
+ \left(\frac{N}{Z}\right)_{\isoA{Ba}{138}}
+ =\frac{82}{56}\approx1.464.
+\]
+Both fission products therefore have larger neutron-to-proton ratios than the
+corresponding stable isobars.
+
+The compound nucleus \isoA{U}{236}$^*$ contains substantially more neutrons
+than protons.  During scission, its nucleons are divided between two fragments
+on a time scale too short for those fragments to move directly to the valley
+of stability.  Prompt-neutron evaporation removes part of the excess and part
+of the fragments' excitation energy, but the residual fragments generally
+remain neutron rich.  They subsequently approach stability through beta decay.
+
+The principal decay mode of both selected fragments is beta-minus decay:
+\[
+ n\longrightarrow p+e^-+\overline{\nu}_e.
+\]
+A beta-minus decay leaves $A$ unchanged, increases $Z$ by one, and decreases
+$N$ by one.  It therefore lowers $N/Z$ and moves a neutron-rich isobar toward
+stability.  Representative chains are
+\[
+ \isoA{Sr}{96}\xrightarrow{\beta^-}\isoA{Y}{96}
+ \xrightarrow{\beta^-}\isoA{Zr}{96}
+\]
+and
+\[
+ \isoA{Xe}{138}\xrightarrow{\beta^-}\isoA{Cs}{138}
+ \xrightarrow{\beta^-}\isoA{Ba}{138}\;(\text{stable}).
+\]
+Excited daughter nuclei can also emit decay gamma rays, and some sufficiently
+neutron-rich fission products have beta-delayed-neutron branches.
+
+Immediately after fission, the system contains two energetic heavy fragments,
+prompt neutrons---two in the representative channel above---and prompt gamma
+rays.  At later times, the fission products emit beta particles, electron
+antineutrinos, decay gamma rays, and, for some precursors, delayed neutrons.
+The two primary fragments carry roughly $80\%$ of the approximately
+$200\ \mathrm{MeV}$ released in fission.  Fragment and beta-particle energy is
+deposited over short ranges, while neutron and gamma-ray energy is ultimately
+deposited elsewhere in the reactor and its shielding, apart from leakage.  The
+antineutrinos interact so weakly that their energy is effectively unrecoverable
+for power production.
+\end{adaptedsolution}
+
+\newpage
+
+% Problem 3 assignment source: ne630/homework/markdown/HW02.md.
+% No matching legacy solution was found; the solution is new for Fall 2026.
+\noindent{\bf Problem 3 [Lewis Eqs.~(1.21)--(1.23)]}.  An idealized
+prompt-neutron chain begins with $n_0$ neutrons.  Each neutron generation takes
+an average time $\ell$, and the multiplication factor $k$ is constant.
+
+\begin{enumerate}[label=(\alph*)]
+\item Beginning with $n_{i+1}=kn_i$, derive
+\[
+ n(t)=n_0 k^{t/\ell}.
+\]
+\item For $k\approx1$, show that
+\[
+ n(t)\approx n_0\exp\left(\frac{k-1}{\ell}t\right).
+\]
+\item Classify systems having $k=0.995$, $k=1.000$, and $k=1.005$ as
+subcritical, critical, or supercritical, and describe the long-term behavior
+of the neutron population in each system.
+\item A reactor initially produces $1.25~\mathrm{MW(t)}$, with $k=1.010$ and
+$\ell=10^{-5}~\mathrm{s}$.  Assuming $P(t)\propto n(t)$, estimate the time
+required to reach $2.00~\mathrm{MW(t)}$ using both the exact and approximate
+expressions.
+\end{enumerate}
+
+\begin{draftsolution}
+After $i$ neutron generations,
+\[
+ n_i=n_0k^i.
+\]
+If each generation takes an average time $\ell$, then $i=t/\ell$.
+Consequently,
+\[
+ \boxed{n(t)=n_0k^{t/\ell}}.
+\]
+
+Writing the power as an exponential gives
+\[
+ n(t)=n_0\exp\left(\frac{\ln k}{\ell}t\right).
+\]
+For $k$ near one,
+\[
+ \ln k=\ln\!\left[1+(k-1)\right]
+       =(k-1)-\frac{(k-1)^2}{2}+\cdots\approx k-1.
+\]
+Therefore,
+\[
+ \boxed{n(t)\approx n_0\exp\left(\frac{k-1}{\ell}t\right)}.
+\]
+
+Within this idealized source-free model,
+\[
+\begin{array}{ccl}
+ k=0.995<1&\Longrightarrow&\text{subcritical; }n(t)\text{ decreases toward zero},\\[1mm]
+ k=1.000&\Longrightarrow&\text{critical; }n(t)=n_0\text{ remains constant},\\[1mm]
+ k=1.005>1&\Longrightarrow&\text{supercritical; }n(t)\text{ increases exponentially}.
+\end{array}
+\]
+The unlimited growth in the last line is a consequence of the simplified
+model; real systems eventually experience feedback and other effects not
+included here.
+
+Because $P(t)\propto n(t)$,
+\[
+ \frac{P(t)}{P(0)}=\frac{2.00}{1.25}=1.60.
+\]
+Using the exact generation expression,
+\begin{align*}
+ t_{\mathrm{exact}}
+ &=\ell\frac{\ln(1.60)}{\ln k}\\
+ &=(10^{-5}\ \mathrm{s})\frac{\ln(1.60)}{\ln(1.010)}
+ \approx\boxed{4.7235\times10^{-4}\ \mathrm{s}}
+ =\boxed{0.47235\ \mathrm{ms}}.
+\end{align*}
+Using the $k\approx1$ approximation,
+\begin{align*}
+ t_{\mathrm{approx}}
+ &=\ell\frac{\ln(1.60)}{k-1}\\
+ &=(10^{-5}\ \mathrm{s})\frac{\ln(1.60)}{0.010}
+ \approx\boxed{4.7000\times10^{-4}\ \mathrm{s}}
+ =\boxed{0.47000\ \mathrm{ms}}.
+\end{align*}
+The approximation is lower by about $2.35\times10^{-6}\ \mathrm{s}$, or
+$0.497\%$, because $\ln(1.010)<0.010$.
+\end{draftsolution}
+
+\clearpage

@@ -17,7 +17,7 @@ from markdown_it import MarkdownIt
 
 ROOT = Path(__file__).resolve().parent
 MARKDOWN_DIR = ROOT / "markdown"
-OUTPUT = ROOT / "html" / "HW01-05.html"
+OUTPUT = ROOT / "html" / "HW01-06.html"
 CANVAS_OUTPUT_DIR = ROOT / "html"
 CANVAS_CONVERTER = ROOT.parent / "build" / "convert_to_canvas.py"
 CANVAS_TEMP_OUTPUT = CANVAS_CONVERTER.parent / "tmp.html"
@@ -35,6 +35,7 @@ HOMEWORK = (
     Homework("HW03.md", 3),
     Homework("HW04.md", 3),
     Homework("HW05.md", 6),
+    Homework("HW06.md", 3),
 )
 
 HEADING_RE = re.compile(r"^##[ \t]+(.+?)[ \t]*$", re.MULTILINE)
@@ -179,7 +180,7 @@ TEMPLATE = """<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NE 630 Homework 01–05</title>
+  <title>NE 630 Homework 01–06</title>
   <style>
     :root {
       --ksu-purple: #512888;
@@ -498,7 +499,7 @@ TEMPLATE = """<!doctype html>
   <header class="page-header">
     <div class="page-header-inner">
       <p class="eyebrow">NE 630</p>
-      <h1>Homework 01–05</h1>
+      <h1>Homework 01–06</h1>
       <p class="subtitle">
         Choose a homework, then open individual problems as needed.
         All sections are folded by default.

@@ -1,0 +1,113 @@
+<h1 id="homework-08-lesson-08">Homework 08: Lesson 08</h1>
+<h2 id="problem-1">Problem 1</h2>
+<p>Following the lecture example, use data from OpenMC to reproduce Figure 3.2 from FNRP, and add a curve for U enriched to 4%. This figure should be produced using computer software (e.g., Python, Excel, MATLAB) and <em>not</em> by hand.</p>
+<h2 id="problem-2">Problem 2</h2>
+<p>For the 4% values, compute the expected value of <img 
+class="equation_image" 
+title="\eta(E)" 
+src="/equation_images/%255Ceta(E)" 
+alt="LaTeX: \eta(E)" 
+data-equation-content="\eta(E)" 
+/> using</p>
+<p><img 
+class="equation_image" 
+title="p(E) =
+\begin{cases}
+C &amp; E_{\mathrm{min}} \leq E \leq E_{\mathrm{max}}, \\
+0 &amp; \text{otherwise},
+\end{cases}
+" 
+src="/equation_images/p(E)%2520%253D%250A%255Cbegin%257Bcases%257D%250AC%2520%2526amp%253B%2520E_%257B%255Cmathrm%257Bmin%257D%257D%2520%255Cleq%2520E%2520%255Cleq%2520E_%257B%255Cmathrm%257Bmax%257D%257D%252C%2520%255C%255C%250A0%2520%2526amp%253B%2520%255Ctext%257Botherwise%257D%252C%250A%255Cend%257Bcases%257D%250A" 
+alt="LaTeX: p(E) =
+\begin{cases}
+C &amp; E_{\mathrm{min}} \leq E \leq E_{\mathrm{max}}, \\
+0 &amp; \text{otherwise},
+\end{cases}
+" 
+data-equation-content="p(E) =
+\begin{cases}
+C &amp; E_{\mathrm{min}} \leq E \leq E_{\mathrm{max}}, \\
+0 &amp; \text{otherwise},
+\end{cases}
+" 
+/></p>
+<p>for the following three cases:</p>
+<ul>
+<li><strong>(a)</strong> <img 
+class="equation_image" 
+title="E_{\mathrm{min}}=10^{-3}~\mathrm{eV}" 
+src="/equation_images/E_%257B%255Cmathrm%257Bmin%257D%257D%253D10%255E%257B-3%257D~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: E_{\mathrm{min}}=10^{-3}~\mathrm{eV}" 
+data-equation-content="E_{\mathrm{min}}=10^{-3}~\mathrm{eV}" 
+/> and <img 
+class="equation_image" 
+title="E_{\mathrm{max}}=1~\mathrm{eV}" 
+src="/equation_images/E_%257B%255Cmathrm%257Bmax%257D%257D%253D1~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: E_{\mathrm{max}}=1~\mathrm{eV}" 
+data-equation-content="E_{\mathrm{max}}=1~\mathrm{eV}" 
+/> (the “thermal” range)</li>
+<li><strong>(b)</strong> <img 
+class="equation_image" 
+title="E_{\mathrm{min}}=1~\mathrm{eV}" 
+src="/equation_images/E_%257B%255Cmathrm%257Bmin%257D%257D%253D1~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: E_{\mathrm{min}}=1~\mathrm{eV}" 
+data-equation-content="E_{\mathrm{min}}=1~\mathrm{eV}" 
+/> and <img 
+class="equation_image" 
+title="E_{\mathrm{max}}=10^5~\mathrm{eV}" 
+src="/equation_images/E_%257B%255Cmathrm%257Bmax%257D%257D%253D10%255E5~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: E_{\mathrm{max}}=10^5~\mathrm{eV}" 
+data-equation-content="E_{\mathrm{max}}=10^5~\mathrm{eV}" 
+/> (the “epithermal” range)</li>
+<li><strong>(c)</strong> <img 
+class="equation_image" 
+title="E_{\mathrm{min}}=10^5~\mathrm{eV}" 
+src="/equation_images/E_%257B%255Cmathrm%257Bmin%257D%257D%253D10%255E5~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: E_{\mathrm{min}}=10^5~\mathrm{eV}" 
+data-equation-content="E_{\mathrm{min}}=10^5~\mathrm{eV}" 
+/> and <img 
+class="equation_image" 
+title="E_{\mathrm{max}}=10^7~\mathrm{eV}" 
+src="/equation_images/E_%257B%255Cmathrm%257Bmax%257D%257D%253D10%255E7~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: E_{\mathrm{max}}=10^7~\mathrm{eV}" 
+data-equation-content="E_{\mathrm{max}}=10^7~\mathrm{eV}" 
+/> (the “fast” range)</li>
+</ul>
+<p>For each case, define <img 
+class="equation_image" 
+title="C" 
+src="/equation_images/C" 
+alt="LaTeX: C" 
+data-equation-content="C" 
+/> using the properties of probability density functions; that is,</p>
+<p><img 
+class="equation_image" 
+title="\int_{E_{\mathrm{min}}}^{E_{\mathrm{max}}}p(E)\,dE=1.
+" 
+src="/equation_images/%255Cint_%257BE_%257B%255Cmathrm%257Bmin%257D%257D%257D%255E%257BE_%257B%255Cmathrm%257Bmax%257D%257D%257Dp(E)%255C%252CdE%253D1.%250A" 
+alt="LaTeX: \int_{E_{\mathrm{min}}}^{E_{\mathrm{max}}}p(E)\,dE=1.
+" 
+data-equation-content="\int_{E_{\mathrm{min}}}^{E_{\mathrm{max}}}p(E)\,dE=1.
+" 
+/></p>
+<p>Generally, reactors are classified as being either “thermal” or “fast” spectrum reactors. Based on your values for <img 
+class="equation_image" 
+title="\bar{\eta}" 
+src="/equation_images/%255Cbar%257B%255Ceta%257D" 
+alt="LaTeX: \bar{\eta}" 
+data-equation-content="\bar{\eta}" 
+/> in each energy range, explain why we don't often consider “intermediate” spectrum reactors.</p>
+<h2 id="problem-3">Problem 3</h2>
+<p>The slowing-down properties of three common moderators are provided in Table 3.1 of FNRP. Add a row to that table for Be, another element with small mass, and compare Be as a moderator with <img 
+class="equation_image" 
+title="\mathrm{H}_2\mathrm{O}" 
+src="/equation_images/%255Cmathrm%257BH%257D_2%255Cmathrm%257BO%257D" 
+alt="LaTeX: \mathrm{H}_2\mathrm{O}" 
+data-equation-content="\mathrm{H}_2\mathrm{O}" 
+/>, <img 
+class="equation_image" 
+title="\mathrm{D}_2\mathrm{O}" 
+src="/equation_images/%255Cmathrm%257BD%257D_2%255Cmathrm%257BO%257D" 
+alt="LaTeX: \mathrm{D}_2\mathrm{O}" 
+data-equation-content="\mathrm{D}_2\mathrm{O}" 
+/>, and graphite. You may use data from Appendix E, Table E.3.</p>

@@ -1,0 +1,159 @@
+% Original source: ne630_problems/lesson_04/statement.tex @ e1fba66, lines 92--241.
+% Solution prose retained; one documented sign typo is corrected below.
+\noindent{\bf Problem 1 [FNRP 2.2]}. The uncollided flux at a distance $r$ from a point source emitting neutrons is given by Eq.~(2.9).
+
+\begin{enumerate}[label=(\alph*)]
+\item If you are 1 m away from a very small 1-Ci source of neutrons, what is the flux of neutrons in n/cm$^2$/s, neglecting scattering and absorption in air?
+\item If a (1-m thick) shield is placed between you and the source, what absorption cross section would be required to reduce the flux by a factor of 10?
+\item Suppose the shield made of the material specified in part (b) is only 0.5 m thick.  How far must you be from the source for the flux to be reduced by the same amount as in (b)?
+\end{enumerate}
+
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent{\bf SOLUTION}:
+
+
+\begin{enumerate}[label=(\alph*)]
+\item
+Because the source is ``very small,'' it can be treated as a point source.  Without attenuation due to collisions with air, the neutron flux is given by
+\begin{equation*}
+ \phi_u = \frac{s_p}{4\pi r^2} = \frac{3.7\times 10^{10}~\text{n}\per\second}{4\pi (100)^2~\centi\meter^2}
+ \approx \boxed{2.94 \cdot 10^{5} \frac{\text{n}}{\centi\meter^2~\second}} \, .
+\end{equation*}
+\item By placing a 1-m thick shield of material with an absorption cross section equal to $\Sigma_a$ between you and the source, the flux is attenuated by a factor equal to $e^{-\Sigma_a\cdot 100}$.  We want this attenuation to be equal to $0.1$, so
+\begin{align*}
+  e^{-\Sigma_a\cdot 100} &= 0.1 \\
+  % Correction: the leading minus sign was omitted in the legacy source.
+  \Aboxed{\Sigma_a  &= -\frac{\ln(0.1)}{100} \approx 0.023~\frac{1}{\centi\meter}} \, .
+\end{align*}
+\item If we have only 50 cm of shielding, the uncollided flux at a distance $r > 50$ from the point source is
+\begin{equation*}
+ \phi_u(r) = \frac{s_p e^{-\Sigma_a \cdot 50}}{4\pi r^2}  \, .
+\end{equation*}
+Set this equal to the flux value of (a) times the attenuation of (b), or
+\begin{align*}
+ \frac{s_p e^{-\Sigma_a \cdot 50}}{4\pi r^2} &= \frac{s_p e^{-\Sigma_a \cdot 100}}{4\pi 100^2} \\
+ \frac{1}{r^2} &= \frac{e^{-\Sigma_a \cdot 50}}{100^2} \\
+ \frac{1}{r^2} &= \frac{e^{-0.023 \cdot 50}}{100^2} \\
+ \Aboxed{r &\approx 178~\centi\meter} \, .
+\end{align*}
+
+
+\end{enumerate}
+
+}
+\newpage
+\else
+% NOTHING
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\noindent{\bf Problem 2 [FNRP 2.4]}. A boiling water reactor operates at 1000 psi.  At that pressure, the density of water and of steam are, respectively, 0.74 g/cm$^3$ and 0.036 g/cm$^3$.  The microscopic cross sections of H and O are 21.8 b and 3.8 b.
+\begin{enumerate}[label=(\alph*)]
+\item What is the macroscopic total cross section of the water?
+\item What is the macroscopic total cross section of the steam?
+\item If, on average, 40\% of the volume is occupied by steam, then what is the macroscopic total cross section of the steam water mixture?
+\item What is the macroscopic total cross section of water under atmospheric conditions at room temperature?
+\end{enumerate}
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent {\bf SOLUTION}:
+
+\begin{enumerate}[label=(\alph*)]
+\item The number density of water molecules is given by
+\begin{equation*}
+  n_{w} = \frac{\rho_w N_a}{M_w} = \frac{0.74 \cdot 6.022\cdot 10^{23}}{2\cdot 1 + 16}
+   \approx 2.4757\cdot 10^{22}~\frac{\text{molecules}}{\centi\meter\cubed}
+\end{equation*}
+The number density of oxygen is $n_{\text{O}} = n_w$, while $n_{\text{H}} = 2n_w$.  Thus, the macroscopic cross section of water is
+\begin{align*}
+ \Sigma_w &= n_{\text{O}}\sigma^{\text{O}} + n_{\text{H}}\sigma^{\text{H}}\\
+          &= 2.4757\cdot 10^{22} \frac{\text{a}}{\centi\meter\cubed} ~
+             ( 3.8~\frac{\text{b}}{\text{a}} + 2\cdot 21.8~\frac{\text{b}}{\text{a}} )
+               \cdot 10^{-24}~\frac{\text{\centi\meter\squared}}{\text{b}} \\
+          &\approx \boxed{1.17~\frac{1}{\centi\meter}} \, .
+\end{align*}
+
+
+\item Because the number density and, hence, macroscopic cross section scale with the mass density, the macroscopic cross section of steam is
+\begin{align*}
+ \Sigma_s &= \frac{\rho_s}{\rho_w} \Sigma_w \\
+          &= \frac{0.036}{0.74} \cdot 1.17 \\
+          &\approx \boxed{0.057~\frac{1}{\centi\meter}} \, .
+\end{align*}
+
+\item  Given volume fractions, we can compute an average number density for H and O and recompute a $\Sigma$.  However, that is equivalent to weighting $\Sigma_w$ and $\Sigma_s$, or
+\begin{equation*}
+ \Sigma_{\text{mix}} = 0.4\Sigma_{s} + 0.6\Sigma_{w} \approx \boxed{0.72~\frac{1}{\centi\meter}} \, .
+\end{equation*}
+That the cross section depends so strongly on the steam quality makes accurate descriptions of the water coolant in reactors very important.
+
+\item At standard temperature and pressure,
+$\rho_w \approx 1~\gram\per\centi\meter\cubed$, so the modified cross section
+is
+\[
+ \boxed{\Sigma_{w'}=(1/0.74)\Sigma_w
+ =1.58~\centi\meter^{-1}}.
+\]
+\end{enumerate}
+
+
+} %%%%%%%%%%%%%%%%%%
+\newpage
+\else
+% NOTHING
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\noindent{\bf Problem 3 [FNRP 2.8]}.
+What is the total macroscopic thermal cross section of uranium dioxide (UO$_2$) that has been enriched to 4\%?  Assume $\sigma^{235} = 607.5$ b, $\sigma^{238} = 11.8$ b, $\sigma^{O} = 3.8$ b, and that UO$_2$ has a density of 10.5 g/cm$^3$.
+
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent {\bf SOLUTION}:
+
+First, we assume that the enrichment is by {\it atomic} composition, which is consistent with the book (see the top of page 36).  Then, the molecular mass of 4\% enriched UO$_2$ is
+\begin{equation*}
+ M_{\text{UO}_2} = 0.04\cdot 235 + 0.96\cdot 238 + 2\cdot 16 \approx 269.88~\frac{\gram~\text{UO}_2}{\text{mol}} \, ,
+\end{equation*}
+where the mass number of each nuclide is used as the molecular mass (instead of tabulated masses).  This introduces a small but negligible error for these sorts of calculations.  We can simplify further, too, by assuming $M_U = 238$ (i.e., we assume the same mass for both isotopes) for which $M_{\text{UO}_2} = 270$.  I'll keep the first value in my solution.
+
+The number density of UO$_2$ molecules is given by
+\begin{align*}
+  n_{\text{UO}_2} &= \frac{\rho_{\text{UO}_2} N_a}{M_{\text{UO}_2}} \\
+                   &= \frac{10.5 \cdot 6.022\cdot 10^{23}}
+                           {269.88} \\
+    &\approx 2.3429\cdot 10^{22}~\frac{\text{molecules}}{\centi\meter\cubed}
+\end{align*}
+Then $n_{235} = 0.04 n_{\text{UO}_2}$, $n_{238} = 0.96 n_{\text{UO}_2}$, and $n_{\text{O}}=2 n_{\text{UO}_2}$, so that the macroscopic cross section is
+\begin{align*}
+ \Sigma^{\text{UO}_2}_t
+  &= n_{235} \sigma_t^{235} + n_{238} \sigma_t^{238} + n_{\text{O}} \sigma_t^{\text{O}} \\
+  &= n_{\text{UO}_2} ( 0.04 \sigma_t^{235} + 0.96 \sigma_t^{238} + 2 \sigma_t^{\text{O}}) \\
+  &= 2.3429\cdot 10^{22} ( 0.04(607.5) + 0.96(11.8) + 2(3.8) )\cdot 10^{-24} \\
+  &\approx \boxed{1.01~\frac{1}{\centi\meter}} \, .
+\end{align*}
+
+
+
+
+} %%%%%%%%%%%%%%%%%%
+\newpage
+\else
+% NOTHING
+\fi

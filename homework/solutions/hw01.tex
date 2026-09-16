@@ -1,0 +1,226 @@
+% Original source: ne630_problems/lesson_01/statement.tex @ e1fba66, lines 89--284.
+% Solution prose retained; only documented mathematical/typesetting errors are corrected below.
+\noindent{\bf Problem 1 [FNRP 1.3]}.
+Complete the following reactions and compute the corresponding Q values using the mass data from \url{https://www-nds.iaea.org/amdc/ame2020/mass_1.mas20.txt}:
+\begin{equation*}
+ \begin{split}
+  \isoAZ{Be}{9}{?} + \isoAZ{He}{4}{2} &\rightarrow ? + \isoAZ{H}{1}{1} \\
+  \isoAZ{Co}{60}{?} &\rightarrow ? + \isoAZ{e}{0}{-1} \\
+  \isoAZ{Li}{7}{3} + \isoAZ{H}{1}{1} &\rightarrow ? + \isoAZ{He}{4}{2} \\
+  \isoAZ{B}{10}{5} + \isoAZ{He}{4}{2} &\rightarrow ? + \isoAZ{H}{1}{1} \\
+ \end{split}
+\end{equation*}
+{\it When computing Q values, be careful not to round prematurely!}
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent{\bf SOLUTION}:
+
+The completed reactions are:
+\begin{equation*}
+ \begin{split}
+  \isoAZ{Be}{9}{4} + \isoAZ{He}{4}{2} &\rightarrow \isoAZ{B}{12}{5} + \isoAZ{H}{1}{1} \\
+  \isoAZ{Co}{60}{27} &\rightarrow \isoAZ{Ni}{60}{28}  + \isoAZ{e}{0}{-1} \\
+  \isoAZ{Li}{7}{3} + \isoAZ{H}{1}{1} &\rightarrow \isoAZ{He}{4}{2}  + \isoAZ{He}{4}{2} \\
+  \isoAZ{B}{10}{5} + \isoAZ{He}{4}{2} &\rightarrow \isoAZ{C}{13}{6}  + \isoAZ{H}{1}{1} \\
+ \end{split}
+\end{equation*}
+
+The corresponding Q values are (where most units are suppressed for brevity):
+
+\begin{equation*}
+ \begin{split}
+Q_1 &= 931.5 \times ((9.012183062+4.00260325413)-(12.014352638+1.007825031898)) \\
+    &\approx -6.885~\mega\electronvolt\\
+% Correction: atomic masses already include the electron bookkeeping for beta-minus decay.
+Q_2 &= 931.5 \times ((59.933815536)-(59.930785129)) \\
+    &\approx 2.823~\mega\electronvolt\\
+Q_3 &= 931.5 \times ((7.01600343426+1.007825031898)-(4.00260325413+4.00260325413)) \\
+    &\approx 17.346~\mega\electronvolt\\
+Q_4 &= 931.5 \times ((10.012936862+4.00260325413)-(13.00335483534+1.007825031898)) \\
+    &\approx 4.062~\mega\electronvolt\\
+ \end{split}
+\end{equation*}
+
+}
+\newpage
+\else
+% NOTHING
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\noindent{\bf Problem 2 [FNRP 1.5]}.
+The average kinetic energy of a fission neutron is 2.0 MeV. Defining the kinetic energy as $K = E_{\text{total}} - m_0 c^2$, what is the percent error introduced into the kinetic energy from using Eq. (1.12) instead of Eq. (1.9)?  {\it (Note that $v$ should be computed using relativistic expressions and that the  error should be defined relative to the true value, i.e., $\%\text{err} = 100(K_{\text{approximate}}-K_{\text{true}})/K_{\text{true}}$, where the ``true'' value comes from Eq. 1.9 and the ``approximate'' value comes from Eq. 1.12.)}
+
+
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent {\bf SOLUTION}:
+
+From Eqs.~1.9 and 1.10, the relativistic expression for total energy is
+\begin{equation*}
+ % Correction: the legacy expression omitted c^2 from the numerator.
+ E_{\text{total}} = mc^2 = \frac{m_0c^2}{\sqrt{1 - (v/c)^2}}  \, ,
+\end{equation*}
+and, following the problem statement, the relativistic expression for kinetic energy is
+\begin{equation*}
+  K_{\text{true}} = mc^2 -  m_0 c^2 = m_0 c^2 \left (\frac{1}{\sqrt{1 - (v/c)^2}} - 1 \right ) \, .
+\end{equation*}
+Equation 1.12 gives the {\it approximate} expression
+\begin{equation*}
+  % Correction: the legacy line switched from m_0 to m.
+  E_{\text{total}} \approx  m_0 c^2 + \frac{1}{2} m_0v^2 \, ,
+\end{equation*}
+so that
+\begin{equation*}
+  K_{\text{approximate}} = m_0 c^2 + \frac{1}{2} m_0 v^2 -  m_0 c^2 = \frac{1}{2} m_0 v^2 \, ,
+\end{equation*}
+which is the familiar ``classical'' expression for kinetic energy.
+
+Given the kinetic energy is 2 MeV, we can use the expression for $K_{\text{true}}$ to determine $(v/c)^2$.  The rest mass of a neutron is $m_0 = 1.008664~\atomicmassunit$.  Recall (or remember for next time) that $1~\atomicmassunit \approx 931.5~\mega\electronvolt\per c^2$.  Thus, we have
+
+\begin{equation*}
+  2~\mega\electronvolt = \overbrace{1.008664~\atomicmassunit \cdot (931.5~(\mega\electronvolt\per c^2)\per\atomicmassunit)}^{m_0} \cdot c^2 \left (\frac{1}{\sqrt{1 - (v/c)^2}} - 1 \right )
+\end{equation*}
+or
+\begin{equation*}
+ 0.00212821 = \frac{1}{\sqrt{1 - (v/c)^2}} - 1 \rightarrow \boxed{(v/c)^2 \approx 0.0042437} \, .
+\end{equation*}
+% Correction: sqrt(0.0042437)c is 1.953e7 m/s, not 1.88e7 m/s.
+With  $c=2.99792458\times 10^{8}~\meter\per\second$, we have
+$v \approx 1.953\cdot 10^7 \meter\per\second$.  Finally, the error is
+\begin{equation*}
+\begin{split}
+ \%\text{err} &= 100\frac{\frac{1}{2} m_0 v^2 - 2~\mega\electronvolt}
+                      {2~\mega\electronvolt} \\
+              &= 100\frac{\frac{1}{2} 1.008664~\atomicmassunit \cdot (931.5~(\mega\electronvolt\per c^2)\per\atomicmassunit ) v^2 -2~\mega\electronvolt}
+                      {2~\mega\electronvolt} \\
+              &= 100\frac{469.785258 (v^2/c^2)~\mega\electronvolt - 2~\mega\electronvolt}
+                      {2~\mega\electronvolt} \, \\
+              &= 100\frac{469.785258 (0.0042437) - 2~\mega\electronvolt}
+                      {2~\mega\electronvolt} \, \\
+              &= \boxed{-0.3184\%} \, .
+\end{split}
+\end{equation*}
+Because this error is small, and because the neutron energies of interest to nuclear engineers are typically below 10 MeV, classical expressions are used in practice.  As we go through the next few weeks and explore things like cross sections, consider what impact such an approximation may have on the quantities we compute!
+
+
+} %%%%%%%%%%%%%%%%%%
+\newpage
+\else
+% NOTHING
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\noindent{\bf Problem 3 [FNRP 1.6]}.
+Consider the following nuclear and chemical reactions:
+\begin{enumerate}[label=(\alph*)]
+\item A uranium-235 nucleus fissions as a result of being bombarded by a slow neutron.
+If the energy of fission is 200 MeV, approximately what fraction of the reactants
+mass is converted to energy?
+\item A carbon-12 atom undergoes combustion following collision with an oxygen-16
+molecule (O$_2$), forming carbon dioxide. If four eV of energy are released,
+approximately what fraction of the reactants mass is converted to energy?
+\item Are the numbers in (a) and (b) consistent with the estimated 20 tons of nuclear fuel per year or the 10,000 tons of coal per day needed for a 1000 MWe nuclear or coal power plant? State your assumptions!  ({\it Hint}: remember from NE 495 that the number of atoms $N$ in a given mass $m$ is given by $N=m N_a / M$, where $N_a = 6.022\cdot 10^{23}~\per\mole$ is Avogadro's number and $M$ is the atomic mass that we often approximate as the mass number $A = Z+N$ in units of grams per mole.  Example: in 100 g of \ISOA{U}{235}, there are approximately $100(6.022\cdot 10^{23})/235 \approx 2.56\cdot 10^{23}$ atoms.)
+\end{enumerate}
+
+
+
+\vspace{0.5cm}
+\ifsolved
+{
+\color{purple}
+
+\noindent {\bf SOLUTION}:
+
+\begin{enumerate}[label=(\alph*)]
+\item The total (rest) mass of the reactants is approximately
+      \begin{equation*}
+      \begin{aligned}
+       m_0
+       &=236~\atomicmassunit\cdot
+         931.5 [\mega\electronvolt/c^2]\per\atomicmassunit\\
+       &\approx219834.0~\mega\electronvolt/c^2 \, .
+      \end{aligned}
+      \end{equation*}
+       The energy released from fission $\Delta E$ is related to the change in mass $\Delta m_0$ by $\Delta E = \Delta m_0 c^2$.  Thus, $200~\mega\electronvolt = \Delta m_0 c^2$, or $\Delta m_0 = 200~ \mega\electronvolt\per c^2$.  The relative change in mass is $\Delta m_0 / m_0 \approx 200/219834 \approx \boxed{0.00091}$.
+\item  The total (rest) mass of the reactants is approximately
+      \begin{equation*}
+      \begin{aligned}
+       m_0
+       &=(12+2\cdot16)~\atomicmassunit\cdot
+         931.5 [\mega\electronvolt/c^2]\per\atomicmassunit\\
+       &\approx40986.0~\mega\electronvolt/c^2 \, .
+      \end{aligned}
+      \end{equation*}
+       The energy released from combustion $\Delta E$ is related to the change
+       in mass $\Delta m_0$ by $\Delta E=\Delta m_0c^2$. Thus,
+       $4\cdot10^{-6}~\mega\electronvolt=\Delta m_0c^2$, or
+       \[
+        \Delta m_0=4\cdot10^{-6}~\mega\electronvolt\per c^2.
+       \]
+       The relative change in mass is
+       \[
+        \frac{\Delta m_0}{m_0}
+        \approx\frac{4\cdot10^{-6}}{40986.0}
+        \approx\boxed{9.76\cdot10^{-11}}.
+       \]
+\item  For a nuclear plant operating at 1000 MWe with 30\% efficiency, the
+total energy produced in one year is
+\[
+  \frac{1000 \cdot 10^6}{0.3} \times 365\cdot 24 \cdot 3600 \approx 1.05\cdot 10^{17} \, \text{[J]} \, .
+\]
+The mass of the fuel used is 20 tons, but that mass is largely unchanged
+during the year! Rather, those 20 tons consist of UO\(_2\) with the
+uranium enriched to 3-4\%. As a very crude estimate, ignore the oxygen,
+and assume 3\% enrichment to find the mass and number of nuclei of
+uranium 235:
+\[
+  N_{\text{U-235}} = (20\cdot 10^6 \times 0.03) \times 6.022\cdot 10^{23} / 235 \approx 1.5\cdot 10^{27}\, \text{[nuclei]} \, .
+\]
+If all of those fission, we'd get
+\[
+  N_{\text{U-235}} \times 200 \times 1.6\cdot 10^{-13} \approx 4.9\times 10^{16} \, \text{[J]} \, .
+\]
+That's within a factor of 2 of the first number, so ``sanity'' prevails.
+Beyond the stated assumptions, another reason the first number is larger
+is that energy is produced not just from U-235; rather, while most of
+the U-235 is consumed (spent fuel has less U-235 than does natural U), a
+variety of other fissile nuclides are produced during operations, namely
+Pu-239, which provides a large fraction of fission power toward the end
+of the fuel's time in the reactor. We'll cover these ``long-term''
+effects later in the course.
+
+    For a coal plant operating at 1000 MWe with 40\% efficiency, the total
+energy produced in one day is
+\[
+  % Correction: the legacy arithmetic reported 2.6e14 J.
+  \frac{1000 \cdot 10^6}{0.4} \times 24 \cdot 3600
+  \approx 2.16\cdot 10^{14} \, \text{[J]} \, .
+\]
+If we assume coal is 100\% carbon, than the 10000 tons of coal consumed
+in one day involves
+\[
+  N_{\text{C-12}} = 10000\cdot 10^6 \times  6.022\cdot 10^{23} / 12 \approx 5\cdot 10^{32} \, \text{[atoms]} \, .
+\]
+If all of these combust, then the total energy produced is
+\[
+  N_{\text{C-12}} \times 4 \times 1.6\cdot 10^{-19} \approx 3.2\cdot 10^{14} \, \text{[J]} \, .
+\]
+Again, this is close, so we've passed the ``sanity'' check.
+\end{enumerate}
+
+} %%%%%%%%%%%%%%%%%%
+\else
+% NOTHING
+\fi

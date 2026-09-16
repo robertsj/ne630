@@ -1,0 +1,141 @@
+\documentclass[11pt]{amsart}
+
+\usepackage[letterpaper,margin=0.8in,headheight=14pt,footskip=18pt]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{times}
+\usepackage{amssymb,amsmath,amscd,mathtools}
+\usepackage{mathrsfs,bbm}
+\usepackage{enumitem}
+\usepackage{graphicx,float}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{xcolor}
+\usepackage{cancel}
+\usepackage{pmboxdraw}
+\usepackage[amssymb,cdot]{SIunits}
+\usepackage{txfonts}
+\usepackage{minted}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\DeclareUnicodeCharacter{3C1}{$\rho$}
+\DeclareUnicodeCharacter{3B3}{$\gamma$}
+\DeclareUnicodeCharacter{3A3}{$\Sigma$}
+\DeclareUnicodeCharacter{3C7}{$\chi$}
+
+\definecolor{purple}{rgb}{0.3176470588,0.1568627451,0.5333333333}
+\definecolor{draftgray}{rgb}{0.32,0.32,0.32}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=purple,
+  urlcolor=purple,
+  citecolor=purple,
+  pdftitle={Fall 2026 NE 630 Solution Manual},
+  pdfauthor={Jeremy Roberts},
+  pdfsubject={NE 630 homework solutions}
+}
+
+\graphicspath{{figures/}}
+\setminted{breaklines,fontsize=\small,frame=single}
+\setlist[enumerate,1]{label=(\alph*)}
+
+% Mode-safe isotope helpers: legacy files use both uppercase/lowercase forms
+% in running text as well as inside displayed mathematics.
+\newcommand{\isoA}[2]{\ensuremath{\prescript{#2}{}{\mathrm{#1}}}}
+\newcommand{\isoAZ}[3]{\ensuremath{\prescript{#2}{#3}{\mathrm{#1}}}}
+\newcommand{\isoAZN}[4]{\ensuremath{\prescript{#2}{#3}{\mathrm{#1}}_{#4}}}
+\newcommand{\ISOA}[2]{\isoA{#1}{#2}}
+\newcommand{\ISOAZ}[3]{\isoAZ{#1}{#2}{#3}}
+\newcommand{\ISOAZN}[4]{\isoAZN{#1}{#2}{#3}{#4}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\def\Inf{\operatornamewithlimits{inf\vphantom{p}}}
+
+\newif\ifsolved
+\solvedtrue
+
+\newenvironment{draftsolution}
+  {\par\vspace{0.5cm}\begingroup\color{purple}%
+   \noindent\textbf{DRAFT SOLUTION}:\par\smallskip}
+  {\par\endgroup}
+
+\newenvironment{adaptedsolution}
+  {\par\vspace{0.5cm}\begingroup\color{purple}%
+   \noindent\textbf{SOLUTION (adapted for Fall 2026)}:\par\smallskip}
+  {\par\endgroup}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{NE 630}
+\fancyhead[R]{Fall 2026 Solution Manual}
+\fancyfoot[C]{\thepage}
+
+\title{Fall 2026 NE 630 Solution Manual}
+\author{Jeremy Roberts}
+\date{Fall 2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{quote}\small
+Purple blocks labeled \textbf{SOLUTION} reproduce the existing course solution
+language wherever a matching solution exists.  Blocks labeled
+\textbf{DRAFT SOLUTION} are new, and blocks labeled \textbf{SOLUTION (adapted
+for Fall 2026)} retain an earlier solution as their foundation but address a
+changed assignment.  Source provenance and the few mathematical or
+typesetting corrections to legacy material are recorded in comments in the
+LaTeX source.
+\end{quote}
+
+\tableofcontents
+\newpage
+
+\section{Homework 01: Lesson 01}
+\input{hw01}
+
+\section{Homework 02: Lesson 02}
+\input{hw02}
+
+\section{Homework 03: Lesson 03}
+\input{hw03}
+
+\section{Homework 04: Lesson 04}
+\input{hw04}
+
+\section{Homework 05: Lesson 05}
+\input{hw05}
+
+\section{Homework 06: Lesson 06}
+\input{hw06}
+
+\section{Homework 07: Lesson 07}
+\input{hw07}
+
+\begin{thebibliography}{9}
+\bibitem{mukhopadhyay2012}
+S. Mukhopadhyay et al., ``Prompt $\gamma$ spectroscopic studies of fragment
+nuclei in thermal neutron induced fission of ${}^{235}\mathrm{U}$,''
+\emph{Physical Review C}, vol. 85, 064321 (2012),
+\url{https://doi.org/10.1103/PhysRevC.85.064321}.
+
+\bibitem{wang2021}
+M. Wang et al., ``The AME 2020 atomic mass evaluation (II). Tables, graphs and
+references,'' \emph{Chinese Physics C}, vol. 45, 030003 (2021),
+\url{https://doi.org/10.1088/1674-1137/abddaf}.
+
+\bibitem{talou2021}
+P. Talou, I. Stetcu, P. Jaffke, M. E. Rising, A. E. Lovell, and T. Kawano,
+``Fission fragment decay simulations with the CGMF code,''
+\emph{Computer Physics Communications}, vol. 269, 108087 (2021),
+\url{https://doi.org/10.1016/j.cpc.2021.108087}.
+
+\bibitem{brown2018}
+D. A. Brown et al., ``ENDF/B-VIII.0: The 8th Major Release of the Nuclear
+Reaction Data Library with CIELO-project Cross Sections, New Standards and
+Thermal Scattering Data,'' \emph{Nuclear Data Sheets}, vol. 148, pp. 1--142
+(2018).
+\end{thebibliography}
+
+\end{document}

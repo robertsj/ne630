@@ -1,0 +1,437 @@
+<h1 id="homework-06-lesson-06">Homework 06: Lesson 06</h1>
+<p>Submit the code used to generate every numerical result and figure. Label all plot axes, include units, and identify the nuclear-data temperature used in OpenMC.</p>
+<h2 id="problem-1">Problem 1</h2>
+<p>Use OpenMC’s Python nuclear-data interface to examine the radiative-capture cross section, <img 
+class="equation_image" 
+title="\sigma_\gamma(E)" 
+src="/equation_images/%255Csigma_%255Cgamma(E)" 
+alt="LaTeX: \sigma_\gamma(E)" 
+data-equation-content="\sigma_\gamma(E)" 
+/>, of <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/>. No transport calculation is required. On Beocat, the continuous-energy data file is</p>
+<p><code>/homes/jaroberts/openmc/data/neutron/U238.h5</code>.</p>
+<p>Load this file with <code>openmc.data.IncidentNeutron.from_hdf5</code>, use the radiative-capture reaction (ENDF MT 102), and select the <code>"294K"</code> cross section. The resulting callable takes neutron energy in eV and returns the microscopic cross section in barns. For example, the data can be prepared with</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openmc</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data_path <span class="op">=</span> <span class="st">&quot;/homes/jaroberts/openmc/data/neutron/U238.h5&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>u238 <span class="op">=</span> openmc.data.IncidentNeutron.from_hdf5(data_path)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>sigma_gamma <span class="op">=</span> u238.reactions[<span class="dv">102</span>].xs[<span class="st">&quot;294K&quot;</span>]</span></code></pre></div>
+<ul>
+<li><strong>(a)</strong> Plot <img 
+class="equation_image" 
+title="\sigma_\gamma(E)" 
+src="/equation_images/%255Csigma_%255Cgamma(E)" 
+alt="LaTeX: \sigma_\gamma(E)" 
+data-equation-content="\sigma_\gamma(E)" 
+/> over <img 
+class="equation_image" 
+title="10^{-4}\le E\le10^7~\mathrm{eV}" 
+src="/equation_images/10%255E%257B-4%257D%255Cle%2520E%255Cle10%255E7~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 10^{-4}\le E\le10^7~\mathrm{eV}" 
+data-equation-content="10^{-4}\le E\le10^7~\mathrm{eV}" 
+/> using log–log axes.</li>
+<li><strong>(b)</strong> Above approximately what energy do the individual resonance peaks begin to overlap and appear as a relatively smooth curve?</li>
+<li><strong>(c)</strong> Plot <img 
+class="equation_image" 
+title="\sigma_\gamma(E)" 
+src="/equation_images/%255Csigma_%255Cgamma(E)" 
+alt="LaTeX: \sigma_\gamma(E)" 
+data-equation-content="\sigma_\gamma(E)" 
+/> again over <img 
+class="equation_image" 
+title="1\le E\le100~\mathrm{eV}" 
+src="/equation_images/1%255Cle%2520E%255Cle100~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 1\le E\le100~\mathrm{eV}" 
+data-equation-content="1\le E\le100~\mathrm{eV}" 
+/> using a linear energy axis and a logarithmic cross-section axis.</li>
+<li><strong>(d)</strong> At what energy is the first large resonance peak?</li>
+</ul>
+<p>Use energy meshes fine enough to resolve the narrow resonances. Increase the mesh resolution until the plotted resonance locations and heights no longer change visibly.</p>
+<h2 id="problem-2">Problem 2</h2>
+<p>Reconstruct the <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/> radiative-capture cross section over <img 
+class="equation_image" 
+title="1\le E\le100~\mathrm{eV}" 
+src="/equation_images/1%255Cle%2520E%255Cle100~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 1\le E\le100~\mathrm{eV}" 
+data-equation-content="1\le E\le100~\mathrm{eV}" 
+/> with the single-level Breit–Wigner (SLBW) approximation. For resonance <img 
+class="equation_image" 
+title="i" 
+src="/equation_images/i" 
+alt="LaTeX: i" 
+data-equation-content="i" 
+/>,</p>
+<p><img 
+class="equation_image" 
+title="\Gamma_i=\Gamma_{n,i}+\Gamma_{\gamma,i},
+\qquad
+\lambda_i=\frac{4.55\times10^{-10}~\mathrm{cm}}
+{\sqrt{E_{r,i}/(1~\mathrm{eV})}}.
+" 
+src="/equation_images/%255CGamma_i%253D%255CGamma_%257Bn%252Ci%257D%252B%255CGamma_%257B%255Cgamma%252Ci%257D%252C%250A%255Cqquad%250A%255Clambda_i%253D%255Cfrac%257B4.55%255Ctimes10%255E%257B-10%257D~%255Cmathrm%257Bcm%257D%257D%250A%257B%255Csqrt%257BE_%257Br%252Ci%257D%252F(1~%255Cmathrm%257BeV%257D)%257D%257D.%250A" 
+alt="LaTeX: \Gamma_i=\Gamma_{n,i}+\Gamma_{\gamma,i},
+\qquad
+\lambda_i=\frac{4.55\times10^{-10}~\mathrm{cm}}
+{\sqrt{E_{r,i}/(1~\mathrm{eV})}}.
+" 
+data-equation-content="\Gamma_i=\Gamma_{n,i}+\Gamma_{\gamma,i},
+\qquad
+\lambda_i=\frac{4.55\times10^{-10}~\mathrm{cm}}
+{\sqrt{E_{r,i}/(1~\mathrm{eV})}}.
+" 
+/></p>
+<p><img 
+class="equation_image" 
+title="\sigma_{0,i}=4\pi\lambda_i^2\frac{\Gamma_{n,i}}{\Gamma_i}.
+" 
+src="/equation_images/%255Csigma_%257B0%252Ci%257D%253D4%255Cpi%255Clambda_i%255E2%255Cfrac%257B%255CGamma_%257Bn%252Ci%257D%257D%257B%255CGamma_i%257D.%250A" 
+alt="LaTeX: \sigma_{0,i}=4\pi\lambda_i^2\frac{\Gamma_{n,i}}{\Gamma_i}.
+" 
+data-equation-content="\sigma_{0,i}=4\pi\lambda_i^2\frac{\Gamma_{n,i}}{\Gamma_i}.
+" 
+/></p>
+<p><img 
+class="equation_image" 
+title="\sigma_{\gamma,i}(E)
+=\sigma_{0,i}\frac{\Gamma_{\gamma,i}}{\Gamma_i}
+ \left(\frac{E_{r,i}}{E}\right)^{1/2}
+ \frac{1}{1+4(E-E_{r,i})^2/\Gamma_i^2}.
+" 
+src="/equation_images/%255Csigma_%257B%255Cgamma%252Ci%257D(E)%250A%253D%255Csigma_%257B0%252Ci%257D%255Cfrac%257B%255CGamma_%257B%255Cgamma%252Ci%257D%257D%257B%255CGamma_i%257D%250A%2520%255Cleft(%255Cfrac%257BE_%257Br%252Ci%257D%257D%257BE%257D%255Cright)%255E%257B1%252F2%257D%250A%2520%255Cfrac%257B1%257D%257B1%252B4(E-E_%257Br%252Ci%257D)%255E2%252F%255CGamma_i%255E2%257D.%250A" 
+alt="LaTeX: \sigma_{\gamma,i}(E)
+=\sigma_{0,i}\frac{\Gamma_{\gamma,i}}{\Gamma_i}
+ \left(\frac{E_{r,i}}{E}\right)^{1/2}
+ \frac{1}{1+4(E-E_{r,i})^2/\Gamma_i^2}.
+" 
+data-equation-content="\sigma_{\gamma,i}(E)
+=\sigma_{0,i}\frac{\Gamma_{\gamma,i}}{\Gamma_i}
+ \left(\frac{E_{r,i}}{E}\right)^{1/2}
+ \frac{1}{1+4(E-E_{r,i})^2/\Gamma_i^2}.
+" 
+/></p>
+<p><img 
+class="equation_image" 
+title="\sigma_\gamma^{\mathrm{SLBW}}(E)=\sum_i\sigma_{\gamma,i}(E).
+" 
+src="/equation_images/%255Csigma_%255Cgamma%255E%257B%255Cmathrm%257BSLBW%257D%257D(E)%253D%255Csum_i%255Csigma_%257B%255Cgamma%252Ci%257D(E).%250A" 
+alt="LaTeX: \sigma_\gamma^{\mathrm{SLBW}}(E)=\sum_i\sigma_{\gamma,i}(E).
+" 
+data-equation-content="\sigma_\gamma^{\mathrm{SLBW}}(E)=\sum_i\sigma_{\gamma,i}(E).
+" 
+/></p>
+<p>All energies and widths in these expressions are in eV. The expression for <img 
+class="equation_image" 
+title="\sigma_{0,i}" 
+src="/equation_images/%255Csigma_%257B0%252Ci%257D" 
+alt="LaTeX: \sigma_{0,i}" 
+data-equation-content="\sigma_{0,i}" 
+/> produces an area in <img 
+class="equation_image" 
+title="\mathrm{cm^2}" 
+src="/equation_images/%255Cmathrm%257Bcm%255E2%257D" 
+alt="LaTeX: \mathrm{cm^2}" 
+data-equation-content="\mathrm{cm^2}" 
+/>; use <img 
+class="equation_image" 
+title="1~\mathrm{b}=10^{-24}~\mathrm{cm^2}" 
+src="/equation_images/1~%255Cmathrm%257Bb%257D%253D10%255E%257B-24%257D~%255Cmathrm%257Bcm%255E2%257D" 
+alt="LaTeX: 1~\mathrm{b}=10^{-24}~\mathrm{cm^2}" 
+data-equation-content="1~\mathrm{b}=10^{-24}~\mathrm{cm^2}" 
+/> to report cross sections in barns. Treat the SLBW reconstruction as a <img 
+class="equation_image" 
+title="0~\mathrm{K}" 
+src="/equation_images/0~%255Cmathrm%257BK%257D" 
+alt="LaTeX: 0~\mathrm{K}" 
+data-equation-content="0~\mathrm{K}" 
+/> result.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;"><img 
+class="equation_image" 
+title="E_{r,i}" 
+src="/equation_images/E_%257Br%252Ci%257D" 
+alt="LaTeX: E_{r,i}" 
+data-equation-content="E_{r,i}" 
+/> (eV)</th>
+<th style="text-align: right;"><img 
+class="equation_image" 
+title="\Gamma_{n,i}" 
+src="/equation_images/%255CGamma_%257Bn%252Ci%257D" 
+alt="LaTeX: \Gamma_{n,i}" 
+data-equation-content="\Gamma_{n,i}" 
+/> (eV)</th>
+<th style="text-align: right;"><img 
+class="equation_image" 
+title="\Gamma_{\gamma,i}" 
+src="/equation_images/%255CGamma_%257B%255Cgamma%252Ci%257D" 
+alt="LaTeX: \Gamma_{\gamma,i}" 
+data-equation-content="\Gamma_{\gamma,i}" 
+/> (eV)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">6.67</td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="1.476\times10^{-3}" 
+src="/equation_images/1.476%255Ctimes10%255E%257B-3%257D" 
+alt="LaTeX: 1.476\times10^{-3}" 
+data-equation-content="1.476\times10^{-3}" 
+/></td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="2.300\times10^{-2}" 
+src="/equation_images/2.300%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 2.300\times10^{-2}" 
+data-equation-content="2.300\times10^{-2}" 
+/></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20.87</td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="1.009\times10^{-2}" 
+src="/equation_images/1.009%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 1.009\times10^{-2}" 
+data-equation-content="1.009\times10^{-2}" 
+/></td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="2.286\times10^{-2}" 
+src="/equation_images/2.286%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 2.286\times10^{-2}" 
+data-equation-content="2.286\times10^{-2}" 
+/></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">36.68</td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="3.355\times10^{-2}" 
+src="/equation_images/3.355%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 3.355\times10^{-2}" 
+data-equation-content="3.355\times10^{-2}" 
+/></td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="2.300\times10^{-2}" 
+src="/equation_images/2.300%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 2.300\times10^{-2}" 
+data-equation-content="2.300\times10^{-2}" 
+/></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">66.03</td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="2.418\times10^{-2}" 
+src="/equation_images/2.418%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 2.418\times10^{-2}" 
+data-equation-content="2.418\times10^{-2}" 
+/></td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="2.331\times10^{-2}" 
+src="/equation_images/2.331%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 2.331\times10^{-2}" 
+data-equation-content="2.331\times10^{-2}" 
+/></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">80.75</td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="1.874\times10^{-3}" 
+src="/equation_images/1.874%255Ctimes10%255E%257B-3%257D" 
+alt="LaTeX: 1.874\times10^{-3}" 
+data-equation-content="1.874\times10^{-3}" 
+/></td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="2.339\times10^{-2}" 
+src="/equation_images/2.339%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 2.339\times10^{-2}" 
+data-equation-content="2.339\times10^{-2}" 
+/></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">102.56</td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="7.077\times10^{-2}" 
+src="/equation_images/7.077%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 7.077\times10^{-2}" 
+data-equation-content="7.077\times10^{-2}" 
+/></td>
+<td style="text-align: right;"><img 
+class="equation_image" 
+title="2.408\times10^{-2}" 
+src="/equation_images/2.408%255Ctimes10%255E%257B-2%257D" 
+alt="LaTeX: 2.408\times10^{-2}" 
+data-equation-content="2.408\times10^{-2}" 
+/></td>
+</tr>
+</tbody>
+</table>
+<p>Although the last resonance is centered just above the plotted interval, include its contribution to the sum.</p>
+<ul>
+<li><strong>(a)</strong> Compute and plot <img 
+class="equation_image" 
+title="\sigma_\gamma^{\mathrm{SLBW}}(E)" 
+src="/equation_images/%255Csigma_%255Cgamma%255E%257B%255Cmathrm%257BSLBW%257D%257D(E)" 
+alt="LaTeX: \sigma_\gamma^{\mathrm{SLBW}}(E)" 
+data-equation-content="\sigma_\gamma^{\mathrm{SLBW}}(E)" 
+/> over <img 
+class="equation_image" 
+title="1\le E\le100~\mathrm{eV}" 
+src="/equation_images/1%255Cle%2520E%255Cle100~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 1\le E\le100~\mathrm{eV}" 
+data-equation-content="1\le E\le100~\mathrm{eV}" 
+/> using a linear energy axis and a logarithmic cross-section axis.</li>
+<li><strong>(b)</strong> On the same axes, plot the <img 
+class="equation_image" 
+title="294~\mathrm{K}" 
+src="/equation_images/294~%255Cmathrm%257BK%257D" 
+alt="LaTeX: 294~\mathrm{K}" 
+data-equation-content="294~\mathrm{K}" 
+/> OpenMC cross section from Problem 1(c).</li>
+<li><strong>(c)</strong> Compare the two curves. Discuss the resonance locations, peak heights, peak widths, and any structure not reproduced by the six-resonance SLBW model. Explain the principal physical reason for the difference in peak height and width between the <img 
+class="equation_image" 
+title="0~\mathrm{K}" 
+src="/equation_images/0~%255Cmathrm%257BK%257D" 
+alt="LaTeX: 0~\mathrm{K}" 
+data-equation-content="0~\mathrm{K}" 
+/> SLBW result and the <img 
+class="equation_image" 
+title="294~\mathrm{K}" 
+src="/equation_images/294~%255Cmathrm%257BK%257D" 
+alt="LaTeX: 294~\mathrm{K}" 
+data-equation-content="294~\mathrm{K}" 
+/> OpenMC data.</li>
+</ul>
+<p>Use a sufficiently fine linear energy grid or local refinement near each resonance, and demonstrate that the reconstructed peaks are converged with respect to the grid resolution.</p>
+<h2 id="problem-3-adapted-from-fnrp-2.9">Problem 3 [adapted from FNRP 2.9]</h2>
+<p>The fission-neutron energy spectrum is modeled by</p>
+<p><img 
+class="equation_image" 
+title="\chi(E)=C\exp(-1.036E)\sinh\!\left(\sqrt{2.29E}\right),
+\qquad E\ge0,
+" 
+src="/equation_images/%255Cchi(E)%253DC%255Cexp(-1.036E)%255Csinh%255C%2521%255Cleft(%255Csqrt%257B2.29E%257D%255Cright)%252C%250A%255Cqquad%2520E%255Cge0%252C%250A" 
+alt="LaTeX: \chi(E)=C\exp(-1.036E)\sinh\!\left(\sqrt{2.29E}\right),
+\qquad E\ge0,
+" 
+data-equation-content="\chi(E)=C\exp(-1.036E)\sinh\!\left(\sqrt{2.29E}\right),
+\qquad E\ge0,
+" 
+/></p>
+<p>where <img 
+class="equation_image" 
+title="E" 
+src="/equation_images/E" 
+alt="LaTeX: E" 
+data-equation-content="E" 
+/> is in MeV, <img 
+class="equation_image" 
+title="\chi(E)" 
+src="/equation_images/%255Cchi(E)" 
+alt="LaTeX: \chi(E)" 
+data-equation-content="\chi(E)" 
+/> is a probability density per MeV, and <img 
+class="equation_image" 
+title="C" 
+src="/equation_images/C" 
+alt="LaTeX: C" 
+data-equation-content="C" 
+/> is an unknown normalization constant. Use numerical integration and the normalized form of <img 
+class="equation_image" 
+title="\chi(E)" 
+src="/equation_images/%255Cchi(E)" 
+alt="LaTeX: \chi(E)" 
+data-equation-content="\chi(E)" 
+/> to determine the following. Report <img 
+class="equation_image" 
+title="C" 
+src="/equation_images/C" 
+alt="LaTeX: C" 
+data-equation-content="C" 
+/> and each fraction to at least three significant figures.</p>
+<ul>
+<li><p><strong>(a)</strong> Evaluate the required integral over the whole domain, <img 
+class="equation_image" 
+title="0\le E\lt\infty" 
+src="/equation_images/0%255Cle%2520E%255Clt%255Cinfty" 
+alt="LaTeX: 0\le E\lt\infty" 
+data-equation-content="0\le E\lt\infty" 
+/>, and determine <img 
+class="equation_image" 
+title="C" 
+src="/equation_images/C" 
+alt="LaTeX: C" 
+data-equation-content="C" 
+/> such that</p>
+<p><img 
+class="equation_image" 
+title="\int_0^\infty \chi(E)\,dE=1.
+" 
+src="/equation_images/%255Cint_0%255E%255Cinfty%2520%255Cchi(E)%255C%252CdE%253D1.%250A" 
+alt="LaTeX: \int_0^\infty \chi(E)\,dE=1.
+" 
+data-equation-content="\int_0^\infty \chi(E)\,dE=1.
+" 
+/></p></li>
+<li><p><strong>(b)</strong> Evaluate the fraction of fission neutrons born with energies in <img 
+class="equation_image" 
+title="0\le E\le0.1~\mathrm{MeV}" 
+src="/equation_images/0%255Cle%2520E%255Cle0.1~%255Cmathrm%257BMeV%257D" 
+alt="LaTeX: 0\le E\le0.1~\mathrm{MeV}" 
+data-equation-content="0\le E\le0.1~\mathrm{MeV}" 
+/>:</p>
+<p><img 
+class="equation_image" 
+title="\int_0^{0.1}\chi(E)\,dE.
+" 
+src="/equation_images/%255Cint_0%255E%257B0.1%257D%255Cchi(E)%255C%252CdE.%250A" 
+alt="LaTeX: \int_0^{0.1}\chi(E)\,dE.
+" 
+data-equation-content="\int_0^{0.1}\chi(E)\,dE.
+" 
+/></p></li>
+<li><p><strong>(c)</strong> Evaluate the fraction of fission neutrons born with energies in <img 
+class="equation_image" 
+title="10~\mathrm{MeV}\le E\lt\infty" 
+src="/equation_images/10~%255Cmathrm%257BMeV%257D%255Cle%2520E%255Clt%255Cinfty" 
+alt="LaTeX: 10~\mathrm{MeV}\le E\lt\infty" 
+data-equation-content="10~\mathrm{MeV}\le E\lt\infty" 
+/>:</p>
+<p><img 
+class="equation_image" 
+title="\int_{10}^\infty\chi(E)\,dE.
+" 
+src="/equation_images/%255Cint_%257B10%257D%255E%255Cinfty%255Cchi(E)%255C%252CdE.%250A" 
+alt="LaTeX: \int_{10}^\infty\chi(E)\,dE.
+" 
+data-equation-content="\int_{10}^\infty\chi(E)\,dE.
+" 
+/></p></li>
+</ul>
+<p>Integrate over each stated interval directly. If your numerical method replaces <img 
+class="equation_image" 
+title="\infty" 
+src="/equation_images/%255Cinfty" 
+alt="LaTeX: \infty" 
+data-equation-content="\infty" 
+/> with a finite upper limit, demonstrate that the result has converged as that limit is increased.</p>

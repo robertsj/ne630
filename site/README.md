@@ -52,7 +52,7 @@ publication copies with:
 
 ```bash
 cmp notebooks/lesson_8.ipynb site/_static/notebooks/lesson_8.ipynb
-cmp notebooks/lesson_9.ipynb site/_static/notebooks/lesson_9.ipynb
+cmp notebooks/lesson_09.ipynb site/_static/notebooks/lesson_9.ipynb
 cmp notebooks/lesson_10.ipynb site/_static/notebooks/lesson_10.ipynb
 ```
 

@@ -1,0 +1,105 @@
+<h1 id="homework-12-lesson-12">Homework 12: Lesson 12</h1>
+<!-- Draft adapted from ne630_problems/lesson_12/statement.tex; problem statements only. The source's optional spreadsheet was not found, so the draft uses its OpenMC option. -->
+<h2 id="problem-1">Problem 1</h2>
+<p>Equations (3.50)–(3.53) in FNRP describe how to compute the resonance integral. Use these equations with nuclear data from OpenMC to compute the absorption resonance integral, <img 
+class="equation_image" 
+title="I_a" 
+src="/equation_images/I_a" 
+alt="LaTeX: I_a" 
+data-equation-content="I_a" 
+/>, for <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/> over <img 
+class="equation_image" 
+title="1\le E\le10^5~\mathrm{eV}" 
+src="/equation_images/1%255Cle%2520E%255Cle10%255E5~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 1\le E\le10^5~\mathrm{eV}" 
+data-equation-content="1\le E\le10^5~\mathrm{eV}" 
+/>.</p>
+<ul>
+<li><strong>(a)</strong> Compute <img 
+class="equation_image" 
+title="I_a" 
+src="/equation_images/I_a" 
+alt="LaTeX: I_a" 
+data-equation-content="I_a" 
+/>.</li>
+<li><strong>(b)</strong> How does this value compare with the value in FNRP Table 3.2?</li>
+<li><strong>(c)</strong> What is the corresponding effective microscopic absorption cross section, <img 
+class="equation_image" 
+title="\bar{\sigma}_a" 
+src="/equation_images/%255Cbar%257B%255Csigma%257D_a" 
+alt="LaTeX: \bar{\sigma}_a" 
+data-equation-content="\bar{\sigma}_a" 
+/>, for a <img 
+class="equation_image" 
+title="1/E" 
+src="/equation_images/1%252FE" 
+alt="LaTeX: 1/E" 
+data-equation-content="1/E" 
+/> flux spectrum over the same energy interval?</li>
+</ul>
+<p>Use absorption, including radiative capture and fission, rather than radiative capture alone. Report the resonance integral and effective cross section in barns.</p>
+<h2 id="problem-2">Problem 2</h2>
+<p>A major approximation in Eqs. (3.50)–(3.53) is the explicit assumption that <img 
+class="equation_image" 
+title="\phi(E)=1/E" 
+src="/equation_images/%255Cphi(E)%253D1%252FE" 
+alt="LaTeX: \phi(E)=1/E" 
+data-equation-content="\phi(E)=1/E" 
+/>. Instead, use the same nuclear data as in Problem 1, supplemented by the total cross sections needed for the mixture, with the narrow-resonance (NR) spectrum</p>
+<p><img 
+class="equation_image" 
+title="\phi_{\mathrm{NR}}(E)\propto\frac{1}{\Sigma_t(E)E}.
+" 
+src="/equation_images/%255Cphi_%257B%255Cmathrm%257BNR%257D%257D(E)%255Cpropto%255Cfrac%257B1%257D%257B%255CSigma_t(E)E%257D.%250A" 
+alt="LaTeX: \phi_{\mathrm{NR}}(E)\propto\frac{1}{\Sigma_t(E)E}.
+" 
+data-equation-content="\phi_{\mathrm{NR}}(E)\propto\frac{1}{\Sigma_t(E)E}.
+" 
+/></p>
+<p>Consider an infinite, homogeneous 100-to-1 atom mixture of <img 
+class="equation_image" 
+title="{}^{1}\mathrm{H}" 
+src="/equation_images/%257B%257D%255E%257B1%257D%255Cmathrm%257BH%257D" 
+alt="LaTeX: {}^{1}\mathrm{H}" 
+data-equation-content="{}^{1}\mathrm{H}" 
+/> and <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/>, where <img 
+class="equation_image" 
+title="\Sigma_t(E)" 
+src="/equation_images/%255CSigma_t(E)" 
+alt="LaTeX: \Sigma_t(E)" 
+data-equation-content="\Sigma_t(E)" 
+/> is the total macroscopic cross section of the mixture.</p>
+<ul>
+<li><strong>(a)</strong> Compute the effective microscopic absorption cross section, <img 
+class="equation_image" 
+title="\bar{\sigma}_a" 
+src="/equation_images/%255Cbar%257B%255Csigma%257D_a" 
+alt="LaTeX: \bar{\sigma}_a" 
+data-equation-content="\bar{\sigma}_a" 
+/>, for <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/> over the same interval, <img 
+class="equation_image" 
+title="1\le E\le10^5~\mathrm{eV}" 
+src="/equation_images/1%255Cle%2520E%255Cle10%255E5~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 1\le E\le10^5~\mathrm{eV}" 
+data-equation-content="1\le E\le10^5~\mathrm{eV}" 
+/>, using the NR spectrum as the flux weighting.</li>
+<li><strong>(b)</strong> Explain why this value differs from the value computed in Problem 1.</li>
+</ul>

@@ -1,0 +1,273 @@
+\providecommand{\dd}{\,\mathrm{d}}
+\AtBeginDocument{\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{3pt plus 1pt}
+\setlength{\belowdisplayshortskip}{3pt plus 1pt}
+\setlength{\jot}{2pt}
+}
+\tcbset{handout base/.append style={before skip=2.5pt,after skip=2.5pt,before upper={\RaggedRight}}}
+
+\HandoutSetup{NE 630}{12}{Effective Cross Sections and $k_{\infty}$}
+  {FNRP Ch.~3 (effective cross sections); review Lessons 10--11}
+\begin{document}
+\MakeHandoutTitle
+\textcolor{KSUDeepPurple}{\textbf{Primary objective.}}
+Compute spectrum-averaged cross sections and reaction rates to estimate
+$k_{\infty}$ for an infinite, homogeneous system.
+\par\vspace{5pt}
+
+\begin{handoutcolumns}
+\HandoutSection{1}{Balance over all energies}
+For steady state, no leakage, and scattering that conserves neutron number,
+\begin{align*}
+ \Sigma_t(E)\phi(E)
+ &=\int_0^\infty\Sigma_s(E'\!\to E)\phi(E')\dd E'\\
+ &\quad+\chi(E)s_f'''+s_{\mathrm{ext}}'''(E),\\
+ s_f'''&=\int_0^\infty\nu(E)\Sigma_f(E)\phi(E)\dd E.
+\end{align*}
+Here $\int_0^\infty\chi(E)\dd E=1$ and
+$\int_0^\infty\Sigma_s(E'\!\to E)\dd E=\Sigma_s(E')$.
+Define reaction-rate densities and the total external source:
+\[
+ R_x=\int_0^\infty\Sigma_x(E)\phi(E)\dd E,
+ \qquad s=\int_0^\infty s_{\mathrm{ext}}'''(E)\dd E.
+\]
+\begin{boardbox}{Integrate, then cancel scattering}
+\[
+ R_t=R_s+s_f'''+s
+ \quad\Longrightarrow\quad
+ \boxed{R_a=\MathBlank[0.88in]{}}.
+\]
+All terms are rates per unit volume, in $\mathrm{cm^{-3}\,s^{-1}}$.
+\end{boardbox}
+\begin{checkpoint}
+Why does scattering disappear from the all-energy balance,
+but not from the balance at a particular energy?
+\RuledLines{2}
+\end{checkpoint}
+
+\HandoutSection{2}{Preserve the reaction rate}
+Let $\phi_{\mathrm{tot}}=\int_0^\infty\phi(E)\dd E$.
+The \textbf{effective cross section} is defined by
+\begin{fixedbox}{Flux-weighted average (FNRP 3.38)}
+\[
+ \boxed{\bar\Sigma_x=
+ \frac{\int_0^\infty\Sigma_x(E)\phi(E)\dd E}
+      {\phi_{\mathrm{tot}}}},
+ \qquad R_x=\bar\Sigma_x\phi_{\mathrm{tot}}.
+\]
+\end{fixedbox}
+Thus $\bar\Sigma_x$ is the expected value of $\Sigma_x(E)$
+under $w(E)=\phi(E)/\phi_{\mathrm{tot}}$.
+Multiplying the spectrum by a constant does not change the average.
+\[
+ \overline{\nu\Sigma_f}=
+ \frac{\int_0^\infty\nu(E)\Sigma_f(E)\phi(E)\dd E}
+      {\phi_{\mathrm{tot}}}.
+\]
+Average the \emph{product}; in general this is not
+$\bar\nu\,\bar\Sigma_f$ for two independently flux-weighted averages.
+\begin{boardbox}{Nonmultiplying, source-driven limit}
+\[
+ \bar\Sigma_a\phi_{\mathrm{tot}}=s
+ \quad\Longrightarrow\quad
+ \phi_{\mathrm{tot}}=\MathBlank[0.85in]{}.
+\]
+Check: $\bar\Sigma_a$ has units $\mathrm{cm^{-1}}$ and
+$\phi_{\mathrm{tot}}$ has units $\mathrm{cm^{-2}\,s^{-1}}$.
+\end{boardbox}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{3}{Normalize the spectral shapes}
+Write $\theta=k_{\mathrm B}T$ and let $j=T,I,F$ denote the
+thermal, intermediate, and fast ranges. All bounds below are in eV.
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{@{}cll@{}}
+\toprule
+$g$ &  Interval $[E^{L}_g, E^{U}_g]$ & Shape $h_g(E)$\\
+\midrule
+$T$ & $[10^{-3},1]$ & $E e^{-E/\theta}$\\
+$I$ & $[1,10^5]$ & $1/[\Sigma_t(E)E]$\\
+$F$ & $[10^5,10^7]$ & $\chi(E)/\Sigma_t(E)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+These are the Maxwellian, narrow-resonance, and approximate
+fast-spectrum shapes from earlier lessons, \emph{not} exact spectra.
+For this finite-range approximation, neglect the tails outside these bounds.  Then
+\begin{align*}
+ C_g^{-1}&=\int_{E^{L}_g}^{E^{U}_g}h_g(E)\dd E, &
+ w_g(E)&=C_gh_g(E),\\
+ \int_{E^{L}_g}^{E^{U}_g}w_g(E)\dd E&=1, &
+ \phi_g&=\int_{E^{L}_g}^{E^{U}_g}\phi(E)\dd E.
+\end{align*}
+Then, within range $g$,
+\[
+ \boxed{\phi(E)\approx\phi_g w_g(E)}.
+\]
+\begin{checkpoint}[Shape versus amount]
+Does finding $C_T$, $C_I$, and $C_F$ determine
+$\phi_T$, $\phi_I$, and $\phi_F$? What information is still missing?
+\RuledLines{3}
+\end{checkpoint}
+
+\HandoutSection{4}{Combine the range averages}
+Using a normalized shape in each interval gives
+\[
+ \bar\Sigma_{x,j}\approx
+ \int_{E^{L}_g}^{E^{U}_g}\Sigma_x(E)w_g(E)\dd E.
+\]
+\begin{boardbox}{Add rates before dividing by total flux}
+\begin{align*}
+ R_x&\approx\bar\Sigma_{x,T}\phi_T
+       +\bar\Sigma_{x,I}\phi_I+\bar\Sigma_{x,F}\phi_F,\\
+ \phi_{\mathrm{tot}}&\approx\phi_T+\phi_I+\phi_F.
+\end{align*}
+\[
+ \boxed{\bar\Sigma_x\approx
+ \frac{\bar\Sigma_{x,T}\phi_T+\bar\Sigma_{x,I}\phi_I
+       +\bar\Sigma_{x,F}\phi_F}{\phi_T+\phi_I+\phi_F}}.
+\]
+\end{boardbox}
+The weights are \textbf{fractions of the total flux}, not fractions
+of the energy interval. If $\phi_T=\phi_I=\phi_F$, then
+\[
+ \bar\Sigma_x\approx\MathBlank[1.95in]{}.
+\]
+\end{handoutcolumns}
+
+\newpage
+\begin{handoutcolumns}
+\HandoutSection{5}{Three useful spectrum averages}
+\textbf{Fission-spectrum average.}
+If $\Sigma_t$ is approximately constant over the fast range,
+\[
+ \bar\sigma_{x,F}\approx
+ \frac{\int_{\mathcal E_F}\sigma_x(E)\chi(E)\dd E}
+      {\int_{\mathcal E_F}\chi(E)\dd E}.
+\]
+The denominator is one only when the chosen interval contains
+all of the normalized fission spectrum.
+
+\textbf{Maxwellian average.}
+Extend the ideal Maxwellian to all $E>0$:
+\[
+ w_T(E)=\frac{E e^{-E/\theta}}{\theta^2},
+ \qquad \int_0^\infty E e^{-E/\theta}\dd E=\theta^2.
+\]
+For a $1/v$ cross section,
+$\sigma_x(E)=\sigma_0\sqrt{E_{\mathrm{ref}}/E}$,
+\begin{boardbox}{Average a $1/v$ absorber}
+\begin{align*}
+ \bar\sigma_{x,T}
+ &=\frac{\sigma_0\sqrt{E_{\mathrm{ref}}}}{\theta^2}
+   \int_0^\infty E^{1/2}e^{-E/\theta}\dd E\\
+ &=\MathBlank[1.60in]{}.
+\end{align*}
+Use $\int_0^\infty E^{1/2}e^{-E/\theta}\dd E
+=(\sqrt\pi/2)\theta^{3/2}$.
+\end{boardbox}
+\textbf{Resonance integral.}
+For $1/E$ weighting on $[E_\ell,E_u]$,
+\[
+ I_x(E_\ell,E_u)=\int_{E_\ell}^{E_u}\frac{\sigma_x(E)}{E}\dd E,
+ \qquad
+ \boxed{\bar\sigma_{x,I}=\frac{I_x}{\ln(E_u/E_\ell)}}.
+\]
+$I_x$ has cross-section units. Its bounds and any subtraction
+of a $1/v$ contribution must match the data definition.
+\begin{takeawaybox}[Do not mix weighting assumptions]
+The NR average uses the weight $1/[\Sigma_t(E)E]$.
+An ordinary $1/E$ resonance integral does \emph{not} include
+that flux depression.
+\end{takeawaybox}
+
+\HandoutSection{6}{Source-driven water tank}
+Treat Prof.~McNeil's water tank as infinite and homogeneous.
+Trace ${}^{252}$Cf supplies $s=10\unit{cm^{-3}\,s^{-1}}$;
+ignore neutron interactions with the trace source. Assume
+$\phi_T=\phi_I=\phi_F$.
+For water molecule density $N_w$,
+\[
+ \bar\Sigma_a=
+ \frac{N_w}{3}\sum_{j=T,I,F}
+ \left(2\bar\sigma^{\mathrm H}_{a,j}+\bar\sigma^{\mathrm O}_{a,j}\right).
+\]
+Use microscopic cross sections in $\mathrm{cm^2}$
+($1\unit{b}=10^{-24}\unit{cm^2}$). Find
+\[
+ \phi_{\mathrm{tot}}=\MathBlank[1.00in]{},
+ \qquad \phi_j=\MathBlank[0.83in]{}.
+\]
+
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{7}{Source-free multiplication}
+With no external source, physical steady-state balance is
+\[
+ \bar\Sigma_a\phi_{\mathrm{tot}}
+ =\overline{\nu\Sigma_f}\phi_{\mathrm{tot}}.
+\]
+For a \emph{nonzero} flux, production must equal absorption.
+This is the critical condition, but it does not determine the flux magnitude.
+\begin{fixedbox}{Introduce the infinite-medium eigenvalue}
+Scale only fission production to obtain a stationary eigenproblem:
+\[
+ \bar\Sigma_a\phi_{\mathrm{tot}}
+ =\frac{1}{k_{\infty}}\overline{\nu\Sigma_f}\phi_{\mathrm{tot}},
+ \qquad
+ \boxed{k_{\infty}=\frac{\overline{\nu\Sigma_f}}{\bar\Sigma_a}}.
+\]
+\end{fixedbox}
+With the consistent eigen-spectrum this is the eigenvalue;
+a prescribed approximate spectrum gives an estimate.
+\begin{checkpoint}[Interpret the ratio]
+Classify the infinite system:
+\begin{align*}
+ k_{\infty}<1 &: \quad\RevealBlank[1.25in]{},\\
+ k_{\infty}=1 &: \quad\RevealBlank[1.25in]{},\\
+ k_{\infty}>1 &: \quad\RevealBlank[1.25in]{}.
+\end{align*}
+Does doubling $\phi(E)$ change $k_{\infty}$? Does it change
+$R_f$?
+\RuledLines{2}
+\end{checkpoint}
+
+\HandoutSection{8}{U-235 dissolved in water}
+Replace the external source by dissolved, pure ${}^{235}$U.
+Ignore other solute constituents and leakage. Define
+\[
+ r=\frac{N_{\mathrm U}}{N_w},
+ \qquad \phi_T=\phi_I=\phi_F.
+\]
+For each nuclide, average over the \emph{same mixture spectrum};
+with equal range fluxes, $\bar\sigma_x^i=\frac13\sum_j\bar\sigma_{x,j}^i$.
+Only uranium contributes fission production in this model:
+\begin{align*}
+ \bar\Sigma_a
+ &=N_w\left(2\bar\sigma_a^{\mathrm H}
+     +\bar\sigma_a^{\mathrm O}+r\bar\sigma_a^{\mathrm U}\right),\\
+ \overline{\nu\Sigma_f}
+ &=N_wr\,\overline{\nu\sigma_f}^{\mathrm U}.
+\end{align*}
+\begin{boardbox}{Form production divided by absorption}
+\[
+ \boxed{k_{\infty}\approx
+ \frac{r\,\overline{\nu\sigma_f}^{\mathrm U}}
+ {2\bar\sigma_a^{\mathrm H}+\bar\sigma_a^{\mathrm O}
+      +r\bar\sigma_a^{\mathrm U}}}.
+\]
+Why does $N_w$ cancel? What is being held fixed when this
+expression is used to vary $r$?
+\RuledLines{2}
+\end{boardbox}
+\begin{takeawaybox}
+Changing composition generally changes the spectrum and its
+averages. Equal thermal, intermediate, and fast fluxes are an
+\emph{assumption for this example}, not a prediction.
+\end{takeawaybox}
+\end{handoutcolumns}
+\end{document}

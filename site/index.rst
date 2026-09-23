@@ -6,8 +6,9 @@ Handouts
 
 Download and print each available handout before class. The PDF and student
 TeX wrapper are linked in the table; complete source bundles and supporting
-TeX files are linked below it. A dash indicates that no handout or additional
-resource is currently available for that lesson.
+TeX files are linked below it. YouTube links point to lesson recordings. A dash
+indicates that no handout or additional non-video resource is currently
+available for that lesson.
 
 .. list-table:: Lesson materials
    :header-rows: 1
@@ -19,36 +20,56 @@ resource is currently available for that lesson.
      - Notebooks and other resources
    * - **Lesson 1** — Mass, Energy, and Nuclear Reactions
      - [`PDF <_static/handouts/lesson-01/lesson_01_handout.pdf>`__][`TeX <_static/handouts/lesson-01/lesson_01_handout.tex>`__]
-     - —
+     - `YouTube video <https://www.youtube.com/watch?v=ScTNbJTOkWI>`__
    * - **Lesson 2** — Nuclear Fission and Chain Reactions
      - [`PDF <_static/handouts/lesson-02/lesson_02_handout.pdf>`__][`TeX <_static/handouts/lesson-02/lesson_02_handout.tex>`__]
-     - —
+     - `YouTube video <https://www.youtube.com/watch?v=-RxKeLKfuF4>`__
    * - **Lesson 3** — Radioactive Decay
      - [`PDF <_static/handouts/lesson-03/lesson_03_handout.pdf>`__][`TeX <_static/handouts/lesson-03/lesson_03_handout.tex>`__]
-     - —
+     - `YouTube video <https://www.youtube.com/watch?v=3c5bNcgvRYw>`__
    * - **Lesson 4** — Neutron Attenuation
      - [`PDF <_static/handouts/lesson-04/lesson_04_handout.pdf>`__][`TeX <_static/handouts/lesson-04/lesson_04_handout.tex>`__]
-     - —
+     - `YouTube video <https://www.youtube.com/watch?v=XNPZ2GShowg>`__
    * - **Lesson 5** — Using Cross-Section Data
      - [`PDF <_static/handouts/lesson-05/lesson_05_handout.pdf>`__][`TeX <_static/handouts/lesson-05/lesson_05_handout.tex>`__]
-     - `Spectrum figure <_static/handouts/lesson-05/spectra.pdf>`__
+     - `Spectrum figure <_static/handouts/lesson-05/spectra.pdf>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=s_rkNEG-dIg>`__
    * - **Lesson 6** — Understanding Cross-Section Data
      - [`PDF <_static/handouts/lesson-06/lesson_06_handout.pdf>`__][`TeX <_static/handouts/lesson-06/lesson_06_handout.tex>`__]
      - `U-238 threshold figure <_static/handouts/lesson-06/figures/u238_threshold.pdf>`__ |middot|
-       `OpenMC notebook <_static/handouts/lesson-06/figures/u238_threshold.ipynb>`__
+       `OpenMC notebook <_static/handouts/lesson-06/figures/u238_threshold.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=9ts1NQrdXuE>`__
    * - **Lesson 7** — Scattering Kinematics
      - [`PDF <_static/handouts/lesson-07/lesson_07_handout.pdf>`__][`TeX <_static/handouts/lesson-07/lesson_07_handout.tex>`__]
      - `U-238 threshold figure <_static/handouts/lesson-07/figures/u238_threshold.pdf>`__ |middot|
-       `OpenMC notebook <_static/handouts/lesson-07/figures/u238_threshold.ipynb>`__
+       `OpenMC notebook <_static/handouts/lesson-07/figures/u238_threshold.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=s5FG1SCtMbU>`__
    * - **Lesson 8** — The Reproduction Factor, η
      - [`PDF <_static/handouts/lesson-08/lesson_08_handout.pdf>`__][`TeX <_static/handouts/lesson-08/lesson_08_handout.tex>`__]
-     - `OpenMC notebook <_static/notebooks/lesson_8.ipynb>`__
+     - `OpenMC notebook <_static/notebooks/lesson_8.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=BOOj-h3aUC8>`__
    * - **Lesson 9** — Fast and Epithermal Spectra
      - [`PDF <_static/handouts/lesson-09/lesson_09_handout.pdf>`__][`TeX <_static/handouts/lesson-09/lesson_09_handout.tex>`__]
-     - `OpenMC notebook <_static/notebooks/lesson_9.ipynb>`__
+     - `OpenMC notebook <_static/notebooks/lesson_9.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=LehptdUddeo>`__
    * - **Lesson 10** — Resonance Absorption
      - [`PDF <_static/handouts/lesson-10/lesson_10_handout.pdf>`__][`TeX <_static/handouts/lesson-10/lesson_10_handout.tex>`__]
-     - `OpenMC notebook <_static/notebooks/lesson_10.ipynb>`__
+     - `OpenMC notebook <_static/notebooks/lesson_10.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=JzfOPadnHeA>`__
+   * - **Lesson 11** — Thermal Neutron Spectra
+     - —
+     - `OpenMC notebook <_static/notebooks/lesson_11.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=9EPWVcwoR4Y>`__
+   * - **Lesson 12** — Effective Cross Sections and Infinite-Medium Multiplication
+     - [`PDF <_static/handouts/lesson-12/lesson_12_handout.pdf>`__][`TeX <_static/handouts/lesson-12/lesson_12_handout.tex>`__]
+     - `OpenMC notebook <_static/notebooks/lesson_12.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=SJvGncqHE98>`__
+   * - **Lesson 13** — The Multigroup Method
+     - [`PDF <_static/handouts/lesson-13/lesson_13_handout.pdf>`__][`TeX <_static/handouts/lesson-13/lesson_13_handout.tex>`__]
+     - —
+   * - **Lesson 14** — The k-Eigenvalue Problem
+     - [`PDF <_static/handouts/lesson-14/lesson_14_handout.pdf>`__][`TeX <_static/handouts/lesson-14/lesson_14_handout.tex>`__]
+     - —
 
 Handout source and support files
 --------------------------------
@@ -77,6 +98,12 @@ file and the shared class.
   `body <_static/handouts/lesson-09/lesson_09_handout_body.tex>`__
 * **Lesson 10:** `source bundle <_static/handouts/lesson-10/lesson_10_handout_source.zip>`__ |middot|
   `body <_static/handouts/lesson-10/lesson_10_handout_body.tex>`__
+* **Lesson 12:** `source bundle <_static/handouts/lesson-12/lesson_12_handout_source.zip>`__ |middot|
+  `body <_static/handouts/lesson-12/lesson_12_handout_body.tex>`__
+* **Lesson 13:** `source bundle <_static/handouts/lesson-13/lesson_13_handout_source.zip>`__ |middot|
+  `body <_static/handouts/lesson-13/lesson_13_handout_body.tex>`__
+* **Lesson 14:** `source bundle <_static/handouts/lesson-14/lesson_14_handout_source.zip>`__ |middot|
+  `body <_static/handouts/lesson-14/lesson_14_handout_body.tex>`__
 
 All bundles include the shared
 `ne630boardhandout.cls <_static/handouts/ne630boardhandout.cls>`__ class. No

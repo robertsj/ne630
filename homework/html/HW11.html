@@ -1,0 +1,89 @@
+<h1 id="homework-11-lesson-11">Homework 11: Lesson 11</h1>
+<!-- Draft adapted from ne630_problems/lesson_11/statement.tex; problem statements only. -->
+<h2 id="problem-1-fnrp-3.9">Problem 1 [FNRP 3.9]</h2>
+<p>Suppose that the Maxwell–Boltzmann distribution, Eq. (2.34), represents the neutron density in Eqs. (3.43) and (3.44).</p>
+<ul>
+<li><strong>(a)</strong> Find the value of <img 
+class="equation_image" 
+title="\bar{v}" 
+src="/equation_images/%255Cbar%257Bv%257D" 
+alt="LaTeX: \bar{v}" 
+data-equation-content="\bar{v}" 
+/>.</li>
+<li><strong>(b)</strong> If we define <img 
+class="equation_image" 
+title="\bar{E}=\frac{1}{2}m\bar{v}^2" 
+src="/equation_images/%255Cbar%257BE%257D%253D%255Cfrac%257B1%257D%257B2%257Dm%255Cbar%257Bv%257D%255E2" 
+alt="LaTeX: \bar{E}=\frac{1}{2}m\bar{v}^2" 
+data-equation-content="\bar{E}=\frac{1}{2}m\bar{v}^2" 
+/>, show that <img 
+class="equation_image" 
+title="\bar{E}\approx1.273kT" 
+src="/equation_images/%255Cbar%257BE%257D%255Capprox1.273kT" 
+alt="LaTeX: \bar{E}\approx1.273kT" 
+data-equation-content="\bar{E}\approx1.273kT" 
+/>.</li>
+<li><strong>(c)</strong> Why is your result different from the average energy of <img 
+class="equation_image" 
+title="\frac{3}{2}kT" 
+src="/equation_images/%255Cfrac%257B3%257D%257B2%257DkT" 
+alt="LaTeX: \frac{3}{2}kT" 
+data-equation-content="\frac{3}{2}kT" 
+/> given by Eq. (2.33)?</li>
+</ul>
+<h2 id="problem-2">Problem 2</h2>
+<p>Construct a model in OpenMC for an infinite, homogeneous system composed of a 1000-to-1 atom mixture of <img 
+class="equation_image" 
+title="{}^{1}\mathrm{H}" 
+src="/equation_images/%257B%257D%255E%257B1%257D%255Cmathrm%257BH%257D" 
+alt="LaTeX: {}^{1}\mathrm{H}" 
+data-equation-content="{}^{1}\mathrm{H}" 
+/> and <img 
+class="equation_image" 
+title="{}^{238}\mathrm{U}" 
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" 
+alt="LaTeX: {}^{238}\mathrm{U}" 
+data-equation-content="{}^{238}\mathrm{U}" 
+/>, with a point source of <img 
+class="equation_image" 
+title="1~\mathrm{MeV}" 
+src="/equation_images/1~%255Cmathrm%257BMeV%257D" 
+alt="LaTeX: 1~\mathrm{MeV}" 
+data-equation-content="1~\mathrm{MeV}" 
+/> neutrons. Compute the neutron flux spectrum over <img 
+class="equation_image" 
+title="10^{-3}&lt;E&lt;10^5~\mathrm{eV}" 
+src="/equation_images/10%255E%257B-3%257D%253CE%253C10%255E5~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 10^{-3}&lt;E&lt;10^5~\mathrm{eV}" 
+data-equation-content="10^{-3}&lt;E&lt;10^5~\mathrm{eV}" 
+/>. Then produce a plot containing:</p>
+<ul>
+<li><strong>(a)</strong> The computed flux spectrum.</li>
+<li><strong>(b)</strong> The Maxwell–Boltzmann flux spectrum for the selected temperature, up to <img 
+class="equation_image" 
+title="1~\mathrm{eV}" 
+src="/equation_images/1~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 1~\mathrm{eV}" 
+data-equation-content="1~\mathrm{eV}" 
+/>.</li>
+<li><strong>(c)</strong> The <img 
+class="equation_image" 
+title="1/E" 
+src="/equation_images/1%252FE" 
+alt="LaTeX: 1/E" 
+data-equation-content="1/E" 
+/> spectrum above <img 
+class="equation_image" 
+title="1~\mathrm{eV}" 
+src="/equation_images/1~%255Cmathrm%257BeV%257D" 
+alt="LaTeX: 1~\mathrm{eV}" 
+data-equation-content="1~\mathrm{eV}" 
+/>.</li>
+</ul>
+<p>Here the thermal comparison is a <em>flux</em> spectrum, <img 
+class="equation_image" 
+title="\phi_{\mathrm{MB}}(E)\propto E\exp[-E/(kT)]" 
+src="/equation_images/%255Cphi_%257B%255Cmathrm%257BMB%257D%257D(E)%255Cpropto%2520E%255Cexp%255B-E%252F(kT)%255D" 
+alt="LaTeX: \phi_{\mathrm{MB}}(E)\propto E\exp[-E/(kT)]" 
+data-equation-content="\phi_{\mathrm{MB}}(E)\propto E\exp[-E/(kT)]" 
+/>, rather than the neutron-density distribution used in Problem 1. The comparison curves may be scaled to compare their shapes with the computed spectrum; no absolute source strength is specified.</p>

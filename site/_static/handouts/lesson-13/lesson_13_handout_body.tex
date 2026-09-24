@@ -1,0 +1,243 @@
+\providecommand{\dd}{\,\mathrm{d}}
+\AtBeginDocument{\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{3pt plus 1pt}
+\setlength{\belowdisplayshortskip}{3pt plus 1pt}
+\setlength{\jot}{2pt}
+}
+\tcbset{handout base/.append style={before skip=2.5pt,after skip=2.5pt,before upper={\RaggedRight}}}
+
+\HandoutSetup{NE 630}{13}{The Multigroup Method}
+  {FNRP Ch.~3 (multigroup equations); review Lesson 12}
+\begin{document}
+\MakeHandoutTitle
+\textcolor{KSUDeepPurple}{\textbf{Primary objective.}}
+Construct multigroup cross sections and solve neutron balances
+for an infinite, homogeneous system.
+\par\vspace{5pt}
+
+\begin{handoutcolumns}
+\HandoutSection{1}{Replace assumed flux ratios}
+Lesson 12 supplied normalized shapes and \emph{assumed} the
+flux in each range. Now determine those fluxes from coupled balances.
+Number groups from \textbf{high to low energy}:
+\[
+ E_0>E_1>\cdots>E_G,
+ \qquad \phi_g=\int_{E_g}^{E_{g-1}}\phi(E)\dd E.
+\]
+The complete domain has $E_0=\infty$ and $E_G=0$.
+For our three-group examples, use the following finite bounds (eV):
+\[
+ (E_0,E_1,E_2,E_3)=(10^7,10^5,1,10^{-3}).
+\]
+Thus $(\phi_1,\phi_2,\phi_3)=(\phi_F,\phi_I,\phi_T)$.
+Finite cutoffs require attention to transfers outside the retained range.
+
+\HandoutSection{2}{Preserve each group reaction rate}
+For $\phi_g>0$, define
+\begin{fixedbox}{Group averages}
+\begin{align*}
+ \Sigma_{x,g}&=
+ \frac{\int_{E_g}^{E_{g-1}}\Sigma_x(E)\phi(E)\dd E}{\phi_g},\\
+ (\nu\Sigma_f)_g&=
+ \frac{\int_{E_g}^{E_{g-1}}\nu(E)\Sigma_f(E)\phi(E)\dd E}{\phi_g}.
+\end{align*}
+\end{fixedbox}
+Use a normalized within-group shape to prepare these averages;
+then solve for $\phi_g$ (Lesson 12). The group sources are
+\[
+ \chi_g=\int_{E_g}^{E_{g-1}}\chi(E)\dd E,
+ \qquad s_g=\int_{E_g}^{E_{g-1}}s_{\mathrm{ext}}'''(E)\dd E.
+\]
+
+\HandoutSection{3}{Keep the scattering direction straight}
+\begin{fixedbox}{Destination $g$ $\gets$ incident group $g'$}
+\[
+ \Sigma_{s,g\gets g'}=
+ \frac{\displaystyle
+ \int_{E_{g'}}^{E_{g'-1}}\!\phi(E')
+ \int_{E_g}^{E_{g-1}}\!\Sigma_s(E'\!\to E)\dd E\dd E'}
+ {\phi_{g'}}.
+\]
+\end{fixedbox}
+The denominator is the \textbf{incident-group flux}.
+Multiplying by $\phi_{g'}$ recovers the rate of transfer into $g$.
+\begin{checkpoint}
+With this numbering, downscatter means
+$g\ \MathBlank[0.35in]{}\ g'$. In a scattering matrix whose
+rows are destinations, are the forced zero (upscatter) entries
+above or below the diagonal?
+\RuledLines{2}
+\end{checkpoint}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{4}{One balance per destination group}
+Integrate the spectrum equation over $E_g\le E\le E_{g-1}$:
+\begin{fixedbox}{Infinite-medium multigroup balance}
+\begin{align*}
+ \Sigma_{t,g}\phi_g
+ &=\sum_{g'=1}^G\Sigma_{s,g\gets g'}\phi_{g'}\\
+ &\quad+\chi_g\sum_{g'=1}^G(\nu\Sigma_f)_{g'}\phi_{g'}+s_g,
+ \qquad g=1,\ldots,G.
+\end{align*}
+\end{fixedbox}
+The fission term sums production over \emph{all incident groups};
+$\chi_g$ then distributes the newborn neutrons to destination $g$.
+Move self-scattering to the left by defining \textbf{removal}:
+\[
+ \boxed{\Sigma_{r,g}=\Sigma_{t,g}-\Sigma_{s,g\gets g}}.
+\]
+With number conservation and complete energy coverage,
+\[
+ \Sigma_{r,g}=\Sigma_{a,g}
+      +\sum_{h\ne g}\Sigma_{s,h\gets g}.
+\]
+Removal includes absorption \emph{and} scattering out of a group;
+it is not generally the same as absorption.
+
+\HandoutSection{5}{Three-group water tank}
+Approximate the ${}^{252}$Cf source as $(s_1,s_2,s_3)=(10,0,0)$
+in $\mathrm{cm^{-3}\,s^{-1}}$. Ignore multiplication, leakage,
+intergroup upscatter, and transfers outside the finite energy range.
+\begin{boardbox}{Solve from fast to thermal}
+Write each group balance and isolate its flux:
+\begin{align*}
+ \phi_1&=\MathBlank[1.30in]{},\\
+ \phi_2&=\MathBlank[1.75in]{},\\
+ \phi_3&=\frac{\Sigma_{s,3\gets1}\phi_1
+                  +\Sigma_{s,3\gets2}\phi_2}{\Sigma_{r,3}}.
+\end{align*}
+\end{boardbox}
+Unlike the Lesson 12 example, the flux ratios are now outputs.
+\begin{checkpoint}[Check the complete balance]
+Add the three equations. Under the stated assumptions, show that
+\[
+ \sum_{g=1}^3\Sigma_{a,g}\phi_g=10\unit{cm^{-3}\,s^{-1}}.
+\]
+Why should removal cross sections \emph{not} replace absorption
+cross sections in this check?
+\RuledLines{2}
+\end{checkpoint}
+\end{handoutcolumns}
+
+\newpage
+\begin{handoutcolumns}
+\HandoutSection{6}{Use the scattering kinematics}
+For elastic scattering isotropic in the CM system from a
+stationary target of mass ratio $A$, let
+$\alpha=[(A-1)/(A+1)]^2$. Then
+\[
+ p(E'\!\to E)=
+ \begin{cases}
+  1/[(1-\alpha)E'],&\alpha E'\le E\le E',\\
+  0,&\text{otherwise}.
+ \end{cases}
+\]
+This kernel cannot upscatter; it is not a thermal free-gas kernel.
+The allowed outgoing interval and destination group overlap over
+\begin{align*}
+ \Delta E_g(E')=\Big[&\min(E_{g-1},E')\\
+                  &-\max(E_g,\alpha E')\Big]_+,
+ \qquad [z]_+=\max(z,0).
+\end{align*}
+Thus the probability of landing in group $g$ is
+\[
+ P_g(E')=\frac{\Delta E_g(E')}{(1-\alpha)E'}.
+\]
+\begin{fixedbox}{Incident-flux-weighted transfer}
+\[
+ \boxed{\sigma_{s,g\gets g'}=
+ \frac{\displaystyle\int_{E_{g'}}^{E_{g'-1}}
+      \sigma_s(E')P_g(E')\phi(E')\dd E'}
+      {\displaystyle\int_{E_{g'}}^{E_{g'-1}}\phi(E')\dd E'}}.
+\]
+\end{fixedbox}
+For a mixture, compute each nuclide's transfer with its own
+$\alpha_i$, then form $\Sigma_{s,g\gets g'}=\sum_iN_i\sigma^i_{s,g\gets g'}$.
+\begin{checkpoint}[An empty overlap is zero]
+Why would directly integrating from the larger lower bound to
+the smaller upper bound give an unphysical result?
+\RuledLines{2}
+\end{checkpoint}
+
+\HandoutSection{7}{Hydrogen: scatter out of group 2}
+Use the same three-group bounds, ${}^1$H ($\alpha=0$),
+$\sigma_s(E)=\sigma_0=20\unit{b}$, and $\phi(E')\propto1/E'$
+within incident group 2. Write
+\[
+ L=\ln(E_1/E_2)=\ln(10^5).
+\]
+\begin{boardbox}{Set up the two nonzero integrals}
+\begin{align*}
+ \sigma_{s,2\gets2}
+ &=\frac{\sigma_0}{L}\int_{E_2}^{E_1}
+                   \frac{E'-E_2}{(E')^2}\dd E',\\
+ \sigma_{s,3\gets2}
+ &=\frac{\sigma_0}{L}\int_{E_2}^{E_1}
+                   \frac{E_2-E_3}{(E')^2}\dd E'.
+\end{align*}
+Explain the numerators using the allowed outgoing energy intervals.
+\RuledLines{2}
+\end{boardbox}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{8}{Evaluate the scattering column}
+The group-to-group cross sections are
+\begin{align*}
+ \sigma_{s,1\gets2}&=0,\\
+ \sigma_{s,2\gets2}&=\sigma_0\frac{L+E_2/E_1-1}{L},\\
+ \sigma_{s,3\gets2}&=\sigma_0\frac{(E_2-E_3)(1/E_2-1/E_1)}{L}.
+\end{align*}
+\begin{boardbox}{Compute the values}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabularx}{\linewidth}{@{}l>{\centering\arraybackslash}X@{}}
+\toprule
+Destination & $\sigma_{s,g\gets2}$ (b)\\
+\midrule
+$g=1$ (fast) & $0$\\
+$g=2$ (intermediate) & \MathBlank[1.10in]{}\\
+$g=3$ (thermal) & \MathBlank[1.10in]{}\\
+\bottomrule
+\end{tabularx}
+\end{boardbox}
+Most collisions stay within the very broad intermediate group;
+about $8.68\%$ enter the retained thermal interval.
+These are conditional collision fractions, \emph{not} ratios of
+steady-state group fluxes.
+
+\begin{checkpoint}[Where did the missing cross section go?]
+With $E_3=10^{-3}$ eV, some hydrogen collisions produce
+\mbox{$0<E<E_3$}. Their contribution is
+\[
+ \sigma_{s,<E_3\gets2}
+ =\sigma_0\frac{E_3(1/E_2-1/E_1)}{L}
+ =\MathBlank[0.95in]{}\unit{b}.
+\]
+Hence
+\[
+ \sum_{g=1}^3\sigma_{s,g\gets2}
+ =\sigma_0-\sigma_{s,<E_3\gets2}\approx19.99826\unit{b}.
+\]
+How would the column sum change if the last group extended to $E=0$?
+\RuledLines{2}
+\end{checkpoint}
+
+\HandoutSection{9}{Check the model, not just the algebra}
+For a complete set of outgoing energies,
+\[
+ \sum_g\Sigma_{s,g\gets g'}=\Sigma_{s,g'},
+ \qquad R_x=\sum_g\Sigma_{x,g}\phi_g.
+\]
+For truncated groups, keep any out-of-range transfer as an
+additional loss, or state the approximation used to close the range.
+Do not silently claim exact conservation after discarding that transfer.
+\begin{takeawaybox}
+Multigroup balance determines the \emph{amount} of flux in each
+group. The within-group spectra used to prepare cross sections
+remain modeling inputs. Fission couples the groups again;
+Lesson 14 uses that coupling to construct the $k$-eigenvalue problem.
+\end{takeawaybox}
+\end{handoutcolumns}
+\end{document}

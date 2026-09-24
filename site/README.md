@@ -1,8 +1,8 @@
 # NE 630 public course site
 
 This directory is the Sphinx source for the public NE 630 course-materials
-site. The initial page publishes student handouts for Lessons 1--10 and
-standalone notebooks for Lessons 8--10.
+site. The initial page publishes student handouts for Lessons 1--10 and 12--14,
+and standalone notebooks for Lessons 8--12.
 
 ## Build
 
@@ -40,20 +40,22 @@ Canonical handouts remain in `handouts/`. Running `make html` first invokes
 `site/scripts/export_handouts.py`, which creates the public files beneath
 `site/_static/handouts/`.
 
-The canonical Lesson 1--10 wrappers, bodies, class, student PDFs, and referenced
-supporting files must be version-controlled along with the public exports;
+The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, student PDFs,
+and referenced supporting files must be version-controlled along with the public exports;
 the build intentionally stops if any required input is absent.
 
 Standalone lesson notebooks remain canonical in `notebooks/`. Public download
 copies live beneath `site/_static/notebooks/` and must be byte-for-byte
-identical to their canonical files. The Lesson 8--10 notebooks are published
-alongside their handouts as independent course resources. Verify their
+identical to their canonical files. The Lesson 8--12 notebooks are
+published alongside their handouts as independent course resources. Verify their
 publication copies with:
 
 ```bash
 cmp notebooks/lesson_8.ipynb site/_static/notebooks/lesson_8.ipynb
 cmp notebooks/lesson_09.ipynb site/_static/notebooks/lesson_9.ipynb
 cmp notebooks/lesson_10.ipynb site/_static/notebooks/lesson_10.ipynb
+cmp notebooks/lesson_11.ipynb site/_static/notebooks/lesson_11.ipynb
+cmp notebooks/lesson_12.ipynb site/_static/notebooks/lesson_12.ipynb
 ```
 
 Do not edit those generated files directly. The exporter copies each student

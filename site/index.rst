@@ -58,10 +58,18 @@ available for that lesson.
        `YouTube video <https://www.youtube.com/watch?v=JzfOPadnHeA>`__
    * - **Lesson 11** — Thermal Neutron Spectra
      - —
-     - `YouTube video <https://www.youtube.com/watch?v=9EPWVcwoR4Y>`__
+     - `OpenMC notebook <_static/notebooks/lesson_11.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=9EPWVcwoR4Y>`__
    * - **Lesson 12** — Effective Cross Sections and Infinite-Medium Multiplication
+     - [`PDF <_static/handouts/lesson-12/lesson_12_handout.pdf>`__][`TeX <_static/handouts/lesson-12/lesson_12_handout.tex>`__]
+     - `OpenMC notebook <_static/notebooks/lesson_12.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=SJvGncqHE98>`__
+   * - **Lesson 13** — The Multigroup Method
+     - [`PDF <_static/handouts/lesson-13/lesson_13_handout.pdf>`__][`TeX <_static/handouts/lesson-13/lesson_13_handout.tex>`__]
      - —
-     - `YouTube video <https://www.youtube.com/watch?v=SJvGncqHE98>`__
+   * - **Lesson 14** — The k-Eigenvalue Problem
+     - [`PDF <_static/handouts/lesson-14/lesson_14_handout.pdf>`__][`TeX <_static/handouts/lesson-14/lesson_14_handout.tex>`__]
+     - —
 
 Handout source and support files
 --------------------------------
@@ -90,6 +98,12 @@ file and the shared class.
   `body <_static/handouts/lesson-09/lesson_09_handout_body.tex>`__
 * **Lesson 10:** `source bundle <_static/handouts/lesson-10/lesson_10_handout_source.zip>`__ |middot|
   `body <_static/handouts/lesson-10/lesson_10_handout_body.tex>`__
+* **Lesson 12:** `source bundle <_static/handouts/lesson-12/lesson_12_handout_source.zip>`__ |middot|
+  `body <_static/handouts/lesson-12/lesson_12_handout_body.tex>`__
+* **Lesson 13:** `source bundle <_static/handouts/lesson-13/lesson_13_handout_source.zip>`__ |middot|
+  `body <_static/handouts/lesson-13/lesson_13_handout_body.tex>`__
+* **Lesson 14:** `source bundle <_static/handouts/lesson-14/lesson_14_handout_source.zip>`__ |middot|
+  `body <_static/handouts/lesson-14/lesson_14_handout_body.tex>`__
 
 All bundles include the shared
 `ne630boardhandout.cls <_static/handouts/ne630boardhandout.cls>`__ class. No

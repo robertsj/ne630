@@ -1,0 +1,252 @@
+% Shared student/instructor body; compile a wrapper, not this file directly.
+\providecommand{\dd}{\,\mathrm{d}}
+\AtBeginDocument{%
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{3pt plus 1pt}
+\setlength{\belowdisplayshortskip}{3pt plus 1pt}
+\setlength{\jot}{2pt}
+}
+\tcbset{handout base/.append style={before skip=2.5pt,after skip=2.5pt,before upper={\RaggedRight}}}
+
+\HandoutSetup{NE 630}{14}{The $k$-Eigenvalue Problem}
+  {Review Lessons 12--13; bring the multigroup balance equations}
+\begin{document}
+\MakeHandoutTitle
+\textcolor{KSUDeepPurple}{\textbf{Primary objective.}}
+Compute the multiplication factor and multigroup spectrum of an
+infinite, homogeneous system, and distinguish eigenvalue from fixed-source solutions.
+\par\vspace{5pt}
+
+\begin{handoutcolumns}
+\HandoutSection{1}{Keep losses and production separate}
+Recall $\Sigma_{r,g}=\Sigma_{t,g}-\Sigma_{s,g\gets g}$.
+For compact algebra, define
+\[
+ f_g=(\nu\Sigma_f)_g,
+ \qquad \mathcal P=\sum_{g'=1}^G f_{g'}\phi_{g'}.
+\]
+Then the physical steady-state balance is
+\[
+ \Sigma_{r,g}\phi_g=
+ \sum_{g'\ne g}\Sigma_{s,g\gets g'}\phi_{g'}
+       +\chi_g\mathcal P+s_g.
+\]
+Here $f_g$ is a production cross section in $\mathrm{cm^{-1}}$,
+while $\mathcal P$ is a neutron-production rate density.
+For the supplied data, $f_g=\bar\nu_g\Sigma_{f,g}$ and
+$\Sigma_{a,g}=\Sigma_{\gamma,g}+\Sigma_{f,g}$; $\bar\nu_g$ is fission-rate weighted.
+
+\HandoutSection{2}{A multiplying two-group system}
+Use bounds $(E_0,E_1,E_2)=(10^7,1,10^{-3})$ eV.
+Group 1 is nonthermal and group 2 is thermal.
+All macroscopic cross sections below are in $\mathrm{cm^{-1}}$.
+\begin{center}
+\renewcommand{\arraystretch}{1.32}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+ & $g=1$ & $g=2$\\
+\midrule
+$\Sigma_{\gamma,g}$ & $2.04\times10^{-3}$ & $1.91\times10^{-2}$\\
+$\Sigma_{f,g}$ & $2.96\times10^{-4}$ & $1.38\times10^{-2}$\\
+$\bar\nu_g$ & $2.49$ & $2.43$\\
+$\Sigma_{s,1\gets g}$ & $7.21\times10^{-1}$ & $0$\\
+$\Sigma_{s,2\gets g}$ & $4.27\times10^{-2}$ & $2.72$\\
+$v_g$ ($\mathrm{m/s}$) & $10^5$ & $2\times10^3$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Assume no leakage or out-of-range losses, no upscatter, all
+fission neutrons born in group 1, and a group-1 external source:
+\[
+ (\chi_1,\chi_2)=(1,0),\qquad(s_1,s_2)=(s_1,0).
+\]
+For numerical fluxes, use $\boxed{s_1=1\unit{cm^{-3}\,s^{-1}}}$.
+\begin{boardbox}{Reduce the data before solving}
+Set $d=\Sigma_{s,2\gets1}=0.0427\unit{cm^{-1}}$. Then
+\begin{align*}
+ \Sigma_{a,1}&=0.002336,&\Sigma_{a,2}&=0.0329,\\
+ \Sigma_{r,1}&=\Sigma_{a,1}+d=0.045036,\\
+ f_1&=0.00073704,&f_2&=0.033534.
+\end{align*}
+All of these coefficients have units $\mathrm{cm^{-1}}$.
+Why is $\Sigma_{r,2}=\Sigma_{a,2}$ here?
+\RuledLines{2}
+\end{boardbox}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{3}{Solve the fixed-source problem}
+The two balances are
+\begin{align*}
+ \Sigma_{r,1}\phi_1&=f_1\phi_1+f_2\phi_2+s_1,\\
+ \Sigma_{a,2}\phi_2&=d\phi_1.
+\end{align*}
+\begin{boardbox}{First the shape, then the magnitude}
+The thermal equation determines the flux ratio:
+\[
+ R=\frac{\phi_2}{\phi_1}=\frac{d}{\Sigma_{a,2}}
+ =\MathBlank[1.02in]{1.29787234}.
+\]
+Insert $\phi_2=R\phi_1$ into the first balance:
+\[
+ \boxed{\phi_1=\frac{s_1}{\Sigma_{r,1}-f_1-f_2R}},
+ \qquad \boxed{\phi_2=R\phi_1}.
+\]
+The denominator is $0.00077610894\unit{cm^{-1}}$.
+For the stated unit source,
+\begin{align*}
+ \phi_1&=\MathBlank[1.15in]{1288.5}\unit{cm^{-2}\,s^{-1}},\\
+ \phi_2&=\MathBlank[1.15in]{1672.3}\unit{cm^{-2}\,s^{-1}}.
+\end{align*}
+\end{boardbox}
+For another source strength, the fluxes scale in direct proportion
+to $s_1$ while the material data remain fixed.
+
+\HandoutSection{4}{Audit the solution}
+Adding the group balances cancels intergroup scattering:
+\[
+ \boxed{\Sigma_{a,1}\phi_1+\Sigma_{a,2}\phi_2
+       =f_1\phi_1+f_2\phi_2+s_1}.
+\]
+Using unrounded fluxes, the rates in $\mathrm{cm^{-3}\,s^{-1}}$ are
+\begin{align*}
+ R_a&=\MathBlank[1.20in]{58.02794},\\
+ \mathcal P&=\MathBlank[1.20in]{57.02794},\\
+ R_a-\mathcal P&=\MathBlank[1.20in]{1=s_1}.
+\end{align*}
+\begin{checkpoint}[Why were speeds supplied?]
+Speeds do not enter these steady-state flux balances. Using
+$v_g$ as a representative group speed gives
+$n_g\approx\phi_g/v_g$. Convert the tabulated speeds to
+$\mathrm{cm/s}$, then compare $n_2/n_1$ with $\phi_2/\phi_1$.
+\[
+ \frac{n_2}{n_1}\approx
+ \frac{\phi_2}{\phi_1}\frac{v_1}{v_2}
+ =\MathBlank[1.00in]{64.8936}.
+\]
+\RuledLines{2}
+\end{checkpoint}
+\end{handoutcolumns}
+
+\newpage
+\begin{handoutcolumns}
+\HandoutSection{5}{Remove the source; introduce $k$}
+With $s_1=0$, a nonzero \emph{physical steady-state} solution
+requires exactly critical material. Instead, define an eigenproblem
+by dividing \textbf{only fission production} by $k_{\infty}$:
+\begin{align*}
+ \Sigma_{r,1}\phi_1&=
+      \frac{1}{k_{\infty}}(f_1\phi_1+f_2\phi_2),\\
+ \Sigma_{a,2}\phi_2&=d\phi_1.
+\end{align*}
+The second equation is unchanged, so $R=d/\Sigma_{a,2}$.
+\begin{boardbox}{Derive the eigenvalue}
+Divide the first equation by $\phi_1>0$:
+\[
+ k_{\infty}\Sigma_{r,1}=f_1+f_2R.
+\]
+\[
+ \boxed{k_{\infty}=\frac{f_1+f_2d/\Sigma_{a,2}}{\Sigma_{r,1}}}
+ =\MathBlank[1.00in]{0.98276692}.
+\]
+The unmodified, source-free system is therefore
+\RevealBlank[1.15in]{subcritical}.
+\end{boardbox}
+The $1/k_{\infty}$ factor is mathematical normalization of
+production, not a physical source or a time-growth rate.
+
+\HandoutSection{6}{Write the matrix eigenproblem}
+Define the loss-minus-scattering and fission matrices:
+\[
+ \mathbf M=
+ \begin{bmatrix}\Sigma_{r,1}&0\\-d&\Sigma_{a,2}\end{bmatrix},
+ \qquad
+ \mathbf F=
+ \begin{bmatrix}f_1&f_2\\0&0\end{bmatrix}.
+\]
+\begin{fixedbox}{Fixed source versus eigenvalue}
+\begin{align*}
+ (\mathbf M-\mathbf F)\symbfit{\phi}&=\mathbf s
+           &&\text{(fixed source)},\\
+ \mathbf M\symbfit{\phi}&=\frac1{k_{\infty}}
+                   \mathbf F\symbfit{\phi}
+           &&\text{(eigenvalue)}.
+\end{align*}
+When $\mathbf M$ is invertible,
+\[
+ \boxed{\mathbf M^{-1}\mathbf F\symbfit{\phi}
+       =k_{\infty}\symbfit{\phi}}.
+\]
+\end{fixedbox}
+For $G$ groups the same structure uses
+\[
+ M_{gg'}=\Sigma_{t,g}\delta_{gg'}-\Sigma_{s,g\gets g'},
+ \qquad F_{gg'}=\chi_g f_{g'}.
+\]
+\begin{checkpoint}
+Why is the off-diagonal entry $-d$ in $\mathbf M$ negative,
+although the scattering cross section itself is positive?
+\RuledLines{2}
+\end{checkpoint}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{7}{Normalize a shape, not a power}
+An eigenvector has arbitrary magnitude. One convenient convention is
+\[
+ \widehat\phi_g=\frac{\phi_g}{\phi_1+\phi_2},
+ \qquad \widehat\phi_1+\widehat\phi_2=1.
+\]
+\begin{boardbox}{Report the eigen-spectrum}
+\[
+ \widehat\phi_1=\frac{1}{1+R}
+   =\MathBlank[0.95in]{0.435185},
+\]
+\[
+ \widehat\phi_2=\frac{R}{1+R}
+   =\MathBlank[0.95in]{0.564815}.
+\]
+These are dimensionless fractions of total flux, not neutron
+number fractions. What additional information would set a
+physical flux magnitude?
+\RuledLines{2}
+\end{boardbox}
+For complete energy coverage, summing the eigen-equations gives
+\[
+ \boxed{k_{\infty}=
+ \frac{\sum_g f_g\phi_g}{\sum_g\Sigma_{a,g}\phi_g}}.
+\]
+Evaluate this with the \emph{eigen-spectrum}; it recovers the
+one-group production-to-absorption ratio from Lesson 12.
+
+\HandoutSection{8}{Connect to source multiplication}
+For this model, the external source and fission births both enter
+group 1. Therefore the fixed-source and eigenvalue problems have
+the same flux ratio $R$.
+Using $f_1+f_2R=k_{\infty}\Sigma_{r,1}$ in Section 3 yields
+\[
+ \boxed{\phi_1=\frac{s_1}{\Sigma_{r,1}(1-k_{\infty})}},
+ \qquad \phi_2=R\phi_1.
+\]
+If fission \emph{production} is suppressed while keeping the
+same loss and scattering coefficients, the group-1 flux is
+$\phi_1^{(0)}=s_1/\Sigma_{r,1}$. Hence
+\[
+ \frac{\phi_1}{\phi_1^{(0)}}=\frac1{1-k_{\infty}}
+ =\MathBlank[1.05in]{58.02794}.
+\]
+\begin{checkpoint}[Approach criticality from below]
+At fixed $s_1>0$, what happens as $k_{\infty}\to1^{-}$?
+Why is the negative algebraic flux obtained for $k_{\infty}>1$
+not a physical steady-state solution?
+\RuledLines{2}
+\end{checkpoint}
+\begin{takeawaybox}
+A fixed source sets the flux magnitude in a subcritical system.
+The eigenproblem sets $k_{\infty}$ and a relative spectrum, not
+power. The simple $1/(1-k_{\infty})$ factor here relies on this
+source shape and fixed two-group model; it is not universal.
+\end{takeawaybox}
+\end{handoutcolumns}
+\end{document}

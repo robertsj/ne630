@@ -1,5 +1,7 @@
+% Shared student/instructor body; compile a wrapper, not this file directly.
 \providecommand{\dd}{\,\mathrm{d}}
-\AtBeginDocument{\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\AtBeginDocument{%
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
 \setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
 \setlength{\abovedisplayshortskip}{3pt plus 1pt}
 \setlength{\belowdisplayshortskip}{3pt plus 1pt}
@@ -64,7 +66,7 @@ The denominator is the \textbf{incident-group flux}.
 Multiplying by $\phi_{g'}$ recovers the rate of transfer into $g$.
 \begin{checkpoint}
 With this numbering, downscatter means
-$g\ \MathBlank[0.35in]{}\ g'$. In a scattering matrix whose
+$g\ \MathBlank[0.35in]{>}\ g'$. In a scattering matrix whose
 rows are destinations, are the forced zero (upscatter) entries
 above or below the diagonal?
 \RuledLines{2}
@@ -103,8 +105,8 @@ intergroup upscatter, and transfers outside the finite energy range.
 \begin{boardbox}{Solve from fast to thermal}
 Write each group balance and isolate its flux:
 \begin{align*}
- \phi_1&=\MathBlank[1.30in]{},\\
- \phi_2&=\MathBlank[1.75in]{},\\
+ \phi_1&=\MathBlank[1.30in]{s_1/\Sigma_{r,1}},\\
+ \phi_2&=\MathBlank[1.75in]{\Sigma_{s,2\gets1}\phi_1/\Sigma_{r,2}},\\
  \phi_3&=\frac{\Sigma_{s,3\gets1}\phi_1
                   +\Sigma_{s,3\gets2}\phi_2}{\Sigma_{r,3}}.
 \end{align*}
@@ -197,8 +199,8 @@ The group-to-group cross sections are
 Destination & $\sigma_{s,g\gets2}$ (b)\\
 \midrule
 $g=1$ (fast) & $0$\\
-$g=2$ (intermediate) & \MathBlank[1.10in]{}\\
-$g=3$ (thermal) & \MathBlank[1.10in]{}\\
+$g=2$ (intermediate) & \MathBlank[1.10in]{18.26284}\\
+$g=3$ (thermal) & \MathBlank[1.10in]{1.73542}\\
 \bottomrule
 \end{tabularx}
 \end{boardbox}
@@ -213,7 +215,7 @@ With $E_3=10^{-3}$ eV, some hydrogen collisions produce
 \[
  \sigma_{s,<E_3\gets2}
  =\sigma_0\frac{E_3(1/E_2-1/E_1)}{L}
- =\MathBlank[0.95in]{}\unit{b}.
+ =\MathBlank[0.95in]{0.00173716}\unit{b}.
 \]
 Hence
 \[

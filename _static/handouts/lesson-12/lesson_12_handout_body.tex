@@ -1,5 +1,7 @@
+% Shared student/instructor body; compile a wrapper, not this file directly.
 \providecommand{\dd}{\,\mathrm{d}}
-\AtBeginDocument{\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\AtBeginDocument{%
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
 \setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
 \setlength{\abovedisplayshortskip}{3pt plus 1pt}
 \setlength{\belowdisplayshortskip}{3pt plus 1pt}
@@ -36,7 +38,7 @@ Define reaction-rate densities and the total external source:
 \[
  R_t=R_s+s_f'''+s
  \quad\Longrightarrow\quad
- \boxed{R_a=\MathBlank[0.88in]{}}.
+ \boxed{R_a=\MathBlank[0.88in]{s_f'''+s}}.
 \]
 All terms are rates per unit volume, in $\mathrm{cm^{-3}\,s^{-1}}$.
 \end{boardbox}
@@ -71,7 +73,7 @@ $\bar\nu\,\bar\Sigma_f$ for two independently flux-weighted averages.
 \[
  \bar\Sigma_a\phi_{\mathrm{tot}}=s
  \quad\Longrightarrow\quad
- \phi_{\mathrm{tot}}=\MathBlank[0.85in]{}.
+ \phi_{\mathrm{tot}}=\MathBlank[0.85in]{s/\bar\Sigma_a}.
 \]
 Check: $\bar\Sigma_a$ has units $\mathrm{cm^{-1}}$ and
 $\phi_{\mathrm{tot}}$ has units $\mathrm{cm^{-2}\,s^{-1}}$.
@@ -134,7 +136,8 @@ Using a normalized shape in each interval gives
 The weights are \textbf{fractions of the total flux}, not fractions
 of the energy interval. If $\phi_T=\phi_I=\phi_F$, then
 \[
- \bar\Sigma_x\approx\MathBlank[1.95in]{}.
+ \bar\Sigma_x\approx\MathBlank[1.95in]{
+ (\bar\Sigma_{x,T}+\bar\Sigma_{x,I}+\bar\Sigma_{x,F})/3}.
 \]
 \end{handoutcolumns}
 
@@ -164,7 +167,8 @@ $\sigma_x(E)=\sigma_0\sqrt{E_{\mathrm{ref}}/E}$,
  \bar\sigma_{x,T}
  &=\frac{\sigma_0\sqrt{E_{\mathrm{ref}}}}{\theta^2}
    \int_0^\infty E^{1/2}e^{-E/\theta}\dd E\\
- &=\MathBlank[1.60in]{}.
+ &=\MathBlank[1.60in]{\frac{\sqrt\pi}{2}\sigma_0
+   \sqrt{E_{\mathrm{ref}}/\theta}}.
 \end{align*}
 Use $\int_0^\infty E^{1/2}e^{-E/\theta}\dd E
 =(\sqrt\pi/2)\theta^{3/2}$.
@@ -198,10 +202,13 @@ For water molecule density $N_w$,
 Use microscopic cross sections in $\mathrm{cm^2}$
 ($1\unit{b}=10^{-24}\unit{cm^2}$). Find
 \[
- \phi_{\mathrm{tot}}=\MathBlank[1.00in]{},
- \qquad \phi_j=\MathBlank[0.83in]{}.
+ \phi_{\mathrm{tot}}=\MathBlank[1.00in]{10/\bar\Sigma_a},
+ \qquad \phi_j=\MathBlank[0.83in]{\phi_{\mathrm{tot}}/3}.
 \]
-
+\SolutionCue{The slide deck's rough estimate
+$\bar\Sigma_a\approx0.007\unit{cm^{-1}}$ gives
+$\phi_{\mathrm{tot}}\approx1.4\times10^3\unit{cm^{-2}\,s^{-1}}$.
+}
 
 \switchcolumn
 \RaggedRight
@@ -227,9 +234,9 @@ a prescribed approximate spectrum gives an estimate.
 \begin{checkpoint}[Interpret the ratio]
 Classify the infinite system:
 \begin{align*}
- k_{\infty}<1 &: \quad\RevealBlank[1.25in]{},\\
- k_{\infty}=1 &: \quad\RevealBlank[1.25in]{},\\
- k_{\infty}>1 &: \quad\RevealBlank[1.25in]{}.
+ k_{\infty}<1 &: \quad\RevealBlank[1.25in]{subcritical},\\
+ k_{\infty}=1 &: \quad\RevealBlank[1.25in]{critical},\\
+ k_{\infty}>1 &: \quad\RevealBlank[1.25in]{supercritical}.
 \end{align*}
 Does doubling $\phi(E)$ change $k_{\infty}$? Does it change
 $R_f$?

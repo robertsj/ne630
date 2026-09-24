@@ -1,3 +1,6 @@
+% Lesson 06: student-facing, board-supported handout.
+% This version deliberately omits the Lesson 05 review and reorganizes the
+% retained physics as H-1 -> threshold reactions -> U-235 resonances -> SLBW.
 \tcbset{handout base/.append style={before skip=2.5pt,after skip=2.5pt}}
 
 \HandoutSetup
@@ -24,10 +27,14 @@ of these cross sections to the underlying nuclear physics.
 
 \begin{fixedbox}{Potential scattering and $1/v$ absorption}
 \centering
-\IfFileExists{figures/h1_xsec.pgf}{  \resizebox{0.98\linewidth}{!}{\input{figures/h1_xsec.pgf}}}{  \fbox{\parbox[c][1.32in][c]{0.92\linewidth}{\centering\sffamily\small
+\IfFileExists{figures/h1_xsec.pgf}{%
+  \resizebox{0.98\linewidth}{!}{\input{figures/h1_xsec.pgf}}%
+}{%
+  \fbox{\parbox[c][1.32in][c]{0.92\linewidth}{\centering\sffamily\small
     H-1 cross-section figure\\[3pt]
     elastic scattering and radiative capture\\[3pt]
-    \texttt{figures/h1\_xsec.pgf}}}}
+    \texttt{figures/h1\_xsec.pgf}}}%
+}
 \end{fixedbox}
 
 \begin{fixedbox}{Low-energy capture}
@@ -42,7 +49,7 @@ Thus $\sigma_\gamma\propto E^{-1/2}\propto 1/v$ for a nonrelativistic neutron.
 
 \begin{checkpoint}[$1/v$ check]
 If the neutron energy increases by a factor of $100$, the $1/v$ capture cross
-section changes by a factor of \MathBlank[0.72in]{}.
+section changes by a factor of \MathBlank[0.72in]{1/10}.
 What feature of the H-1 elastic curve makes it qualitatively different?
 \RuledLines{2}
 \end{checkpoint}
@@ -53,7 +60,10 @@ What feature of the H-1 elastic curve makes it qualitatively different?
 
 \begin{fixedbox}{${}^{238}$U threshold cross sections}
 \centering
-\IfFileExists{figures/u238_threshold.pdf}{  \includegraphics[width=0.98\linewidth]{figures/u238_threshold.pdf}}{\begin{minipage}[t]{0.48\linewidth}
+\IfFileExists{figures/u238_threshold.pdf}{%
+  \includegraphics[width=0.98\linewidth]{figures/u238_threshold.pdf}%
+}{%
+\begin{minipage}[t]{0.48\linewidth}
 \centering
 \fbox{\parbox[c][1.42in][c]{0.91\linewidth}{\centering\sffamily\scriptsize
 ${}^{238}$U fission\\[4pt]
@@ -85,7 +95,7 @@ inelastic scattering turn on.
 
 \begin{checkpoint}[Connect shape to physics]
 A threshold is qualitatively different from a $1/v$ trend because the
-reaction channel is \RevealBlank[1.45in]{}.
+reaction channel is \RevealBlank[1.45in]{closed below $E_{\mathrm{th}}$}.
 What physical energy requirement must be met for inelastic scattering?
 \RuledLines{2}
 \end{checkpoint}
@@ -117,7 +127,8 @@ $\bar{\nu}_{p}$ (prompt)  & 456    & Average prompt neutrons per fission \\
 
 \HandoutSection{3}{Resonances expose nuclear levels}
 
-\resizebox{\linewidth}{!}{\begin{tikzpicture}[
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
   x=1cm,
   y=0.72cm,
   >=Latex,
@@ -130,20 +141,24 @@ $\bar{\nu}_{p}$ (prompt)  & 456    & Average prompt neutrons per fission \\
   guide/.style={draw=KSUGray,densely dotted}
 ]
 
+  % Zero incident-neutron energy is the n + U-238 threshold.
   \draw[threshold] (1.5,0) -- (8.0,0);
 
   \node[anchor=west,align=left] at (8.15,-0.10)
     {$^{238}\mathrm{U}+n$ threshold\\
      $E_n=0,\quad E_x=S_n$};
 
+  % U-239 compound-nucleus levels.
   \node[font=\scriptsize\bfseries] at (5.5,3.65)
     {$^{239}\mathrm{U}$ compound-nucleus levels};
 
+  % Ground state.
   \draw[level] (4.2,-4.4) -- (6.8,-4.4);
 
   \node[anchor=north,align=center] at (5.5,-4.52)
     {ground state, $E_x=0$};
 
+  % Bound excited states below the neutron threshold.
   \foreach \y in {-3.35,-2.25,-1.05}
     \draw[negative level] (4.2,\y) -- (6.8,\y);
 
@@ -156,6 +171,7 @@ $\bar{\nu}_{p}$ (prompt)  & 456    & Average prompt neutrons per fission \\
      negative resonances\\
      $E_r=E_x-S_n<0$};
 
+  % Compound-nucleus levels above the neutron threshold.
   \foreach \y in {0.65,1.30,2.20,3.05}
     \draw[positive level] (4.2,\y) -- (6.8,\y);
 
@@ -167,6 +183,7 @@ $\bar{\nu}_{p}$ (prompt)  & 456    & Average prompt neutrons per fission \\
     {positive-energy\\
      resonances, $E_r>0$};
 
+  % Ground state to threshold: neutron separation energy.
   \draw[measure] (2.55,-4.4) -- (2.55,0);
 
   \node[anchor=east,align=right] at (2.30,-2.20)
@@ -174,12 +191,14 @@ $\bar{\nu}_{p}$ (prompt)  & 456    & Average prompt neutrons per fission \\
      (separation) energy\\
      $S_n$};
 
+  % Threshold to one selected positive-energy level.
   \draw[measure] (7.55,0) -- (7.55,2.20);
 
   \node[anchor=west,align=left] at (7.80,1.10)
     {incident-neutron\\
      kinetic energy $E_n$};
 
+  % Ground state to the same level: total compound excitation.
   \draw[measure] (11.25,-4.4) -- (11.25,2.20);
 
   \node[anchor=west,align=left] at (11.50,-1.10)
@@ -187,17 +206,24 @@ $\bar{\nu}_{p}$ (prompt)  & 456    & Average prompt neutrons per fission \\
      excitation energy\\
      $E_x=S_n+E_n$};
 
+  % Guides connecting the selected level and ground state to the
+  % total-excitation-energy measurement.
   \draw[guide] (6.8,2.20) -- (11.25,2.20);
   \draw[guide] (6.8,-4.4) -- (11.25,-4.4);
 
-\end{tikzpicture}}
+\end{tikzpicture}%
+}
 
 \begin{fixedbox}{${}^{235}$U fission cross section}
 \centering
-\IfFileExists{figures/u235_fission.pgf}{  \resizebox{0.98\linewidth}{!}{\input{figures/u235_fission.pgf}}}{  \fbox{\parbox[c][1.58in][c]{0.92\linewidth}{\centering\sffamily\small
+\IfFileExists{figures/u235_fission.pgf}{%
+  \resizebox{0.98\linewidth}{!}{\input{figures/u235_fission.pgf}}%
+}{%
+  \fbox{\parbox[c][1.58in][c]{0.92\linewidth}{\centering\sffamily\small
     ${}^{235}$U fission cross section\\[3pt]
     $\sigma_f(E)$ over reactor-neutron energies\\[3pt]
-    \texttt{figures/u235\_fission.pgf}}}}
+    \texttt{figures/u235\_fission.pgf}}}%
+}
 
 The fission cross section varies by several orders of magnitude over roughly
 ten decades of neutron energy. The jagged peaks between about
@@ -233,7 +259,8 @@ Across the examples in this lesson, recognize at sight:
 \begin{fixedbox}{Capture near one resonance}
 For a resonance centered at $E_r$,
 \[
-\boxed{\sigma_{\gamma}(E)
+\boxed{%
+\sigma_{\gamma}(E)
  = \sigma_0\frac{\Gamma_{\gamma}}{\Gamma}
    \left(\frac{E_r}{E}\right)^{1/2}
    \frac{1}{1+4(E-E_r)^2/\Gamma^2}}
@@ -262,9 +289,9 @@ For the Lorentzian factor
 \]
 complete the two checks:
 \[
- L(E_r)=\MathBlank[0.58in]{},
+ L(E_r)=\MathBlank[0.58in]{1},
  \qquad
- L(E_r\pm\Gamma/2)=\MathBlank[0.58in]{}.
+ L(E_r\pm\Gamma/2)=\MathBlank[0.58in]{1/2}.
 \]
 Hence $E_r$ locates the peak and $\Gamma$ sets its characteristic width.
 How do $\Gamma_\gamma/\Gamma$ and $\Gamma_n/\Gamma$ partition the resonance

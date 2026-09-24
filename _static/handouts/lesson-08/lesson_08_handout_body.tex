@@ -1,3 +1,25 @@
+% Lesson 08: shared student/instructor board-supported handout.
+% Structure: lesson_07_handout_body(1).tex.
+% Main content: lewis_ch3_handwritten_notes.tex, source pages 1--3.
+% Objective and reading: lesson_08.md.
+% The alpha, xi, and collision-count equations are explicitly identified as
+% review from the attached Lesson 07 handout, not additions to Lewis notes.
+%
+% This body has the same integration contract as Lesson 07: load the common
+% handout preamble, then input this file. It includes begin/end{document}.
+% The required template commands/environments and KSU colors are unchanged.
+% All diagrams are embedded editable TikZ; there are no external assets.
+%
+% Source-handling decisions:
+% - Sketches remain qualitative; original hand-traced curve coordinates retained.
+% - The moderator table is reproduced without supplying missing conditions/units.
+% - The "no intermediate spectrum reactors" and LEU-boundary statements remain
+%   explicitly attributed quotations in discussion/verification prompts.
+% - Unclear/cropped fragments (including "constituents >= 10 [cropped]" and
+%   the missing word in the U-238 inelastic-scattering sentence) are not completed.
+% - Solution-only reminders about reintroducing diffusion and unfinished
+%   marginal questions have not been converted into new course assertions.
+% - Numerical checkpoint answers are arithmetic consequences of the given table.
 
 \providecommand{\SourceEq}[1]{\par\nobreak\hfill{\sffamily\scriptsize\color{KSUGray}#1}\par}
 \usetikzlibrary{arrows.meta,decorations.pathreplacing}
@@ -9,7 +31,10 @@
 \setlength{\jot}{2pt}
 \tcbset{handout base/.append style={before skip=2.5pt,after skip=2.5pt}}
 
-\providecommand{\LessonEightPureFuelSketch}{\begin{tikzpicture}[x=.88cm,y=.76cm,>=Latex,font=\scriptsize,
+% The curve coordinates below are copied from the transcription. Only their
+% size, color, labels, and surrounding layout have been adapted for columns.
+\providecommand{\LessonEightPureFuelSketch}{%
+\begin{tikzpicture}[x=.88cm,y=.76cm,>=Latex,font=\scriptsize,
                    line cap=round,line join=round]
   \path[use as bounding box] (-.68,-.65) rectangle (8.18,3.07);
   \draw[->,semithick] (0,-.06)--(0,2.67);
@@ -45,8 +70,10 @@
   \node[align=center,text=KSUGray,inner sep=1pt] (nu) at (6.35,2.65)
        {larger $\nu(E)$};
   \draw[->,KSUGray] (nu.south east) to[out=-25,in=150] (7.25,2.05);
-\end{tikzpicture}}
-\providecommand{\LessonEightMixtureSketch}{\begin{tikzpicture}[x=.85cm,y=.73cm,>=Latex,font=\scriptsize,
+\end{tikzpicture}%
+}
+\providecommand{\LessonEightMixtureSketch}{%
+\begin{tikzpicture}[x=.85cm,y=.73cm,>=Latex,font=\scriptsize,
                    line cap=round,line join=round]
   \path[use as bounding box] (-.72,-1.16) rectangle (8.40,3.13);
   \draw[->,semithick] (0,-.06)--(0,2.65);
@@ -101,7 +128,8 @@
   \node[text=KSUDeepPurple] at (1.0,-.91) {thermal};
   \node[text=KSUGray] at (4.1,-.91) {intermediate};
   \node[text=KSUDeepPurple] at (7.3,-.91) {fast};
-\end{tikzpicture}}
+\end{tikzpicture}%
+}
 
 \HandoutSetup
   {NE 630}
@@ -117,6 +145,7 @@ Explain the different goals of thermal- and fast-spectrum reactor designs
 using $\eta(E)$, $\xi$, $\Sigma_s$, and $\Sigma_a$.
 \par\vspace{5pt}
 
+% ===================== PAGE 1: ENERGY AND FUELS =====================
 \begin{handoutcolumns}
 \HandoutSection{1}{Energy and the multiplication factor}
 Recall the generation-to-generation definition:
@@ -214,6 +243,7 @@ Why might a design favor low enrichment?
 
 \newpage
 
+% ==================== PAGE 2: MODERATION AND DESIGN =================
 \begin{handoutcolumns}
 \HandoutSection{5}{Thermal and fast design strategies}
 \begin{fixedbox}{Thermal-spectrum reactors}
@@ -308,14 +338,14 @@ was using in Fermi's pile.
 \begin{checkpoint}[Recover absorption from the table]
 Rearrange the slowing-down ratio to obtain
 $$
-\Sigma_a=\MathBlank[1.25in]{}.
+\Sigma_a=\MathBlank[1.25in]{\frac{\xi\Sigma_s}{\xi\Sigma_s/\Sigma_a}}.
 $$
 Then compute the implied absorption cross sections:
 \begin{align*}
 \mathrm{H_2O}:\quad&\Sigma_a=\frac{1.28}{58}
-                 \approx\MathBlank[.85in]{},\\[5pt]
+                 \approx\MathBlank[.85in]{2.21\times10^{-2}},\\[5pt]
 \mathrm{D_2O}:\quad&\Sigma_a=\frac{0.18}{21{,}000}
-                 \approx\MathBlank[.85in]{}.
+                 \approx\MathBlank[.85in]{8.57\times10^{-6}}.
 \end{align*}
 The results have the same inverse-length units as the table's
 slowing-down power; no numerical unit convention is supplied here.

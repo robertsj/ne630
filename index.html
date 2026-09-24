@@ -125,9 +125,9 @@ available for that lesson.</p>
 </section>
 <section id="handout-source-and-support-files">
 <h2>Handout source and support files<a class="headerlink" href="#handout-source-and-support-files" title="Link to this heading">¶</a></h2>
-<p>The TeX links in the table point to each student wrapper. Download the complete
-source bundle for a ready-to-build copy, or pair a wrapper with its public body
-file and the shared class.</p>
+<p>The TeX links in the table point to each wrapper with <code class="docutils literal notranslate"><span class="pre">\handoutsolutionsfalse</span></code>.
+Download the complete source bundle for a ready-to-build copy, or pair a wrapper
+with its body file and the shared class.</p>
 <ul class="simple">
 <li><p><strong>Lesson 1:</strong> <a class="reference external" href="_static/handouts/lesson-01/lesson_01_handout_source.zip">source bundle</a> ·
 <a class="reference external" href="_static/handouts/lesson-01/lesson_01_handout_body.tex">body</a></p></li>
@@ -163,8 +163,9 @@ bundle with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_01_handout.tex</span>
 </pre></div>
 </div>
-<p>The public body files are student-safe exports. Instructor reveal values and
-instructor-only figure content are deliberately omitted.</p>
+<p>The public wrappers compile the non-solution PDFs as distributed. To make a
+private solution copy, change <code class="docutils literal notranslate"><span class="pre">\handoutsolutionsfalse</span></code> to
+<code class="docutils literal notranslate"><span class="pre">\handoutsolutionstrue</span></code> before compiling.</p>
 </section>
 </section>
 

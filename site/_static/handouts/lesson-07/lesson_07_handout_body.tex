@@ -1,3 +1,4 @@
+% Lesson 07: shared student/instructor board-supported handout.
 \providecommand{\muc}{\mu_{\mathrm c}}
 \providecommand{\mul}{\mu_{\mathrm L}}
 \providecommand{\thetac}{\theta_{\mathrm c}}
@@ -33,13 +34,17 @@ Estimate the number of elastic collisions needed to slow a neutron from
 $E_0$ to $E_n$ for a target modeled by mass number $A\geq1$.
 \par\vspace{5pt}
 
+% ======================== PAGE 1: KINEMATICS ========================
 \begin{handoutcolumns}
 \HandoutSection{1}{Review: threshold reactions}
 
 \begin{fixedbox}{Uranium-238 review figure}
 \begin{minipage}[c][1.32in][c]{\linewidth}
 \centering
-\IfFileExists{figures/u238_threshold.pdf}{  \includegraphics[width=\linewidth,height=1.30in,keepaspectratio]{figures/u238_threshold.pdf}}{  {\sffamily\small\color{KSUGray}Review figure unavailable.\par}
+\IfFileExists{figures/u238_threshold.pdf}{%
+  \includegraphics[width=\linewidth,height=1.30in,keepaspectratio]{figures/u238_threshold.pdf}%
+}{%
+  {\sffamily\small\color{KSUGray}Review figure unavailable.\par}
   \vspace{6pt}
   {\ttfamily\footnotesize figures/u238\_threshold.pdf\par}
 }
@@ -162,6 +167,7 @@ What happens to $\overline{\mu}_{\mathrm L}$ as $A$ grows?
 
 \newpage
 
+% ======================= PAGE 2: PROBABILITY ========================
 \begin{handoutcolumns}
 \HandoutSection{5}{A quick summary of probabilities}
 Let $X$ be a random variable with probability density $p_X(x)$ and
@@ -218,9 +224,9 @@ Then $p_X(x)=1$ for $0\leq x\leq1$ (and zero elsewhere). Find the
 transformed density and support:
 \[
 p_Y(y)=\left|\frac{dx}{dy}\right|p_X(x)
-  =\MathBlank[0.55in]{}.
+  =\MathBlank[0.55in]{\frac12}.
 \]
-Support of $Y$: \RevealBlank[1.20in]{}; $p_Y(y)=0$ otherwise.
+Support of $Y$: \RevealBlank[1.20in]{$-1\leq y\leq1$}; $p_Y(y)=0$ otherwise.
 \end{checkpoint}
 
 \begin{boardbox}{Notes: transforming a density}
@@ -259,7 +265,7 @@ energy $E$ after an elastic collision with a target of mass ratio $A$?
 \medskip
 \[
 \overline{E'}=\Expect[E'\mid E]=
-  \MathBlank[1.35in]{}.
+  \MathBlank[1.35in]{\frac12(1+\alpha)E}.
 \]
 \RuledLines{2}
 \end{checkpoint}
@@ -296,7 +302,7 @@ Using the supplied effective, collision-weighted mixture value
 $\xi_{\mathrm{water}}=0.93$,
 \[
 n\approx\frac{1}{0.93}\ln\!\left(\frac{2\times10^6\unit{eV}}{1\unit{eV}}\right)
-  \approx\MathBlank[0.48in]{}.
+  \approx\MathBlank[0.48in]{16}.
 \]
 \RuledLines{2}
 \end{checkpoint}

@@ -1,5 +1,7 @@
+% Shared student/instructor body; compile a wrapper, not this file directly.
 \providecommand{\dd}{\,\mathrm{d}}
-\AtBeginDocument{\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\AtBeginDocument{%
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
 \setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
 \setlength{\abovedisplayshortskip}{3pt plus 1pt}
 \setlength{\belowdisplayshortskip}{3pt plus 1pt}
@@ -84,7 +86,7 @@ The two balances are
 The thermal equation determines the flux ratio:
 \[
  R=\frac{\phi_2}{\phi_1}=\frac{d}{\Sigma_{a,2}}
- =\MathBlank[1.02in]{}.
+ =\MathBlank[1.02in]{1.29787234}.
 \]
 Insert $\phi_2=R\phi_1$ into the first balance:
 \[
@@ -94,8 +96,8 @@ Insert $\phi_2=R\phi_1$ into the first balance:
 The denominator is $0.00077610894\unit{cm^{-1}}$.
 For the stated unit source,
 \begin{align*}
- \phi_1&=\MathBlank[1.15in]{}\unit{cm^{-2}\,s^{-1}},\\
- \phi_2&=\MathBlank[1.15in]{}\unit{cm^{-2}\,s^{-1}}.
+ \phi_1&=\MathBlank[1.15in]{1288.5}\unit{cm^{-2}\,s^{-1}},\\
+ \phi_2&=\MathBlank[1.15in]{1672.3}\unit{cm^{-2}\,s^{-1}}.
 \end{align*}
 \end{boardbox}
 For another source strength, the fluxes scale in direct proportion
@@ -109,9 +111,9 @@ Adding the group balances cancels intergroup scattering:
 \]
 Using unrounded fluxes, the rates in $\mathrm{cm^{-3}\,s^{-1}}$ are
 \begin{align*}
- R_a&=\MathBlank[1.20in]{},\\
- \mathcal P&=\MathBlank[1.20in]{},\\
- R_a-\mathcal P&=\MathBlank[1.20in]{}.
+ R_a&=\MathBlank[1.20in]{58.02794},\\
+ \mathcal P&=\MathBlank[1.20in]{57.02794},\\
+ R_a-\mathcal P&=\MathBlank[1.20in]{1=s_1}.
 \end{align*}
 \begin{checkpoint}[Why were speeds supplied?]
 Speeds do not enter these steady-state flux balances. Using
@@ -121,7 +123,7 @@ $\mathrm{cm/s}$, then compare $n_2/n_1$ with $\phi_2/\phi_1$.
 \[
  \frac{n_2}{n_1}\approx
  \frac{\phi_2}{\phi_1}\frac{v_1}{v_2}
- =\MathBlank[1.00in]{}.
+ =\MathBlank[1.00in]{64.8936}.
 \]
 \RuledLines{2}
 \end{checkpoint}
@@ -146,10 +148,10 @@ Divide the first equation by $\phi_1>0$:
 \]
 \[
  \boxed{k_{\infty}=\frac{f_1+f_2d/\Sigma_{a,2}}{\Sigma_{r,1}}}
- =\MathBlank[1.00in]{}.
+ =\MathBlank[1.00in]{0.98276692}.
 \]
 The unmodified, source-free system is therefore
-\RevealBlank[1.15in]{}.
+\RevealBlank[1.15in]{subcritical}.
 \end{boardbox}
 The $1/k_{\infty}$ factor is mathematical normalization of
 production, not a physical source or a time-growth rate.
@@ -199,11 +201,11 @@ An eigenvector has arbitrary magnitude. One convenient convention is
 \begin{boardbox}{Report the eigen-spectrum}
 \[
  \widehat\phi_1=\frac{1}{1+R}
-   =\MathBlank[0.95in]{},
+   =\MathBlank[0.95in]{0.435185},
 \]
 \[
  \widehat\phi_2=\frac{R}{1+R}
-   =\MathBlank[0.95in]{}.
+   =\MathBlank[0.95in]{0.564815}.
 \]
 These are dimensionless fractions of total flux, not neutron
 number fractions. What additional information would set a
@@ -232,7 +234,7 @@ same loss and scattering coefficients, the group-1 flux is
 $\phi_1^{(0)}=s_1/\Sigma_{r,1}$. Hence
 \[
  \frac{\phi_1}{\phi_1^{(0)}}=\frac1{1-k_{\infty}}
- =\MathBlank[1.05in]{}.
+ =\MathBlank[1.05in]{58.02794}.
 \]
 \begin{checkpoint}[Approach criticality from below]
 At fixed $s_1>0$, what happens as $k_{\infty}\to1^{-}$?

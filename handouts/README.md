@@ -31,58 +31,24 @@ Color identifies a box's instructional role, not its subject:
 - **Purple** marks supplied reference material, vocabulary, and course hierarchy.
 - **Gray** marks space students construct during lecture.
 - **Orange** marks a formative checkpoint or decision.
-- **Teal** marks synthesis, a key result, or an instructor-only reveal.
+- **Teal** marks synthesis, a key result, or a solution-only reveal.
 
-Titles provide the same distinctions for grayscale printing. In the student
-version, graph curves and annotations are suppressed so plotted figures begin
-as labeled blank axes; the instructor version overlays the completed curves.
+Titles provide the same distinctions for grayscale printing. With
+`\handoutsolutionsfalse`, graph curves and annotations are suppressed so plotted
+figures begin as labeled blank axes; switching the wrapper to
+`\handoutsolutionstrue` overlays the completed curves and reveals selected
+results.
 
 ## Files
 
 - `ne630boardhandout.cls` -- reusable document class.
 - `handout_template.tex` -- blank two-page starting point with comments.
-- `lesson_01_handout_body.tex` -- all Lesson 1 content.
-- `lesson_01_handout.tex` -- student wrapper.
-- `lesson_01_handout_instructor.tex` -- instructor wrapper; reveals selected source-derived board results. Instructor cues are retained as comments in the shared body source.
-- `lesson_02_handout_body.tex` -- shared Lesson 2 content.
-- `lesson_02_handout.tex` -- Lesson 2 student wrapper, including blank-axis graphs.
-- `lesson_02_handout_instructor.tex` -- Lesson 2 instructor wrapper with completed graphs and selected results.
-- `lesson_03_handout_body.tex` -- shared Lesson 3 radioactive-decay content.
-- `lesson_03_handout.tex` -- Lesson 3 student wrapper.
-- `lesson_03_handout_instructor.tex` -- Lesson 3 instructor wrapper with selected results revealed.
-- `lesson_04_handout_body.tex` -- shared Lesson 4 neutron-attenuation content.
-- `lesson_04_handout.tex` -- Lesson 4 student wrapper.
-- `lesson_04_handout_instructor.tex` -- Lesson 4 instructor wrapper with selected results revealed.
-- `lesson_05_handout_body.tex` -- shared Lesson 5 cross-section-data and reaction-probability content.
-- `lesson_05_handout.tex` -- Lesson 5 student wrapper, with a spectrum reference and reaction-probability workspaces.
-- `lesson_05_handout_instructor.tex` -- Lesson 5 instructor wrapper with selected interpretations and results revealed.
-- `lesson_06_handout_body.tex` -- shared Lesson 6 cross-section-shape and resonance content.
-- `lesson_06_handout.tex` -- Lesson 6 student wrapper, including the cross-section figures from the slide deck.
-- `lesson_07_handout_body.tex` -- shared two-page Lesson 7 scattering-kinematics content.
-- `lesson_07_handout.tex` -- Lesson 7 student wrapper with worked results left as reveal blanks.
-- `lesson_07_handout_instructor.tex` -- Lesson 7 instructor wrapper with selected example results revealed.
-- `lesson_08_handout_body.tex` -- shared two-page Lesson 8 fuels, moderators, and reactor-spectra content.
-- `lesson_08_handout.tex` -- Lesson 8 student wrapper with arithmetic results left as reveal blanks.
-- `lesson_08_handout_instructor.tex` -- Lesson 8 instructor wrapper with the arithmetic results revealed.
-- `lesson_09_handout_body.tex` -- shared two-page Lesson 9 fast- and epithermal-spectrum content.
-- `lesson_09_handout.tex` -- Lesson 9 student wrapper with integration limits left as reveal blanks.
-- `lesson_09_handout_instructor.tex` -- Lesson 9 instructor wrapper with the integration limits revealed.
-- `lesson_10_handout_body.tex` -- shared two-page Lesson 10 resonance-absorption content.
-- `lesson_10_handout.tex` -- Lesson 10 student wrapper with derivation and arithmetic results left as reveal blanks.
-- `lesson_10_handout_instructor.tex` -- Lesson 10 instructor wrapper with the selected results revealed.
-- `lesson_12_handout_body.tex` -- shared two-page Lesson 12 effective-cross-section and infinite-medium multiplication content.
-- `lesson_12_handout.tex` -- Lesson 12 student wrapper with derivation and arithmetic results left as reveal blanks.
-- `lesson_12_handout_instructor.tex` -- Lesson 12 instructor wrapper with selected results revealed.
-- `lesson_13_handout_body.tex` -- shared two-page Lesson 13 multigroup-method content.
-- `lesson_13_handout.tex` -- Lesson 13 student wrapper with balance and scattering-transfer results left as reveal blanks.
-- `lesson_13_handout_instructor.tex` -- Lesson 13 instructor wrapper with selected results revealed.
-- `lesson_14_handout_body.tex` -- shared two-page Lesson 14 k-eigenvalue content.
-- `lesson_14_handout.tex` -- Lesson 14 student wrapper with fixed-source and eigenvalue results left as reveal blanks.
-- `lesson_14_handout_instructor.tex` -- Lesson 14 instructor wrapper with selected results revealed.
+- `lesson_XX_handout.tex` -- lesson wrapper with `\handoutsolutionsfalse` for the public handout.
+- `lesson_XX_handout_body.tex` -- lesson body with blanks and solution payloads.
 - `figures/` -- supporting figures used by Lessons 6, 7, and 10, including the
   OpenMC notebook that generates the U-238 threshold plot.
 - `spectra.pdf` -- supporting spectrum figure used by Lesson 5.
-- `Makefile` -- builds the available student and instructor PDFs with `latexmk`.
+- `Makefile` -- builds the public non-solution PDFs with `latexmk`.
 
 ## Build
 
@@ -90,15 +56,14 @@ as labeled blank axes; the instructor version overlays the completed curves.
 make
 ```
 
-Build only one student handout with its uppercase lesson target:
+Build only one handout with its uppercase lesson target:
 
 ```bash
 make L07
 ```
 
-The lowercase legacy targets (for example, `make lesson05`) build both the
-student and instructor versions when both wrappers exist. You can also compile
-a single version directly:
+The lowercase lesson targets are aliases for the public PDF targets. You can
+also compile a single version directly:
 
 ```bash
 latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_02_handout.tex
@@ -119,7 +84,8 @@ make clean
 ## Core interface
 
 ```tex
-\documentclass[student]{ne630boardhandout} % or instructor
+\documentclass{ne630boardhandout}
+\handoutsolutionsfalse % change to \handoutsolutionstrue for a private solution copy
 \HandoutSetup{NE 630}{01}{Lesson title}{FNRP Sections X.X--X.X}
 
 \begin{document}
@@ -139,9 +105,9 @@ Useful components are:
 \begin{checkpoint}[Prompt title] ... \end{checkpoint}
 \begin{takeawaybox}[Synthesis] ... \end{takeawaybox}
 \Blank[1.0in]
-\RevealBlank[1.0in]{instructor-only result}
+\RevealBlank[1.0in]{solution-only result}
 \RuledLines{3}
-\InstructorCue{Instructor-only note.}
+\SolutionCue{Solution-only note.}
 ```
 
 ## Recommended authoring rule

@@ -1,3 +1,5 @@
+% Keep this lesson within the framework's two-page limit while leaving room
+% for the reaction-rate bookkeeping developed during class.
 \tcbset{handout base/.append style={before skip=3pt,after skip=3pt}}
 
 \HandoutSetup
@@ -59,8 +61,8 @@ $\sigma_t$ & total: sum over all exclusive channels \\
 \end{fixedbox}
 
 \begin{checkpoint}[Beam loss versus system loss]
-Elastic scattering removes a neutron from the original beam: \RevealBlank[0.48in]{}.
-It destroys that neutron: \RevealBlank[0.48in]{}.  Which listed reactions can
+Elastic scattering removes a neutron from the original beam: \RevealBlank[0.48in]{yes}.
+It destroys that neutron: \RevealBlank[0.48in]{no}.  Which listed reactions can
 increase the neutron population?
 \RuledLines{1}
 \end{checkpoint}
@@ -93,9 +95,9 @@ $2\unit{MeV}$.
 \end{fixedbox}
 
 \begin{checkpoint}[Do not confuse the two functions]
-A spectrum $\phi(E)$ describes \RevealBlank[1.25in]{} at
+A spectrum $\phi(E)$ describes \RevealBlank[1.25in]{neutrons available} at
 energy $E$; a cross section $\sigma_x^i(E)$ describes
-\RevealBlank[1.45in]{} for nuclide $i$ and channel $x$.
+\RevealBlank[1.45in]{interaction propensity} for nuclide $i$ and channel $x$.
 \end{checkpoint}
 
 \HandoutSection{3}{From evaluated data to a rate}
@@ -154,11 +156,11 @@ The useful partial sums are
  \frac{R_t^i}{R_t}
    &: \text{target is }i\text{, given an interaction},\\[2pt]
  \frac{R_x^i}{R_t^i}
-   &: \text{reaction is }\RevealBlank[0.36in]{}\text{, given target }i,\\[2pt]
+   &: \text{reaction is }\RevealBlank[0.36in]{$x$}\text{, given target }i,\\[2pt]
  \frac{R_x^i}{R_x}
-   &: \text{target is }\RevealBlank[0.36in]{}\text{, given reaction }x,\\[2pt]
+   &: \text{target is }\RevealBlank[0.36in]{$i$}\text{, given reaction }x,\\[2pt]
  \frac{R_f}{R_a}
-   &: \text{an absorption produces }\RevealBlank[0.58in]{}.
+   &: \text{an absorption produces }\RevealBlank[0.58in]{fission}.
 \end{align*}
 The common flux cancels from these ratios. For a homogeneous mixture at a
 fixed $E$,
@@ -184,7 +186,8 @@ rate-weighted mean neutrons born per fission.
 Over a uniform path of length $L$, combine Lesson 4 with the rate ratio:
 \[
  P(\text{first interaction is }x\text{ by }L)
- =\MathBlank[1.75in]{}.
+ =\MathBlank[1.75in]{\frac{\Sigma_x}{\Sigma_t}
+   \left(1-e^{-\Sigma_tL}\right)}.
 \]
 \end{checkpoint}
 
@@ -217,12 +220,12 @@ strengths:
 \footnotesize
 \begin{align*}
  \frac{R_e}{n_0\phi_0}
-   &=2(20)+1(4)+1(15)=\MathBlank[0.56in]{}\unit{b},\\
+   &=2(20)+1(4)+1(15)=\MathBlank[0.56in]{59}\unit{b},\\
  \frac{R_a}{n_0\phi_0}
-   &=2(0.1)+1(100+500)=\MathBlank[0.66in]{}\unit{b},\\
+   &=2(0.1)+1(100+500)=\MathBlank[0.66in]{600.2}\unit{b},\\
  \frac{R_t}{n_0\phi_0}
-   &=\MathBlank[0.54in]{}+\MathBlank[0.66in]{}
-     =\MathBlank[0.66in]{}\unit{b}.
+   &=\MathBlank[0.54in]{59}+\MathBlank[0.66in]{600.2}
+     =\MathBlank[0.66in]{659.2}\unit{b}.
 \end{align*}
 \normalsize
 \end{boardbox}
@@ -231,20 +234,20 @@ strengths:
 \footnotesize
 \begin{align*}
  P(e\mid\mathrm{int})
-   &=\frac{59}{659.2}=\MathBlank[0.60in]{}\approx\RevealBlank[0.44in]{},\\
+   &=\frac{59}{659.2}=\MathBlank[0.60in]{0.0895}\approx\RevealBlank[0.44in]{0.09},\\
  P(\mathrm{H\ elastic}\mid\mathrm{int})
-   &=\frac{2(20)}{659.2}=\MathBlank[0.60in]{}\approx\RevealBlank[0.44in]{},\\
+   &=\frac{2(20)}{659.2}=\MathBlank[0.60in]{0.0607}\approx\RevealBlank[0.44in]{0.06},\\
  P(\mathrm{U\ absorption}\mid\mathrm{int})
-   &=\frac{100+500}{659.2}=\MathBlank[0.60in]{}\approx\RevealBlank[0.44in]{},\\
+   &=\frac{100+500}{659.2}=\MathBlank[0.60in]{0.910}\approx\RevealBlank[0.44in]{0.91},\\
  P(f\mid\mathrm{absorbed})
-   &=\frac{500}{600.2}=\MathBlank[0.60in]{}\approx\RevealBlank[0.44in]{}.
+   &=\frac{500}{600.2}=\MathBlank[0.60in]{0.833}\approx\RevealBlank[0.44in]{0.83}.
 \end{align*}
 \normalsize
 \end{checkpoint}
 
 \begin{takeawaybox}[The reusable recipe]
 At a fixed energy: read $\sigma_x^i(E)$, weight by each
-\RevealBlank[1.08in]{}, form reaction rates, then normalize
+\RevealBlank[1.08in]{number density $n_i$}, form reaction rates, then normalize
 the desired partial rate by the rate named in the condition.
 \end{takeawaybox}
 

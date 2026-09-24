@@ -37,7 +37,7 @@ binding energies,
 \begin{tikzpicture}[x=0.0305\linewidth,y=0.23cm,>=Latex]
   \draw[->,KSUGray] (0,0) -- (29,0) node[right,black] {$A$};
   \draw[->,KSUGray] (0,0) -- (0,9.8) node[above,black] {$B/A$};
-  \InstructorFigureContent{%
+  \SolutionFigureContent{%
   \draw[thick,KSUPurple]
     plot[smooth] coordinates {(0.5,0.2) (1.2,2.0) (2.2,5.2) (3.6,7.0)
       (6.0,8.0) (10.0,8.55) (15.0,8.79) (20.0,8.45) (28.0,7.6)};
@@ -56,7 +56,7 @@ maximum near the middle of the chart?
 \RuledLines{2}
 \end{boardbox}
 
-% Instructor cue: fusion and fission both move products toward larger B/A;
+% Solution cue: fusion and fission both move products toward larger B/A;
 % the broad maximum reflects the competition of short-range nuclear binding
 % with Coulomb repulsion and surface effects.
 
@@ -68,10 +68,10 @@ maximum near the middle of the chart?
  &\longrightarrow{}^{3}_{1}\mathrm H+{}^{1}_{1}\mathrm H+4.02\unit{MeV}.
 \end{align*}
 The energy is favorable; bringing two positive nuclei close enough to react
-is the engineering challenge.  
-For D--T fusion, estimate the Coulomb energy 
-$V_C=(4\pi\epsilon_0)^{-1}e^2/r$ at $r\approx 4\unit{fm}$ and convert it to an 
-equivalent temperature $T=V_C/k_B$; what does the 
+is the engineering challenge.
+For D--T fusion, estimate the Coulomb energy
+$V_C=(4\pi\epsilon_0)^{-1}e^2/r$ at $r\approx 4\unit{fm}$ and convert it to an
+equivalent temperature $T=V_C/k_B$; what does the
 resulting $\approx 0.36\unit{MeV}$ ($\approx 4\times10^9\unit{K}$) tell you about the need for quantum tunneling?
 \end{fixedbox}
 
@@ -172,7 +172,7 @@ of the initiating neutron absorption.
 \begin{tikzpicture}[x=0.032\linewidth,y=0.032\linewidth,>=Latex]
   \draw[->,KSUGray] (0,0)--(12,0) node[right,black] {$Z$};
   \draw[->,KSUGray] (0,0)--(0,15) node[above,black] {$N$};
-  \InstructorFigureContent{%
+  \SolutionFigureContent{%
   \draw[thick,KSUPurple] plot[smooth] coordinates {(0.4,0.5)(3,3.1)(6,7.0)(9,11.2)(11,14.2)};
   \node[rotate=49,KSUPurple] at (7.6,9.4) {stability};
   \fill[KSUOrange] (5.0,8.1) circle (1.7pt);
@@ -187,7 +187,7 @@ of the initiating neutron absorption.
 \begin{tikzpicture}[x=0.031\linewidth,y=0.034\linewidth]
   \draw[->,KSUGray] (0,0)--(25,0) node[right,black] {$A$};
   \draw[->,KSUGray] (0,0)--(0,15) node[above,black,rotate=90] {yield};
-  \InstructorFigureContent{%
+  \SolutionFigureContent{%
   \draw[thick,KSUPurple] plot[smooth] coordinates {(1,0.3)(2.5,2)(4,8.4)(5.2,9.2)(6.3,5.4)(7.2,2.4)(8,4.0)(9.2,8.8)(10.4,9.6)(11.7,2.0)(12.4,0.4)};
   }
 \end{tikzpicture}
@@ -199,7 +199,7 @@ How do they move toward stability?
 \RuledLines{2}
 \end{boardbox}
 
-% Instructor cue: the fragments lie on the neutron-rich side of the stability
+% Solution cue: the fragments lie on the neutron-rich side of the stability
 % line and move toward stability mainly through beta-minus decay, accompanied
 % by delayed gamma emission and, for a small subset, delayed neutrons.
 
@@ -215,7 +215,7 @@ Which contribution is effectively lost for heat production?
 
 \begin{boardbox}{Reading completion: fuel vocabulary}
 \scriptsize
-\ifhandoutinstructor
+\ifhandoutsolutions
 \textbf{Fissionable:} can undergo neutron-induced fission at some neutron
 energy. Examples: ${}^{235}$U, ${}^{238}$U, ${}^{239}$Pu.\\[2pt]
 \textbf{Fissile:} fissions with low-energy neutrons and can support a chain
@@ -287,7 +287,7 @@ Why can atomic masses be used directly for the complete $\beta^-$ chain?
 \RuledLines{1}
 \end{boardbox}
 
-% Instructor cue: for beta-minus decay, the electron bookkeeping is already
+% Solution cue: for beta-minus decay, the electron bookkeeping is already
 % embodied in neutral-atom masses; neutrino masses are neglected here.
 
 \begin{takeawaybox}[Fission-energy scale]
@@ -368,7 +368,7 @@ itself the reactor multiplication factor?
 \RuledLines{1}
 \end{boardbox}
 
-% Instructor cue: k counts the neutrons that actually populate the next
+% Solution cue: k counts the neutrons that actually populate the next
 % generation, after leakage and non-fission absorption; it is therefore not
 % the same quantity as the average number emitted in one fission.
 

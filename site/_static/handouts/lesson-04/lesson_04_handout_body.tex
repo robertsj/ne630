@@ -1,3 +1,5 @@
+% Keep this content-dense lesson within the framework's two-page limit without
+% changing the global layout used by the other handouts.
 \tcbset{handout base/.append style={before skip=3pt,after skip=3pt}}
 
 \HandoutSetup
@@ -42,9 +44,9 @@ For a one-direction beam,
 A neutron scatters without being absorbed. Does it still contribute to
 (a) the original beam and (b) the total neutron population?
 \[
- (a)\ \RevealBlank[0.54in]{}
+ (a)\ \RevealBlank[0.54in]{no}
  \qquad
- (b)\ \RevealBlank[0.54in]{}
+ (b)\ \RevealBlank[0.54in]{yes}
 \]
 \end{checkpoint}
 
@@ -63,16 +65,16 @@ $N$), not neutron density. Keep the species label in the units.
 \footnotesize
 \textbf{Al:} $\rho=2.70\unit{g/cm^3}$, $M=26.98\unit{g/mol}$,
 \[
- n_{\mathrm{Al}}=\MathBlank[1.30in]{}
+ n_{\mathrm{Al}}=\MathBlank[1.30in]{6.03\times10^{22}}
  \unit{Al\ atoms/cm^3}.
 \]
 \textbf{Water:} $\rho=1.00\unit{g/cm^3}$, $M=18.015\unit{g/mol}$,
 \[
  \begin{aligned}
- n_{\mathrm{H_2O}}&=\MathBlank[1.22in]{}
+ n_{\mathrm{H_2O}}&=\MathBlank[1.22in]{3.34\times10^{22}}
    \unit{molecules/cm^3},\\
  n_{\mathrm H}&=2n_{\mathrm{H_2O}}
-   =\MathBlank[1.02in]{}
+   =\MathBlank[1.02in]{6.69\times10^{22}}
    \unit{H\ atoms/cm^3}.
  \end{aligned}
 \]
@@ -81,6 +83,8 @@ Why is stoichiometry applied after counting molecules?
 \normalsize
 \end{boardbox}
 
+% Solution cue: require a complete species-labeled unit chain for the first
+% calculation; for water, count molecules before applying stoichiometry.
 
 \switchcolumn
 
@@ -96,9 +100,9 @@ nucleus. The slice contains
 Complete the blocked-area fraction:
 \[
  \frac{N_{\mathrm{slice}}\sigma}{A}
- =\MathBlank[1.00in]{}
+ =\MathBlank[1.00in]{n\sigma\,\Delta x}
  \equiv\Sigma\,\Delta x,
- \qquad \boxed{\Sigma=\MathBlank[0.72in]{}}.
+ \qquad \boxed{\Sigma=\MathBlank[0.72in]{n\sigma}}.
 \]
 For a thin slice, the balance on uncollided intensity is
 \[
@@ -106,9 +110,9 @@ For a thin slice, the balance on uncollided intensity is
 \]
 Subtract $I(x)$, divide by $\Delta x$, and take $\Delta x\to0$:
 \[
- \boxed{\frac{dI}{dx}=\MathBlank[0.88in]{}}
+ \boxed{\frac{dI}{dx}=\MathBlank[0.88in]{-\Sigma I(x)}}
  \quad\Longrightarrow\quad
- \boxed{I(x)=\MathBlank[1.12in]{}}.
+ \boxed{I(x)=\MathBlank[1.12in]{I_0e^{-\Sigma x}}}.
 \]
 \end{boardbox}
 
@@ -129,7 +133,7 @@ $\Sigma x$ & dimensionless path length through the material & 1\\
 $1\unit{b}=10^{-24}\unit{cm^2}$. For attenuation,
 $\sigma=\sigma_t=\sigma_s+\sigma_a$ and $\Sigma=\Sigma_t$: any collision
 counts. At fixed nuclide and neutron energy, changing density changes
-\RevealBlank[0.62in]{}, not \RevealBlank[0.62in]{}.
+\RevealBlank[0.62in]{$\Sigma$}, not \RevealBlank[0.62in]{$\sigma$}.
 \normalsize
 \end{fixedbox}
 
@@ -152,11 +156,11 @@ A thermal-neutron beam crosses $0.050\unit{cm}$ of aluminum and emerges with
 $I/I_0=0.9949$. Using $n_{\mathrm{Al}}$ from Section 2,
 \[
  \Sigma=-\frac{\ln(I/I_0)}{x}
- =\MathBlank[0.82in]{},
+ =\MathBlank[0.82in]{0.102\unit{cm^{-1}}},
 \]
 \[
  \sigma=\frac{\Sigma}{n_{\mathrm{Al}}}
- =\MathBlank[0.82in]{}.
+ =\MathBlank[0.82in]{1.70\unit{b}}.
 \]
 Why is the measured loss fraction not itself a cross section?
 \RuledLines{1}
@@ -195,13 +199,13 @@ Lesson 3 decay constant.
 \begin{checkpoint}[One mean free path]
 At $x=\ell$, the fraction still uncollided is
 \[
- P(X>\ell)=\MathBlank[0.70in]{}=
- \RevealBlank[0.70in]{},
+ P(X>\ell)=\MathBlank[0.70in]{e^{-1}}=
+ \RevealBlank[0.70in]{0.368},
 \]
 and the fraction having collided is
 \[
- P(X\le\ell)=\MathBlank[0.84in]{}=
- \RevealBlank[0.70in]{}.
+ P(X\le\ell)=\MathBlank[0.84in]{1-e^{-1}}=
+ \RevealBlank[0.70in]{0.632}.
 \]
 Is $\ell$ the distance by which one-half survive? Explain.
 \RuledLines{1}
@@ -209,8 +213,8 @@ Is $\ell$ the distance by which one-half survive? Explain.
 
 \begin{checkpoint}[Probability-density checks]
 \[
- \int_0^\infty p_X(x)\,dx=\MathBlank[0.48in]{},
- \qquad [p_X]=\MathBlank[0.72in]{}.
+ \int_0^\infty p_X(x)\,dx=\MathBlank[0.48in]{1},
+ \qquad [p_X]=\MathBlank[0.72in]{\unit{cm^{-1}}}.
 \]
 Why does $p_X$ carry units while $P(X>x)$ does not?
 \RuledLines{1}
@@ -235,9 +239,9 @@ removes neutrons from their uncollided first flight.
 For $r_2=2r_1$ in the same medium,
 \[
  \frac{\phi_u(2r_1)}{\phi_u(r_1)}
- =\MathBlank[1.18in]{}.
+ =\MathBlank[1.18in]{\frac14e^{-\Sigma r_1}}.
 \]
-In vacuum this becomes \RevealBlank[0.48in]{}. Which attenuation remains,
+In vacuum this becomes \RevealBlank[0.48in]{$1/4$}. Which attenuation remains,
 and why does a parallel beam not have this factor?
 \RuledLines{1}
 \normalsize
@@ -268,16 +272,16 @@ For isotope mass fractions $w_i=m_i/(\sum_jm_j)$,
 Use cross sections at the same neutron energy and for the same reaction
 category (total here). Atom and mass fractions enter through $n_i$; volume
 fractions instead weight the constituents' macroscopic cross sections.
-For water, $n_{\mathrm H}:n_{\mathrm O}=\MathBlank[0.45in]{}$ and
+For water, $n_{\mathrm H}:n_{\mathrm O}=\MathBlank[0.45in]{2:1}$ and
 $\Sigma_{\mathrm{H_2O}}=n_{\mathrm{H_2O}}
-\MathBlank[1.25in]{}$.
+\MathBlank[1.25in]{(2\sigma_{\mathrm H}+\sigma_{\mathrm O})}$.
 \normalsize
 \end{fixedbox}
 
 \begin{checkpoint}[Composition logic]
 If the water density decreases while its molecular composition stays fixed,
 which of $n_i$, $\sigma_i$, and $\Sigma$ change?
-\RevealBlank[3.00in]{}
+\RevealBlank[3.00in]{$n_i$ and $\Sigma$ decrease; $\sigma_i$ is unchanged.}
 \end{checkpoint}
 
 \HandoutSection{7}{Translate uranium enrichment}
@@ -304,19 +308,22 @@ Choose a $100\unit{g}$ uranium basis and neglect ${}^{234}$U:
 \toprule
 isotope & mass & amount ($\unit{mol}$)\\
 \midrule
-${}^{235}$U & $4.00\unit{g}$ & \RevealBlank[0.72in]{}\\
-${}^{238}$U & $96.00\unit{g}$ & \RevealBlank[0.72in]{}\\
+${}^{235}$U & $4.00\unit{g}$ & \RevealBlank[0.72in]{0.0170}\\
+${}^{238}$U & $96.00\unit{g}$ & \RevealBlank[0.72in]{0.403}\\
 \bottomrule
 \end{tabularx}
 \normalsize
 \[
- e_a=\MathBlank[0.90in]{}
- =\RevealBlank[0.76in]{}.
+ e_a=\MathBlank[0.90in]{0.0405}
+ =\RevealBlank[0.76in]{4.05 atom\%}.
 \]
 Why is the atom percent slightly larger than the mass percent?
-\RevealBlank[3.00in]{}
+\RevealBlank[3.00in]{The lighter isotope supplies more atoms per gram.}
 \end{boardbox}
 
+% Solution cue: close by asking students to say, in words, why sigma is a
+% property of a nuclide/reaction/energy while Sigma is a property of a material,
+% and why e^{-Sigma x} and 1/(4 pi r^2) represent different mechanisms.
 
 \end{handoutcolumns}
 \end{document}

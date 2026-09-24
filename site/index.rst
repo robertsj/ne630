@@ -74,9 +74,9 @@ available for that lesson.
 Handout source and support files
 --------------------------------
 
-The TeX links in the table point to each student wrapper. Download the complete
-source bundle for a ready-to-build copy, or pair a wrapper with its public body
-file and the shared class.
+The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
+Download the complete source bundle for a ready-to-build copy, or pair a wrapper
+with its body file and the shared class.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|
   `body <_static/handouts/lesson-01/lesson_01_handout_body.tex>`__
@@ -114,7 +114,8 @@ bundle with:
 
    latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_01_handout.tex
 
-The public body files are student-safe exports. Instructor reveal values and
-instructor-only figure content are deliberately omitted.
+The public wrappers compile the non-solution PDFs as distributed. To make a
+private solution copy, change ``\handoutsolutionsfalse`` to
+``\handoutsolutionstrue`` before compiling.
 
 .. |middot| unicode:: U+00B7

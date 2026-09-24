@@ -58,14 +58,11 @@ cmp notebooks/lesson_11.ipynb site/_static/notebooks/lesson_11.ipynb
 cmp notebooks/lesson_12.ipynb site/_static/notebooks/lesson_12.ipynb
 ```
 
-Do not edit those generated files directly. The exporter copies each student
-PDF, creates a complete source bundle, and removes instructor-only reveal
-values, figures, conditionals, and cue comments from the public TeX body. It
-never publishes instructor wrappers or instructor PDFs. The build stops if a
-required input is missing, if a lesson's audited redaction counts change, or if
-the generated source still contains a known instructor-only construct. Public
-body exports contain no TeX comments, so an accidental answer or teaching note
-cannot leak through a comment line.
+Do not edit those generated files directly. The exporter copies each public
+PDF and creates a complete source bundle from the canonical wrapper, body, and
+class. The exported wrapper must set `\handoutsolutionsfalse`, so the published
+source reproduces the non-solution PDF. A private solution copy can be made by
+changing that single line to `\handoutsolutionstrue` before compiling.
 
 To verify that committed exports match their canonical inputs without changing
 anything, run:
@@ -75,10 +72,10 @@ make check-handouts
 ```
 
 The public TeX requires XeLaTeX or LuaLaTeX. Each lesson bundle contains the
-student wrapper, sanitized body, shared `ne630boardhandout.cls`, any supporting
-figures or reproducibility notebooks referenced by that lesson, and brief build
-instructions. No
-repository-local `.sty` file is currently required.
+wrapper with solutions disabled, the body source, shared `ne630boardhandout.cls`,
+any supporting figures or reproducibility notebooks referenced by that lesson,
+and brief build instructions. No repository-local `.sty` file is currently
+required.
 
 Deployment to a `gh-pages` branch is intentionally separate from the local
 build. Review `_build/html/` and the Git diff before creating or updating that

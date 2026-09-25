@@ -75,6 +75,30 @@ class PipelineUnitTests(unittest.TestCase):
             "dbc3dcb0204c2d601c0bf3a766908134bcb37b41476923586dfa006f918a11b4",
         )
 
+    def test_identity_derivative_gate_distinguishes_visible_and_removed_data(
+        self,
+    ) -> None:
+        self.assertFalse(
+            pipeline.identity_scan_requires_derivative(
+                ["IDENTITY_SCAN_TEXT_UNAVAILABLE"]
+            )
+        )
+        self.assertFalse(
+            pipeline.identity_scan_requires_derivative(
+                ["IDENTITY_FILENAME_TOKEN_BINARY_ONLY_PRESENT"]
+            )
+        )
+        self.assertTrue(
+            pipeline.identity_scan_requires_derivative(
+                ["IDENTITY_FILENAME_TOKEN_VISIBLE_TEXT_PRESENT"]
+            )
+        )
+        self.assertTrue(
+            pipeline.identity_scan_requires_derivative(
+                ["IDENTITY_DISPLAY_NAME_PRESENT"]
+            )
+        )
+
     def test_canvas_name_parsing(self) -> None:
         ordinary = pipeline.parse_export_name(
             "invented_login_900001_45000001_solution_part_1.pdf"
@@ -1885,7 +1909,8 @@ class SyntheticEndToEndTest(unittest.TestCase):
             private_tmp=self.root / "private-pdf-test",
         )
         self.assertEqual(status, "FAIL")
-        self.assertIn("IDENTITY_DISPLAY_NAME_PRESENT", codes)
+        self.assertIn("IDENTITY_DISPLAY_NAME_BINARY_ONLY_PRESENT", codes)
+        self.assertFalse(pipeline.identity_scan_requires_derivative(codes))
 
 
 if __name__ == "__main__":

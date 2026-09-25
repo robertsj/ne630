@@ -82,7 +82,11 @@ eight assignment/package slots exist. It then writes the locked selection and
 an eight-item clearance request and returns a successful `status: BLOCKED`
 checkpoint without writing packets. Automated denylist checks can
 disprove blinding but cannot prove that an unknown visible or handwritten name
-is absent.
+is absent. A known identity match in extracted page text requires a sanitized
+derivative. A match found only in metadata/raw bytes is normalized into the
+canonical image-only candidate but is not assumed nonvisual; it remains subject
+to the same page-by-page visual clearance. Unavailable text extraction likewise
+routes to visual review rather than being treated as proof of identity.
 
 `stage-calibration-review-set` converts the eight sources to immutable inert
 review PDFs. Pass repeated `--sanitized-derivative RECORD_ID=PDF` arguments to

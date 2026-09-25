@@ -70,6 +70,10 @@ route guesses.
 
 Automated PDF scans are denylist checks: they may report `FAIL` or
 `NEEDS_HUMAN_TRIAGE`, but they cannot by themselves establish visual blinding.
+Identity matches in extracted page text require a sanitized derivative.
+Metadata/raw-byte-only matches are normalized into the canonical image-only
+candidate but are not assumed nonvisual; they and unextractable page images
+remain for human visual clearance.
 `prepare-calibration` therefore emits a clearance request for all eight locked
 sources. `stage-calibration-review-set` sandbox-renders the chosen source or
 derivative and rebuilds canonical image-only PDFs. An adopted

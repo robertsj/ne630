@@ -42,7 +42,7 @@ import jsonschema
 import yaml
 
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 SCHEMA_VERSION = "1.0.0"
 ASSIGNMENTS = ("HW01", "HW02", "HW03", "HW04")
 STAGES = (
@@ -95,9 +95,10 @@ MAX_RASTER_DIMENSION_PIXELS = 3300
 MAX_RASTER_PAGE_BYTES = 32 * 1024 * 1024
 MAX_RASTER_TOTAL_BYTES = 200 * 1024 * 1024
 INERT_RASTER_PROFILE = "POPPLER_JPEG_IMAGE_ONLY_V1"
+PDF_PAGE_TEXT_SEPARATOR = b"\x00NE630_PAGE_TEXT\x00"
 PRIVATE_DIRECTORY_MODE = 0o700
 PRIVATE_FILE_MODE = 0o600
-MINIMUM_SELF_TEST_CASES = 58
+MINIMUM_SELF_TEST_CASES = 59
 CLEARANCE_ATTESTATION = (
     "I personally inspected every page of each PDF in the identified review "
     "set and confirm that no visible student identity remains."
@@ -298,6 +299,19 @@ def identity_token_present(haystack: str, token: str) -> bool:
             )
         )
     return folded in haystack
+
+
+def identity_scan_requires_derivative(codes: Sequence[str]) -> bool:
+    """Return whether a source finding requires a derivative before review."""
+    for code in codes:
+        if not code.startswith("IDENTITY_"):
+            continue
+        if code == "IDENTITY_SCAN_TEXT_UNAVAILABLE":
+            continue
+        if code.endswith("_BINARY_ONLY_PRESENT"):
+            continue
+        return True
+    return False
 
 
 def safe_file_bytes(path: Path, maximum_bytes: int | None = None) -> bytes:
@@ -841,7 +855,7 @@ def inspect_pdf_bytes(
                 "text_extraction": text_status,
                 "tool_reason_code": None,
             },
-            metadata.stdout + b"\n" + extracted,
+            metadata.stdout + PDF_PAGE_TEXT_SEPARATOR + extracted,
         )
     finally:
         with contextlib.suppress(FileNotFoundError):
@@ -4393,10 +4407,19 @@ class ReviewPipeline:
                 self.config["processing"]["archive_limits"]["tool_timeout_seconds"]
             ),
         )
-        text_value = normalized_casefold(text.decode("utf-8", errors="replace"))
+        if PDF_PAGE_TEXT_SEPARATOR not in text:
+            raise ContractError("PDF parser output lacks the page-text boundary")
+        metadata_text, page_text = text.split(PDF_PAGE_TEXT_SEPARATOR, 1)
+        text_value = normalized_casefold(
+            page_text.decode("utf-8", errors="replace")
+        )
+        nonvisible_value = normalized_casefold(
+            metadata_text.decode("utf-8", errors="replace")
+        )
         binary_value = normalized_casefold(
             solution_pdf.decode("latin-1", errors="ignore")
         )
+        nonvisible_value += "\n" + binary_value
         matched_codes: set[str] = set()
         active_pdf_tokens = (
             "/openaction",
@@ -4416,34 +4439,42 @@ class ReviewPipeline:
         for entry in identities:
             for subject in entry["subjects"]:
                 display = subject.get("display_name")
-                if display and (
-                    identity_token_present(text_value, display)
-                    or identity_token_present(binary_value, display)
-                ):
-                    matched_codes.add("IDENTITY_DISPLAY_NAME_PRESENT")
+                if display and identity_token_present(text_value, display):
+                    matched_codes.add(
+                        "IDENTITY_DISPLAY_NAME_VISIBLE_TEXT_PRESENT"
+                    )
+                if display and identity_token_present(nonvisible_value, display):
+                    matched_codes.add(
+                        "IDENTITY_DISPLAY_NAME_BINARY_ONLY_PRESENT"
+                    )
                 user_id = subject.get("lms_user_id")
-                if user_id and (
-                    re.search(
-                        rf"(?<![0-9]){re.escape(user_id)}(?![0-9])", text_value
-                    )
-                    or re.search(
-                        rf"(?<![0-9]){re.escape(user_id)}(?![0-9])", binary_value
-                    )
+                if user_id and re.search(
+                    rf"(?<![0-9]){re.escape(user_id)}(?![0-9])", text_value
                 ):
-                    matched_codes.add("IDENTITY_LMS_ID_PRESENT")
+                    matched_codes.add("IDENTITY_LMS_ID_VISIBLE_TEXT_PRESENT")
+                if user_id and re.search(
+                    rf"(?<![0-9]){re.escape(user_id)}(?![0-9])", nonvisible_value
+                ):
+                    matched_codes.add("IDENTITY_LMS_ID_BINARY_ONLY_PRESENT")
             for source in entry["original_files"]:
                 basename = PurePosixPath(source["source_path"]).name
-                if len(basename) >= 6 and basename.casefold() in binary_value:
-                    matched_codes.add("IDENTITY_ORIGINAL_FILENAME_PRESENT")
+                if len(basename) >= 6 and basename.casefold() in nonvisible_value:
+                    matched_codes.add(
+                        "IDENTITY_ORIGINAL_FILENAME_BINARY_ONLY_PRESENT"
+                    )
                 original_tail = basename.split("_", 3)[-1]
                 for token in re.findall(r"[A-Za-z][A-Za-z0-9]{3,}", original_tail):
                     folded = token.casefold()
                     if folded in GENERIC_FILENAME_TOKENS:
                         continue
-                    if identity_token_present(
-                        text_value, folded
-                    ) or identity_token_present(binary_value, folded):
-                        matched_codes.add("IDENTITY_FILENAME_TOKEN_PRESENT")
+                    if identity_token_present(text_value, folded):
+                        matched_codes.add(
+                            "IDENTITY_FILENAME_TOKEN_VISIBLE_TEXT_PRESENT"
+                        )
+                    if identity_token_present(nonvisible_value, folded):
+                        matched_codes.add(
+                            "IDENTITY_FILENAME_TOKEN_BINARY_ONLY_PRESENT"
+                        )
         if matched_codes:
             return "FAIL", sorted(matched_codes)
         if (
@@ -4493,13 +4524,14 @@ class ReviewPipeline:
                 # blinding, even if a test double or future scanner emits it.
                 scan_status = "NEEDS_HUMAN_TRIAGE"
                 scan_codes = ["HUMAN_VISUAL_IDENTITY_CLEARANCE_REQUIRED"]
-            identity_failure = any(
-                code.startswith("IDENTITY_") for code in scan_codes
-            )
+            identity_failure = identity_scan_requires_derivative(scan_codes)
             if scan_status == "FAIL" and not identity_failure:
                 scan_status = "NEEDS_HUMAN_TRIAGE"
                 scan_codes = sorted(
-                    {*scan_codes, "ACTIVE_CONTENT_REMOVED_BY_RASTERIZATION"}
+                    {
+                        *scan_codes,
+                        "SOURCE_UNEXTRACTED_CONTENT_NORMALIZED_BY_RASTERIZATION",
+                    }
                 )
             items.append(
                 {
@@ -5093,9 +5125,7 @@ class ReviewPipeline:
                     identities=identity_map["entries"],
                     private_tmp=run_root / "tmp",
                 )
-                identity_failure = any(
-                    code.startswith("IDENTITY_") for code in scan_codes
-                )
+                identity_failure = identity_scan_requires_derivative(scan_codes)
                 if identity_failure:
                     raise ContractError(
                         "a sanitized derivative still contains a known identity"
@@ -5103,7 +5133,10 @@ class ReviewPipeline:
                 if scan_status == "FAIL":
                     scan_status = "NEEDS_HUMAN_TRIAGE"
                     scan_codes = sorted(
-                        {*scan_codes, "ACTIVE_CONTENT_REMOVED_BY_RASTERIZATION"}
+                        {
+                            *scan_codes,
+                            "SOURCE_UNEXTRACTED_CONTENT_NORMALIZED_BY_RASTERIZATION",
+                        }
                     )
                 disposition = "SANITIZED_DERIVATIVE_RASTER"
                 required_action = "VISUAL_CLEARANCE_ALLOWED"

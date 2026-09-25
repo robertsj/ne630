@@ -1,0 +1,160 @@
+% Assignment source: ne630/homework/html/HW09.html.
+% Legacy foundation: ne630_problems/lesson_09/statement.tex.
+
+\noindent{\bf Problem 1}. Verify Eqs.~(3.23) and (3.25):
+\[
+ \Sigma_s(E)\varphi(E)=\frac{C}{E}
+ \tag{FNRP 3.23}
+\]
+and
+\[
+ q=\left[1+\frac{\alpha}{1-\alpha}\ln\alpha\right]C.
+ \tag{FNRP 3.25}
+\]
+\textbf{Hint:} To verify Eq.~(3.23), substitute Eq.~(3.23) into Eq.~(3.22)
+and show that the left- and right-hand sides are equal.
+
+\begin{adaptedsolution}
+Substitute $\Sigma_s(E)\phi(E)=C/E$ into Eq.~(3.22):
+\begin{align*}
+ \Sigma_s(E)\phi(E)
+ &=\int_E^{E/\alpha}
+   \frac{1}{(1-\alpha)E'}\Sigma_s(E')\phi(E')\,dE'\\
+ &=\int_E^{E/\alpha}\frac{1}{(1-\alpha)E'}\frac{C}{E'}\,dE'\\
+ &=\frac{C}{1-\alpha}\int_E^{E/\alpha}\frac{dE'}{E'^2}\\
+ &=\frac{C}{1-\alpha}\left[-\frac{1}{E'}\right]_E^{E/\alpha}\\
+ &=\frac{C}{1-\alpha}\left(\frac{1}{E}-\frac{\alpha}{E}\right)
+  =\boxed{\frac{C}{E}}.
+\end{align*}
+For Eq.~(3.25),
+\begin{align*}
+ q
+ &=\int_E^{E/\alpha}
+   \left[\int_{\alpha E'}^E
+   \frac{1}{(1-\alpha)E'}\Sigma_s(E')\phi(E')\,dE''\right]dE'\\
+ &=\frac{C}{1-\alpha}\int_E^{E/\alpha}
+   \frac{E-\alpha E'}{E'^2}\,dE'\\
+ &=\frac{C}{1-\alpha}
+   \left(\int_E^{E/\alpha}\frac{E}{E'^2}\,dE'
+         -\int_E^{E/\alpha}\frac{\alpha}{E'}\,dE'\right)\\
+ &=\frac{C}{1-\alpha}\left(1-\alpha+\alpha\ln\alpha\right)\\
+ &=\boxed{\left[1+\frac{\alpha}{1-\alpha}\ln\alpha\right]C}.
+\end{align*}
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 2}. For thermal neutrons, calculate $\bar{\eta}$ as a
+function of uranium enrichment and plot your results for enrichments between
+0\% and 30\%. Use the uranium data from the following table:
+\[
+\begin{array}{lrrr}
+\toprule
+ & \nu & \sigma_f~(\mathrm{barns}) & \sigma_a~(\mathrm{barns})\\
+\midrule
+\text{Uranium-235} & 2.43 & 505 & 591\\
+\text{Plutonium-239} & 2.90 & 698 & 973\\
+\text{Uranium-238} & \text{---} & 0 & 2.42\\
+\bottomrule
+\end{array}
+\]
+Consider the value you compute for 4\% enrichment. How does this value compare
+with the values computed for Problem 2 of HW08?
+
+\begin{adaptedsolution}
+For enrichment $e$, the thermal reproduction factor for the uranium mixture is
+\[
+ \eta(e)
+ =\frac{e\,\nu_{235}\sigma_{f,235}}
+        {e\,\sigma_{a,235}+(1-e)\sigma_{a,238}}.
+\]
+Substitution gives
+\[
+ \eta(e)=
+ \frac{e(2.43)(505)}
+      {e(591)+(1-e)(2.42)}.
+\]
+Thus, for $e=0.04$,
+\[
+ \eta(0.04)
+ =\frac{0.04(2.43)(505)}
+      {0.04(591)+0.96(2.42)}
+ \approx \boxed{1.89}.
+\]
+A Python plotting solution is
+\begin{minted}{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+nu_235 = 2.43
+sigma_f_235 = 505.0
+sigma_a_235 = 591.0
+sigma_a_238 = 2.42
+
+enrichment = np.linspace(0, 0.3, 100)
+eta = lambda e: e*nu_235*sigma_f_235/(e*sigma_a_235
+                                      + (1-e)*sigma_a_238)
+plt.plot(100*enrichment, eta(enrichment), "k")
+plt.plot(4, eta(0.04), "rx")
+plt.xlabel("enrichment (%)")
+plt.ylabel(r"$\eta$")
+\end{minted}
+The 4\% value is close to the thermal-range values from HW08 and to the low
+energy portion of the 4\% $\eta(E)$ curve.  It is much more favorable than the
+resonance-dominated epithermal behavior.
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 3}. Lethargy, defined as $u=\ln(E_0/E)$, is often used
+in neutron slowing-down problems; lethargy increases as energy decreases. Note
+the following transformations:
+\[
+ \varphi(E)\,dE=-\varphi(u)\,du,\qquad
+ p(E\to E')\,dE'=-p(u\to u')\,du',\qquad
+ \Sigma_x(E)=\Sigma_x(u).
+\]
+\begin{enumerate}[label=(\alph*)]
+\item Show that $p(E\to E')$, given by Eq.~(2.47), becomes
+\[
+p(u\to u')=
+\begin{cases}
+\displaystyle\frac{1}{1-\alpha}\exp(u-u'),
+  & u\le u'\le u+\ln(1/\alpha),\\
+0, & \text{otherwise}.
+\end{cases}
+\]
+\item Express Eq.~(3.22) in terms of $u$.
+\item Show that the slowing-down decrement can be expressed as
+$\xi=\overline{\Delta u}$.
+\end{enumerate}
+
+\begin{adaptedsolution}
+\begin{enumerate}[label=(\alph*)]
+\item Since $E'=E_0e^{-u'}$, $dE'/du'=-E'$.  Therefore,
+\[
+ p(u\to u')
+ =-p(E\to E')\frac{dE'}{du'}
+ =\frac{1}{(1-\alpha)E}E'
+ =\frac{1}{1-\alpha}\exp(u-u').
+\]
+The original support $\alpha E\le E'\le E$ becomes
+$u\le u'\le u+\ln(1/\alpha)$.
+\item Using $\phi(u)=\phi(E)E$ and $E=E_0e^{-u}$, Eq.~(3.22) becomes
+\[
+ \boxed{\Sigma_s(u)\phi(u)
+ =\int_{u-\ln(1/\alpha)}^{u}
+  \frac{e^{u'-u}}{1-\alpha}\Sigma_s(u')\phi(u')\,du'}.
+\]
+\item With the density found in part (a),
+\begin{align*}
+ \overline{\Delta u}
+ &=\int_u^{u+\ln(1/\alpha)}
+   \frac{1}{1-\alpha}e^{u-u'}(u'-u)\,du'\\
+ &=1+\frac{\alpha}{1-\alpha}\ln\alpha\\
+ &=\boxed{\xi}.
+\end{align*}
+\end{enumerate}
+\end{adaptedsolution}
+
+\clearpage

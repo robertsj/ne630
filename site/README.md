@@ -1,8 +1,8 @@
 # NE 630 public course site
 
 This directory is the Sphinx source for the public NE 630 course-materials
-site. The initial page publishes student handouts for Lessons 1--10 and
-standalone notebooks for Lessons 8--10.
+site. The initial page publishes student handouts for Lessons 1--10 and 12--14,
+and standalone notebooks for Lessons 8--12.
 
 ## Build
 
@@ -40,30 +40,29 @@ Canonical handouts remain in `handouts/`. Running `make html` first invokes
 `site/scripts/export_handouts.py`, which creates the public files beneath
 `site/_static/handouts/`.
 
-The canonical Lesson 1--10 wrappers, bodies, class, student PDFs, and referenced
-supporting files must be version-controlled along with the public exports;
+The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, student PDFs,
+and referenced supporting files must be version-controlled along with the public exports;
 the build intentionally stops if any required input is absent.
 
 Standalone lesson notebooks remain canonical in `notebooks/`. Public download
 copies live beneath `site/_static/notebooks/` and must be byte-for-byte
-identical to their canonical files. The Lesson 8--10 notebooks are published
-alongside their handouts as independent course resources. Verify their
+identical to their canonical files. The Lesson 8--12 notebooks are
+published alongside their handouts as independent course resources. Verify their
 publication copies with:
 
 ```bash
 cmp notebooks/lesson_8.ipynb site/_static/notebooks/lesson_8.ipynb
 cmp notebooks/lesson_09.ipynb site/_static/notebooks/lesson_9.ipynb
 cmp notebooks/lesson_10.ipynb site/_static/notebooks/lesson_10.ipynb
+cmp notebooks/lesson_11.ipynb site/_static/notebooks/lesson_11.ipynb
+cmp notebooks/lesson_12.ipynb site/_static/notebooks/lesson_12.ipynb
 ```
 
-Do not edit those generated files directly. The exporter copies each student
-PDF, creates a complete source bundle, and removes instructor-only reveal
-values, figures, conditionals, and cue comments from the public TeX body. It
-never publishes instructor wrappers or instructor PDFs. The build stops if a
-required input is missing, if a lesson's audited redaction counts change, or if
-the generated source still contains a known instructor-only construct. Public
-body exports contain no TeX comments, so an accidental answer or teaching note
-cannot leak through a comment line.
+Do not edit those generated files directly. The exporter copies each public
+PDF and creates a complete source bundle from the canonical wrapper, body, and
+class. The exported wrapper must set `\handoutsolutionsfalse`, so the published
+source reproduces the non-solution PDF. A private solution copy can be made by
+changing that single line to `\handoutsolutionstrue` before compiling.
 
 To verify that committed exports match their canonical inputs without changing
 anything, run:
@@ -73,10 +72,10 @@ make check-handouts
 ```
 
 The public TeX requires XeLaTeX or LuaLaTeX. Each lesson bundle contains the
-student wrapper, sanitized body, shared `ne630boardhandout.cls`, any supporting
-figures or reproducibility notebooks referenced by that lesson, and brief build
-instructions. No
-repository-local `.sty` file is currently required.
+wrapper with solutions disabled, the body source, shared `ne630boardhandout.cls`,
+any supporting figures or reproducibility notebooks referenced by that lesson,
+and brief build instructions. No repository-local `.sty` file is currently
+required.
 
 Deployment to a `gh-pages` branch is intentionally separate from the local
 build. Review `_build/html/` and the Git diff before creating or updating that

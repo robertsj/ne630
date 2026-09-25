@@ -1,0 +1,171 @@
+% Assignment source: ne630/homework/html/HW13.html.
+% Legacy foundation: ne630_problems/lesson_13/statement.tex and hw13_sol.ipynb.
+% Problem 1 restores the part (b) calculation that was commented in the legacy
+% statement source.
+
+\noindent{\bf Problem 1}. One can compute effective cross sections for a
+coarse group structure based on the multigroup fluxes and cross sections
+defined on a finer group structure. Let a fine energy group $g$ be defined over
+the energies $E_g<E\le E_{g-1}$. Suppose a coarse group $G$ is defined over
+$E_{g+1}<E\le E_{g-1}$ (i.e., over groups $g$ and $g+1$). The coarse-group
+flux can then be written as
+\[
+\begin{aligned}
+ \phi_G^{\mathrm{coarse}}
+ &=\int_{E_{g+1}}^{E_{g-1}}\phi(E)\,dE\\
+ &=\int_{E_g}^{E_{g-1}}\phi(E)\,dE
+  +\int_{E_{g+1}}^{E_g}\phi(E)\,dE\\
+ &=\phi_g^{\mathrm{fine}}+\phi_{g+1}^{\mathrm{fine}}.
+\end{aligned}
+\]
+\begin{enumerate}[label=(\alph*)]
+\item Determine an expression for $\sigma_{a,G}$ in terms of the fine-group
+      fluxes and cross-section values $\sigma_{a,g}$ and
+      $\sigma_{a,g+1}$.
+\item Assuming the fast and epithermal fluxes are identical, determine the
+      effective $\sigma_a$ for \isoA{U}{238} over
+      $1<E<10^7~\mathrm{eV}$ using FNRP Table 3.2.
+\end{enumerate}
+
+\begin{adaptedsolution}
+The reaction rate per atom integrated over the coarse group must be preserved:
+\[
+ \phi_G^{\mathrm{coarse}}\sigma_{a,G}
+ =\phi_g^{\mathrm{fine}}\sigma_{a,g}
+ +\phi_{g+1}^{\mathrm{fine}}\sigma_{a,g+1}.
+\]
+Therefore,
+\[
+ \boxed{\sigma_{a,G}
+ =\frac{\phi_g^{\mathrm{fine}}\sigma_{a,g}
+       +\phi_{g+1}^{\mathrm{fine}}\sigma_{a,g+1}}
+      {\phi_g^{\mathrm{fine}}+\phi_{g+1}^{\mathrm{fine}}}}.
+\]
+For part (b), Table~3.2 gives $I_a\approx278~\mathrm b$ for the epithermal
+group, so
+\[
+ \sigma_a^{\mathrm{epi}}
+ =0.0869 I_a
+ \approx24.16~\mathrm b.
+\]
+The fast-group value is $\sigma_a^{\mathrm{fast}}=0.361~\mathrm b$.  With
+identical fast and epithermal fluxes,
+\[
+ \boxed{\bar{\sigma}_a
+ =\frac{24.16+0.361}{2}
+ \approx12.26~\mathrm b}.
+\]
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 2}. Consider an infinite solution of water and uranium
+with a uniform source of $1~\mathrm{MeV}$ neutrons that emits
+$100~\mathrm{n\,cm^{-3}\,s^{-1}}$. Using the data in Table 1, compute the
+volumetric absorption and fission rates in the solution.
+
+\begin{center}
+\textbf{Table 1.} Two-group data for Problems 2 and 3. Macroscopic cross
+sections are given in $\mathrm{cm^{-1}}$.
+\[
+\begin{array}{lrr}
+\toprule
+ & g=1 & g=2\\
+\midrule
+\Sigma_\gamma & 2.04\times10^{-3} & 1.91\times10^{-2}\\
+\Sigma_f & 2.96\times10^{-4} & 1.38\times10^{-2}\\
+\bar{\nu}\Sigma_f & 7.38\times10^{-4} & 3.36\times10^{-2}\\
+\Sigma_{s,1\gets g} & 7.21\times10^{-1} & 0\\
+\Sigma_{s,2\gets g} & 4.27\times10^{-2} & 2.72\times10^0\\
+\bottomrule
+\end{array}
+\]
+\end{center}
+
+\begin{adaptedsolution}
+The two-group equations for this fixed-source infinite system are
+\begin{align*}
+ \Sigma_{r,1}\phi_1
+ &=\bar{\nu}\Sigma_{f,1}\phi_1
+  +\bar{\nu}\Sigma_{f,2}\phi_2+S_1,\\
+ \Sigma_{a,2}\phi_2&=\Sigma_{s,2\gets1}\phi_1.
+\end{align*}
+Thus,
+\[
+ \phi_2=\frac{\Sigma_{s,2\gets1}\phi_1}{\Sigma_{a,2}},
+ \qquad
+ \phi_1=
+ \frac{S_1}
+ {\Sigma_{r,1}-\bar{\nu}\Sigma_{f,1}
+ -\bar{\nu}\Sigma_{f,2}\Sigma_{s,2\gets1}/\Sigma_{a,2}}.
+\]
+The fast removal cross section is
+\[
+ \Sigma_{r,1}
+ =2.04\times10^{-3}+2.96\times10^{-4}+4.27\times10^{-2}
+ \approx0.0450~\centi\meter^{-1},
+\]
+and
+\[
+ \Sigma_{a,2}=1.91\times10^{-2}+1.38\times10^{-2}
+ =0.0329~\centi\meter^{-1}.
+\]
+Therefore,
+\[
+ \phi_1\approx
+ \frac{100}
+ {0.0450-7.38\times10^{-4}
+ -(3.36\times10^{-2})(4.27\times10^{-2})/0.0329}
+ \approx1.45\times10^5~\centi\meter^{-2}\second^{-1},
+\]
+and
+\[
+ \phi_2=\frac{(4.27\times10^{-2})(1.45\times10^5)}{0.0329}
+ \approx1.88\times10^5~\centi\meter^{-2}\second^{-1}.
+\]
+The volumetric absorption rate is
+\[
+\begin{aligned}
+ R_a
+ &=\phi_1\Sigma_{a,1}+\phi_2\Sigma_{a,2}\\
+ &=1.45\times10^5(2.04\times10^{-3}+2.96\times10^{-4})
+  +1.88\times10^5(0.0329)\\
+ &\approx \boxed{6.5\times10^3~\second^{-1}\centi\meter^{-3}}.
+\end{aligned}
+\]
+The volumetric fission rate is
+\[
+\begin{aligned}
+ R_f
+ &=\phi_1\Sigma_{f,1}+\phi_2\Sigma_{f,2}\\
+ &=1.45\times10^5(2.96\times10^{-4})
+  +1.88\times10^5(1.38\times10^{-2})\\
+ &\approx \boxed{2.6\times10^3~\second^{-1}\centi\meter^{-3}}.
+\end{aligned}
+\]
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 3}. Compute $k_{\infty}$ for the system described in
+Problem 2.
+
+\begin{adaptedsolution}
+For the corresponding homogeneous eigenvalue problem,
+\[
+ k_\infty
+ =\frac{\bar{\nu}\Sigma_{f,1}
+ +\bar{\nu}\Sigma_{f,2}\Sigma_{s,2\gets1}/\Sigma_{a,2}}
+ {\Sigma_{r,1}}.
+\]
+Substitution gives
+\[
+ k_\infty
+ =\frac{7.38\times10^{-4}
+ +(3.36\times10^{-2})(4.27\times10^{-2})/0.0329}
+ {0.0450}
+ \approx \boxed{0.985}.
+\]
+\end{adaptedsolution}
+
+\clearpage

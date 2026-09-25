@@ -1,3 +1,23 @@
+% Lesson 09: shared student/instructor board-supported handout.
+% Content: ne630_lesson09_transcription.tex (handwritten notes, pp. 1--3).
+% Structure: lesson_07_handout_body(2).tex.
+% Like the supplied body file, this file includes \begin{document}/\end{document}
+% and is intended to be read after the course handout preamble.
+%
+% DRAFT / SOURCE NOTES
+% - The source's scope is no absorption, not merely no resonance absorption.
+% - The density is defined below per unit energy; the source's literal
+%   "between E and dE" wording is not reused. The E to E+dE interval appears
+%   explicitly in the source's path-length and reaction-rate definitions.
+% - phi_fast is an explicitly declared label for the fast-range approximation;
+%   the transcription flags its original subscript (read as g=1) as uncertain.
+% - The source uses bar-nu in the general balance and nu in the separately
+%   written fission-strength integral. That distinction is retained here.
+% - The source's phi=C/E and phi=q/[xi Sigma_s(E) E] are both retained.
+%   Their compatibility is a checkpoint, not a silently supplied hypothesis.
+% - The inelastic-scattering figure and OpenMC activity remain board prompts;
+%   no missing data, illustration, or example has been invented.
+% - Reading location: the supplied Project lesson_09.md specifies Section 3.4.
 
 \providecommand{\ndensity}{n^{\prime\prime\prime}}
 \providecommand{\sfission}{s_f^{\prime\prime\prime}}
@@ -25,6 +45,7 @@ Approximate the flux spectrum $\phi(E)$ of fast and epithermal neutrons
 subject to elastic collisions without absorption.
 \par\vspace{5pt}
 
+% =================== PAGE 1: DEFINITIONS AND BALANCE ===================
 \begin{handoutcolumns}
 \HandoutSection{1}{Review: why do we need a spectrum?}
 Last time, $\eta(E)$ was a first step toward $k$: an energy average
@@ -141,6 +162,7 @@ $E'<E$ describe an energy gain?
 
 \newpage
 
+% ================== PAGE 2: FAST AND SLOWING-DOWN FORMS ==================
 \begin{handoutcolumns}
 \HandoutSection{5}{A first approximation to the fast spectrum}
 The \textbf{uncollided flux} in the fast range provides a first
@@ -219,7 +241,7 @@ $E$ is the outgoing energy at which we write the balance.
 With $E$ fixed, solve $\alpha E'<E<E'$ for the incident energies
 $E'$ that can contribute. For $\alpha>0$,
 $$
-\MathBlank[0.45in]{}<E'<\MathBlank[0.55in]{}.
+\MathBlank[0.45in]{E}<E'<\MathBlank[0.55in]{E/\alpha}.
 $$
 \RuledLines{1}
 \end{checkpoint}

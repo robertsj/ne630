@@ -1,10 +1,8 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ne630boardhandout}[2026/08/26 v1.2 Myriad Pro NE 630 handouts]
+\ProvidesClass{ne630boardhandout}[2026/09/24 v1.3 Myriad Pro NE 630 handouts]
 
-\newif\ifhandoutinstructor
-\handoutinstructorfalse
-\DeclareOption{student}{\handoutinstructorfalse}
-\DeclareOption{instructor}{\handoutinstructortrue}
+\newif\ifhandoutsolutions
+\handoutsolutionsfalse
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 \LoadClass[10pt]{article}
@@ -250,22 +248,22 @@
   \end{itemize}
 }
 
-\NewDocumentCommand{\InstructorFigureContent}{+m}{%
-  \ifhandoutinstructor #1\fi
+\NewDocumentCommand{\SolutionFigureContent}{+m}{%
+  \ifhandoutsolutions #1\fi
 }
 
 \NewDocumentCommand{\Blank}{O{1.0in}}{%
   \leavevmode\makebox[#1][c]{\leaders\hbox to 0.42em{\hss.\hss}\hfill}%
 }
 \NewDocumentCommand{\RevealBlank}{O{1.0in} m}{%
-  \ifhandoutinstructor
+  \ifhandoutsolutions
     \leavevmode\makebox[#1][c]{\textcolor{HandoutSynthesis}{\sffamily\bfseries #2}}%
   \else
     \Blank[#1]%
   \fi
 }
 \NewDocumentCommand{\MathBlank}{O{0.75in} m}{%
-  \ifhandoutinstructor
+  \ifhandoutsolutions
     \makebox[#1][c]{\textcolor{HandoutSynthesis}{\ensuremath{#2}}}%
   \else
     \makebox[#1][c]{\rule[-0.15ex]{#1}{0.35pt}}%
@@ -284,15 +282,15 @@
   \endgroup
 }
 
-\NewDocumentCommand{\InstructorCue}{m}{%
-  \ifhandoutinstructor
+\NewDocumentCommand{\SolutionCue}{m}{%
+  \ifhandoutsolutions
     \begin{tcolorbox}[
       enhanced,boxrule=0.4pt,arc=1pt,
       colframe=HandoutSynthesis!60,colback=HandoutSynthesis!5,
       left=4pt,right=4pt,top=2pt,bottom=2pt,
       before skip=3pt,after skip=3pt
     ]
-      \sffamily\scriptsize\textbf{Instructor cue.} #1
+      \sffamily\scriptsize\textbf{Solution cue.} #1
     \end{tcolorbox}
   \fi
 }

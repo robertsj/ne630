@@ -35,7 +35,7 @@ its neutron-separation energy, one decay branch can emit a delayed neutron:
 \end{align*}
 \normalsize
 Delayed neutron energies are typically
-\RevealBlank[0.80in]{}.
+\RevealBlank[0.80in]{$0.2$--$0.6\unit{MeV}$}.
 Deposited $\beta$ and $\gamma$ energy
 drives spent-fuel decay heat; antineutrino energy escapes.
 \end{fixedbox}
@@ -56,16 +56,16 @@ Separate and integrate:
  \ln\!\frac{N(t)}{N_0}=\Blank[0.72in],
 \]
 \[
- \boxed{N(t)=\MathBlank[1.25in]{}}.
+ \boxed{N(t)=\MathBlank[1.25in]{N_0e^{-\lambda t}}}.
 \]
 Here $\lambda$ is the decay probability per unit time for one nucleus.
 \end{boardbox}
 
 \begin{checkpoint}[Half-life check]
 \[
- \frac{N(nt_{1/2})}{N_0}=\MathBlank[0.72in]{},
+ \frac{N(nt_{1/2})}{N_0}=\MathBlank[0.72in]{2^{-n}},
  \qquad
- \frac{A(nt_{1/2})}{A_0}=\MathBlank[0.72in]{}.
+ \frac{A(nt_{1/2})}{A_0}=\MathBlank[0.72in]{2^{-n}}.
 \]
 What assumptions make both ratios equal to $2^{-n}$?
 \RuledLines{1}
@@ -100,7 +100,7 @@ When there is no production, $A(t)=-dN/dt$. Thus, for a pure radionuclide,
 \begin{checkpoint}[Reverse the conversion route]
 Express the radionuclide mass in terms of measured activity:
 \[
- m=\MathBlank[2.05in]{}.
+ m=\MathBlank[2.05in]{\frac{AM}{\lambda N_A}}.
 \]
 List the units you would use for each quantity.
 \end{checkpoint}
@@ -131,9 +131,9 @@ For $R(t)=R_0$ and $t_0=0$,
 For $N_0=0$,
 \[
  \begin{aligned}
- A(t)&=\MathBlank[1.30in]{},\\[-2pt]
- N_{\mathrm{sat}}&=\MathBlank[0.60in]{},\qquad
- A_{\mathrm{sat}}=\MathBlank[0.46in]{}.
+ A(t)&=\MathBlank[1.30in]{R_0(1-e^{-\lambda t})},\\[-2pt]
+ N_{\mathrm{sat}}&=\MathBlank[0.60in]{R_0/\lambda},\qquad
+ A_{\mathrm{sat}}=\MathBlank[0.46in]{R_0}.
  \end{aligned}
 \]
 After $n$ half-lives, $A/A_{\mathrm{sat}}=1-2^{-n}$; one, three, five, and
@@ -195,9 +195,9 @@ The last line also follows from conservation of the $A=94$ nuclei.
 \begin{checkpoint}[Inventory after one hour]
 At $t=1\unit{h}$,
 \[
- \frac{N_{\mathrm{Sr}}}{N_0}=\MathBlank[0.52in]{},\quad
- \frac{N_{\mathrm{Y}}}{N_0}=\MathBlank[0.52in]{},\quad
- \frac{N_{\mathrm{Zr}}}{N_0}=\MathBlank[0.52in]{}.
+ \frac{N_{\mathrm{Sr}}}{N_0}=\MathBlank[0.52in]{3.6\times10^{-15}},\quad
+ \frac{N_{\mathrm{Y}}}{N_0}=\MathBlank[0.52in]{0.116},\quad
+ \frac{N_{\mathrm{Zr}}}{N_0}=\MathBlank[0.52in]{0.884}.
 \]
 Which half-life controls the long-time approach to stable zirconium?
 \RuledLines{1}
@@ -235,9 +235,9 @@ sources, and a 100\% parent-to-daughter branch,
 If $\lambda_1\ll\lambda_2$, then after several daughter half-lives but before
 the parent changes appreciably,
 \[
- A_2(t)\approx\MathBlank[0.66in]{},
+ A_2(t)\approx\MathBlank[0.66in]{A_1(t)},
  \qquad
- \frac{N_2}{N_1}\approx\MathBlank[0.82in]{}.
+ \frac{N_2}{N_1}\approx\MathBlank[0.82in]{\frac{\lambda_1}{\lambda_2}}.
 \]
 Explain why equal activities do not imply equal inventories.
 \RuledLines{1}

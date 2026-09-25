@@ -17,6 +17,7 @@ __pycache__/
 # Raw course-grading records. Ignoring them is defense against accidental
 # commits, not an access-control mechanism.
 /grades/submissions/
+/grades/tmp/
 
 # Private identity material and generated review runs. Reusable framework
 # code, configuration, schemas, protocols, tests, and synthetic fixtures under

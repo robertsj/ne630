@@ -2,11 +2,14 @@
 __pycache__/
 *.py[cod]
 
-# Handout build intermediates and instructor-only rendered copies.
+# Handout build intermediates and rendered copies. Public PDFs are generated
+# locally and published from the gh-pages branch, not stored on Fall2026.
 /handouts/*.aux
 /handouts/*.fdb_latexmk
 /handouts/*.fls
 /handouts/*.log
 /handouts/*.out
 /handouts/*.xdv
+/handouts/lesson_??_handout.pdf
 /handouts/*_instructor.pdf
+/site/_static/handouts/

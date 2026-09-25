@@ -19,8 +19,10 @@ git status --short
 ```
 
 Inspect the site at `_build/html/index.html`, verify the Git diff, and make sure
-the intended canonical handout inputs and generated `site/_static/handouts/`
-exports are committed on the source branch before publishing.
+the intended canonical handout inputs are committed on the source branch before
+publishing. Rendered handout PDFs and `site/_static/handouts/` are ignored on
+the source branch; `make check` regenerates them and `_build/html/` carries them
+into `gh-pages`.
 
 ## First publication procedure (reference)
 

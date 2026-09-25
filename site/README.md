@@ -37,12 +37,14 @@ contains the `.nojekyll` file needed for a branch-based GitHub Pages site.
 ## Handout publication model
 
 Canonical handouts remain in `handouts/`. Running `make html` first invokes
-`site/scripts/export_handouts.py`, which creates the public files beneath
-`site/_static/handouts/`.
+the handout Makefile and then `site/scripts/export_handouts.py`, which creates
+the public files beneath `site/_static/handouts/`.
 
-The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, student PDFs,
-and referenced supporting files must be version-controlled along with the public exports;
-the build intentionally stops if any required input is absent.
+The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, and referenced
+supporting files are version-controlled. Rendered handout PDFs and the entire
+`site/_static/handouts/` export tree are ignored build artifacts on the source
+branch; they are generated during `make html` or `make check` and published in
+the rendered site on `gh-pages`.
 
 Standalone lesson notebooks remain canonical in `notebooks/`. Public download
 copies live beneath `site/_static/notebooks/` and must be byte-for-byte
@@ -58,14 +60,15 @@ cmp notebooks/lesson_11.ipynb site/_static/notebooks/lesson_11.ipynb
 cmp notebooks/lesson_12.ipynb site/_static/notebooks/lesson_12.ipynb
 ```
 
-Do not edit those generated files directly. The exporter copies each public
-PDF and creates a complete source bundle from the canonical wrapper, body, and
-class. The exported wrapper must set `\handoutsolutionsfalse`, so the published
-source reproduces the non-solution PDF. A private solution copy can be made by
-changing that single line to `\handoutsolutionstrue` before compiling.
+Do not edit generated handout exports directly. The build renders each public
+PDF, and the exporter copies it while creating a complete source bundle from
+the canonical wrapper, body, and class. The exported wrapper must set
+`\handoutsolutionsfalse`, so the published source reproduces the non-solution
+PDF. A private solution copy can be made by changing that single line to
+`\handoutsolutionstrue` before compiling.
 
-To verify that committed exports match their canonical inputs without changing
-anything, run:
+To regenerate the ignored exports and verify that they match their canonical
+inputs, run:
 
 ```bash
 make check-handouts

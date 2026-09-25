@@ -50,6 +50,10 @@ results.
 - `spectra.pdf` -- supporting spectrum figure used by Lesson 5.
 - `Makefile` -- builds the public non-solution PDFs with `latexmk`.
 
+Rendered `lesson_XX_handout.pdf` files are build artifacts. They are ignored on
+the course-development branch and copied into the generated site during the
+publication build. The published copies live on `gh-pages`.
+
 ## Build
 
 ```bash

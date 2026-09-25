@@ -212,7 +212,7 @@
             "pseudonym_scope": {"const": "PERSON_ACROSS_PILOT"},
             "pseudonym_pattern": {"const": "S[0-9]{3,}"},
             "submission_record_id_pattern": {"const": "HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}"},
-            "source_identifiers_location": {"const": "RESTRICTED_IDENTITY_MAP_ONLY"}
+            "source_identifiers_location": {"const": "RESTRICTED_IDENTITY_MAP_OR_EXPLICITLY_AUTHORIZED_PRIVATE_PACKET_PDFS"}
           },
           "additionalProperties": false
         },

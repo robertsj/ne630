@@ -227,7 +227,7 @@
       "properties": {
         "run_directory_mode": {"const": "0700"},
         "private_file_mode": {"const": "0600"},
-        "contains_source_identifiers": {"const": false},
+        "contains_source_identifiers": {"type": "boolean"},
         "student_facing_release": {"const": false}
       },
       "additionalProperties": false

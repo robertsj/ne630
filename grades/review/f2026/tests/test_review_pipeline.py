@@ -543,6 +543,30 @@ class SyntheticEndToEndTest(unittest.TestCase):
         self.assertEqual(prepared["product_review"], 8)
         self.assertFalse((self.root / "should-not-exist").exists())
 
+        run_root = self.root / f"grades/review/f2026/runs/{FIXED_RUN_ID}"
+        for packet_path in sorted(
+            (run_root / "packets").glob("*/packet_manifest.json")
+        ):
+            packet = json.loads(packet_path.read_text())
+            dossier = json.loads(
+                (
+                    run_root
+                    / "dossiers"
+                    / packet["submission_record_id"]
+                    / "dossier_data.json"
+                ).read_text()
+            )
+            self.assertEqual(packet["review_mode"], "PRODUCT_BLINDED")
+            self.assertEqual(
+                packet["classification"], "RESTRICTED_CALIBRATION_PACKET"
+            )
+            self.assertEqual(packet["sanitization"]["identity_scan_status"], "PASS")
+            self.assertTrue(packet["exclusions"]["identity"])
+            self.assertFalse(packet["contains_source_identifiers"])
+            self.assertEqual(dossier["view"], "PRODUCT_BLINDED")
+            self.assertTrue(dossier["exclusions"]["identity"])
+            self.assertFalse(dossier["contains_source_identifiers"])
+
         validated = self.pipeline.validate(run_id=FIXED_RUN_ID)
         self.assertEqual(validated["status"], "PASS")
         self.assertEqual(validated["failed"], 0)
@@ -571,7 +595,6 @@ class SyntheticEndToEndTest(unittest.TestCase):
             )
         self.assertTrue(check_id_sets[0].isdisjoint(check_id_sets[1]))
 
-        run_root = self.root / f"grades/review/f2026/runs/{FIXED_RUN_ID}"
         restricted_root = self.root / f"grades/review/f2026/restricted/{FIXED_RUN_ID}"
         self.assertEqual(stat.S_IMODE(run_root.stat().st_mode), 0o700)
         self.assertEqual(stat.S_IMODE(restricted_root.stat().st_mode), 0o700)
@@ -639,6 +662,35 @@ class SyntheticEndToEndTest(unittest.TestCase):
         )
         self.assertEqual(len(candidates), 8)
         self.assertEqual(list((run_root / "packets").glob("*/packet_manifest.json")), [])
+        visible_manifest_before = (run_root / "run_manifest.json").read_bytes()
+        visible_decisions_before = (
+            run_root / "events/human_decisions.jsonl"
+        ).read_bytes()
+        with self.assertRaises(pipeline.ContractError):
+            review.authorize_identity_visible_calibration(
+                run_id=FIXED_RUN_ID,
+                review_set_id=str(review_set["review_set_id"]),
+                review_set_sha256=str(review_set["review_set_sha256"]),
+                actor_id="synthetic-instructor",
+                acknowledgement=pipeline.IDENTITY_VISIBLE_ACKNOWLEDGEMENT,
+                rationale=(
+                    "A ready-for-clearance review set must stay on the blinded path."
+                ),
+            )
+        self.assertFalse(
+            (
+                run_root
+                / "manifests/calibration_identity_visible_authorization.json"
+            ).exists()
+        )
+        self.assertEqual(
+            (run_root / "run_manifest.json").read_bytes(),
+            visible_manifest_before,
+        )
+        self.assertEqual(
+            (run_root / "events/human_decisions.jsonl").read_bytes(),
+            visible_decisions_before,
+        )
         manifest_before = (run_root / "run_manifest.json").read_bytes()
         events_before = (run_root / "events/events.jsonl").read_bytes()
         with self.assertRaisesRegex(
@@ -887,6 +939,392 @@ class SyntheticEndToEndTest(unittest.TestCase):
                 attestation=pipeline.CLEARANCE_ATTESTATION,
                 rationale="Synthetic hard-failure rejection test.",
             )
+
+    def test_identity_visible_authorization_reuses_exact_inert_review_set(
+        self,
+    ) -> None:
+        class IdentityVisiblePipeline(pipeline.ReviewPipeline):
+            def _identity_scan(
+                self, *args: object, **kwargs: object
+            ) -> tuple[str, list[str]]:
+                return "FAIL", ["IDENTITY_DISPLAY_NAME_PRESENT"]
+
+        review = IdentityVisiblePipeline(
+            self.root,
+            codebook_path=self.codebook_path,
+            now=lambda: FIXED_TIME,
+        )
+        review.intake(run_id=FIXED_RUN_ID)
+        self.assertEqual(
+            review.prepare_calibration(run_id=FIXED_RUN_ID)["status"], "BLOCKED"
+        )
+        review_set_result = review.stage_calibration_review_set(
+            run_id=FIXED_RUN_ID,
+            sanitized_derivatives={},
+        )
+        self.assertEqual(
+            review_set_result["status"], "REQUIRES_SANITIZED_DERIVATIVE"
+        )
+        authorization_arguments = {
+            "run_id": FIXED_RUN_ID,
+            "review_set_id": str(review_set_result["review_set_id"]),
+            "review_set_sha256": str(review_set_result["review_set_sha256"]),
+            "actor_id": "synthetic-instructor",
+            "acknowledgement": pipeline.IDENTITY_VISIBLE_ACKNOWLEDGEMENT,
+            "rationale": (
+                "Synthetic instructor authorization for restricted, non-blinded "
+                "calibration."
+            ),
+        }
+        first_authorization = review.authorize_identity_visible_calibration(
+            **authorization_arguments
+        )
+
+        run_root = self.root / f"grades/review/f2026/runs/{FIXED_RUN_ID}"
+        manifest_after_authorization = (run_root / "run_manifest.json").read_bytes()
+        decisions_after_authorization = (
+            run_root / "events/human_decisions.jsonl"
+        ).read_bytes()
+        authorization_after_first = (
+            run_root / "manifests/calibration_identity_visible_authorization.json"
+        ).read_bytes()
+        second_authorization = review.authorize_identity_visible_calibration(
+            **authorization_arguments
+        )
+        self.assertEqual(first_authorization, second_authorization)
+        self.assertEqual(
+            (run_root / "run_manifest.json").read_bytes(),
+            manifest_after_authorization,
+        )
+        self.assertEqual(
+            (run_root / "events/human_decisions.jsonl").read_bytes(),
+            decisions_after_authorization,
+        )
+        self.assertEqual(
+            (
+                run_root
+                / "manifests/calibration_identity_visible_authorization.json"
+            ).read_bytes(),
+            authorization_after_first,
+        )
+
+        with self.assertRaises(pipeline.ContractError):
+            review.resume_calibration(run_id=FIXED_RUN_ID)
+        self.assertEqual(
+            (run_root / "run_manifest.json").read_bytes(),
+            manifest_after_authorization,
+        )
+        self.assertEqual(list((run_root / "packets").glob("*/packet_manifest.json")), [])
+
+        resumed = review.resume_identity_visible_calibration(run_id=FIXED_RUN_ID)
+        self.assertEqual(resumed["selected"], 8)
+        self.assertEqual(resumed["product_review"], 8)
+
+        authorization_path = (
+            run_root / "manifests/calibration_identity_visible_authorization.json"
+        )
+        authorization = json.loads(authorization_path.read_text())
+        self.assertEqual(
+            authorization["review_mode"], "IDENTITY_VISIBLE_NON_BLINDED"
+        )
+        self.assertEqual(
+            authorization["authorization"],
+            pipeline.IDENTITY_VISIBLE_ACKNOWLEDGEMENT,
+        )
+        self.assertTrue(
+            authorization["accepted_artifacts_may_contain_source_identifiers"]
+        )
+        self.assertEqual(len(authorization["items"]), 8)
+        self.assertTrue(
+            all(
+                item["disposition"]
+                == "SOURCE_RASTER_IDENTITY_VISIBLE_AUTHORIZED"
+                and item["identity_visibility"]
+                == "MAY_CONTAIN_VISIBLE_STUDENT_IDENTITY"
+                and item["accepted_artifact"] == item["review_artifact"]
+                for item in authorization["items"]
+            )
+        )
+        decisions = [
+            json.loads(line)
+            for line in (run_root / "events/human_decisions.jsonl")
+            .read_bytes()
+            .splitlines()
+        ]
+        self.assertEqual(len(decisions), 1)
+        self.assertEqual(
+            decisions[0]["decision_type"],
+            "IDENTITY_VISIBLE_CALIBRATION_AUTHORIZATION",
+        )
+
+        review_set_path = self.root / str(review_set_result["review_set_manifest"])
+        review_set = json.loads(review_set_path.read_text())
+        clearance_request = json.loads(
+            (run_root / "manifests/calibration_clearance_request.json").read_text()
+        )
+        request_by_record = {
+            item["submission_record_id"]: item
+            for item in clearance_request["items"]
+        }
+        review_by_record = {
+            item["submission_record_id"]: item for item in review_set["items"]
+        }
+        for authorized_item in authorization["items"]:
+            record_id = authorized_item["submission_record_id"]
+            review_item = review_by_record[record_id]
+            request_item = request_by_record[record_id]
+            review_pdf = self.root / review_item["review_artifact"]["path"]
+            packet_root = run_root / "packets" / record_id
+            packet_pdf = packet_root / "submitted-solution.pdf"
+            packet = json.loads((packet_root / "packet_manifest.json").read_text())
+            dossier = json.loads(
+                (run_root / "dossiers" / record_id / "dossier_data.json").read_text()
+            )
+
+            self.assertEqual(review_item["disposition"], "SOURCE_RASTER")
+            self.assertEqual(
+                review_item["source_input_sha256"],
+                request_item["source_solution_sha256"],
+            )
+            self.assertEqual(
+                review_item["source_input_byte_count"],
+                request_item["source_solution_byte_count"],
+            )
+            self.assertEqual(packet_pdf.read_bytes(), review_pdf.read_bytes())
+            inert = pipeline.inspect_inert_raster_pdf(packet_pdf.read_bytes())
+            self.assertEqual(inert.page_count, review_item["page_count"])
+            self.assertEqual(
+                list(inert.page_sha256s), review_item["page_sha256s"]
+            )
+            self.assertEqual(
+                packet["review_mode"], "IDENTITY_VISIBLE_NON_BLINDED"
+            )
+            self.assertEqual(
+                packet["classification"],
+                "RESTRICTED_IDENTITY_VISIBLE_CALIBRATION_PACKET",
+            )
+            self.assertEqual(
+                packet["sanitization"]["identity_scan_status"], "NOT_BLINDED"
+            )
+            self.assertEqual(
+                packet["sanitization"]["disposition"],
+                "SOURCE_RASTER_IDENTITY_VISIBLE_AUTHORIZED",
+            )
+            self.assertFalse(packet["exclusions"]["identity"])
+            self.assertTrue(packet["contains_source_identifiers"])
+            self.assertEqual(dossier["view"], "PRODUCT_IDENTITY_VISIBLE")
+            self.assertFalse(dossier["exclusions"]["identity"])
+            self.assertTrue(dossier["contains_source_identifiers"])
+
+            falsely_passing_packet = json.loads(json.dumps(packet))
+            falsely_passing_packet["sanitization"]["identity_scan_status"] = "PASS"
+            self.assertTrue(
+                list(
+                    review.validators["calibration_packet_manifest"].iter_errors(
+                        falsely_passing_packet
+                    )
+                )
+            )
+            falsely_blinded_dossier = json.loads(json.dumps(dossier))
+            falsely_blinded_dossier["view"] = "PRODUCT_BLINDED"
+            self.assertTrue(
+                list(
+                    review.validators["dossier_data"].iter_errors(
+                        falsely_blinded_dossier
+                    )
+                )
+            )
+
+        generated_product_text = "\n".join(
+            path.read_text(encoding="utf-8", errors="ignore")
+            for root in (run_root / "packets", run_root / "dossiers")
+            for path in root.rglob("*")
+            if path.is_file() and path.suffix in {".json", ".md"}
+        )
+        self.assertNotIn('"identity_scan_status":"PASS"', generated_product_text)
+        self.assertNotIn('"view":"PRODUCT_BLINDED"', generated_product_text)
+        self.assertNotIn('"review_mode":"PRODUCT_BLINDED"', generated_product_text)
+
+        build_reports = [
+            json.loads(path.read_text())
+            for path in sorted((run_root / "builds").glob("*.json"))
+        ]
+        self.assertEqual(len(build_reports), 8)
+        self.assertTrue(
+            all(
+                report["execution_performed"] is False
+                and report["commands"] == []
+                for report in build_reports
+            )
+        )
+        self.assertFalse((self.root / "should-not-exist").exists())
+
+        validated = review.validate(run_id=FIXED_RUN_ID)
+        self.assertEqual(validated["status"], "PASS")
+        validation_path = sorted((run_root / "reports").glob("validation-*.json"))[-1]
+        validation = json.loads(validation_path.read_text())
+        checks = {
+            item["code"]: item
+            for category in (
+                "semantic_checks",
+                "privacy_checks",
+                "hash_checks",
+            )
+            for item in validation[category]
+        }
+        self.assertEqual(checks["STUDENT_CODE_NOT_EXECUTED"]["status"], "PASS")
+        if "SOURCE_IDENTIFIERS_ABSENT" in checks:
+            self.assertNotEqual(
+                checks["SOURCE_IDENTIFIERS_ABSENT"]["status"], "PASS"
+            )
+
+    def test_identity_visible_authorization_requires_exact_acknowledgement_and_hash(
+        self,
+    ) -> None:
+        class IdentityVisiblePipeline(pipeline.ReviewPipeline):
+            def _identity_scan(
+                self, *args: object, **kwargs: object
+            ) -> tuple[str, list[str]]:
+                return "FAIL", ["IDENTITY_DISPLAY_NAME_PRESENT"]
+
+        review = IdentityVisiblePipeline(
+            self.root,
+            codebook_path=self.codebook_path,
+            now=lambda: FIXED_TIME,
+        )
+        review.intake(run_id=FIXED_RUN_ID)
+        review.prepare_calibration(run_id=FIXED_RUN_ID)
+        review_set = review.stage_calibration_review_set(
+            run_id=FIXED_RUN_ID,
+            sanitized_derivatives={},
+        )
+        run_root = self.root / f"grades/review/f2026/runs/{FIXED_RUN_ID}"
+        manifest_before = (run_root / "run_manifest.json").read_bytes()
+        decisions_before = (run_root / "events/human_decisions.jsonl").read_bytes()
+        common = {
+            "run_id": FIXED_RUN_ID,
+            "review_set_id": str(review_set["review_set_id"]),
+            "actor_id": "synthetic-instructor",
+            "rationale": "Synthetic restricted identity-visible authorization.",
+        }
+        with self.assertRaisesRegex(
+            pipeline.ContractError, "acknowledgement"
+        ):
+            review.authorize_identity_visible_calibration(
+                **common,
+                review_set_sha256=str(review_set["review_set_sha256"]),
+                acknowledgement="I authorize a vaguely similar operation.",
+            )
+        with self.assertRaisesRegex(
+            pipeline.ContractError, "review-set hash"
+        ):
+            review.authorize_identity_visible_calibration(
+                **common,
+                review_set_sha256="0" * 64,
+                acknowledgement=pipeline.IDENTITY_VISIBLE_ACKNOWLEDGEMENT,
+            )
+        self.assertEqual((run_root / "run_manifest.json").read_bytes(), manifest_before)
+        self.assertEqual(
+            (run_root / "events/human_decisions.jsonl").read_bytes(),
+            decisions_before,
+        )
+        self.assertFalse(
+            (run_root / "manifests/calibration_identity_visible_authorization.json").exists()
+        )
+
+    def test_identity_visible_authorization_rejects_derivative_review_set(
+        self,
+    ) -> None:
+        class MixedIdentityPipeline(pipeline.ReviewPipeline):
+            def _identity_scan(
+                self, data: bytes, *args: object, **kwargs: object
+            ) -> tuple[str, list[str]]:
+                if b"sanitized replacement" in data:
+                    return "NEEDS_HUMAN_TRIAGE", [
+                        "HUMAN_VISUAL_IDENTITY_CLEARANCE_REQUIRED"
+                    ]
+                return "FAIL", ["IDENTITY_DISPLAY_NAME_PRESENT"]
+
+        review = MixedIdentityPipeline(
+            self.root,
+            codebook_path=self.codebook_path,
+            now=lambda: FIXED_TIME,
+        )
+        review.intake(run_id=FIXED_RUN_ID)
+        review.prepare_calibration(run_id=FIXED_RUN_ID)
+        run_root = self.root / f"grades/review/f2026/runs/{FIXED_RUN_ID}"
+        request = json.loads(
+            (run_root / "manifests/calibration_clearance_request.json").read_text()
+        )
+        record_id = sorted(
+            item["submission_record_id"] for item in request["items"]
+        )[0]
+        derivative_path = self.root / "synthetic-sanitized-derivative.pdf"
+        derivative_path.write_bytes(
+            pipeline._minimal_pdf_bytes("synthetic sanitized replacement P1 P2 P3")
+        )
+        review_set = review.stage_calibration_review_set(
+            run_id=FIXED_RUN_ID,
+            sanitized_derivatives={record_id: derivative_path},
+        )
+        self.assertEqual(review_set["status"], "REQUIRES_SANITIZED_DERIVATIVE")
+        with self.assertRaisesRegex(
+            pipeline.ContractError, "source raster"
+        ):
+            review.authorize_identity_visible_calibration(
+                run_id=FIXED_RUN_ID,
+                review_set_id=str(review_set["review_set_id"]),
+                review_set_sha256=str(review_set["review_set_sha256"]),
+                actor_id="synthetic-instructor",
+                acknowledgement=pipeline.IDENTITY_VISIBLE_ACKNOWLEDGEMENT,
+                rationale="Synthetic derivative rejection test.",
+            )
+
+    def test_identity_visible_resume_rejects_review_pdf_tampering_without_mutation(
+        self,
+    ) -> None:
+        class IdentityVisiblePipeline(pipeline.ReviewPipeline):
+            def _identity_scan(
+                self, *args: object, **kwargs: object
+            ) -> tuple[str, list[str]]:
+                return "FAIL", ["IDENTITY_DISPLAY_NAME_PRESENT"]
+
+        review = IdentityVisiblePipeline(
+            self.root,
+            codebook_path=self.codebook_path,
+            now=lambda: FIXED_TIME,
+        )
+        review.intake(run_id=FIXED_RUN_ID)
+        review.prepare_calibration(run_id=FIXED_RUN_ID)
+        review_set = review.stage_calibration_review_set(
+            run_id=FIXED_RUN_ID,
+            sanitized_derivatives={},
+        )
+        review.authorize_identity_visible_calibration(
+            run_id=FIXED_RUN_ID,
+            review_set_id=str(review_set["review_set_id"]),
+            review_set_sha256=str(review_set["review_set_sha256"]),
+            actor_id="synthetic-instructor",
+            acknowledgement=pipeline.IDENTITY_VISIBLE_ACKNOWLEDGEMENT,
+            rationale="Synthetic tamper rejection test.",
+        )
+        review_set_document = json.loads(
+            (self.root / str(review_set["review_set_manifest"])).read_text()
+        )
+        review_pdf = self.root / review_set_document["items"][0]["review_artifact"][
+            "path"
+        ]
+        pipeline.write_private_bytes(review_pdf, review_pdf.read_bytes() + b"tampered")
+        run_root = self.root / f"grades/review/f2026/runs/{FIXED_RUN_ID}"
+        manifest_before = (run_root / "run_manifest.json").read_bytes()
+        events_before = (run_root / "events/events.jsonl").read_bytes()
+        with self.assertRaisesRegex(
+            pipeline.ContractError, "recorded run output changed"
+        ):
+            review.resume_identity_visible_calibration(run_id=FIXED_RUN_ID)
+        self.assertEqual((run_root / "run_manifest.json").read_bytes(), manifest_before)
+        self.assertEqual((run_root / "events/events.jsonl").read_bytes(), events_before)
+        self.assertEqual(list((run_root / "packets").glob("*/packet_manifest.json")), [])
 
     def test_accepted_artifact_tampering_blocks_resume_without_mutation(self) -> None:
         self.pipeline.intake(run_id=FIXED_RUN_ID)

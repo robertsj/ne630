@@ -19,8 +19,9 @@ check it without network access or cross-file reference resolution.
 | `calibration_clearance_request.schema.json` | eight locked source scan records awaiting inert review-set staging | private run state |
 | `calibration_clearance_review_set.schema.json` | immutable eight-item image-only visual-review set | restricted run state |
 | `calibration_clearance.schema.json` | adopted human clearance and accepted PDF references | restricted run state |
-| `calibration_packet_manifest.schema.json` | product-blinded packet contents | restricted run state |
-| `dossier_data.schema.json` | structured source for a blinded dossier | private run state |
+| `calibration_identity_visible_authorization.schema.json` | adopted private-use authorization for an exact identity-visible canonical review set | restricted run state |
+| `calibration_packet_manifest.schema.json` | blinded or explicitly identity-visible packet contents | restricted run state |
+| `dossier_data.schema.json` | structured source for a product-calibration dossier | private run state |
 | `render_manifest.schema.json` | deterministic Markdown rendering provenance | private run state |
 | `review.schema.json` | qualitative product-calibration review | private run state |
 | `calibration_reconciliation.schema.json` | post-calibration reconciliation | private run state |
@@ -42,7 +43,10 @@ template, renderer, and output hashes are recorded by `render_manifest`.
 - A nonidentifying submission record ID is
   `<assignment>-<pseudonym>-V<attempt>`, for example `HW02-S014-V01`.
 - Source/LMS submission IDs, names, usernames, and original basenames are
-  forbidden outside `identity_map` and the original submission tree.
+  forbidden outside `identity_map` and the original submission tree, except
+  that visible identity already present on a canonical raster PDF may remain in
+  an explicitly authorized, restricted identity-visible review set and packet.
+  The authorization and other structured JSON remain pseudonymous.
 - Record IDs use an uppercase type prefix and a six-or-more digit sequence:
   `ART-000001`, `EVT-000001`, `DEC-000001`, `FND-000001`, and `OBS-000001`.
 - Decision lines are immutable. A new adopted decision may name the earlier
@@ -65,8 +69,12 @@ are optional and never substitute for an artifact hash and location.
 
 Product-calibration evidence is limited to `SUBMITTED_SOLUTION`,
 `PROBLEM_STATEMENT`, and `SOLUTION_KEY`. Product packets, dossiers, and reviews
-must not expose discourse, identity, original filenames, intake/late flags, or
-route guesses.
+must not expose discourse, original filenames, intake/late flags, or route
+guesses. Identity is excluded in `PRODUCT_BLINDED` mode. Under a separately
+adopted, exact-review-set authorization, a restricted
+`IDENTITY_VISIBLE_NON_BLINDED` packet may preserve visible identity already on
+the canonical submitted-solution raster; it must not be represented as
+identity-cleared or blinded.
 
 Automated PDF scans are denylist checks: they may report `FAIL` or
 `NEEDS_HUMAN_TRIAGE`, but they cannot by themselves establish visual blinding.
@@ -81,6 +89,17 @@ derivative and rebuilds canonical image-only PDFs. An adopted
 review-set ID, manifest hash, and eight PDF hashes. Packet manifests preserve
 the automated status and codes, cite that review set, clearance, and decision,
 and record `PASS` only as the final combined human-visible-identity outcome.
+
+When the instructor instead explicitly authorizes the exact canonical review
+set for restricted identity-visible calibration, an adopted
+`IDENTITY_VISIBLE_CALIBRATION_AUTHORIZATION` decision and matching
+authorization bind the same review-set and PDF hashes. The authorization JSON
+records no source identifier itself; it states that the accepted PDF artifacts
+may contain visible identity. Resulting packets use
+`RESTRICTED_IDENTITY_VISIBLE_CALIBRATION_PACKET`, set identity exclusion to
+false, report `NOT_BLINDED`, and propagate `contains_source_identifiers: true`
+to packet and dossier aggregates. This path authorizes private calibration use;
+it is not identity clearance and does not make the artifacts student-facing.
 
 ## Validation beyond JSON Schema
 
@@ -102,10 +121,13 @@ and record `PASS` only as the final combined human-visible-identity outcome.
    set. Review sets and adopted clearances contain the same eight
    assignment/submission pairs and match those request facts.
 8. Each accepted PDF is the exact canonical image-only artifact in an immutable
-   review set and is bound to an adopted `IDENTITY_CLEARANCE` decision whose
-   evidence names both the review-set and clearance hashes. Packet sanitization
-   fields must reproduce the corresponding clearance item.
-9. Product packets and reviews obey blinding, evidence, excerpt, comment, and
+   review set and is bound either to an adopted `IDENTITY_CLEARANCE` decision
+   whose evidence names the review-set and clearance hashes, or to an adopted
+   `IDENTITY_VISIBLE_CALIBRATION_AUTHORIZATION` bound to the exact same
+   review-set and PDF hashes. Packet sanitization fields must reproduce the
+   corresponding clearance or authorization item.
+9. Product packets and reviews obey their declared blinded or restricted
+   identity-visible mode, plus the evidence, excerpt, comment, and
    no-numeric-scoring constraints.
 10. Student code remains unexecuted while the sandbox decision is unresolved.
 11. Event and decision sequences are contiguous and chronological; decision

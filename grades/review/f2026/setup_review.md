@@ -1,6 +1,6 @@
 # NE 630 Fall 2026 Homework Review Pilot
 
-Status: **Intake/selection and fail-closed human-clearance/resume CLI implemented and demonstrated on wholly synthetic records; live intake remains pending**
+Status: **Live pseudonymized intake demonstrated; calibration packets require either exact visual clearance or an explicit restricted identity-visible authorization**
 
 Scope: HW01–HW04
 
@@ -70,8 +70,12 @@ python3 grades/review/f2026/review_pipeline.py intake
 python3 grades/review/f2026/review_pipeline.py prepare-calibration --run-id RUN_ID
 python3 grades/review/f2026/review_pipeline.py stage-calibration-review-set --run-id RUN_ID
 # The instructor now opens every review_pdfs path returned above.
+# Blinded path:
 python3 grades/review/f2026/review_pipeline.py record-calibration-clearance --run-id RUN_ID --review-set-id RSET_ID --review-set-sha256 SHA256 --actor-id INSTRUCTOR_ID --attest-visual-clearance
 python3 grades/review/f2026/review_pipeline.py resume-calibration --run-id RUN_ID
+# Or, restricted identity-visible path:
+python3 grades/review/f2026/review_pipeline.py authorize-identity-visible-calibration --run-id RUN_ID --review-set-id RSET_ID --review-set-sha256 SHA256 --actor-id INSTRUCTOR_ID --acknowledge-identity-visible
+python3 grades/review/f2026/review_pipeline.py resume-identity-visible-calibration --run-id RUN_ID
 python3 grades/review/f2026/review_pipeline.py validate --run-id RUN_ID
 ```
 
@@ -97,17 +101,36 @@ input: it requires the exact returned `RSET` ID and manifest SHA-256, then
 records the visual attestation, an adopted `IDENTITY_CLEARANCE` decision, and
 those same eight artifact references.
 
+When the instructor explicitly directs that the canonical raster PDFs be used
+with visible identity permitted, the separate
+`authorize-identity-visible-calibration` path records an adopted
+`IDENTITY_VISIBLE_CALIBRATION_AUTHORIZATION` for the exact returned `RSET` ID,
+manifest SHA-256, and eight PDF hashes. This is not clearance: the resulting
+packet classification is `RESTRICTED_IDENTITY_VISIBLE_CALIBRATION_PACKET`, its
+identity status is `NOT_BLINDED`, and both packet and dossier declare that they
+may contain source identifiers. Canonical rasterization still removes metadata
+and active content. The authorization is restricted to private calibration use
+and does not make any artifact student-facing.
+
 The local actor ID is an operator attestation, not a cryptographic identity
 proof. The authorized agent must not issue this command on the instructor's
 behalf; the instructor runs it personally (or gives an explicit, review-set-
-specific confirmation through the trusted session) after page inspection.
-Inertness is machine-enforced and is not part of the human claim.
+specific confirmation through the trusted session). Visual clearance still
+requires page inspection. Identity-visible authorization instead acknowledges
+that visible identity may remain and does not claim such inspection or
+clearance. Inertness is machine-enforced and is not part of either human claim.
 
 `resume-calibration` verifies that the request, clearance, decision, locked
 selection, review-set hash, accepted inert bytes, and automated scan facts still agree; only then does
 it complete `PREPARE_CALIBRATION` and write the blinded packet and dossier
 artifacts. Any missing, stale, altered, rejected, or mismatched evidence remains
 fail-closed rather than being treated as a clearance.
+
+`resume-identity-visible-calibration` performs the corresponding exact-chain
+checks against the adopted authorization before it writes explicitly
+identity-visible, non-blinded packets and dossiers. It never falls back to the
+blinded path, and a visible authorization cannot satisfy an identity-clearance
+requirement.
 
 As its stages occur, a run writes its `run_manifest.json`, reference manifest,
 event log, human-decision log, versioned review queues, per-submission

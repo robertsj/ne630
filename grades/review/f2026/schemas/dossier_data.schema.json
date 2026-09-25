@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:ne630:review:f2026:dossier-data:1.0.0",
-  "title": "Structured product-blinded dossier data",
+  "title": "Structured product-calibration dossier data",
   "type": "object",
   "required": [
     "schema_version",
@@ -30,7 +30,7 @@
     "assignment_id": {"$ref": "#/$defs/assignment_id"},
     "submission_record_id": {"$ref": "#/$defs/submission_record_id"},
     "pseudonym": {"$ref": "#/$defs/pseudonym"},
-    "view": {"const": "PRODUCT_BLINDED"},
+    "view": {"enum": ["PRODUCT_BLINDED", "PRODUCT_IDENTITY_VISIBLE"]},
     "packet_manifest": {"$ref": "#/$defs/artifact_ref"},
     "coverage": {
       "type": "object",
@@ -78,7 +78,7 @@
       "required": ["discourse", "identity", "original_filenames", "intake_flags", "late_metadata", "route_metadata"],
       "properties": {
         "discourse": {"const": true},
-        "identity": {"const": true},
+        "identity": {"type": "boolean"},
         "original_filenames": {"const": true},
         "intake_flags": {"const": true},
         "late_metadata": {"const": true},
@@ -88,8 +88,28 @@
     },
     "reviewer_state": {"const": "PENDING"},
     "student_facing": {"const": false},
-    "contains_source_identifiers": {"const": false}
+    "contains_source_identifiers": {"type": "boolean"}
   },
+  "oneOf": [
+    {
+      "properties": {
+        "view": {"const": "PRODUCT_BLINDED"},
+        "exclusions": {
+          "properties": {"identity": {"const": true}}
+        },
+        "contains_source_identifiers": {"const": false}
+      }
+    },
+    {
+      "properties": {
+        "view": {"const": "PRODUCT_IDENTITY_VISIBLE"},
+        "exclusions": {
+          "properties": {"identity": {"const": false}}
+        },
+        "contains_source_identifiers": {"const": true}
+      }
+    }
+  ],
   "$defs": {
     "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
     "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},

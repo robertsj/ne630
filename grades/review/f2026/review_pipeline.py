@@ -42,7 +42,7 @@ import jsonschema
 import yaml
 
 
-VERSION = "0.3.1"
+VERSION = "0.4.0"
 SCHEMA_VERSION = "1.0.0"
 ASSIGNMENTS = ("HW01", "HW02", "HW03", "HW04")
 STAGES = (
@@ -98,10 +98,15 @@ INERT_RASTER_PROFILE = "POPPLER_JPEG_IMAGE_ONLY_V1"
 PDF_PAGE_TEXT_SEPARATOR = b"\x00NE630_PAGE_TEXT\x00"
 PRIVATE_DIRECTORY_MODE = 0o700
 PRIVATE_FILE_MODE = 0o600
-MINIMUM_SELF_TEST_CASES = 59
+MINIMUM_SELF_TEST_CASES = 63
 CLEARANCE_ATTESTATION = (
     "I personally inspected every page of each PDF in the identified review "
     "set and confirm that no visible student identity remains."
+)
+IDENTITY_VISIBLE_ACKNOWLEDGEMENT = (
+    "I authorize the identified canonical raster review set for restricted "
+    "identity-visible calibration. I understand that visible student identity "
+    "may remain and that the resulting packets are not blinded."
 )
 IDENTIFIER_RE = re.compile(
     r"\b(?:ART|EVT|FND|OBS|DEC|CHK|REFMAN|IDMAP|SUBMAN|BLD|QUE|SEL|RSET|PKT|DOS|RND|VAL)-[0-9]{6}\b"
@@ -2050,8 +2055,8 @@ class ReviewPipeline:
             self.restricted_root,
         ):
             assert_no_symlink_components(self.repository_root, configured_path)
-        if len(self.schemas) != 19:
-            raise ContractError(f"expected 19 schemas, found {len(self.schemas)}")
+        if len(self.schemas) != 20:
+            raise ContractError(f"expected 20 schemas, found {len(self.schemas)}")
         for name, schema in sorted(self.schemas.items()):
             try:
                 jsonschema.Draft202012Validator.check_schema(schema)
@@ -4580,10 +4585,11 @@ class ReviewPipeline:
         selected: Mapping[str, Any],
         accepted_solution: bytes,
         accepted_ref: Mapping[str, Any],
-        clearance_ref: Mapping[str, Any],
+        approval_ref: Mapping[str, Any],
         review_set_ref: Mapping[str, Any],
-        clearance_item: Mapping[str, Any],
+        approval_item: Mapping[str, Any],
         decision_id: str,
+        identity_visible: bool,
         reference_materials: Mapping[tuple[str, str], tuple[bytes, Mapping[str, Any]]],
         dossier_template: tuple[bytes, Mapping[str, Any]],
         allocator: IdAllocator,
@@ -4660,11 +4666,42 @@ class ReviewPipeline:
         created_at = self.now()
         exclusions = {
             "discourse": True,
-            "identity": True,
+            "identity": not identity_visible,
             "original_filenames": True,
             "intake_flags": True,
             "late_metadata": True,
             "route_metadata": True,
+        }
+        sanitization = {
+            "tool": {
+                "name": "ne630-review-pipeline",
+                "version": VERSION,
+                "executable_sha256": self.executable_sha256,
+            },
+            "method": (
+                "Instructor-authorized canonical image-only raster PDF from an "
+                "immutable review set; visible student identity may remain, while "
+                "discourse, metadata, active content, and non-product files are excluded."
+                if identity_visible
+                else "Instructor-cleared, canonical image-only raster PDF from an "
+                "immutable review set; discourse, metadata, active content, and "
+                "non-product files excluded."
+            ),
+            (
+                "authorization_artifact"
+                if identity_visible
+                else "clearance_artifact"
+            ): dict(approval_ref),
+            "review_set_artifact": dict(review_set_ref),
+            "decision_id": decision_id,
+            "disposition": approval_item["disposition"],
+            "automated_scan_status": approval_item["automated_scan_status"],
+            "automated_scan_codes": list(
+                approval_item["automated_scan_codes"]
+            ),
+            "identity_scan_status": (
+                "NOT_BLINDED" if identity_visible else "PASS"
+            ),
         }
         packet_manifest = {
             "schema_version": SCHEMA_VERSION,
@@ -4675,31 +4712,22 @@ class ReviewPipeline:
             "assignment_id": assignment_id,
             "submission_record_id": record_id,
             "pseudonym": selected["pseudonym"],
-            "classification": "RESTRICTED_CALIBRATION_PACKET",
+            "review_mode": (
+                "IDENTITY_VISIBLE_NON_BLINDED"
+                if identity_visible
+                else "PRODUCT_BLINDED"
+            ),
+            "classification": (
+                "RESTRICTED_IDENTITY_VISIBLE_CALIBRATION_PACKET"
+                if identity_visible
+                else "RESTRICTED_CALIBRATION_PACKET"
+            ),
             "required_file_mode": "0600",
             "materials": materials,
-            "sanitization": {
-                "tool": {
-                    "name": "ne630-review-pipeline",
-                    "version": VERSION,
-                    "executable_sha256": self.executable_sha256,
-                },
-                "method": "Instructor-cleared, canonical image-only raster PDF from an immutable review set; discourse, metadata, active content, and non-product files excluded.",
-                "clearance_artifact": dict(clearance_ref),
-                "review_set_artifact": dict(review_set_ref),
-                "decision_id": decision_id,
-                "disposition": clearance_item["disposition"],
-                "automated_scan_status": clearance_item[
-                    "automated_scan_status"
-                ],
-                "automated_scan_codes": list(
-                    clearance_item["automated_scan_codes"]
-                ),
-                "identity_scan_status": "PASS",
-            },
+            "sanitization": sanitization,
             "exclusions": exclusions,
             "product_review_opened": False,
-            "contains_source_identifiers": False,
+            "contains_source_identifiers": identity_visible,
         }
         self.validators["calibration_packet_manifest"].validate(packet_manifest)
         packet_manifest_path = packet_root / "packet_manifest.json"
@@ -4751,7 +4779,11 @@ class ReviewPipeline:
             "assignment_id": assignment_id,
             "submission_record_id": record_id,
             "pseudonym": selected["pseudonym"],
-            "view": "PRODUCT_BLINDED",
+            "view": (
+                "PRODUCT_IDENTITY_VISIBLE"
+                if identity_visible
+                else "PRODUCT_BLINDED"
+            ),
             "packet_manifest": packet_manifest_ref,
             "coverage": {
                 "status": "NOT_CHECKABLE",
@@ -4763,7 +4795,7 @@ class ReviewPipeline:
             "exclusions": exclusions,
             "reviewer_state": "PENDING",
             "student_facing": False,
-            "contains_source_identifiers": False,
+            "contains_source_identifiers": identity_visible,
         }
         self.validators["dossier_data"].validate(dossier)
         dossier_root = run_root / "dossiers" / record_id
@@ -4789,6 +4821,18 @@ class ReviewPipeline:
             submission_record_id=record_id,
             run_id=selection["run_id"],
             materials=material_lines,
+            view_label=(
+                "identity-visible, non-blinded private calibration packet"
+                if identity_visible
+                else "product-blinded calibration packet"
+            ),
+            identity_notice=(
+                "WARNING — visible student identity may remain in the submitted "
+                "solution. Instructor authorization is required; this packet must "
+                "not be represented as blinded."
+                if identity_visible
+                else "Identity is excluded from this packet."
+            ),
         ).encode("utf-8")
         markdown_path = dossier_root / "dossier.md"
         write_private_bytes(markdown_path, markdown)
@@ -5551,6 +5595,28 @@ class ReviewPipeline:
         decision_log, decision_documents = self._human_decision_documents(
             decision_path, run_id
         )
+        clearance_path = run_root / "manifests/calibration_clearance.json"
+        existing_clearance_ref = self._output_for_path(
+            manifest, repository_relative(self.repository_root, clearance_path)
+        )
+        identity_visible_path = (
+            run_root / "manifests/calibration_identity_visible_authorization.json"
+        )
+        if (
+            identity_visible_path.exists()
+            or self._output_for_path(
+                manifest,
+                repository_relative(self.repository_root, identity_visible_path),
+            )
+            is not None
+        ):
+            raise ContractError(
+                "existing identity-visible authorization blocks visual clearance"
+            )
+        if decision_documents and existing_clearance_ref is None:
+            raise ContractError(
+                "an unexpected prior human decision blocks clearance recording"
+            )
         self._arm_stage_failure_guard(
             manifest=manifest,
             events=events,
@@ -5561,10 +5627,6 @@ class ReviewPipeline:
             code="PREPARE_CALIBRATION_FAILED",
             message="Clearance recording stopped safely before calibration resumed.",
             preserve_terminal=True,
-        )
-        clearance_path = run_root / "manifests/calibration_clearance.json"
-        existing_clearance_ref = self._output_for_path(
-            manifest, repository_relative(self.repository_root, clearance_path)
         )
         if existing_clearance_ref is not None:
             clearance_ref = self._verified_output_for_path(manifest, clearance_path)
@@ -5714,6 +5776,390 @@ class ReviewPipeline:
             ),
         }
 
+    def authorize_identity_visible_calibration(
+        self,
+        *,
+        run_id: str | None = None,
+        review_set_id: str,
+        review_set_sha256: str,
+        actor_id: str,
+        acknowledgement: str,
+        rationale: str,
+    ) -> dict[str, Any]:
+        """Authorize exact source rasters for private, explicitly non-blinded use."""
+        with self._mutation_lock():
+            self._clear_stage_failure_guard()
+            try:
+                return self._authorize_identity_visible_calibration(
+                    run_id=run_id,
+                    review_set_id=review_set_id,
+                    review_set_sha256=review_set_sha256,
+                    actor_id=actor_id,
+                    acknowledgement=acknowledgement,
+                    rationale=rationale,
+                )
+            except (Exception, KeyboardInterrupt):
+                self._seal_active_stage_failure()
+                raise
+            finally:
+                self._clear_stage_failure_guard()
+
+    def _authorize_identity_visible_calibration(
+        self,
+        *,
+        run_id: str | None,
+        review_set_id: str,
+        review_set_sha256: str,
+        actor_id: str,
+        acknowledgement: str,
+        rationale: str,
+    ) -> dict[str, Any]:
+        if not actor_id.strip() or len(actor_id) > 128:
+            raise ContractError("instructor actor ID must contain 1 to 128 characters")
+        if acknowledgement != IDENTITY_VISIBLE_ACKNOWLEDGEMENT:
+            raise ContractError(
+                "the exact identity-visible authorization acknowledgement is required"
+            )
+        if not rationale.strip() or len(rationale) > 10_000:
+            raise ContractError(
+                "authorization rationale must contain 1 to 10000 characters"
+            )
+        if not re.fullmatch(r"RSET-[0-9]{6,}", review_set_id):
+            raise ContractError("review-set ID is invalid")
+        if not re.fullmatch(r"[0-9a-f]{64}", review_set_sha256):
+            raise ContractError("review-set SHA-256 is invalid")
+
+        preflight = self.preflight_framework(require_tools=True)
+        run_id = self.resolve_run_id(run_id)
+        run_root, manifest, events, event_path, decision_path, allocator = self._load_run(
+            run_id
+        )
+        prepare_state = self._stage(manifest, "PREPARE_CALIBRATION")
+        if any(
+            (
+                manifest["run_state"] != "BLOCKED",
+                prepare_state["status"] != "BLOCKED",
+                prepare_state["reason_code"] != "IDENTITY_SANITIZATION_REQUIRED",
+            )
+        ):
+            raise ContractError(
+                "identity-visible authorization may be recorded only for an "
+                "identity-clearance-blocked preparation"
+            )
+        self._assert_frozen_run_compatible(manifest, preflight)
+
+        selection_path = run_root / "manifests/calibration_selection.json"
+        request_path = run_root / "manifests/calibration_clearance_request.json"
+        selection_ref = self._verified_output_for_path(manifest, selection_path)
+        request_ref = self._verified_output_for_path(manifest, request_path)
+        selection = read_json(selection_path)
+        request = read_json(request_path)
+        self.validators["calibration_selection"].validate(selection)
+        self.validators["calibration_clearance_request"].validate(request)
+        if any(
+            (
+                selection["run_id"] != run_id,
+                request["run_id"] != run_id,
+                request["selection_id"] != selection["selection_id"],
+                request["selection"] != selection_ref,
+            )
+        ):
+            raise ContractError("clearance request does not match the locked selection")
+        selected_ids = {
+            item["submission_record_id"] for item in selection["selections"]
+        }
+        request_by_record = {
+            item["submission_record_id"]: item for item in request["items"]
+        }
+        if len(selected_ids) != 8 or set(request_by_record) != selected_ids:
+            raise ContractError("clearance request does not contain the exact selection")
+
+        identity_path = self.restricted_root / run_id / "identity_map.json"
+        self._verified_output_for_path(manifest, identity_path)
+        identity_map = self._identity_map(run_id)
+        free_text = normalized_casefold(f"{actor_id}\n{rationale}")
+        for entry in identity_map["entries"]:
+            for subject in entry["subjects"]:
+                for key in ("display_name", "lms_user_id", "source_identity_key"):
+                    value = subject.get(key)
+                    if value and identity_token_present(free_text, str(value)):
+                        raise ContractError(
+                            "actor ID and rationale must not contain source identifiers"
+                        )
+
+        review_set_references = [
+            item
+            for item in manifest["outputs"]
+            if item["role"] == "CALIBRATION_CLEARANCE_REVIEW_SET"
+            and item["sha256"] == review_set_sha256
+        ]
+        if len(review_set_references) != 1:
+            raise ContractError("review-set hash is not an indexed run artifact")
+        review_set_ref = dict(review_set_references[0])
+        review_set_path = self.repository_root / assert_relative_path(
+            review_set_ref["path"]
+        )
+        self._verified_output_for_path(manifest, review_set_path)
+        review_set = read_json(review_set_path)
+        self.validators["calibration_clearance_review_set"].validate(review_set)
+        if any(
+            (
+                review_set["run_id"] != run_id,
+                review_set["selection_id"] != selection["selection_id"],
+                review_set["review_set_id"] != review_set_id,
+                review_set["selection"] != selection_ref,
+                review_set["clearance_request"] != request_ref,
+                review_set["status"] != "REQUIRES_SANITIZED_DERIVATIVE",
+                review_set["normalization"]["profile"] != INERT_RASTER_PROFILE,
+                review_set["normalization"]["executable_sha256"]
+                != self.executable_sha256,
+            )
+        ):
+            raise ContractError("review set is not valid for this exact selection")
+        review_by_record = {
+            item["submission_record_id"]: item for item in review_set["items"]
+        }
+        if set(review_by_record) != selected_ids:
+            raise ContractError("review set does not cover the exact selection")
+
+        authorization_items: list[dict[str, Any]] = []
+        for record_id in sorted(selected_ids):
+            request_item = request_by_record[record_id]
+            review_item = review_by_record[record_id]
+            review_ref = review_item["review_artifact"]
+            review_path = self.repository_root / assert_relative_path(
+                review_ref["path"]
+            )
+            if self._verified_output_for_path(manifest, review_path) != review_ref:
+                raise ContractError("review PDF reference changed")
+            inert = inspect_inert_raster_pdf(
+                safe_file_bytes(review_path, MAX_RASTER_TOTAL_BYTES)
+            )
+            if any(
+                (
+                    review_ref["role"] != "CALIBRATION_REVIEW_PDF",
+                    review_item["assignment_id"] != request_item["assignment_id"],
+                    review_item["disposition"] != "SOURCE_RASTER",
+                    review_item["page_count"] != inert.page_count,
+                    review_item["page_sha256s"] != list(inert.page_sha256s),
+                    review_item["pixel_dimensions"]
+                    != [list(item) for item in inert.pixel_dimensions],
+                    review_item["source_input_sha256"]
+                    != request_item["source_solution_sha256"],
+                    review_item["source_input_byte_count"]
+                    != request_item["source_solution_byte_count"],
+                )
+            ):
+                raise ContractError(
+                    "identity-visible authorization requires exact source rasters"
+                )
+            authorization_items.append(
+                {
+                    "assignment_id": request_item["assignment_id"],
+                    "submission_record_id": record_id,
+                    "disposition": "SOURCE_RASTER_IDENTITY_VISIBLE_AUTHORIZED",
+                    "review_artifact": review_ref,
+                    "accepted_artifact": review_ref,
+                    "automated_scan_status": review_item["automated_scan_status"],
+                    "automated_scan_codes": list(
+                        review_item["automated_scan_codes"]
+                    ),
+                    "identity_visibility": (
+                        "MAY_CONTAIN_VISIBLE_STUDENT_IDENTITY"
+                    ),
+                    "contains_source_identifiers": False,
+                }
+            )
+
+        decision_log, decision_documents = self._human_decision_documents(
+            decision_path, run_id
+        )
+        authorization_path = (
+            run_root / "manifests/calibration_identity_visible_authorization.json"
+        )
+        existing_authorization_ref = self._output_for_path(
+            manifest,
+            repository_relative(self.repository_root, authorization_path),
+        )
+        clearance_path = run_root / "manifests/calibration_clearance.json"
+        if (
+            clearance_path.exists()
+            or self._output_for_path(
+                manifest, repository_relative(self.repository_root, clearance_path)
+            )
+            is not None
+        ):
+            raise ContractError(
+                "existing visual clearance blocks identity-visible authorization"
+            )
+        if decision_documents and existing_authorization_ref is None:
+            raise ContractError(
+                "an unexpected prior human decision blocks authorization recording"
+            )
+        self._arm_stage_failure_guard(
+            manifest=manifest,
+            events=events,
+            run_root=run_root,
+            event_path=event_path,
+            decision_path=decision_path,
+            stage="PREPARE_CALIBRATION",
+            code="PREPARE_CALIBRATION_FAILED",
+            message=(
+                "Identity-visible authorization stopped safely before "
+                "calibration resumed."
+            ),
+            preserve_terminal=True,
+        )
+        if existing_authorization_ref is not None:
+            authorization_ref = self._verified_output_for_path(
+                manifest, authorization_path
+            )
+            authorization = read_json(authorization_path)
+            self.validators[
+                "calibration_identity_visible_authorization"
+            ].validate(authorization)
+            decision_id = authorization["decision_id"]
+            if any(
+                (
+                    authorization["run_id"] != run_id,
+                    authorization["selection_id"] != selection["selection_id"],
+                    authorization["selection"] != selection_ref,
+                    authorization["clearance_request"] != request_ref,
+                    authorization["review_set_id"] != review_set_id,
+                    authorization["review_set"] != review_set_ref,
+                    authorization["authorization"] != acknowledgement,
+                    authorization["items"] != authorization_items,
+                )
+            ):
+                raise ContractError(
+                    "existing identity-visible authorization differs from this request"
+                )
+        else:
+            if authorization_path.exists():
+                raise ContractError(
+                    "unindexed identity-visible authorization requires recovery"
+                )
+            decision_id = decision_log.next_decision_id
+            authorization = {
+                "schema_version": SCHEMA_VERSION,
+                "run_id": run_id,
+                "selection_id": selection["selection_id"],
+                "created_at": self.now(),
+                "selection": selection_ref,
+                "clearance_request": request_ref,
+                "review_set_id": review_set_id,
+                "review_set": review_set_ref,
+                "decision_id": decision_id,
+                "status": "ADOPTED",
+                "review_mode": "IDENTITY_VISIBLE_NON_BLINDED",
+                "authorization": acknowledgement,
+                "restrictions": {
+                    "restricted_private_use_only": True,
+                    "identity_visible": True,
+                    "not_identity_cleared": True,
+                    "student_facing": False,
+                },
+                "items": authorization_items,
+                "accepted_artifacts_may_contain_source_identifiers": True,
+                "contains_source_identifiers": False,
+            }
+            self.validators[
+                "calibration_identity_visible_authorization"
+            ].validate(authorization)
+            write_private_json(authorization_path, authorization)
+            authorization_ref = artifact_ref(
+                self.repository_root,
+                authorization_path,
+                artifact_id=allocator.next("ART"),
+                role="CALIBRATION_IDENTITY_VISIBLE_AUTHORIZATION",
+                media_type="application/json",
+            )
+            self._add_output(manifest, authorization_ref)
+            manifest["updated_at"] = authorization["created_at"]
+            self._refresh_logs(manifest, events, event_path, decision_path)
+            self._write_manifest(run_root, manifest)
+
+        matching_decisions = [
+            item
+            for item in decision_documents
+            if item["decision_id"] == decision_id
+        ]
+        evidence_locators = [
+            {
+                "artifact_id": review_set_ref["artifact_id"],
+                "artifact_sha256": review_set_ref["sha256"],
+                "source_role": "HUMAN_NOTE",
+                "logical_path": PurePosixPath(review_set_ref["path"]).name,
+                "locator_type": "FILE",
+                "extraction_method": "JSON_PARSE",
+                "uncertainty": "NONE",
+            },
+            {
+                "artifact_id": authorization_ref["artifact_id"],
+                "artifact_sha256": authorization_ref["sha256"],
+                "source_role": "HUMAN_NOTE",
+                "logical_path": PurePosixPath(authorization_ref["path"]).name,
+                "locator_type": "FILE",
+                "extraction_method": "JSON_PARSE",
+                "uncertainty": "NONE",
+            },
+        ]
+        if len(matching_decisions) > 1:
+            raise ContractError("identity-visible authorization decision is duplicated")
+        if matching_decisions:
+            decision = matching_decisions[0]
+            if any(
+                (
+                    decision["decision_maker"]["actor_id"] != actor_id.strip(),
+                    decision["rationale"] != rationale.strip(),
+                    decision["decision_type"]
+                    != "IDENTITY_VISIBLE_CALIBRATION_AUTHORIZATION",
+                    decision["subject"]
+                    != {"subject_type": "RUN", "subject_id": run_id},
+                    decision["evidence_locators"] != evidence_locators,
+                    set(decision["affected_record_ids"])
+                    != {selection["selection_id"], review_set_id, *selected_ids},
+                )
+            ):
+                raise ContractError(
+                    "existing identity-visible decision differs from this authorization"
+                )
+        else:
+            if decision_documents:
+                raise ContractError(
+                    "an unexpected prior human decision blocks authorization recording"
+                )
+            decision = decision_log.append(
+                decision_id=decision_id,
+                actor_id=actor_id.strip(),
+                authority="COURSE_INSTRUCTOR",
+                decision_type="IDENTITY_VISIBLE_CALIBRATION_AUTHORIZATION",
+                subject_type="RUN",
+                subject_id=run_id,
+                prior_state="EIGHT_PRODUCTS_BLOCKED_PENDING_IDENTITY_SANITIZATION",
+                resulting_state=(
+                    "EIGHT_SOURCE_RASTERS_AUTHORIZED_FOR_RESTRICTED_"
+                    "IDENTITY_VISIBLE_CALIBRATION"
+                ),
+                rationale=rationale.strip(),
+                evidence_locators=evidence_locators,
+                affected_record_ids=[
+                    selection["selection_id"], review_set_id, *sorted(selected_ids)
+                ],
+            )
+            manifest["updated_at"] = decision["made_at"]
+            self._refresh_logs(manifest, events, event_path, decision_path)
+            self._write_manifest(run_root, manifest)
+        return {
+            "run_id": run_id,
+            "selection_id": selection["selection_id"],
+            "review_set_id": review_set_id,
+            "review_set_sha256": review_set_sha256,
+            "decision_id": decision["decision_id"],
+            "authorized": len(authorization_items),
+            "review_mode": "IDENTITY_VISIBLE_NON_BLINDED",
+        }
+
     def _prepare_failed_resume_retry(
         self,
         *,
@@ -5786,14 +6232,33 @@ class ReviewPipeline:
         with self._mutation_lock():
             self._clear_stage_failure_guard()
             try:
-                return self._resume_calibration(run_id=run_id)
+                return self._resume_calibration(
+                    run_id=run_id, identity_visible=False
+                )
             except (Exception, KeyboardInterrupt):
                 self._seal_active_stage_failure()
                 raise
             finally:
                 self._clear_stage_failure_guard()
 
-    def _resume_calibration(self, *, run_id: str | None) -> dict[str, Any]:
+    def resume_identity_visible_calibration(
+        self, *, run_id: str | None = None
+    ) -> dict[str, Any]:
+        with self._mutation_lock():
+            self._clear_stage_failure_guard()
+            try:
+                return self._resume_calibration(
+                    run_id=run_id, identity_visible=True
+                )
+            except (Exception, KeyboardInterrupt):
+                self._seal_active_stage_failure()
+                raise
+            finally:
+                self._clear_stage_failure_guard()
+
+    def _resume_calibration(
+        self, *, run_id: str | None, identity_visible: bool
+    ) -> dict[str, Any]:
         preflight = self.preflight_framework(require_tools=True)
         run_id = self.resolve_run_id(run_id)
         run_root, manifest, events, event_path, decision_path, allocator = self._load_run(
@@ -5827,44 +6292,77 @@ class ReviewPipeline:
 
         selection_path = run_root / "manifests/calibration_selection.json"
         request_path = run_root / "manifests/calibration_clearance_request.json"
-        clearance_path = run_root / "manifests/calibration_clearance.json"
+        approval_path = run_root / "manifests" / (
+            "calibration_identity_visible_authorization.json"
+            if identity_visible
+            else "calibration_clearance.json"
+        )
         selection_ref = self._verified_output_for_path(manifest, selection_path)
         request_ref = self._verified_output_for_path(manifest, request_path)
-        clearance_ref = self._verified_output_for_path(manifest, clearance_path)
+        approval_ref = self._verified_output_for_path(manifest, approval_path)
         selection = read_json(selection_path)
         request = read_json(request_path)
-        clearance = read_json(clearance_path)
+        approval = read_json(approval_path)
         self.validators["calibration_selection"].validate(selection)
         self.validators["calibration_clearance_request"].validate(request)
-        self.validators["calibration_clearance"].validate(clearance)
-        review_set_ref = clearance["review_set"]
+        self.validators[
+            (
+                "calibration_identity_visible_authorization"
+                if identity_visible
+                else "calibration_clearance"
+            )
+        ].validate(approval)
+        review_set_ref = approval["review_set"]
         review_set_path = self.repository_root / assert_relative_path(
             review_set_ref["path"]
         )
         if self._verified_output_for_path(manifest, review_set_path) != review_set_ref:
-            raise ContractError("clearance review-set reference changed")
+            raise ContractError("approved review-set reference changed")
         review_set = read_json(review_set_path)
         self.validators["calibration_clearance_review_set"].validate(review_set)
-        if any(
+        common_approval_mismatch = any(
             (
                 selection["run_id"] != run_id,
                 request["run_id"] != run_id,
-                clearance["run_id"] != run_id,
+                approval["run_id"] != run_id,
                 request["selection_id"] != selection["selection_id"],
-                clearance["selection_id"] != selection["selection_id"],
+                approval["selection_id"] != selection["selection_id"],
                 request["selection"] != selection_ref,
-                clearance["selection"] != selection_ref,
-                clearance["clearance_request"] != request_ref,
-                clearance["attestation"] != CLEARANCE_ATTESTATION,
+                approval["selection"] != selection_ref,
+                approval["clearance_request"] != request_ref,
                 review_set["run_id"] != run_id,
                 review_set["selection_id"] != selection["selection_id"],
-                review_set["review_set_id"] != clearance["review_set_id"],
+                review_set["review_set_id"] != approval["review_set_id"],
                 review_set["selection"] != selection_ref,
                 review_set["clearance_request"] != request_ref,
-                review_set["status"] != "READY_FOR_VISUAL_REVIEW",
+                review_set["normalization"]["profile"]
+                != INERT_RASTER_PROFILE,
+                review_set["normalization"]["executable_sha256"]
+                != manifest["tool"]["executable_sha256"],
             )
-        ):
-            raise ContractError("clearance artifacts do not match the locked selection")
+        )
+        mode_approval_mismatch = (
+            any(
+                (
+                    approval["authorization"]
+                    != IDENTITY_VISIBLE_ACKNOWLEDGEMENT,
+                    approval["review_mode"]
+                    != "IDENTITY_VISIBLE_NON_BLINDED",
+                    review_set["status"] != "REQUIRES_SANITIZED_DERIVATIVE",
+                )
+            )
+            if identity_visible
+            else any(
+                (
+                    approval["attestation"] != CLEARANCE_ATTESTATION,
+                    review_set["status"] != "READY_FOR_VISUAL_REVIEW",
+                )
+            )
+        )
+        if common_approval_mismatch or mode_approval_mismatch:
+            raise ContractError(
+                "calibration authorization artifacts do not match the locked selection"
+            )
 
         selected_by_record = {
             item["submission_record_id"]: item for item in selection["selections"]
@@ -5872,8 +6370,8 @@ class ReviewPipeline:
         request_by_record = {
             item["submission_record_id"]: item for item in request["items"]
         }
-        clearance_by_record = {
-            item["submission_record_id"]: item for item in clearance["items"]
+        approval_by_record = {
+            item["submission_record_id"]: item for item in approval["items"]
         }
         review_by_record = {
             item["submission_record_id"]: item for item in review_set["items"]
@@ -5882,10 +6380,12 @@ class ReviewPipeline:
         if (
             len(selected_ids) != 8
             or set(request_by_record) != selected_ids
-            or set(clearance_by_record) != selected_ids
+            or set(approval_by_record) != selected_ids
             or set(review_by_record) != selected_ids
         ):
-            raise ContractError("clearance artifacts do not cover the exact selection")
+            raise ContractError(
+                "calibration authorization does not cover the exact selection"
+            )
 
         if retrying_failed:
             self._prepare_failed_resume_retry(
@@ -5901,15 +6401,20 @@ class ReviewPipeline:
         matching_decisions = [
             item
             for item in decision_documents
-            if item["decision_id"] == clearance["decision_id"]
+            if item["decision_id"] == approval["decision_id"]
         ]
         if len(matching_decisions) != 1:
-            raise ContractError("clearance decision is missing or duplicated")
+            raise ContractError("authorization decision is missing or duplicated")
         decision = matching_decisions[0]
         if any(
             (
                 decision["state"] != "ADOPTED",
-                decision["decision_type"] != "IDENTITY_CLEARANCE",
+                decision["decision_type"]
+                != (
+                    "IDENTITY_VISIBLE_CALIBRATION_AUTHORIZATION"
+                    if identity_visible
+                    else "IDENTITY_CLEARANCE"
+                ),
                 decision["subject"]
                 != {"subject_type": "RUN", "subject_id": run_id},
                 set(decision["affected_record_ids"])
@@ -5919,8 +6424,8 @@ class ReviewPipeline:
                     *selected_ids,
                 },
                 not any(
-                    locator["artifact_id"] == clearance_ref["artifact_id"]
-                    and locator["artifact_sha256"] == clearance_ref["sha256"]
+                    locator["artifact_id"] == approval_ref["artifact_id"]
+                    and locator["artifact_sha256"] == approval_ref["sha256"]
                     for locator in decision["evidence_locators"]
                 ),
                 not any(
@@ -5930,7 +6435,9 @@ class ReviewPipeline:
                 ),
             )
         ):
-            raise ContractError("clearance decision does not authorize this exact selection")
+            raise ContractError(
+                "decision does not authorize this exact calibration selection"
+            )
 
         submissions = self._submission_manifests(run_root, run_id)
         identity_path = self.restricted_root / run_id / "identity_map.json"
@@ -5948,7 +6455,7 @@ class ReviewPipeline:
             selected = selected_by_record[record_id]
             request_item = request_by_record[record_id]
             review_item = review_by_record[record_id]
-            clearance_item = clearance_by_record[record_id]
+            approval_item = approval_by_record[record_id]
             submission = submissions.get(record_id)
             identity_entry = identity_by_record.get(record_id)
             if submission is None or identity_entry is None:
@@ -5964,21 +6471,25 @@ class ReviewPipeline:
                     review_item["assignment_id"] != selected["assignment_id"],
                     review_item["review_artifact"]["role"]
                     != "CALIBRATION_REVIEW_PDF",
-                    clearance_item["assignment_id"] != selected["assignment_id"],
-                    clearance_item["review_artifact"]
+                    approval_item["assignment_id"] != selected["assignment_id"],
+                    approval_item["review_artifact"]
                     != review_item["review_artifact"],
-                    clearance_item["accepted_artifact"]
+                    approval_item["accepted_artifact"]
                     != review_item["review_artifact"],
-                    clearance_item["automated_scan_status"]
+                    approval_item["automated_scan_status"]
                     != review_item["automated_scan_status"],
-                    clearance_item["automated_scan_codes"]
+                    approval_item["automated_scan_codes"]
                     != review_item["automated_scan_codes"],
-                    review_item["required_action"]
+                    not identity_visible
+                    and review_item["required_action"]
                     != "VISUAL_CLEARANCE_ALLOWED",
-                    clearance_item["automated_scan_status"] == "FAIL",
+                    not identity_visible
+                    and approval_item["automated_scan_status"] == "FAIL",
                 )
             ):
-                raise ContractError("clearance row does not reconcile with selection")
+                raise ContractError(
+                    "authorization row does not reconcile with selection"
+                )
             if review_item["disposition"] == "SOURCE_RASTER":
                 source_solution, _ = self._solution_bytes(
                     submission[0], identity_entry
@@ -5993,19 +6504,23 @@ class ReviewPipeline:
                         != request_item["source_solution_sha256"],
                         review_item["source_input_byte_count"]
                         != request_item["source_solution_byte_count"],
-                        clearance_item["disposition"]
-                        != "SOURCE_RASTER_VISUALLY_CLEARED",
+                        approval_item["disposition"]
+                        != (
+                            "SOURCE_RASTER_IDENTITY_VISIBLE_AUTHORIZED"
+                            if identity_visible
+                            else "SOURCE_RASTER_VISUALLY_CLEARED"
+                        ),
                     )
                 ):
                     raise ContractError("source raster provenance does not reconcile")
             elif review_item["disposition"] == "SANITIZED_DERIVATIVE_RASTER":
-                if clearance_item["disposition"] != (
+                if identity_visible or approval_item["disposition"] != (
                     "SANITIZED_DERIVATIVE_RASTER_VISUALLY_CLEARED"
                 ):
                     raise ContractError("derivative raster disposition does not reconcile")
             else:
                 raise ContractError("unknown review-set disposition")
-            accepted_ref = clearance_item["accepted_artifact"]
+            accepted_ref = approval_item["accepted_artifact"]
             accepted_path = self.repository_root / assert_relative_path(
                 accepted_ref["path"]
             )
@@ -6027,7 +6542,7 @@ class ReviewPipeline:
             accepted_materials[record_id] = (
                 accepted_bytes,
                 dict(accepted_ref),
-                clearance_item,
+                approval_item,
             )
 
         queue_ref = self._latest_queue_reference(manifest)
@@ -6081,22 +6596,28 @@ class ReviewPipeline:
             stage="PREPARE_CALIBRATION",
             code="PREPARE_CALIBRATION_FAILED",
             message="Resumed calibration preparation stopped safely before completion.",
-            start_inputs=[clearance_ref],
+            start_inputs=[approval_ref],
             resume=True,
         )
         self._resume_stage(
             manifest,
             events,
             "PREPARE_CALIBRATION",
-            inputs=[clearance_ref],
-            message="Instructor identity clearance recorded for all eight selected products.",
+            inputs=[approval_ref],
+            message=(
+                "Instructor authorized all eight canonical source rasters for "
+                "restricted identity-visible calibration."
+                if identity_visible
+                else "Instructor identity clearance recorded for all eight "
+                "selected products."
+            ),
         )
 
         output_refs: list[dict[str, Any]] = []
         dossier_refs: dict[str, dict[str, Any]] = {}
         for selected in selection["selections"]:
             record_id = selected["submission_record_id"]
-            accepted_bytes, accepted_ref, clearance_item = accepted_materials[
+            accepted_bytes, accepted_ref, approval_item = accepted_materials[
                 record_id
             ]
             refs, dossier_ref = self._packet_and_dossier(
@@ -6105,10 +6626,11 @@ class ReviewPipeline:
                 selected=selected,
                 accepted_solution=accepted_bytes,
                 accepted_ref=accepted_ref,
-                clearance_ref=clearance_ref,
+                approval_ref=approval_ref,
                 review_set_ref=review_set_ref,
-                clearance_item=clearance_item,
-                decision_id=clearance["decision_id"],
+                approval_item=approval_item,
+                decision_id=approval["decision_id"],
+                identity_visible=identity_visible,
                 reference_materials=reference_materials,
                 dossier_template=dossier_template,
                 allocator=allocator,
@@ -6126,14 +6648,20 @@ class ReviewPipeline:
                             {
                                 "code": "CALIBRATION_SELECTED",
                                 "severity": "INFO",
-                                "message": "Selected deterministically and visually cleared for product calibration.",
+                                "message": (
+                                    "Selected deterministically and instructor-authorized "
+                                    "for restricted identity-visible product calibration."
+                                    if identity_visible
+                                    else "Selected deterministically and visually cleared "
+                                    "for product calibration."
+                                ),
                                 "finding_ids": [],
                             }
                         ],
                         "calibration_state": "SELECTED",
                         "dossier_data": dossier_refs[record_id],
                         "reviewer_state": "PENDING",
-                        "decision_ids": [clearance["decision_id"]],
+                        "decision_ids": [approval["decision_id"]],
                     }
                 )
             elif item["calibration_state"] == "PENDING_SELECTION":
@@ -6173,19 +6701,31 @@ class ReviewPipeline:
         for reference in output_refs:
             self._add_output(manifest, reference)
         manifest["reconciliation"]["calibration_selected"] = 8
+        manifest["privacy"]["contains_source_identifiers"] = identity_visible
         self._complete_stage(
             manifest,
             events,
             "PREPARE_CALIBRATION",
             outputs=output_refs,
-            message="Eight instructor-cleared product calibration packets and dossier shells prepared.",
+            message=(
+                "Eight restricted identity-visible product calibration packets "
+                "and dossier shells prepared."
+                if identity_visible
+                else "Eight instructor-cleared product calibration packets and "
+                "dossier shells prepared."
+            ),
         )
         self._refresh_logs(manifest, events, event_path, decision_path)
         self._write_manifest(run_root, manifest)
         return {
             "run_id": run_id,
             "selection_id": selection["selection_id"],
-            "decision_id": clearance["decision_id"],
+            "decision_id": approval["decision_id"],
+            "review_mode": (
+                "IDENTITY_VISIBLE_NON_BLINDED"
+                if identity_visible
+                else "PRODUCT_BLINDED"
+            ),
             "selected": 8,
             "eligible_not_selected": calibration_queue["counts"]["not_selected"],
             "product_review": calibration_queue["counts"]["product_review"],
@@ -6241,6 +6781,15 @@ class ReviewPipeline:
         clearance_path = run_root / "manifests/calibration_clearance.json"
         if clearance_path.exists():
             add(clearance_path, "calibration_clearance")
+        identity_visible_authorization_path = (
+            run_root
+            / "manifests/calibration_identity_visible_authorization.json"
+        )
+        if identity_visible_authorization_path.exists():
+            add(
+                identity_visible_authorization_path,
+                "calibration_identity_visible_authorization",
+            )
         for path in sorted((run_root / "packets").glob("*/packet_manifest.json")):
             add(path, "calibration_packet_manifest")
         for path in sorted((run_root / "dossiers").glob("*/dossier_data.json")):
@@ -7064,8 +7613,29 @@ class ReviewPipeline:
             self.repository_root,
             run_root / "manifests/calibration_clearance.json",
         )
+        identity_visible_authorization_path = repository_relative(
+            self.repository_root,
+            run_root
+            / "manifests/calibration_identity_visible_authorization.json",
+        )
         clearance_request = documents.get(clearance_request_path)
-        clearance = documents.get(clearance_path)
+        blinded_clearance = documents.get(clearance_path)
+        identity_visible_authorization = documents.get(
+            identity_visible_authorization_path
+        )
+        identity_visible_mode = isinstance(
+            identity_visible_authorization, dict
+        ) and not isinstance(blinded_clearance, dict)
+        approval_path = (
+            identity_visible_authorization_path
+            if identity_visible_mode
+            else clearance_path
+        )
+        clearance = (
+            identity_visible_authorization
+            if identity_visible_mode
+            else blinded_clearance
+        )
         clearance_by_id: dict[str, dict[str, Any]] = {}
         clearance_ok: bool | None
         if not prepare_complete:
@@ -7073,6 +7643,9 @@ class ReviewPipeline:
         elif not all(
             isinstance(item, dict)
             for item in (selection, clearance_request, clearance)
+        ) or (
+            isinstance(blinded_clearance, dict)
+            and isinstance(identity_visible_authorization, dict)
         ):
             clearance_ok = False
         else:
@@ -7152,11 +7725,31 @@ class ReviewPipeline:
                     isinstance(review_set, dict)
                     and review_set["clearance_request"] == request_reference,
                     isinstance(review_set, dict)
-                    and review_set["status"] == "READY_FOR_VISUAL_REVIEW",
+                    and review_set["status"]
+                    == (
+                        "REQUIRES_SANITIZED_DERIVATIVE"
+                        if identity_visible_mode
+                        else "READY_FOR_VISUAL_REVIEW"
+                    ),
                     isinstance(review_set, dict)
                     and review_set["normalization"]["profile"]
                     == INERT_RASTER_PROFILE,
-                    clearance["attestation"] == CLEARANCE_ATTESTATION,
+                    isinstance(review_set, dict)
+                    and review_set["normalization"]["executable_sha256"]
+                    == manifest["tool"]["executable_sha256"],
+                    (
+                        clearance.get("authorization")
+                        == IDENTITY_VISIBLE_ACKNOWLEDGEMENT
+                        and clearance.get("review_mode")
+                        == "IDENTITY_VISIBLE_NON_BLINDED"
+                        and clearance.get(
+                            "accepted_artifacts_may_contain_source_identifiers"
+                        )
+                        is True
+                        if identity_visible_mode
+                        else clearance.get("attestation")
+                        == CLEARANCE_ATTESTATION
+                    ),
                     set(request_by_id) == selected_ids_for_clearance,
                     set(clearance_by_id) == selected_ids_for_clearance,
                     set(review_by_id) == selected_ids_for_clearance,
@@ -7169,7 +7762,11 @@ class ReviewPipeline:
                     (
                         clearance_decision["state"] == "ADOPTED",
                         clearance_decision["decision_type"]
-                        == "IDENTITY_CLEARANCE",
+                        == (
+                            "IDENTITY_VISIBLE_CALIBRATION_AUTHORIZATION"
+                            if identity_visible_mode
+                            else "IDENTITY_CLEARANCE"
+                        ),
                         clearance_decision["subject"]
                         == {"subject_type": "RUN", "subject_id": run_id},
                         set(clearance_decision["affected_record_ids"])
@@ -7190,17 +7787,17 @@ class ReviewPipeline:
                         any(
                             locator["artifact_id"]
                             == self._output_for_path(
-                                manifest, clearance_path
+                                manifest, approval_path
                             )["artifact_id"]
                             and locator["artifact_sha256"]
                             == self._output_for_path(
-                                manifest, clearance_path
+                                manifest, approval_path
                             )["sha256"]
                             for locator in clearance_decision[
                                 "evidence_locators"
                             ]
                         )
-                        if self._output_for_path(manifest, clearance_path)
+                        if self._output_for_path(manifest, approval_path)
                         is not None
                         else False,
                     )
@@ -7253,9 +7850,11 @@ class ReviewPipeline:
                         accepted_output != accepted_ref,
                         clearance_item["review_artifact"] != review_ref,
                         accepted_ref != review_ref,
-                        review_item["required_action"]
+                        not identity_visible_mode
+                        and review_item["required_action"]
                         != "VISUAL_CLEARANCE_ALLOWED",
-                        clearance_item["automated_scan_status"] == "FAIL",
+                        not identity_visible_mode
+                        and clearance_item["automated_scan_status"] == "FAIL",
                         clearance_item["automated_scan_status"]
                         != review_item["automated_scan_status"],
                         clearance_item["automated_scan_codes"]
@@ -7264,11 +7863,23 @@ class ReviewPipeline:
                         != request_item["assignment_id"],
                         review_item["disposition"] == "SOURCE_RASTER"
                         and clearance_item["disposition"]
-                        != "SOURCE_RASTER_VISUALLY_CLEARED",
+                        != (
+                            "SOURCE_RASTER_IDENTITY_VISIBLE_AUTHORIZED"
+                            if identity_visible_mode
+                            else "SOURCE_RASTER_VISUALLY_CLEARED"
+                        ),
                         review_item["disposition"]
                         == "SANITIZED_DERIVATIVE_RASTER"
-                        and clearance_item["disposition"]
-                        != "SANITIZED_DERIVATIVE_RASTER_VISUALLY_CLEARED",
+                        and (
+                            identity_visible_mode
+                            or clearance_item["disposition"]
+                            != "SANITIZED_DERIVATIVE_RASTER_VISUALLY_CLEARED"
+                        ),
+                        identity_visible_mode
+                        and review_item["disposition"] != "SOURCE_RASTER",
+                        identity_visible_mode
+                        and clearance_item.get("identity_visibility")
+                        != "MAY_CONTAIN_VISIBLE_STUDENT_IDENTITY",
                     )
                 ):
                     clearance_ok = False
@@ -7305,7 +7916,7 @@ class ReviewPipeline:
             semantic_checks,
             "CALIBRATION_CLEARANCE_VALID",
             clearance_ok,
-            "Completed calibration uses one adopted, hash-bound instructor clearance covering the exact selection.",
+            "Completed calibration uses one adopted, hash-bound instructor clearance or identity-visible authorization covering the exact selection.",
         )
 
         calibration_products_ok: bool | None
@@ -7397,7 +8008,7 @@ class ReviewPipeline:
                     (selected["assignment_id"], "SOLUTION_KEY")
                 )
                 clearance_reference = self._output_for_path(
-                    manifest, clearance_path
+                    manifest, approval_path
                 )
                 packet_root = run_root / "packets" / record_id
                 dossier_root = run_root / "dossiers" / record_id
@@ -7421,7 +8032,13 @@ class ReviewPipeline:
                         frozen_statement is None,
                         frozen_key is None,
                         clearance_reference is None,
-                        packet["sanitization"]["clearance_artifact"]
+                        packet["sanitization"][
+                            (
+                                "authorization_artifact"
+                                if identity_visible_mode
+                                else "clearance_artifact"
+                            )
+                        ]
                         != clearance_reference,
                         packet["sanitization"]["review_set_artifact"]
                         != clearance["review_set"],
@@ -7433,6 +8050,28 @@ class ReviewPipeline:
                         != clearance_item["automated_scan_status"],
                         packet["sanitization"]["automated_scan_codes"]
                         != clearance_item["automated_scan_codes"],
+                        packet["review_mode"]
+                        != (
+                            "IDENTITY_VISIBLE_NON_BLINDED"
+                            if identity_visible_mode
+                            else "PRODUCT_BLINDED"
+                        ),
+                        dossier["view"]
+                        != (
+                            "PRODUCT_IDENTITY_VISIBLE"
+                            if identity_visible_mode
+                            else "PRODUCT_BLINDED"
+                        ),
+                        packet["sanitization"]["identity_scan_status"]
+                        != ("NOT_BLINDED" if identity_visible_mode else "PASS"),
+                        packet["exclusions"]["identity"]
+                        is identity_visible_mode,
+                        dossier["exclusions"]["identity"]
+                        is identity_visible_mode,
+                        packet["contains_source_identifiers"]
+                        is not identity_visible_mode,
+                        dossier["contains_source_identifiers"]
+                        is not identity_visible_mode,
                         submitted_material is not None
                         and (
                             submitted_material["source_artifact"]["artifact_id"]
@@ -7682,7 +8321,10 @@ class ReviewPipeline:
                 basename = PurePosixPath(source["source_path"]).name
                 if len(basename) >= 10:
                     identity_tokens.add(basename.casefold())
-        identifiers_absent = True
+        identifiers_controlled = (
+            manifest["privacy"]["contains_source_identifiers"]
+            is identity_visible_mode
+        )
         for path in run_root.rglob("*"):
             if not path.is_file() or path.is_symlink():
                 continue
@@ -7692,29 +8334,41 @@ class ReviewPipeline:
                 safe_file_bytes(path).decode("utf-8", errors="ignore")
             )
             if any(identity_token_present(text, token) for token in identity_tokens):
-                identifiers_absent = False
+                identifiers_controlled = False
             if any(
                 re.search(rf"(?<![0-9]){re.escape(token)}(?![0-9])", text)
                 for token in numeric_tokens
             ):
-                identifiers_absent = False
+                identifiers_controlled = False
         for path in sorted((run_root / "packets").glob("*/submitted-solution.pdf")):
+            packet_bytes = safe_file_bytes(path)
             try:
                 scan_status, _ = self._identity_scan(
-                    safe_file_bytes(path),
+                    packet_bytes,
                     artifact_id=allocator.next("ART"),
                     identities=identity_entries,
                     private_tmp=run_root / "tmp",
                 )
             except PipelineError:
                 scan_status = "FAIL"
-            if scan_status == "FAIL":
-                identifiers_absent = False
+            accepted_item = clearance_by_id.get(path.parent.name)
+            identity_visible_packet_allowed = (
+                identity_visible_mode
+                and clearance_ok is True
+                and calibration_products_ok is True
+                and accepted_item is not None
+                and sha256_bytes(packet_bytes)
+                == accepted_item["accepted_artifact"]["sha256"]
+                and len(packet_bytes)
+                == accepted_item["accepted_artifact"]["byte_count"]
+            )
+            if scan_status == "FAIL" and not identity_visible_packet_allowed:
+                identifiers_controlled = False
         check(
             privacy_checks,
-            "SOURCE_IDENTIFIERS_ABSENT",
-            identifiers_absent,
-            "Known source names, LMS IDs, active PDF content, and original basenames are absent outside restricted state; completed packets are bound to human clearance.",
+            "SOURCE_IDENTIFIERS_CONFINED",
+            identifiers_controlled,
+            "Known source identifiers are absent from derived text and either absent from submitted-solution PDFs or confined to exact, inert, instructor-authorized identity-visible packets.",
         )
 
         indexed_paths = {reference["path"] for reference in manifest["outputs"]}
@@ -8040,11 +8694,55 @@ def build_parser() -> argparse.ArgumentParser:
         ),
         help="nonidentifying instructor rationale stored with the decision",
     )
+    authorize_visible = commands.add_parser(
+        "authorize-identity-visible-calibration",
+        help=(
+            "authorize one exact source-only review set for restricted, "
+            "explicitly non-blinded calibration"
+        ),
+    )
+    authorize_visible.add_argument("--run-id", help="review run ID")
+    authorize_visible.add_argument(
+        "--review-set-id",
+        required=True,
+        help="immutable RSET identifier shown by stage-calibration-review-set",
+    )
+    authorize_visible.add_argument(
+        "--review-set-sha256",
+        required=True,
+        help="exact review-set manifest SHA-256 shown after staging",
+    )
+    authorize_visible.add_argument(
+        "--actor-id",
+        required=True,
+        help="instructor identity recorded in the append-only decision log",
+    )
+    authorize_visible.add_argument(
+        "--acknowledge-identity-visible",
+        action="store_true",
+        help=f'affirm exactly: "{IDENTITY_VISIBLE_ACKNOWLEDGEMENT}"',
+    )
+    authorize_visible.add_argument(
+        "--rationale",
+        default=(
+            "Instructor directed use of the exact canonical source rasters as-is "
+            "for a restricted, identity-visible calibration trial."
+        ),
+        help="nonidentifying instructor rationale stored with the decision",
+    )
     resume = commands.add_parser(
         "resume-calibration",
         help="verify recorded clearance and create the eight blinded packets",
     )
     resume.add_argument("--run-id", help="review run ID")
+    resume_visible = commands.add_parser(
+        "resume-identity-visible-calibration",
+        help=(
+            "verify exact identity-visible authorization and create eight "
+            "restricted non-blinded packets"
+        ),
+    )
+    resume_visible.add_argument("--run-id", help="review run ID")
     validate = commands.add_parser(
         "validate",
         help="write a phase-aware schema, semantic, privacy, and hash report",
@@ -8102,8 +8800,25 @@ def main(argv: Sequence[str] | None = None) -> int:
                 ),
                 rationale=arguments.rationale,
             )
+        elif arguments.command == "authorize-identity-visible-calibration":
+            result = pipeline.authorize_identity_visible_calibration(
+                run_id=arguments.run_id,
+                review_set_id=arguments.review_set_id,
+                review_set_sha256=arguments.review_set_sha256,
+                actor_id=arguments.actor_id,
+                acknowledgement=(
+                    IDENTITY_VISIBLE_ACKNOWLEDGEMENT
+                    if arguments.acknowledge_identity_visible
+                    else ""
+                ),
+                rationale=arguments.rationale,
+            )
         elif arguments.command == "resume-calibration":
             result = pipeline.resume_calibration(run_id=arguments.run_id)
+        elif arguments.command == "resume-identity-visible-calibration":
+            result = pipeline.resume_identity_visible_calibration(
+                run_id=arguments.run_id
+            )
         elif arguments.command == "validate":
             result = pipeline.validate(run_id=arguments.run_id)
         else:  # pragma: no cover - argparse enforces the command set

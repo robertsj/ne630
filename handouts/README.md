@@ -1,7 +1,7 @@
 # NE 630 board-supported handout framework
 
 This package contains a reusable LaTeX class and two-page handouts for Lessons
-1--10.
+1--10 and 12--14.
 The design separates three kinds of content:
 
 1. **Fixed inputs** -- reading, objectives, notation, constants, data tables, and problem statements that students should not have to copy from the board.
@@ -70,6 +70,15 @@ as labeled blank axes; the instructor version overlays the completed curves.
 - `lesson_10_handout_body.tex` -- shared two-page Lesson 10 resonance-absorption content.
 - `lesson_10_handout.tex` -- Lesson 10 student wrapper with derivation and arithmetic results left as reveal blanks.
 - `lesson_10_handout_instructor.tex` -- Lesson 10 instructor wrapper with the selected results revealed.
+- `lesson_12_handout_body.tex` -- shared two-page Lesson 12 effective-cross-section and infinite-medium multiplication content.
+- `lesson_12_handout.tex` -- Lesson 12 student wrapper with derivation and arithmetic results left as reveal blanks.
+- `lesson_12_handout_instructor.tex` -- Lesson 12 instructor wrapper with selected results revealed.
+- `lesson_13_handout_body.tex` -- shared two-page Lesson 13 multigroup-method content.
+- `lesson_13_handout.tex` -- Lesson 13 student wrapper with balance and scattering-transfer results left as reveal blanks.
+- `lesson_13_handout_instructor.tex` -- Lesson 13 instructor wrapper with selected results revealed.
+- `lesson_14_handout_body.tex` -- shared two-page Lesson 14 k-eigenvalue content.
+- `lesson_14_handout.tex` -- Lesson 14 student wrapper with fixed-source and eigenvalue results left as reveal blanks.
+- `lesson_14_handout_instructor.tex` -- Lesson 14 instructor wrapper with selected results revealed.
 - `figures/` -- supporting figures used by Lessons 6, 7, and 10, including the
   OpenMC notebook that generates the U-238 threshold plot.
 - `spectra.pdf` -- supporting spectrum figure used by Lesson 5.

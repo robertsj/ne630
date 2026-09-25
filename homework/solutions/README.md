@@ -1,14 +1,16 @@
 # Fall 2026 NE 630 solution manual
 
 This directory builds one instructor-only PDF covering Homework 01 through
-Homework 07:
+Homework 13:
 
 ```bash
 make
 ```
 
-The canonical entry point is `fall_2026_ne630_solution_manual.tex`; the seven
-`hwNN.tex` files are its section-level inputs.  Existing solution language is
+The canonical entry point is `fall_2026_ne630_solution_manual.tex`; the
+`hwNN.tex` files are its section-level inputs.  Each homework problem starts
+on a fresh page, followed immediately by its solution, for grading and
+exam-design use. Existing solution language is
 drawn from the matching LaTeX sources in
 `/home/robertsj/Classes/ne630_problems` at commit `e1fba66`.  New or materially
 adapted material is labeled in the PDF and documented in source comments.

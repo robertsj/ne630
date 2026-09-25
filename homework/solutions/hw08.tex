@@ -1,0 +1,151 @@
+% Assignment source: ne630/homework/html/HW08.html.
+% Legacy foundation: ne630_problems/lesson_08/statement.tex and
+% ne630_problems/lesson_08/HW08_solution.ipynb.
+% Problem 2 keeps the legacy notebook's computed eta values and adds the
+% Fall 2026 interpretation prompt.
+
+\noindent{\bf Problem 1}. Following the lecture example, use data from OpenMC
+to reproduce Figure 3.2 from FNRP, and add a curve for U enriched to 4\%.
+This figure should be produced using computer software (e.g., Python, Excel,
+MATLAB) and {\it not} by hand.
+
+\begin{adaptedsolution}
+A correct solution computes
+\[
+ \eta(E)=
+ \frac{e\,\bar{\nu}_{235}(E)\sigma_{f,235}(E)
+       +(1-e)\,\bar{\nu}_{238}(E)\sigma_{f,238}(E)}
+      {e\,\sigma_{a,235}(E)+(1-e)\,\sigma_{a,238}(E)}
+\]
+for the requested enrichments, where $e$ is the atom fraction of
+\isoA{U}{235}.  The absorption cross sections should include capture plus
+fission:
+\[
+ \sigma_a(E)=\sigma_\gamma(E)+\sigma_f(E).
+\]
+
+The plotted curves should reproduce the main behavior of FNRP Fig.~3.2: the
+natural-uranium curve remains below the enriched cases over most energies, the
+20\% curve is highest, and the 4\% curve lies between them.  The raw evaluated
+data are noisy where the pointwise cross sections and $\bar{\nu}$ are tabulated
+on different energy grids, so interpolation to a common grid is expected.
+Smoothing the plotted curve is acceptable for visual comparison, but grading
+should be based on the unsmoothed values used in any numerical follow-up.
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 2}. For the 4\% values, compute the expected value of
+$\eta(E)$ using
+\[
+p(E)=
+  \begin{cases}
+    C, & E_{\mathrm{min}}\le E\le E_{\mathrm{max}},\\
+    0, & \text{otherwise},
+  \end{cases}
+\]
+for the following three cases:
+\begin{enumerate}[label=(\alph*)]
+\item $E_{\mathrm{min}}=10^{-3}~\mathrm{eV}$ and
+      $E_{\mathrm{max}}=1~\mathrm{eV}$ (the ``thermal'' range).
+\item $E_{\mathrm{min}}=1~\mathrm{eV}$ and
+      $E_{\mathrm{max}}=10^5~\mathrm{eV}$ (the ``epithermal'' range).
+\item $E_{\mathrm{min}}=10^5~\mathrm{eV}$ and
+      $E_{\mathrm{max}}=10^7~\mathrm{eV}$ (the ``fast'' range).
+\end{enumerate}
+For each case, define $C$ using the properties of probability density
+functions; that is,
+\[
+ \int_{E_{\mathrm{min}}}^{E_{\mathrm{max}}}p(E)\,dE=1.
+\]
+Generally, reactors are classified as being either ``thermal'' or ``fast''
+spectrum reactors. Based on your values for $\bar{\eta}$ in each energy range,
+explain why we do not often consider ``intermediate'' spectrum reactors.
+
+\begin{adaptedsolution}
+For a uniform probability density over the interval
+$[E_{\min},E_{\max}]$,
+\[
+ C=\frac{1}{E_{\max}-E_{\min}},
+ \qquad
+ \bar{\eta}
+ =\frac{1}{E_{\max}-E_{\min}}
+  \int_{E_{\min}}^{E_{\max}}\eta(E)\,dE.
+\]
+Numerically, the legacy solution notebook evaluates $\eta(E)$ from pointwise
+BNL/OpenMC-style data and integrates with the trapezoid rule.  For the full
+range $10^{-3}\le E\le10^7~\mathrm{eV}$, the same calculation gives
+\[
+ \bar{\eta}_{\mathrm{uniform}}\approx 2.82.
+\]
+If instead the flux-weighting density is taken proportional to $1/E$ over
+the full range, the notebook gives
+\[
+ \bar{\eta}_{1/E}
+ =\frac{\int \eta(E)E^{-1}\,dE}{\int E^{-1}\,dE}
+ \approx 1.36.
+\]
+
+Using the local ENDF/B-VIII.1 OpenMC HDF5 data and a converged logarithmic
+energy grid, the three assigned uniform-range averages are approximately
+\[
+\begin{array}{ll}
+10^{-3}\le E\le1~\mathrm{eV}: & \bar{\eta}\approx1.82,\\
+1\le E\le10^5~\mathrm{eV}: & \bar{\eta}\approx0.552,\\
+10^5\le E\le10^7~\mathrm{eV}: & \bar{\eta}\approx2.85.
+\end{array}
+\]
+The epithermal/intermediate range is dominated by strong resonance absorption
+structure and gives a much lower average reproduction factor than either the
+thermal or fast range in this calculation.  That is the main physical reason
+reactor spectra are usually pushed toward thermal or fast designs rather than
+left in an intermediate spectrum.
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 3}. The slowing-down properties of three common
+moderators are provided in Table 3.1 of FNRP. Add a row to that table for Be,
+another element with small mass, and compare Be as a moderator with
+$\mathrm{H}_2\mathrm{O}$, $\mathrm{D}_2\mathrm{O}$, and graphite. You may use
+data from Appendix E, Table E.3.
+
+\begin{adaptedsolution}
+Natural Be consists only of \isoA{Be}{9} and, from Table~E.3, has a mass
+density of $\rho=1.85~\gram\per\centi\meter\cubed$.  Thus
+\[
+ \alpha=\left(\frac{A-1}{A+1}\right)^2
+       =\left(\frac{8}{10}\right)^2=0.64,
+\]
+and
+\[
+ \boxed{\xi
+ =1+\frac{\alpha}{1-\alpha}\ln\alpha
+ \approx0.207}.
+\]
+The number density of natural Be is
+\[
+ n_{\mathrm{Be}}
+ =\frac{1.85(6.022\times10^{23})}{9.013}
+ \approx1.24\times10^{23}~\mathrm{atoms/cm^3}.
+\]
+Using $\sigma_s=6.151~\mathrm b$ and $\sigma_a=0.0085~\mathrm b$,
+\[
+ \Sigma_s\approx0.76~\centi\meter^{-1},
+ \qquad
+ \Sigma_a\approx1.1\times10^{-3}~\centi\meter^{-1}.
+\]
+Therefore,
+\[
+ \boxed{\xi\Sigma_s\approx0.157~\centi\meter^{-1}},
+ \qquad
+ \boxed{\frac{\xi\Sigma_s}{\Sigma_a}\approx1.5\times10^2}.
+\]
+Be has a slowing-down decrement and slowing-down power between heavy water and
+graphite, as expected from its mass.  Its slowing-down ratio is better than
+light water but below graphite.  It is plausible as a reflector or specialty
+moderating material, but graphite and heavy water remain the more familiar
+natural-uranium moderator choices.
+\end{adaptedsolution}
+
+\clearpage

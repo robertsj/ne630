@@ -1,0 +1,106 @@
+% Assignment source: ne630/homework/markdown/HW12.md.
+% Legacy foundation: ne630_problems/lesson_12/statement.tex and hw12_sol.ipynb.
+
+\noindent{\bf Problem 1}. Equations (3.50)--(3.53) in FNRP describe how to
+compute the resonance integral. Use these equations with nuclear data from
+OpenMC to compute the absorption resonance integral, $I_a$, for
+\isoA{U}{238} over $1\le E\le10^5~\mathrm{eV}$.
+\begin{enumerate}[label=(\alph*)]
+\item Compute $I_a$.
+\item How does this value compare with the value in FNRP Table 3.2?
+\item What is the corresponding effective microscopic absorption cross
+      section, $\bar{\sigma}_a$, for a $1/E$ flux spectrum over the same
+      energy interval?
+\end{enumerate}
+Use absorption, including radiative capture and fission, rather than
+radiative capture alone. Report the resonance integral and effective cross
+section in barns.
+
+\begin{adaptedsolution}
+The resonance integral and corresponding effective cross section are
+\[
+ I_a=\int_1^{10^5}\frac{\sigma_a(E)}{E}\,dE,
+ \qquad
+ \bar{\sigma}_a=\frac{I_a}{\int_1^{10^5}E^{-1}\,dE}
+ =\frac{I_a}{\ln(10^5)}.
+\]
+Using OpenMC pointwise data with
+$\sigma_a=\sigma_\gamma+\sigma_f$:
+\begin{minted}{python}
+import openmc
+import numpy as np
+
+u238 = openmc.data.IncidentNeutron.from_hdf5(data_path + "U238.h5")
+sig_g = u238.reactions[102].xs["294K"]
+sig_f = u238.reactions[18].xs["294K"]
+
+E = np.logspace(0, 5, 100000)
+I_a = np.trapz((sig_g(E) + sig_f(E))/E, E)
+sig_a_bar = I_a / np.log(1e5)
+print(I_a, sig_a_bar)
+\end{minted}
+The legacy solution notebook gives
+\[
+ \boxed{I_a\approx2.75\times10^2~\mathrm b},
+ \qquad
+ \boxed{\bar{\sigma}_a\approx23.9~\mathrm b}.
+\]
+The integral is close to the FNRP Table~3.2 value of about
+$278~\mathrm b$.
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 2}. A major approximation in Eqs.~(3.50)--(3.53) is the
+explicit assumption that $\phi(E)=1/E$. Instead, use the same nuclear data as
+in Problem 1, supplemented by the total cross sections needed for the mixture,
+with the narrow-resonance (NR) spectrum
+\[
+ \phi_{\mathrm{NR}}(E)\propto\frac{1}{\Sigma_t(E)E}.
+\]
+Consider an infinite, homogeneous 100-to-1 atom mixture of \isoA{H}{1} and
+\isoA{U}{238}, where $\Sigma_t(E)$ is the total macroscopic cross section of
+the mixture.
+\begin{enumerate}[label=(\alph*)]
+\item Compute the effective microscopic absorption cross section,
+      $\bar{\sigma}_a$, for \isoA{U}{238} over $1\le E\le10^5~\mathrm{eV}$,
+      using the NR spectrum as the flux weighting.
+\item Explain why this value differs from the value computed in Problem 1.
+\end{enumerate}
+
+\begin{adaptedsolution}
+The flux-weighted effective cross section is
+\[
+ \bar{\sigma}_a
+ =\frac{\int_1^{10^5}\sigma_a^{238}(E)\phi_{\mathrm{NR}}(E)\,dE}
+        {\int_1^{10^5}\phi_{\mathrm{NR}}(E)\,dE}.
+\]
+Because the \isoA{U}{238} number density cancels, the mixture total can be
+formed from microscopic cross sections as
+\[
+ \Sigma_t(E)\propto
+ 100\sigma_t^{\isoA{H}{1}}(E)+\sigma_t^{\isoA{U}{238}}(E).
+\]
+The OpenMC-data calculation is
+\begin{minted}{python}
+h1 = openmc.data.IncidentNeutron.from_hdf5(data_path + "H1.h5")
+sig_s_u238 = u238.reactions[2].xs["294K"]
+sig_g_h1 = h1.reactions[102].xs["294K"]
+sig_s_h1 = h1.reactions[2].xs["294K"]
+
+sig_t_u238 = sig_g(E) + sig_f(E) + sig_s_u238(E)
+sig_t_h1 = sig_g_h1(E) + sig_s_h1(E)
+phi_nr = 1.0 / ((100*sig_t_h1 + sig_t_u238)*E)
+sig_a_bar = np.trapz((sig_g(E) + sig_f(E))*phi_nr, E) / np.trapz(phi_nr, E)
+\end{minted}
+The legacy solution notebook gives
+\[
+ \boxed{\bar{\sigma}_a\approx8.53~\mathrm b}.
+\]
+This is much smaller than the $1/E$ result because the NR spectrum includes
+energy self-shielding.  The flux is depressed near \isoA{U}{238} absorption
+resonances, so those large cross sections receive less flux weight than they
+do under an unshielded $1/E$ spectrum.
+\end{adaptedsolution}
+
+\clearpage

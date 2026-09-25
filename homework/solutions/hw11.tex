@@ -1,0 +1,118 @@
+% Assignment source: ne630/homework/markdown/HW11.md.
+% Legacy foundation: ne630_problems/lesson_11/statement.tex and
+% OpenMC_Problem_HW11.ipynb.
+
+\noindent{\bf Problem 1 [FNRP 3.9]}. Suppose that the Maxwell-Boltzmann
+distribution, Eq.~(2.34), represents the neutron density in Eqs.~(3.43) and
+(3.44).
+\begin{enumerate}[label=(\alph*)]
+\item Find the value of $\bar{v}$.
+\item If we define $\bar{E}=\frac{1}{2}m\bar{v}^2$, show that
+      $\bar{E}\approx1.273kT$.
+\item Why is your result different from the average energy of
+      $\frac{3}{2}kT$ given by Eq.~(2.33)?
+\end{enumerate}
+
+\begin{adaptedsolution}
+The Maxwell-Boltzmann energy distribution is
+\[
+ M(E)=\frac{2\pi}{(\pi kT)^{3/2}}E^{1/2}e^{-E/kT}.
+\]
+\begin{enumerate}[label=(\alph*)]
+\item Substitution into Eq.~(3.44) gives
+\begin{align*}
+ \bar{v}
+ &=\frac{\int_0^\infty v(E)M(E)\,dE}{\int_0^\infty M(E)\,dE}\\
+ &=\frac{2\pi}{(\pi kT)^{3/2}}\sqrt{\frac{2}{m}}
+   \int_0^\infty E e^{-E/kT}\,dE\\
+ &=\boxed{\frac{2\sqrt{2kT}}{\sqrt{\pi m}}}.
+\end{align*}
+\item Therefore,
+\[
+ \bar{E}=\frac{1}{2}m\bar{v}^2
+ =\frac{1}{2}m\left(\frac{2\sqrt{2kT}}{\sqrt{\pi m}}\right)^2
+ =\boxed{\frac{4kT}{\pi}\approx1.273kT}.
+\]
+\item The results differ because $\bar{E}$ here is computed from the square of
+the mean speed, while the true expected energy depends on the mean of the
+speed squared.  In general, $\left(\bar{v}\right)^2\ne\overline{v^2}$.
+\end{enumerate}
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 2}. Construct a model in OpenMC for an infinite,
+homogeneous system composed of a 1000-to-1 atom mixture of \isoA{H}{1} and
+\isoA{U}{238}, with a point source of $1~\mathrm{MeV}$ neutrons. Compute the
+neutron flux spectrum over $10^{-3}<E<10^5~\mathrm{eV}$. Then produce a plot
+containing:
+\begin{enumerate}[label=(\alph*)]
+\item The computed flux spectrum.
+\item The Maxwell-Boltzmann flux spectrum for the selected temperature, up to
+      $1~\mathrm{eV}$.
+\item The $1/E$ spectrum above $1~\mathrm{eV}$.
+\end{enumerate}
+Here the thermal comparison is a \emph{flux} spectrum,
+$\phi_{\mathrm{MB}}(E)\propto E\exp[-E/(kT)]$, rather than the neutron-density
+distribution used in Problem 1. The comparison curves may be scaled to compare
+their shapes with the computed spectrum; no absolute source strength is
+specified.
+
+\begin{adaptedsolution}
+One representative OpenMC model is
+\begin{minted}{python}
+import openmc
+import numpy as np
+import matplotlib.pyplot as plt
+
+model = openmc.Model()
+mat = openmc.Material(name="u238_h1")
+mat.add_nuclide("H1", 1000.0)
+mat.add_nuclide("U238", 1.0)
+mat.set_density("g/cm3", 1.0)
+mat.temperature = 294
+model.materials = openmc.Materials([mat])
+
+sphere = openmc.Sphere(r=1.0, boundary_type="reflective")
+cell = openmc.Cell(region=-sphere, fill=mat)
+model.geometry = openmc.Geometry([cell])
+
+settings = openmc.Settings()
+settings.run_mode = "fixed source"
+settings.source = openmc.IndependentSource(
+    space=openmc.stats.Point((0, 0, 0)),
+    energy=openmc.stats.Discrete([1e6], [1.0]),
+)
+settings.seed = 1234
+settings.batches = 100
+settings.particles = 10000
+settings.cutoff = {"energy_neutron": 1e-3}
+model.settings = settings
+
+energies = np.logspace(-3, 5, 1000)
+tally = openmc.Tally()
+tally.filters = [openmc.EnergyFilter(energies)]
+tally.scores = ["flux"]
+model.tallies = [tally]
+\end{minted}
+After running the model, plot the tally per unit energy and compare it with
+scaled shapes:
+\begin{minted}{python}
+E = energies[:-1]
+plt.step(E, flux_mean/np.diff(energies), where="post",
+         color="k", lw=0.9, label="simulation")
+plt.plot(E[E > 1], const_1/E[E > 1], "r--", label="1/E")
+plt.plot(E[E < 1], const_2*E[E < 1]*np.exp(-E[E < 1]/0.0253),
+         "b:", label="Maxwell-Boltzmann flux")
+plt.xscale("log")
+plt.yscale("log")
+plt.xlabel("E [eV]")
+plt.ylabel("flux per unit energy")
+plt.legend()
+\end{minted}
+The simulated spectrum should approach a Maxwell-Boltzmann-like thermal shape
+below about $1~\mathrm{eV}$ and a slowing-down shape close to $1/E$ above the
+thermal range, with resonance effects where \isoA{U}{238} data are important.
+\end{adaptedsolution}
+
+\clearpage

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:identity-map:1.0.0",
+  "title": "Restricted source-identity map",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "map_id",
+    "run_id",
+    "configuration_id",
+    "created_at",
+    "classification",
+    "required_file_mode",
+    "pseudonym_scope",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "map_id": {"type": "string", "pattern": "^IDMAP-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "configuration_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-v[0-9]+$"
+    },
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "classification": {"const": "RESTRICTED_IDENTITY_DATA"},
+    "required_file_mode": {"const": "0600"},
+    "pseudonym_scope": {"const": "PERSON_ACROSS_PILOT"},
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "assignment_id",
+          "submission_record_id",
+          "pseudonym",
+          "attempt_number",
+          "source_submission_id",
+          "source_group_key",
+          "subjects",
+          "original_files"
+        ],
+        "properties": {
+          "assignment_id": {"$ref": "#/$defs/assignment_id"},
+          "submission_record_id": {"$ref": "#/$defs/submission_record_id"},
+          "pseudonym": {"$ref": "#/$defs/pseudonym"},
+          "attempt_number": {"type": "integer", "minimum": 1, "maximum": 999},
+          "source_submission_id": {"type": "string", "minLength": 1, "maxLength": 256},
+          "source_group_key": {"type": "string", "minLength": 1, "maxLength": 512},
+          "subjects": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["source_identity_key"],
+              "properties": {
+                "source_identity_key": {"type": "string", "minLength": 1, "maxLength": 256},
+                "display_name": {"type": "string", "minLength": 1, "maxLength": 256},
+                "lms_user_id": {"type": "string", "minLength": 1, "maxLength": 256}
+              },
+              "additionalProperties": false
+            }
+          },
+          "original_files": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["source_path", "sha256", "byte_count"],
+              "properties": {
+                "source_path": {"$ref": "#/$defs/relative_path"},
+                "sha256": {"$ref": "#/$defs/sha256"},
+                "byte_count": {"type": "integer", "minimum": 0},
+                "lms_file_id": {"type": "string", "minLength": 1, "maxLength": 256}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "run_id": {
+      "type": "string",
+      "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"
+    },
+    "pseudonym": {"type": "string", "pattern": "^S[0-9]{3,}$"},
+    "submission_record_id": {
+      "type": "string",
+      "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    }
+  },
+  "additionalProperties": false
+}

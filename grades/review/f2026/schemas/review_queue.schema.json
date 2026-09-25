@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:review-queue:1.0.0",
+  "title": "Deterministic review queue",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "queue_id",
+    "run_id",
+    "configuration_id",
+    "config_sha256",
+    "reference_manifest_sha256",
+    "created_at",
+    "ordering",
+    "counts",
+    "items",
+    "contains_source_identifiers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "queue_id": {"type": "string", "pattern": "^QUE-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "configuration_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-v[0-9]+$"},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "reference_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "ordering": {
+      "type": "object",
+      "required": ["method", "ascending"],
+      "properties": {
+        "method": {"const": "assignment_id, action_priority, submission_record_id"},
+        "ascending": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "required": ["total", "awaiting_selection", "not_selected", "product_review", "human_triage", "hold", "exclude", "calibration_selected"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "awaiting_selection": {"type": "integer", "minimum": 0},
+        "not_selected": {"type": "integer", "minimum": 0},
+        "product_review": {"type": "integer", "minimum": 0},
+        "human_triage": {"type": "integer", "minimum": 0},
+        "hold": {"type": "integer", "minimum": 0},
+        "exclude": {"type": "integer", "minimum": 0},
+        "calibration_selected": {"type": "integer", "minimum": 0, "maximum": 8}
+      },
+      "additionalProperties": false
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "position",
+          "assignment_id",
+          "submission_record_id",
+          "pseudonym",
+          "observed_package_shape",
+          "calibration_stratum",
+          "status_axes",
+          "action",
+          "reasons",
+          "calibration_state",
+          "random_audit_state",
+          "dossier_data",
+          "reviewer_state",
+          "decision_ids"
+        ],
+        "properties": {
+          "position": {"type": "integer", "minimum": 1},
+          "assignment_id": {"$ref": "#/$defs/assignment_id"},
+          "submission_record_id": {"$ref": "#/$defs/submission_record_id"},
+          "pseudonym": {"$ref": "#/$defs/pseudonym"},
+          "observed_package_shape": {"enum": ["SINGLE_PDF", "ZIP", "MULTI_FILE", "OTHER", "MISSING"]},
+          "calibration_stratum": {"enum": ["READABLE_SINGLE_PDF", "SAFE_ZIP_UNIQUE_SOLUTION_PDF", "INELIGIBLE"]},
+          "status_axes": {"$ref": "#/$defs/status_axes"},
+          "action": {"enum": ["AWAIT_CALIBRATION_SELECTION", "DEFERRED_NOT_SELECTED", "PRODUCT_REVIEW", "HUMAN_TRIAGE", "HOLD", "EXCLUDE"]},
+          "reasons": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["code", "severity", "message", "finding_ids"],
+              "properties": {
+                "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+                "severity": {"enum": ["INFO", "WARNING", "BLOCKING_PROCESSING"]},
+                "message": {"type": "string", "minLength": 1, "maxLength": 2000},
+                "finding_ids": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {"type": "string", "pattern": "^FND-[0-9]{6,}$"}
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "calibration_state": {"enum": ["PENDING_SELECTION", "SELECTED", "NOT_SELECTED", "INELIGIBLE"]},
+          "random_audit_state": {"enum": ["NOT_CONFIGURED", "SELECTED", "NOT_SELECTED"]},
+          "dossier_data": {
+            "anyOf": [{"$ref": "#/$defs/artifact_ref"}, {"type": "null"}]
+          },
+          "reviewer_state": {"enum": ["PENDING", "IN_REVIEW", "APPROVED", "REVISIONS_REQUIRED", "REJECTED", "NOT_REQUIRED"]},
+          "decision_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"}
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"calibration_state": {"const": "PENDING_SELECTION"}}, "required": ["calibration_state"]},
+            "then": {
+              "properties": {
+                "action": {"const": "AWAIT_CALIBRATION_SELECTION"},
+                "dossier_data": {"type": "null"},
+                "reviewer_state": {"const": "PENDING"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"calibration_state": {"const": "SELECTED"}}, "required": ["calibration_state"]},
+            "then": {
+              "properties": {
+                "action": {"const": "PRODUCT_REVIEW"},
+                "dossier_data": {"$ref": "#/$defs/artifact_ref"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"calibration_state": {"const": "NOT_SELECTED"}}, "required": ["calibration_state"]},
+            "then": {
+              "properties": {
+                "action": {"const": "DEFERRED_NOT_SELECTED"},
+                "dossier_data": {"type": "null"},
+                "reviewer_state": {"const": "NOT_REQUIRED"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"calibration_state": {"const": "INELIGIBLE"}}, "required": ["calibration_state"]},
+            "then": {
+              "properties": {
+                "calibration_stratum": {"const": "INELIGIBLE"},
+                "action": {"enum": ["HUMAN_TRIAGE", "HOLD", "EXCLUDE"]},
+                "dossier_data": {"type": "null"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"calibration_stratum": {"const": "INELIGIBLE"}}, "required": ["calibration_stratum"]},
+            "then": {"properties": {"calibration_state": {"const": "INELIGIBLE"}}},
+            "else": {"properties": {"calibration_state": {"enum": ["PENDING_SELECTION", "SELECTED", "NOT_SELECTED"]}}}
+          },
+          {
+            "if": {"properties": {"action": {"const": "AWAIT_CALIBRATION_SELECTION"}}, "required": ["action"]},
+            "then": {"properties": {"calibration_state": {"const": "PENDING_SELECTION"}}}
+          },
+          {
+            "if": {"properties": {"action": {"const": "PRODUCT_REVIEW"}}, "required": ["action"]},
+            "then": {"properties": {"calibration_state": {"const": "SELECTED"}}}
+          },
+          {
+            "if": {"properties": {"action": {"const": "DEFERRED_NOT_SELECTED"}}, "required": ["action"]},
+            "then": {"properties": {"calibration_state": {"const": "NOT_SELECTED"}}}
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "contains_source_identifiers": {"const": false}
+  },
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "pseudonym": {"type": "string", "pattern": "^S[0-9]{3,}$"},
+    "submission_record_id": {"type": "string", "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "relative_path": {"type": "string", "minLength": 1, "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"},
+    "status_axes": {
+      "type": "object",
+      "required": ["intake", "build", "coverage", "processing", "human_review"],
+      "properties": {
+        "intake": {"enum": ["READY", "NEEDS_HUMAN_TRIAGE", "BLOCKED", "MISSING"]},
+        "build": {"enum": ["NOT_RUN_NO_SANDBOX", "NOT_RUN_POLICY", "NOT_APPLICABLE", "READY_FOR_SANDBOX", "COMPLETE", "FAILED"]},
+        "coverage": {"enum": ["NOT_CHECKED", "COMPLETE", "PARTIAL", "NOT_CHECKABLE"]},
+        "processing": {"enum": ["PENDING", "READY", "BLOCKED", "COMPLETE", "EXCLUDED"]},
+        "human_review": {"enum": ["PENDING", "IN_REVIEW", "APPROVED", "REVISIONS_REQUIRED", "REJECTED", "NOT_REQUIRED"]}
+      },
+      "additionalProperties": false
+    },
+    "artifact_ref": {
+      "type": "object",
+      "required": ["artifact_id", "role", "path", "sha256", "byte_count", "media_type"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "role": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "path": {"$ref": "#/$defs/relative_path"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

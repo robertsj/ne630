@@ -13,3 +13,13 @@ __pycache__/
 /handouts/lesson_??_handout.pdf
 /handouts/*_instructor.pdf
 /site/_static/handouts/
+
+# Raw course-grading records. Ignoring them is defense against accidental
+# commits, not an access-control mechanism.
+/grades/submissions/
+
+# Private identity material and generated review runs. Reusable framework
+# code, configuration, schemas, protocols, tests, and synthetic fixtures under
+# grades/review/ remain trackable.
+/grades/review/*/restricted/
+/grades/review/*/runs/

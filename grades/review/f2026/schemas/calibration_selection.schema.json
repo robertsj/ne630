@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:calibration-selection:1.0.0",
+  "title": "Locked product-calibration selection",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "selection_id",
+    "run_id",
+    "configuration_id",
+    "config_sha256",
+    "reference_manifest_sha256",
+    "created_at",
+    "locked_at",
+    "lock_event_id",
+    "status",
+    "seed",
+    "method",
+    "rank_digest_definition",
+    "eligibility_snapshot_sha256",
+    "sample_size",
+    "content_review_started",
+    "selections",
+    "reconciliation",
+    "contains_source_identifiers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "selection_id": {"type": "string", "pattern": "^SEL-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "configuration_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-v[0-9]+$"},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "reference_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "locked_at": {"$ref": "#/$defs/timestamp"},
+    "lock_event_id": {"type": "string", "pattern": "^EVT-[0-9]{6,}$"},
+    "status": {"const": "LOCKED"},
+    "seed": {"type": "string", "minLength": 1, "maxLength": 512},
+    "method": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "rank_digest_definition": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "eligibility_snapshot_sha256": {"$ref": "#/$defs/sha256"},
+    "sample_size": {"const": 8},
+    "content_review_started": {"const": false},
+    "selections": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": [
+          "assignment_id",
+          "package_stratum",
+          "submission_record_id",
+          "pseudonym",
+          "rank_digest",
+          "rank",
+          "eligible_count",
+          "submission_manifest"
+        ],
+        "properties": {
+          "assignment_id": {"$ref": "#/$defs/assignment_id"},
+          "package_stratum": {"enum": ["READABLE_SINGLE_PDF", "SAFE_ZIP_UNIQUE_SOLUTION_PDF"]},
+          "submission_record_id": {"$ref": "#/$defs/submission_record_id"},
+          "pseudonym": {"$ref": "#/$defs/pseudonym"},
+          "rank_digest": {"$ref": "#/$defs/sha256"},
+          "rank": {"type": "integer", "minimum": 1},
+          "eligible_count": {"type": "integer", "minimum": 1},
+          "submission_manifest": {"$ref": "#/$defs/artifact_ref"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "reconciliation": {
+      "type": "object",
+      "required": ["expected_slots", "filled_slots", "duplicate_submission_record_ids", "missing_slots"],
+      "properties": {
+        "expected_slots": {"const": 8},
+        "filled_slots": {"const": 8},
+        "duplicate_submission_record_ids": {"const": 0},
+        "missing_slots": {"type": "array", "maxItems": 0}
+      },
+      "additionalProperties": false
+    },
+    "contains_source_identifiers": {"const": false}
+  },
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "pseudonym": {"type": "string", "pattern": "^S[0-9]{3,}$"},
+    "submission_record_id": {"type": "string", "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "relative_path": {"type": "string", "minLength": 1, "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"},
+    "artifact_ref": {
+      "type": "object",
+      "required": ["artifact_id", "role", "path", "sha256", "byte_count", "media_type"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "role": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "path": {"$ref": "#/$defs/relative_path"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

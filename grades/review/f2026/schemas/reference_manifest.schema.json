@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:reference-manifest:1.0.0",
+  "title": "Frozen reference manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "configuration_id",
+    "created_at",
+    "repository_commit",
+    "references"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "manifest_id": {"type": "string", "pattern": "^REFMAN-[0-9]{6,}$"},
+    "configuration_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-v[0-9]+$"
+    },
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "repository_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}([0-9a-f]{24})?$"
+    },
+    "references": {
+      "type": "array",
+      "minItems": 12,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "reference_id",
+          "role",
+          "path",
+          "sha256",
+          "byte_count",
+          "media_type",
+          "working_tree_state",
+          "frozen_at"
+        ],
+        "properties": {
+          "reference_id": {
+            "type": "string",
+            "pattern": "^REF-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+          },
+          "role": {
+            "enum": [
+              "POLICY",
+              "PROBLEM_STATEMENT",
+              "SOLUTION_KEY",
+              "CONFIGURATION",
+              "REVIEW_PROTOCOL",
+              "SCHEMA",
+              "CODEBOOK",
+              "TEMPLATE"
+            ]
+          },
+          "assignment_id": {"$ref": "#/$defs/assignment_id"},
+          "path": {"$ref": "#/$defs/relative_path"},
+          "sha256": {"$ref": "#/$defs/sha256"},
+          "byte_count": {"type": "integer", "minimum": 0},
+          "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"},
+          "git_blob_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}([0-9a-f]{24})?$"
+          },
+          "working_tree_state": {
+            "enum": ["TRACKED_CLEAN", "TRACKED_MODIFIED", "UNTRACKED"]
+          },
+          "frozen_at": {"$ref": "#/$defs/timestamp"},
+          "note": {"type": "string", "minLength": 1, "maxLength": 1000}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "role": {"enum": ["PROBLEM_STATEMENT", "SOLUTION_KEY"]}
+              },
+              "required": ["role"]
+            },
+            "then": {"required": ["assignment_id"]}
+          }
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    }
+  },
+  "additionalProperties": false
+}

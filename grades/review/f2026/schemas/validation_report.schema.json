@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:validation-report:1.0.0",
+  "title": "Review run validation report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "validation_report_id",
+    "run_id",
+    "created_at",
+    "validator",
+    "overall_status",
+    "schema_checks",
+    "semantic_checks",
+    "privacy_checks",
+    "hash_checks",
+    "summary",
+    "errors",
+    "warnings",
+    "contains_source_identifiers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "validation_report_id": {"type": "string", "pattern": "^VAL-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "validator": {
+      "type": "object",
+      "required": ["name", "version", "jsonschema_version", "python_version"],
+      "properties": {
+        "name": {"const": "ne630-review-validator"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "jsonschema_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "python_version": {"type": "string", "pattern": "^3\\.[0-9]+\\.[0-9]+$"},
+        "executable_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "overall_status": {"enum": ["PASS", "FAIL"]},
+    "schema_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check_id", "schema_id", "artifact_id", "artifact_path", "status", "issue_count"],
+        "properties": {
+          "check_id": {"type": "string", "pattern": "^CHK-[0-9]{6,}$"},
+          "schema_id": {"type": "string", "pattern": "^urn:ne630:review:f2026:[a-z0-9-]+:1\\.0\\.0$"},
+          "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+          "artifact_path": {"$ref": "#/$defs/relative_path"},
+          "status": {"enum": ["PASS", "FAIL", "SKIP"]},
+          "issue_count": {"type": "integer", "minimum": 0}
+        },
+        "additionalProperties": false
+      }
+    },
+    "semantic_checks": {"$ref": "#/$defs/checks"},
+    "privacy_checks": {"$ref": "#/$defs/checks"},
+    "hash_checks": {"$ref": "#/$defs/checks"},
+    "summary": {
+      "type": "object",
+      "required": ["total", "passed", "failed", "skipped"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "passed": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "errors": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/issue"}
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/issue"}
+    },
+    "contains_source_identifiers": {"const": false}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"overall_status": {"const": "PASS"}}, "required": ["overall_status"]},
+      "then": {
+        "properties": {
+          "schema_checks": {"items": {"properties": {"status": {"enum": ["PASS", "SKIP"]}}}},
+          "semantic_checks": {"items": {"properties": {"status": {"enum": ["PASS", "SKIP"]}}}},
+          "privacy_checks": {"items": {"properties": {"status": {"enum": ["PASS", "SKIP"]}}}},
+          "hash_checks": {"items": {"properties": {"status": {"enum": ["PASS", "SKIP"]}}}},
+          "errors": {"maxItems": 0},
+          "summary": {"properties": {"failed": {"const": 0}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"overall_status": {"const": "FAIL"}}, "required": ["overall_status"]},
+      "then": {"properties": {"errors": {"minItems": 1}, "summary": {"properties": {"failed": {"minimum": 1}}}}}
+    }
+  ],
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "relative_path": {"type": "string", "minLength": 1, "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"},
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check_id", "code", "status", "message", "artifact_ids"],
+        "properties": {
+          "check_id": {"type": "string", "pattern": "^CHK-[0-9]{6,}$"},
+          "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+          "status": {"enum": ["PASS", "FAIL", "SKIP"]},
+          "message": {"type": "string", "minLength": 1, "maxLength": 4000},
+          "artifact_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^ART-[0-9]{6,}$"}
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "issue": {
+      "type": "object",
+      "required": ["code", "message", "artifact_id", "instance_path"],
+      "properties": {
+        "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "message": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "artifact_id": {"type": ["string", "null"], "pattern": "^ART-[0-9]{6,}$"},
+        "instance_path": {"type": ["string", "null"], "maxLength": 2000}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

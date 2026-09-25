@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:human-decision:1.0.0",
+  "title": "Append-only instructor decision",
+  "$comment": "Each line of events/human_decisions.jsonl is validated independently against this schema.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "decision_id",
+    "run_id",
+    "sequence",
+    "made_at",
+    "decision_maker",
+    "authority",
+    "decision_type",
+    "subject",
+    "prior_state",
+    "resulting_state",
+    "rationale",
+    "state",
+    "evidence_locators",
+    "affected_record_ids",
+    "contains_source_identifiers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "decision_id": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "made_at": {"$ref": "#/$defs/timestamp"},
+    "decision_maker": {
+      "type": "object",
+      "required": ["actor_type", "actor_id", "role"],
+      "properties": {
+        "actor_type": {"const": "HUMAN"},
+        "actor_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "role": {"const": "INSTRUCTOR"}
+      },
+      "additionalProperties": false
+    },
+    "authority": {
+      "enum": ["COURSE_INSTRUCTOR", "DELEGATED_COURSE_AUTHORITY"]
+    },
+    "decision_type": {
+      "enum": [
+        "ROUTE_DECLARATION",
+        "INTAKE_OVERRIDE",
+        "CALIBRATION_OVERRIDE",
+        "IDENTITY_CLEARANCE",
+        "KEY_DISAGREEMENT",
+        "REVIEW_ADJUDICATION",
+        "SANDBOX_APPROVAL",
+        "FEEDBACK_RELEASE",
+        "RETENTION",
+        "APPEAL_ROUTE"
+      ]
+    },
+    "subject": {"$ref": "#/$defs/subject"},
+    "prior_state": {"type": ["string", "null"], "maxLength": 2000},
+    "resulting_state": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "rationale": {"type": "string", "minLength": 1, "maxLength": 10000},
+    "state": {
+      "$comment": "This is the outcome of this immutable decision. A later adopted record supersedes it by setting supersedes_decision_id; prior JSONL lines are never rewritten.",
+      "enum": ["ADOPTED", "REJECTED"]
+    },
+    "evidence_locators": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/evidence_locator"}
+    },
+    "affected_record_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/record_id"}
+    },
+    "supersedes_decision_id": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"},
+    "contains_source_identifiers": {"const": false}
+  },
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "record_id": {
+      "anyOf": [
+        {"$ref": "#/$defs/run_id"},
+        {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+        {"type": "string", "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"},
+        {"type": "string", "pattern": "^(ART|EVT|DEC|FND|OBS|REV|BLD|FDB|SEL|RSET|PKT|DOS|REC|VAL|QUE)-[0-9]{6,}$"}
+      ]
+    },
+    "subject": {
+      "type": "object",
+      "required": ["subject_type", "subject_id"],
+      "properties": {
+        "subject_type": {"enum": ["RUN", "ASSIGNMENT", "SUBMISSION", "FINDING", "OBSERVATION", "REVIEW", "BUILD", "FEEDBACK"]},
+        "subject_id": {"type": "string", "minLength": 1, "maxLength": 128}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "subject_type": {"const": "RUN"},
+            "subject_id": {"$ref": "#/$defs/run_id"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "ASSIGNMENT"},
+            "subject_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "SUBMISSION"},
+            "subject_id": {"type": "string", "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "FINDING"},
+            "subject_id": {"type": "string", "pattern": "^FND-[0-9]{6,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "OBSERVATION"},
+            "subject_id": {"type": "string", "pattern": "^OBS-[0-9]{6,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "REVIEW"},
+            "subject_id": {"type": "string", "pattern": "^REV-[0-9]{6,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "BUILD"},
+            "subject_id": {"type": "string", "pattern": "^BLD-[0-9]{6,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "FEEDBACK"},
+            "subject_id": {"type": "string", "pattern": "^FDB-[0-9]{6,}$"}
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "evidence_locator": {
+      "type": "object",
+      "required": [
+        "artifact_id",
+        "artifact_sha256",
+        "source_role",
+        "logical_path",
+        "locator_type",
+        "extraction_method",
+        "uncertainty"
+      ],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "source_role": {
+          "enum": ["SUBMITTED_SOLUTION", "PROBLEM_STATEMENT", "SOLUTION_KEY", "DETERMINISTIC_TOOL_OUTPUT", "CONFIGURATION", "HUMAN_NOTE"]
+        },
+        "logical_path": {"$ref": "#/$defs/relative_path"},
+        "locator_type": {"enum": ["FILE", "PDF_PAGE", "TEXT_LINES", "JSON_POINTER", "ARCHIVE_MEMBER", "LABEL"]},
+        "page": {"type": "integer", "minimum": 1},
+        "printed_page_label": {"type": "string", "minLength": 1, "maxLength": 64},
+        "line_start": {"type": "integer", "minimum": 1},
+        "line_end": {"type": "integer", "minimum": 1},
+        "json_pointer": {"type": "string", "pattern": "^(/([^~/]|~[01])*)*$"},
+        "archive_member": {"$ref": "#/$defs/relative_path"},
+        "label": {"type": "string", "minLength": 1, "maxLength": 256},
+        "problem_id": {"type": "string", "pattern": "^P[1-9][0-9]*$"},
+        "subpart_id": {"type": "string", "pattern": "^[A-Za-z0-9._-]{1,32}$"},
+        "extraction_method": {"enum": ["NATIVE_TEXT", "PDFTOTEXT", "OCR", "VISUAL", "ARCHIVE_METADATA", "JSON_PARSE", "HUMAN_NOTE"]},
+        "uncertainty": {"enum": ["NONE", "LOW", "MEDIUM", "HIGH"]},
+        "excerpt": {"type": "string", "maxLength": 500}
+      },
+      "oneOf": [
+        {"properties": {"locator_type": {"const": "FILE"}}},
+        {"properties": {"locator_type": {"const": "PDF_PAGE"}}, "required": ["page"]},
+        {"properties": {"locator_type": {"const": "TEXT_LINES"}}, "required": ["line_start", "line_end"]},
+        {"properties": {"locator_type": {"const": "JSON_POINTER"}}, "required": ["json_pointer"]},
+        {"properties": {"locator_type": {"const": "ARCHIVE_MEMBER"}}, "required": ["archive_member"]},
+        {"properties": {"locator_type": {"const": "LABEL"}}, "required": ["label"]}
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

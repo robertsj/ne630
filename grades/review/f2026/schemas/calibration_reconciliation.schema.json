@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:calibration-reconciliation:1.0.0",
+  "title": "Post-calibration reconciliation",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "reconciliation_id",
+    "run_id",
+    "selection_id",
+    "created_at",
+    "review_count",
+    "review_ids",
+    "recurring_findings",
+    "key_ambiguities",
+    "weak_or_false_flags",
+    "unreadable_material",
+    "recommended_changes",
+    "reliability_threshold_inferred",
+    "human_review",
+    "student_facing",
+    "contains_source_identifiers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "reconciliation_id": {"type": "string", "pattern": "^REC-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "selection_id": {"type": "string", "pattern": "^SEL-[0-9]{6,}$"},
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "review_count": {"const": 8},
+    "review_ids": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^REV-[0-9]{6,}$"}
+    },
+    "recurring_findings": {"$ref": "#/$defs/reconciliation_items"},
+    "key_ambiguities": {"$ref": "#/$defs/reconciliation_items"},
+    "weak_or_false_flags": {"$ref": "#/$defs/reconciliation_items"},
+    "unreadable_material": {"$ref": "#/$defs/reconciliation_items"},
+    "recommended_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["change_id", "target", "description", "rationale", "status", "decision_id"],
+        "properties": {
+          "change_id": {"type": "string", "pattern": "^CHG-[0-9]{6,}$"},
+          "target": {"enum": ["SCHEMA", "PROMPT", "CODEBOOK", "PROTOCOL", "QUEUE_RULE", "HUMAN_GUIDANCE"]},
+          "description": {"type": "string", "minLength": 1, "maxLength": 4000},
+          "rationale": {"type": "string", "minLength": 1, "maxLength": 4000},
+          "status": {"enum": ["PROPOSED", "ADOPTED", "REJECTED"]},
+          "decision_id": {"type": ["string", "null"], "pattern": "^DEC-[0-9]{6,}$"}
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"enum": ["ADOPTED", "REJECTED"]}}, "required": ["status"]},
+            "then": {"properties": {"decision_id": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"}}}
+          },
+          {
+            "if": {"properties": {"status": {"const": "PROPOSED"}}, "required": ["status"]},
+            "then": {"properties": {"decision_id": {"type": "null"}}}
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "reliability_threshold_inferred": {"const": false},
+    "human_review": {"$ref": "#/$defs/human_review"},
+    "student_facing": {"const": false},
+    "contains_source_identifiers": {"const": false}
+  },
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "relative_path": {"type": "string", "minLength": 1, "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"},
+    "evidence_locator": {
+      "type": "object",
+      "required": ["artifact_id", "artifact_sha256", "source_role", "logical_path", "locator_type", "extraction_method", "uncertainty"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "source_role": {"enum": ["SUBMITTED_SOLUTION", "PROBLEM_STATEMENT", "SOLUTION_KEY", "PRODUCT_REVIEW"]},
+        "logical_path": {"$ref": "#/$defs/relative_path"},
+        "locator_type": {"enum": ["FILE", "PDF_PAGE", "TEXT_LINES", "JSON_POINTER", "LABEL"]},
+        "page": {"type": "integer", "minimum": 1},
+        "line_start": {"type": "integer", "minimum": 1},
+        "line_end": {"type": "integer", "minimum": 1},
+        "json_pointer": {"type": "string", "pattern": "^(/([^~/]|~[01])*)*$"},
+        "label": {"type": "string", "minLength": 1, "maxLength": 256},
+        "problem_id": {"type": "string", "pattern": "^P[1-9][0-9]*$"},
+        "subpart_id": {"type": "string", "pattern": "^[A-Za-z0-9._-]{1,32}$"},
+        "extraction_method": {"enum": ["NATIVE_TEXT", "PDFTOTEXT", "OCR", "VISUAL", "JSON_PARSE"]},
+        "uncertainty": {"enum": ["NONE", "LOW", "MEDIUM", "HIGH"]},
+        "excerpt": {"type": "string", "maxLength": 500}
+      },
+      "oneOf": [
+        {"properties": {"locator_type": {"const": "FILE"}}},
+        {"properties": {"locator_type": {"const": "PDF_PAGE"}}, "required": ["page"]},
+        {"properties": {"locator_type": {"const": "TEXT_LINES"}}, "required": ["line_start", "line_end"]},
+        {"properties": {"locator_type": {"const": "JSON_POINTER"}}, "required": ["json_pointer"]},
+        {"properties": {"locator_type": {"const": "LABEL"}}, "required": ["label"]}
+      ],
+      "additionalProperties": false
+    },
+    "reconciliation_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "description", "review_ids", "evidence_locators", "disposition", "decision_id"],
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^RCI-[0-9]{6,}$"},
+          "description": {"type": "string", "minLength": 1, "maxLength": 4000},
+          "review_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^REV-[0-9]{6,}$"}
+          },
+          "evidence_locators": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/evidence_locator"}
+          },
+          "disposition": {"enum": ["RETAIN", "REVISE", "REMOVE", "INSTRUCTOR_DECISION"]},
+          "decision_id": {"type": ["string", "null"], "pattern": "^DEC-[0-9]{6,}$"}
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"disposition": {"const": "INSTRUCTOR_DECISION"}}, "required": ["disposition"]},
+            "then": {"properties": {"decision_id": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"}}}
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "human_review": {
+      "type": "object",
+      "required": ["state", "reviewer_id", "reviewed_at", "decision_id"],
+      "properties": {
+        "state": {"enum": ["PENDING", "IN_REVIEW", "APPROVED", "REVISIONS_REQUIRED", "REJECTED"]},
+        "reviewer_id": {"type": ["string", "null"], "minLength": 1, "maxLength": 128},
+        "reviewed_at": {"anyOf": [{"$ref": "#/$defs/timestamp"}, {"type": "null"}]},
+        "decision_id": {"type": ["string", "null"], "pattern": "^DEC-[0-9]{6,}$"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "PENDING"}}, "required": ["state"]},
+          "then": {
+            "properties": {"reviewer_id": {"type": "null"}, "reviewed_at": {"type": "null"}, "decision_id": {"type": "null"}}
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "IN_REVIEW"}}, "required": ["state"]},
+          "then": {
+            "properties": {"reviewer_id": {"type": "string", "minLength": 1}, "reviewed_at": {"type": "null"}, "decision_id": {"type": "null"}}
+          }
+        },
+        {
+          "if": {"properties": {"state": {"enum": ["APPROVED", "REVISIONS_REQUIRED", "REJECTED"]}}, "required": ["state"]},
+          "then": {
+            "properties": {
+              "reviewer_id": {"type": "string", "minLength": 1},
+              "reviewed_at": {"$ref": "#/$defs/timestamp"},
+              "decision_id": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"}
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

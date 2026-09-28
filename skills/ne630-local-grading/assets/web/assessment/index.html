@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NE 630 Assessment</title>
+    <link rel="stylesheet" href="/assessment/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>NE 630 Assessment</h1>
+          <p id="pathLine"></p>
+        </div>
+        <div class="topbar-actions">
+          <select id="homeworkSelect" aria-label="Homework"></select>
+          <a id="exportLink" class="button secondary" href="#">Export CSV</a>
+          <button id="seedButton" class="button secondary" type="button">Apply Draft Scores</button>
+          <button id="saveButton" class="button primary" type="button">Save</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="matrix-pane">
+          <div class="matrix-toolbar">
+            <input id="studentSearch" type="search" placeholder="Filter students" aria-label="Filter students">
+            <div class="filter-row" role="group" aria-label="Table filters">
+              <button class="filter active" data-filter="all" type="button">All</button>
+              <button class="filter" data-filter="yellow" type="button">Yellow</button>
+              <button class="filter" data-filter="red" type="button">Red</button>
+              <button class="filter" data-filter="review" type="button">Review</button>
+            </div>
+            <div id="statusLine" class="status-line"></div>
+          </div>
+          <div class="legend">
+            <span class="legend-item"><span class="swatch green"></span>1 pass</span>
+            <span class="legend-item"><span class="swatch yellow"></span>0.5 simple issue</span>
+            <span class="legend-item"><span class="swatch red"></span>0 involved issue</span>
+          </div>
+          <div class="table-wrap">
+            <table id="assessmentTable" class="assessment-table"></table>
+          </div>
+        </section>
+
+        <aside class="detail-pane">
+          <section id="cellDetail" class="detail-panel"></section>
+          <section class="feedback-panel">
+            <h2>Feedback Drafts</h2>
+            <div id="feedbackBank" class="feedback-bank"></div>
+          </section>
+        </aside>
+      </main>
+    </div>
+    <script src="/assessment/app.js"></script>
+  </body>
+</html>

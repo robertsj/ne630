@@ -1,7 +1,7 @@
 # Fall 2026 NE 630 solution manual
 
 This directory builds one instructor-only PDF covering Homework 01 through
-Homework 13:
+Homework 14:
 
 ```bash
 make

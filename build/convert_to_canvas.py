@@ -7,6 +7,7 @@ import re
 import urllib.parse
 import os
 import subprocess
+from html import escape, unescape
 
 def encodemath(s):
     """Given a LaTeX blurb, return the URI string in Canvas form.
@@ -17,8 +18,14 @@ def encodemath(s):
 
 def makeimg(s):
     """ Make img from given LaTeX snipped."""
-    
-    e = encodemath(s)
+
+    # Pandoc HTML-escapes characters that are meaningful inside LaTeX (for
+    # example, ``&`` in aligned environments and ``'`` in primed variables).
+    # Canvas's equation endpoint needs the original LaTeX in the URL, while
+    # the HTML attributes still need to remain safely escaped.
+    latex = unescape(s)
+    e = encodemath(latex)
+    attr_latex = escape(latex, quote=True)
 
     tmpl = """<img 
 class="equation_image" 
@@ -27,7 +34,7 @@ src="/equation_images/{1}"
 alt="LaTeX: {0}" 
 data-equation-content="{0}" 
 />"""
-    return tmpl.format(s, e)
+    return tmpl.format(attr_latex, e)
     
 
 def find_inline_equations(s):

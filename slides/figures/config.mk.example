@@ -1,0 +1,12 @@
+# Copy this file to config.mk and adapt it to the local installation.
+# config.mk is ignored by Git and loaded automatically by this Makefile.
+
+# Python with matplotlib, numpy, Pillow, and scipy installed.
+PYTHON := /path/to/python
+
+# Command that runs Python in an environment containing OpenMC.  A command
+# with arguments is valid here.
+OPENMC_PYTHON := conda run --no-capture-output -n openmc python
+
+# Evaluated HDF5 data-library index used by the OpenMC plots and transport run.
+OPENMC_CROSS_SECTIONS := /path/to/cross_sections.xml

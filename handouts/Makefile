@@ -2,13 +2,13 @@ LATEXMK = latexmk
 FLAGS = -xelatex -interaction=nonstopmode -halt-on-error
 WRAPPERS := $(wildcard lesson_??_handout.tex) handout_template.tex
 
-.PHONY: all L01 L02 L03 L04 L05 L06 L07 L08 L09 L10 L12 L13 L14 \
+.PHONY: all L01 L02 L03 L04 L05 L06 L07 L08 L09 L10 L12 L13 L14 L15 L16 L17 L18 \
 	lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07 lesson08 lesson09 lesson10 \
-	lesson12 lesson13 lesson14 \
+	lesson12 lesson13 lesson14 lesson15 lesson16 lesson17 lesson18 \
 	template tidy clean
 
 all: lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07 lesson08 lesson09 lesson10 \
-	lesson12 lesson13 lesson14
+	lesson12 lesson13 lesson14 lesson15 lesson16 lesson17 lesson18
 
 L01: lesson_01_handout.pdf
 
@@ -36,6 +36,14 @@ L13: lesson_13_handout.pdf
 
 L14: lesson_14_handout.pdf
 
+L15: lesson_15_handout.pdf
+
+L16: lesson_16_handout.pdf
+
+L17: lesson_17_handout.pdf
+
+L18: lesson_18_handout.pdf
+
 lesson01: L01
 
 lesson02: L02
@@ -61,6 +69,14 @@ lesson12: L12
 lesson13: L13
 
 lesson14: L14
+
+lesson15: L15
+
+lesson16: L16
+
+lesson17: L17
+
+lesson18: L18
 
 lesson_01_handout.pdf: lesson_01_handout.tex lesson_01_handout_body.tex ne630boardhandout.cls
 	$(LATEXMK) $(FLAGS) lesson_01_handout.tex
@@ -100,6 +116,18 @@ lesson_13_handout.pdf: lesson_13_handout.tex lesson_13_handout_body.tex ne630boa
 
 lesson_14_handout.pdf: lesson_14_handout.tex lesson_14_handout_body.tex ne630boardhandout.cls
 	$(LATEXMK) $(FLAGS) lesson_14_handout.tex
+
+lesson_15_handout.pdf: lesson_15_handout.tex ne630_ch04_reading_guide_common.tex
+	$(LATEXMK) $(FLAGS) lesson_15_handout.tex
+
+lesson_16_handout.pdf: lesson_16_handout.tex ne630_ch04_reading_guide_common.tex
+	$(LATEXMK) $(FLAGS) lesson_16_handout.tex
+
+lesson_17_handout.pdf: lesson_17_handout.tex ne630_ch04_reading_guide_common.tex
+	$(LATEXMK) $(FLAGS) lesson_17_handout.tex
+
+lesson_18_handout.pdf: lesson_18_handout.tex ne630_ch04_reading_guide_common.tex
+	$(LATEXMK) $(FLAGS) lesson_18_handout.tex
 
 handout_template.pdf: handout_template.tex ne630boardhandout.cls
 	$(LATEXMK) $(FLAGS) handout_template.tex

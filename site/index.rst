@@ -66,10 +66,29 @@ available for that lesson.
        `YouTube video <https://www.youtube.com/watch?v=SJvGncqHE98>`__
    * - **Lesson 13** — The Multigroup Method
      - [`PDF <_static/handouts/lesson-13/lesson_13_handout.pdf>`__][`TeX <_static/handouts/lesson-13/lesson_13_handout.tex>`__]
-     - —
+     - `YouTube video <https://www.youtube.com/watch?v=Gmqrpozp_zg>`__
    * - **Lesson 14** — The k-Eigenvalue Problem
      - [`PDF <_static/handouts/lesson-14/lesson_14_handout.pdf>`__][`TeX <_static/handouts/lesson-14/lesson_14_handout.tex>`__]
+     - `YouTube video <https://www.youtube.com/watch?v=eDONMsH-pGk>`__
+   * - **Lesson 15** — Power Reactor Core Configurations
      - —
+     - `OpenMC notebook <_static/notebooks/lesson_15.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=DXLcFR83GKw>`__
+   * - **Lesson 16** — Fast-Spectrum Unit-Cell Analysis
+     - —
+     - `YouTube video <https://www.youtube.com/watch?v=S9UgL-R4imU>`__
+   * - **Lesson 17** — The Four-Factor Formula
+     - —
+     - `YouTube video <https://www.youtube.com/watch?v=SmQ_KbmB6FA>`__
+   * - **Lesson 18** — OpenMC Unit-Cell Models
+     - —
+     - `YouTube video <https://www.youtube.com/watch?v=ifSflrLzm-w>`__
+   * - **Lesson 19** — Unit-Cell Design Studies
+     - —
+     - `YouTube video <https://www.youtube.com/watch?v=L-LLYceaL1U>`__
+   * - **Lesson 20** — Reactivity and Power Defects
+     - —
+     - `YouTube video <https://www.youtube.com/watch?v=-GADP7fGMRs>`__
 
 Handout source and support files
 --------------------------------

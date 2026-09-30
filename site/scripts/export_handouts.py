@@ -16,6 +16,7 @@ REPOSITORY = Path(__file__).resolve().parents[2]
 SOURCE_DIRECTORY = REPOSITORY / "handouts"
 OUTPUT_DIRECTORY = REPOSITORY / "site" / "_static" / "handouts"
 LESSONS = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14)
+PDF_ONLY_LESSONS = (15, 16)
 LESSON_SUPPORT_FILES = {
     5: ("spectra.pdf",),
     6: (
@@ -107,12 +108,10 @@ def expected_exports() -> dict[Path, bytes]:
         basename = f"lesson_{lesson:02d}_handout"
         directory = Path(f"lesson-{lesson:02d}")
         wrapper_path = SOURCE_DIRECTORY / f"{basename}.tex"
-        body_path = SOURCE_DIRECTORY / f"{basename}_body.tex"
         pdf_path = SOURCE_DIRECTORY / f"{basename}.pdf"
 
         wrapper = _read_required(wrapper_path)
         _validate_public_wrapper(wrapper_path, wrapper.decode("utf-8"))
-        body = _read_required(body_path)
         pdf = _read_required(pdf_path)
         if not pdf.startswith(b"%PDF-"):
             raise ExportError(f"{pdf_path.name} is not a PDF file")
@@ -122,6 +121,7 @@ def expected_exports() -> dict[Path, bytes]:
             name: _read_required(SOURCE_DIRECTORY / name) for name in support_files
         }
         readme = _source_readme(lesson, support_files)
+        body = _read_required(SOURCE_DIRECTORY / f"{basename}_body.tex")
         bundle_files = {
             "README.txt": readme,
             f"{basename}.tex": wrapper,
@@ -136,6 +136,13 @@ def expected_exports() -> dict[Path, bytes]:
         for name, content in support_contents.items():
             exports[directory / name] = content
         exports[directory / f"{basename}_source.zip"] = _zip_bytes(bundle_files)
+
+    for lesson in PDF_ONLY_LESSONS:
+        basename = f"lesson_{lesson:02d}_handout"
+        pdf = _read_required(SOURCE_DIRECTORY / f"{basename}.pdf")
+        if not pdf.startswith(b"%PDF-"):
+            raise ExportError(f"{basename}.pdf is not a PDF file")
+        exports[Path(f"lesson-{lesson:02d}") / f"{basename}.pdf"] = pdf
 
     return exports
 

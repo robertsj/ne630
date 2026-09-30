@@ -71,12 +71,13 @@ available for that lesson.
      - [`PDF <_static/handouts/lesson-14/lesson_14_handout.pdf>`__][`TeX <_static/handouts/lesson-14/lesson_14_handout.tex>`__]
      - `YouTube video <https://www.youtube.com/watch?v=eDONMsH-pGk>`__
    * - **Lesson 15** — Power Reactor Core Configurations
-     - —
+     - `PDF <_static/handouts/lesson-15/lesson_15_handout.pdf>`__
      - `OpenMC notebook <_static/notebooks/lesson_15.ipynb>`__ |middot|
        `YouTube video <https://www.youtube.com/watch?v=DXLcFR83GKw>`__
    * - **Lesson 16** — Fast-Spectrum Unit-Cell Analysis
-     - —
-     - `YouTube video <https://www.youtube.com/watch?v=S9UgL-R4imU>`__
+     - `PDF <_static/handouts/lesson-16/lesson_16_handout.pdf>`__
+     - `OpenMC notebook <_static/notebooks/lesson_16.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=S9UgL-R4imU>`__
    * - **Lesson 17** — The Four-Factor Formula
      - —
      - `YouTube video <https://www.youtube.com/watch?v=SmQ_KbmB6FA>`__
@@ -95,7 +96,8 @@ Handout source and support files
 
 The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
 Download the complete source bundle for a ready-to-build copy, or pair a wrapper
-with its body file and the shared class.
+with its body file and the shared class. Lessons 15--16 are distributed as PDFs
+only.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|
   `body <_static/handouts/lesson-01/lesson_01_handout_body.tex>`__

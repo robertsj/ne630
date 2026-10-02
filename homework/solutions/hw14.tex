@@ -1,231 +1,355 @@
-% Assignment source: ../markdown/HW14.md
-% This extends the two-group graphite example in
-% ne630_problems/lesson_14/example_2g_fs_nm.tex using the Lesson 13 group
-% structure and microscopic data from FNRP Table 3.2.
+% Assignment solution source: ne630_problems/lesson_14/hw14_solution.tex.
+% Copied into the Fall 2026 solution manual on 2026-10-02.
+% The source was a standalone LaTeX document; only its wrapper preamble was
+% removed so it can be included by fall_2026_ne630_solution_manual.tex.
 
-\noindent{\bf Problem 1}.
+\newcommand{\iso}[2]{\ensuremath{^{#1}\mathrm{#2}}}
+\newcommand{\C}{\iso{12}{C}}
+\newcommand{\Ufive}{\iso{235}{U}}
+\newcommand{\Ueight}{\iso{238}{U}}
+\providecommand{\barn}{\ensuremath{\mathrm{b}}}
+\providecommand{\cm}{\ensuremath{\mathrm{cm}}}
+\providecommand{\eV}{\ensuremath{\mathrm{eV}}}
+\providecommand{\MeV}{\ensuremath{\mathrm{MeV}}}
+\providecommand{\dd}{\ensuremath{\,\mathrm{d}}}
+\providecommand{\NA}{\ensuremath{N_A}}
 
-Consider a very large graphite block with density $2.26\,\mathrm{g\,cm^{-3}}$
-and a uniformly distributed source of 1 MeV neutrons with strength
-$s_0\,\mathrm{n\,cm^{-3}\,s^{-1}}$.
+\noindent{\bf Homework 14 solution draft: three-group graphite spectrum and
+infinite-medium multiplication.}
 
-Using the data supplied in Table 3.2 of FNRP, construct the necessary cross
-sections and transfer probabilities for a three-group approximation of the
-neutron energy spectrum. State all assumptions.
+\subsection*{Group structure and notation}
 
-\begin{adaptedsolution}
-We use the course three-group structure, ordered from high to low energy,
-\begin{align*}
-  (E_0,E_1,E_2,E_3)&=(10^7,10^5,1,10^{-3})\ \mathrm{eV},\\
-  g=1 &: 0.1\ \mathrm{MeV}<E<10\ \mathrm{MeV},\\
-  g=2 &: 1\ \mathrm{eV}<E<0.1\ \mathrm{MeV},\\
-  g=3 &: 10^{-3}\ \mathrm{eV}<E<1\ \mathrm{eV}.
-\end{align*}
-The 1 MeV source is therefore entirely in group 1. The calculation makes the
-following assumptions.
-\begin{itemize}
-  \item The medium is infinite, homogeneous, and in steady state; leakage and
-        spatial dependence are neglected.
-  \item Scattering is elastic from stationary nuclei and isotropic in the
-        center-of-mass system. Upscattering is neglected.
-  \item Within each nonthermal group, the collision density is represented by
-        a $1/E$ spectrum. A single carbon collision cannot skip a group for
-        these boundaries, so only $1\to2$ and $2\to3$ transfer is retained.
-  \item Table 3.2 fast constants are used in group 1 and thermal constants in
-        group 3. In group 2,
-        $\sigma_{a,2}=0.0869 I_a$; because Table 3.2 does not give an
-        intermediate-energy scattering integral, the tabulated thermal
-        scattering cross section is used in groups 2 and 3.
-  \item Neutrons scattered below $10^{-3}$ eV are ignored. This is negligible
-        for the present three-group balance but makes the finite group bounds
-        explicit.
-\end{itemize}
+Use the three energy groups
+\[
+\begin{array}{ccl}
+g=1 &:& 10^5 < E \le 10^6\ \eV \quad\text{fast},\\
+g=2 &:& 1 < E \le 10^5\ \eV \quad\text{intermediate/epithermal},\\
+g=3 &:& E \le 1\ \eV \quad\text{thermal}.
+\end{array}
+\]
+The upper bound \(10^6\ \eV\) is the source energy used for the graphite
+fixed-source problem and is also the representative starting energy used in
+the simple eigenvalue model.  The actual fission spectrum is not
+monoenergetic; the approximation made here is to set \(\chi_1=1\) and
+\(\chi_2=\chi_3=0\).
 
-For elastic scattering from a nucleus of mass number $A$,
-\begin{equation*}
-  \alpha_A=\left(\frac{A-1}{A+1}\right)^2,
-  \qquad
-  \xi_A=1+\frac{\alpha_A\ln\alpha_A}{1-\alpha_A}.
-\end{equation*}
-For a $1/E$ spectrum and a constant scattering cross section, the fraction of
-collisions that cross the lower boundary of group $g$ is
-\begin{equation*}
-  P_{g+1\leftarrow g}^{(A)}
-  =\frac{\xi_A}{\ln(E_{g-1}/E_g)}.
-\end{equation*}
-For carbon ($A=12$),
-\begin{equation*}
-  \alpha_C=0.715976,\qquad \xi_C=0.157769,
-\end{equation*}
-and hence
-\begin{equation*}
-  P_{2\leftarrow1}^{(C)}=0.0342591,
-  \qquad
-  P_{3\leftarrow2}^{(C)}=0.0137036.
-\end{equation*}
-The resulting carbon microscopic constants are
-\begin{center}
-\begin{tabular}{c c c c c c}
-\toprule
-$g$ & $\sigma_{a,g}$ & $\sigma_{s,g}$ & $P_{g+1\leftarrow g}$
-    & $\sigma_{s,g+1\leftarrow g}$ & $\sigma_{s,g\leftarrow g}$ \\
-& \multicolumn{5}{c}{barns, except for $P$} \\
-\midrule
-1 & $1.2300\times10^{-3}$ & 2.36 & 0.0342591 & 0.0808515 & 2.27915 \\
-2 & $1.32957\times10^{-4}$ & 4.81 & 0.0137036 & 0.0659145 & 4.74409 \\
-3 & $3.0000\times10^{-3}$ & 4.81 & --- & 0 & 4.81 \\
-\bottomrule
-\end{tabular}
-\end{center}
-Here $\sigma_{s,g+1\leftarrow g}=P_{g+1\leftarrow g}\sigma_{s,g}$ and
-$\sigma_{s,g\leftarrow g}=\sigma_{s,g}-\sigma_{s,g+1\leftarrow g}$.
+Let \(\phi_g=\int_g \phi(E)\dd E\) be the group-integrated flux.  For any
+reaction \(x\),
+\[
+\Sigma_{x,g}=\sum_i N_i\sigma_{x,i,g}10^{-24},
+\]
+where \(\sigma\) is in barns and \(N_i\) is the atom density of isotope \(i\).
+Absorption already includes fission:
+\[
+\sigma_{a,i,g}=\sigma_{\gamma,i,g}+\sigma_{f,i,g}.
+\]
 
-Using $M_C=12.011\,\mathrm{g\,mol^{-1}}$ gives
-\begin{equation*}
-  N_C=\frac{\rho N_A}{M_C}=1.13313\times10^{23}\ \mathrm{cm^{-3}}.
-\end{equation*}
-The macroscopic absorption, downscatter, and removal constants are then
-\begin{center}
-\begin{tabular}{c c c c}
-\toprule
-$g$ & $\Sigma_{a,g}$ & $\Sigma_{s,g+1\leftarrow g}$ &
-$\Sigma_{r,g}=\Sigma_{a,g}+\Sigma_{s,g+1\leftarrow g}$ \\
-& \multicolumn{3}{c}{$\mathrm{cm^{-1}}$} \\
-\midrule
-1 & $1.39375\times10^{-4}$ & $9.16153\times10^{-3}$ & $9.30091\times10^{-3}$ \\
-2 & $1.50658\times10^{-5}$ & $7.46898\times10^{-3}$ & $7.48404\times10^{-3}$ \\
-3 & $3.39939\times10^{-4}$ & 0 & $3.39939\times10^{-4}$ \\
-\bottomrule
-\end{tabular}
-\end{center}
+\subsection*{General three-group balances}
 
-With no upscatter, the infinite-medium fixed-source equations are triangular:
-\begin{align*}
-  \Sigma_{r,1}\phi_1 &= s_0,\\
-  \Sigma_{r,2}\phi_2 &= \Sigma_{s,2\leftarrow1}\phi_1,\\
-  \Sigma_{a,3}\phi_3 &= \Sigma_{s,3\leftarrow2}\phi_2.
-\end{align*}
-Thus the approximate spectrum is
-\begin{equation*}
-  \boxed{
-  (\phi_1,\phi_2,\phi_3)
-  =(107.516,\ 131.615,\ 2891.79)\,s_0
-  \ \mathrm{cm^{-2}\,s^{-1}}.}
-\end{equation*}
-As a useful check,
-$\Sigma_{a,1}\phi_1+\Sigma_{a,2}\phi_2+\Sigma_{a,3}\phi_3=s_0$
-to rounding: in an infinite nonmultiplying medium, every source neutron is
-eventually absorbed.
-\end{adaptedsolution}
-
-\newpage
-
-\noindent{\bf Problem 2}.
-
-Now consider the case in which uranium enriched to 2\% U-235 (by atom) is
-uniformly dispersed in the graphite block. Determine the resulting
-infinite-medium multiplication factor $k_\infty$ as a function of the C-to-U
-atomic ratio $R=N_C/N_U$. State all assumptions.
-
-\begin{adaptedsolution}
-We retain the group structure and scattering model from Problem 1. In
-addition, we assume
-\begin{itemize}
-  \item a homogeneous mixture with
-        $N_{235}=0.02N_U$, $N_{238}=0.98N_U$, and $R=N_C/N_U$;
-  \item all fission neutrons are born in group 1, so
-        $\boldsymbol{\chi}=(1,0,0)^T$;
-  \item $\nu=(2.49,2.43,2.43)$ for the fast, intermediate, and thermal
-        groups, respectively;
-  \item resonance self-shielding, heterogeneous effects, inelastic
-        scattering, and $(n,2n)$ reactions are neglected.
-\end{itemize}
-The values of $\nu$ are not included in FNRP Table 3.2 and are therefore an
-explicit auxiliary approximation. As in Problem 1, group-2 absorption and
-fission cross sections are obtained from $0.0869 I_a$ and $0.0869 I_f$.
-
-The uranium-mixture microscopic constants are atom-fraction-weighted values,
-for example
-\begin{equation*}
-  \sigma_{x,U}=0.02\sigma_{x,235}+0.98\sigma_{x,238}.
-\end{equation*}
-For scattering transfer, the same weighting is applied after evaluating
-$\xi_A$ for $A=235$ and 238. The resulting values are
-\begin{center}
-\begin{tabular}{c c c c c}
-\toprule
-$g$ & $\sigma_{f,U,g}$ & $\sigma_{a,U,g}$
-    & $\sigma_{s,U,g+1\leftarrow g}$ & $(\nu\sigma_f)_{U,g}$ \\
-& \multicolumn{4}{c}{barns} \\
-\midrule
-1 & 0.322320 & 0.379580 & 0.0134652 & 0.802577 \\
-2 & 0.472906 & 24.377188 & 0.00690485 & 1.14916 \\
-3 & 10.100010 & 14.191600 & 0 & 24.5430 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-Because every macroscopic cross section contains the common factor
-$N_U10^{-24}$, that factor cancels from the eigenvalue. Define microscopic
-mixture coefficients, in barns,
-\begin{align*}
-  a_1(R)&=0.001230R+0.379580,&
-  d_1(R)&=0.080851478R+0.013465186,\\
-  a_2(R)&=0.000132957R+24.377188,&
-  d_2(R)&=0.065914510R+0.006904846,\\
-  a_3(R)&=0.003000R+14.191600.&&
-\end{align*}
-Here $a_g$ is absorption and $d_g$ is transfer from group $g$ to $g+1$.
-The removal coefficients are
-\begin{equation*}
-  r_1=a_1+d_1=0.082081478R+0.393045186,
-\end{equation*}
-\begin{equation*}
-  r_2=a_2+d_2=0.066047467R+24.384092846,
-  \qquad r_3=a_3.
-\end{equation*}
-
-Normalize the fundamental-mode flux to $\phi_1=1$. The group-2 and group-3
-balances give
-\begin{equation*}
-  y(R)\equiv\frac{\phi_2}{\phi_1}=\frac{d_1}{r_2},
-  \qquad
-  z(R)\equiv\frac{\phi_3}{\phi_1}=\frac{d_1d_2}{r_2r_3}.
-\end{equation*}
-The group-1 balance then gives the requested multiplication factor:
+The general infinite-medium multigroup balance is
 \begin{equation}
-  \boxed{
-  k_\infty(R)=
-  \frac{0.8025768+1.1491624\,y(R)+24.5430250\,z(R)}
-       {0.082081478R+0.393045186}.}
-  \label{eq:hw14-kinf}
+\Sigma_{r,g}\phi_g
+= S_g
++ \sum_{\substack{h=1\\h\ne g}}^3 \Sigma_{s,g\leftarrow h}\phi_h
++ \frac{\chi_g}{k_{\mathrm{eff}}}s_f''' .
+\label{eq:general-balance}
 \end{equation}
-Equivalently, substituting the definitions of $y$ and $z$ into
-Eq.~\eqref{eq:hw14-kinf} gives a single explicit rational function of $R$.
+In words: removal from group \(g\) balances the external source, scattering
+into group \(g\), and fission neutrons born into group \(g\).  The removal
+cross section is
+\[
+\Sigma_{r,g}=\Sigma_{a,g}
++\sum_{\substack{h=1\\h\ne g}}^3 \Sigma_{s,h\leftarrow g},
+\]
+because within-group scattering does not change the group population.
 
-Some representative values are
+With only adjacent downscatter retained, the only nonzero intergroup
+scattering terms are \(\Sigma_{s,2\leftarrow1}\) and
+\(\Sigma_{s,3\leftarrow2}\); all upscatter and direct \(1\to3\) transfer are
+neglected.  The
+nonmultiplying fixed-source graphite balances become
+\begin{align}
+(\Sigma_{a,1}+\Sigma_{s,2\leftarrow1})\phi_1 &= s_0,\\
+(\Sigma_{a,2}+\Sigma_{s,3\leftarrow2})\phi_2
+  &= \Sigma_{s,2\leftarrow1}\phi_1,\\
+\Sigma_{a,3}\phi_3 &= \Sigma_{s,3\leftarrow2}\phi_2.
+\label{eq:fixed-source}
+\end{align}
+The corresponding source-free eigenvalue balances are
+\begin{align}
+(\Sigma_{a,1}+\Sigma_{s,2\leftarrow1})\phi_1
+  &= \frac{s_f'''}{k_{\mathrm{eff}}},\\
+(\Sigma_{a,2}+\Sigma_{s,3\leftarrow2})\phi_2
+  &= \Sigma_{s,2\leftarrow1}\phi_1,\\
+\Sigma_{a,3}\phi_3 &= \Sigma_{s,3\leftarrow2}\phi_2,
+\label{eq:eig-balances}
+\end{align}
+where
+\[
+s_f'''=\sum_{g=1}^3 \nu\Sigma_{f,g}\phi_g
+\]
+is the volumetric fission-neutron source rate.  With
+\(\chi_1=1\), all fission neutrons are born into group 1 in this model.
+For isotope- and group-dependent fission yields, replace
+\(\nu\Sigma_{f,g}\) by
+\(\sum_i N_i\bar{\nu}_{i,g}\sigma_{f,i,g}10^{-24}\).
+
+\subsection*{Microscopic data from FNRP Table 3.2}
+
+FNRP Table 3.2 gives thermal averages, resonance integrals, and
+fission-spectrum fast averages.  The fast values below are therefore
+\(\chi(E)\)-averaged values, not literal 1 MeV point values.  We adopt them
+for the fast group because 1 MeV is close to the most probable fission-neutron
+energy and because the homework calls for Table 3.2 data.
+
+For the intermediate group, use the resonance-integral relation
+\[
+\bar{\sigma}_{x,2}=
+\frac{I_x}{\int_1^{10^5}\dd E/E}
+=\frac{I_x}{\ln(10^5)}.
+\]
+Thus \(\Delta u_2=\ln(10^5)=11.512925465\).  The table supplies
+intermediate \(I_f\) and \(I_a\); capture is obtained as
+\(\sigma_{\gamma,2}=\sigma_{a,2}-\sigma_{f,2}\).  Since Table 3.2 does not
+list intermediate scattering averages, use the tabulated thermal scattering
+average for group 2.
+
 \begin{center}
-\begin{tabular}{c c@{\qquad}c c}
+\small
+\begin{tabular}{llrrrr}
 \toprule
-$R$ & $k_\infty$ & $R$ & $k_\infty$ \\
+Isotope & Group & \(\sigma_f\) & \(\sigma_\gamma\) & \(\sigma_a\) & \(\sigma_s\)\\
+& & \multicolumn{4}{c}{barns}\\
 \midrule
-0    & 2.044 & 500  & 0.915 \\
-10   & 0.723 & 1000 & 1.043 \\
-100  & 0.468 & 2000 & 1.019 \\
-300  & 0.763 & 5000 & 0.774 \\
+\C & 1 & 0 & \(1.230\times10^{-3}\) & \(1.230\times10^{-3}\) & 2.36\\
+\C & 2 & 0 & \(1.329\times10^{-4}\) & \(1.329\times10^{-4}\) & 4.81\\
+\C & 3 & 0 & \(3.000\times10^{-3}\) & \(3.000\times10^{-3}\) & 4.81\\
+\midrule
+\Ufive & 1 & 1.220 & 0.0700 & 1.290 & 6.33\\
+\Ufive & 2 & 23.626 & 11.465 & 35.091 & 15.0\\
+\Ufive & 3 & 505.0 & 86.0 & 591.0 & 15.0\\
+\midrule
+\Ueight & 1 & 0.304 & 0.0570 & 0.361 & 7.42\\
+\Ueight & 2 & \(1.737\times10^{-4}\) & 24.1466 & 24.1468 & 9.37\\
+\Ueight & 3 & \(1.05\times10^{-5}\) & 2.41999 & 2.420 & 9.37\\
 \bottomrule
 \end{tabular}
 \end{center}
-Within this deliberately coarse three-group model, $k_\infty=1$ at
-approximately
-\begin{equation*}
-  R=5.38,\qquad 726.35,\qquad 2232.87.
-\end{equation*}
-The nonmonotonic behavior is physical in outline: a nearly pure enriched-
-uranium mixture is fast critical; initial carbon addition removes fast
-neutrons before providing enough thermalization; further moderation raises
-$k_\infty$; and very large $R$ eventually dilutes the fuel and increases
-parasitic absorption in carbon. The numerical crossings should not be treated
-as design values because resonance self-shielding and heterogeneous-lattice
-effects, both important in real graphite--uranium systems, were excluded.
-\end{adaptedsolution}
+
+\subsection*{Elastic group transfer}
+
+For isotope \(i\), define
+\[
+\alpha_i=\left(\frac{A_i-1}{A_i+1}\right)^2.
+\]
+With isotropic scattering in the center-of-mass frame, the outgoing energy
+from an incident energy \(E\) is uniformly distributed over
+\(\alpha_iE\le E'\le E\):
+\[
+p_i(E\to E')=
+\begin{cases}
+\displaystyle\frac{1}{(1-\alpha_i)E},&
+\alpha_iE\le E'\le E,\\[0.7em]
+0,&\text{otherwise}.
+\end{cases}
+\]
+Equivalently, the probability that a collision from energy \(E\) lands in
+an energy interval \([E_L,E_U]\) is
+\[
+P_i(E\to [E_L,E_U])
+=\frac{\left[\min(E,E_U)-\max(\alpha_iE,E_L)\right]_+}
+{(1-\alpha_i)E},
+\]
+where \([z]_+=\max(z,0)\).
+
+For the adjacent downscatter closure used here, assume a \(1/E\) flux in a
+group and a group-constant scattering cross section.  The elastic kernel then
+gives the usual average lethargy gain per collision,
+\[
+\xi_i=1+\frac{\alpha_i}{1-\alpha_i}\ln\alpha_i.
+\]
+The effective microscopic transfer cross section across the lower boundary of
+group \(g\) is
+\[
+\sigma_{s,g+1\leftarrow g}^{(i)}
+\simeq \sigma_{s,i,g}\frac{\xi_i}{\Delta u_g},
+\qquad
+\Delta u_g=\ln\left(\frac{E_{g-1}}{E_g}\right).
+\]
+Here \(\Delta u_1=\ln(10)\) and \(\Delta u_2=\ln(10^5)\).
+
+\begin{center}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Isotope & \(\alpha_i\) & \(\xi_i\) &
+\(\sigma_{s,2\leftarrow1}^{(i)}\) &
+\(\sigma_{s,3\leftarrow2}^{(i)}\)\\
+& & & \multicolumn{2}{c}{barns}\\
+\midrule
+\C      & 0.7159763314 & 0.1577689898 & 0.161703 & 0.0659145\\
+\Ufive  & 0.9831226659 & 0.0084865458 & 0.0233302 & 0.0110570\\
+\Ueight & 0.9833336251 & 0.0083798718 & 0.0270038 & 0.0068201\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For a mixture,
+\[
+\Sigma_{s,2\leftarrow1}=10^{-24}\sum_i N_i\sigma_{s,2\leftarrow1}^{(i)},
+\qquad
+\Sigma_{s,3\leftarrow2}=10^{-24}\sum_i N_i\sigma_{s,3\leftarrow2}^{(i)}.
+\]
+
+\subsection*{Problem 1: pure graphite fixed-source spectrum}
+
+The carbon atom density is
+\[
+N_C=\frac{\rho_C}{M_C}\NA
+=\frac{2.26}{12.0}(6.02214076\times10^{23})
+=1.13416984\times10^{23}\ \mathrm{atoms\,cm^{-3}}.
+\]
+Thus one barn corresponds to \(0.113416984\ \cm^{-1}\) for this graphite.
+
+The macroscopic cross sections are
+\[
+\begin{array}{lll}
+\Sigma_{a,1}=1.39503\times10^{-4},&
+\Sigma_{a,2}=1.50724\times10^{-5},&
+\Sigma_{a,3}=3.40251\times10^{-4},\\
+\Sigma_{s,2\leftarrow1}=1.83399\times10^{-2},&
+\Sigma_{s,3\leftarrow2}=7.47582\times10^{-3}.&
+\end{array}
+\]
+All values are in \(\cm^{-1}\).
+
+Solving Eq.~\eqref{eq:fixed-source} in sequence gives
+\[
+\phi_1=\frac{s_0}{\Sigma_{a,1}+\Sigma_{s,2\leftarrow1}}
+=54.1144\,s_0,
+\]
+\[
+\phi_2=\frac{\Sigma_{s,2\leftarrow1}\phi_1}
+{\Sigma_{a,2}+\Sigma_{s,3\leftarrow2}}
+=132.488\,s_0,
+\]
+and
+\[
+\phi_3=\frac{\Sigma_{s,3\leftarrow2}\phi_2}{\Sigma_{a,3}}
+=2910.95\,s_0.
+\]
+Since \(s_0\) has units \(\mathrm{n\,cm^{-3}\,s^{-1}}\), these coefficients
+have units of cm and the fluxes have units
+\(\mathrm{n\,cm^{-2}\,s^{-1}}\).
+
+As a balance check,
+\[
+\Sigma_{a,1}\phi_1+\Sigma_{a,2}\phi_2+\Sigma_{a,3}\phi_3=s_0,
+\]
+to rounding.  In this model nearly all source neutrons are eventually absorbed
+after reaching the thermal group.
+
+\subsection*{Problem 2: \(k_{\mathrm{eff}}\) as a function of \(R=N_C/N_U\)}
+
+For 2 atom-percent enrichment,
+\[
+N_U=\frac{N_C}{R},\qquad
+N_{235}=0.02\,\frac{N_C}{R},\qquad
+N_{238}=0.98\,\frac{N_C}{R}.
+\]
+Let \(c=N_C10^{-24}=0.113416984\).  Define uranium-mixture microscopic
+coefficients
+\[
+u_{x,g}=0.02\sigma_{x,235,g}+0.98\sigma_{x,238,g}.
+\]
+From the table above,
+\[
+\begin{array}{c|rrr}
+g & u_{f,g} & u_{a,g} & u_{\gamma,g}\\
+\hline
+1 & 0.32232 & 0.37958 & 0.05726\\
+2 & 0.47268264 & 24.36565761 & 23.89297497\\
+3 & 10.10001029 & 14.1916 & 4.09158971
+\end{array}
+\]
+in barns.  The uranium-mixture transfer coefficients are
+\[
+u_{t,12}=0.02693037,\qquad u_{t,23}=0.00690485
+\]
+in barns.
+
+Therefore
+\[
+\Sigma_{a,g}(R)=
+c\left(\sigma_{a,C,g}+\frac{u_{a,g}}{R}\right),
+\qquad
+\Sigma_{f,g}(R)=c\frac{u_{f,g}}{R},
+\]
+and
+\[
+\Sigma_{s,2\leftarrow1}(R)
+=c\left(0.161702956+\frac{0.02693037}{R}\right),
+\qquad
+\Sigma_{s,3\leftarrow2}(R)
+=c\left(0.065914510+\frac{0.00690485}{R}\right).
+\]
+
+Normalize the eigenvector by \(\phi_1\), and define
+\[
+x(R)=\frac{\phi_2}{\phi_1},\qquad y(R)=\frac{\phi_3}{\phi_1}.
+\]
+The lower two rows of Eq.~\eqref{eq:eig-balances} give
+\[
+x(R)=
+\frac{\Sigma_{s,2\leftarrow1}(R)}
+{\Sigma_{a,2}(R)+\Sigma_{s,3\leftarrow2}(R)},
+\qquad
+y(R)=\frac{\Sigma_{s,3\leftarrow2}(R)x(R)}{\Sigma_{a,3}(R)}.
+\]
+The first row then gives
+\[
+k_{\mathrm{eff}}(R)=
+\frac{\sum_{g=1}^3 \nu\Sigma_{f,g}(R)\phi_g}
+{(\Sigma_{a,1}(R)+\Sigma_{s,2\leftarrow1}(R))\phi_1}.
+\]
+Equivalently, because the downscatter terms cancel in a global balance,
+\[
+k_{\mathrm{eff}}(R)=
+\frac{\nu\Sigma_{f,1}(R)+\nu\Sigma_{f,2}(R)x(R)+\nu\Sigma_{f,3}(R)y(R)}
+{\Sigma_{a,1}(R)+\Sigma_{a,2}(R)x(R)+\Sigma_{a,3}(R)y(R)}.
+\]
+The one-group fixed-source view can still reserve \(k_\infty\) as a material
+property and use \(k_{\mathrm{eff}}\) as the eigenvalue knob, so production
+appears through the replacement \(k_\infty\to k_\infty/k_{\mathrm{eff}}\).
+
+\textbf{Gap to note.}  FNRP Table 3.2 does not provide fission neutron yields
+\(\bar{\nu}_{i,g}\).  A numerical value of \(k_{\mathrm{eff}}\) therefore needs either
+a separate data source or an explicit named approximation for \(\nu\).  If a
+common value \(\nu=2.43\) is used for all fissions, then at \(R=1000\),
+\[
+x=1.78865,\qquad y=6.85861,
+\]
+and
+\[
+\boxed{k_{\mathrm{eff}}(R=1000;\ \nu=2.43)=1.04793.}
+\]
+This number should be read as the value of the stated three-group closure, not
+as a continuous-energy benchmark.
+
+\subsection*{Assumptions and remaining gaps}
+
+\begin{itemize}
+\item Fast-group cross sections are fission-spectrum averages from Table 3.2,
+not pointwise 1 MeV cross sections.
+\item Intermediate fission and absorption data are resonance integrals divided
+by \(\ln(10^5)\), corresponding to a \(1/E\) flux from 1 eV to 0.1 MeV.
+\item Intermediate scattering cross sections are not supplied by Table 3.2;
+the thermal scattering averages are used for group 2.
+\item Transfer is adjacent downscatter only.  Upscatter and direct
+\(1\to3\) transfer are omitted.
+\item Resonance self-shielding is neglected, so the resonance-integral
+absorption is an infinite-dilution approximation.
+\item A numerical multiplication factor requires fission neutron yields.
+Those are not in Table 3.2 and must be supplied as a named prerequisite or
+explicit approximation.
+\end{itemize}

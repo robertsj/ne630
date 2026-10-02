@@ -1,0 +1,493 @@
+% Compile exam_01_reference.tex with LuaLaTeX or XeLaTeX.
+% All content is supplied reference material; there are no student blanks.
+% Sources: supplied FNRP Chapters 1--3, lesson handouts, and HW01--HW13.
+\providecommand{\dd}{\,\mathrm d}
+\newcommand{\is}[2]{\ensuremath{{}^{#1}\mathrm{#2}}}
+\newcommand{\EE}{\mathbb E}
+\newcommand{\fv}{\symbfit\phi}
+\newcommand{\M}{\mathbf M}
+\newcommand{\F}{\mathbf F}
+\newcommand{\sv}{\mathbf s}
+\newcommand{\RefHead}[3]{%
+  \par\addvspace{3.5pt}%
+  \noindent\colorbox{KSUPurple}{\color{white}\sffamily\bfseries\strut\hspace{1pt}#1\hspace{1pt}}%
+  \hspace{0.35em}{\sffamily\bfseries\color{KSUDeepPurple}#2}%
+  \hfill{\sffamily\scriptsize\color{KSUGray}#3}\par\vspace{1.5pt}}
+\newcommand{\RefLabel}[1]{\textbf{\color{KSUDeepPurple}#1}}
+\AtBeginDocument{%
+  \fontsize{8.6}{9.6}\selectfont
+  \setlength{\abovedisplayskip}{2pt plus .3pt minus .3pt}
+  \setlength{\belowdisplayskip}{2pt plus .3pt minus .3pt}
+  \setlength{\abovedisplayshortskip}{1.5pt}
+  \setlength{\belowdisplayshortskip}{1.5pt}
+  \setlength{\jot}{1.5pt}
+  \setlength{\tabcolsep}{3.5pt}
+  \setlength{\aboverulesep}{1.2pt}
+  \setlength{\belowrulesep}{1.2pt}
+}
+\tcbset{handout base/.append style={
+  before skip=3pt,after skip=3pt,top=3pt,bottom=3pt,
+  fonttitle=\sffamily\bfseries\fontsize{8.6}{10}\selectfont,
+  before upper={\RaggedRight}}}
+\HandoutSetup{NE 630}{1--14}{Exam 1 Reference}{Principles, equations, and course data}
+\fancyhead[R]{\sffamily\bfseries\small Lessons 1--14}
+\begin{document}
+\thispagestyle{handoutfirst}
+\vspace*{\dimexpr-\headheight-\headsep\relax}
+\begin{tcolorbox}[enhanced,frame hidden,colback=white,left=6pt,right=0pt,
+  top=1pt,bottom=1pt,borderline west={4pt}{0pt}{KSUPurple},
+  before skip=0pt,after skip=4pt]
+  {\sffamily\bfseries\fontsize{17}{19}\selectfont Exam 1 Reference}
+  \hfill {\sffamily\bfseries\large Lessons 1--14}\par
+  {\sffamily\small NE 630\quad Nuclear reactions, neutron interactions, and infinite-medium balance}
+\end{tcolorbox}
+\begin{fixedbox}{Constants and units}
+\begin{tabularx}{\linewidth}{@{}XXX@{}}
+$N_A=6.022\times10^{23}\unit{mol^{-1}}$ &
+$1\unit{b}=10^{-24}\unit{cm^2}$ &
+$1\unit{eV}=1.60218\times10^{-19}\unit{J}$\\
+$m_n=1.0086649\unit{u}=1.67493\times10^{-27}\unit{kg}$ &
+$m_nc^2=939.57\unit{MeV}$ &
+$c=2.9979\times10^8\unit{m/s}$\\
+$k_B=8.6173\times10^{-5}\unit{eV/K}$ &
+$1\unit{u}\,c^2=931.5\unit{MeV}$ &
+$1\unit{Ci}=3.7\times10^{10}$ decays/s
+\end{tabularx}
+\end{fixedbox}
+\begin{handoutcolumns}
+% ---------- PAGE 1, LEFT ----------
+\RefHead{1}{Reactions, energy, and power}{L1--2}
+For ${}^{A}_{Z}X$, $A=Z+N$. Conserve total $A$, charge, energy,
+and momentum; $Q>0$ releases kinetic/excitation energy.
+\[
+ Q=\Big(\sum m_{\rm in}-\sum m_{\rm out}\Big)c^2,
+ \qquad B=\big[Z m({}^{1}{\rm H})+Nm_n-m_{
+ X}^{\rm atom}\big]c^2.
+\]
+Greater $B/A$ means tighter binding. With \emph{atomic} masses,
+$Q_{\beta^-}=(m_P-m_D)c^2$; do not subtract $m_e$ again.
+A $\beta^-$ decay keeps $A$ fixed and increases $Z$ by one.
+\[
+ K_{\rm rel}=m_nc^2\left[(1-v^2/c^2)^{-1/2}-1\right],
+ \qquad K_{\rm cl}=\tfrac12m_nv^2,
+\]
+\[
+ \frac{v^2}{c^2}=1-\left(1+\frac{K_{\rm rel}}{m_nc^2}\right)^{-2},
+ \quad \%\mathrm{err}=100\frac{K_{\rm cl}-K_{\rm rel}}{K_{\rm rel}}.
+\]
+Classically, $v=\sqrt{2E/m_n}$ (use consistent units).
+
+
+\[
+ N=\frac{mN_A}{M},\quad E_{\rm released}=N_{\rm reactions}Q,
+ \quad \frac{\Delta m}{m}=\frac{E_{\rm released}}{mc^2},
+\]
+\[
+ P_{\rm th}=E_f\dot N_f=E_fVR_f,
+ \qquad P_e=\epsilon_{\rm th}P_{\rm th},\qquad E=P\Delta t.
+\]
+Use $E_f\simeq200\unit{MeV}=3.204\times10^{-11}\unit{J}$ per
+fission unless specified. Prompt energy: fragments, neutrons, and
+$\gamma$ rays. Later: $\beta^-$, $\gamma$, delayed neutrons, and
+escaping antineutrinos. Fission products are usually neutron rich.
+\textbf{Fissile}: low-energy fission (U-233, U-235, Pu-239).
+\textbf{Fertile}: capture/decay produces fissile material
+(Th-232 $\to$ U-233; U-238 $\to$ Pu-239).
+
+\RefHead{2}{Multiplication and radioactive decay}{L2--3}
+For fixed $k$ and generation time $\ell$,
+\[
+ n_i=n_0k^i,\quad
+ \frac{n(t)}{n_0}=\frac{P(t)}{P_0}=k^{t/\ell}
+ \simeq e^{(k-1)t/\ell}\quad(k\simeq1).
+\]
+$k<1$: subcritical; $k=1$: critical; $k>1$: supercritical.
+
+\vspace{0.25cm}
+\RefLabel{Decay heat after operation at $P_0$ for $t_0$.}
+\[
+ P_d(t)=0.0622P_0\big[t^{-0.2}-(t+t_0)^{-0.2}\big].
+\]
+Use $t,t_0$ in seconds; $t>0$ is time after shutdown.
+
+\vspace{0.25cm}
+\RefLabel{Inventory and activity.} $N$ is a number of nuclei; production
+$R$ and activity $\mathcal A$ are nuclei/s and decays/s.
+\[
+ \lambda=\frac{\ln2}{t_{1/2}}=\frac1{\bar t},\qquad
+ \mathcal A=\lambda N,\qquad m=\frac{\mathcal A M}{\lambda N_A}.
+\]
+\[
+ \dot N=R-\lambda N\ \Longrightarrow\
+ N(t)=N_0e^{-\lambda t}+\frac{R}{\lambda}(1-e^{-\lambda t})
+ \quad(R\text{ constant}).
+\]
+For $R=0$, $N(nt_{1/2})=N_0/2^n$; for constant production,
+$N_\infty=R/\lambda$ and $\mathcal A_\infty=R$. After production
+stops, decay from the shutdown inventory.
+For a one-way chain,
+\[
+ \dot N_i=R_i(t)+\lambda_{i-1}N_{i-1}-\lambda_iN_i,
+\]
+\[
+ N_i(t)=N_i(0)e^{-\lambda_it}
+ +\int_0^t e^{-\lambda_i(t-\tau)}
+ [R_i(\tau)+\lambda_{i-1}N_{i-1}(\tau)]\dd\tau.
+\]
+For $A\to B\to C$, no production, $N_A(0)=N_0$, $N_B(0)=0$:
+\[
+ N_A=N_0e^{-\lambda_A t},\quad
+ N_B=\frac{\lambda_AN_0}{\lambda_B-\lambda_A}
+       (e^{-\lambda_A t}-e^{-\lambda_B t}).
+\]
+If $C$ is stable, $N_C=N_0-N_A-N_B$. Secular equilibrium:
+$\lambda_A\ll\lambda_B$, after the daughter transient,
+$\lambda_BN_B\simeq\lambda_AN_A$ (equal activities, not inventories).
+
+
+\switchcolumn\RaggedRight
+% ---------- PAGE 1, RIGHT ----------
+\RefHead{3}{Composition, cross sections, and rates}{L4--5}
+$M_i$: molar mass (g/mol); $n_i$: target density (cm$^{-3}$);
+$x_i,w_i,f_{V,i}$: atom, mass, and volume fractions.
+\[
+ \overline M=\sum_i x_iM_i,\qquad
+ n_i=x_i\frac{\rho N_A}{\overline M}
+       =\frac{\rho w_iN_A}{M_i},\qquad
+ x_i=\frac{w_i/M_i}{\sum_jw_j/M_j}.
+\]
+For a compound, $M_m=\sum_i a_iM_i$, $n_m=\rho N_A/M_m$,
+$n_i=a_in_m$, with $a_i$ atoms per formula unit.
+
+
+\[
+ \Sigma_x=\sum_i n_i\sigma_x^i,\qquad
+ \Sigma_{x,\rm mix}=\sum_i f_{V,i}\Sigma_{x,i}.
+\]
+Use $\sigma$ in cm$^2$ to obtain $\Sigma$ in cm$^{-1}$.
+$\Sigma_t=\Sigma_s+\Sigma_a$; $\Sigma_a=\Sigma_\gamma+\Sigma_f$
+when capture and fission are the only absorption channels.
+\[
+ R_x=\Sigma_x\phi\quad ,\qquad
+ \overline\nu_{\rm mix}=\frac{\sum_i\nu_iR_f^i}{\sum_iR_f^i}.
+\]
+\RefLabel{Conditional probabilities at fixed energy.}
+\[
+ P(x\mid\mathrm{collision})=\frac{\Sigma_x}{\Sigma_t},\quad
+ P(i\mid x)=\frac{n_i\sigma_x^i}{\Sigma_x},\quad
+ P(f\mid a)=\frac{\Sigma_f}{\Sigma_a}.
+\]
+\RefLabel{Uncollided fluxes.}
+
+Parallel beam through homogeneous slab:
+\[
+\phi_u(x)=\phi_u(0)e^{-\Sigma_t x}
+\]
+Isotropic point source $s_p$ (n/s) surrounded by multiple layers of thickness $\Delta_j$:
+\[
+ \phi_u(r)=\frac{s_p}{4\pi r^2}e^{-\sum_j\Sigma_{t,j} \Delta_j},
+\]
+for $\sum_j \Delta_j \leq r$.
+Attenuation describes \emph{uncollided} flux, not total flux!
+
+\RefHead{4}{Cross-section shapes and resonances}{L6}
+Low-energy $1/v$: $\sigma_x(E)=\sigma_x(E_*)\sqrt{E_*/E}$.
+Thresholds open channels; resonances reflect compound-nucleus levels.
+
+\RefLabel{Single-level Breit--Wigner capture}
+\[
+ \Gamma=\Gamma_n+\Gamma_\gamma,\quad
+ \lambda_r=\frac{4.55\times10^{-10}}{\sqrt{E_r/\mathrm{eV}}}\unit{cm},
+ \quad \sigma_0=4\pi\lambda_r^2\frac{\Gamma_n}{\Gamma},
+\]
+\[
+ \sigma_\gamma(E)=\sigma_0\frac{\Gamma_\gamma}{\Gamma}
+ \sqrt{\frac{E_r}{E}}\,
+ \frac{1}{1+4(E-E_r)^2/\Gamma^2}.
+\]
+The FWHM
+is $\Gamma$. Doppler broadening lowers/widens peaks, approximately
+preserving area.
+
+\RefHead{5}{Elastic collisions and moderation}{L7--8}
+\textbf{Stationary target, nonrelativistic, isotropic CM.}
+$E\to E'$; $A=M/m_n\simeq$ mass number;
+$\mu_c=\cos\theta_c$, $\mu_L=\cos\theta_L$.
+\[
+ \alpha=\left(\frac{A-1}{A+1}\right)^2,\quad
+ \frac{E'}E=\frac{A^2+2A\mu_c+1}{(A+1)^2},\quad
+ \mu_L=\frac{1+A\mu_c}{\sqrt{A^2+2A\mu_c+1}}.
+\]
+\[
+ p(E\to E') = p(E'\mid E)=\frac{1}{(1-\alpha)E}\quad(\alpha E\le E'\le E);
+ \qquad p=0\text{ otherwise}.
+\]
+\[
+ \langle E'\rangle=\tfrac12(1+\alpha)E,\quad
+ \langle E-E'\rangle=\tfrac12(1-\alpha)E,\quad
+ \langle\mu_L\rangle=\frac{2}{3A}.
+\]
+\[
+ \xi=\left\langle\ln\frac{E}{E'}\right\rangle
+ =1+\frac{\alpha\ln\alpha}{1-\alpha},\quad
+ n_{\rm coll}\simeq\frac{\ln(E_0/E_n)}{\xi}\quad(\xi\text{ constant}).
+\]
+For H-1, $\alpha=0$, $\xi=1$. Mixtures use \emph{collision} weights:
+$p_{\rm mix}=\sum_i(\Sigma_s^i/\Sigma_s)p_i$ and
+$\bar\xi=\sum_i\Sigma_s^i\xi_i/\Sigma_s$.
+Slowing-down power $=\bar\xi\Sigma_s$; ratio $=\bar\xi\Sigma_s/\Sigma_a$.
+\end{handoutcolumns}
+
+\newpage
+\begin{handoutcolumns}
+% ---------- PAGE 2, LEFT ----------
+\RefHead{6}{Densities, spectra, and expectations}{L7,9,11}
+For $p\ge0$, $\int p\dd x=1$:
+$P(a<X<b)=\int_a^bp\dd x$ and $\EE[f]=\int fp\dd x$.
+A one-to-one transformation gives $p_Y(y)=p_X(x(y))|\dd x/\dd y|$.
+Restrict every integral to the support.
+\[
+ \phi(E)=v(E)n(E),\quad \phi_{\rm tot}=\int\phi(E)\dd E,
+ \quad R_x=\int\Sigma_x(E)\phi(E)\dd E.
+\]
+Units: $n(E)$ [cm$^{-3}$ eV$^{-1}$], $\phi(E)$ [cm$^{-2}$ s$^{-1}$ eV$^{-1}$],
+$R_x$ [cm$^{-3}$ s$^{-1}$]; $v$ in cm/s.
+\RefLabel{Lethargy.} $u=\ln(E_0/E)$, $\dd u=-\dd E/E$,
+$\phi_u(u)=E\phi(E)$, and $\sigma_u(u)=\sigma(E(u))$.
+For one elastic collision, $\Delta u=u'-u$:
+\[
+ p(\Delta u)=\frac{e^{-\Delta u}}{1-\alpha},
+ \quad 0\le\Delta u\le\ln(1/\alpha),\qquad\EE[\Delta u]=\xi.
+\]
+Bin flux is \emph{integrated}: plot $\phi_g/\Delta E_g$ per eV or
+$\phi_g/\Delta u_g$ per unit lethargy.
+\RefLabel{Thermal equilibrium.} Set $\theta=k_BT$. On $E>0$,
+\[
+ p_n(E)=\frac{2\sqrt E}{\sqrt\pi\theta^{3/2}}e^{-E/\theta},
+ \qquad w_T(E)=\frac{E}{\theta^2}e^{-E/\theta}.
+\]
+$p_n$: normalized \emph{neutron density}; $w_T$: normalized \emph{flux}.
+Room temperature: $\theta\simeq0.0253$ eV.
+\[
+ \bar v=\sqrt{\frac{8\theta}{\pi m_n}},\quad
+ \langle E\rangle_n=\tfrac32\theta,\quad
+ \tfrac12m_n\bar v^2=\frac4\pi\theta\ne\langle E\rangle_n.
+\]
+Useful integrals: $\int_0^\infty Ee^{-E/\theta}\dd E=\theta^2$;
+$\int_0^\infty\sqrt E e^{-E/\theta}\dd E=\sqrt\pi\theta^{3/2}/2$.
+
+\RefHead{7}{Fast, slowing-down, and resonance spectra}{L6,9--10}
+\RefLabel{Fission births.} $\int\chi\dd E=1$; $\chi$ need not equal
+$\phi/\phi_{\rm tot}$. Course Watt model ($E$ in \textbf{MeV}):
+\[
+ \chi(E)=C_\chi e^{-1.036E}\sinh\sqrt{2.29E},\qquad
+ C_\chi\simeq0.452463\unit{MeV^{-1}}.
+\]
+Ignoring in-scatter gives $\phi_F\propto\chi/\Sigma_t$;
+only a constant $\Sigma_t$ gives $\phi_F\propto\chi$.
+\RefLabel{Slowing down below the source.} No absorption or local births;
+$E'$ is now \emph{incident}, $E$ \emph{outgoing}:
+\[
+ \Sigma_s(E)\phi(E)=\int_E^{E/\alpha}
+ \frac{\Sigma_s(E')\phi(E')}{(1-\alpha)E'}\dd E',
+\]
+\[
+ \Sigma_s(E)\phi(E)=\frac{C}{E},\quad q=\xi C,
+ \quad \phi(E)=\frac{q}{\xi\Sigma_s(E)E}.
+\]
+For H-1, the upper limit is $\infty$. $q$ is the slowing-down density
+(cm$^{-3}$s$^{-1}$). A $1/E$ \emph{flux} requires constant $\Sigma_s$.
+For mixtures with constant scattering, use $\sum_i\xi_i\Sigma_s^i$.
+
+\vspace{0.25cm}
+
+\RefLabel{Resonant fuel $f$, moderator $m$.} Background $C/E$;
+$\Sigma_{s,0}=\Sigma_{s,0}^m+\Sigma_{s,0}^f$ is background scattering.
+\[
+ \phi_{\rm NR}\simeq\frac{C}{\Sigma_t(E) E},\qquad
+ \phi_{\rm WR}\simeq\frac{C}{(\Sigma_t(E)-\Sigma_s^f)E}.
+\]
+NR: $\Delta E_{\rm res}\ll(1-\alpha_i)E_r$ for both species.
+WR: $A_f\to\infty$ cancels same-energy fuel scattering; the moderator
+remains NR. Resonances depress $\phi$ (\textbf{self-shielding}), but the
+absorption rate is $\Sigma_a\phi$. Use a common normalization.
+
+\RefHead{8}{Useful course data}{L1,8--9,12}
+
+\RefLabel{Atomic masses (u); retain digits until the final $Q$.}
+\par\vspace{2pt}{\centering\fontsize{8.0}{9.2}\selectfont
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}lr@{\quad}lr@{\quad}lr@{}}
+\is{1}{H}&1.007825031898&\is{4}{He}&4.00260325413&\is{7}{Li}&7.01600343426\\
+\is{9}{Be}&9.012183062&\is{10}{B}&10.012936862&\is{12}{B}&12.014352638\\
+\is{13}{C}&13.00335483534&\is{60}{Co}&59.933815536&\is{60}{Ni}&59.930785129
+\end{tabular}\par}\vspace{2pt}
+
+\par\vspace{2pt}{\centering\fontsize{8.0}{9.2}\selectfont
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Moderator & $\xi$ & $\xi\Sigma_s$ (cm$^{-1}$) & $\xi\Sigma_s/\Sigma_a$\\
+\midrule
+H$_2$O&0.93&1.28&58\\
+D$_2$O&0.51&0.18&21000\\
+C&0.158&0.056&200\\
+\bottomrule
+\end{tabular}
+\par}\vspace{2pt}
+FNRP Table 3.1: moderator ratio uses \emph{thermal} absorption.
+
+\par\vspace{2pt}
+{\centering\fontsize{8}{9.2}\selectfont
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & $\nu_T$ & $\sigma_{f,T}$ & $\sigma_{a,T}$ & $I_a$ & $\sigma_{f,F}$ & $\sigma_{a,F}$\\
+\midrule
+U-235 & 2.43 & 505 & 591 & 404 & 1.22 & 1.29\\
+U-238 & --- & $\simeq0$ & 2.42 & 278 & 0.304 & 0.361\\
+Pu-239 & 2.90 & 698 & 973 & 474 & 1.81 & 1.86\\
+\bottomrule
+\end{tabular}\par}
+$T$: room-temperature Maxwellian \emph{flux averages}, not 0.0253-eV
+point values; $F$: fission-spectrum averages; $I_a$: 1--$10^5$ eV.
+
+\switchcolumn\RaggedRight
+% ---------- PAGE 2, RIGHT ----------
+\RefHead{9}{Rate-preserving energy averages}{L8,12--13}
+Effective cross sections:
+\[
+ \bar\Sigma_x=\frac{\int\Sigma_x\phi\dd E}{\int\phi\dd E},\quad
+ \overline{\nu\Sigma_f}=\frac{\int\nu\Sigma_f\phi\dd E}{\int\phi\dd E}.
+\]
+Average $\nu\Sigma_f$ as a product, not as independent averages.
+\[
+ I_x=\int_{E_l}^{E_u}\frac{\sigma_x(E)}{E}\dd E,\qquad
+ \bar\sigma_{x,I}=\frac{I_x}{\ln(E_u/E_l)}\quad(1/E\text{ weight}).
+\]
+NR weighting instead uses $1/[\Sigma_t(E)E]$ in \emph{both} integrals.
+For $1/v$ cross sections and Maxwellian flux,
+\[
+ \bar\sigma_{x,T}=\frac{\sqrt\pi}{2}\sigma_x(E_*)
+ \sqrt{\frac{E_*}{k_BT}}.
+\]
+
+
+\RefHead{10}{Groups, transfer, and condensation}{L13}
+Number from high to low energy: $E_0>\cdots>E_G$,
+$\phi_g=\int_{E_g}^{E_{g-1}}\phi(E)\dd E$.
+Course bounds (eV): $(10^7,10^5,1,10^{-3})$ for $(F,I,T)$;
+$\Delta u_g=\ln(E_{g-1}/E_g)$.
+Apply the flux average above within each group:
+$\Sigma_{x,g}=\int_g\Sigma_x\phi\dd E/\phi_g$;
+$\chi_g=\int_g\chi\dd E$, $s_g=\int_gs\dd E$.
+
+\vspace{0.25cm}
+
+\RefLabel{Destination $g\gets$ incident $g'$.} For elastic scattering,
+\[
+ P_g^i(E')=\frac{[\min(E_{g-1},E')-\max(E_g,\alpha_i E')]_+}
+                  {(1-\alpha_i)E'},\quad[z]_+=\max(z,0),
+\]
+\[
+ \Sigma_{s,g\gets g'}=\sum_i n_i
+ \frac{\int_{g'}\sigma_s^i(E')P_g^i(E')\phi(E')\dd E'}{\phi_{g'}}.
+\]
+The denominator is the \emph{incident}-group flux ($\propto\Delta u_{g'}$
+for $1/E'$ weighting). No upscatter: entries above the diagonal vanish.
+
+\RefLabel{Collapse fine groups into a coarse group $G$.}
+\[
+ \phi_G=\sum_{g\in G}\phi_g,\qquad
+ \Sigma_{x,G}=\frac{\sum_{g\in G}\Sigma_{x,g}\phi_g}{\phi_G}.
+\]
+Add rates, not cross sections!
+
+
+
+\RefHead{11}{Infinite-medium neutron balance}{L12--14}
+Steady, homogeneous, no leakage; number-conserving scattering.
+For each energy group,
+\[
+ \Sigma_{t,g}\phi_g
+ =
+ \sum_{g'}\Sigma_{s,g\gets g'}\phi_{g'}
+ +\chi_g\sum_{g'}(\nu\Sigma_f)_{g'}\phi_{g'}
+ +s_g .
+\]
+Thus, scattering out of group $g$ is included in $\Sigma_{t,g}\phi_g$,
+while scattering into $g$ appears on the right.
+For a fixed source,
+\[
+ \sum_{g'}
+ \left[
+   \Sigma_{t,g}\delta_{gg'}
+   -\Sigma_{s,g\gets g'}
+   -\chi_g(\nu\Sigma_f)_{g'}
+ \right]\phi_{g'}
+ =s_g .
+\]
+For the eigenvalue problem,
+\[
+ \sum_{g'}
+ \left[
+   \Sigma_{t,g}\delta_{gg'}
+   -\Sigma_{s,g\gets g'}
+ \right]\phi_{g'}
+ =
+ \frac{\chi_g}{k_{\text{eff}}}
+ \sum_{g'}(\nu\Sigma_f)_{g'}\phi_{g'} .
+\]
+Only fission is divided by $k_{\text{eff}}$. The dominant eigenvector
+sets shape, not power; e.g., $\sum_g\widehat{\phi}_g=1$.
+A physical multiplying fixed-source solution requires $\nu\Sigma_f/\Sigma_a \equiv k_\infty<1$!!
+
+\RefLabel{One group.}
+\[
+  \Sigma_a \phi= \frac{1}{k_{\text{eff}}} \nu\Sigma_f  \phi + s
+  \Longrightarrow
+  \phi = \frac{s}{\Sigma_a-\nu\Sigma_f/k_{\text{eff}}}
+  = \frac{s/\Sigma_a}{1-k_{\infty}/k_{\text{eff}}}
+\]
+
+\RefLabel{Two groups, no upscatter.}
+Let $(\chi_1,\chi_2)=(1,0)$, $(s_1,s_2)=(s_1,0)$. Then
+\[
+ \Sigma_{a,2}\phi_2
+ =
+ \Sigma_{s,2\gets1}\phi_1,
+ \qquad
+ \frac{\phi_2}{\phi_1}
+ =
+ \frac{\Sigma_{s,2\gets1}}{\Sigma_{a,2}},
+\]
+and
+\[
+ k_\infty
+ =
+ \frac{
+   (\nu\Sigma_f)_1\phi_1+(\nu\Sigma_f)_2\phi_2
+ }{
+   \left(\Sigma_{a,1}+\Sigma_{s,2\gets1}\right)\phi_1
+ }
+ =
+ \frac{
+   (\nu\Sigma_f)_1
+   +(\nu\Sigma_f)_2(\phi_2/\phi_1)
+ }{
+   \Sigma_{a,1}+\Sigma_{s,2\gets1}
+ }.
+\]
+For a fixed fast-group source,
+\[
+ \phi_1
+ =
+ \frac{s_1}
+ {\left(\Sigma_{a,1}+\Sigma_{s,2\gets1}\right)(1-k_\infty)},
+ \qquad
+ \phi_2
+ =
+ \frac{\Sigma_{s,2\gets1}}{\Sigma_{a,2}}\phi_1 .
+\]
+
+
+\end{handoutcolumns}
+\end{document}

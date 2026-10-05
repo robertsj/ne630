@@ -12,19 +12,19 @@
  {Which part of the neutron life cycle explains a change in multiplication?}
 \begin{center}\resizebox{.995\linewidth}{!}{\CycleFigure}\end{center}
 \vspace{-7pt}
-\figcap{Idealized no-leakage cycle (adapted from Fig.\ 4.5). Thermal fission produces \emph{fast} neutrons. The four factors describe coupled processes.}
+\figcap{Idealized no-leakage cycle (adapted from Fig.\ 4.5). Thermal fission produces \emph{fast} neutrons.}
 \colstart
 \Sec{1}{Keep space and energy together}
-At thermal and resonance energies, larger optical thicknesses produce substantial fuel/moderator flux differences. Use \textbf{regional volume averages} $\varphi_y(E)$; the flux need not actually be uniform inside a homogeneous material region.
+At thermal and resonance energies, larger optical thicknesses produce substantial fuel/moderator flux differences. Use \textbf{regional volume averages} $\phi^r(E)$; the flux need not actually be uniform inside a homogeneous material region.
 
-\textbf{Bands:} $T$: $E<1\uunit{eV}$; $I$: $1\uunit{eV}\le E<0.1\uunit{MeV}$; $F$: $E\ge0.1\uunit{MeV}$. ``Nonthermal'' means $I\cup F$, not just $F$.
+\textbf{Groups:} $T$: $E<1\uunit{eV}$; $I$: $1\uunit{eV}\le E<0.1\uunit{MeV}$; $F$: $E\ge0.1\uunit{MeV}$. ``Nonthermal'' means $I\cup F$, not just $F$.
 
-For band $g$ and region $y$, introduce volume-integrated absorption and fission-neutron production:
+For group $g$ and region $r$, introduce volume-integrated absorption and fission-neutron production:
 \begin{align*}
- A_g^y&=V_y\int_g\Sigma_a^y(E)\varphi_y(E)\,dE,\\
- B_g^y&=V_y\int_g\nu\Sigma_f^y(E)\varphi_y(E)\,dE.
+ A_g^r&=V^r\int_g\Sigma_a^r(E)\phi^r(E)\,dE,\\
+ B_g^r&=V^r\int_g\nu\Sigma_f^r(E)\phi^r(E)\,dE.
 \end{align*}
-Only fuel fissions: $B_g=B_g^f$, $B=\sum_g B_g$, and $A=\sum_{g,y}A_g^y$. With $A_T=A_T^f+A_T^m$, the chapter's two-region model retains
+Only fuel fissions: $B_g=B_g^f$, $B=\sum_g B_g$, and $A=\sum_{g,r}A_g^r$. With $A_T=A_T^f+A_T^m$, the chapter's two-region model retains
 \[
  B\simeq B_T+B_F,\qquad A\simeq A_T+A_I^f,
 \]
@@ -32,11 +32,11 @@ and hence $k_\infty\simeq(B_T+B_F)/(A_T+A_I^f)$.
 \eqread{Eqs.\ (4.18)--(4.23): intermediate fission, fast absorption, and nonthermal moderator absorption are omitted.}
 
 \Sec{2}{Homogenize reaction rates, not atoms alone}
-With $\overline\varphi_{yg}=\int_g\varphi_y(E)\,dE$ and region-specific group data,
+With $\overline\phi_{g}^{r}=\int_g\phi^r(E)\,dE$ and region-specific group data,
 \[
  \overline\Sigma_{xg}^{\rm hom}=
- \frac{\sum_y V_y\overline\Sigma_{xg}^y\overline\varphi_{yg}}
- {\sum_y V_y\overline\varphi_{yg}}.
+ \frac{\sum_r V^r\overline\Sigma_{xg}^r\overline\phi_{g}^{r}}
+ {\sum_r V^r\overline\phi_{g}^{r}}.
 \]
 Simple volume weighting is recovered only when the regional group fluxes are equal. Material mixing before transport and reaction-rate homogenization after transport are different operations.
 \colnext
@@ -60,18 +60,15 @@ $\epsilon$ counts the additional fission-neutron production beyond thermal fissi
 
 \Sec{4}{The thermal disadvantage}
 \[
- \zeta=\frac{\overline\varphi_{mT}}{\overline\varphi_{fT}},\qquad
+ \zeta=\frac{\overline\phi_{mT}}{\overline\phi_{fT}},\qquad
  f=\left[1+\zeta\frac{V_m\overline\Sigma_{aT}^{m}}
  {V_f\overline\Sigma_{aT}^{f}}\right]^{-1}.
 \]
-A larger moderator-to-fuel thermal flux ratio makes moderator absorption more costly. Include cladding, dissolved boron, and other nonfuel absorbers in a detailed tally balance.
+A larger moderator-to-fuel thermal flux ratio makes moderator absorption more costly. Include cladding, dissolved boron, and other nonfuel absorbers in a more detailed balance.
 
-\begin{KeyBox}{A reduced model is not a full tally balance}
-Full-energy transport includes reactions omitted by Eq.\ (4.23). A discrepancy between its factor product and the eigenvalue is not automatically a tally error. Identify the omitted rates before changing definitions.
-\end{KeyBox}
 \colend
 \begin{Explore}{Measure the factors before interpreting them}
-Use \texttt{CellFilter} and an incident-energy \texttt{EnergyFilter}; score \texttt{flux}, \texttt{absorption}, and \texttt{nu-fission}. Reaction-rate tallies already include volume. Divide a flux tally by $V_y\Delta E$ for a spectrum per eV, or by $V_y\Delta u$ for one per lethargy. Compare the chapter's product, the all-band $B/A$, and the eigenvalue; discuss omitted reactions and statistical uncertainty rather than forcing agreement.
+Use \texttt{CellFilter} and an incident-energy \texttt{EnergyFilter}; score \texttt{flux}, \texttt{absorption}, and \texttt{nu-fission}. Reaction-rate tallies already include volume. Divide a flux tally by $V^r\Delta E$ for a spectrum per eV, or by $V^r\Delta u$ for one per lethargy. Compare the chapter's product, the energy-independent $B/A$, and the eigenvalue; discuss omitted reactions and statistical uncertainty rather than forcing agreement.
 \end{Explore}
 \SourceLine{Sources: Ch.\ 4, \S\S\,4.4--4.5; slide sets 17--18. OpenMC: \href{https://docs.openmc.org/en/stable/usersguide/tallies.html}{Tallies, \S\S\,8.1--8.2}. $B/A=k_\infty$ additionally assumes no leakage or net nonfission neutron production.}
 \end{document}

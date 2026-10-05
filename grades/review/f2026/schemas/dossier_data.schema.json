@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:dossier-data:1.0.0",
+  "title": "Structured product-calibration dossier data",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "dossier_id",
+    "run_id",
+    "selection_id",
+    "created_at",
+    "assignment_id",
+    "submission_record_id",
+    "pseudonym",
+    "view",
+    "packet_manifest",
+    "coverage",
+    "sections",
+    "exclusions",
+    "reviewer_state",
+    "student_facing",
+    "contains_source_identifiers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "dossier_id": {"type": "string", "pattern": "^DOS-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "selection_id": {"type": "string", "pattern": "^SEL-[0-9]{6,}$"},
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "assignment_id": {"$ref": "#/$defs/assignment_id"},
+    "submission_record_id": {"$ref": "#/$defs/submission_record_id"},
+    "pseudonym": {"$ref": "#/$defs/pseudonym"},
+    "view": {"enum": ["PRODUCT_BLINDED", "PRODUCT_IDENTITY_VISIBLE"]},
+    "packet_manifest": {"$ref": "#/$defs/artifact_ref"},
+    "coverage": {
+      "type": "object",
+      "required": ["status", "expected_problem_count", "problem_ids", "reviewable_pages"],
+      "properties": {
+        "status": {"enum": ["COMPLETE", "PARTIAL", "NOT_CHECKABLE"]},
+        "expected_problem_count": {"type": "integer", "minimum": 1},
+        "problem_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^P[1-9][0-9]*$"}
+        },
+        "reviewable_pages": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/evidence_locator"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["section_id", "title", "source_role", "summary", "evidence_locators"],
+        "properties": {
+          "section_id": {"type": "string", "pattern": "^SEC-[0-9]{6,}$"},
+          "title": {"type": "string", "minLength": 1, "maxLength": 256},
+          "source_role": {"enum": ["SUBMITTED_SOLUTION", "PROBLEM_STATEMENT", "SOLUTION_KEY"]},
+          "problem_id": {"type": "string", "pattern": "^P[1-9][0-9]*$"},
+          "summary": {"type": "string", "maxLength": 8000},
+          "evidence_locators": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/evidence_locator"}
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "exclusions": {
+      "type": "object",
+      "required": ["discourse", "identity", "original_filenames", "intake_flags", "late_metadata", "route_metadata"],
+      "properties": {
+        "discourse": {"const": true},
+        "identity": {"type": "boolean"},
+        "original_filenames": {"const": true},
+        "intake_flags": {"const": true},
+        "late_metadata": {"const": true},
+        "route_metadata": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "reviewer_state": {"const": "PENDING"},
+    "student_facing": {"const": false},
+    "contains_source_identifiers": {"type": "boolean"}
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "view": {"const": "PRODUCT_BLINDED"},
+        "exclusions": {
+          "properties": {"identity": {"const": true}}
+        },
+        "contains_source_identifiers": {"const": false}
+      }
+    },
+    {
+      "properties": {
+        "view": {"const": "PRODUCT_IDENTITY_VISIBLE"},
+        "exclusions": {
+          "properties": {"identity": {"const": false}}
+        },
+        "contains_source_identifiers": {"const": true}
+      }
+    }
+  ],
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "pseudonym": {"type": "string", "pattern": "^S[0-9]{3,}$"},
+    "submission_record_id": {"type": "string", "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "relative_path": {"type": "string", "minLength": 1, "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"},
+    "artifact_ref": {
+      "type": "object",
+      "required": ["artifact_id", "role", "path", "sha256", "byte_count", "media_type"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "role": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "path": {"$ref": "#/$defs/relative_path"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"}
+      },
+      "additionalProperties": false
+    },
+    "evidence_locator": {
+      "type": "object",
+      "required": ["artifact_id", "artifact_sha256", "source_role", "logical_path", "locator_type", "extraction_method", "uncertainty"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "source_role": {"enum": ["SUBMITTED_SOLUTION", "PROBLEM_STATEMENT", "SOLUTION_KEY"]},
+        "logical_path": {"$ref": "#/$defs/relative_path"},
+        "locator_type": {"enum": ["FILE", "PDF_PAGE", "TEXT_LINES", "LABEL"]},
+        "page": {"type": "integer", "minimum": 1},
+        "printed_page_label": {"type": "string", "minLength": 1, "maxLength": 64},
+        "line_start": {"type": "integer", "minimum": 1},
+        "line_end": {"type": "integer", "minimum": 1},
+        "label": {"type": "string", "minLength": 1, "maxLength": 256},
+        "problem_id": {"type": "string", "pattern": "^P[1-9][0-9]*$"},
+        "subpart_id": {"type": "string", "pattern": "^[A-Za-z0-9._-]{1,32}$"},
+        "extraction_method": {"enum": ["NATIVE_TEXT", "PDFTOTEXT", "OCR", "VISUAL"]},
+        "uncertainty": {"enum": ["NONE", "LOW", "MEDIUM", "HIGH"]},
+        "excerpt": {"type": "string", "maxLength": 500}
+      },
+      "oneOf": [
+        {"properties": {"locator_type": {"const": "FILE"}}},
+        {"properties": {"locator_type": {"const": "PDF_PAGE"}}, "required": ["page"]},
+        {"properties": {"locator_type": {"const": "TEXT_LINES"}}, "required": ["line_start", "line_end"]},
+        {"properties": {"locator_type": {"const": "LABEL"}}, "required": ["label"]}
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

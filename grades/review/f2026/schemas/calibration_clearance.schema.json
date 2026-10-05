@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:calibration-clearance:1.0.0",
+  "title": "Adopted calibration visual clearance",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "selection_id",
+    "created_at",
+    "selection",
+    "clearance_request",
+    "review_set_id",
+    "review_set",
+    "decision_id",
+    "status",
+    "attestation",
+    "items",
+    "contains_source_identifiers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "selection_id": {"$ref": "#/$defs/selection_id"},
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "selection": {"$ref": "#/$defs/artifact_ref"},
+    "clearance_request": {"$ref": "#/$defs/artifact_ref"},
+    "review_set_id": {"$ref": "#/$defs/review_set_id"},
+    "review_set": {"$ref": "#/$defs/artifact_ref"},
+    "decision_id": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"},
+    "status": {"const": "ADOPTED"},
+    "attestation": {
+      "const": "I personally inspected every page of each PDF in the identified review set and confirm that no visible student identity remains."
+    },
+    "items": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "assignment_id",
+          "submission_record_id",
+          "disposition",
+          "review_artifact",
+          "accepted_artifact",
+          "automated_scan_status",
+          "automated_scan_codes",
+          "contains_source_identifiers"
+        ],
+        "properties": {
+          "assignment_id": {"$ref": "#/$defs/assignment_id"},
+          "submission_record_id": {"$ref": "#/$defs/submission_record_id"},
+          "disposition": {
+            "enum": [
+              "SOURCE_RASTER_VISUALLY_CLEARED",
+              "SANITIZED_DERIVATIVE_RASTER_VISUALLY_CLEARED"
+            ]
+          },
+          "review_artifact": {"$ref": "#/$defs/artifact_ref"},
+          "accepted_artifact": {"$ref": "#/$defs/artifact_ref"},
+          "automated_scan_status": {"$ref": "#/$defs/automated_scan_status"},
+          "automated_scan_codes": {"$ref": "#/$defs/automated_scan_codes"},
+          "contains_source_identifiers": {"const": false}
+        },
+        "additionalProperties": false
+      }
+    },
+    "contains_source_identifiers": {"const": false}
+  },
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "selection_id": {"type": "string", "pattern": "^SEL-[0-9]{6,}$"},
+    "review_set_id": {"type": "string", "pattern": "^RSET-[0-9]{6,}$"},
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "submission_record_id": {"type": "string", "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"},
+    "automated_scan_status": {"enum": ["FAIL", "NEEDS_HUMAN_TRIAGE"]},
+    "automated_scan_codes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"}
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "relative_path": {"type": "string", "minLength": 1, "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"},
+    "artifact_ref": {
+      "type": "object",
+      "required": ["artifact_id", "role", "path", "sha256", "byte_count", "media_type"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "role": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "path": {"$ref": "#/$defs/relative_path"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

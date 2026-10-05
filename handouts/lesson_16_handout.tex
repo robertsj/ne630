@@ -1,0 +1,90 @@
+% NE 630 -- Chapter 4 reading guide, Lesson 16
+% Standalone source: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_16_handout.tex
+\input{ne630_ch04_reading_guide_common.tex}
+\hypersetup{pdftitle={NE 630: Chapter 4 Reading Guide -- Lesson 16: Fast-reactor unit cells}}
+\begin{document}
+\fontsize{9.5}{11.5}\selectfont
+\RaggedRight
+
+% ============================ LESSON 16 ============================
+\Lesson{16}{Fast-reactor unit cells}
+ {\S\,4.3, Eqs.\ (4.1)--(4.16); revisit the fast-reactor discussion in \S\,4.2.}
+ {When is volume mixing a good approximation to a heterogeneous lattice?}
+\colstart
+\Sec{1}{Hexagonal Unit Cells}
+$P$ is nearest-neighbor pin pitch, $D=2r_f$ is \emph{fuel} diameter, $r_c$ is outer cladding radius, and $L$ is a common axial length. A triangular array of pin centers has a hexagonal cell:
+\[
+ a=\frac{P}{\sqrt3},\quad \text{apothem}=\frac P2,\quad
+ A_{\rm hex}=\frac{\sqrt3}{2}P^2,\quad A_{\rm sq}=P^2.
+\]
+\begin{center}\resizebox{.74\linewidth}{!}{\PinCellsFigure}\end{center}
+\vspace{-6pt}
+\figcap{Same pitch and pin size, different cell areas. The hexagon's side $a$ is not its across-flats dimension $P$.}
+Omitting the gap and assigning the cladding to $st$,
+\begin{align*}
+ V_f&=\pi r_f^2L, & V_{st}&=\pi(r_c^2-r_f^2)L,\\
+ V_c&=(A_{\rm cell}-\pi r_c^2)L, & V&=A_{\rm cell}L.
+\end{align*}
+Thus, for the hexagonal cell,
+\[
+ \frac{V_f}{V}=\frac{\pi}{2\sqrt3}\left(\frac DP\right)^2,
+ \qquad P>2r_c
+\]
+for a nonzero inter-pin coolant gap. Extra structure or a fuel--clad gap must be counted separately.
+
+\Sec{2}{Compare length scales, not just energies}
+Mean free path and optical thickness (for characteristic dimension $d$):
+\[
+ \lambda(E)=\frac1{\Sigma_t(E)},\qquad
+ \tau(E)=d \Sigma_t(E).
+\] 
+Fast-energy cross sections are often small. For $d \ll\lambda$, spatial flux differences are modest:
+\[
+ \varphi_f(E)\simeq\varphi_c(E)\simeq\varphi_{st}(E).
+\]
+A fast spectrum is generally complex and shaped by inelastic scattering processes.
+\colnext
+\Sec{3}{Collapse only after finding the spectrum}
+For a common spectrum $\varphi(E)$, define
+\[
+ \phi=\int_0^\infty\varphi(E)\,dE,\qquad
+ \overline\Sigma_x=\frac{\int_0^\infty\Sigma_x(E)\varphi(E)\,dE}{\phi}.
+\]
+{\it Volume mixing} then gives $\Sigma_x=\sum_y(V_y/V)\Sigma_x$. The chapter's production/absorption balance becomes
+\[
+ \boxed{k_\infty\simeq
+ \frac{V_f\overline{\nu\Sigma_f}^{\,f}}
+ {V_f\overline\Sigma_a^f+V_c\overline\Sigma_a^c+V_{st}\overline\Sigma_a^{st}}.}
+\]
+\eqread{Eqs.\ (4.2)--(4.8); leakage and nonfission neutron multiplication neglected.}
+
+ 
+\Sec{4}{Enrichment is the fast-lattice lever}
+In the two-nuclide model ($fi$: fissile; $fe$: fertile),
+\[
+ N_f=N_{fi}+N_{fe},\qquad \widetilde e=\frac{N_{fi}}{N_f}.
+\]
+Let $a_i=\overline\sigma_a^{\,i}$, $b_i=\overline{\nu\sigma_f}^{\,i}$ and
+\[
+ C=\frac{V_c\overline\Sigma_a^c+V_{st}\overline\Sigma_a^{st}}{V_fN_f}.
+\]
+At a \emph{fixed spectrum}, Eq.\ (4.16) is
+\[
+ k_\infty(\widetilde e)=
+ \frac{b_{fe}+\widetilde e(b_{fi}-b_{fe})}
+ {a_{fe}+\widetilde e(a_{fi}-a_{fe})+C}.
+\]
+Solving for an assigned lattice target $k_*$ gives
+\[
+ \widetilde e_*=
+ \frac{k_*(a_{fe}+C)-b_{fe}}
+ {(b_{fi}-b_{fe})-k_*(a_{fi}-a_{fe})}.
+\]
+ 
+\textbf{Match the enrichment basis:} $\widetilde e$ is an atom fraction; OpenMC's uranium \texttt{add\_element} uses U-235 \emph{weight percent}. Convert, or set isotope atom fractions explicitly.
+\colend
+\begin{Explore}{Exploring fast spectra}
+Compare a fuel--cladding--Na hexagonal cell with its inventory-matched homogeneous mixture. Set \texttt{HexagonalPrism}'s \texttt{edge\_length} to $P/\sqrt3$. Suppress axial and lateral leakage; compare regional spectra, regional reaction rates, and $k_\infty$. 
+\end{Explore}
+\SourceLine{Sources: Ch.\ 4, \S\,4.3; slide sets 16--17. OpenMC: \href{https://docs.openmc.org/en/stable/pythonapi/generated/openmc.model.HexagonalPrism.html}{HexagonalPrism}; \href{https://docs.openmc.org/en/stable/pythonapi/generated/openmc.Material.html}{Material.add\_element}.}
+\end{document}

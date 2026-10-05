@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:calibration-packet-manifest:1.0.0",
+  "title": "Restricted calibration packet manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "packet_id",
+    "run_id",
+    "selection_id",
+    "created_at",
+    "assignment_id",
+    "submission_record_id",
+    "pseudonym",
+    "review_mode",
+    "classification",
+    "required_file_mode",
+    "materials",
+    "sanitization",
+    "exclusions",
+    "product_review_opened",
+    "contains_source_identifiers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "packet_id": {"type": "string", "pattern": "^PKT-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "selection_id": {"type": "string", "pattern": "^SEL-[0-9]{6,}$"},
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "assignment_id": {"$ref": "#/$defs/assignment_id"},
+    "submission_record_id": {"$ref": "#/$defs/submission_record_id"},
+    "pseudonym": {"$ref": "#/$defs/pseudonym"},
+    "review_mode": {
+      "enum": ["PRODUCT_BLINDED", "IDENTITY_VISIBLE_NON_BLINDED"]
+    },
+    "classification": {
+      "enum": [
+        "RESTRICTED_CALIBRATION_PACKET",
+        "RESTRICTED_IDENTITY_VISIBLE_CALIBRATION_PACKET"
+      ]
+    },
+    "required_file_mode": {"const": "0600"},
+    "materials": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["source_role", "source_artifact", "source_path_classification", "packet_artifact"],
+        "properties": {
+          "source_role": {"enum": ["SUBMITTED_SOLUTION", "PROBLEM_STATEMENT", "SOLUTION_KEY"]},
+          "source_artifact": {"$ref": "#/$defs/artifact_hash_ref"},
+          "source_path_classification": {"const": "SANITIZED_RUN_ARTIFACT"},
+          "packet_artifact": {"$ref": "#/$defs/artifact_ref"}
+        },
+        "additionalProperties": false
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {"source_role": {"const": "SUBMITTED_SOLUTION"}},
+            "required": ["source_role"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {"source_role": {"const": "PROBLEM_STATEMENT"}},
+            "required": ["source_role"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {"source_role": {"const": "SOLUTION_KEY"}},
+            "required": ["source_role"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "sanitization": {
+      "type": "object",
+      "required": [
+        "tool",
+        "method",
+        "review_set_artifact",
+        "decision_id",
+        "disposition",
+        "automated_scan_status",
+        "automated_scan_codes",
+        "identity_scan_status"
+      ],
+      "properties": {
+        "tool": {
+          "type": "object",
+          "required": ["name", "version"],
+          "properties": {
+            "name": {"type": "string", "minLength": 1, "maxLength": 128},
+            "version": {"type": "string", "minLength": 1, "maxLength": 128},
+            "executable_sha256": {"$ref": "#/$defs/sha256"}
+          },
+          "additionalProperties": false
+        },
+        "method": {"type": "string", "minLength": 1, "maxLength": 2000},
+        "clearance_artifact": {"$ref": "#/$defs/artifact_ref"},
+        "authorization_artifact": {"$ref": "#/$defs/artifact_ref"},
+        "review_set_artifact": {"$ref": "#/$defs/artifact_ref"},
+        "decision_id": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"},
+        "disposition": {
+          "enum": [
+            "SOURCE_RASTER_VISUALLY_CLEARED",
+            "SANITIZED_DERIVATIVE_RASTER_VISUALLY_CLEARED",
+            "SOURCE_RASTER_IDENTITY_VISIBLE_AUTHORIZED",
+            "SANITIZED_DERIVATIVE_RASTER_IDENTITY_VISIBLE_AUTHORIZED"
+          ]
+        },
+        "automated_scan_status": {"enum": ["FAIL", "NEEDS_HUMAN_TRIAGE"]},
+        "automated_scan_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"}
+        },
+        "identity_scan_status": {"enum": ["PASS", "NOT_BLINDED"]}
+      },
+      "additionalProperties": false
+    },
+    "exclusions": {
+      "type": "object",
+      "required": ["discourse", "identity", "original_filenames", "intake_flags", "late_metadata", "route_metadata"],
+      "properties": {
+        "discourse": {"const": true},
+        "identity": {"type": "boolean"},
+        "original_filenames": {"const": true},
+        "intake_flags": {"const": true},
+        "late_metadata": {"const": true},
+        "route_metadata": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "product_review_opened": {"const": false},
+    "contains_source_identifiers": {"type": "boolean"}
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "review_mode": {"const": "PRODUCT_BLINDED"},
+        "classification": {"const": "RESTRICTED_CALIBRATION_PACKET"},
+        "sanitization": {
+          "required": ["clearance_artifact"],
+          "properties": {
+            "disposition": {
+              "enum": [
+                "SOURCE_RASTER_VISUALLY_CLEARED",
+                "SANITIZED_DERIVATIVE_RASTER_VISUALLY_CLEARED"
+              ]
+            },
+            "identity_scan_status": {"const": "PASS"}
+          },
+          "not": {"required": ["authorization_artifact"]}
+        },
+        "exclusions": {
+          "properties": {"identity": {"const": true}}
+        },
+        "contains_source_identifiers": {"const": false}
+      }
+    },
+    {
+      "properties": {
+        "review_mode": {"const": "IDENTITY_VISIBLE_NON_BLINDED"},
+        "classification": {
+          "const": "RESTRICTED_IDENTITY_VISIBLE_CALIBRATION_PACKET"
+        },
+        "sanitization": {
+          "required": ["authorization_artifact"],
+          "properties": {
+            "disposition": {"const": "SOURCE_RASTER_IDENTITY_VISIBLE_AUTHORIZED"},
+            "identity_scan_status": {"const": "NOT_BLINDED"}
+          },
+          "not": {"required": ["clearance_artifact"]}
+        },
+        "exclusions": {
+          "properties": {"identity": {"const": false}}
+        },
+        "contains_source_identifiers": {"const": true}
+      }
+    }
+  ],
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "pseudonym": {"type": "string", "pattern": "^S[0-9]{3,}$"},
+    "submission_record_id": {"type": "string", "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "relative_path": {"type": "string", "minLength": 1, "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"},
+    "artifact_ref": {
+      "type": "object",
+      "required": ["artifact_id", "role", "path", "sha256", "byte_count", "media_type"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "role": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "path": {"$ref": "#/$defs/relative_path"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"}
+      },
+      "additionalProperties": false
+    },
+    "artifact_hash_ref": {
+      "type": "object",
+      "required": ["artifact_id", "role", "sha256", "byte_count", "media_type"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "role": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

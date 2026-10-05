@@ -1,0 +1,408 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:run-manifest:1.0.0",
+  "title": "Review run manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "configuration_id",
+    "created_at",
+    "updated_at",
+    "run_state",
+    "tool",
+    "config_sha256",
+    "reference_manifest_state",
+    "reference_manifest_sha256",
+    "schema_set_sha256",
+    "input_summary",
+    "inputs",
+    "sample_seed",
+    "stages",
+    "reconciliation",
+    "event_log",
+    "human_decision_log",
+    "outputs",
+    "validation",
+    "privacy"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "configuration_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-v[0-9]+$"
+    },
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "updated_at": {"$ref": "#/$defs/timestamp"},
+    "run_state": {"enum": ["INITIALIZED", "RUNNING", "BLOCKED", "FAILED", "COMPLETE"]},
+    "tool": {"$ref": "#/$defs/tool"},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "reference_manifest_state": {"enum": ["NOT_FROZEN", "FROZEN"]},
+    "reference_manifest_sha256": {
+      "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+    },
+    "schema_set_sha256": {"$ref": "#/$defs/sha256"},
+    "input_summary": {
+      "type": "object",
+      "required": ["assignment_count", "source_group_count", "top_level_file_count"],
+      "properties": {
+        "assignment_count": {"const": 4},
+        "source_group_count": {"type": "integer", "minimum": 0},
+        "top_level_file_count": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "inputs": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["assignment_id", "source_directory", "source_group_count", "top_level_file_count", "snapshot_sha256"],
+        "properties": {
+          "assignment_id": {"$ref": "#/$defs/assignment_id"},
+          "source_directory": {"$ref": "#/$defs/relative_path"},
+          "source_group_count": {"type": "integer", "minimum": 0},
+          "top_level_file_count": {"type": "integer", "minimum": 0},
+          "snapshot_sha256": {"$ref": "#/$defs/sha256"}
+        },
+        "additionalProperties": false
+      },
+      "allOf": [
+        {"contains": {"type": "object", "properties": {"assignment_id": {"const": "HW01"}}, "required": ["assignment_id"]}, "minContains": 0, "maxContains": 1},
+        {"contains": {"type": "object", "properties": {"assignment_id": {"const": "HW02"}}, "required": ["assignment_id"]}, "minContains": 0, "maxContains": 1},
+        {"contains": {"type": "object", "properties": {"assignment_id": {"const": "HW03"}}, "required": ["assignment_id"]}, "minContains": 0, "maxContains": 1},
+        {"contains": {"type": "object", "properties": {"assignment_id": {"const": "HW04"}}, "required": ["assignment_id"]}, "minContains": 0, "maxContains": 1}
+      ]
+    },
+    "sample_seed": {"type": "string", "minLength": 1, "maxLength": 512},
+    "stages": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "required": ["stage", "position", "status", "event_sequence_start", "event_sequence_end", "started_at", "completed_at", "reason_code"],
+        "properties": {
+          "stage": {"$ref": "#/$defs/stage"},
+          "position": {"type": "integer", "minimum": 1, "maximum": 7},
+          "status": {"enum": ["NOT_STARTED", "RUNNING", "COMPLETE", "BLOCKED", "FAILED", "SKIPPED"]},
+          "event_sequence_start": {"type": ["integer", "null"], "minimum": 1},
+          "event_sequence_end": {"type": ["integer", "null"], "minimum": 1},
+          "started_at": {"anyOf": [{"$ref": "#/$defs/timestamp"}, {"type": "null"}]},
+          "completed_at": {"anyOf": [{"$ref": "#/$defs/timestamp"}, {"type": "null"}]},
+          "reason_code": {"type": ["string", "null"], "pattern": "^[A-Z][A-Z0-9_]{2,63}$"}
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"const": "NOT_STARTED"}}, "required": ["status"]},
+            "then": {
+              "properties": {
+                "event_sequence_start": {"type": "null"},
+                "event_sequence_end": {"type": "null"},
+                "started_at": {"type": "null"},
+                "completed_at": {"type": "null"},
+                "reason_code": {"type": "null"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"status": {"const": "RUNNING"}}, "required": ["status"]},
+            "then": {
+              "properties": {
+                "event_sequence_start": {"type": "integer", "minimum": 1},
+                "event_sequence_end": {"type": "null"},
+                "started_at": {"$ref": "#/$defs/timestamp"},
+                "completed_at": {"type": "null"},
+                "reason_code": {"type": "null"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"status": {"enum": ["COMPLETE", "FAILED", "BLOCKED"]}}, "required": ["status"]},
+            "then": {
+              "properties": {
+                "event_sequence_start": {"type": "integer", "minimum": 1},
+                "event_sequence_end": {"type": "integer", "minimum": 1},
+                "started_at": {"$ref": "#/$defs/timestamp"},
+                "completed_at": {"$ref": "#/$defs/timestamp"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"status": {"enum": ["FAILED", "BLOCKED"]}}, "required": ["status"]},
+            "then": {"properties": {"reason_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"}}}
+          },
+          {
+            "if": {"properties": {"status": {"const": "SKIPPED"}}, "required": ["status"]},
+            "then": {
+              "properties": {
+                "event_sequence_start": {"type": "integer", "minimum": 1},
+                "event_sequence_end": {"type": "integer", "minimum": 1},
+                "started_at": {"type": "null"},
+                "completed_at": {"$ref": "#/$defs/timestamp"},
+                "reason_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"}
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      },
+      "allOf": [
+        {
+          "prefixItems": [
+            {"properties": {"stage": {"const": "SELF_TEST"}, "position": {"const": 1}}},
+            {"properties": {"stage": {"const": "REFERENCE_FREEZE"}, "position": {"const": 2}}},
+            {"properties": {"stage": {"const": "INTAKE"}, "position": {"const": 3}}},
+            {"properties": {"stage": {"const": "PREPARE_CALIBRATION"}, "position": {"const": 4}}},
+            {"properties": {"stage": {"const": "PRODUCT_REVIEW"}, "position": {"const": 5}}},
+            {"properties": {"stage": {"const": "RECONCILIATION"}, "position": {"const": 6}}},
+            {"properties": {"stage": {"const": "VALIDATE"}, "position": {"const": 7}}}
+          ]
+        }
+      ]
+    },
+    "reconciliation": {
+      "type": "object",
+      "required": [
+        "source_groups",
+        "submission_manifests",
+        "queue_items",
+        "calibration_selected",
+        "reviews",
+        "unresolved_errors"
+      ],
+      "properties": {
+        "source_groups": {"type": "integer", "minimum": 0},
+        "submission_manifests": {"type": "integer", "minimum": 0},
+        "queue_items": {"type": "integer", "minimum": 0},
+        "calibration_selected": {"type": "integer", "minimum": 0, "maximum": 8},
+        "reviews": {"type": "integer", "minimum": 0, "maximum": 8},
+        "unresolved_errors": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "event_log": {"$ref": "#/$defs/log_ref"},
+    "human_decision_log": {"$ref": "#/$defs/log_ref"},
+    "outputs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/artifact_ref"}
+    },
+    "validation": {
+      "type": "object",
+      "required": ["status", "report"],
+      "properties": {
+        "status": {"enum": ["NOT_RUN", "PASS", "FAIL"]},
+        "report": {
+          "anyOf": [
+            {"$ref": "#/$defs/artifact_ref"},
+            {"type": "null"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"enum": ["PASS", "FAIL"]}},
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {"report": {"$ref": "#/$defs/artifact_ref"}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"status": {"const": "NOT_RUN"}},
+            "required": ["status"]
+          },
+          "then": {"properties": {"report": {"type": "null"}}}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "privacy": {
+      "type": "object",
+      "required": ["run_directory_mode", "private_file_mode", "contains_source_identifiers", "student_facing_release"],
+      "properties": {
+        "run_directory_mode": {"const": "0700"},
+        "private_file_mode": {"const": "0600"},
+        "contains_source_identifiers": {"type": "boolean"},
+        "student_facing_release": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"reference_manifest_state": {"const": "NOT_FROZEN"}}, "required": ["reference_manifest_state"]},
+      "then": {"properties": {"reference_manifest_sha256": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"reference_manifest_state": {"const": "FROZEN"}}, "required": ["reference_manifest_state"]},
+      "then": {"properties": {"reference_manifest_sha256": {"$ref": "#/$defs/sha256"}}}
+    },
+    {
+      "if": {"properties": {"run_state": {"const": "INITIALIZED"}}, "required": ["run_state"]},
+      "then": {
+        "properties": {
+          "reference_manifest_state": {"const": "NOT_FROZEN"},
+          "stages": {"items": {"properties": {"status": {"const": "NOT_STARTED"}}}},
+          "validation": {"properties": {"status": {"const": "NOT_RUN"}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"run_state": {"const": "RUNNING"}}, "required": ["run_state"]},
+      "then": {
+        "properties": {
+          "stages": {
+            "contains": {"type": "object", "properties": {"status": {"const": "RUNNING"}}, "required": ["status"]},
+            "minContains": 0,
+            "maxContains": 1,
+            "not": {
+              "contains": {
+                "type": "object",
+                "properties": {"status": {"enum": ["FAILED", "BLOCKED"]}},
+                "required": ["status"]
+              },
+              "minContains": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"run_state": {"const": "BLOCKED"}}, "required": ["run_state"]},
+      "then": {
+        "properties": {
+          "stages": {
+            "contains": {"type": "object", "properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+            "minContains": 1,
+            "maxContains": 1,
+            "not": {
+              "contains": {
+                "type": "object",
+                "properties": {"status": {"enum": ["RUNNING", "FAILED"]}},
+                "required": ["status"]
+              },
+              "minContains": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"run_state": {"const": "FAILED"}}, "required": ["run_state"]},
+      "then": {
+        "properties": {
+          "stages": {
+            "contains": {"type": "object", "properties": {"status": {"const": "FAILED"}}, "required": ["status"]},
+            "minContains": 1,
+            "maxContains": 1,
+            "not": {
+              "contains": {
+                "type": "object",
+                "properties": {"status": {"enum": ["RUNNING", "BLOCKED"]}},
+                "required": ["status"]
+              },
+              "minContains": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"run_state": {"const": "COMPLETE"}}, "required": ["run_state"]},
+      "then": {
+        "properties": {
+          "reference_manifest_state": {"const": "FROZEN"},
+          "stages": {"items": {"properties": {"status": {"enum": ["COMPLETE", "SKIPPED"]}}}},
+          "validation": {"properties": {"status": {"const": "PASS"}}}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "stage": {
+      "enum": [
+        "SELF_TEST",
+        "REFERENCE_FREEZE",
+        "INTAKE",
+        "PREPARE_CALIBRATION",
+        "PRODUCT_REVIEW",
+        "RECONCILIATION",
+        "VALIDATE"
+      ]
+    },
+    "tool": {
+      "type": "object",
+      "required": ["name", "version", "python_version", "executable_sha256", "dependencies"],
+      "properties": {
+        "name": {"const": "ne630-review-pipeline"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "python_version": {"type": "string", "pattern": "^3\\.[0-9]+\\.[0-9]+$"},
+        "executable_sha256": {"$ref": "#/$defs/sha256"},
+        "dependencies": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": ["name", "version", "executable_sha256"],
+            "properties": {
+              "name": {"enum": ["bwrap", "pdfinfo", "pdftotext", "pdftoppm"]},
+              "version": {"type": "string", "minLength": 1, "maxLength": 256},
+              "executable_sha256": {"$ref": "#/$defs/sha256"}
+            },
+            "additionalProperties": false
+          },
+          "allOf": [
+            {"contains": {"properties": {"name": {"const": "bwrap"}}, "required": ["name"]}, "minContains": 1, "maxContains": 1},
+            {"contains": {"properties": {"name": {"const": "pdfinfo"}}, "required": ["name"]}, "minContains": 1, "maxContains": 1},
+            {"contains": {"properties": {"name": {"const": "pdftotext"}}, "required": ["name"]}, "minContains": 1, "maxContains": 1},
+            {"contains": {"properties": {"name": {"const": "pdftoppm"}}, "required": ["name"]}, "minContains": 1, "maxContains": 1}
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "artifact_ref": {
+      "type": "object",
+      "required": ["artifact_id", "role", "path", "sha256", "byte_count", "media_type"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "role": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "path": {"$ref": "#/$defs/relative_path"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"}
+      },
+      "additionalProperties": false
+    },
+    "log_ref": {
+      "type": "object",
+      "required": ["artifact", "entry_count", "last_sequence"],
+      "properties": {
+        "artifact": {"$ref": "#/$defs/artifact_ref"},
+        "entry_count": {"type": "integer", "minimum": 0},
+        "last_sequence": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

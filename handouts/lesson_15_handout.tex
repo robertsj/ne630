@@ -1,0 +1,65 @@
+% NE 630 -- Chapter 4 reading guide, Lesson 15
+% Standalone source: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_15_handout.tex
+\input{ne630_ch04_reading_guide_common.tex}
+\hypersetup{pdftitle={NE 630: Chapter 4 Reading Guide -- Lesson 15: From mixtures to reactor lattices}}
+\begin{document}
+\fontsize{9.5}{11.5}\selectfont
+\RaggedRight
+
+% ============================ LESSON 15 ============================
+\Lesson{15}{From mixtures to reactor lattices}
+ {\S\S\,4.1--4.2; Figs.\ 4.1--4.3 and Table 4.1.}
+ {Why should moving the same atoms into separate regions change multiplication?}
+\begin{center}\resizebox{.97\linewidth}{!}{\FamilyFigure}\end{center}
+\vspace{-7pt}
+\figcap{Unit cells adapted from Fig.\ 4.1, with an added TRISO zoom. Fuel is shaded purple; the stippled HTGR compacts suggest dispersed TRISO particles. These sketches are not on the same scale.}
+\colstart
+\Sec{1}{Core design balances criticality and heat removal}
+Criticality over the fuel lifetime and removal of fission heat jointly determine the best lattice of unit cells. Identify \textbf{fuel, coolant, moderator, cladding/structure, and absorbers}; one material may serve more than one role.
+\[
+ P_{\rm th}=\bar P'''V,\qquad q'=\frac{P_{\rm pin}}{L},\qquad
+ k=k_\infty P_{NL}.
+\]
+Thin fuel elements shorten heat-conduction distances; assemblies make handling and refuelling practical. A high $k_\infty$ alone does not establish an acceptable power density or a critical finite core.
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{.67in}Y@{}}
+\toprule
+Family & Distinction to find in the reading \\
+\midrule
+PWR/BWR & H$_2$O cools and moderates; enriched UO$_2$. PWR: liquid primary loop and steam generator. BWR: boiling in the core.\\
+PHWR & D$_2$O moderator surrounds pressure tubes; low absorption permits natural-U fuel.\\
+Graphite & Separate moderator and coolant: He in an HTGR; TRISO particles are embedded in graphite-based fuel compacts or pebbles; boiling H$_2$O in an RBMK.\\
+Fast & No intentional moderator; Na (SFR) or He (GCFR) coolant; tightly packed, enriched fuel.\\
+\bottomrule
+\end{tabularx}
+
+\Sec{2}{Reduce the geometry deliberately}
+\textbf{Core $\to$ assembly $\to$ repeating cell.} Use a square or hexagonal cell to represent a uniform, repeated lattice. Slabs represent layers, cylinders represent pins, and spheres represent local lumps
+\colnext
+\Sec{3}{The uranium-lump experiment}
+Begin with H$_2$O and natural U, then segregate U into a central metal sphere of radius $r_U$ inside a water sphere of outer radius $R$. Let $h=H/U$ be the \textbf{total atom ratio}, not a local number-density ratio. With $V_w=V-V_U$,
+\[
+ h=\frac{N_H^w V_w}{N_U^{\metal}V_U},\qquad
+ \boxed{r_U=R\left(\frac{N_H^w}{N_H^w+hN_U^{\metal}}\right)^{1/3}}.
+\]
+Use nominal $\rho_U=19.1\uunit{g/cm^3}$ for this model and the chosen water density:
+\[
+ N_U^{\metal}=\frac{\rho_U N_A}{\overline M_U},\qquad
+ N_H^w=\frac{2\rho_wN_A}{M_{\mathrm{H_2O}}}.
+\]
+Here $N_A$ is Avogadro's constant and $M$ denotes molar mass. For the homogenized model, distribute the \emph{same isotope inventories} over $V$:
+\[
+ \overline N_i=\frac{N_i^{\metal}V_U+N_i^wV_w}{V}.
+\]
+ 
+
+\begin{KeyBox}{Spatial Self Shielding}
+Most slowing down can occur {\it outside} the fuel. Near U-238 capture resonances, absorption depresses the flux inside a lump, shielding its interior. This can improve resonance escape without adding fissile atoms. Thermal-flux depression competes with that benefit; larger lumps are not unconditionally better!
+\end{KeyBox}
+Lumping does \emph{not} by itself make natural uranium in light water critical. Revisit that limitation when $p$ and $f$ are separated in Lessons 17--18.
+\colend
+\begin{Explore}{Exploring the impact of lumping}
+Compare homogeneous and lumped models over $H/U$. Inspect $\eta$ or $k_{\infty}$, spectra, and U-238 capture.
+\end{Explore}
+\SourceLine{Sources: supplied Ch.\ 4, \S\S\,4.1--4.2 and the self-shielding discussion in \S\,4.5; slide set 15. OpenMC reference: \href{https://docs.openmc.org/en/stable/usersguide/geometry.html}{Geometry, \S\,6.1.1 (boundary conditions)}.}
+\end{document}

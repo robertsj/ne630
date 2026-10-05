@@ -1,0 +1,70 @@
+% NE 630 -- Chapter 4 reading guide, Lesson 18
+% Standalone source: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_18_handout.tex
+\input{ne630_ch04_reading_guide_common.tex}
+\hypersetup{pdftitle={NE 630: Chapter 4 Reading Guide -- Lesson 18: From unit-cell physics to design choices}}
+\begin{document}
+\fontsize{9.5}{11.5}\selectfont
+\RaggedRight
+
+% ============================ LESSON 18 ============================
+\Lesson{18}{From unit-cell physics to design choices}
+ {Continue \S\,4.5: Eqs.\ (4.29)--(4.40), (4.48)--(4.55), Table 4.3, and the PWR example/Fig.\ 4.7.}
+ {Why is maximum lattice multiplication not the same as the best reactor design?}
+\colstart
+\Sec{1}{Connect lump size to resonance escape}
+The heterogeneous resonance integral is
+\[
+ I=\int_I\sigma_a^{fe}(E)
+ \frac{\varphi_f(E)}{\varphi_m(E)}\,\frac{dE}{E}.
+\]
+Slowing down mainly in the moderator, an approximately $1/E$ moderator spectrum between resonances, and small losses at each resonance lead to
+\[
+ \boxed{p\simeq\exp\!\left[-\frac{V_fN_{fe} I}{V_m\xi^m\Sigma_s^m}\right].}
+\]
+The exponential combines successive resonance survival probabilities. For a mixture, use $\xi\Sigma_s=\sum_i\xi_i\Sigma_{s,i}$.
+
+Spatial self-shielding lowers $\varphi_f/\varphi_m$ at resonance energies, reducing $I$. This is the quantitative link back to Lesson 15's uranium lump.
+\begin{center}\resizebox{\linewidth}{!}{\ResonanceFigure}\end{center}
+\vspace{-6pt}
+\figcap{Adapted from Fig.\ 4.6: cooler fuel (solid), hotter fuel (dashed). Schematic only; the relevant loss is the integral of $\sigma_a\varphi_f$, not the peak cross section.}
+Doppler broadening spreads absorption into less-shielded wings. In the usual U-238 thermal-lattice setting, raising fuel temperature increases effective resonance absorption and lowers $p$.
+
+\begin{KeyBox}{Use the rod correlation only for rods}
+Table 4.3 gives, for isolated UO$_2$ rods,
+\[
+ I\,[\mathrm b]=4.45+26.6\sqrt{\frac4{\rho_fD}}.
+\]
+Insert $\rho_f$ in g/cm$^3$ and $D$ in cm; the stated range is $0.2<D<3.5$ cm. The fit is \emph{not} a sphere formula. Nearby rods introduce inter-rod shielding (the Dancoff effect).
+\end{KeyBox}
+\colnext
+\Sec{2}{Translate PWR pitch into atom ratios}
+For the square UO$_2$--cladding--water cell of Lesson 16, with gap neglected and $D=2r_f$,
+\begin{align*}
+ \frac{V_m}{V_f}&=\frac{P^2-\pi r_c^2}{\pi r_f^2},\\
+ \frac HU&=\frac{N_H^m}{N_U^f}\,
+ \frac{P^2-\pi r_c^2}{\pi r_f^2},\qquad \frac PD>\frac{r_c}{r_f}.
+\end{align*}
+At fixed radii and material densities, increasing $P/D$ increases the moderator-to-fuel ratio. Changing $D$ instead also changes self-shielding and heat-conduction distance: $P/D$ alone does not specify a cell.
+
+\Sec{3}{Find the competing effects}
+\textbf{More moderator:} resonance escape $p$ generally rises, but thermal utilization $f$ falls as more neutrons are absorbed outside fuel. Their competition produces the maximum in $k_\infty$ discussed with Fig.\ 4.7.
+
+\textbf{More enrichment:} $\eta_T$ rises as a larger share of fuel absorptions occurs in fissile nuclei. For fissile/fertile fuel with negligible fertile thermal fission,
+\[
+ \eta_T\simeq
+ \frac{\widetilde e\,\overline{\nu\sigma_f}^{\,fi}_{T}}
+ {\widetilde e\,\overline\sigma_{aT}^{fi}
+ +(1-\widetilde e)\overline\sigma_{aT}^{fe}}.
+\]
+\textbf{More soluble boron:} greater nonfuel thermal absorption lowers $f$ and changes the optimum. Fuel size, spectrum, and temperature can also alter the other factors; do not treat them as fixed constants in a transport sweep.
+
+\Sec{4}{Separate an optimum from a design}
+An \textbf{undermoderated} cell lies on the low-moderator side of the maximum. There, decreasing moderator density tends to lower $k_\infty$. This is the desired moderator-density contribution to negative feedback, not a guarantee for the full temperature coefficient. Boron dilution by expansion, fuel Doppler broadening, and other effects must be separated.
+
+\textbf{Compare the two design levers.} For an SFR, use enrichment to meet an assigned $k_\infty$ target (Lesson 16). For a PWR, map the $P/D$ optimum at fixed fuel composition. Both choices remain constrained by heat removal, mechanical spacing, control, leakage, and fuel depletion.
+\colend
+\begin{Explore}{One controlled change per run}
+For the PWR, hold fuel/clad radii, enrichment, temperatures, and water density fixed while scanning $P$; record $k_\infty\pm\sigma_k$, the four factors, and $\zeta$. Repeat with boron, then vary fuel temperature and moderator density \emph{separately}. Use H-in-H$_2$O thermal scattering data. Compare with the SFR enrichment sweep. \textbf{Explain:} what improves neutron economy, what changes feedback, and what the unit cell cannot decide about the full core?
+\end{Explore}
+\SourceLine{Sources: Ch.\ 4, \S\,4.5; slide sets 18--19. OpenMC: \href{https://docs.openmc.org/en/stable/usersguide/materials.html}{Materials, \S\S\,5.2 and 5.5}. For $\epsilon$, retain group flux ratios or use production tallies; a cross-section ratio alone does not replace Eq.\ (4.25).}
+\end{document}

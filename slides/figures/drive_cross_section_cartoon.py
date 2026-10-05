@@ -1,4 +1,6 @@
-import os
+"""Generate the 2-D/3-D cross-section cartoon family without source-tree debris."""
+
+import argparse
 import shutil
 import subprocess
 from pathlib import Path
@@ -48,21 +50,41 @@ def _ensure_xelatex() -> str:
     return exe
 
 
-def _run_xelatex(texfile: Path, jobname: str) -> None:
+def _run_xelatex(texfile: Path, jobname: str, build_dir: Path) -> None:
     """
     Compile the provided TeX file with xelatex, using a unique jobname so outputs don't overwrite.
     Runs twice to stabilize references if needed.
     """
     exe = _ensure_xelatex()
-    cmd = [exe, "-interaction=nonstopmode", "-halt-on-error", f"-jobname={jobname}", texfile.name]
+    cmd = [
+        exe,
+        "-interaction=nonstopmode",
+        "-halt-on-error",
+        f"-jobname={jobname}",
+        str(texfile.resolve()),
+    ]
     for _ in range(2):
-        # Use cwd so TeX can find relative \input files
-        proc = subprocess.run(cmd, cwd=texfile.parent)
+        proc = subprocess.run(
+            cmd,
+            cwd=build_dir,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+        )
         if proc.returncode != 0:
-            raise RuntimeError(f"xelatex failed while compiling {texfile} (jobname={jobname}).")
+            raise RuntimeError(
+                f"xelatex failed while compiling {texfile} (jobname={jobname}):\n"
+                f"{proc.stdout}"
+            )
 
 
-def render(centers: Iterable[Sequence[float]], xcut: float, radius: float) -> Tuple[Path, Path]:
+def render(
+    centers: Iterable[Sequence[float]],
+    xcut: float,
+    radius: float,
+    output_dir: Path,
+    build_root: Path,
+) -> Tuple[Path, Path]:
     """
     Creates 'cross_section_cartoon_shared.tex' from the template with the supplied centers, xcut,
     and radius, then generates both the 3D and 2D PDFs using xelatex.
@@ -83,9 +105,14 @@ def render(centers: Iterable[Sequence[float]], xcut: float, radius: float) -> Tu
     """
     base = _here()
     template_path = base / TEMPLATE_NAME
-    shared_path   = base / SHARED_NAME
     tex3d_path    = base / TEX_3D_NAME
     tex2d_path    = base / TEX_2D_NAME
+
+    suffix = f"x{xcut:.2f}".replace('.', 'p')
+    build_dir = build_root / suffix
+    build_dir.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    shared_path = build_dir / SHARED_NAME
 
     # Load template and substitute placeholders
     template = template_path.read_text(encoding="utf-8")
@@ -97,21 +124,47 @@ def render(centers: Iterable[Sequence[float]], xcut: float, radius: float) -> Tu
     )
     shared_path.write_text(rendered, encoding="utf-8")
 
-    # Build unique suffix based on xcut to avoid overwriting outputs
-    suffix = f"x{xcut:.2f}".replace('.', 'p')
     job3d = f"cross_section_cartoon_3D_{suffix}"
     job2d = f"cross_section_cartoon_2D_{suffix}"
 
     # Compile 3D and 2D
-    _run_xelatex(tex3d_path, job3d)
-    _run_xelatex(tex2d_path, job2d)
+    _run_xelatex(tex3d_path, job3d, build_dir)
+    _run_xelatex(tex2d_path, job2d, build_dir)
 
-    pdf3d = tex3d_path.with_name(job3d + ".pdf")
-    pdf2d = tex2d_path.with_name(job2d + ".pdf")
+    pdf3d = output_dir / f"{job3d}.pdf"
+    pdf2d = output_dir / f"{job2d}.pdf"
+    shutil.copy2(build_dir / f"{job3d}.pdf", pdf3d)
+    shutil.copy2(build_dir / f"{job2d}.pdf", pdf2d)
     return pdf3d, pdf2d
 
 
-if __name__ == "__main__":
+def parse_args() -> argparse.Namespace:
+    base = _here()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=base / "generated",
+        help="directory for final PDFs (default: figures/generated)",
+    )
+    parser.add_argument(
+        "--build-dir",
+        type=Path,
+        default=base / ".build" / "cross_section_cartoon",
+        help="directory for temporary TeX products",
+    )
+    parser.add_argument(
+        "--xcut",
+        type=float,
+        action="append",
+        dest="xcuts",
+        help="cross-section location; may be repeated (default: five standard cuts)",
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
     nuclei_centers = [
         [0.15, 0.60, 0.70],
         [0.35, 1.40, 2.50],
@@ -121,15 +174,25 @@ if __name__ == "__main__":
         [0.90, 1.80, 1.70],
     ]
 
-    xcuts = [0.0, 0.25, 0.5, 0.75, 1.0]
+    xcuts = args.xcuts or [0.0, 0.25, 0.5, 0.75, 1.0]
     radius = 0.25
 
     outputs: List[Tuple[Path, Path]] = []
     for x in xcuts:
-        out3d, out2d = render(nuclei_centers, x, radius)
+        out3d, out2d = render(
+            nuclei_centers,
+            x,
+            radius,
+            args.output_dir.resolve(),
+            args.build_dir.resolve(),
+        )
         outputs.append((out3d, out2d))
 
     # Friendly summary
     print("Generated PDFs:")
     for (p3d, p2d) in outputs:
         print(f"  3D: {p3d.name}   |   2D: {p2d.name}")
+
+
+if __name__ == "__main__":
+    main()

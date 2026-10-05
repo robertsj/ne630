@@ -1,0 +1,448 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:config:1.0.0",
+  "title": "NE 630 Fall 2026 review configuration",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "configuration_id",
+    "decision_date",
+    "assignment",
+    "assessment",
+    "submission_rules",
+    "processing",
+    "review",
+    "governance"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "configuration_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-v[0-9]+$"
+    },
+    "decision_date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "assignment": {
+      "type": "object",
+      "required": ["course", "term", "assignments", "outcomes", "accommodations"],
+      "properties": {
+        "course": {
+          "allOf": [
+            {"$ref": "#/$defs/string_setting"},
+            {"properties": {"value": {"const": "NE 630"}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "term": {
+          "allOf": [
+            {"$ref": "#/$defs/string_setting"},
+            {"properties": {"value": {"const": "Fall 2026"}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "assignments": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": ["id", "statement", "solution_key", "expected_problem_count", "key_status"],
+            "properties": {
+              "id": {"$ref": "#/$defs/assignment_id"},
+              "statement": {"$ref": "#/$defs/relative_path"},
+              "solution_key": {"$ref": "#/$defs/relative_path"},
+              "expected_problem_count": {"type": "integer", "minimum": 1},
+              "key_status": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          },
+          "allOf": [
+            {"contains": {"type": "object", "properties": {"id": {"const": "HW01"}}, "required": ["id"]}, "minContains": 1, "maxContains": 1},
+            {"contains": {"type": "object", "properties": {"id": {"const": "HW02"}}, "required": ["id"]}, "minContains": 1, "maxContains": 1},
+            {"contains": {"type": "object", "properties": {"id": {"const": "HW03"}}, "required": ["id"]}, "minContains": 1, "maxContains": 1},
+            {"contains": {"type": "object", "properties": {"id": {"const": "HW04"}}, "required": ["id"]}, "minContains": 1, "maxContains": 1}
+          ]
+        },
+        "outcomes": {"$ref": "#/$defs/unresolved_null_setting"},
+        "accommodations": {"$ref": "#/$defs/string_setting"}
+      },
+      "additionalProperties": false
+    },
+    "assessment": {
+      "type": "object",
+      "required": [
+        "rubric",
+        "numeric_score_suggestions",
+        "qualitative_product_review",
+        "discourse_mode",
+        "proposed_product_rubric"
+      ],
+      "properties": {
+        "rubric": {"$ref": "#/$defs/unresolved_null_setting"},
+        "numeric_score_suggestions": {
+          "allOf": [
+            {"$ref": "#/$defs/boolean_setting"},
+            {"properties": {"value": {"const": false}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "qualitative_product_review": {
+          "allOf": [
+            {"$ref": "#/$defs/boolean_setting"},
+            {"properties": {"value": {"const": true}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "discourse_mode": {
+          "allOf": [
+            {"$ref": "#/$defs/string_setting"},
+            {"properties": {"value": {"const": "FORMATIVE_SHADOW"}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "proposed_product_rubric": {
+          "type": "object",
+          "required": ["adoption_status", "source", "criteria"],
+          "properties": {
+            "adoption_status": {"const": "PROPOSED"},
+            "source": {"type": "string", "minLength": 1},
+            "criteria": {
+              "type": "object",
+              "required": [
+                "physical_and_mathematical_formulation",
+                "technical_execution_and_final_results",
+                "assumptions_and_approximation_judgment",
+                "verification_and_physical_interpretation",
+                "communication_and_reproducibility"
+              ],
+              "properties": {
+                "physical_and_mathematical_formulation": {"const": 20},
+                "technical_execution_and_final_results": {"const": 30},
+                "assumptions_and_approximation_judgment": {"const": 15},
+                "verification_and_physical_interpretation": {"const": 20},
+                "communication_and_reproducibility": {"const": 15}
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "submission_rules": {
+      "type": "object",
+      "required": [
+        "policy_source",
+        "route_declaration_source",
+        "route_a_required_files",
+        "route_b_required_files",
+        "route_b_supporting_artifacts",
+        "both_routes_requirements",
+        "opening_notice",
+        "end_marker",
+        "deadline_and_timezone",
+        "late_penalty",
+        "repair_window"
+      ],
+      "properties": {
+        "policy_source": {"$ref": "#/$defs/string_setting"},
+        "route_declaration_source": {"$ref": "#/$defs/unresolved_null_setting"},
+        "route_a_required_files": {"$ref": "#/$defs/string_array_setting"},
+        "route_b_required_files": {"$ref": "#/$defs/string_array_setting"},
+        "route_b_supporting_artifacts": {"$ref": "#/$defs/string_setting"},
+        "both_routes_requirements": {"$ref": "#/$defs/string_array_setting"},
+        "opening_notice": {"$ref": "#/$defs/string_setting"},
+        "end_marker": {"$ref": "#/$defs/string_setting"},
+        "deadline_and_timezone": {"$ref": "#/$defs/unresolved_null_setting"},
+        "late_penalty": {"$ref": "#/$defs/unresolved_null_setting"},
+        "repair_window": {"$ref": "#/$defs/unresolved_null_setting"}
+      },
+      "additionalProperties": false
+    },
+    "processing": {
+      "type": "object",
+      "required": [
+        "submission_root",
+        "review_root",
+        "runs_root",
+        "restricted_root",
+        "run_directory_mode",
+        "restricted_directory_mode",
+        "private_file_mode",
+        "run_layout",
+        "identifier_policy",
+        "canonical_json",
+        "source_payload_digest",
+        "workflow_stages",
+        "storage",
+        "authorized_processing",
+        "external_services",
+        "model_provider",
+        "deterministic_tools",
+        "sandbox",
+        "default_build_status",
+        "archive_limits"
+      ],
+      "properties": {
+        "submission_root": {"$ref": "#/$defs/relative_path"},
+        "review_root": {"$ref": "#/$defs/relative_path"},
+        "runs_root": {"$ref": "#/$defs/relative_path"},
+        "restricted_root": {"$ref": "#/$defs/relative_path"},
+        "run_directory_mode": {"const": "0700"},
+        "restricted_directory_mode": {"const": "0700"},
+        "private_file_mode": {"const": "0600"},
+        "run_layout": {
+          "type": "object",
+          "required": ["run_root_pattern", "directories", "event_log", "human_decision_log"],
+          "properties": {
+            "run_root_pattern": {"const": "grades/review/f2026/runs/{run_id}"},
+            "directories": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*$"}
+            },
+            "event_log": {"$ref": "#/$defs/relative_path"},
+            "human_decision_log": {"$ref": "#/$defs/relative_path"}
+          },
+          "additionalProperties": false
+        },
+        "identifier_policy": {
+          "type": "object",
+          "required": ["pseudonym_scope", "pseudonym_pattern", "submission_record_id_pattern", "source_identifiers_location"],
+          "properties": {
+            "pseudonym_scope": {"const": "PERSON_ACROSS_PILOT"},
+            "pseudonym_pattern": {"const": "S[0-9]{3,}"},
+            "submission_record_id_pattern": {"const": "HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}"},
+            "source_identifiers_location": {"const": "RESTRICTED_IDENTITY_MAP_OR_EXPLICITLY_AUTHORIZED_PRIVATE_PACKET_PDFS"}
+          },
+          "additionalProperties": false
+        },
+        "canonical_json": {
+          "type": "object",
+          "required": ["encoding", "unicode_normalization", "sort_object_keys", "separators", "terminal_newline"],
+          "properties": {
+            "encoding": {"const": "UTF-8"},
+            "unicode_normalization": {"const": "NFC"},
+            "sort_object_keys": {"const": true},
+            "separators": {"const": [",", ":"]},
+            "terminal_newline": {"const": true}
+          },
+          "additionalProperties": false
+        },
+        "source_payload_digest": {
+          "type": "object",
+          "required": ["algorithm", "definition"],
+          "properties": {
+            "algorithm": {"const": "SHA-256"},
+            "definition": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        },
+        "workflow_stages": {
+          "const": ["SELF_TEST", "REFERENCE_FREEZE", "INTAKE", "PREPARE_CALIBRATION", "PRODUCT_REVIEW", "RECONCILIATION", "VALIDATE"]
+        },
+        "storage": {
+          "allOf": [
+            {"$ref": "#/$defs/string_setting"},
+            {"properties": {"value": {"const": "tracked framework with Git-ignored raw submissions, restricted identity data, and generated run directories"}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "authorized_processing": {
+          "allOf": [
+            {"$ref": "#/$defs/string_setting"},
+            {"properties": {"value": {"const": "Jeremy Roberts and the current Morrow/OpenClaw Codex pilot session"}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "external_services": {
+          "allOf": [
+            {"$ref": "#/$defs/string_setting"},
+            {"properties": {"value": {"const": "none beyond the current authorized agent session"}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "model_provider": {
+          "allOf": [
+            {"$ref": "#/$defs/string_setting"},
+            {"properties": {"value": {"const": "record exact provider, model, prompt, and tool versions in each run and review artifact"}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "deterministic_tools": {
+          "allOf": [
+            {"$ref": "#/$defs/string_array_setting"},
+            {"properties": {"value": {"const": ["Python 3", "zipfile", "file", "bubblewrap", "pdfinfo", "pdftotext", "pdftoppm", "SHA-256"]}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "sandbox": {"$ref": "#/$defs/unresolved_null_setting"},
+        "default_build_status": {"const": "NOT_RUN_NO_SANDBOX"},
+        "archive_limits": {
+          "type": "object",
+          "required": [
+            "academic_policy_status",
+            "guardrail_status",
+            "source",
+            "max_entries",
+            "max_entry_bytes",
+            "max_total_expanded_bytes",
+            "max_compression_ratio",
+            "max_pdf_bytes_for_text_check",
+            "tool_timeout_seconds"
+          ],
+          "properties": {
+            "academic_policy_status": {"const": "PROPOSED"},
+            "guardrail_status": {"const": "ACTIVE"},
+            "source": {"type": "string", "minLength": 1},
+            "max_entries": {"type": "integer", "minimum": 1},
+            "max_entry_bytes": {"type": "integer", "minimum": 1},
+            "max_total_expanded_bytes": {"type": "integer", "minimum": 1},
+            "max_compression_ratio": {"type": "number", "exclusiveMinimum": 1},
+            "max_pdf_bytes_for_text_check": {"type": "integer", "minimum": 1},
+            "tool_timeout_seconds": {"type": "integer", "minimum": 1}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "codebook_version",
+        "prompt_version",
+        "calibration_status",
+        "product_first_blinding",
+        "sample_seed",
+        "sample_method",
+        "sample_rank_digest",
+        "sample_size",
+        "full_discourse_coding_in_steps_1_3",
+        "random_audit_exam_block_coverage",
+        "human_review_state"
+      ],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "codebook_version": {"type": "string", "minLength": 1},
+        "prompt_version": {"type": "string", "minLength": 1},
+        "calibration_status": {"enum": ["UNCALIBRATED", "SELECTED", "IN_REVIEW", "RECONCILED"]},
+        "product_first_blinding": {"const": true},
+        "sample_seed": {"type": "string", "minLength": 1},
+        "sample_method": {"type": "string", "minLength": 1},
+        "sample_rank_digest": {"type": "string", "minLength": 1},
+        "sample_size": {"const": 8},
+        "full_discourse_coding_in_steps_1_3": {"const": false},
+        "random_audit_exam_block_coverage": {"$ref": "#/$defs/unresolved_null_setting"},
+        "human_review_state": {"const": "PENDING"}
+      },
+      "additionalProperties": false
+    },
+    "governance": {
+      "type": "object",
+      "required": [
+        "identity_map_access",
+        "retention",
+        "appeal_or_contest_route",
+        "cohort_reporting",
+        "research_use",
+        "feedback_release"
+      ],
+      "properties": {
+        "identity_map_access": {"$ref": "#/$defs/string_setting"},
+        "retention": {"$ref": "#/$defs/unresolved_null_setting"},
+        "appeal_or_contest_route": {"$ref": "#/$defs/unresolved_null_setting"},
+        "cohort_reporting": {
+          "allOf": [
+            {"$ref": "#/$defs/boolean_setting"},
+            {"properties": {"value": {"const": false}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "research_use": {
+          "allOf": [
+            {"$ref": "#/$defs/boolean_setting"},
+            {"properties": {"value": {"const": false}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        },
+        "feedback_release": {
+          "allOf": [
+            {"$ref": "#/$defs/boolean_setting"},
+            {"properties": {"value": {"const": false}, "adoption_status": {"const": "ADOPTED"}}}
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "stage": {
+      "enum": [
+        "SELF_TEST",
+        "REFERENCE_FREEZE",
+        "INTAKE",
+        "PREPARE_CALIBRATION",
+        "PRODUCT_REVIEW",
+        "RECONCILIATION",
+        "VALIDATE"
+      ]
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "adoption_status": {"enum": ["ADOPTED", "PROPOSED", "UNRESOLVED"]},
+    "setting": {
+      "type": "object",
+      "required": ["value", "source", "adoption_status"],
+      "properties": {
+        "value": {},
+        "source": {"type": ["string", "null"]},
+        "adoption_status": {"$ref": "#/$defs/adoption_status"}
+      },
+      "additionalProperties": false
+    },
+    "unresolved_null_setting": {
+      "type": "object",
+      "required": ["value", "source", "adoption_status"],
+      "properties": {
+        "value": {"type": "null"},
+        "source": {"type": ["string", "null"]},
+        "adoption_status": {"const": "UNRESOLVED"}
+      },
+      "additionalProperties": false
+    },
+    "string_setting": {
+      "type": "object",
+      "required": ["value", "source", "adoption_status"],
+      "properties": {
+        "value": {"type": "string", "minLength": 1},
+        "source": {"type": "string", "minLength": 1},
+        "adoption_status": {"$ref": "#/$defs/adoption_status"}
+      },
+      "additionalProperties": false
+    },
+    "boolean_setting": {
+      "type": "object",
+      "required": ["value", "source", "adoption_status"],
+      "properties": {
+        "value": {"type": "boolean"},
+        "source": {"type": "string", "minLength": 1},
+        "adoption_status": {"$ref": "#/$defs/adoption_status"}
+      },
+      "additionalProperties": false
+    },
+    "string_array_setting": {
+      "type": "object",
+      "required": ["value", "source", "adoption_status"],
+      "properties": {
+        "value": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "source": {"type": "string", "minLength": 1},
+        "adoption_status": {"$ref": "#/$defs/adoption_status"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

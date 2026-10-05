@@ -1,0 +1,475 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:submission-manifest:1.0.0",
+  "title": "Pseudonymized deterministic intake record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "run_id",
+    "configuration_id",
+    "config_sha256",
+    "reference_manifest_sha256",
+    "created_at",
+    "assignment_id",
+    "submission_record_id",
+    "pseudonym",
+    "attempt_number",
+    "source_payload_sha256",
+    "route_declaration",
+    "observed_package_shape",
+    "calibration_stratum",
+    "input_files",
+    "archive_inspections",
+    "pdf_inspections",
+    "core_file_checks",
+    "marker_candidates",
+    "status_axes",
+    "deterministic_findings",
+    "coverage",
+    "contains_source_identifiers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "manifest_id": {"type": "string", "pattern": "^SUBMAN-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "configuration_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-v[0-9]+$"
+    },
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "reference_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "created_at": {"$ref": "#/$defs/timestamp"},
+    "assignment_id": {"$ref": "#/$defs/assignment_id"},
+    "submission_record_id": {"$ref": "#/$defs/submission_record_id"},
+    "pseudonym": {"$ref": "#/$defs/pseudonym"},
+    "attempt_number": {"type": "integer", "minimum": 1, "maximum": 999},
+    "source_payload_sha256": {"$ref": "#/$defs/sha256"},
+    "route_declaration": {
+      "type": "object",
+      "required": ["state", "route", "source"],
+      "properties": {
+        "state": {"enum": ["AVAILABLE", "UNAVAILABLE"]},
+        "route": {"enum": ["ROUTE_A", "ROUTE_B", null]},
+        "source": {"enum": ["HUMAN_DECISION", "LMS_METADATA", "SUBMISSION_CONTENT", "NONE"]},
+        "decision_id": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "UNAVAILABLE"}}, "required": ["state"]},
+          "then": {
+            "properties": {"route": {"type": "null"}, "source": {"const": "NONE"}}
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "AVAILABLE"}}, "required": ["state"]},
+          "then": {
+            "properties": {"route": {"enum": ["ROUTE_A", "ROUTE_B"]}, "source": {"enum": ["HUMAN_DECISION", "LMS_METADATA", "SUBMISSION_CONTENT"]}}
+          }
+        },
+        {
+          "if": {"properties": {"source": {"const": "HUMAN_DECISION"}}, "required": ["source"]},
+          "then": {"required": ["decision_id"]}
+        },
+        {
+          "if": {
+            "properties": {"source": {"enum": ["LMS_METADATA", "SUBMISSION_CONTENT", "NONE"]}},
+            "required": ["source"]
+          },
+          "then": {"not": {"required": ["decision_id"]}}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "observed_package_shape": {"enum": ["SINGLE_PDF", "ZIP", "MULTI_FILE", "OTHER", "MISSING"]},
+    "calibration_stratum": {"enum": ["READABLE_SINGLE_PDF", "SAFE_ZIP_UNIQUE_SOLUTION_PDF", "INELIGIBLE"]},
+    "input_files": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/file_record"}
+    },
+    "archive_inspections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifact_id",
+          "status",
+          "entry_count",
+          "total_expanded_bytes",
+          "maximum_entry_bytes",
+          "maximum_compression_ratio",
+          "has_traversal_path",
+          "has_absolute_path",
+          "has_symlink",
+          "has_duplicate_normalized_path",
+          "has_nested_archive",
+          "limit_codes"
+        ],
+        "properties": {
+          "artifact_id": {"$ref": "#/$defs/artifact_id"},
+          "status": {"enum": ["SAFE", "UNSAFE", "RESOURCE_LIMIT", "ERROR"]},
+          "entry_count": {"type": "integer", "minimum": 0},
+          "total_expanded_bytes": {"type": "integer", "minimum": 0},
+          "maximum_entry_bytes": {"type": "integer", "minimum": 0},
+          "maximum_compression_ratio": {"type": "number", "minimum": 0},
+          "has_traversal_path": {"type": "boolean"},
+          "has_absolute_path": {"type": "boolean"},
+          "has_symlink": {"type": "boolean"},
+          "has_duplicate_normalized_path": {"type": "boolean"},
+          "has_nested_archive": {"type": "boolean"},
+          "limit_codes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"}
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"const": "SAFE"}}, "required": ["status"]},
+            "then": {
+              "properties": {
+                "has_traversal_path": {"const": false},
+                "has_absolute_path": {"const": false},
+                "has_symlink": {"const": false},
+                "has_duplicate_normalized_path": {"const": false},
+                "has_nested_archive": {"const": false},
+                "limit_codes": {"maxItems": 0}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"status": {"const": "RESOURCE_LIMIT"}}, "required": ["status"]},
+            "then": {"properties": {"limit_codes": {"minItems": 1}}}
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "pdf_inspections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifact_id",
+          "status",
+          "page_count",
+          "metadata_extracted",
+          "text_extraction",
+          "tool_reason_code"
+        ],
+        "properties": {
+          "artifact_id": {"$ref": "#/$defs/artifact_id"},
+          "status": {"enum": ["READABLE", "UNREADABLE", "TYPE_MISMATCH", "RESOURCE_LIMIT", "ERROR"]},
+          "page_count": {"type": ["integer", "null"], "minimum": 1},
+          "metadata_extracted": {"type": "boolean"},
+          "text_extraction": {"enum": ["NOT_ATTEMPTED", "EMPTY", "PARTIAL", "AVAILABLE", "ERROR"]},
+          "tool_reason_code": {"type": ["string", "null"], "pattern": "^[A-Z][A-Z0-9_]{2,63}$"}
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"const": "READABLE"}}, "required": ["status"]},
+            "then": {
+              "properties": {
+                "page_count": {"type": "integer", "minimum": 1},
+                "metadata_extracted": {"const": true},
+                "text_extraction": {"enum": ["NOT_ATTEMPTED", "EMPTY", "PARTIAL", "AVAILABLE"]},
+                "tool_reason_code": {"type": "null"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"status": {"enum": ["TYPE_MISMATCH", "RESOURCE_LIMIT", "ERROR"]}}, "required": ["status"]},
+            "then": {"properties": {"tool_reason_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"}}}
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "core_file_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["logical_name", "status", "matches"],
+        "properties": {
+          "logical_name": {"enum": ["solution.tex", "solution.pdf", "discourse.tex", "discourse.pdf", "Makefile"]},
+          "status": {"enum": ["PRESENT_UNIQUE", "MISSING", "DUPLICATE", "NOT_APPLICABLE"]},
+          "matches": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "oneOf": [
+                {"$ref": "#/$defs/artifact_id"},
+                {
+                  "type": "object",
+                  "required": ["container_artifact_id", "archive_member"],
+                  "properties": {
+                    "container_artifact_id": {"$ref": "#/$defs/artifact_id"},
+                    "archive_member": {"$ref": "#/$defs/relative_path"}
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"const": "PRESENT_UNIQUE"}}, "required": ["status"]},
+            "then": {"properties": {"matches": {"minItems": 1, "maxItems": 1}}}
+          },
+          {
+            "if": {"properties": {"status": {"enum": ["MISSING", "NOT_APPLICABLE"]}}, "required": ["status"]},
+            "then": {"properties": {"matches": {"maxItems": 0}}}
+          },
+          {
+            "if": {"properties": {"status": {"const": "DUPLICATE"}}, "required": ["status"]},
+            "then": {"properties": {"matches": {"minItems": 2}}}
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "marker_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["marker_type", "status", "evidence_locators"],
+        "properties": {
+          "marker_type": {"enum": ["OPENING_NOTICE", "END_OF_GRADED_DISCOURSE"]},
+          "status": {"enum": ["EXACT", "PARTIAL", "ABSENT", "NOT_CHECKED"]},
+          "evidence_locators": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/evidence_locator"}
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"enum": ["EXACT", "PARTIAL"]}}, "required": ["status"]},
+            "then": {"properties": {"evidence_locators": {"minItems": 1}}}
+          },
+          {
+            "if": {"properties": {"status": {"enum": ["ABSENT", "NOT_CHECKED"]}}, "required": ["status"]},
+            "then": {"properties": {"evidence_locators": {"maxItems": 0}}}
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "status_axes": {"$ref": "#/$defs/status_axes"},
+    "deterministic_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "finding_id",
+          "finding_type",
+          "severity",
+          "observation",
+          "evidence_locators",
+          "uncertainty",
+          "proposed_action",
+          "origin",
+          "academic_effect"
+        ],
+        "properties": {
+          "finding_id": {"type": "string", "pattern": "^FND-[0-9]{6,}$"},
+          "finding_type": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+          "severity": {"enum": ["INFO", "WARNING", "BLOCKING_PROCESSING"]},
+          "observation": {"type": "string", "minLength": 1, "maxLength": 4000},
+          "evidence_locators": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/evidence_locator"}
+          },
+          "uncertainty": {"enum": ["NONE", "LOW", "MEDIUM", "HIGH"]},
+          "proposed_action": {"enum": ["NONE", "QUEUE_PRODUCT_REVIEW", "HUMAN_TRIAGE", "HOLD_PROCESSING", "EXCLUDE_FROM_CALIBRATION"]},
+          "origin": {"const": "DETERMINISTIC"},
+          "academic_effect": {"const": "NONE"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["status", "expected_problem_count", "detected_problem_ids", "evidence_locators"],
+      "properties": {
+        "status": {"enum": ["NOT_CHECKED", "COMPLETE", "PARTIAL", "NOT_CHECKABLE"]},
+        "expected_problem_count": {"type": "integer", "minimum": 1},
+        "detected_problem_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^P[1-9][0-9]*$"}
+        },
+        "evidence_locators": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/evidence_locator"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"enum": ["COMPLETE", "PARTIAL"]}}, "required": ["status"]},
+          "then": {
+            "properties": {
+              "detected_problem_ids": {"minItems": 1},
+              "evidence_locators": {"minItems": 1}
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "contains_source_identifiers": {"const": false}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"observed_package_shape": {"const": "MISSING"}},
+        "required": ["observed_package_shape"]
+      },
+      "then": {"properties": {"input_files": {"maxItems": 0}}},
+      "else": {"properties": {"input_files": {"minItems": 1}}}
+    },
+    {
+      "if": {
+        "properties": {"calibration_stratum": {"const": "READABLE_SINGLE_PDF"}},
+        "required": ["calibration_stratum"]
+      },
+      "then": {
+        "properties": {
+          "observed_package_shape": {"const": "SINGLE_PDF"},
+          "input_files": {"minItems": 1, "maxItems": 1},
+          "archive_inspections": {"maxItems": 0},
+          "pdf_inspections": {
+            "contains": {"type": "object", "properties": {"status": {"const": "READABLE"}}, "required": ["status"]},
+            "minContains": 1
+          },
+          "status_axes": {
+            "properties": {
+              "intake": {"const": "READY"},
+              "build": {"const": "NOT_APPLICABLE"},
+              "processing": {"const": "READY"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"calibration_stratum": {"const": "SAFE_ZIP_UNIQUE_SOLUTION_PDF"}},
+        "required": ["calibration_stratum"]
+      },
+      "then": {
+        "properties": {
+          "observed_package_shape": {"const": "ZIP"},
+          "input_files": {"minItems": 1, "maxItems": 1},
+          "archive_inspections": {
+            "contains": {"type": "object", "properties": {"status": {"const": "SAFE"}}, "required": ["status"]},
+            "minContains": 1
+          },
+          "pdf_inspections": {
+            "contains": {"type": "object", "properties": {"status": {"const": "READABLE"}}, "required": ["status"]},
+            "minContains": 1
+          },
+          "core_file_checks": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "logical_name": {"const": "solution.pdf"},
+                "status": {"const": "PRESENT_UNIQUE"}
+              },
+              "required": ["logical_name", "status"]
+            },
+            "minContains": 1,
+            "maxContains": 1
+          },
+          "status_axes": {
+            "properties": {
+              "intake": {"const": "READY"},
+              "build": {"const": "NOT_RUN_NO_SANDBOX"},
+              "processing": {"const": "READY"}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "assignment_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]},
+    "pseudonym": {"type": "string", "pattern": "^S[0-9]{3,}$"},
+    "submission_record_id": {"type": "string", "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"},
+    "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "file_record": {
+      "type": "object",
+      "required": ["artifact_id", "logical_path", "sha256", "byte_count", "media_type", "detected_type", "extension_match"],
+      "properties": {
+        "artifact_id": {"$ref": "#/$defs/artifact_id"},
+        "logical_path": {"$ref": "#/$defs/relative_path"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"},
+        "detected_type": {"type": "string", "minLength": 1, "maxLength": 256},
+        "extension_match": {"enum": ["MATCH", "MISMATCH", "NO_EXTENSION", "UNKNOWN"]}
+      },
+      "additionalProperties": false
+    },
+    "status_axes": {
+      "type": "object",
+      "required": ["intake", "build", "coverage", "processing", "human_review"],
+      "properties": {
+        "intake": {"enum": ["READY", "NEEDS_HUMAN_TRIAGE", "BLOCKED", "MISSING"]},
+        "build": {"enum": ["NOT_RUN_NO_SANDBOX", "NOT_RUN_POLICY", "NOT_APPLICABLE", "READY_FOR_SANDBOX", "COMPLETE", "FAILED"]},
+        "coverage": {"enum": ["NOT_CHECKED", "COMPLETE", "PARTIAL", "NOT_CHECKABLE"]},
+        "processing": {"enum": ["PENDING", "READY", "BLOCKED", "COMPLETE", "EXCLUDED"]},
+        "human_review": {"enum": ["PENDING", "IN_REVIEW", "APPROVED", "REVISIONS_REQUIRED", "REJECTED", "NOT_REQUIRED"]}
+      },
+      "additionalProperties": false
+    },
+    "evidence_locator": {
+      "type": "object",
+      "required": ["artifact_id", "artifact_sha256", "source_role", "logical_path", "locator_type", "extraction_method", "uncertainty"],
+      "properties": {
+        "artifact_id": {"$ref": "#/$defs/artifact_id"},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "source_role": {"enum": ["SUBMITTED_SOLUTION", "SUBMITTED_DISCOURSE", "SUBMITTED_SUPPORTING_FILE", "DETERMINISTIC_TOOL_OUTPUT"]},
+        "logical_path": {"$ref": "#/$defs/relative_path"},
+        "locator_type": {"enum": ["FILE", "PDF_PAGE", "TEXT_LINES", "JSON_POINTER", "ARCHIVE_MEMBER", "LABEL"]},
+        "page": {"type": "integer", "minimum": 1},
+        "printed_page_label": {"type": "string", "minLength": 1, "maxLength": 64},
+        "line_start": {"type": "integer", "minimum": 1},
+        "line_end": {"type": "integer", "minimum": 1},
+        "json_pointer": {"type": "string", "pattern": "^(/([^~/]|~[01])*)*$"},
+        "archive_member": {"$ref": "#/$defs/relative_path"},
+        "label": {"type": "string", "minLength": 1, "maxLength": 256},
+        "problem_id": {"type": "string", "pattern": "^P[1-9][0-9]*$"},
+        "subpart_id": {"type": "string", "pattern": "^[A-Za-z0-9._-]{1,32}$"},
+        "extraction_method": {"enum": ["NATIVE_TEXT", "PDFTOTEXT", "OCR", "VISUAL", "ARCHIVE_METADATA", "JSON_PARSE"]},
+        "uncertainty": {"enum": ["NONE", "LOW", "MEDIUM", "HIGH"]},
+        "excerpt": {"type": "string", "maxLength": 500}
+      },
+      "oneOf": [
+        {"properties": {"locator_type": {"const": "FILE"}}},
+        {"properties": {"locator_type": {"const": "PDF_PAGE"}}, "required": ["page"]},
+        {"properties": {"locator_type": {"const": "TEXT_LINES"}}, "required": ["line_start", "line_end"]},
+        {"properties": {"locator_type": {"const": "JSON_POINTER"}}, "required": ["json_pointer"]},
+        {"properties": {"locator_type": {"const": "ARCHIVE_MEMBER"}}, "required": ["archive_member"]},
+        {"properties": {"locator_type": {"const": "LABEL"}}, "required": ["label"]}
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,143 @@
+\documentclass[student]{ne630boardhandout}
+\hypersetup{
+  pdftitle={NE 630 -- Lesson 07: Scattering Kinematics Derivations},
+  pdfauthor={Jeremy Roberts},
+  pdfsubject={Derivation supplement}
+}
+
+\providecommand{\muc}{\mu_{\mathrm c}}
+\providecommand{\mul}{\mu_{\mathrm L}}
+\providecommand{\thetac}{\theta_{\mathrm c}}
+\providecommand{\thetaL}{\theta_{\mathrm L}}
+\providecommand{\vc}{v_{\mathrm c}}
+\providecommand{\bvc}{\mathbf{v}_{\mathrm c}}
+\providecommand{\bVCM}{\mathbf{V}_{\mathrm{CM}}}
+\providecommand{\VCM}{V_{\mathrm{CM}}}
+\providecommand{\SourceEq}[1]{\par\nobreak\hfill{\sffamily\scriptsize\color{KSUGray}#1}\par}
+
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{3pt plus 1pt}
+\setlength{\belowdisplayshortskip}{3pt plus 1pt}
+\setlength{\jot}{2pt}
+
+\HandoutSetup
+  {NE 630}
+  {07}
+  {Scattering Kinematics: Derivations}
+  {Textbook \S2.5; Rydin \S\S2.1--2.2.}
+
+\begin{document}
+{\sffamily\bfseries\large\color{KSUDeepPurple}
+  Appendix: derivation of the kinematics equations\par}
+\vspace{4pt}
+
+\begin{handoutcolumns}
+\HandoutSection{A0}{Set-up}
+The target is initially at rest in the lab. Take $\hat{\mathbf x}$ along
+the incident neutron velocity, so $\mathbf v=v\hat{\mathbf x}$.
+Let $m_n$ be the neutron mass and $M_N$ the target mass. We use
+$A\equiv M_N/m_n\simeq$ mass number with $A\geq1$.
+\begin{align*}
+ \bVCM&=\frac{m_n}{m_n+M_N}\mathbf v
+       =\frac{1}{1+A}\mathbf v,\\
+ \vc&=\|\mathbf v-\bVCM\|=\frac{A}{1+A}v.
+\end{align*}
+In the CM frame, elastic scattering preserves speeds and merely rotates
+directions. In the scattering plane,
+\[
+\bvc'=\vc\big(\cos\thetac\,\hat{\mathbf x}
+                  +\sin\thetac\,\hat{\mathbf y}\big),
+\]
+and the lab velocity is $\mathbf v'=\bvc'+\bVCM$.
+Throughout, $\muc=\cos\thetac$ and $\mul=\cos\thetaL$.
+
+\HandoutSection{A1}{Energy--angle link}
+Using the square of the velocity magnitude,
+\begin{align*}
+ \frac{E'}{E}
+  &=\frac{v'^2}{v^2}
+   =\frac{\|\bvc'+\bVCM\|^2}{v^2}\\
+  &=\frac{\vc^2+\VCM^2+2\vc\VCM\muc}{v^2}.
+\end{align*}
+Insert $\vc=Av/(1+A)$ and $\VCM=v/(1+A)$ to obtain
+\begin{fixedbox}{Energy as a function of CM angle}
+\[
+\frac{E'}{E}=\frac{A^2+2A\muc+1}{(A+1)^2}.
+\]
+\SourceEq{Rydin 2.18}
+\end{fixedbox}
+
+\HandoutSection{A2}{Lab--CM angle link}
+The lab scattering cosine is
+\[
+\mul=\frac{\mathbf v'\!\cdot\!\hat{\mathbf x}}{\|\mathbf v'\|}
+  =\frac{\vc\muc+\VCM}{v'}.
+\]
+Divide numerator and denominator by $v$ and use the energy--angle result:
+\[
+\frac{v'}{v}=\sqrt{\frac{E'}{E}}
+ =\frac{\sqrt{A^2+2A\muc+1}}{A+1}.
+\]
+Therefore,
+\begin{fixedbox}{Lab angle as a function of CM angle}
+\[
+\mul=\frac{1+A\muc}{\sqrt{A^2+2A\muc+1}}.
+\]
+\SourceEq{Rydin 2.21}
+\end{fixedbox}
+
+\begin{boardbox}{Notes: velocity transformations}
+\RuledLines{4}
+\end{boardbox}
+
+\switchcolumn
+\RaggedRight
+\HandoutSection{A3}{Average lab cosine}
+For \textbf{isotropic CM scattering}, $\muc=\cos\thetac$ is uniform on $[-1,1]$.
+Consequently,
+\[
+\overline\mu_{\mathrm L}
+ =\frac12\int_{-1}^{1}\frac{1+A\muc}{\sqrt{A^2+2A\muc+1}}\,d\muc.
+\]
+Introduce the integration variable
+\[
+z=\sqrt{A^2+2A\muc+1}.
+\]
+Then
+\[
+d\muc=\frac{z}{A}\,dz,\qquad
+ 1+A\muc=\frac12\big[z^2-(A^2-1)\big].
+\]
+For the $A\geq1$ model, the integration limits are
+\[
+z\big|_{\muc=-1}=A-1,\qquad
+  z\big|_{\muc=1}=A+1.
+\]
+Thus,
+\begin{align*}
+ \overline\mu_{\mathrm L}
+  &=\frac12\,\frac{1}{2A}
+    \int_{A-1}^{A+1}\big[z^2-(A^2-1)\big],dz\\[3pt]
+  &=\frac{1}{4A}\left[\frac{z^3}{3}-(A^2-1)z\right]_{A-1}^{A+1}.
+\end{align*}
+Evaluating the limits gives
+\begin{fixedbox}{Isotropic-in-CM average}
+\[
+\overline\mu_{\mathrm L}=\frac{2}{3A}.
+\]
+\SourceEq{Rydin 2.56}
+\end{fixedbox}
+
+\begin{boardbox}{Notes: substitution and limits}
+\RuledLines{11}
+\end{boardbox}
+
+\begin{takeawaybox}[Reading and equation locators]
+The Rydin and FNRP equation locators are retained from the lesson slides.
+Assigned reading: textbook \S2.5 and Rydin,
+\textit{Nuclear Reactor Theory and Design}, \S\S2.1--2.2.
+\end{takeawaybox}
+\end{handoutcolumns}
+
+\end{document}

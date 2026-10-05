@@ -1,66 +1,275 @@
+<h1 id="homework-13-lesson-13">Homework 13: Lesson 13</h1>
+<!-- Draft adapted from ne630_problems/lesson_13/statement.tex; problem statements only. -->
 <h2 id="problem-1">Problem 1</h2>
-<p>One can compute effective cross sections for a coarse group structure based on the multigroup fluxes and cross sections defined on a finer group structure. Let a fine energy group <img class="equation_image" title="g" src="https://k-state.instructure.com/equation_images/g" alt="LaTeX: g" data-equation-content="g" /> be defined over the energies <img class="equation_image" title="E_g &lt; E \le E_{g-1}" src="https://k-state.instructure.com/equation_images/E_g%2520%253C%2520E%2520%255Cle%2520E_%257Bg-1%257D" alt="LaTeX: E_g &lt; E \le E_{g-1}" data-equation-content="E_g &lt; E \le E_{g-1}" />. Suppose a coarse group <img class="equation_image" title="G" src="https://k-state.instructure.com/equation_images/G" alt="LaTeX: G" data-equation-content="G" /> is defined over <img class="equation_image" title="E_{g+1} &lt; E \le E_{g-1}" src="https://k-state.instructure.com/equation_images/E_%257Bg%252B1%257D%2520%253C%2520E%2520%255Cle%2520E_%257Bg-1%257D" alt="LaTeX: E_{g+1} &lt; E \le E_{g-1}" data-equation-content="E_{g+1} &lt; E \le E_{g-1}" /> (i.e., over groups <img class="equation_image" title="g" src="https://k-state.instructure.com/equation_images/g" alt="LaTeX: g" data-equation-content="g" /> and <img class="equation_image" title="g+1" src="https://k-state.instructure.com/equation_images/g%252B1" alt="LaTeX: g+1" data-equation-content="g+1" />). The coarse-group flux can then be written as</p>
-<p><img class="equation_image" title="\begin{aligned}
+<p>One can compute effective cross sections for a coarse group structure based on the multigroup fluxes and cross sections defined on a finer group structure. Let a fine energy group <img
+class="equation_image"
+title="g"
+src="/equation_images/g"
+alt="LaTeX: g"
+data-equation-content="g"
+/> be defined over the energies <img
+class="equation_image"
+title="E_g &lt; E \le E_{g-1}"
+src="/equation_images/E_g%2520%253C%2520E%2520%255Cle%2520E_%257Bg-1%257D"
+alt="LaTeX: E_g &lt; E \le E_{g-1}"
+data-equation-content="E_g &lt; E \le E_{g-1}"
+/>. Suppose a coarse group <img
+class="equation_image"
+title="G"
+src="/equation_images/G"
+alt="LaTeX: G"
+data-equation-content="G"
+/> is defined over <img
+class="equation_image"
+title="E_{g+1} &lt; E \le E_{g-1}"
+src="/equation_images/E_%257Bg%252B1%257D%2520%253C%2520E%2520%255Cle%2520E_%257Bg-1%257D"
+alt="LaTeX: E_{g+1} &lt; E \le E_{g-1}"
+data-equation-content="E_{g+1} &lt; E \le E_{g-1}"
+/> (i.e., over groups <img
+class="equation_image"
+title="g"
+src="/equation_images/g"
+alt="LaTeX: g"
+data-equation-content="g"
+/> and <img
+class="equation_image"
+title="g+1"
+src="/equation_images/g%252B1"
+alt="LaTeX: g+1"
+data-equation-content="g+1"
+/>). The coarse-group flux can then be written as</p>
+<p><img
+class="equation_image"
+title="\begin{aligned}
 \phi_G^{\mathrm{coarse}}
 &amp;= \int_{E_{g+1}}^{E_{g-1}} \phi(E)\,dE \\
 &amp;= \int_{E_g}^{E_{g-1}} \phi(E)\,dE
  + \int_{E_{g+1}}^{E_g} \phi(E)\,dE \\
 &amp;= \phi_g^{\mathrm{fine}} + \phi_{g+1}^{\mathrm{fine}}.
-\end{aligned}" src="https://k-state.instructure.com/equation_images/%255Cbegin%257Baligned%257D%250A%255Cphi_G%255E%257B%255Cmathrm%257Bcoarse%257D%257D%250A%2526%253D%2520%255Cint_%257BE_%257Bg%252B1%257D%257D%255E%257BE_%257Bg-1%257D%257D%2520%255Cphi(E)%255C%252CdE%2520%255C%255C%250A%2526%253D%2520%255Cint_%257BE_g%257D%255E%257BE_%257Bg-1%257D%257D%2520%255Cphi(E)%255C%252CdE%250A%2520%252B%2520%255Cint_%257BE_%257Bg%252B1%257D%257D%255E%257BE_g%257D%2520%255Cphi(E)%255C%252CdE%2520%255C%255C%250A%2526%253D%2520%255Cphi_g%255E%257B%255Cmathrm%257Bfine%257D%257D%2520%252B%2520%255Cphi_%257Bg%252B1%257D%255E%257B%255Cmathrm%257Bfine%257D%257D.%250A%255Cend%257Baligned%257D%250A" alt="LaTeX: \begin{aligned}
+\end{aligned}
+"
+src="/equation_images/%255Cbegin%257Baligned%257D%250A%255Cphi_G%255E%257B%255Cmathrm%257Bcoarse%257D%257D%250A%2526%253D%2520%255Cint_%257BE_%257Bg%252B1%257D%257D%255E%257BE_%257Bg-1%257D%257D%2520%255Cphi(E)%255C%252CdE%2520%255C%255C%250A%2526%253D%2520%255Cint_%257BE_g%257D%255E%257BE_%257Bg-1%257D%257D%2520%255Cphi(E)%255C%252CdE%250A%2520%252B%2520%255Cint_%257BE_%257Bg%252B1%257D%257D%255E%257BE_g%257D%2520%255Cphi(E)%255C%252CdE%2520%255C%255C%250A%2526%253D%2520%255Cphi_g%255E%257B%255Cmathrm%257Bfine%257D%257D%2520%252B%2520%255Cphi_%257Bg%252B1%257D%255E%257B%255Cmathrm%257Bfine%257D%257D.%250A%255Cend%257Baligned%257D%250A"
+alt="LaTeX: \begin{aligned}
 \phi_G^{\mathrm{coarse}}
 &amp;= \int_{E_{g+1}}^{E_{g-1}} \phi(E)\,dE \\
 &amp;= \int_{E_g}^{E_{g-1}} \phi(E)\,dE
  + \int_{E_{g+1}}^{E_g} \phi(E)\,dE \\
 &amp;= \phi_g^{\mathrm{fine}} + \phi_{g+1}^{\mathrm{fine}}.
-\end{aligned}" data-equation-content="\begin{aligned}
+\end{aligned}
+"
+data-equation-content="\begin{aligned}
 \phi_G^{\mathrm{coarse}}
 &amp;= \int_{E_{g+1}}^{E_{g-1}} \phi(E)\,dE \\
 &amp;= \int_{E_g}^{E_{g-1}} \phi(E)\,dE
  + \int_{E_{g+1}}^{E_g} \phi(E)\,dE \\
 &amp;= \phi_g^{\mathrm{fine}} + \phi_{g+1}^{\mathrm{fine}}.
-\end{aligned}" /></p>
+\end{aligned}
+"
+/></p>
 <ul>
-    <li><strong>(a)</strong> Determine an expression for <img class="equation_image" title="\sigma_{a,G}" src="https://k-state.instructure.com/equation_images/%255Csigma_%257Ba%252CG%257D" alt="LaTeX: \sigma_{a,G}" data-equation-content="\sigma_{a,G}" /> in terms of the fine-group fluxes and cross-section values <img class="equation_image" title="\sigma_{a,g}" src="https://k-state.instructure.com/equation_images/%255Csigma_%257Ba%252Cg%257D" alt="LaTeX: \sigma_{a,g}" data-equation-content="\sigma_{a,g}" /> and <img class="equation_image" title="\sigma_{a,g+1}" src="https://k-state.instructure.com/equation_images/%255Csigma_%257Ba%252Cg%252B1%257D" alt="LaTeX: \sigma_{a,g+1}" data-equation-content="\sigma_{a,g+1}" />.</li>
-    <li><strong>(b)</strong> Assuming the fast and epithermal fluxes are identical, determine the effective <img class="equation_image" title="\sigma_a" src="https://k-state.instructure.com/equation_images/%255Csigma_a" alt="LaTeX: \sigma_a" data-equation-content="\sigma_a" /> for <img class="equation_image" title="{}^{238}\mathrm{U}" src="https://k-state.instructure.com/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D" alt="LaTeX: {}^{238}\mathrm{U}" data-equation-content="{}^{238}\mathrm{U}" /> over <img class="equation_image" title="1 &lt; E &lt; 10^7~\mathrm{eV}" src="https://k-state.instructure.com/equation_images/1%2520%253C%2520E%2520%253C%252010%255E7~%255Cmathrm%257BeV%257D" alt="LaTeX: 1 &lt; E &lt; 10^7~\mathrm{eV}" data-equation-content="1 &lt; E &lt; 10^7~\mathrm{eV}" /> using FNRP Table 3.2.</li>
+<li><strong>(a)</strong> Determine an expression for <img
+class="equation_image"
+title="\sigma_{a,G}"
+src="/equation_images/%255Csigma_%257Ba%252CG%257D"
+alt="LaTeX: \sigma_{a,G}"
+data-equation-content="\sigma_{a,G}"
+/> in terms of the fine-group fluxes and cross-section values <img
+class="equation_image"
+title="\sigma_{a,g}"
+src="/equation_images/%255Csigma_%257Ba%252Cg%257D"
+alt="LaTeX: \sigma_{a,g}"
+data-equation-content="\sigma_{a,g}"
+/> and <img
+class="equation_image"
+title="\sigma_{a,g+1}"
+src="/equation_images/%255Csigma_%257Ba%252Cg%252B1%257D"
+alt="LaTeX: \sigma_{a,g+1}"
+data-equation-content="\sigma_{a,g+1}"
+/>.</li>
+<li><strong>(b)</strong> Assuming the fast and epithermal fluxes are identical, determine the effective <img
+class="equation_image"
+title="\sigma_a"
+src="/equation_images/%255Csigma_a"
+alt="LaTeX: \sigma_a"
+data-equation-content="\sigma_a"
+/> for <img
+class="equation_image"
+title="{}^{238}\mathrm{U}"
+src="/equation_images/%257B%257D%255E%257B238%257D%255Cmathrm%257BU%257D"
+alt="LaTeX: {}^{238}\mathrm{U}"
+data-equation-content="{}^{238}\mathrm{U}"
+/> over <img
+class="equation_image"
+title="1 &lt; E &lt; 10^7~\mathrm{eV}"
+src="/equation_images/1%2520%253C%2520E%2520%253C%252010%255E7~%255Cmathrm%257BeV%257D"
+alt="LaTeX: 1 &lt; E &lt; 10^7~\mathrm{eV}"
+data-equation-content="1 &lt; E &lt; 10^7~\mathrm{eV}"
+/> using FNRP Table 3.2.</li>
 </ul>
 <h2 id="problem-2">Problem 2</h2>
-<p>Consider an infinite solution of water and uranium with a uniform source of <img class="equation_image" title="1~\mathrm{MeV}" src="https://k-state.instructure.com/equation_images/1~%255Cmathrm%257BMeV%257D" alt="LaTeX: 1~\mathrm{MeV}" data-equation-content="1~\mathrm{MeV}" /> neutrons that emits <img class="equation_image" title="100~\mathrm{n\,cm^{-3}\,s^{-1}}" src="https://k-state.instructure.com/equation_images/100~%255Cmathrm%257Bn%255C%252Ccm%255E%257B-3%257D%255C%252Cs%255E%257B-1%257D%257D" alt="LaTeX: 100~\mathrm{n\,cm^{-3}\,s^{-1}}" data-equation-content="100~\mathrm{n\,cm^{-3}\,s^{-1}}" />. Using the data in Table 1, compute the volumetric absorption and fission rates in the solution.</p>
-<p><strong>Table 1.</strong> Two-group data for Problems 2 and 3. Macroscopic cross sections are given in <img class="equation_image" title="\mathrm{cm^{-1}}" src="https://k-state.instructure.com/equation_images/%255Cmathrm%257Bcm%255E%257B-1%257D%257D" alt="LaTeX: \mathrm{cm^{-1}}" data-equation-content="\mathrm{cm^{-1}}" />.</p>
+<p>Consider an infinite solution of water and uranium with a uniform source of <img
+class="equation_image"
+title="1~\mathrm{MeV}"
+src="/equation_images/1~%255Cmathrm%257BMeV%257D"
+alt="LaTeX: 1~\mathrm{MeV}"
+data-equation-content="1~\mathrm{MeV}"
+/> neutrons that emits <img
+class="equation_image"
+title="100~\mathrm{n\,cm^{-3}\,s^{-1}}"
+src="/equation_images/100~%255Cmathrm%257Bn%255C%252Ccm%255E%257B-3%257D%255C%252Cs%255E%257B-1%257D%257D"
+alt="LaTeX: 100~\mathrm{n\,cm^{-3}\,s^{-1}}"
+data-equation-content="100~\mathrm{n\,cm^{-3}\,s^{-1}}"
+/>. Using the data in Table 1, compute the volumetric absorption and fission rates in the solution.</p>
+<p><strong>Table 1.</strong> Two-group data for Problems 2 and 3. Macroscopic cross sections are given in <img
+class="equation_image"
+title="\mathrm{cm^{-1}}"
+src="/equation_images/%255Cmathrm%257Bcm%255E%257B-1%257D%257D"
+alt="LaTeX: \mathrm{cm^{-1}}"
+data-equation-content="\mathrm{cm^{-1}}"
+/>.</p>
 <table>
-    <thead>
-        <tr class="header">
-            <th></th>
-            <th style="text-align: right;"><img class="equation_image" title="g=1" src="https://k-state.instructure.com/equation_images/g%253D1" alt="LaTeX: g=1" data-equation-content="g=1" /></th>
-            <th style="text-align: right;"><img class="equation_image" title="g=2" src="https://k-state.instructure.com/equation_images/g%253D2" alt="LaTeX: g=2" data-equation-content="g=2" /></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="odd">
-            <td><img class="equation_image" title="\Sigma_\gamma" src="https://k-state.instructure.com/equation_images/%255CSigma_%255Cgamma" alt="LaTeX: \Sigma_\gamma" data-equation-content="\Sigma_\gamma" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="2.04\times10^{-3}" src="https://k-state.instructure.com/equation_images/2.04%255Ctimes10%255E%257B-3%257D" alt="LaTeX: 2.04\times10^{-3}" data-equation-content="2.04\times10^{-3}" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="1.91\times10^{-2}" src="https://k-state.instructure.com/equation_images/1.91%255Ctimes10%255E%257B-2%257D" alt="LaTeX: 1.91\times10^{-2}" data-equation-content="1.91\times10^{-2}" /></td>
-        </tr>
-        <tr class="even">
-            <td><img class="equation_image" title="\Sigma_f" src="https://k-state.instructure.com/equation_images/%255CSigma_f" alt="LaTeX: \Sigma_f" data-equation-content="\Sigma_f" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="2.96\times10^{-4}" src="https://k-state.instructure.com/equation_images/2.96%255Ctimes10%255E%257B-4%257D" alt="LaTeX: 2.96\times10^{-4}" data-equation-content="2.96\times10^{-4}" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="1.38\times10^{-2}" src="https://k-state.instructure.com/equation_images/1.38%255Ctimes10%255E%257B-2%257D" alt="LaTeX: 1.38\times10^{-2}" data-equation-content="1.38\times10^{-2}" /></td>
-        </tr>
-        <tr class="odd">
-            <td><img class="equation_image" title="\bar{\nu}\Sigma_f" src="https://k-state.instructure.com/equation_images/%255Cbar%257B%255Cnu%257D%255CSigma_f" alt="LaTeX: \bar{\nu}\Sigma_f" data-equation-content="\bar{\nu}\Sigma_f" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="7.38\times10^{-4}" src="https://k-state.instructure.com/equation_images/7.38%255Ctimes10%255E%257B-4%257D" alt="LaTeX: 7.38\times10^{-4}" data-equation-content="7.38\times10^{-4}" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="3.36\times10^{-2}" src="https://k-state.instructure.com/equation_images/3.36%255Ctimes10%255E%257B-2%257D" alt="LaTeX: 3.36\times10^{-2}" data-equation-content="3.36\times10^{-2}" /></td>
-        </tr>
-        <tr class="even">
-            <td><img class="equation_image" title="\Sigma_{s,1\gets g}" src="https://k-state.instructure.com/equation_images/%255CSigma_%257Bs%252C1%255Cgets%2520g%257D" alt="LaTeX: \Sigma_{s,1\gets g}" data-equation-content="\Sigma_{s,1\gets g}" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="7.21\times10^{-1}" src="https://k-state.instructure.com/equation_images/7.21%255Ctimes10%255E%257B-1%257D" alt="LaTeX: 7.21\times10^{-1}" data-equation-content="7.21\times10^{-1}" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="0" src="https://k-state.instructure.com/equation_images/0" alt="LaTeX: 0" data-equation-content="0" /></td>
-        </tr>
-        <tr class="odd">
-            <td><img class="equation_image" title="\Sigma_{s,2\gets g}" src="https://k-state.instructure.com/equation_images/%255CSigma_%257Bs%252C2%255Cgets%2520g%257D" alt="LaTeX: \Sigma_{s,2\gets g}" data-equation-content="\Sigma_{s,2\gets g}" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="4.27\times10^{-2}" src="https://k-state.instructure.com/equation_images/4.27%255Ctimes10%255E%257B-2%257D" alt="LaTeX: 4.27\times10^{-2}" data-equation-content="4.27\times10^{-2}" /></td>
-            <td style="text-align: right;"><img class="equation_image" title="2.72\times10^0" src="https://k-state.instructure.com/equation_images/2.72%255Ctimes10%255E0" alt="LaTeX: 2.72\times10^0" data-equation-content="2.72\times10^0" /></td>
-        </tr>
-    </tbody>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;"><img
+class="equation_image"
+title="g=1"
+src="/equation_images/g%253D1"
+alt="LaTeX: g=1"
+data-equation-content="g=1"
+/></th>
+<th style="text-align: right;"><img
+class="equation_image"
+title="g=2"
+src="/equation_images/g%253D2"
+alt="LaTeX: g=2"
+data-equation-content="g=2"
+/></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img
+class="equation_image"
+title="\Sigma_\gamma"
+src="/equation_images/%255CSigma_%255Cgamma"
+alt="LaTeX: \Sigma_\gamma"
+data-equation-content="\Sigma_\gamma"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="2.04\times10^{-3}"
+src="/equation_images/2.04%255Ctimes10%255E%257B-3%257D"
+alt="LaTeX: 2.04\times10^{-3}"
+data-equation-content="2.04\times10^{-3}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="1.91\times10^{-2}"
+src="/equation_images/1.91%255Ctimes10%255E%257B-2%257D"
+alt="LaTeX: 1.91\times10^{-2}"
+data-equation-content="1.91\times10^{-2}"
+/></td>
+</tr>
+<tr class="even">
+<td><img
+class="equation_image"
+title="\Sigma_f"
+src="/equation_images/%255CSigma_f"
+alt="LaTeX: \Sigma_f"
+data-equation-content="\Sigma_f"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="2.96\times10^{-4}"
+src="/equation_images/2.96%255Ctimes10%255E%257B-4%257D"
+alt="LaTeX: 2.96\times10^{-4}"
+data-equation-content="2.96\times10^{-4}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="1.38\times10^{-2}"
+src="/equation_images/1.38%255Ctimes10%255E%257B-2%257D"
+alt="LaTeX: 1.38\times10^{-2}"
+data-equation-content="1.38\times10^{-2}"
+/></td>
+</tr>
+<tr class="odd">
+<td><img
+class="equation_image"
+title="\bar{\nu}\Sigma_f"
+src="/equation_images/%255Cbar%257B%255Cnu%257D%255CSigma_f"
+alt="LaTeX: \bar{\nu}\Sigma_f"
+data-equation-content="\bar{\nu}\Sigma_f"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="7.38\times10^{-4}"
+src="/equation_images/7.38%255Ctimes10%255E%257B-4%257D"
+alt="LaTeX: 7.38\times10^{-4}"
+data-equation-content="7.38\times10^{-4}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="3.36\times10^{-2}"
+src="/equation_images/3.36%255Ctimes10%255E%257B-2%257D"
+alt="LaTeX: 3.36\times10^{-2}"
+data-equation-content="3.36\times10^{-2}"
+/></td>
+</tr>
+<tr class="even">
+<td><img
+class="equation_image"
+title="\Sigma_{s,1\gets g}"
+src="/equation_images/%255CSigma_%257Bs%252C1%255Cgets%2520g%257D"
+alt="LaTeX: \Sigma_{s,1\gets g}"
+data-equation-content="\Sigma_{s,1\gets g}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="7.21\times10^{-1}"
+src="/equation_images/7.21%255Ctimes10%255E%257B-1%257D"
+alt="LaTeX: 7.21\times10^{-1}"
+data-equation-content="7.21\times10^{-1}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="0"
+src="/equation_images/0"
+alt="LaTeX: 0"
+data-equation-content="0"
+/></td>
+</tr>
+<tr class="odd">
+<td><img
+class="equation_image"
+title="\Sigma_{s,2\gets g}"
+src="/equation_images/%255CSigma_%257Bs%252C2%255Cgets%2520g%257D"
+alt="LaTeX: \Sigma_{s,2\gets g}"
+data-equation-content="\Sigma_{s,2\gets g}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="4.27\times10^{-2}"
+src="/equation_images/4.27%255Ctimes10%255E%257B-2%257D"
+alt="LaTeX: 4.27\times10^{-2}"
+data-equation-content="4.27\times10^{-2}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="2.72\times10^0"
+src="/equation_images/2.72%255Ctimes10%255E0"
+alt="LaTeX: 2.72\times10^0"
+data-equation-content="2.72\times10^0"
+/></td>
+</tr>
+</tbody>
 </table>
 <h2 id="problem-3">Problem 3</h2>
-<p>Compute <img class="equation_image" title="k_\infty" src="https://k-state.instructure.com/equation_images/k_%255Cinfty" alt="LaTeX: k_\infty" data-equation-content="k_\infty" /> for the system described in Problem 2.</p>
+<p>Compute <img
+class="equation_image"
+title="k_\infty"
+src="/equation_images/k_%255Cinfty"
+alt="LaTeX: k_\infty"
+data-equation-content="k_\infty"
+/> for the system described in Problem 2.</p>

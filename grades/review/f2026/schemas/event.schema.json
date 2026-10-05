@@ -1,0 +1,374 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ne630:review:f2026:event:1.0.0",
+  "title": "Append-only review event",
+  "$comment": "Each line of events/events.jsonl is validated independently against this schema.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "event_id",
+    "run_id",
+    "sequence",
+    "occurred_at",
+    "stage",
+    "event_type",
+    "actor",
+    "subject",
+    "outcome",
+    "reason_code",
+    "inputs",
+    "outputs",
+    "payload"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "event_id": {"type": "string", "pattern": "^EVT-[0-9]{6,}$"},
+    "run_id": {"$ref": "#/$defs/run_id"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "occurred_at": {"$ref": "#/$defs/timestamp"},
+    "stage": {"$ref": "#/$defs/stage"},
+    "event_type": {
+      "enum": [
+        "RUN_CREATED",
+        "STAGE_STARTED",
+        "STAGE_COMPLETED",
+        "ARTIFACT_WRITTEN",
+        "SELECTION_LOCKED",
+        "REVIEW_RECORDED",
+        "VALIDATION_RECORDED",
+        "BLOCKED",
+        "RESUMED",
+        "RUN_FINALIZED"
+      ]
+    },
+    "actor": {"$ref": "#/$defs/actor"},
+    "subject": {"$ref": "#/$defs/subject"},
+    "outcome": {"enum": ["STARTED", "SUCCEEDED", "FAILED", "BLOCKED", "SKIPPED", "RECORDED"]},
+    "reason_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+    "parent_event_id": {"type": "string", "pattern": "^EVT-[0-9]{6,}$"},
+    "inputs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/artifact_ref"}
+    },
+    "outputs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/artifact_ref"}
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "stage_status": {"enum": ["NOT_STARTED", "RUNNING", "COMPLETE", "BLOCKED", "FAILED", "SKIPPED"]},
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "selection_id": {"type": "string", "pattern": "^SEL-[0-9]{6,}$"},
+        "review_id": {"type": "string", "pattern": "^REV-[0-9]{6,}$"},
+        "validation_report_id": {"type": "string", "pattern": "^VAL-[0-9]{6,}$"},
+        "blocking_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "retryable": {"type": "boolean"},
+        "from_event_id": {"type": "string", "pattern": "^EVT-[0-9]{6,}$"},
+        "message": {"type": "string", "minLength": 1, "maxLength": 2000}
+      },
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "event_type": {"const": "RUN_CREATED"},
+        "stage": {"const": "RUN"},
+        "outcome": {"const": "RECORDED"},
+        "subject": {"properties": {"subject_type": {"const": "RUN"}}},
+        "payload": {
+          "type": "object",
+          "properties": {"message": {"type": "string", "minLength": 1, "maxLength": 2000}},
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "event_type": {"const": "STAGE_STARTED"},
+        "stage": {"enum": ["SELF_TEST", "REFERENCE_FREEZE", "INTAKE", "PREPARE_CALIBRATION", "PRODUCT_REVIEW", "RECONCILIATION", "VALIDATE"]},
+        "outcome": {"const": "STARTED"},
+        "payload": {
+          "type": "object",
+          "required": ["stage_status"],
+          "properties": {
+            "stage_status": {"const": "RUNNING"},
+            "message": {"type": "string", "minLength": 1, "maxLength": 2000}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "event_type": {"const": "STAGE_COMPLETED"},
+        "stage": {"enum": ["SELF_TEST", "REFERENCE_FREEZE", "INTAKE", "PREPARE_CALIBRATION", "PRODUCT_REVIEW", "RECONCILIATION", "VALIDATE"]},
+        "outcome": {"enum": ["SUCCEEDED", "FAILED", "BLOCKED", "SKIPPED"]},
+        "payload": {
+          "type": "object",
+          "required": ["stage_status"],
+          "properties": {
+            "stage_status": {"enum": ["COMPLETE", "FAILED", "BLOCKED", "SKIPPED"]},
+            "message": {"type": "string", "minLength": 1, "maxLength": 2000}
+          },
+          "additionalProperties": false
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "outcome": {"const": "SUCCEEDED"},
+            "payload": {"properties": {"stage_status": {"const": "COMPLETE"}}}
+          }
+        },
+        {
+          "properties": {
+            "outcome": {"const": "FAILED"},
+            "payload": {"properties": {"stage_status": {"const": "FAILED"}}}
+          }
+        },
+        {
+          "properties": {
+            "outcome": {"const": "BLOCKED"},
+            "payload": {"properties": {"stage_status": {"const": "BLOCKED"}}}
+          }
+        },
+        {
+          "properties": {
+            "outcome": {"const": "SKIPPED"},
+            "payload": {"properties": {"stage_status": {"const": "SKIPPED"}}}
+          }
+        }
+      ]
+    },
+    {
+      "properties": {
+        "event_type": {"const": "ARTIFACT_WRITTEN"},
+        "outcome": {"const": "RECORDED"},
+        "subject": {"properties": {"subject_type": {"const": "ARTIFACT"}}},
+        "payload": {
+          "type": "object",
+          "required": ["artifact_id"],
+          "properties": {
+            "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+            "message": {"type": "string", "minLength": 1, "maxLength": 2000}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "event_type": {"const": "SELECTION_LOCKED"},
+        "stage": {"const": "PREPARE_CALIBRATION"},
+        "outcome": {"const": "RECORDED"},
+        "subject": {"properties": {"subject_type": {"const": "SELECTION"}}},
+        "payload": {
+          "type": "object",
+          "required": ["selection_id"],
+          "properties": {
+            "selection_id": {"type": "string", "pattern": "^SEL-[0-9]{6,}$"},
+            "message": {"type": "string", "minLength": 1, "maxLength": 2000}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "event_type": {"const": "REVIEW_RECORDED"},
+        "stage": {"const": "PRODUCT_REVIEW"},
+        "outcome": {"const": "RECORDED"},
+        "subject": {"properties": {"subject_type": {"const": "REVIEW"}}},
+        "payload": {
+          "type": "object",
+          "required": ["review_id"],
+          "properties": {
+            "review_id": {"type": "string", "pattern": "^REV-[0-9]{6,}$"},
+            "message": {"type": "string", "minLength": 1, "maxLength": 2000}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "event_type": {"const": "VALIDATION_RECORDED"},
+        "stage": {"const": "VALIDATE"},
+        "outcome": {"const": "RECORDED"},
+        "subject": {"properties": {"subject_type": {"const": "VALIDATION_REPORT"}}},
+        "payload": {
+          "type": "object",
+          "required": ["validation_report_id"],
+          "properties": {
+            "validation_report_id": {"type": "string", "pattern": "^VAL-[0-9]{6,}$"},
+            "message": {"type": "string", "minLength": 1, "maxLength": 2000}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "event_type": {"const": "BLOCKED"},
+        "outcome": {"const": "BLOCKED"},
+        "payload": {
+          "type": "object",
+          "required": ["blocking_code", "retryable"],
+          "properties": {
+            "blocking_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+            "retryable": {"type": "boolean"},
+            "message": {"type": "string", "minLength": 1, "maxLength": 2000}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "required": ["parent_event_id"],
+      "properties": {
+        "event_type": {"const": "RESUMED"},
+        "outcome": {"const": "STARTED"},
+        "payload": {
+          "type": "object",
+          "required": ["from_event_id"],
+          "properties": {
+            "from_event_id": {"type": "string", "pattern": "^EVT-[0-9]{6,}$"},
+            "message": {"type": "string", "minLength": 1, "maxLength": 2000}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "event_type": {"const": "RUN_FINALIZED"},
+        "stage": {"const": "RUN"},
+        "outcome": {"enum": ["SUCCEEDED", "FAILED", "BLOCKED"]},
+        "subject": {"properties": {"subject_type": {"const": "RUN"}}},
+        "payload": {
+          "type": "object",
+          "properties": {"message": {"type": "string", "minLength": 1, "maxLength": 2000}},
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "run_id": {"type": "string", "pattern": "^run-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"},
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "stage": {
+      "enum": [
+        "RUN",
+        "SELF_TEST",
+        "REFERENCE_FREEZE",
+        "INTAKE",
+        "PREPARE_CALIBRATION",
+        "PRODUCT_REVIEW",
+        "RECONCILIATION",
+        "VALIDATE"
+      ]
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "actor": {
+      "type": "object",
+      "required": ["actor_type", "actor_id"],
+      "properties": {
+        "actor_type": {"enum": ["TOOL", "AGENT", "HUMAN", "SYSTEM"]},
+        "actor_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "version": {"type": "string", "minLength": 1, "maxLength": 128}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"actor_type": {"enum": ["TOOL", "AGENT"]}}, "required": ["actor_type"]},
+          "then": {"required": ["version"]}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "subject": {
+      "type": "object",
+      "required": ["subject_type", "subject_id"],
+      "properties": {
+        "subject_type": {"enum": ["RUN", "ASSIGNMENT", "SUBMISSION", "ARTIFACT", "SELECTION", "REVIEW", "VALIDATION_REPORT", "DECISION"]},
+        "subject_id": {"type": "string", "minLength": 1, "maxLength": 128}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "subject_type": {"const": "RUN"},
+            "subject_id": {"$ref": "#/$defs/run_id"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "ASSIGNMENT"},
+            "subject_id": {"enum": ["HW01", "HW02", "HW03", "HW04"]}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "SUBMISSION"},
+            "subject_id": {"type": "string", "pattern": "^HW0[1-4]-S[0-9]{3,}-V[0-9]{2,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "ARTIFACT"},
+            "subject_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "REVIEW"},
+            "subject_id": {"type": "string", "pattern": "^REV-[0-9]{6,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "SELECTION"},
+            "subject_id": {"type": "string", "pattern": "^SEL-[0-9]{6,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "VALIDATION_REPORT"},
+            "subject_id": {"type": "string", "pattern": "^VAL-[0-9]{6,}$"}
+          }
+        },
+        {
+          "properties": {
+            "subject_type": {"const": "DECISION"},
+            "subject_id": {"type": "string", "pattern": "^DEC-[0-9]{6,}$"}
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "artifact_ref": {
+      "type": "object",
+      "required": ["artifact_id", "role", "path", "sha256", "byte_count", "media_type"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^ART-[0-9]{6,}$"},
+        "role": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"},
+        "path": {"$ref": "#/$defs/relative_path"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "pattern": "^[a-z0-9.+-]+/[a-zA-Z0-9.+-]+$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

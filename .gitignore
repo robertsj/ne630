@@ -2,11 +2,56 @@
 __pycache__/
 *.py[cod]
 
-# Handout build intermediates and instructor-only rendered copies.
+# Handout build intermediates and rendered copies. Public PDFs are generated
+# locally and published from the gh-pages branch, not stored on Fall2026.
 /handouts/*.aux
 /handouts/*.fdb_latexmk
 /handouts/*.fls
 /handouts/*.log
 /handouts/*.out
 /handouts/*.xdv
+/handouts/lesson_??_handout.pdf
 /handouts/*_instructor.pdf
+/site/_static/handouts/
+
+# Raw course-grading records. Ignoring them is defense against accidental
+# commits, not an access-control mechanism.
+/grades/submissions/
+/grades/tmp/
+
+# Private identity material and generated review runs. Reusable framework
+# code, configuration, schemas, protocols, tests, and synthetic fixtures under
+# grades/review/ remain trackable.
+/grades/review/*/restricted/
+/grades/review/*/runs/
+
+# Homework solution manuals are generated locally, not stored on Fall2026.
+/homework/solutions/*.pdf
+
+# Slide decks and figure build products.  Source-less assets live under
+# slides/figures/static/ and remain visible to Git.
+/slides/.build/
+/slides/figures/.build/
+/slides/figures/generated/
+/slides/figures/config.mk
+/slides/*.pdf
+/slides/_minted-*/
+/slides/git_sha.txt
+/slides/**/*.aux
+/slides/**/*.bbl
+/slides/**/*.bcf
+/slides/**/*.blg
+/slides/**/*.fdb_latexmk
+/slides/**/*.fls
+/slides/**/*.log
+/slides/**/*.nav
+/slides/**/*.out
+/slides/**/*.pyg
+/slides/**/*.pygtex
+/slides/**/*.run.xml
+/slides/**/*.snm
+/slides/**/*.synctex.gz
+/slides/**/*.toc
+/slides/**/*.vrb
+/slides/**/*.w18
+/slides/**/*.xdv

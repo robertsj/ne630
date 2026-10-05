@@ -1,0 +1,10 @@
+# Runtime dependencies for the portable Python figure generators.
+# PGF targets additionally require a working XeLaTeX installation on PATH.
+# generate_openmc_figures.py also requires the OpenMC Python package and
+# executable plus an evaluated HDF5 library selected with OPENMC_CROSS_SECTIONS
+# or --cross-sections. OpenMC is best installed from conda-forge rather than
+# added as a pip requirement here.
+matplotlib>=3.8
+numpy>=1.26
+Pillow>=10
+scipy>=1.11

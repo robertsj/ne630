@@ -16,7 +16,7 @@ REPOSITORY = Path(__file__).resolve().parents[2]
 SOURCE_DIRECTORY = REPOSITORY / "handouts"
 OUTPUT_DIRECTORY = REPOSITORY / "site" / "_static" / "handouts"
 LESSONS = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14)
-PDF_ONLY_LESSONS = (15, 16, 17)
+PDF_ONLY_LESSONS = (15, 16, 17, 18)
 LESSON_SUPPORT_FILES = {
     5: ("spectra.pdf",),
     6: (

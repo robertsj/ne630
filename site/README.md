@@ -1,8 +1,8 @@
 # NE 630 public course site
 
 This directory is the Sphinx source for the public NE 630 course-materials
-site. The initial page publishes student handouts for Lessons 1--10 and 12--17,
-standalone notebooks for Lessons 8--12 and 15--16, and available lesson videos.
+site. The initial page publishes student handouts for Lessons 1--10 and 12--18,
+standalone notebooks for Lessons 8--12 and 15--19, and available lesson videos.
 
 ## Build
 
@@ -41,14 +41,14 @@ the handout Makefile and then `site/scripts/export_handouts.py`, which creates
 the public files beneath `site/_static/handouts/`.
 
 The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, and referenced
-supporting files are version-controlled. Lessons 15--17 are exported as PDFs
+supporting files are version-controlled. Lessons 15--18 are exported as PDFs
 only. Rendered handout PDFs and the entire `site/_static/handouts/` export tree
 are ignored build artifacts on the source branch; they are generated during
 `make html` or `make check` and published in the rendered site on `gh-pages`.
 
 Standalone lesson notebooks remain canonical in `notebooks/`. Public download
 copies live beneath `site/_static/notebooks/` and must be byte-for-byte
-identical to their canonical files. The Lesson 8--12 and Lesson 15--16
+identical to their canonical files. The Lesson 8--12 and Lesson 15--19
 notebooks are published alongside the lesson materials as independent course
 resources.
 Verify their publication copies with:
@@ -61,6 +61,9 @@ cmp notebooks/lesson_11.ipynb site/_static/notebooks/lesson_11.ipynb
 cmp notebooks/lesson_12.ipynb site/_static/notebooks/lesson_12.ipynb
 cmp notebooks/lesson_15.ipynb site/_static/notebooks/lesson_15.ipynb
 cmp notebooks/lesson_16.ipynb site/_static/notebooks/lesson_16.ipynb
+cmp notebooks/lesson_17.ipynb site/_static/notebooks/lesson_17.ipynb
+cmp notebooks/lesson_18.ipynb site/_static/notebooks/lesson_18.ipynb
+cmp notebooks/lesson_19.ipynb site/_static/notebooks/lesson_19.ipynb
 ```
 
 Do not edit generated handout exports directly. The build renders each public

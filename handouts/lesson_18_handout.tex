@@ -22,29 +22,28 @@ Slowing down mainly in the moderator, an approximately $1/E$ moderator spectrum 
  \boxed{p\simeq\exp\!\left[-\frac{V_fN_{fe} I}{V_m\xi^m\Sigma_s^m}\right].}
 \]
 The exponential combines successive resonance survival probabilities. For a mixture, use $\xi\Sigma_s=\sum_i\xi_i\Sigma_{s,i}$.
-
 Spatial self-shielding lowers $\varphi_f/\varphi_m$ at resonance energies, reducing $I$. This is the quantitative link back to Lesson 15's uranium lump.
 \begin{center}\resizebox{\linewidth}{!}{\ResonanceFigure}\end{center}
 \vspace{-6pt}
 \figcap{Adapted from Fig.\ 4.6: cooler fuel (solid), hotter fuel (dashed). Schematic only; the relevant loss is the integral of $\sigma_a\varphi_f$, not the peak cross section.}
-Doppler broadening spreads absorption into less-shielded wings. In the usual U-238 thermal-lattice setting, raising fuel temperature increases effective resonance absorption and lowers $p$.
+Doppler broadening spreads absorption into less-shielded wings.  Thus, raising fuel temperature increases effective resonance absorption and lowers $p$.
 
-\begin{KeyBox}{Use the rod correlation only for rods}
+\begin{KeyBox}{Empirical Resonance Integral for UO$_2$ Fuel Elements}
 Table 4.3 gives, for isolated UO$_2$ rods,
 \[
  I\,[\mathrm b]=4.45+26.6\sqrt{\frac4{\rho_fD}}.
 \]
-Insert $\rho_f$ in g/cm$^3$ and $D$ in cm; the stated range is $0.2<D<3.5$ cm. The fit is \emph{not} a sphere formula. Nearby rods introduce inter-rod shielding (the Dancoff effect).
+Insert $\rho_f$ in g/cm$^3$ and $D$ in cm; the stated range is $0.2<D<3.5$ cm.
 \end{KeyBox}
 \colnext
 \Sec{2}{Translate PWR pitch into atom ratios}
-For the square UO$_2$--cladding--water cell of Lesson 16, with gap neglected and $D=2r_f$,
+For the square UO$_2$--cladding--water cell of Lesson 17, with gap neglected and $D=2r_f$,
 \begin{align*}
  \frac{V_m}{V_f}&=\frac{P^2-\pi r_c^2}{\pi r_f^2},\\
  \frac HU&=\frac{N_H^m}{N_U^f}\,
  \frac{P^2-\pi r_c^2}{\pi r_f^2},\qquad \frac PD>\frac{r_c}{r_f}.
 \end{align*}
-At fixed radii and material densities, increasing $P/D$ increases the moderator-to-fuel ratio. Changing $D$ instead also changes self-shielding and heat-conduction distance: $P/D$ alone does not specify a cell.
+At fixed radii and material densities, increasing $P/D$ increases the moderator-to-fuel ratio. Note that changing $D$ instead also changes self-shielding and heat conduction.
 
 \Sec{3}{Find the competing effects}
 \textbf{More moderator:} resonance escape $p$ generally rises, but thermal utilization $f$ falls as more neutrons are absorbed outside fuel. Their competition produces the maximum in $k_\infty$ discussed with Fig.\ 4.7.
@@ -64,7 +63,7 @@ An \textbf{undermoderated} cell lies on the low-moderator side of the maximum. T
 \textbf{Compare the two design levers.} For an SFR, use enrichment to meet an assigned $k_\infty$ target (Lesson 16). For a PWR, map the $P/D$ optimum at fixed fuel composition. Both choices remain constrained by heat removal, mechanical spacing, control, leakage, and fuel depletion.
 \colend
 \begin{Explore}{One controlled change per run}
-For the PWR, hold fuel/clad radii, enrichment, temperatures, and water density fixed while scanning $P$; record $k_\infty\pm\sigma_k$, the four factors, and $\zeta$. Repeat with boron, then vary fuel temperature and moderator density \emph{separately}. Use H-in-H$_2$O thermal scattering data. Compare with the SFR enrichment sweep. \textbf{Explain:} what improves neutron economy, what changes feedback, and what the unit cell cannot decide about the full core?
+For the PWR, hold fuel/clad radii, enrichment, temperatures, and water density fixed while scanning $P$; record $k_\infty\pm\sigma_k$, the four factors, and $\zeta$. Repeat with boron, then vary fuel temperature and moderator density \emph{separately}. Use H-in-H$_2$O thermal scattering data. Compare with the SFR enrichment sweep. \textbf{Explain:} what improves neutron economy, what changes feedback, and what can't be modeled by the unit cell?
 \end{Explore}
-\SourceLine{Sources: Ch.\ 4, \S\,4.5; slide sets 18--19. OpenMC: \href{https://docs.openmc.org/en/stable/usersguide/materials.html}{Materials, \S\S\,5.2 and 5.5}. For $\epsilon$, retain group flux ratios or use production tallies; a cross-section ratio alone does not replace Eq.\ (4.25).}
+
 \end{document}

@@ -62,6 +62,10 @@ def key_for(row: dict) -> str:
     return f"{row['homework_id']}.{row['problem_id']}.{row['answer_id']}"
 
 
+def canonical_student_group(group: str) -> str:
+    return str(group or "").strip().lower()
+
+
 def answer_label(row: dict) -> str:
     problem = row["problem_id"].replace("p", "P")
     part = row.get("part_id", "")
@@ -184,7 +188,7 @@ def build_payload(hw: str) -> dict:
 
     students: dict[str, dict] = {}
     for manifest in manifest_rows:
-        group = f"{manifest.get('slug', '')}_{manifest.get('user_id', '')}".strip("_")
+        group = canonical_student_group(f"{manifest.get('slug', '')}_{manifest.get('user_id', '')}".strip("_"))
         if not group:
             continue
         students[group] = {
@@ -202,7 +206,7 @@ def build_payload(hw: str) -> dict:
 
     for row in student_rows:
         source = row.get("source", {})
-        group = source.get("student_group")
+        group = canonical_student_group(source.get("student_group", ""))
         if not group:
             continue
         students.setdefault(
@@ -241,7 +245,7 @@ def build_payload(hw: str) -> dict:
         counts[status] = counts.get(status, 0) + 1
 
     for error in error_rows:
-        group = error.get("student_group")
+        group = canonical_student_group(error.get("student_group", ""))
         if not group:
             continue
         students.setdefault(

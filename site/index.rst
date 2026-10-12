@@ -87,7 +87,7 @@ available for that lesson.
      - `OpenMC notebook <_static/notebooks/lesson_18.ipynb>`__ |middot|
        `YouTube video <https://www.youtube.com/watch?v=ifSflrLzm-w>`__
    * - **Lesson 19** — Unit-Cell Design Studies
-     - —
+     - `PDF <_static/handouts/lesson-19/lesson_19_handout.pdf>`__
      - `OpenMC notebook <_static/notebooks/lesson_19.ipynb>`__ |middot|
        `YouTube video <https://www.youtube.com/watch?v=L-LLYceaL1U>`__
    * - **Lesson 20** — Reactivity and Power Defects
@@ -99,7 +99,7 @@ Handout source and support files
 
 The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
 Download the complete source bundle for a ready-to-build copy, or pair a wrapper
-with its body file and the shared class. Lessons 15--18 are distributed as PDFs
+with its body file and the shared class. Lessons 15--19 are distributed as PDFs
 only.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|

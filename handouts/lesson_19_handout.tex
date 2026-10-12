@@ -1,0 +1,298 @@
+% NE 630 -- Lesson 19 OpenMC unit-cell modeling cheat sheet
+% Standalone source: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_19_handout.tex
+\input{ne630_ch04_reading_guide_common.tex}
+\usepackage{listings}
+\hypersetup{pdftitle={NE 630: Lesson 19 -- OpenMC Unit-Cell Modeling Cheat Sheet}}
+
+\lstdefinestyle{omc}{
+  language=Python,
+  basicstyle=\ttfamily\fontsize{6.65}{7.45}\selectfont,
+  keywordstyle=\color{KSUDeepPurple}\bfseries,
+  commentstyle=\color{KSUGray}\itshape,
+  stringstyle=\color{KSUOrange!85!black},
+  columns=fullflexible,keepspaces=true,showstringspaces=false,
+  breaklines=true,breakatwhitespace=true,
+  aboveskip=2pt,belowskip=2pt,
+  frame=single,rulecolor=\color{KSUPurple!25},
+  framesep=3pt,xleftmargin=1pt,xrightmargin=1pt
+}
+\lstset{style=omc}
+
+\begin{document}
+\fontsize{8.7}{10.25}\selectfont
+\RaggedRight
+
+\Lesson{19}{OpenMC unit-cell modeling: cheat sheet}
+ {Condensed from the PWR and SFR unit-cell notebooks in Lessons 17 and 19.}
+ {What is the minimum complete model for an infinite pin lattice?}
+
+\begin{KeyBox}{The five pieces of an OpenMC model}
+\textbf{Materials} $\rightarrow$ \textbf{surfaces/regions} $\rightarrow$ \textbf{cells/geometry}
+$\rightarrow$ \textbf{settings} $\rightarrow$ \textbf{tallies}.  Bundle them in
+\texttt{openmc.Model}, run in an isolated directory, and read the resulting statepoint.
+Use reflective outer and axial boundaries for a no-leakage, infinite-lattice $k_\infty$ model.
+Internal fuel/cladding surfaces remain transmitting (the default).
+\end{KeyBox}
+
+\colstart
+\Sec{1}{Shared setup and dimensions}
+\begin{lstlisting}
+import os, tempfile
+from pathlib import Path
+import numpy as np
+import openmc
+
+xs = os.environ["OPENMC_CROSS_SECTIONS"]
+openmc.config["cross_sections"] = xs
+
+rf, rc, P, H = 0.45, 0.46, 1.20, 1.0 # cm
+fuel_s = openmc.ZCylinder(r=rf)
+clad_s = openmc.ZCylinder(r=rc)
+z0 = openmc.ZPlane(z0=-H/2, boundary_type="reflective")
+z1 = openmc.ZPlane(z0= H/2, boundary_type="reflective")
+axial = +z0 & -z1
+\end{lstlisting}
+Always check $P>2r_c$.  Use one consistent axial height $H$ in the
+geometry and volumes; $H=1$ cm is convenient.
+
+\Sec{2}{PWR materials: square lattice}
+\begin{lstlisting}
+fuel = openmc.Material(name="UO2 fuel")
+fuel.add_element("U", 1.0, enrichment=4.0) # wt% U-235
+fuel.add_element("O", 2.0)
+fuel.set_density("g/cm3", 10.5)
+fuel.temperature = 1200.0
+
+clad = openmc.Material(name="Zr cladding")
+clad.add_element("Zr", 1.0)
+clad.set_density("g/cm3", 6.6)
+
+cool = openmc.model.borated_water(
+    boron_ppm=800.0, temperature=600.0,
+    pressure=15.5, temp_unit="K", press_unit="MPa")
+\end{lstlisting}
+\texttt{borated\_water} supplies H$_2$O composition and
+\texttt{c\_H\_in\_H2O} thermal scattering.  Enrichment passed to
+\texttt{add\_element} is weight percent.
+
+\Sec{3}{PWR regions, cells, and volumes}
+\begin{lstlisting}
+x0 = openmc.XPlane(x0=-P/2, boundary_type="reflective")
+x1 = openmc.XPlane(x0= P/2, boundary_type="reflective")
+y0 = openmc.YPlane(y0=-P/2, boundary_type="reflective")
+y1 = openmc.YPlane(y0= P/2, boundary_type="reflective")
+outer = +x0 & -x1 & +y0 & -y1 & axial
+
+cells = [
+  openmc.Cell(name="fuel", fill=fuel,
+              region=-fuel_s & outer),
+  openmc.Cell(name="cladding", fill=clad,
+              region=+fuel_s & -clad_s & outer),
+  openmc.Cell(name="coolant", fill=cool,
+              region=+clad_s & outer)]
+V = np.array([np.pi*rf**2,
+              np.pi*(rc**2-rf**2),
+              P**2-np.pi*rc**2])*H
+for c, v in zip(cells, V): c.volume = float(v)
+\end{lstlisting}
+\colnext
+\Sec{4}{SFR materials: explicit enrichment basis}
+\begin{lstlisting}
+e = 0.15  # U-235 atom fraction among uranium atoms
+fuel = openmc.Material(name="UO2 fuel")
+fuel.add_nuclide("U235", e)
+fuel.add_nuclide("U238", 1.0-e)
+fuel.add_element("O", 2.0)
+fuel.set_density("g/cm3", 10.5)
+
+clad = openmc.Material(name="steel cladding")
+clad.add_element("Fe", 1.0)       # shortened example
+clad.set_density("g/cm3", 7.13)
+
+cool = openmc.Material(name="sodium coolant")
+cool.add_nuclide("Na23", 1.0)
+cool.set_density("g/cm3", 0.837)
+\end{lstlisting}
+For a specified alloy, replace the shortened Fe material by its full
+elemental composition.  Adding U-235 and U-238 explicitly makes $e$ an
+\emph{atom fraction}; do not confuse it with the weight-percent shortcut
+used in the PWR example.
+
+\Sec{5}{SFR regions: hexagonal lattice}
+Here $P$ is the nearest-neighbor pitch (the hexagon's across-flats
+dimension), so the hexagon side length is $P/\sqrt3$.
+\begin{lstlisting}
+hex_s = openmc.model.HexagonalPrism(
+    edge_length=P/np.sqrt(3.0), orientation="x",
+    boundary_type="reflective")
+outer = -hex_s & axial
+
+cells = [
+  openmc.Cell(name="fuel", fill=fuel,
+              region=-fuel_s & outer),
+  openmc.Cell(name="cladding", fill=clad,
+              region=+fuel_s & -clad_s & outer),
+  openmc.Cell(name="coolant", fill=cool,
+              region=+clad_s & outer)]
+Ahex = np.sqrt(3.0)*P**2/2.0
+V = np.array([np.pi*rf**2,
+              np.pi*(rc**2-rf**2),
+              Ahex-np.pi*rc**2])*H
+for c, v in zip(cells, V): c.volume = float(v)
+\end{lstlisting}
+
+\begin{KeyBox}{Geometry sanity checks}
+\vspace{-2pt}
+\[
+ \sum_rV_r=A_{\rm cell}H,\qquad
+ A_{\rm sq}=P^2,\qquad A_{\rm hex}=\frac{\sqrt3}{2}P^2.
+\]
+Use \texttt{model.plot()} to inspect the geometry before spending histories.
+Overlaps, gaps, a missing outer boundary, and a wrong hexagon side length
+are the most expensive ``small'' mistakes.
+\end{KeyBox}
+\colend
+
+\newpage
+\Lesson{19}{OpenMC unit-cell modeling: run and reduce}
+ {Use after defining \texttt{cells} and \texttt{V} on page 1.}
+ {How do geometry and materials become defensible physical results?}
+
+\colstart
+\Sec{6}{Eigenvalue settings}
+\begin{lstlisting}
+settings = openmc.Settings(run_mode="eigenvalue")
+settings.batches, settings.inactive = 60, 10
+settings.particles, settings.seed = 2000, 19001
+settings.source = openmc.IndependentSource(
+    space=openmc.stats.Point((0., 0., 0.)),
+    angle=openmc.stats.Isotropic(),
+    energy=openmc.stats.Watt())
+settings.temperature = {"method": "interpolation"}
+\end{lstlisting}
+Inactive batches converge the fission source; active batches estimate
+responses.  Increase histories until uncertainty is small relative to the
+difference you want to interpret.  A random seed aids reproducibility; an
+independent seed is appropriate for a confirmation calculation.
+
+\Sec{7}{Tallies: filter first, then score}
+\begin{lstlisting}
+cell_filter = openmc.CellFilter(cells)
+
+# PWR groups: thermal, intermediate, fast [eV]
+edges = [1.0e-5, 1.0, 1.0e5, 2.0e7]
+rates = openmc.Tally(name="regional rates")
+rates.filters = [cell_filter, openmc.EnergyFilter(edges)]
+rates.scores = ["flux", "absorption", "nu-fission"]
+
+# Optional fine spectrum, logarithmic in energy
+E = np.geomspace(1.0e-5, 2.0e7, 161)
+spec = openmc.Tally(name="regional spectrum")
+spec.filters = [cell_filter, openmc.EnergyFilter(E)]
+spec.scores = ["flux"]
+\end{lstlisting}
+For a one-group SFR comparison, omit the \texttt{EnergyFilter} from
+\texttt{rates}.  OpenMC reaction-rate scores already contain the spatial
+and energy integrals.  Do not multiply them by volume again.
+
+\Sec{8}{Assemble and run cleanly}
+\begin{lstlisting}
+model = openmc.Model(
+    geometry=openmc.Geometry(cells),
+    materials=openmc.Materials([fuel, clad, cool]),
+    settings=settings,
+    tallies=openmc.Tallies([rates, spec]))
+
+with tempfile.TemporaryDirectory(prefix="ne630_") as d:
+    sp_path = model.run(cwd=d, output=True)
+    with openmc.StatePoint(sp_path) as sp:
+        keff = sp.keff
+        t = sp.get_tally(name="regional rates")
+        flux = t.get_values(scores=["flux"], value="mean").copy()
+        absorp = t.get_values(scores=["absorption"],
+                              value="mean").copy()
+        prod = t.get_values(scores=["nu-fission"],
+                            value="mean").copy()
+        flux = flux.reshape(len(cells), -1)
+        absorp = absorp.reshape(len(cells), -1)
+        prod = prod.reshape(len(cells), -1)
+print(keff)
+\end{lstlisting}
+Copy arrays while the statepoint is open.  The temporary directory prevents
+XML, statepoint, summary, and tally files from cluttering the repository.
+\colnext
+\Sec{9}{Normalize only for the question asked}
+With a cell filter, the flux score $\Phi_g^r$ is integrated over cell $r$.
+For a regional volume-average flux,
+\[
+ \overline\phi_g^r=\frac{\Phi_g^r}{V_r}.
+\]
+For a spectrum per unit lethargy, also divide by
+$\Delta u_g=\ln(E_{g+1}/E_g)$:
+\begin{lstlisting}
+# after reshaping to [region, energy_bin]
+du = np.log(E[1:] / E[:-1])
+phi_u = spectrum_flux / V[:, None] / du[None, :]
+\end{lstlisting}
+Raw cell-filtered fluxes mainly reflect unequal cell volumes; compare
+$\Phi^r/V_r$ when testing whether regional fluxes are similar.
+
+\Sec{10}{Reduce rates without losing the physics}
+For each region/group, effective macroscopic data follow from the measured
+rates:
+\[
+ \overline\Sigma_{a,g}^r=\frac{A_g^r}{\Phi_g^r},\qquad
+ \overline{\nu\Sigma}_{f,g}^r=\frac{B_g^r}{\Phi_g^r}.
+\]
+The no-leakage, full-energy rate balance is
+\[
+ \frac BA=\frac{\sum_{g,r}B_g^r}{\sum_{g,r}A_g^r}.
+\]
+For the PWR three-group ordering $T,I,F$ and regions fuel, clad, coolant:
+\begin{lstlisting}
+A_T = absorp[:, 0].sum()
+A_I_f = absorp[0, 1]
+B_T, B_F = prod[0, 0], prod[0, 2]
+epsilon = (B_T + B_F)/B_T
+p       = A_T/(A_T + A_I_f)
+f       = absorp[0, 0]/A_T
+eta_T   = B_T/absorp[0, 0]
+k4 = epsilon*p*f*eta_T
+\end{lstlisting}
+The reduced four-factor product omits terms by construction; report those
+omissions instead of forcing it to equal \texttt{keff}.
+
+For the SFR, test the common-flux approximation by comparing measured
+$B/A$ with
+\[
+ k_{\rm common\ flux}=
+ \frac{\sum_rV_r\overline{\nu\Sigma}_f^r}
+      {\sum_rV_r\overline\Sigma_a^r}.
+\]
+
+\Sec{11}{Before believing the answer}
+\begin{itemize}\setlength\itemsep{1pt}\setlength\parskip{0pt}\setlength\topsep{2pt}
+ \item Confirm material density, temperature, enrichment \emph{basis}, and
+       thermal scattering treatment.
+ \item Confirm region signs, no overlaps/gaps, and reflective boundaries.
+ \item Check $\sum V_r$, plot the geometry, and keep tally ordering explicit.
+ \item Report $k\pm\sigma_k$; compare changes with Monte Carlo uncertainty.
+ \item Change one input at a time.  A unit cell cannot determine leakage,
+       depletion, control worth, thermal limits, or whole-core safety margins.
+\end{itemize}
+
+\begin{Explore}{Minimal experiment pattern}
+Write one builder \texttt{build\_model(parameters)} and one reducer
+\texttt{run\_case(parameters)}.  Sweep pitch for the PWR or enrichment for
+the SFR, retain every input and uncertainty, bracket a target, then perform
+one higher-statistics confirmation run with an independent seed.
+\end{Explore}
+\colend
+
+\SourceLine{Companion notebooks: \texttt{notebooks/lesson\_17.ipynb} (PWR) and
+\texttt{notebooks/lesson\_19.ipynb} (SFR). OpenMC references:
+\href{https://docs.openmc.org/en/stable/usersguide/materials.html}{materials},
+\href{https://docs.openmc.org/en/stable/usersguide/geometry.html}{geometry},
+\href{https://docs.openmc.org/en/stable/usersguide/settings.html}{settings}, and
+\href{https://docs.openmc.org/en/stable/usersguide/tallies.html}{tallies}.}
+\end{document}

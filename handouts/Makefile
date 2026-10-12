@@ -2,13 +2,13 @@ LATEXMK = latexmk
 FLAGS = -xelatex -interaction=nonstopmode -halt-on-error
 WRAPPERS := $(wildcard lesson_??_handout.tex) handout_template.tex
 
-.PHONY: all L01 L02 L03 L04 L05 L06 L07 L08 L09 L10 L12 L13 L14 L15 L16 L17 L18 \
+.PHONY: all L01 L02 L03 L04 L05 L06 L07 L08 L09 L10 L12 L13 L14 L15 L16 L17 L18 L19 \
 	lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07 lesson08 lesson09 lesson10 \
-	lesson12 lesson13 lesson14 lesson15 lesson16 lesson17 lesson18 \
+	lesson12 lesson13 lesson14 lesson15 lesson16 lesson17 lesson18 lesson19 \
 	template tidy clean
 
 all: lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07 lesson08 lesson09 lesson10 \
-	lesson12 lesson13 lesson14 lesson15 lesson16 lesson17 lesson18
+	lesson12 lesson13 lesson14 lesson15 lesson16 lesson17 lesson18 lesson19
 
 L01: lesson_01_handout.pdf
 
@@ -44,6 +44,8 @@ L17: lesson_17_handout.pdf
 
 L18: lesson_18_handout.pdf
 
+L19: lesson_19_handout.pdf
+
 lesson01: L01
 
 lesson02: L02
@@ -77,6 +79,8 @@ lesson16: L16
 lesson17: L17
 
 lesson18: L18
+
+lesson19: L19
 
 lesson_01_handout.pdf: lesson_01_handout.tex lesson_01_handout_body.tex ne630boardhandout.cls
 	$(LATEXMK) $(FLAGS) lesson_01_handout.tex
@@ -128,6 +132,9 @@ lesson_17_handout.pdf: lesson_17_handout.tex ne630_ch04_reading_guide_common.tex
 
 lesson_18_handout.pdf: lesson_18_handout.tex ne630_ch04_reading_guide_common.tex
 	$(LATEXMK) $(FLAGS) lesson_18_handout.tex
+
+lesson_19_handout.pdf: lesson_19_handout.tex ne630_ch04_reading_guide_common.tex
+	$(LATEXMK) $(FLAGS) lesson_19_handout.tex
 
 handout_template.pdf: handout_template.tex ne630boardhandout.cls
 	$(LATEXMK) $(FLAGS) handout_template.tex

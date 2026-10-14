@@ -1,0 +1,263 @@
+% NE 630 -- Lesson 20 handout
+% Compile: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_20_handout.tex
+% This source also compiles with pdflatex when using the built-in fallback.
+%
+% Use the course's shared reading-guide interface when it is available.
+% The embedded fallback keeps this source portable outside the repository.
+% To force the fallback, replace the next line with \def\NEOriginalStyle{0}.
+\IfFileExists{ne630_ch04_reading_guide_common.tex}{\def\NEOriginalStyle{1}}{\def\NEOriginalStyle{0}}
+\ifnum\NEOriginalStyle=1\relax
+  \input{ne630_ch04_reading_guide_common.tex}
+\else
+  \documentclass[10pt,letterpaper]{article}
+  \usepackage[margin=0.50in,top=0.47in,bottom=0.48in,footskip=0.23in]{geometry}
+  \usepackage[T1]{fontenc}
+  \usepackage{newtxtext,newtxmath}
+  \usepackage{microtype}
+  \usepackage{amsmath,booktabs,array,graphicx,xcolor}
+  \usepackage{ragged2e}
+  \usepackage{tikz}
+  \usepackage[most]{tcolorbox}
+  \usepackage{fancyhdr}
+  \usepackage[hidelinks]{hyperref}
+  \definecolor{ksupurple}{HTML}{512888}
+  \definecolor{orange}{HTML}{CA7C1B}
+  \setlength{\parindent}{0pt}
+  \setlength{\parskip}{2pt}
+  \setlength{\emergencystretch}{1em}
+  \pagestyle{fancy}
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0.3pt}
+  \fancyfoot[L]{\sffamily\fontsize{8}{9}\selectfont NE 630\enspace /\enspace Nuclear Reactor Theory}
+  \fancyfoot[R]{\sffamily\fontsize{8}{9}\selectfont Lesson 20\enspace /\enspace \thepage}
+  \newcommand{\Lesson}[4]{%
+    {\sffamily\bfseries\fontsize{9}{11}\selectfont\color{ksupurple}NE 630\enspace |\enspace LESSON #1}\par
+    \vspace{1pt}
+    {\sffamily\bfseries\fontsize{19}{22}\selectfont #2\par}
+    \vspace{2pt}
+    {\fontsize{8.5}{10}\selectfont\textbf{Reading:} #3\par}
+    {\fontsize{10}{12}\selectfont\color{ksupurple}\textit{#4}\par}
+    \vspace{2pt}{\color{ksupurple}\hrule height 0.7pt}\vspace{5pt}}
+  \newcommand{\Sec}[2]{\par\addvspace{6pt}%
+    {\sffamily\bfseries\color{ksupurple}#1\enspace #2\par}\vspace{2pt}}
+  \newcommand{\colstart}{\par\noindent\begin{minipage}[t]{0.483\textwidth}\vspace{0pt}\RaggedRight}
+  \newcommand{\colnext}{\end{minipage}\hfill\begin{minipage}[t]{0.483\textwidth}\vspace{0pt}\RaggedRight}
+  \newcommand{\colend}{\end{minipage}\par}
+  \newtcolorbox{KeyBox}[1]{enhanced,boxrule=0.45pt,arc=1mm,
+    colback=ksupurple!2,colframe=ksupurple!65,
+    colbacktitle=ksupurple!9,coltitle=ksupurple,
+    fonttitle=\sffamily\bfseries\fontsize{9}{10}\selectfont,title={#1},
+    left=5pt,right=5pt,top=3pt,bottom=3pt,
+    toptitle=3pt,bottomtitle=3pt,before skip=5pt,after skip=5pt}
+  \newtcolorbox{Explore}[1]{enhanced,boxrule=0.45pt,arc=1mm,
+    colback=orange!4,colframe=orange!75,
+    colbacktitle=orange!12,coltitle=black,
+    fonttitle=\sffamily\bfseries\fontsize{9}{10}\selectfont,title={#1},
+    left=6pt,right=6pt,top=3pt,bottom=3pt,
+    toptitle=3pt,bottomtitle=3pt,before skip=7pt,after skip=0pt}
+  \newcommand{\figcap}[1]{{\fontsize{8}{9.5}\selectfont #1\par}}
+\fi
+
+% Extra, local helpers; the L18 interface above is otherwise unchanged.
+\usepackage{amsmath,booktabs,array,graphicx,xcolor,tikz,ragged2e}
+\usetikzlibrary{arrows.meta,calc,decorations.pathreplacing,positioning}
+\providecolor{ksupurple}{HTML}{512888}
+\providecolor{orange}{HTML}{CA7C1B}
+\newcommand{\NEContinue}[2]{%
+  {\sffamily\bfseries\fontsize{12}{14}\selectfont\color{ksupurple}Lesson #1\enspace |\enspace #2\par}
+  \vspace{4pt}{\color{ksupurple}\hrule height 0.6pt}\vspace{5pt}}
+\newcommand{\NEEx}[1]{\par\addvspace{4pt}\textbf{#1}\par}
+\newcommand{\NECheck}{\textbf{Definition check.}\ }
+\newcommand{\NEsmall}[1]{{\fontsize{8.3}{10}\selectfont #1\par}}
+\newcommand{\NEbody}{%
+  \fontsize{8.7}{10.25}\selectfont\RaggedRight
+  \setlength{\parskip}{2pt}
+  \setlength{\topsep}{2pt}\setlength{\partopsep}{0pt}
+  \setlength{\abovedisplayskip}{4pt}\setlength{\belowdisplayskip}{4pt}
+  \setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}}
+
+% Editable reconstruction of the startup sketch. The source's rho_ex axis
+% has been labelled as a budget to distinguish it from actual controlled rho.
+\newcommand{\NEStartupFigure}{%
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,line width=0.5pt,
+  every node/.style={font=\fontsize{7.2}{8.2}\selectfont},
+  dot/.style={circle,fill=ksupurple,inner sep=1.6pt}]
+  \draw[->] (0,0)--(7.9,0);
+  \draw[->] (0,0)--(0,3.32);
+  \node[rotate=90] at (-0.44,1.60) {excess reactivity};
+  \node[anchor=east] at (-0.05,0) {$0$};
+  \coordinate (A) at (0.65,2.95);
+  \coordinate (B) at (2.25,2.27);
+  \coordinate (C) at (4.35,1.52);
+  \coordinate (D) at (6.60,0.72);
+  \draw[dashed,ksupurple!70] (A)--(B)--(C)--(D);
+  \foreach \P in {A,B,C,D}{\node[dot] at (\P) {};}
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (2.47,2.27)--node[right=4pt,align=left]{shutdown margin\\$|\Delta\rho_{\rm sd}|$}(2.47,2.95);
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (4.58,1.52)--node[right=4pt,align=left]{temperature defect\\$|\Delta\rho_{\rm td}|$}(4.58,2.27);
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (6.82,0.72)--node[right=4pt,align=left]{power defect\\$|\Delta\rho_{\rm pd}|$}(6.82,1.52);
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (7.50,0.04)--node[right=4pt,align=left]{variable\\control}(7.50,0.72);
+  \foreach \xx in {0.65,2.25,4.35,6.60}{\draw (\xx,-.035)--(\xx,.035);}
+  \node[below=4pt,align=center] at (.65,0) {cold\\shutdown};
+  \node[below=4pt,align=center] at (2.25,0) {cold\\critical};
+  \node[below=4pt,align=center] at (4.35,0) {hot zero\\power};
+  \node[below=4pt,align=center] at (6.60,0) {hot full\\power};
+  \draw[->] (2.1,-.83)--node[below]{startup sequence}(6.8,-.83);
+\end{tikzpicture}}
+
+% Editable schematic of the L21 Doppler-broadening sketch, not nuclear data.
+% Separate vertical scales avoid conflating cross section and flux.
+\newcommand{\NEDopplerFigure}{%
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,line width=0.65pt,
+  every node/.style={font=\fontsize{8}{9}\selectfont}]
+  \draw[->] (0,2.25)--(0,4.18) node[above] {$\sigma_a(E)$};
+  \draw[->] (0,2.25)--(6.7,2.25) node[right] {$E$};
+  \draw[ksupurple,domain=.12:6.45,samples=140,smooth]
+    plot (\x,{2.42+1.42*exp(-((\x-3.2)/.30)^2)});
+  \draw[orange,dashed,domain=.12:6.45,samples=140,smooth]
+    plot (\x,{2.42+.73*exp(-((\x-3.2)/.63)^2)});
+  \draw[->] (0,0)--(0,1.70) node[above] {$\varphi_f(E)/\varphi_m(E)$};
+  \draw[->] (0,0)--(6.7,0) node[right] {$E$};
+  \draw[ksupurple,domain=.12:6.45,samples=140,smooth]
+    plot (\x,{1.36-1.04*exp(-((\x-3.2)/.38)^2)});
+  \draw[orange,dashed,domain=.12:6.45,samples=140,smooth]
+    plot (\x,{1.36-.77*exp(-((\x-3.2)/.79)^2)});
+  \draw[ksupurple] (.35,-.45)--(.95,-.45);
+  \node[anchor=west] at (1.0,-.45) {cooler fuel};
+  \draw[orange,dashed] (3.45,-.45)--(4.05,-.45);
+  \node[anchor=west] at (4.1,-.45) {hotter fuel};
+\end{tikzpicture}}
+
+% SOURCES: lecture_20.tex (all substantive frames; duplicate units frame merged)
+% and L20.pdf, handwritten pages 1--5 (page 5 viewed after 180-degree rotation).
+% Editorial distinctions are visible in the text: exact vs near-critical
+% derivatives; uncertainty normalization; the schematic budget; and
+% slide-specific software details.
+\hypersetup{pdftitle={NE 630 -- Lesson 20: Reactivity, units, coefficients, and control},pdfauthor={Jeremy Roberts}}
+\begin{document}
+\NEbody
+\Lesson{20}{Reactivity: units, coefficients, and control}
+ {FNRP \S\,9.1--9.4; connections to the four-factor model and control absorption.}
+ {How is reactivity balanced as a reactor moves from cold shutdown to full power?}
+\textbf{Objective:} Quantify reactivity and its changes with operating conditions.
+
+\colstart
+\Sec{1}{Measure departure from criticality}
+The multiplication factor measures gains relative to losses. For an infinite, nonleaking system,
+$$
+ k_\infty=\frac{\text{total neutron production rate}}
+ {\text{total neutron absorption rate}}.
+$$
+Reactivity measures departure from criticality:
+$$
+ \boxed{\rho=\frac{k-1}{k}=1-\frac{1}{k} \quad \longrightarrow \quad k=\frac{1}{1-\rho}.}
+$$
+Use $k_\infty$ for the nonleaking unit cell and $k_{\rm eff}$ for the whole-core example below. Subcritical, critical, and supercritical states have $\rho<0$, $\rho=0$, and $\rho>0$, respectively.
+
+\Sec{2}{Choose units; state the reference}
+Although $k$ and $\rho$ are dimensionless, reactivity is conventionally assigned in units of $\Delta k/k$. Other numerical representations are
+\begin{center}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Representation & Numerical value\\
+\midrule
+Fraction ($\Delta k/k$) & $\rho$\\
+Percent ($\%\,\Delta k/k$) & $100\rho$\\
+Percent-milli (pcm) & $10^5\rho$\\
+Dollars (\$) & $\rho/\beta$\\
+Cents & $100\rho/\beta$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Thus $1$ pcm is one part in $10^5$, and $1\%=1000$ pcm. Here $\beta$ is the \textbf{delayed neutron fraction}: the fraction of fission neutrons emitted later through precursor decay. Since $\beta$ depends on the fissioning species, dollars are system-specific.
+
+\begin{KeyBox}{Example: reactivity units}
+\centering
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+$k_\infty$ & $\rho$ & $\%\,\Delta k/k$ & pcm\\
+\midrule
+$1.01$ & $0.00990$ & $0.990$ & $990$\\
+$1.30$ & $0.2308$ & $23.08$ & $23080$\\
+\bottomrule
+\end{tabular}\par
+\RaggedRight
+For $\beta=0.007$, the first case gives $0.00990/0.007\simeq1.4\,\$$. Separately, $278$ pcm gives
+$$\rho_{\$}=\frac{0.00278}{0.007}=0.397\,\$\simeq40\text{ cents}.$$
+\end{KeyBox}
+
+\Sec{3}{Balance excess reactivity with control}
+\textbf{Excess reactivity}, $\rho_{\rm ex}$, is the positive reactivity available without removable control. A reserve is needed to offset changes in the system; with no reserve, fuel consumption would move an initially critical system toward subcriticality.
+
+\textbf{Adjustable control} changes absorption to maintain $\rho=0$. Such control must accommodate the short-term changes in fuel temperature and coolant density and the longer-term changes from xenon buildup and fuel depletion.
+
+A \textbf{reactivity worth} is a finite change,
+$$\Delta\rho=\rho_2-\rho_1=\frac1{k_1}-\frac1{k_2}.$$
+A \textbf{reactivity coefficient} is a local derivative, $\alpha_x=\partial\rho/\partial x$, with the other independent parameters fixed. Integral changes connect operating states; coefficients describe local sensitivity.
+
+\colnext
+
+
+\Sec{4}{Reactivity Balance During Startup}
+\begin{center}
+\resizebox{\linewidth}{!}{\NEStartupFigure}
+\end{center}
+\vspace{-5pt}
+\figcap{Cold shutdown is subcritical; the cold-critical, hot-zero-power, and full-power critical states have $\rho=0$.}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Condition & $T_M$ (K) & $T_F$ (K)\\
+\midrule
+Cold shutdown / cold critical & $300$ & $300$\\
+Hot zero power (HZP) & $600$ & $600$\\
+Hot full power & $600$ & $1200$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Shutdown margin, $\Delta\rho_{\rm sd}<0$:} the amount by which the reactor is subcritical with all control rods inserted. At the same cold conditions, the magnitude of the total rod worth is
+
+\vspace{5pt}
+
+$$W_{\rm rods}=\rho_{\rm ex}+|\Delta\rho_{\rm sd}|.$$
+\textbf{Temperature defect, $\Delta\rho_{\rm td}<0$:} the change from cold to HZP conditions, before compensating control adjustments. Fuel Doppler broadening and moderator density reduction contribute.
+
+\vspace{5pt}
+
+\textbf{Power defect, $\Delta\rho_{\rm pd}<0$:} the additional change from HZP to full power, again before compensating control. In the stated example, $T_F$ rises from $600$ to $1200$ K while $T_M$ remains $600$ K.
+
+\vspace{5pt}
+
+\textbf{Variable control:} rods or soluble boron balance the remaining excess reactivity to restore $\rho=0$.
+
+\Sec{5}{Modeling Control with the Four-Factor Formula}
+
+We can model each state in the startup process using the modified
+four-factor formula
+$$
+ k_\infty=
+ \underbrace{\frac{\nu\bar\Sigma^{F}_{fT}}
+ {\bar\Sigma^{F}_{aT}+\bar\Sigma^{\rm control}_{a T}
+ +\varsigma(V^M/V^F)\bar\Sigma^{M}_{a T}}}_{\eta_T f}
+ \,p\,\varepsilon \, ,
+$$
+where $F$ and $M$ denote fuel and moderator. Here, the control term is added directly to the fuel absorption cross section.  A similar term will be added in L22 to account for the buildup of fission products that are parasitic neutron absorbers.
+
+\vspace{5pt}
+
+Some control (e.g., boric acid) is dissolved in the moderator, in which case the control term would instead add to the moderator absorption cross section.  Typically, solutions are sufficiently dilute to ignore impacts on things like $\xi \bar\Sigma_{s}^M$ when evaluating the four factors.
+
+\colend
+
+
+
+
+\end{document}

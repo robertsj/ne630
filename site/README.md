@@ -1,7 +1,7 @@
 # NE 630 public course site
 
 This directory is the Sphinx source for the public NE 630 course-materials
-site. The initial page publishes student handouts for Lessons 1--10 and 12--20,
+site. The initial page publishes student handouts for Lessons 1--10 and 12--21,
 standalone notebooks for Lessons 8--12 and 15--19, and available lesson videos.
 
 ## Build
@@ -41,7 +41,7 @@ the handout Makefile and then `site/scripts/export_handouts.py`, which creates
 the public files beneath `site/_static/handouts/`.
 
 The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, and referenced
-supporting files are version-controlled. Lessons 15--20 are exported as PDFs
+supporting files are version-controlled. Lessons 15--21 are exported as PDFs
 only. Rendered handout PDFs and the entire `site/_static/handouts/` export tree
 are ignored build artifacts on the source branch; they are generated during
 `make html` or `make check` and published in the rendered site on `gh-pages`.

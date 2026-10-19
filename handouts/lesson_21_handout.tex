@@ -1,0 +1,376 @@
+% NE 630 -- Lesson 21 handout
+% Compile: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_21_handout.tex
+% This source also compiles with pdflatex when using the built-in fallback.
+%
+% Use the course's shared reading-guide interface when it is available.
+% The embedded fallback keeps this source portable outside the repository.
+% To force the fallback, replace the next line with \def\NEOriginalStyle{0}.
+\IfFileExists{ne630_ch04_reading_guide_common.tex}{\def\NEOriginalStyle{1}}{\def\NEOriginalStyle{0}}
+\ifnum\NEOriginalStyle=1\relax
+  \input{ne630_ch04_reading_guide_common.tex}
+\else
+  \documentclass[10pt,letterpaper]{article}
+  \usepackage[margin=0.50in,top=0.47in,bottom=0.48in,footskip=0.23in]{geometry}
+  \usepackage[T1]{fontenc}
+  \usepackage{newtxtext,newtxmath}
+  \usepackage{microtype}
+  \usepackage{amsmath,booktabs,array,graphicx,xcolor}
+  \usepackage{ragged2e}
+  \usepackage{tikz}
+  \usepackage[most]{tcolorbox}
+  \usepackage{fancyhdr}
+  \usepackage[hidelinks]{hyperref}
+  \definecolor{ksupurple}{HTML}{512888}
+  \definecolor{orange}{HTML}{CA7C1B}
+  \setlength{\parindent}{0pt}
+  \setlength{\parskip}{2pt}
+  \setlength{\emergencystretch}{1em}
+  \pagestyle{fancy}
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0.3pt}
+  \fancyfoot[L]{\sffamily\fontsize{8}{9}\selectfont NE 630\enspace /\enspace Nuclear Reactor Theory}
+  \fancyfoot[R]{\sffamily\fontsize{8}{9}\selectfont Lesson 21\enspace /\enspace \thepage}
+  \newcommand{\Lesson}[4]{%
+    {\sffamily\bfseries\fontsize{9}{11}\selectfont\color{ksupurple}NE 630\enspace |\enspace LESSON #1}\par
+    \vspace{1pt}
+    {\sffamily\bfseries\fontsize{19}{22}\selectfont #2\par}
+    \vspace{2pt}
+    {\fontsize{8.5}{10}\selectfont\textbf{Reading:} #3\par}
+    {\fontsize{10}{12}\selectfont\color{ksupurple}\textit{#4}\par}
+    \vspace{2pt}{\color{ksupurple}\hrule height 0.7pt}\vspace{5pt}}
+  \newcommand{\Sec}[2]{\par\addvspace{6pt}%
+    {\sffamily\bfseries\color{ksupurple}#1\enspace #2\par}\vspace{2pt}}
+  \newcommand{\colstart}{\par\noindent\begin{minipage}[t]{0.483\textwidth}\vspace{0pt}\RaggedRight}
+  \newcommand{\colnext}{\end{minipage}\hfill\begin{minipage}[t]{0.483\textwidth}\vspace{0pt}\RaggedRight}
+  \newcommand{\colend}{\end{minipage}\par}
+  \newtcolorbox{KeyBox}[1]{enhanced,boxrule=0.45pt,arc=1mm,
+    colback=ksupurple!2,colframe=ksupurple!65,
+    colbacktitle=ksupurple!9,coltitle=ksupurple,
+    fonttitle=\sffamily\bfseries\fontsize{9}{10}\selectfont,title={#1},
+    left=5pt,right=5pt,top=3pt,bottom=3pt,
+    toptitle=3pt,bottomtitle=3pt,before skip=5pt,after skip=5pt}
+  \newtcolorbox{Explore}[1]{enhanced,boxrule=0.45pt,arc=1mm,
+    colback=orange!4,colframe=orange!75,
+    colbacktitle=orange!12,coltitle=black,
+    fonttitle=\sffamily\bfseries\fontsize{9}{10}\selectfont,title={#1},
+    left=6pt,right=6pt,top=3pt,bottom=3pt,
+    toptitle=3pt,bottomtitle=3pt,before skip=7pt,after skip=0pt}
+  \newcommand{\figcap}[1]{{\fontsize{8}{9.5}\selectfont #1\par}}
+\fi
+
+% Extra, local helpers; the L18 interface above is otherwise unchanged.
+\usepackage{amsmath,booktabs,array,graphicx,xcolor,tikz,ragged2e}
+\usetikzlibrary{arrows.meta,calc,decorations.pathreplacing,positioning}
+\providecolor{ksupurple}{HTML}{512888}
+\providecolor{orange}{HTML}{CA7C1B}
+\newcommand{\NEContinue}[2]{%
+  {\sffamily\bfseries\fontsize{12}{14}\selectfont\color{ksupurple}Lesson #1\enspace |\enspace #2\par}
+  \vspace{4pt}{\color{ksupurple}\hrule height 0.6pt}\vspace{5pt}}
+\newcommand{\NEEx}[1]{\par\addvspace{4pt}\textbf{#1}\par}
+\newcommand{\NECheck}{\textbf{Definition check.}\ }
+\newcommand{\NEsmall}[1]{{\fontsize{8.3}{10}\selectfont #1\par}}
+\newcommand{\NEbody}{%
+  \fontsize{8.7}{10.25}\selectfont\RaggedRight
+  \setlength{\parskip}{2pt}
+  \setlength{\topsep}{2pt}\setlength{\partopsep}{0pt}
+  \setlength{\abovedisplayskip}{4pt}\setlength{\belowdisplayskip}{4pt}
+  \setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}}
+
+% Editable reconstruction of the startup sketch. The source's rho_ex axis
+% has been labelled as a budget to distinguish it from actual controlled rho.
+\newcommand{\NEStartupFigure}{%
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,line width=0.5pt,
+  every node/.style={font=\fontsize{7.2}{8.2}\selectfont},
+  dot/.style={circle,fill=ksupurple,inner sep=1.6pt}]
+  \draw[->] (0,0)--(7.9,0);
+  \draw[->] (0,0)--(0,3.32);
+  \node[rotate=90] at (-0.44,1.60) {reactivity budget};
+  \node[anchor=east] at (-0.05,0) {$0$};
+  \coordinate (A) at (0.65,2.95);
+  \coordinate (B) at (2.25,2.27);
+  \coordinate (C) at (4.35,1.52);
+  \coordinate (D) at (6.60,0.72);
+  \draw[dashed,ksupurple!70] (A)--(B)--(C)--(D);
+  \foreach \P in {A,B,C,D}{\node[dot] at (\P) {};}
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (2.47,2.27)--node[right=4pt,align=left]{shutdown margin\\$|\Delta\rho_{\rm sd}|$}(2.47,2.95);
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (4.58,1.52)--node[right=4pt,align=left]{temperature defect\\$|\Delta\rho_{\rm td}|$}(4.58,2.27);
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (6.82,0.72)--node[right=4pt,align=left]{power defect\\$|\Delta\rho_{\rm pd}|$}(6.82,1.52);
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (7.50,0.04)--node[right=4pt,align=left]{variable\\control}(7.50,0.72);
+  \foreach \xx in {0.65,2.25,4.35,6.60}{\draw (\xx,-.035)--(\xx,.035);}
+  \node[below=4pt,align=center] at (.65,0) {cold\\shutdown};
+  \node[below=4pt,align=center] at (2.25,0) {cold\\critical};
+  \node[below=4pt,align=center] at (4.35,0) {hot zero\\power};
+  \node[below=4pt,align=center] at (6.60,0) {hot full\\power};
+  \draw[->] (2.1,-.83)--node[below]{startup sequence}(6.8,-.83);
+\end{tikzpicture}}
+
+% Editable schematic of the L21 Doppler-broadening sketch, not nuclear data.
+% Separate vertical scales avoid conflating cross section and flux.
+\newcommand{\NEDopplerFigure}{%
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,line width=0.65pt,
+  every node/.style={font=\fontsize{8}{9}\selectfont}]
+  \draw[->] (0,2.25)--(0,4.18) node[above] {$\sigma_a(E)$};
+  \draw[->] (0,2.25)--(6.7,2.25) node[right] {$E$};
+  \draw[ksupurple,domain=.12:6.45,samples=140,smooth]
+    plot (\x,{2.42+1.42*exp(-((\x-3.2)/.30)^2)});
+  \draw[orange,dashed,domain=.12:6.45,samples=140,smooth]
+    plot (\x,{2.42+.73*exp(-((\x-3.2)/.63)^2)});
+  \draw[->] (0,0)--(0,1.70) node[above] {$\varphi_f(E)/\varphi_m(E)$};
+  \draw[->] (0,0)--(6.7,0) node[right] {$E$};
+  \draw[ksupurple,domain=.12:6.45,samples=140,smooth]
+    plot (\x,{1.36-1.04*exp(-((\x-3.2)/.38)^2)});
+  \draw[orange,dashed,domain=.12:6.45,samples=140,smooth]
+    plot (\x,{1.36-.77*exp(-((\x-3.2)/.79)^2)});
+  \draw[ksupurple] (.35,-.45)--(.95,-.45);
+  \node[anchor=west] at (1.0,-.45) {cooler fuel};
+  \draw[orange,dashed] (3.45,-.45)--(4.05,-.45);
+  \node[anchor=west] at (4.1,-.45) {hotter fuel};
+\end{tikzpicture}}
+
+% PRIMARY SOURCE: L21.pdf, handwritten pages 1--5, including all three
+% numbered examples, the product-rule derivation, FTC/MTC derivations,
+% the Doppler sketch, the Monte Carlo caution, and the fast-reactor pointer.
+% The source's near-critical -91 pcm/K result is retained, not replaced.
+% An explicitly labelled definition check supplies the exact-reactivity
+% finite-difference result. The inconsistent denominator in the handwritten
+% intermediate step is reordered to match its numerator and negative slope.
+% Some right-edge prose is physically cropped; uncertain words and the
+% incomplete MTC range are not guessed.
+\hypersetup{pdftitle={NE 630 -- Lesson 21: Reactivity coefficients},pdfauthor={Jeremy Roberts}}
+\begin{document}
+\NEbody
+\Lesson{21}{Reactivity coefficients}
+ {FNRP \S\,9.2--9.4; the handwritten derivations and examples for Lesson 21.}
+ {How does changing one system parameter change reactivity?}
+\textbf{Objective:} Quantify reactivity changes due to fuel temperature, moderator temperature, and other parameters, including coolant void fraction.
+
+\colstart
+\Sec{1}{From integral changes to local sensitivity}
+Last time: $\rho=(k-1)/k$, its numerical units, and the integral reactivity changes from shutdown to full power. Now hold the other independent parameters fixed and define
+$$
+ \boxed{\alpha_x=\left.\frac{\partial\rho}{\partial x}
+ \right|_{\rm all\ other\ parameters\ fixed}.}
+$$
+For $x=T_F$, this is the \textbf{fuel temperature coefficient}, $\alpha_F$ (FTC). For $x=T_M$, it is the \textbf{moderator temperature coefficient}, $\alpha_M$ (MTC). Temperature coefficients are commonly reported in pcm/K.  For boiling water reactors, the coolant void fraction (or steam quality) is another possible $x$.
+
+\vspace{10pt} 
+
+Starting directly from the definition of $\rho$,
+$$
+ \frac{\partial\rho}{\partial k}=\frac1{k^2},\qquad
+ \alpha_x=\frac1{k^2}\frac{\partial k}{\partial x}.
+$$
+
+Typically, coefficients are reported for near-critical states, or
+$$\alpha_x\simeq\frac1k\frac{\partial k}{\partial x}\qquad(k\simeq1).$$
+Away from $k=1$, the two normalizations differ.
+
+\Sec{2}{A Finite Difference Approximation}
+Suppose we modeled a PWR fuel pin at two different 
+moderator temperatures using OpenMC and found 
+the following multiplication factors:
+$$
+ \underbrace{k_{600}=1.28397}_{\rm nominal},\qquad
+ \underbrace{k_{610}=1.27228}_{\rm perturbed}.
+$$
+To estimate $\alpha_M$ at the nominal $T_M=600$ K, we can apply a {\bf finite-difference} approximation, or
+$$
+ \alpha_M \approx \left.\frac{\partial k}{\partial T_M}\right|_{600}
+ \simeq\frac{k_{610}-k_{600}}{610-600}
+ =-0.001169\ \mathrm{K}^{-1} ,
+$$
+or, in the more common units,
+$$
+ \boxed{\alpha_M\simeq\frac{-0.001169}{1.28397}
+ =-9.1046\times10^{-4}\ \mathrm{K}^{-1}
+ \simeq-91\ \mathrm{pcm/K}.}
+$$
+
+\vspace{10pt} 
+
+\begin{KeyBox}{Assumption check}
+Using $\rho=1-1/k$ at both temperatures instead gives
+$$
+ \frac{\rho_{610}-\rho_{600}}{10}
+ =\frac{k_{610}-k_{600}}{10k_{600}k_{610}}
+ =-71.6\ \mathrm{pcm/K}.
+$$
+Because $k\simeq1.28$, this differs materially from the near-critical result; the difference is not rounding!  Unless directed otherwise, the near-critical approximation should be used for reporting reactivity coefficients.
+\end{KeyBox}
+
+\colnext
+\Sec{3}{Expressing $\alpha_x$ with the Four Factors}
+Recall $k_\infty=\eta_Tfp\varepsilon$. The handwritten $\eta$ is written $\eta_T$ here, following the slide notation. The product rule gives
+\begin{align*}
+ \frac{\partial k_\infty}{\partial x}
+ &=fp\varepsilon\frac{\partial\eta_T}{\partial x}
+ +\eta_Tp\varepsilon\frac{\partial f}{\partial x}\\
+ &\quad+\eta_Tf\varepsilon\frac{\partial p}{\partial x}
+ +\eta_Tfp\frac{\partial\varepsilon}{\partial x}.
+\end{align*}
+Divide by $k_\infty=\eta_Tfp\varepsilon$:
+\begin{align*}
+ \frac1{k_\infty}\frac{\partial k_\infty}{\partial x}
+ &=\frac1{\eta_T}\frac{\partial\eta_T}{\partial x}
+ +\frac1f\frac{\partial f}{\partial x}\\
+ &\quad+\frac1p\frac{\partial p}{\partial x}
+ +\frac1\varepsilon\frac{\partial\varepsilon}{\partial x}.
+\end{align*}
+Thus, in the near-critical approximation used throughout the handwritten four-factor analysis,
+$$
+ \boxed{\alpha_x\simeq
+ \frac1{\eta_T}\frac{\partial\eta_T}{\partial x}
+ +\frac1f\frac{\partial f}{\partial x}
+ +\frac1p\frac{\partial p}{\partial x}
+ +\frac1\varepsilon\frac{\partial\varepsilon}{\partial x}.}
+$$
+Each term is the fractional sensitivity of one factor. The exact derivative of $\rho_\infty$ is $1/k_\infty$ times this sum.
+
+\Sec{4}{Recall the UO$_2$ resonance model}
+For a UO$_2$ fuel element,
+$$
+ p=\exp\!\left[-\frac{V_fN_{fe}I}{V_m\xi^m\bar\Sigma_s^m}\right].
+$$
+Here $V_f$ and $V_m$ are the fuel and moderator volumes, $N_{fe}$ is the fertile-nuclide number density in the fuel, and $\xi^m\bar\Sigma_s^m$ is the moderator slowing-down power. The effective heterogeneous resonance integral is $I$.
+
+\vspace{10pt} 
+
+With $\rho_f$ the fuel mass density and $D$ the fuel diameter, define
+\begin{align*}
+ I(300)\,[\mathrm b]&=4.45+26.6\sqrt{\frac4{\rho_fD}},\\
+ I(T_F)&=I(300)\big[1+\tilde\gamma
+ (\sqrt{T_F}-\sqrt{300})\big],\\
+ \tilde\gamma\,[\mathrm{K}^{-1/2}]&=0.0061+0.0047\frac4{\rho_fD}.
+\end{align*}
+Insert $\rho_f$ in g/cm$^3$, $D$ in cm, and temperatures in kelvin. The subscript on $\rho_f$ distinguishes mass density from reactivity.  These relations are equivalent to FNRP Eq.\ (4.40), Table 4.3, Eqs.\ (9.13)--(9.14), and Table 9.1.
+
+\vspace{10pt} 
+
+
+At fixed moderator conditions, the explicit $T_F$ dependence in this simplified model enters through $I(T_F)$ and hence $p$. Moderator temperature affects moderator density, so it changes both $p$ and $f$. The next page differentiates those pathways separately.
+
+\colend
+
+\newpage
+\NEContinue{21}{Fuel and moderator temperature feedback}
+\colstart
+\Sec{5}{Derive the fuel temperature coefficient}
+With the moderator and geometry fixed, write
+$$
+ C_F=\frac{V_fN_{fe}}{V_m\xi^m\bar\Sigma_s^m},\qquad
+ \ln p=-C_F I(T_F).
+$$
+Since $p$ is the only factor with explicit $T_F$ dependence in this model,
+\begin{align*}
+ \alpha_F&\simeq\frac1p\frac{\partial p}{\partial T_F}
+ =-C_F\frac{\partial I}{\partial T_F}\\
+ &=-\ln\!\left(\frac1p\right)\frac1I
+ \frac{\partial I}{\partial T_F}.
+\end{align*}
+The empirical relation gives
+$$
+ \frac{\partial I}{\partial T_F}
+ =I(300)\frac{\tilde\gamma}{2\sqrt{T_F}},\qquad
+ C_F I(300)=\ln\!\left[\frac1{p(300)}\right].
+$$
+Therefore
+$$
+ \boxed{\alpha_F\simeq-\ln\!\left[\frac1{p(300)}\right]
+ \frac{\tilde\gamma}{2\sqrt{T_F}}.}
+$$
+The negative sign follows from $0<p(300)<1$ and $\tilde\gamma>0$. Typical values for $\alpha_T$ are $\alpha_F\simeq-(2\text{--}3)$ pcm/K for PWRs and about $-10$ pcm/K for our TRIGA reactor.
+
+\vspace{10pt} 
+
+Why does $I$ depend on $T_F$? {\bf Doppler broadening}!
+
+
+% \begin{center}
+% \resizebox{0.90\linewidth}{!}{\NEDopplerFigure}
+% \end{center}
+% \vspace{-5pt}
+% \figcap{Reconstruction of the handwritten sketch: solid, cooler fuel; dashed, hotter fuel. Curves are schematic, with separate vertical scales; they are not evaluated cross-section data.}
+% The broadened resonance and the associated flux depression must be considered together. As emphasized in the supplied L18 handout, absorption depends on the integral of $\sigma_a(E)\varphi_f(E)$, not just the peak cross section. Absorption in less-shielded resonance wings increases the effective integral $I$ and lowers $p$.
+% % The prose to the right of the original L21 sketch is cut off. The complete
+% % mechanism sentence above is attributed to the supplied L18 handout rather
+% % than presented as a guessed transcription of that clipped annotation.
+
+\begin{KeyBox}{Example: Fuel Temperature Coefficient}
+For $p(300)=0.8$, compute $\alpha_F$ at $T_F=1200$ K for a UO$_2$ fuel
+element with a diameter of 1 cm and mass density of 10 g/cm$^3$.
+\begin{align*}
+ \tilde\gamma
+ &=0.0061+0.0047\frac4{(10)(1)}
+ =0.00798\ \mathrm{K}^{-1/2},\\
+ \alpha_F(1200)
+ &\simeq-\ln(1/0.8)\frac{0.00798}{2\sqrt{1200}}\\
+ &=-2.57\times10^{-5}\ \mathrm{K}^{-1}
+ =-2.57\ \mathrm{pcm/K}\approx\boxed{-2.6\ \mathrm{pcm/K}}.
+\end{align*}
+\end{KeyBox}
+
+
+
+\colnext
+\Sec{6}{Derive the moderator temperature coefficient}
+Recall
+$$
+ f=\frac1{1+\varsigma\displaystyle\frac{V_m}{V_f}
+ \displaystyle\frac{\bar\Sigma^M_{a,2}}{\bar\Sigma^F_{a,2}}}.
+$$
+In the density-only model, $T_M$ changes the moderator number densities: decreasing $\rho_m=\rho_{\mathrm{H_2O}}$ lowers both $\bar\Sigma^M_{a,2}$ and $\xi^m\bar\Sigma_s^m$.
+
+Define the volumetric thermal-expansion coefficient by
+$$
+ \beta_M=-\frac1{\rho_m}\frac{d\rho_m}{dT_M}.
+$$
+Careful: this $\beta_M$ is distinct from the delayed neutron fraction $\beta$.
+
+\vspace{6pt}
+
+\textbf{Thermal utilization.} Collect the fixed quantities into $C$ and write $f=[1+C\rho_m(T_M)]^{-1}$. Differentiating gives
+\begin{align*}
+ \frac1f\frac{df}{dT_M}
+ &=-\frac{C\rho_m}{1+C\rho_m}
+   \frac1{\rho_m}\frac{d\rho_m}{dT_M}\\
+ &=(1-f)\beta_M>0.
+\end{align*}
+
+\vspace{6pt}
+
+\textbf{Resonance escape.} Write $p=\exp[-A/\rho_m(T_M)]$, with $A$ fixed.  Then
+\begin{align*}
+ \frac1p\frac{dp}{dT_M}
+ &=\frac{A}{\rho_m}\frac1{\rho_m}\frac{d\rho_m}{dT_M}\\
+ &=-\beta_M\ln(1/p)<0.
+\end{align*}
+Combine these two contributions:
+$$
+ \boxed{\alpha_M\simeq-\beta_M\big[\ln(1/p)-(1-f)\big].}
+$$
+The \textbf{overall sign depends on their relative magnitudes}. In this model, negative moderator feedback requires $\ln(1/p)>(1-f)$.
+
+\vspace{6pt}
+
+\begin{KeyBox}{Example: Moderator Temperature Coefficient}
+For $p=0.6$, $f=0.95$, and $\beta_M=2.9\times10^{-4}$ K$^{-1}$,
+\begin{align*}
+ \alpha_M&\simeq-2.9\times10^{-4}
+ \big[\ln(1/0.6)-(1-0.95)\big]\\
+ &=-1.3364\times10^{-4}\ \mathrm{K}^{-1}\\
+ &=-13.36\ \mathrm{pcm/K}\approx\boxed{-13\ \mathrm{pcm/K}}.
+\end{align*}
+The resonance-escape penalty outweighs the utilization gain for these values.
+\end{KeyBox}
+
+ 
+ 
+\colend
+
+ 
+\end{document}

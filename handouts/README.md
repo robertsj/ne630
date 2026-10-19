@@ -1,7 +1,7 @@
 # NE 630 board-supported handout framework
 
-This package contains a reusable LaTeX class and two-page handouts for Lessons
-1--10 and 12--14.
+This package contains a reusable LaTeX class and printable handouts for Lessons
+1--10 and 12--23.
 The design separates three kinds of content:
 
 1. **Fixed inputs** -- reading, objectives, notation, constants, data tables, and problem statements that students should not have to copy from the board.
@@ -9,6 +9,18 @@ The design separates three kinds of content:
 3. **Study checks** -- compact prediction, interpretation, and synthesis prompts.
 
 The default layout uses US Letter paper, two columns, approximately half-inch margins, a modern print-friendly typeface, and a restrained K-State-purple accent. The boxes retain their hierarchy when printed in grayscale.
+
+## Shared backend pilot (Lesson 22 only)
+
+[`ne630handout.cls`](ne630handout.cls) is the new course-wide backend, with
+Wildcat/Beamer colors and the combined board-handout and reading-guide
+interfaces. **Only Lesson 22 is migrated.** The old class and chapter-style
+backend remain unchanged for all other lessons.
+
+See [the backend guide](handout_backend.md) for authoring, feature coverage,
+future migration notes, and the Lesson 22 slide-coverage map. Build L22 with
+`make L22`; run the isolated compatibility check with `make check-class`.
+L22 is now three Letter pages to retain the slide content at readable size.
 
 ## Typography
 
@@ -114,9 +126,31 @@ Useful components are:
 \SolutionCue{Solution-only note.}
 ```
 
-## Recommended authoring rule
+## Legacy board-handout authoring rule
 
 Start with the two-page limit. Put on the sheet only material that is expensive
 or unhelpful to reproduce by hand: fixed data, long expressions, diagrams, and
 problem statements. Leave reasoning transitions, intermediate algebra,
 interpretation, and selected final results for lecture and student annotation.
+
+## Lessons 22 and 23
+
+Build with `make L22 L23` (or `make lesson22 lesson23`).
+
+- `lesson_22_handout.tex` uses `ne630handout.cls`: three pages covering the
+  Lesson 22 slides, including reactivity/control bookkeeping, iodine--xenon
+  balances, equilibrium worth, transient code/results, and the samarium
+  reading extension. Purple/orange equation emphasis follows the slides.
+- `lesson_22_xenon_transient.py` is included directly as the printed listing;
+  it requires NumPy, SciPy, and Matplotlib when run, but not to build the PDF.
+  The equilibrium and transient examples intentionally retain distinct inputs.
+- L22's capture cross section is a native PGF plot generated from OpenMC
+  Xe135 MT=102 data; its text inherits the handout fonts. See the
+  [figure guide](figures/README.md) for regeneration and data provenance.
+  The transient figure remains a local copy of the slide figure.
+- `lesson_23_handout.tex` remains the original two-page reading guide using
+  `ne630_ch04_reading_guide_common.tex`. Its depletion figure is copied from
+  `../slides/figures/static/depletion_chain.pdf`.
+
+Original Downloads files are untouched. These are local drafts, not an
+addition to the published site.

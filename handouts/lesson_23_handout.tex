@@ -1,0 +1,337 @@
+% NE 630 -- Lesson 23 handout
+% Compile: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_23_handout.tex
+% This source also compiles with pdflatex when using the built-in fallback.
+%
+% Use the course's shared reading-guide style when available.
+% The embedded fallback keeps the draft portable outside the repository.
+% To force the fallback, replace the next line with \def\NEOriginalStyle{0}.
+\IfFileExists{ne630_ch04_reading_guide_common.tex}{\def\NEOriginalStyle{1}}{\def\NEOriginalStyle{0}}
+\ifnum\NEOriginalStyle=1\relax
+  \input{ne630_ch04_reading_guide_common.tex}
+\else
+  \documentclass[10pt,letterpaper]{article}
+  \usepackage[margin=0.50in,top=0.47in,bottom=0.48in,footskip=0.23in]{geometry}
+  \usepackage[T1]{fontenc}
+  \usepackage{newtxtext,newtxmath}
+  \usepackage{microtype}
+  \usepackage{amsmath,booktabs,array,graphicx,xcolor}
+  \usepackage{ragged2e}
+  \usepackage{tikz}
+  \usepackage[most]{tcolorbox}
+  \usepackage{fancyhdr}
+  \usepackage[hidelinks]{hyperref}
+  \definecolor{ksupurple}{HTML}{512888}
+  \definecolor{orange}{HTML}{CA7C1B}
+  \setlength{\parindent}{0pt}
+  \setlength{\parskip}{2pt}
+  \setlength{\emergencystretch}{1em}
+  \pagestyle{fancy}
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0.3pt}
+  \fancyfoot[L]{\sffamily\fontsize{8}{9}\selectfont NE 630\enspace /\enspace Nuclear Reactor Theory}
+  \fancyfoot[R]{\sffamily\fontsize{8}{9}\selectfont Lesson 23\enspace /\enspace \thepage}
+  \newcommand{\Lesson}[4]{%
+    {\sffamily\bfseries\fontsize{9}{11}\selectfont\color{ksupurple}NE 630\enspace |\enspace LESSON #1}\par
+    \vspace{1pt}
+    {\sffamily\bfseries\fontsize{19}{22}\selectfont #2\par}
+    \vspace{2pt}
+    {\fontsize{8.5}{10}\selectfont\textbf{Reading:} #3\par}
+    {\fontsize{10}{12}\selectfont\color{ksupurple}\textit{#4}\par}
+    \vspace{2pt}{\color{ksupurple}\hrule height 0.7pt}\vspace{5pt}}
+  \newcommand{\Sec}[2]{\par\addvspace{6pt}%
+    {\sffamily\bfseries\color{ksupurple}#1\enspace #2\par}\vspace{2pt}}
+  \newcommand{\colstart}{\par\noindent\begin{minipage}[t]{0.483\textwidth}\vspace{0pt}\RaggedRight}
+  \newcommand{\colnext}{\end{minipage}\hfill\begin{minipage}[t]{0.483\textwidth}\vspace{0pt}\RaggedRight}
+  \newcommand{\colend}{\end{minipage}\par}
+  \newtcolorbox{KeyBox}[1]{enhanced,boxrule=0.45pt,arc=1mm,
+    colback=ksupurple!2,colframe=ksupurple!65,
+    colbacktitle=ksupurple!9,coltitle=ksupurple,
+    fonttitle=\sffamily\bfseries\fontsize{9}{10}\selectfont,title={#1},
+    left=5pt,right=5pt,top=3pt,bottom=3pt,
+    toptitle=3pt,bottomtitle=3pt,before skip=5pt,after skip=5pt}
+  \newtcolorbox{Explore}[1]{enhanced,boxrule=0.45pt,arc=1mm,
+    colback=orange!4,colframe=orange!75,
+    colbacktitle=orange!12,coltitle=black,
+    fonttitle=\sffamily\bfseries\fontsize{9}{10}\selectfont,title={#1},
+    left=6pt,right=6pt,top=3pt,bottom=3pt,
+    toptitle=3pt,bottomtitle=3pt,before skip=7pt,after skip=0pt}
+  \newcommand{\figcap}[1]{{\fontsize{8}{9.5}\selectfont #1\par}}
+\fi
+
+% Local layout helpers; shared definitions are unchanged for other lessons.
+\usepackage{amsmath,booktabs,array,graphicx,xcolor,tikz,ragged2e}
+\usetikzlibrary{arrows.meta,calc,decorations.pathreplacing,positioning}
+\providecolor{ksupurple}{HTML}{512888}
+\providecolor{orange}{HTML}{CA7C1B}
+% These synthesis prompts are not OpenMC-specific.
+\renewtcolorbox{Explore}[1]{enhanced,boxrule=.5pt,arc=1pt,
+ colback=orange!5,colframe=orange!65,left=6pt,right=6pt,top=4pt,bottom=4pt,
+ before skip=6pt,after skip=3pt,before upper=\RaggedRight,
+ title={#1},fonttitle=\sffamily\bfseries\fontsize{9}{10}\selectfont,
+ coltitle=ksupurple,colbacktitle=orange!10,titlerule=0pt,
+ toptitle=2pt,bottomtitle=2pt}
+\newcommand{\NEContinue}[2]{%
+  {\sffamily\bfseries\fontsize{12}{14}\selectfont\color{ksupurple}Lesson #1\enspace |\enspace #2\par}
+  \vspace{4pt}{\color{ksupurple}\hrule height 0.6pt}\vspace{5pt}}
+\newcommand{\NEEx}[1]{\par\addvspace{4pt}\textbf{#1}\par}
+\newcommand{\NECheck}{\textbf{Definition check.}\ }
+\newcommand{\NEsmall}[1]{{\fontsize{8.3}{10}\selectfont\RaggedRight #1\par}}
+\newcommand{\NEbody}{%
+  \fontsize{9}{10.7}\selectfont\RaggedRight
+  \setlength{\parskip}{2pt}
+  \setlength{\topsep}{2pt}\setlength{\partopsep}{0pt}
+  \setlength{\abovedisplayskip}{4pt}\setlength{\belowdisplayskip}{4pt}
+  \setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}}
+
+
+% SOURCE: lecture_23(1).tex, retaining all substantive frames and both examples.
+% Depletion-chain artwork is copied from slides/figures/static/depletion_chain.pdf.
+% Local clarification of isotope subscripts and a table header is visible.
+% No fuel density or enrichment convention is silently supplied.
+\hypersetup{pdftitle={NE 630 -- Lesson 23: Reactivity impacts of fuel depletion},pdfauthor={Jeremy Roberts}}
+\begin{document}
+\NEbody
+\Lesson{23}{Reactivity impacts of fuel depletion}
+ {FNRP \S\,10.4--10.5; Eqs.\ (10.27)--(10.39).}
+ {How do nuclide inventories and core reactivity evolve with time, fluence, and burnup?}
+\textbf{Objective:} Quantify the evolution of nuclides and core reactivity with burnup.
+
+\colstart
+\Sec{1}{Review: reactivity in time}
+During operation, ${}^{235}$U is consumed and parasitic fission products are born. The changing excess reactivity must be balanced by control.
+
+As in Lesson 22, write the absorption denominator as
+\begin{align*}
+ \mathcal A(t)&=\bar\Sigma_{aT}^{F}(t)
+                  +\bar\Sigma_{aT}^{\mathrm{FP}}(t)\\
+ &\quad+\varsigma\frac{V_M}{V_F}
+    \left[\bar\Sigma_{aT}^{M}
+          +\bar\Sigma_{aT}^{\mathrm{control}}(t)\right].
+\end{align*}
+Then the time-varying multiplication factor is
+$$
+ \boxed{k(t)=
+ \frac{\nu\bar\Sigma_{fT}^{F}(t)\,p\,\varepsilon P_{\mathrm{NL}}}
+      {\mathcal A(t)}.}
+$$
+\NEsmall{FNRP Eq.\ (10.4*), as used in the slides. $P_{\mathrm{NL}}$ is the nonleakage probability.}
+The adjustable control term is represented in the moderator volume. Rod position or soluble-poison concentration is changed to keep $k(t)=1$.
+
+\Sec{2}{A representative depletion chain}
+In principle, all nuclides connected through capture or decay should be modeled simultaneously. Each arrow \textbf{into} a nuclide represents production; each arrow \textbf{out} represents destruction.
+
+The representative LWR chain discussed in the slides still tracks \textbf{18 nuclides} for ${}^{235}$U-fueled systems. In addition, each fissile nuclide has its own fission-product distribution, so the full isotopic inventory remains complex.
+
+\IfFileExists{./figures/depletion_chain.pdf}{%
+ \begin{center}
+ \includegraphics[width=\linewidth]{./figures/depletion_chain.pdf}
+ \end{center}
+ \figcap{Representative chain referenced in the slides, adapted from the IAEA WIMS actinide chain.}
+}{%
+ \begin{KeyBox}{Referenced chain figure}
+ The original \texttt{depletion\_chain.pdf} is not embedded in the supplied slide TeX and was not attached. The source describes an adaptation of the
+ \href{https://www-nds.iaea.org/wimsd/achain.htm}{IAEA WIMS actinide chain}, excluding $(n,2n)$ reactions and noting that ${}^{242}$Am requires special treatment.
+ \end{KeyBox}
+}
+\NEsmall{The three-nuclide model below is the separate, more drastic approximation developed in FNRP.}
+
+\Sec{3}{Make the four simplifying assumptions}
+\textbf{1.} Track only ${}^{235}$U, ${}^{238}$U, and ${}^{239}$Pu.
+
+\textbf{2.} Ignore radioactive decay of these nuclides.
+
+\textbf{3.} Treat ${}^{239}$Pu as produced \emph{directly and immediately} by ${}^{238}$U$(n,\gamma)$.
+
+\textbf{4.} Treat the ${}^{238}$U inventory as constant: its amount is so large that depletion losses are neglected.
+
+\colnext
+\Sec{4}{Solve the simplified depletion model}
+For constant total flux $\phi$ and constant, spectrum-averaged cross sections, the ${}^{235}$U balance is
+\begin{align*}
+ \frac{dN^{\mathrm{U}235}}{dt}
+ &=-N^{\mathrm{U}235}(t)\bar\sigma_a^{\mathrm{U}235}\phi,\\
+ N^{\mathrm{U}235}(t)
+ &=N^{\mathrm{U}235}(0)
+ e^{-\bar\sigma_a^{\mathrm{U}235}\phi t}.
+\end{align*}
+\NEsmall{FNRP Eqs.\ (10.27)$\rightarrow$(10.31).}
+The ${}^{238}$U approximation is
+\begin{align*}
+ \frac{dN^{\mathrm{U}238}}{dt}
+ &=-N^{\mathrm{U}238}(t)\bar\sigma_a^{\mathrm{U}238}\phi
+ \simeq0,\\
+ N^{\mathrm{U}238}(t)
+ &=N^{\mathrm{U}238}(0).
+\end{align*}
+\NEsmall{FNRP Eqs.\ (10.27)$\rightarrow$(10.34).}
+Production of ${}^{239}$Pu by capture in ${}^{238}$U competes with absorption in ${}^{239}$Pu:
+\begin{align*}
+ \frac{dN^{\mathrm{Pu}239}}{dt}
+ &=N^{\mathrm{U}238}(0)\bar\sigma_\gamma^{\mathrm{U}238}\phi\\
+ &\quad-N^{\mathrm{Pu}239}(t)\bar\sigma_a^{\mathrm{Pu}239}\phi.
+\end{align*}
+The closed-form result in the slide is
+$$
+ \boxed{\begin{aligned}
+ N^{\mathrm{Pu}239}(t)
+ &=\frac{\bar\sigma_\gamma^{\mathrm{U}238}}
+        {\bar\sigma_a^{\mathrm{Pu}239}}
+     N^{\mathrm{U}238}(0)\\[-1pt]
+ &\quad\times
+   \left[1-e^{-\bar\sigma_a^{\mathrm{Pu}239}\phi t}\right].
+ \end{aligned}}
+$$
+\NEsmall{FNRP Eqs.\ (10.30)$\rightarrow$(10.37). The displayed Pu solution corresponds to an initially zero ${}^{239}$Pu inventory.}
+
+\Sec{5}{Time, fluence, and burnup}
+The \textbf{fluence} is the time-integrated flux:
+$$
+ \boxed{\Phi(t)=\int_0^t\phi(t')\,dt',\qquad
+        [\Phi]=\mathrm{cm}^{-2}.}
+$$
+For the constant-flux example, $\Phi(t)=\phi t$.
+
+\textbf{Burnup} is the energy produced per \emph{initial unit mass of actinides}. The slide lists
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Unit & Interpretation\\
+\midrule
+MWd/kg & Megawatt-days per kilogram\\
+GWd/MTU & Gigawatt-days per metric ton of uranium\\
+J/kg & Joules per kilogram\\
+\bottomrule
+\end{tabular}
+\end{center}
+MWd/kg and GWd/MTU have the same numerical value when the initial mass basis is the same.
+
+The slides also mention \textbf{percent ${}^{235}$U} as the inventory-based measure used at the local TRIGA, while noting that this is not burnup \emph{per se}.
+\colend
+
+\newpage
+\NEContinue{23}{Energy production, reactivity, and the two-part example}
+\colstart
+\Sec{6}{Compute burnup with the simplified model}
+The fission-rate density is $R_f(t)=\Sigma_f(t)\phi$ in fissions/(cm$^3$s). With the usual $200$ MeV per fission, the slides use
+$$
+ \kappa\simeq3.2\times10^{-11}\ \mathrm{J/fission}.
+$$
+Expand the time-dependent fission cross section as
+\begin{align*}
+ \Sigma_f(t)
+ &=\bar\sigma_f^{\mathrm{U}235}N^{\mathrm{U}235}(t)\\
+ &\quad+\bar\sigma_f^{\mathrm{U}238}N^{\mathrm{U}238}(t)
+       +\bar\sigma_f^{\mathrm{Pu}239}N^{\mathrm{Pu}239}(t).
+\end{align*}
+For constant flux, the accumulated energy per unit volume is
+$$
+ \boxed{q'''(t)=\int_0^t\kappa\phi\,\Sigma_f(t')\,dt'.}
+$$
+Here $q'''(t)$ denotes \textbf{accumulated energy per volume}, as in the slides, not instantaneous power density.
+
+For a chosen unit volume of UO$_2$, the slide estimates the initial actinide mass using
+$$
+ m\simeq\rho_{\mathrm{UO_2}}\frac{238}{270},
+ \qquad \boxed{B(t)=\frac{q'''(t)}{m}.}
+$$
+The enrichment should generally be considered in the mass conversion. Use consistent mass units before reporting $B$; for example, J/cm$^3$ divided by g/cm$^3$ initially gives J/g.
+
+\NEsmall{\textbf{Isotope-label clarification.} In the slide's energy integral, the ${}^{238}$U term is paired with $N^{\mathrm{U}235}$ and the Pu term with $N^{\mathrm{U}239}$. Above, each fission cross section is paired with its matching nuclide density, consistent with the stated three-nuclide model.}
+
+\Sec{7}{Connect the depleted inventory to reactivity}
+For the explicit fuel-depletion expression, collect the thermal absorption terms into
+\begin{align*}
+ \mathcal A_T(t)
+ &=\bar\sigma_{aT}^{\mathrm{U}235}N^{\mathrm{U}235}(t)
+  +\bar\sigma_{aT}^{\mathrm{Pu}239}N^{\mathrm{Pu}239}(t)\\
+ &\quad+\Sigma_{aT}^{\mathrm{U}238}
+       +\varsigma\frac{V_m}{V_f}\Sigma_{aT}^{m}.
+\end{align*}
+FNRP Eq.\ (10.39) then becomes
+$$
+ \boxed{\begin{aligned}
+ k(t)&=\frac{\varepsilon pP_{\mathrm{NL}}}{\mathcal A_T(t)}
+ \Big[\nu\bar\sigma_{fT}^{\mathrm{U}235}N^{\mathrm{U}235}(t)\\
+ &\hspace{39pt}
+ +\nu\bar\sigma_{fT}^{\mathrm{Pu}239}N^{\mathrm{Pu}239}(t)\Big],
+ \end{aligned}}
+$$
+with the appropriate $\nu$ for each fissile nuclide, and
+$$
+ \rho(t)=1-\frac1{k(t)}.
+$$
+\begin{KeyBox}{The crucial distinction: one-group vs.\ thermal data}
+\textbf{Depletion:} use the total flux over the entire energy range and the corresponding \emph{one-group} cross sections.
+
+\textbf{Four-factor reactivity:} use the appropriate \emph{thermal-group} cross sections. The $T$ subscripts are retained explicitly in the slides and here.
+\end{KeyBox}
+
+\colnext
+\Sec{8}{Example, part 1: evolve the nuclides}
+Consider \textbf{4\% enriched UO$_2$} with the following spectrum-averaged, one-group cross sections:
+\begin{center}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Nuclide & $\bar\sigma_a$ (b) & $\bar\sigma_f$ (b)\\
+\midrule
+${}^{235}$U  & $57.20$  & $46.89$\\
+${}^{238}$U  & $1.02$   & $0.11$\\
+${}^{239}$Pu & $195.10$ & $124.41$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The total flux is
+$$
+ \phi=2\times10^{14}\ \mathrm{cm}^{-2}\mathrm{s}^{-1}.
+$$
+\textbf{(a)} Determine the ${}^{235}$U and ${}^{239}$Pu number densities after each of five years of operation.
+
+\textbf{(b)} Determine the fraction of all power generated by ${}^{239}$Pu after one year of operation.
+\par\vspace{13pt}
+
+\Sec{9}{Example, part 2: evaluate reactivity and burnup}
+Use the inventory from part 1, but use the following \textbf{thermal-group} data in the four-factor expression:
+\begin{center}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Nuclide & $\bar\sigma_{aT}$ (b) & $\bar\sigma_{fT}$ (b) & $\bar\nu_T$\\
+\midrule
+${}^{235}$U  & $297.40$  & $253.09$ & $2.43$\\
+${}^{238}$U  & $1.32$    & $0.00$   & $0.00$\\
+${}^{239}$Pu & $1146.51$ & $732.22$ & $2.90$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\NEsmall{\textbf{Header clarification.} The slide labels both cross-section columns $\bar\sigma_{aT}$. The second is shown as $\bar\sigma_{fT}$ here, consistent with its role in Eq.\ (10.39). All numerical entries are unchanged.}
+
+The other model parameters are
+\begin{align*}
+ \varsigma&=1.1,& V_m/V_f&=1,\\
+ p&=0.6,&\varepsilon&=1.3,\\
+ P_{\mathrm{NL}}&=0.95,&
+ \Sigma_{aT}^{m}&=0.007\ \mathrm{cm}^{-1}.
+\end{align*}
+\textbf{(a)} Compute the initial reactivity.
+
+\textbf{(b)} Compute the reactivity, fluence, and burnup after each of five years of operation.
+
+\textbf{Ponderable:} How does the fission rate change in time?
+\par\vspace{13pt}
+
+\begin{KeyBox}{Inputs to specify before numerical evaluation}
+The slides do not give a UO$_2$ mass density or specify whether the 4\% enrichment is by mass or by atoms. State those choices before evaluating the initial number densities, absolute reaction rates, reactivity, and burnup. No density or enrichment convention has been inserted here.
+\end{KeyBox}
+\colend
+
+\begin{Explore}{Keep the calculation sequence explicit}
+Initial composition $\longrightarrow$ one-group depletion $\longrightarrow$
+nuclide inventories. Use those inventories with \emph{one-group} fission data
+to integrate energy and compute burnup, and with \emph{thermal-group} data to
+evaluate the four-factor reactivity model. The assigned constant flux does
+not impose a constant fission rate or power.
+\end{Explore}
+\end{document}

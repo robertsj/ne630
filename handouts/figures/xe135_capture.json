@@ -1,0 +1,23 @@
+{
+  "nuclide": "Xe135",
+  "reaction": "(n,gamma)",
+  "mt": 102,
+  "temperature_key": "294K",
+  "library_label": null,
+  "energy_units": "eV",
+  "cross_section_units": "barn",
+  "energy_range_eV": [
+    9.999999999999999e-06,
+    20000000.0
+  ],
+  "native_grid_points": 2665,
+  "plot_points": 4264,
+  "annotation_energy_eV": 0.0253,
+  "annotation_cross_section_b": 2664214.0,
+  "hdf5": "/home/robertsj/opt/openmc/endfb-viii.0-hdf5/neutron/Xe135.h5",
+  "hdf5_sha256": "8b8112b4483c6dcdcba143c8c277ee28f6955a4c59b994e0095357b5d41897b1",
+  "cross_sections_xml": "/home/robertsj/opt/openmc/endfb-viii.0-hdf5/cross_sections.xml",
+  "cross_sections_xml_sha256": "ba7f6d5a371b5a8de8157356f8ef5d1c17cb0ed60accccfbc3075f46ae13f489",
+  "openmc_version": "0.16.0",
+  "generator_sha256": "689d57c0c4b7e340e9be3a26696de422caa630098374b459e0b6ca5cfaaa72e4"
+}

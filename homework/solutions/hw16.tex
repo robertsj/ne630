@@ -1,0 +1,79 @@
+% Adapted from Problems 2 and 3 of
+% ne630_problems/lesson_16/statement.tex at commit e1fba66.
+% Corrected the legacy coolant term in the symbolic k-infinity denominator,
+% the mass-fraction denominator, and minor prose/typesetting errors.
+
+\noindent{\bf Problem 1 [FNRP 4.3].}
+
+A sodium-cooled fast reactor contains 15 vol\% PuO$_2$ and 85 vol\%
+depleted UO$_2$ within its fuel. The core is 30 vol\% fuel, 50 vol\% sodium,
+and 20 vol\% iron. Using the stated fast-spectrum data, determine
+$k_\infty$ and the fuel mass fraction.
+
+\begin{adaptedsolution}
+Neglect oxygen reactions as directed and use one heavy-metal atom per oxide
+molecule. The fuel-averaged production and absorption cross sections are
+\begin{align*}
+\nu\bar\Sigma_f^f
+&=0.15\frac{(11)N_A}{239+32}(2.98)(1.95\times10^{-24})
+ +0.85\frac{(11)N_A}{238+32}(2.47)(0.05\times10^{-24})\\
+&=0.02388~\mathrm{cm^{-1}},\\
+\bar\Sigma_a^f
+&=0.15\frac{(11)N_A}{239+32}(2.40\times10^{-24})
+ +0.85\frac{(11)N_A}{238+32}(0.404\times10^{-24})\\
+&=0.01722~\mathrm{cm^{-1}}.
+\end{align*}
+For sodium and iron,
+\begin{align*}
+\bar\Sigma_a^c
+&=\frac{(0.97)N_A}{22.99}(0.0018\times10^{-24})
+=4.573\times10^{-5}~\mathrm{cm^{-1}},\\
+\bar\Sigma_a^{st}
+&=\frac{(7.87)N_A}{55.85}(0.0087\times10^{-24})
+=7.383\times10^{-4}~\mathrm{cm^{-1}}.
+\end{align*}
+Thus
+\[
+k_\infty=
+\frac{0.30\nu\bar\Sigma_f^f}
+{0.30\bar\Sigma_a^f+0.50\bar\Sigma_a^c+0.20\bar\Sigma_a^{st}}
+=\boxed{1.342}.
+\]
+The density of the fuel mixture remains $11.0~\mathrm{g\,cm^{-3}}$ because
+both oxide components have that density. Therefore
+\[
+w_f=\frac{0.30(11.0)}{0.30(11.0)+0.50(0.97)+0.20(7.87)}
+=\boxed{0.616\ \text{(61.6\%)}}.
+\]
+\end{adaptedsolution}
+
+\newpage
+\noindent{\bf Problem 2 [FNRP 4.4].}
+
+For the reactor in Problem 1, take $P_{\mathrm{NL}}=0.90$ and find the
+PuO$_2$ fraction within the fuel that gives $k_{\mathrm{eff}}=1$.
+
+\begin{adaptedsolution}
+Let $x=V_{\mathrm{PuO_2}}/V_f$; then $1-x$ is the UO$_2$ fraction. From the
+component calculations in Problem 1,
+\[
+\nu\Sigma_f^f(x)=0.14204x+0.00303(1-x),
+\qquad
+\Sigma_a^f(x)=0.05866x+0.00991(1-x).
+\]
+Keeping the core region fractions fixed gives
+\[
+1=k_{\mathrm{eff}}
+=0.90\frac{0.30[0.14204x+0.00303(1-x)]}
+{0.30[0.05866x+0.00991(1-x)]
+ +0.50(4.573\times10^{-5})+0.20(7.383\times10^{-4})}.
+\]
+Collecting terms,
+\[
+1=\frac{0.03753x+0.00082}{0.01463x+0.00314},
+\qquad
+x=\boxed{0.101\ \text{(about 10.1 vol\% PuO$_2$ in the fuel)}}.
+\]
+Substitution returns $k_{\mathrm{eff}}=1.00$ to the precision of the input
+data.
+\end{adaptedsolution}

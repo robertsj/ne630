@@ -1,0 +1,151 @@
+<h1 id="homework-21-lesson-21">Homework 21: Lesson 21</h1>
+<!-- Draft adapted from ne630_problems/lesson_21/statement.tex; problem statements only. -->
+<h2 id="problem-1">Problem 1</h2>
+<p>Consider the hot, full-power conditions from Homework 20, Problem 2(e). In a PWR, excess reactivity is usually balanced with boric acid dissolved in the coolant rather than by partially inserting control rods, which would produce asymmetric axial power distributions. Set <img
+class="equation_image"
+title="x=0"
+src="/equation_images/x%253D0"
+alt="LaTeX: x=0"
+data-equation-content="x=0"
+/> and assume</p>
+<p><img
+class="equation_image"
+title="\Sigma^{\mathrm{M}}_{a,2}
+=N_{\mathrm{H}}\sigma^{\mathrm{H}}_a
++N_{\mathrm{O}}\sigma^{\mathrm{O}}_a
++N_{\mathrm{B}}\sigma^{\mathrm{B}}_a.
+"
+src="/equation_images/%255CSigma%255E%257B%255Cmathrm%257BM%257D%257D_%257Ba%252C2%257D%250A%253DN_%257B%255Cmathrm%257BH%257D%257D%255Csigma%255E%257B%255Cmathrm%257BH%257D%257D_a%250A%252BN_%257B%255Cmathrm%257BO%257D%257D%255Csigma%255E%257B%255Cmathrm%257BO%257D%257D_a%250A%252BN_%257B%255Cmathrm%257BB%257D%257D%255Csigma%255E%257B%255Cmathrm%257BB%257D%257D_a.%250A"
+alt="LaTeX: \Sigma^{\mathrm{M}}_{a,2}
+=N_{\mathrm{H}}\sigma^{\mathrm{H}}_a
++N_{\mathrm{O}}\sigma^{\mathrm{O}}_a
++N_{\mathrm{B}}\sigma^{\mathrm{B}}_a.
+"
+data-equation-content="\Sigma^{\mathrm{M}}_{a,2}
+=N_{\mathrm{H}}\sigma^{\mathrm{H}}_a
++N_{\mathrm{O}}\sigma^{\mathrm{O}}_a
++N_{\mathrm{B}}\sigma^{\mathrm{B}}_a.
+"
+/></p>
+<ul>
+<li><strong>(a)</strong> What concentration of <img
+class="equation_image"
+title="{}^{10}\mathrm{B}"
+src="/equation_images/%257B%257D%255E%257B10%257D%255Cmathrm%257BB%257D"
+alt="LaTeX: {}^{10}\mathrm{B}"
+data-equation-content="{}^{10}\mathrm{B}"
+/> in the water, in parts per million (ppm), is needed to achieve criticality? Use the cross sections in FNRP Table 3.2.</li>
+<li><strong>(b)</strong> Compute the moderator temperature coefficient, <img
+class="equation_image"
+title="\alpha_m"
+src="/equation_images/%255Calpha_m"
+alt="LaTeX: \alpha_m"
+data-equation-content="\alpha_m"
+/>, with and without this boron concentration. Assume that water has a coefficient of thermal expansion <img
+class="equation_image"
+title="\beta_m=0.004~\mathrm{K^{-1}}"
+src="/equation_images/%255Cbeta_m%253D0.004~%255Cmathrm%257BK%255E%257B-1%257D%257D"
+alt="LaTeX: \beta_m=0.004~\mathrm{K^{-1}}"
+data-equation-content="\beta_m=0.004~\mathrm{K^{-1}}"
+/>. How does adding boric acid affect the moderator temperature coefficient?</li>
+</ul>
+<h2 id="problem-2-adapted-from-fnrp-9.1">Problem 2 [Adapted from FNRP 9.1]</h2>
+<p>FNRP Table 4.2 gives the four factors for a pressurized water reactor at <img
+class="equation_image"
+title="300~\mathrm{K}"
+src="/equation_images/300~%255Cmathrm%257BK%257D"
+alt="LaTeX: 300~\mathrm{K}"
+data-equation-content="300~\mathrm{K}"
+/>. Assume the reactor is fueled with <img
+class="equation_image"
+title="\mathrm{UO}_2"
+src="/equation_images/%255Cmathrm%257BUO%257D_2"
+alt="LaTeX: \mathrm{UO}_2"
+data-equation-content="\mathrm{UO}_2"
+/> pins having diameter <img
+class="equation_image"
+title="1.1~\mathrm{cm}"
+src="/equation_images/1.1~%255Cmathrm%257Bcm%257D"
+alt="LaTeX: 1.1~\mathrm{cm}"
+data-equation-content="1.1~\mathrm{cm}"
+/> and density <img
+class="equation_image"
+title="11.0~\mathrm{g\,cm^{-3}}"
+src="/equation_images/11.0~%255Cmathrm%257Bg%255C%252Ccm%255E%257B-3%257D%257D"
+alt="LaTeX: 11.0~\mathrm{g\,cm^{-3}}"
+data-equation-content="11.0~\mathrm{g\,cm^{-3}}"
+/>. Determine the fuel temperature coefficient and plot its value from 300 to <img
+class="equation_image"
+title="1000~\mathrm{K}"
+src="/equation_images/1000~%255Cmathrm%257BK%257D"
+alt="LaTeX: 1000~\mathrm{K}"
+data-equation-content="1000~\mathrm{K}"
+/>.</p>
+<h2 id="problem-3-bonus">Problem 3 [Bonus]</h2>
+<p>Using the OpenMC model of a PWR fuel element at nominal full-power conditions and assuming <img
+class="equation_image"
+title="P_{\mathrm{NL}}=0.95"
+src="/equation_images/P_%257B%255Cmathrm%257BNL%257D%257D%253D0.95"
+alt="LaTeX: P_{\mathrm{NL}}=0.95"
+data-equation-content="P_{\mathrm{NL}}=0.95"
+/>:</p>
+<ul>
+<li><strong>(a)</strong> Determine the critical boron concentration in ppm. Recall that the model uses <code>openmc.model.borated_water</code> to define <code>water</code>.</li>
+<li><strong>(b)</strong> Compute <img
+class="equation_image"
+title="\alpha_m"
+src="/equation_images/%255Calpha_m"
+alt="LaTeX: \alpha_m"
+data-equation-content="\alpha_m"
+/> with and without boron and include the uncertainty. <code>openmc.model.borated_water</code> automatically computes the water density for a specified temperature. How do these values compare with the results from Problem 1?</li>
+<li><strong>(c)</strong> Compute <img
+class="equation_image"
+title="\alpha_f"
+src="/equation_images/%255Calpha_f"
+alt="LaTeX: \alpha_f"
+data-equation-content="\alpha_f"
+/> with and without boron and include the uncertainty. Set the fuel temperature with <code>uo2.temperature = T_fuel</code>; broadened-resonance data are available at 600, 900, and <img
+class="equation_image"
+title="1200~\mathrm{K}"
+src="/equation_images/1200~%255Cmathrm%257BK%257D"
+alt="LaTeX: 1200~\mathrm{K}"
+data-equation-content="1200~\mathrm{K}"
+/>. How does the result compare with Problem 2 at the same fuel temperature?</li>
+</ul>
+<p>For independent quantities <img
+class="equation_image"
+title="x"
+src="/equation_images/x"
+alt="LaTeX: x"
+data-equation-content="x"
+/> and <img
+class="equation_image"
+title="y"
+src="/equation_images/y"
+alt="LaTeX: y"
+data-equation-content="y"
+/> with uncertainties <img
+class="equation_image"
+title="\sigma_x"
+src="/equation_images/%255Csigma_x"
+alt="LaTeX: \sigma_x"
+data-equation-content="\sigma_x"
+/> and <img
+class="equation_image"
+title="\sigma_y"
+src="/equation_images/%255Csigma_y"
+alt="LaTeX: \sigma_y"
+data-equation-content="\sigma_y"
+/>, the uncertainty of <img
+class="equation_image"
+title="z=x-y"
+src="/equation_images/z%253Dx-y"
+alt="LaTeX: z=x-y"
+data-equation-content="z=x-y"
+/> is <img
+class="equation_image"
+title="\sigma_z=\sqrt{\sigma_x^2+\sigma_y^2}"
+src="/equation_images/%255Csigma_z%253D%255Csqrt%257B%255Csigma_x%255E2%252B%255Csigma_y%255E2%257D"
+alt="LaTeX: \sigma_z=\sqrt{\sigma_x^2+\sigma_y^2}"
+data-equation-content="\sigma_z=\sqrt{\sigma_x^2+\sigma_y^2}"
+/>.</p>

@@ -1,0 +1,95 @@
+% Adapted from ne630_problems/lesson_17/statement.tex at commit e1fba66.
+% Corrected the inconsistent fuel number density in the legacy substitution.
+
+\noindent{\bf Problem 1 [FNRP 4.6].}
+
+A PWR has 3 atom-\% enriched UO$_2$ fuel pins with $D=1.0~\mathrm{cm}$,
+$\rho_f=11.0~\mathrm{g\,cm^{-3}}$, and $V_m/V_f=2$. At room temperature,
+calculate $\eta_T$, $p$, $f$, and $k_\infty$ for $\epsilon=1.24$,
+$\varsigma=1.16$, and an effective resonance diameter $1.1D$.
+
+\begin{adaptedsolution}
+The UO$_2$ molecule density and water molecule density are
+\begin{align*}
+N_f&=\frac{11N_A}{0.03(235)+0.97(238)+2(16)}
+=2.454\times10^{22}~\mathrm{cm^{-3}},\\
+N_m&=\frac{(1.00)N_A}{18}=3.346\times10^{22}~\mathrm{cm^{-3}}.
+\end{align*}
+Using the thermal data from FNRP Problem 3.4,
+\[
+\eta_T=
+\frac{2.43(505)/591}
+{1+\dfrac{0.97(2.42)}{0.03(591)}}
+=\boxed{1.8336}.
+\]
+With $\sigma_{a,m}=2(0.295)+1.69\times10^{-4}$ b and
+$\sigma_{a,f}=0.97(2.42)+0.03(591)$ b,
+\[
+f=\left[1+\varsigma\frac{V_mN_m}{V_fN_f}
+\frac{\sigma_{a,m}}{\sigma_{a,f}}\right]^{-1}
+=\boxed{0.9149}.
+\]
+For the epithermal water scattering values $\sigma_s^H=19.508$ b and
+$\sigma_s^O=3.85$ b,
+\[
+\xi=\frac{2(1)(19.508)+(0.1199)(3.85)}{2(19.508)+3.85}
+=0.9210.
+\]
+The Table 4.3 resonance-integral approximation gives
+\[
+I=4.45+26.6\sqrt{\frac{4}{\rho_f(1.1D)}}=19.7439~\mathrm{b},
+\]
+and Eq.~(4.40) then gives
+\[
+p=\exp\left[-\frac{0.97}{(V_mN_m)/(V_fN_f)}
+\frac{I}{\xi[2\sigma_s^H+\sigma_s^O]}\right]
+=\boxed{0.8370}.
+\]
+Finally,
+\[
+k_\infty=\eta_T f p\epsilon
+=(1.8336)(0.9149)(0.8370)(1.24)
+=\boxed{1.741}.
+\]
+The result is high compared with a representative operating PWR because this
+room-temperature estimate uses simplified thermal averaging and resonance
+self-shielding.
+\end{adaptedsolution}
+
+\newpage
+\noindent{\bf Problem 2 [FNRP 4.8].}
+
+A uranium lattice's heavy-water moderator is replaced with light water.
+
+\begin{adaptedsolution}
+\begin{enumerate}
+\item The resonance escape probability $p$ generally \emph{increases} because
+light water has greater slowing-down power, $\xi\Sigma_s$, so neutrons spend
+less slowing-down time in the resonance-energy range.
+\item The thermal utilization $f$ \emph{decreases} because ${}^{1}$H absorbs
+substantially more thermal neutrons than ${}^{2}$H.
+\item These effects oppose one another, so the sign cannot be established
+from the four-factor formula alone without magnitudes. For a lattice designed
+for heavy water, a direct replacement by light water will generally reduce
+$k_\infty$ because the moderator-absorption penalty is large.
+\end{enumerate}
+\end{adaptedsolution}
+
+\newpage
+\noindent{\bf Problem 3 [FNRP 4.9].}
+
+The coolant-to-fuel volume ratio is increased in a PWR.
+
+\begin{adaptedsolution}
+\begin{enumerate}
+\item The basic Chapter 4 formulas do not uniquely quantify $\epsilon$.
+Physically, added moderation softens the spectrum and usually \emph{decreases}
+the fast-fission factor slightly because fewer fast neutrons cause
+${}^{238}$U fission.
+\item The resonance escape probability $p$ \emph{increases}: increasing
+$V_m/V_f$ increases the slowing-down power available per fuel atom and makes
+capture during passage through the ${}^{238}$U resonances less likely.
+\end{enumerate}
+This does not by itself determine the behavior of $k_\infty$, since the
+thermal-utilization penalty also changes with moderator amount.
+\end{adaptedsolution}

@@ -79,24 +79,33 @@ available for that lesson.
      - `OpenMC notebook <_static/notebooks/lesson_16.ipynb>`__ |middot|
        `YouTube video <https://www.youtube.com/watch?v=S9UgL-R4imU>`__
    * - **Lesson 17** — The Four-Factor Formula
-     - —
-     - `YouTube video <https://www.youtube.com/watch?v=SmQ_KbmB6FA>`__
+     - `PDF <_static/handouts/lesson-17/lesson_17_handout.pdf>`__
+     - `OpenMC notebook <_static/notebooks/lesson_17.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=SmQ_KbmB6FA>`__
    * - **Lesson 18** — OpenMC Unit-Cell Models
-     - —
-     - `YouTube video <https://www.youtube.com/watch?v=ifSflrLzm-w>`__
+     - `PDF <_static/handouts/lesson-18/lesson_18_handout.pdf>`__
+     - `OpenMC notebook <_static/notebooks/lesson_18.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=ifSflrLzm-w>`__
    * - **Lesson 19** — Unit-Cell Design Studies
-     - —
-     - `YouTube video <https://www.youtube.com/watch?v=L-LLYceaL1U>`__
+     - `PDF <_static/handouts/lesson-19/lesson_19_handout.pdf>`__
+     - `OpenMC notebook <_static/notebooks/lesson_19.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=L-LLYceaL1U>`__
    * - **Lesson 20** — Reactivity and Power Defects
-     - —
+     - `PDF <_static/handouts/lesson-20/lesson_20_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=-GADP7fGMRs>`__
+   * - **Lesson 21** — Reactivity Coefficients
+     - `PDF <_static/handouts/lesson-21/lesson_21_handout.pdf>`__
+     - —
+   * - **Lesson 22** — Reactivity Impacts of Xenon and Samarium
+     - `PDF <_static/handouts/lesson-22/lesson_22_handout.pdf>`__
+     - `OpenMC notebook <_static/notebooks/lesson_22.ipynb>`__
 
 Handout source and support files
 --------------------------------
 
 The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
 Download the complete source bundle for a ready-to-build copy, or pair a wrapper
-with its body file and the shared class. Lessons 15--16 are distributed as PDFs
+with its body file and the shared class. Lessons 15--22 are distributed as PDFs
 only.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|

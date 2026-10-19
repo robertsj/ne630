@@ -27,12 +27,12 @@ def makeimg(s):
     e = encodemath(latex)
     attr_latex = escape(latex, quote=True)
 
-    tmpl = """<img 
-class="equation_image" 
-title="{0}" 
-src="/equation_images/{1}" 
-alt="LaTeX: {0}" 
-data-equation-content="{0}" 
+    tmpl = """<img
+class="equation_image"
+title="{0}"
+src="/equation_images/{1}"
+alt="LaTeX: {0}"
+data-equation-content="{0}"
 />"""
     return tmpl.format(attr_latex, e)
     

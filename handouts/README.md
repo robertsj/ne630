@@ -20,7 +20,7 @@ backend remain unchanged for all other lessons.
 See [the backend guide](handout_backend.md) for authoring, feature coverage,
 future migration notes, and the Lesson 22 slide-coverage map. Build L22 with
 `make L22`; run the isolated compatibility check with `make check-class`.
-L22 is now three Letter pages to retain the slide content at readable size.
+The current instructor-edited L22 builds as two Letter pages.
 
 ## Typography
 
@@ -137,7 +137,7 @@ interpretation, and selected final results for lecture and student annotation.
 
 Build with `make L22 L23` (or `make lesson22 lesson23`).
 
-- `lesson_22_handout.tex` uses `ne630handout.cls`: three pages covering the
+- `lesson_22_handout.tex` uses `ne630handout.cls`: two pages covering the
   Lesson 22 slides, including reactivity/control bookkeeping, iodine--xenon
   balances, equilibrium worth, transient code/results, and the samarium
   reading extension. Purple/orange equation emphasis follows the slides.
@@ -152,5 +152,7 @@ Build with `make L22 L23` (or `make lesson22 lesson23`).
   `ne630_ch04_reading_guide_common.tex`. Its depletion figure is copied from
   `../slides/figures/static/depletion_chain.pdf`.
 
-Original Downloads files are untouched. These are local drafts, not an
-addition to the published site.
+Original Downloads files are untouched. Lesson 22 is already published on the
+course site; Lesson 23 remains a draft and is not linked or exported there.
+Committing source updates does not republish the site; a release must rebuild
+and validate the student-facing exports separately.

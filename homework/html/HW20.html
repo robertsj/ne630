@@ -1,0 +1,263 @@
+<h1 id="homework-20-lesson-20">Homework 20: Lesson 20</h1>
+<!-- Draft adapted from ne630_problems/lesson_20/statement.tex; problem statements only. -->
+<h2 id="problem-1">Problem 1</h2>
+<p>Suppose a sodium-cooled fast reactor is modeled in OpenMC and has <img
+class="equation_image"
+title="k_{\mathrm{eff}}=1.00234"
+src="/equation_images/k_%257B%255Cmathrm%257Beff%257D%257D%253D1.00234"
+alt="LaTeX: k_{\mathrm{eff}}=1.00234"
+data-equation-content="k_{\mathrm{eff}}=1.00234"
+/>. Compute the reactivity, <img
+class="equation_image"
+title="\rho"
+src="/equation_images/%255Crho"
+alt="LaTeX: \rho"
+data-equation-content="\rho"
+/>, and express it in each of the following units:</p>
+<ul>
+<li><strong>(a)</strong> <img
+class="equation_image"
+title="\Delta k/k"
+src="/equation_images/%255CDelta%2520k%252Fk"
+alt="LaTeX: \Delta k/k"
+data-equation-content="\Delta k/k"
+/>,</li>
+<li><strong>(b)</strong> percent,</li>
+<li><strong>(c)</strong> pcm,</li>
+<li><strong>(d)</strong> dollars, assuming all fission is from <img
+class="equation_image"
+title="{}^{235}\mathrm{U}"
+src="/equation_images/%257B%257D%255E%257B235%257D%255Cmathrm%257BU%257D"
+alt="LaTeX: {}^{235}\mathrm{U}"
+data-equation-content="{}^{235}\mathrm{U}"
+/>, and</li>
+<li><strong>(e)</strong> dollars, assuming all fission is from <img
+class="equation_image"
+title="{}^{239}\mathrm{Pu}"
+src="/equation_images/%257B%257D%255E%257B239%257D%255Cmathrm%257BPu%257D"
+alt="LaTeX: {}^{239}\mathrm{Pu}"
+data-equation-content="{}^{239}\mathrm{Pu}"
+/>.</li>
+</ul>
+<p>If you did not record the needed delayed-neutron fractions in class, use appropriate <img
+class="equation_image"
+title="\beta"
+src="/equation_images/%255Cbeta"
+alt="LaTeX: \beta"
+data-equation-content="\beta"
+/> values from FNRP Table 5.1.</p>
+<h2 id="problem-2">Problem 2</h2>
+<p>Consider again the PWR described in FNRP Problem 4.6, which was studied in Homework 17. Walk through the basic steps that bring the reactor from cold shutdown conditions to criticality at full-power conditions using the modified four-factor formula, similar to FNRP Eq. (10.3):</p>
+<p><img
+class="equation_image"
+title="k_{\infty}
+=\overbrace{
+  \frac{\nu\Sigma^{\mathrm{F}}_{f,2}}
+  {\Sigma^{\mathrm{F}}_{a,2}
+   +\Sigma^{\mathrm{control}}_{a,2}
+   +\varsigma(V_{\mathrm{M}}/V_{\mathrm{F}})\Sigma^{\mathrm{M}}_{a,2}}
+}^{\eta f}p\epsilon.
+"
+src="/equation_images/k_%257B%255Cinfty%257D%250A%253D%255Coverbrace%257B%250A%2520%2520%255Cfrac%257B%255Cnu%255CSigma%255E%257B%255Cmathrm%257BF%257D%257D_%257Bf%252C2%257D%257D%250A%2520%2520%257B%255CSigma%255E%257B%255Cmathrm%257BF%257D%257D_%257Ba%252C2%257D%250A%2520%2520%2520%252B%255CSigma%255E%257B%255Cmathrm%257Bcontrol%257D%257D_%257Ba%252C2%257D%250A%2520%2520%2520%252B%255Cvarsigma(V_%257B%255Cmathrm%257BM%257D%257D%252FV_%257B%255Cmathrm%257BF%257D%257D)%255CSigma%255E%257B%255Cmathrm%257BM%257D%257D_%257Ba%252C2%257D%257D%250A%257D%255E%257B%255Ceta%2520f%257Dp%255Cepsilon.%250A"
+alt="LaTeX: k_{\infty}
+=\overbrace{
+  \frac{\nu\Sigma^{\mathrm{F}}_{f,2}}
+  {\Sigma^{\mathrm{F}}_{a,2}
+   +\Sigma^{\mathrm{control}}_{a,2}
+   +\varsigma(V_{\mathrm{M}}/V_{\mathrm{F}})\Sigma^{\mathrm{M}}_{a,2}}
+}^{\eta f}p\epsilon.
+"
+data-equation-content="k_{\infty}
+=\overbrace{
+  \frac{\nu\Sigma^{\mathrm{F}}_{f,2}}
+  {\Sigma^{\mathrm{F}}_{a,2}
+   +\Sigma^{\mathrm{control}}_{a,2}
+   +\varsigma(V_{\mathrm{M}}/V_{\mathrm{F}})\Sigma^{\mathrm{M}}_{a,2}}
+}^{\eta f}p\epsilon.
+"
+/></p>
+<p>The subscript 2 indicates the thermal group (<img
+class="equation_image"
+title="E&lt;1~\mathrm{eV}"
+src="/equation_images/E%253C1~%255Cmathrm%257BeV%257D"
+alt="LaTeX: E&lt;1~\mathrm{eV}"
+data-equation-content="E&lt;1~\mathrm{eV}"
+/>), while the superscripts <img
+class="equation_image"
+title="\mathrm{F}"
+src="/equation_images/%255Cmathrm%257BF%257D"
+alt="LaTeX: \mathrm{F}"
+data-equation-content="\mathrm{F}"
+/>, <img
+class="equation_image"
+title="\mathrm{M}"
+src="/equation_images/%255Cmathrm%257BM%257D"
+alt="LaTeX: \mathrm{M}"
+data-equation-content="\mathrm{M}"
+/>, and <img
+class="equation_image"
+title="\mathrm{control}"
+src="/equation_images/%255Cmathrm%257Bcontrol%257D"
+alt="LaTeX: \mathrm{control}"
+data-equation-content="\mathrm{control}"
+/> indicate fuel, moderator, and control-rod values. Where needed, use the cross sections in FNRP Table 3.2.</p>
+<p>Using a programming language or spreadsheet to support your work is strongly recommended. Show the basic steps and enough intermediate results for a reader to follow the process. Keep your work organized because you will build on this solution in a future homework.</p>
+<ul>
+<li><p><strong>(a)</strong> Compute the four factors for <img
+class="equation_image"
+title="T_f=T_m=300~\mathrm{K}"
+src="/equation_images/T_f%253DT_m%253D300~%255Cmathrm%257BK%257D"
+alt="LaTeX: T_f=T_m=300~\mathrm{K}"
+data-equation-content="T_f=T_m=300~\mathrm{K}"
+/> (room temperature). Assume that the nonleakage probability is <img
+class="equation_image"
+title="P_{\mathrm{NL}}=0.95"
+src="/equation_images/P_%257B%255Cmathrm%257BNL%257D%257D%253D0.95"
+alt="LaTeX: P_{\mathrm{NL}}=0.95"
+data-equation-content="P_{\mathrm{NL}}=0.95"
+/> and compute <img
+class="equation_image"
+title="\rho"
+src="/equation_images/%255Crho"
+alt="LaTeX: \rho"
+data-equation-content="\rho"
+/>. This reactivity is the <strong>excess reactivity</strong>, <img
+class="equation_image"
+title="\rho_{\mathrm{ex}}"
+src="/equation_images/%255Crho_%257B%255Cmathrm%257Bex%257D%257D"
+alt="LaTeX: \rho_{\mathrm{ex}}"
+data-equation-content="\rho_{\mathrm{ex}}"
+/>: the core reactivity with all removable control, such as control rods and <a href="https://www.nuclear-power.com/glossary/boron-10/boric-acid-chemical-shim/">chemical shim</a>, completely removed.</p></li>
+<li><p><strong>(b)</strong> Suppose the <strong>shutdown margin</strong> is <img
+class="equation_image"
+title="\rho_{\mathrm{sd}}=-4\%~\Delta k/k"
+src="/equation_images/%255Crho_%257B%255Cmathrm%257Bsd%257D%257D%253D-4%255C%2525~%255CDelta%2520k%252Fk"
+alt="LaTeX: \rho_{\mathrm{sd}}=-4\%~\Delta k/k"
+data-equation-content="\rho_{\mathrm{sd}}=-4\%~\Delta k/k"
+/>; that is, with all control rods fully inserted, the core reactivity is <img
+class="equation_image"
+title="-0.04"
+src="/equation_images/-0.04"
+alt="LaTeX: -0.04"
+data-equation-content="-0.04"
+/>. The total <strong>reactivity worth</strong> of the control rods is</p>
+<p><img
+class="equation_image"
+title="\Delta\rho=\rho_{\mathrm{ex}}-\rho_{\mathrm{sd}}
+=\rho_{\mathrm{ex}}+0.04.
+"
+src="/equation_images/%255CDelta%255Crho%253D%255Crho_%257B%255Cmathrm%257Bex%257D%257D-%255Crho_%257B%255Cmathrm%257Bsd%257D%257D%250A%253D%255Crho_%257B%255Cmathrm%257Bex%257D%257D%252B0.04.%250A"
+alt="LaTeX: \Delta\rho=\rho_{\mathrm{ex}}-\rho_{\mathrm{sd}}
+=\rho_{\mathrm{ex}}+0.04.
+"
+data-equation-content="\Delta\rho=\rho_{\mathrm{ex}}-\rho_{\mathrm{sd}}
+=\rho_{\mathrm{ex}}+0.04.
+"
+/></p>
+<p>What must <img
+class="equation_image"
+title="\Sigma^{\mathrm{control}}_{a,2}"
+src="/equation_images/%255CSigma%255E%257B%255Cmathrm%257Bcontrol%257D%257D_%257Ba%252C2%257D"
+alt="LaTeX: \Sigma^{\mathrm{control}}_{a,2}"
+data-equation-content="\Sigma^{\mathrm{control}}_{a,2}"
+/> be in this <strong>cold shutdown</strong> state? The NRC definition of shutdown margin excludes the control assembly with the highest reactivity worth; this simplified model cannot make that distinction.</p></li>
+<li><p><strong>(c)</strong> Represent partial control-rod insertion by a fraction <img
+class="equation_image"
+title="x"
+src="/equation_images/x"
+alt="LaTeX: x"
+data-equation-content="x"
+/>, so the corresponding macroscopic cross section is <img
+class="equation_image"
+title="x\Sigma^{\mathrm{control}}_{a,2}"
+src="/equation_images/x%255CSigma%255E%257B%255Cmathrm%257Bcontrol%257D%257D_%257Ba%252C2%257D"
+alt="LaTeX: x\Sigma^{\mathrm{control}}_{a,2}"
+data-equation-content="x\Sigma^{\mathrm{control}}_{a,2}"
+/>. As <img
+class="equation_image"
+title="x"
+src="/equation_images/x"
+alt="LaTeX: x"
+data-equation-content="x"
+/> ranges from 0 to 1, the core reactivity should range from <img
+class="equation_image"
+title="\rho_{\mathrm{ex}}"
+src="/equation_images/%255Crho_%257B%255Cmathrm%257Bex%257D%257D"
+alt="LaTeX: \rho_{\mathrm{ex}}"
+data-equation-content="\rho_{\mathrm{ex}}"
+/> to <img
+class="equation_image"
+title="-0.04"
+src="/equation_images/-0.04"
+alt="LaTeX: -0.04"
+data-equation-content="-0.04"
+/>. Determine the value of <img
+class="equation_image"
+title="x"
+src="/equation_images/x"
+alt="LaTeX: x"
+data-equation-content="x"
+/> that makes the reactor critical. Call this value <img
+class="equation_image"
+title="x_{\mathrm{cc}}"
+src="/equation_images/x_%257B%255Cmathrm%257Bcc%257D%257D"
+alt="LaTeX: x_{\mathrm{cc}}"
+data-equation-content="x_{\mathrm{cc}}"
+/>, where “cc” denotes cold critical.</p></li>
+<li><p><strong>(d)</strong> Next, run the reactor coolant pumps until the coolant and fuel reach <img
+class="equation_image"
+title="600~\mathrm{K}"
+src="/equation_images/600~%255Cmathrm%257BK%257D"
+alt="LaTeX: 600~\mathrm{K}"
+data-equation-content="600~\mathrm{K}"
+/>, corresponding to <strong>hot zero-power</strong> conditions. Assume the coolant density is <img
+class="equation_image"
+title="0.66~\mathrm{g\,cm^{-3}}"
+src="/equation_images/0.66~%255Cmathrm%257Bg%255C%252Ccm%255E%257B-3%257D%257D"
+alt="LaTeX: 0.66~\mathrm{g\,cm^{-3}}"
+data-equation-content="0.66~\mathrm{g\,cm^{-3}}"
+/>. Recompute <img
+class="equation_image"
+title="\rho"
+src="/equation_images/%255Crho"
+alt="LaTeX: \rho"
+data-equation-content="\rho"
+/> using <img
+class="equation_image"
+title="x=x_{\mathrm{cc}}"
+src="/equation_images/x%253Dx_%257B%255Cmathrm%257Bcc%257D%257D"
+alt="LaTeX: x=x_{\mathrm{cc}}"
+data-equation-content="x=x_{\mathrm{cc}}"
+/>; this reactivity is the <strong>temperature defect</strong>. Then find the control-rod fraction that makes the reactor critical and call it <img
+class="equation_image"
+title="x_{\mathrm{hzp}}"
+src="/equation_images/x_%257B%255Cmathrm%257Bhzp%257D%257D"
+alt="LaTeX: x_{\mathrm{hzp}}"
+data-equation-content="x_{\mathrm{hzp}}"
+/>.</p></li>
+<li><p><strong>(e)</strong> Finally, bring the reactor to <strong>full-power</strong> conditions so the fuel temperature increases to <img
+class="equation_image"
+title="1200~\mathrm{K}"
+src="/equation_images/1200~%255Cmathrm%257BK%257D"
+alt="LaTeX: 1200~\mathrm{K}"
+data-equation-content="1200~\mathrm{K}"
+/>. Recompute <img
+class="equation_image"
+title="\rho"
+src="/equation_images/%255Crho"
+alt="LaTeX: \rho"
+data-equation-content="\rho"
+/> using <img
+class="equation_image"
+title="x=x_{\mathrm{hzp}}"
+src="/equation_images/x%253Dx_%257B%255Cmathrm%257Bhzp%257D%257D"
+alt="LaTeX: x=x_{\mathrm{hzp}}"
+data-equation-content="x=x_{\mathrm{hzp}}"
+/>; this reactivity is the <strong>power defect</strong>. Determine the corresponding critical control-rod fraction, <img
+class="equation_image"
+title="x_{\mathrm{fp}}"
+src="/equation_images/x_%257B%255Cmathrm%257Bfp%257D%257D"
+alt="LaTeX: x_{\mathrm{fp}}"
+data-equation-content="x_{\mathrm{fp}}"
+/>.</p></li>
+</ul>

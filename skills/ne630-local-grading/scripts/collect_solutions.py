@@ -9,14 +9,17 @@ CSV reports for every automatic decision and every case needing review.
 from __future__ import annotations
 
 import argparse
+import base64
 import csv
 import hashlib
 import io
+import json
 import os
 import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -61,6 +64,19 @@ NEGATIVE_TERMS = {
 }
 
 IMAGE_EXTENSIONS = {"jpg", "jpeg"}
+NOTEBOOK_EXTENSIONS = {"ipynb"}
+LATEX_SPECIAL = {
+    "&": r"\&",
+    "%": r"\%",
+    "$": r"\$",
+    "#": r"\#",
+    "_": r"\_",
+    "{": r"\{",
+    "}": r"\}",
+    "~": r"\textasciitilde{}",
+    "^": r"\textasciicircum{}",
+    "\\": r"\textbackslash{}",
+}
 
 
 @dataclass(frozen=True)
@@ -463,6 +479,222 @@ def converted_jpeg_candidate(
     )
 
 
+def ascii_clean(value: object) -> str:
+    if isinstance(value, list):
+        text = "".join(str(item) for item in value)
+    elif value is None:
+        text = ""
+    else:
+        text = str(value)
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    text = "".join(
+        char if char in {"\n", "\t"} or ord(char) >= 32 else " "
+        for char in text
+    )
+    return unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+
+
+def tex_escape(value: object) -> str:
+    return "".join(LATEX_SPECIAL.get(char, char) for char in ascii_clean(value))
+
+
+def listing_block(value: object) -> str:
+    text = ascii_clean(value).strip("\n")
+    text = text.replace(r"\end{lstlisting}", r"\\end{lstlisting}")
+    if not text:
+        text = "[empty]"
+    return "\\begin{lstlisting}\n" + text + "\n\\end{lstlisting}\n"
+
+
+def write_notebook_image(
+    build_dir: Path,
+    group_label: str,
+    cell_index: int,
+    output_index: int,
+    mime: str,
+    payload: object,
+) -> str:
+    if isinstance(payload, list):
+        payload = "".join(str(part) for part in payload)
+    suffix = ".png" if mime == "image/png" else ".jpg"
+    image_name = f"{group_label}_cell{cell_index:02d}_output{output_index:02d}{suffix}"
+    (build_dir / image_name).write_bytes(base64.b64decode(str(payload)))
+    return image_name
+
+
+def write_notebook_tex(
+    notebook: dict[str, object],
+    entry: OuterEntry,
+    group_label: str,
+    build_dir: Path,
+) -> Path:
+    lines = [
+        r"\documentclass[10pt]{article}",
+        r"\usepackage[margin=0.65in]{geometry}",
+        r"\usepackage{graphicx}",
+        r"\usepackage{xcolor}",
+        r"\usepackage{listings}",
+        r"\usepackage[hidelinks]{hyperref}",
+        (
+            r"\lstset{basicstyle=\ttfamily\scriptsize,breaklines=true,"
+            r"columns=fullflexible,keepspaces=true,upquote=true}"
+        ),
+        r"\setlength{\parindent}{0pt}",
+        r"\setlength{\parskip}{0.55em}",
+        r"\title{NE 630 Notebook Submission Archive}",
+        rf"\author{{{tex_escape(group_label)}}}",
+        r"\date{}",
+        r"\begin{document}",
+        r"\maketitle",
+        rf"\textbf{{Source notebook:}} {tex_escape(entry.original_name)}",
+        r"\par\medskip",
+        (
+            r"\textit{Archival rendering of saved notebook cells and saved outputs. "
+            r"Student code was not executed during conversion.}"
+        ),
+        r"\tableofcontents",
+        r"\newpage",
+    ]
+    cells = notebook.get("cells", [])
+    if not isinstance(cells, list):
+        cells = []
+    for cell_index, cell_obj in enumerate(cells, start=1):
+        if not isinstance(cell_obj, dict):
+            continue
+        cell_type = cell_obj.get("cell_type", "cell")
+        lines.append(rf"\section{{Cell {cell_index}: {tex_escape(cell_type)}}}")
+        source = cell_obj.get("source", "")
+        if source:
+            lines.append(listing_block(source))
+        outputs = cell_obj.get("outputs", [])
+        if not isinstance(outputs, list):
+            outputs = []
+        for output_index, output_obj in enumerate(outputs, start=1):
+            if not isinstance(output_obj, dict):
+                continue
+            output_type = output_obj.get("output_type", "output")
+            lines.append(rf"\subsection*{{Output {output_index}: {tex_escape(output_type)}}}")
+            if output_obj.get("text"):
+                lines.append(listing_block(output_obj.get("text")))
+            data = output_obj.get("data", {})
+            if not isinstance(data, dict):
+                data = {}
+            for mime in ("image/png", "image/jpeg"):
+                if mime in data:
+                    image_name = write_notebook_image(
+                        build_dir,
+                        group_label,
+                        cell_index,
+                        output_index,
+                        mime,
+                        data[mime],
+                    )
+                    lines.extend(
+                        [
+                            r"\begin{center}",
+                            (
+                                rf"\includegraphics[width=0.95\textwidth,"
+                                rf"height=0.72\textheight,keepaspectratio]{{{image_name}}}"
+                            ),
+                            r"\end{center}",
+                        ]
+                    )
+                    break
+            if "text/plain" in data:
+                lines.append(listing_block(data["text/plain"]))
+            elif "text/html" in data:
+                lines.append(
+                    r"\textit{HTML output saved in notebook; plain archival rendering follows.}"
+                )
+                lines.append(listing_block(data["text/html"]))
+    lines.append(r"\end{document}")
+    tex_path = build_dir / f"{group_label}_notebook_archive.tex"
+    tex_path.write_text("\n".join(lines) + "\n", encoding="ascii")
+    return tex_path
+
+
+def notebook_to_pdf(
+    content: bytes,
+    entry: OuterEntry,
+    work_dir: Path,
+    group_label: str,
+) -> tuple[bytes | None, str]:
+    pdflatex = shutil.which("pdflatex")
+    if pdflatex is None:
+        return None, "no pdflatex executable found for notebook PDF conversion"
+    notebook_label = sanitize_stem(Path(entry.original_name).stem)
+    build_dir = work_dir / "notebook_pdfs" / group_label / notebook_label
+    if build_dir.exists():
+        shutil.rmtree(build_dir)
+    build_dir.mkdir(parents=True, exist_ok=True)
+    notebook_path = build_dir / Path(entry.original_name).name
+    notebook_path.write_bytes(content)
+    try:
+        notebook = json.loads(content.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        return None, f"could not read notebook JSON: {exc}"
+    if not isinstance(notebook, dict):
+        return None, "notebook JSON was not an object"
+    tex_path = write_notebook_tex(notebook, entry, group_label, build_dir)
+    log_path = build_dir / "pdflatex.log"
+    with log_path.open("wb") as log:
+        completed = subprocess.run(
+            [pdflatex, "-interaction=nonstopmode", "-halt-on-error", tex_path.name],
+            cwd=build_dir,
+            stdout=log,
+            stderr=subprocess.STDOUT,
+            timeout=120,
+            check=False,
+        )
+    if completed.returncode != 0:
+        return None, f"notebook PDF conversion failed; see {log_path}"
+    pdf_path = tex_path.with_suffix(".pdf")
+    if not pdf_path.exists():
+        return None, f"notebook conversion did not produce {pdf_path.name}; see {log_path}"
+    pdf_content = pdf_path.read_bytes()
+    is_pdf, signature = classify_content(pdf_content)
+    if not is_pdf:
+        return None, f"notebook conversion output is not a valid PDF ({signature}); see {log_path}"
+    return (
+        pdf_content,
+        f"converted notebook to archival PDF without executing code; conversion source: {tex_path}",
+    )
+
+
+def attempt_notebook_conversions(
+    outer_zip: ZipFile,
+    entries: list[OuterEntry],
+    work_dir: Path,
+    group_label: str,
+) -> tuple[list[Candidate], list[str]]:
+    candidates: list[Candidate] = []
+    notes: list[str] = []
+    for entry in entries:
+        if entry.extension not in NOTEBOOK_EXTENSIONS:
+            continue
+        content = outer_zip.read(entry.zip_path)
+        pdf_content, note = notebook_to_pdf(content, entry, work_dir, group_label)
+        if pdf_content is None:
+            notes.append(f"{entry.basename}: {note}")
+            continue
+        candidates.append(
+            Candidate(
+                source_kind="top_level_notebook_pdf",
+                source_entry=entry.zip_path,
+                original_name=entry.original_name,
+                nested_archive="",
+                internal_path=entry.zip_path,
+                display_name=entry.original_name,
+                score=650,
+                rule=note,
+                is_pdf=True,
+                signature="notebook_converted_pdf",
+                content=pdf_content,
+            )
+        )
+    return candidates, notes
+
+
 def summarize_candidate(candidate: Candidate) -> str:
     nested = f" in {candidate.nested_archive}" if candidate.nested_archive else ""
     return (
@@ -470,6 +702,15 @@ def summarize_candidate(candidate: Candidate) -> str:
         f" [score={candidate.score}, rule={candidate.rule}, "
         f"valid_pdf={candidate.is_pdf}, signature={candidate.signature}]"
     )
+
+
+def has_explicit_solution_marker(candidate: Candidate) -> bool:
+    text = " ".join(
+        os.path.basename(piece).lower()
+        for piece in (candidate.display_name, candidate.internal_path)
+        if piece
+    )
+    return any(term in text for term in ("solution", "answer", "answers", "final"))
 
 
 def choose_candidate(candidates: list[Candidate]) -> tuple[Candidate | None, str, str]:
@@ -502,6 +743,8 @@ def choose_candidate(candidates: list[Candidate]) -> tuple[Candidate | None, str
             return best, best.rule, "0.72"
         if best.source_kind == "nested_image_pdf":
             return best, "converted nested image candidate to PDF", "0.70"
+        if best.source_kind == "top_level_notebook_pdf":
+            return best, best.rule, "0.70"
         return best, "single nested PDF candidate", "0.78"
 
     score_gap = best.score - runner_up.score
@@ -509,6 +752,48 @@ def choose_candidate(candidates: list[Candidate]) -> tuple[Candidate | None, str
         return best, "unique best PDF by filename heuristic", "0.78"
     if score_gap >= 35 and best.score >= 35 and runner_up.score < 0:
         return best, "only plausible non-discourse PDF candidate", "0.74"
+
+    image_kinds = {"top_level_image_pdf", "nested_image_pdf"}
+    submitted_pdf = next(
+        (
+            candidate
+            for candidate in sorted_candidates
+            if candidate.source_kind in {"top_level_pdf", "nested_pdf"}
+            and candidate.score >= 35
+        ),
+        None,
+    )
+    converted_image = next(
+        (candidate for candidate in sorted_candidates if candidate.source_kind in image_kinds),
+        None,
+    )
+    if submitted_pdf is not None and converted_image is not None:
+        if converted_image.score - submitted_pdf.score <= 25:
+            return submitted_pdf, "preferred submitted PDF over converted image upload", "0.80"
+
+    top_level_pdfs = [
+        candidate
+        for candidate in sorted_candidates
+        if candidate.source_kind == "top_level_pdf" and candidate.score >= 10
+    ]
+    if len(top_level_pdfs) == 1:
+        standalone_pdf = top_level_pdfs[0]
+        nested_pdfs = [
+            candidate
+            for candidate in sorted_candidates
+            if candidate.source_kind == "nested_pdf"
+        ]
+        explicit_nested_solution = [
+            candidate for candidate in nested_pdfs if has_explicit_solution_marker(candidate)
+        ]
+        if nested_pdfs and not explicit_nested_solution:
+            strongest_nested = nested_pdfs[0]
+            if strongest_nested.score - standalone_pdf.score <= 40:
+                return (
+                    standalone_pdf,
+                    "preferred standalone PDF over auxiliary nested PDFs",
+                    "0.76",
+                )
 
     return None, "ambiguous PDF candidates", "0.00"
 
@@ -522,10 +807,14 @@ def route_guess(entries: list[OuterEntry], selected: Candidate | None) -> str:
         return "route_b_zip_image_converted"
     if selected and selected.source_kind == "built_tex_pdf":
         return "route_b_zip_built_from_tex"
+    if selected and selected.source_kind == "top_level_notebook_pdf":
+        return "route_a_notebook_converted"
     if has_zip and selected and selected.source_kind == "nested_pdf":
         if selected.rule == "exact solution.pdf":
             return "route_b_zip"
         return "route_b_zip_nonstandard_solution_name"
+    if has_zip and selected and selected.source_kind == "top_level_pdf":
+        return "route_mixed_standalone_pdf_preferred"
     if has_zip:
         return "route_b_zip_needs_review"
     if pdf_count == 1:
@@ -762,26 +1051,29 @@ def build_tex_pdf(source_dir: Path, target: Path, build_log: Path) -> tuple[byte
     if engine is None:
         return None, "no usable TeX engine found"
     target_rel = target.relative_to(source_dir).as_posix()
+    compile_dir = target.parent
     command = [
         engine,
         "-interaction=nonstopmode",
         "-halt-on-error",
         "-file-line-error",
         "-no-shell-escape",
-        target_rel,
+        target.name,
     ]
     log_parts: list[str] = []
     for run_number in (1, 2):
         completed = subprocess.run(
             command,
-            cwd=source_dir,
+            cwd=compile_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
             timeout=120,
             check=False,
         )
-        log_parts.append(f"===== pass {run_number}: {' '.join(command)} =====\n")
+        log_parts.append(
+            f"===== pass {run_number}: {' '.join(command)} (cwd={compile_dir}) =====\n"
+        )
         log_parts.append(completed.stdout)
         log_parts.append("\n")
         if completed.returncode != 0:
@@ -891,6 +1183,15 @@ def collect(
                     outer_zip, group_entries, work_dir, group_label
                 )
                 candidates.extend(build_candidates)
+                selected, reason, confidence = choose_candidate(candidates)
+            if selected is None and any(
+                entry.extension in NOTEBOOK_EXTENSIONS for entry in group_entries
+            ):
+                notebook_candidates, notebook_notes = attempt_notebook_conversions(
+                    outer_zip, group_entries, work_dir, group_label
+                )
+                candidates.extend(notebook_candidates)
+                build_notes.extend(notebook_notes)
                 selected, reason, confidence = choose_candidate(candidates)
             route = route_guess(group_entries, selected)
             candidate_summary = " | ".join(summarize_candidate(c) for c in candidates)

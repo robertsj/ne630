@@ -158,7 +158,7 @@ $$
 $$
 For $x=T_F$, this is the \textbf{fuel temperature coefficient}, $\alpha_F$ (FTC). For $x=T_M$, it is the \textbf{moderator temperature coefficient}, $\alpha_M$ (MTC). Temperature coefficients are commonly reported in pcm/K.  For boiling water reactors, the coolant void fraction (or steam quality) is another possible $x$.
 
-\vspace{10pt} 
+\vspace{10pt}
 
 Starting directly from the definition of $\rho$,
 $$
@@ -171,8 +171,8 @@ $$\alpha_x\simeq\frac1k\frac{\partial k}{\partial x}\qquad(k\simeq1).$$
 Away from $k=1$, the two normalizations differ.
 
 \Sec{2}{A Finite Difference Approximation}
-Suppose we modeled a PWR fuel pin at two different 
-moderator temperatures using OpenMC and found 
+Suppose we modeled a PWR fuel pin at two different
+moderator temperatures using OpenMC and found
 the following multiplication factors:
 $$
  \underbrace{k_{600}=1.28397}_{\rm nominal},\qquad
@@ -191,7 +191,7 @@ $$
  \simeq-91\ \mathrm{pcm/K}.}
 $$
 
-\vspace{10pt} 
+\vspace{10pt}
 
 \begin{KeyBox}{Assumption check}
 Using $\rho=1-1/k$ at both temperatures instead gives
@@ -238,7 +238,7 @@ $$
 $$
 Here $V_f$ and $V_m$ are the fuel and moderator volumes, $N_{fe}$ is the fertile-nuclide number density in the fuel, and $\xi^m\bar\Sigma_s^m$ is the moderator slowing-down power. The effective heterogeneous resonance integral is $I$.
 
-\vspace{10pt} 
+\vspace{10pt}
 
 With $\rho_f$ the fuel mass density and $D$ the fuel diameter, define
 \begin{align*}
@@ -249,7 +249,7 @@ With $\rho_f$ the fuel mass density and $D$ the fuel diameter, define
 \end{align*}
 Insert $\rho_f$ in g/cm$^3$, $D$ in cm, and temperatures in kelvin. The subscript on $\rho_f$ distinguishes mass density from reactivity.  These relations are equivalent to FNRP Eq.\ (4.40), Table 4.3, Eqs.\ (9.13)--(9.14), and Table 9.1.
 
-\vspace{10pt} 
+\vspace{10pt}
 
 
 At fixed moderator conditions, the explicit $T_F$ dependence in this simplified model enters through $I(T_F)$ and hence $p$. Moderator temperature affects moderator density, so it changes both $p$ and $f$. The next page differentiates those pathways separately.
@@ -285,7 +285,7 @@ $$
 $$
 The negative sign follows from $0<p(300)<1$ and $\tilde\gamma>0$. Typical values for $\alpha_T$ are $\alpha_F\simeq-(2\text{--}3)$ pcm/K for PWRs and about $-10$ pcm/K for our TRIGA reactor.
 
-\vspace{10pt} 
+\vspace{10pt}
 
 Why does $I$ depend on $T_F$? {\bf Doppler broadening}!
 
@@ -368,9 +368,9 @@ For $p=0.6$, $f=0.95$, and $\beta_M=2.9\times10^{-4}$ K$^{-1}$,
 The resonance-escape penalty outweighs the utilization gain for these values.
 \end{KeyBox}
 
- 
- 
+
+
 \colend
 
- 
+
 \end{document}

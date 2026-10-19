@@ -1,0 +1,33 @@
+% Adapted from ne630_problems/lesson_16/statement.tex at commit e1fba66.
+% Problem 1 of the source Lesson 16 assignment is used for Homework 15.
+
+\noindent{\bf Problem 1 [FNRP 4.1].}
+
+A reactor is to be built with fuel rods of diameter $D=1.2~\mathrm{cm}$ and
+a liquid moderator with a 2:1 moderator-to-fuel volume ratio. What is the
+distance $P$ between nearest fuel centerlines (a) for a square lattice and
+(b) for a hexagonal lattice? State how cladding volume is treated.
+
+\begin{adaptedsolution}
+Neglect cladding volume (equivalently, assign it consistently to either fuel
+or moderator). Per unit axial length,
+\[
+V_f=\frac{\pi D^2}{4},\qquad V_m=2V_f,
+\]
+so the unit-cell area is $V_f+V_m=3V_f$.
+
+For a square lattice, the cell area is $P^2$:
+\[
+P=\sqrt{3V_f}=D\sqrt{\frac{3\pi}{4}}
+=\boxed{1.84~\mathrm{cm}}.
+\]
+For a triangular lattice (a hexagonal Wigner--Seitz cell), the area per rod
+is $\sqrt{3}P^2/2$:
+\[
+\frac{\sqrt{3}}{2}P^2=3V_f,
+\qquad
+P=D\sqrt{\frac{\sqrt{3}\pi}{2}}
+=\boxed{1.98~\mathrm{cm}}.
+\]
+Both pitches exceed the rod diameter, as required.
+\end{adaptedsolution}

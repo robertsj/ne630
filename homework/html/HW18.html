@@ -1,0 +1,166 @@
+<h1 id="homework-18-lesson-18">Homework 18: Lesson 18</h1>
+<!-- Draft adapted from ne630_problems/lesson_18/statement.tex; problem statements only. -->
+<h2 id="problem-1">Problem 1</h2>
+<p>Modify the OpenMC PWR pin-cell model to use the parameters from Homework 17, Problem 1 [FNRP 4.6]. Run the model and report</p>
+<ul>
+<li><strong>(a)</strong> each of the four factors,</li>
+<li><strong>(b)</strong> <img
+class="equation_image"
+title="k_\infty"
+src="/equation_images/k_%255Cinfty"
+alt="LaTeX: k_\infty"
+data-equation-content="k_\infty"
+/>, and</li>
+<li><strong>(c)</strong> the thermal disadvantage factor <img
+class="equation_image"
+title="\varsigma"
+src="/equation_images/%255Cvarsigma"
+alt="LaTeX: \varsigma"
+data-equation-content="\varsigma"
+/>.</li>
+</ul>
+<p>Which of the four factors differs the most from the values calculated in Homework 17? Compare against the Homework 17 solution if needed.</p>
+<h2 id="problem-2">Problem 2</h2>
+<p>Use the same PWR pin-cell model at nominal conditions, <img
+class="equation_image"
+title="T_f=1200~\mathrm{K}"
+src="/equation_images/T_f%253D1200~%255Cmathrm%257BK%257D"
+alt="LaTeX: T_f=1200~\mathrm{K}"
+data-equation-content="T_f=1200~\mathrm{K}"
+/>, <img
+class="equation_image"
+title="T_m=600~\mathrm{K}"
+src="/equation_images/T_m%253D600~%255Cmathrm%257BK%257D"
+alt="LaTeX: T_m=600~\mathrm{K}"
+data-equation-content="T_m=600~\mathrm{K}"
+/>, and <img
+class="equation_image"
+title="P=15.5~\mathrm{MPa}"
+src="/equation_images/P%253D15.5~%255Cmathrm%257BMPa%257D"
+alt="LaTeX: P=15.5~\mathrm{MPa}"
+data-equation-content="P=15.5~\mathrm{MPa}"
+/>. Compute the four factors and <img
+class="equation_image"
+title="k_\infty"
+src="/equation_images/k_%255Cinfty"
+alt="LaTeX: k_\infty"
+data-equation-content="k_\infty"
+/> as functions of pitch-to-diameter ratio over <img
+class="equation_image"
+title="1.1\le P/D\le3.0"
+src="/equation_images/1.1%255Cle%2520P%252FD%255Cle3.0"
+alt="LaTeX: 1.1\le P/D\le3.0"
+data-equation-content="1.1\le P/D\le3.0"
+/>. Produce</p>
+<ul>
+<li><strong>(a)</strong> a plot of <img
+class="equation_image"
+title="k_\infty"
+src="/equation_images/k_%255Cinfty"
+alt="LaTeX: k_\infty"
+data-equation-content="k_\infty"
+/> versus <img
+class="equation_image"
+title="P/D"
+src="/equation_images/P%252FD"
+alt="LaTeX: P/D"
+data-equation-content="P/D"
+/>, and</li>
+<li><strong>(b)</strong> one plot containing <img
+class="equation_image"
+title="\ln\eta"
+src="/equation_images/%255Cln%255Ceta"
+alt="LaTeX: \ln\eta"
+data-equation-content="\ln\eta"
+/>, <img
+class="equation_image"
+title="\ln f"
+src="/equation_images/%255Cln%2520f"
+alt="LaTeX: \ln f"
+data-equation-content="\ln f"
+/>, <img
+class="equation_image"
+title="\ln p"
+src="/equation_images/%255Cln%2520p"
+alt="LaTeX: \ln p"
+data-equation-content="\ln p"
+/>, and <img
+class="equation_image"
+title="\ln\epsilon"
+src="/equation_images/%255Cln%255Cepsilon"
+alt="LaTeX: \ln\epsilon"
+data-equation-content="\ln\epsilon"
+/> versus <img
+class="equation_image"
+title="P/D"
+src="/equation_images/P%252FD"
+alt="LaTeX: P/D"
+data-equation-content="P/D"
+/>.</li>
+</ul>
+<p>The second plot converts the product <img
+class="equation_image"
+title="k_\infty=\eta f p\epsilon"
+src="/equation_images/k_%255Cinfty%253D%255Ceta%2520f%2520p%255Cepsilon"
+alt="LaTeX: k_\infty=\eta f p\epsilon"
+data-equation-content="k_\infty=\eta f p\epsilon"
+/> to the sum</p>
+<p><img
+class="equation_image"
+title="\ln k_\infty=\ln\eta+\ln f+\ln p+\ln\epsilon,
+"
+src="/equation_images/%255Cln%2520k_%255Cinfty%253D%255Cln%255Ceta%252B%255Cln%2520f%252B%255Cln%2520p%252B%255Cln%255Cepsilon%252C%250A"
+alt="LaTeX: \ln k_\infty=\ln\eta+\ln f+\ln p+\ln\epsilon,
+"
+data-equation-content="\ln k_\infty=\ln\eta+\ln f+\ln p+\ln\epsilon,
+"
+/></p>
+<p>making each factor’s contribution visible. Use enough <img
+class="equation_image"
+title="P/D"
+src="/equation_images/P%252FD"
+alt="LaTeX: P/D"
+data-equation-content="P/D"
+/> values to obtain smooth curves comparable to FNRP Figure 4.7.</p>
+<h2 id="problem-3-bonus">Problem 3 [Bonus]</h2>
+<p>Create a hexagonal-pitch SFR unit cell using the materials and dimensions in the example notebook. Use a volume-averaged fuel mixture of natural-enrichment UO<img
+class="equation_image"
+title="_2"
+src="/equation_images/_2"
+alt="LaTeX: _2"
+data-equation-content="_2"
+/> and 100% <img
+class="equation_image"
+title="{}^{239}\mathrm{Pu}"
+src="/equation_images/%257B%257D%255E%257B239%257D%255Cmathrm%257BPu%257D"
+alt="LaTeX: {}^{239}\mathrm{Pu}"
+data-equation-content="{}^{239}\mathrm{Pu}"
+/> PuO<img
+class="equation_image"
+title="_2"
+src="/equation_images/_2"
+alt="LaTeX: _2"
+data-equation-content="_2"
+/>, each with density <img
+class="equation_image"
+title="10.5~\mathrm{g\,cm^{-3}}"
+src="/equation_images/10.5~%255Cmathrm%257Bg%255C%252Ccm%255E%257B-3%257D%257D"
+alt="LaTeX: 10.5~\mathrm{g\,cm^{-3}}"
+data-equation-content="10.5~\mathrm{g\,cm^{-3}}"
+/>.</p>
+<ul>
+<li><strong>(a)</strong> Define and apply a procedure to determine the PuO<img
+class="equation_image"
+title="_2"
+src="/equation_images/_2"
+alt="LaTeX: _2"
+data-equation-content="_2"
+/> volume fraction required for <img
+class="equation_image"
+title="k_\infty=1.1"
+src="/equation_images/k_%255Cinfty%253D1.1"
+alt="LaTeX: k_\infty=1.1"
+data-equation-content="k_\infty=1.1"
+/>.</li>
+<li><strong>(b)</strong> Compute the neutron spectrum in each region and use the result to assess the approximation in FNRP Eq. (4.8).</li>
+</ul>

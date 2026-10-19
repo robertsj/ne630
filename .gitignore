@@ -25,6 +25,27 @@ __pycache__/
 /grades/review/*/restricted/
 /grades/review/*/runs/
 
+# Homework solution manuals are generated locally, not stored on Fall2026.
+/homework/solutions/*.pdf
+
+# Local notebook checkpoints and OpenMC run products (not lesson sources).
+/notebooks/.ipynb_checkpoints/
+/notebooks/.ne630_draft_runs/
+/notebooks/lesson_12_sphere_runs/
+/notebooks/model.xml
+/notebooks/statepoint.*.h5
+/notebooks/summary.h5
+/notebooks/tallies.out
+
+# Generated exam reference and scratch conversion/TeX files.
+/exam/ex1/cheatsheet/*.pdf
+/exam/ex1/cheatsheet/*.aux
+/exam/ex1/cheatsheet/*.log
+/exam/ex1/cheatsheet/*.out
+/tmp.html
+/build/tmp.html
+/texput.fls
+
 # Slide decks and figure build products.  Source-less assets live under
 # slides/figures/static/ and remain visible to Git.
 /slides/.build/

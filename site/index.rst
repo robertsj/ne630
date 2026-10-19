@@ -96,13 +96,16 @@ available for that lesson.
    * - **Lesson 21** — Reactivity Coefficients
      - `PDF <_static/handouts/lesson-21/lesson_21_handout.pdf>`__
      - —
+   * - **Lesson 22** — Reactivity Impacts of Xenon and Samarium
+     - `PDF <_static/handouts/lesson-22/lesson_22_handout.pdf>`__
+     - —
 
 Handout source and support files
 --------------------------------
 
 The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
 Download the complete source bundle for a ready-to-build copy, or pair a wrapper
-with its body file and the shared class. Lessons 15--21 are distributed as PDFs
+with its body file and the shared class. Lessons 15--22 are distributed as PDFs
 only.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|

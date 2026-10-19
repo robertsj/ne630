@@ -1,7 +1,7 @@
 # NE 630 board-supported handout framework
 
 This package contains a reusable LaTeX class and printable handouts for Lessons
-1--10 and 12--21.
+1--10 and 12--22.
 The design separates three kinds of content:
 
 1. **Fixed inputs** -- reading, objectives, notation, constants, data tables, and problem statements that students should not have to copy from the board.
@@ -120,3 +120,12 @@ Start with the two-page limit. Put on the sheet only material that is expensive
 or unhelpful to reproduce by hand: fixed data, long expressions, diagrams, and
 problem statements. Leave reasoning transitions, intermediate algebra,
 interpretation, and selected final results for lecture and student annotation.
+
+## Lesson 22
+
+Lesson 22 uses `ne630handout.cls` and is published as a PDF. Build it with
+`make L22`. Its inputs are `lesson_22_handout.tex`, the shared class,
+`lesson_22_xenon_transient.py` (the printed listing),
+`figures/xe135_capture.pgf`, and `figures/lesson_22_Xe_transient.pdf`.
+The supplied PGF plot contains Xe-135 capture data; no OpenMC installation
+is needed to compile the handout.

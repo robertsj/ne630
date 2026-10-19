@@ -98,7 +98,7 @@ available for that lesson.
      - —
    * - **Lesson 22** — Reactivity Impacts of Xenon and Samarium
      - `PDF <_static/handouts/lesson-22/lesson_22_handout.pdf>`__
-     - —
+     - `OpenMC notebook <_static/notebooks/lesson_22.ipynb>`__
 
 Handout source and support files
 --------------------------------

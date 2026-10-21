@@ -148,11 +148,15 @@ Build with `make L22 L23` (or `make lesson22 lesson23`).
   Xe135 MT=102 data; its text inherits the handout fonts. See the
   [figure guide](figures/README.md) for regeneration and data provenance.
   The transient figure remains a local copy of the slide figure.
-- `lesson_23_handout.tex` remains the original two-page reading guide using
-  `ne630_ch04_reading_guide_common.tex`. Its depletion figure is copied from
-  `../slides/figures/static/depletion_chain.pdf`.
+- `lesson_23_handout.tex` is a two-page reading guide using
+  `ne630_ch04_reading_guide_common.tex`. Its editable depletion chain is included
+  directly from `figures/depletion_chain_tikz.tex`, retaining shared isotope
+  columns and element rows with fixed-size stacked labels. FNRP equation
+  numbers use `\tag`, with asterisks explained
+  where the expression is modified. See the [figure guide](figures/README.md)
+  for standalone compilation and the figure conventions.
 
-Original Downloads files are untouched. Lesson 22 is already published on the
-course site; Lesson 23 remains a draft and is not linked or exported there.
+Original Downloads files are untouched. Lessons 22 and 23 are published as
+PDF-only handouts on the course site.
 Committing source updates does not republish the site; a release must rebuild
 and validate the student-facing exports separately.

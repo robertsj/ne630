@@ -164,7 +164,7 @@ lesson_22_handout.pdf: lesson_22_handout.tex ne630handout.cls lesson_22_xenon_tr
 	figures/xe135_capture.pgf figures/lesson_22_Xe_transient.pdf
 	$(LATEXMK) $(FLAGS) lesson_22_handout.tex
 
-lesson_23_handout.pdf: lesson_23_handout.tex ne630_ch04_reading_guide_common.tex figures/depletion_chain.pdf
+lesson_23_handout.pdf: lesson_23_handout.tex ne630_ch04_reading_guide_common.tex figures/depletion_chain_tikz.tex
 	$(LATEXMK) $(FLAGS) lesson_23_handout.tex
 
 handout_template.pdf: handout_template.tex ne630boardhandout.cls

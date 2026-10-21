@@ -1,5 +1,53 @@
 # Handout figure sources
 
+## Actinide depletion chain (Lesson 23)
+
+`depletion_chain_tikz.tex` is an editable, self-contained TikZ adaptation of
+the same-named Windows Downloads file supplied on 2026-10-21. The original
+download is unchanged. The diagram uses the source's purple/orange distinctions
+without the 23 visible branch numbers. Equal mass numbers
+share a horizontal coordinate across every element row; the source's diagonal
+progression and cross-row alignments are preserved. A common mapping gives
+`x = A - 231`, spaced by 0.655 cm per mass-number unit. The original vertical
+coordinates are retained, with 0.64 cm per vertical unit. Do not independently
+center rows or rearrange nodes: those alignments carry meaning.
+
+The handout includes the figure directly, so text and math inherit its font
+faces. Compact labels stack the mass/state (5.8 pt) above the element (7.4 pt),
+keeping adjacent isotopes legible without shifting their centers. The two
+pseudo-state labels are 6.8 pt. Geometry is independent of
+these text sizes: do not wrap the
+figure in `\resizebox`. Colors preserve the supplied purple (`#512888`) and
+orange (`#F58220`). The handout caption explains the color key, `m/g` states,
+Am-242g treatment, and `Pseudo` labels using the
+[IAEA WIMS-D branch notes](https://www-nds.iaea.org/wimsd/achain.htm).
+It links the complete notes rather than reproducing benchmark-dependent
+branching/yield parameters as universal constants. The downloaded drawing's
+17/19 labels were swapped relative to the webpage; source comments now use the
+webpage correspondence. No numbered annotations remain in the rendered figure.
+
+```tex
+% Load TikZ and amsmath in the parent preamble.
+\begingroup
+\def\NEDepletionChainEmbedded{}
+\input{figures/depletion_chain_tikz.tex}
+\endgroup
+```
+
+From `handouts/`, `make L23` rebuilds the handout when this source changes.
+For a standalone figure, run from `handouts/figures/`:
+
+```bash
+xelatex -interaction=nonstopmode -halt-on-error depletion_chain_tikz.tex
+```
+
+Standalone output uses Libertinus, matching the current L23 reading-guide
+backend. No external images or numerical files are required. The former
+`depletion_chain.pdf` is retained as a historical asset but is no longer
+referenced by L23.
+
+Crossings without dots are not additional graph junctions.
+
 ## Xe-135 capture cross section (Lesson 22)
 
 `plot_xe135_capture.py` is a standalone generator. It reads **Xe135, MT=102

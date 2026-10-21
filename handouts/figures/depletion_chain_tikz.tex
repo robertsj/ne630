@@ -1,0 +1,208 @@
+% Editable, column-width adaptation of the supplied depletion_chain_tikz.tex.
+% Standalone: xelatex depletion_chain_tikz.tex
+% Embedded: define \NEDepletionChainEmbedded, then \input this file in a group.
+% Original Downloads file is retained unchanged. The source palette is retained.
+% Routine route numbers are omitted; the handout caption explains the key.
+% Reference: https://www-nds.iaea.org/wimsd/achain.htm
+% Horizontal coordinates are shared mass-number columns (x = A - 231).
+% Restore the source's cross-row alignments; never center rows independently.
+% Scale geometry only: fixed-size text is not transformed or resized.
+\ifdefined\NEDepletionChainEmbedded
+  \let\NEChainStart\relax
+  \let\NEChainFinish\relax
+\else
+  \documentclass[tikz,border=3pt]{standalone}
+  \usepackage{libertinus}
+  \usepackage{amsmath}
+  \newcommand{\NEChainStart}{\begin{document}}
+  \newcommand{\NEChainFinish}{\end{document}}
+\fi
+\NEChainStart
+\begingroup
+\usetikzlibrary{arrows.meta,calc,backgrounds}
+\definecolor{NEChainPurple}{HTML}{512888}
+\definecolor{NEChainOrange}{HTML}{F58220}
+\definecolor{NEChainLabel}{HTML}{202024}
+% Compact chart labels keep the isotope centers on their physical columns.
+% Mass/state above element avoids squeezing adjacent labels horizontally.
+\newcommand{\NEChainNuclide}[2]{\shortstack[c]{%
+  {\fontsize{5.8}{6.2}\selectfont\ensuremath{#1}}\\[-1.5pt]
+  {\fontsize{7.4}{8.5}\selectfont\ensuremath{\mathrm{#2}}}}}
+\begin{tikzpicture}[
+  x=.655cm,y=.64cm,
+  font=\fontsize{7.4}{8.5}\selectfont,
+  nuclide/.style={text=NEChainLabel,fill=white,
+    inner xsep=.35pt,inner ysep=1pt,outer sep=.2pt},
+  pseudo/.style={text=NEChainOrange,font=\fontsize{6.8}{8}\selectfont\itshape,
+    inner sep=.2pt,anchor=north},
+  orange line/.style={draw=NEChainOrange,line width=.45pt},
+  purple line/.style={draw=NEChainPurple,line width=.45pt},
+  orange arrow/.style={orange line,-{Stealth[length=1mm,width=.7mm]}},
+  purple arrow/.style={purple line,-{Stealth[length=1mm,width=.7mm]}}
+]
+% ------------------------------------------------------------------
+% Nuclides. Equal A has equal x across every element row.
+% Element rows retain the supplied vertical coordinates.
+% ------------------------------------------------------------------
+\node[nuclide] (Th232) at (1.0000,0.0000) {\NEChainNuclide{232}{Th}};
+
+\node[nuclide] (Pa231) at (0.0000,1.5000) {\NEChainNuclide{231}{Pa}};
+\node[nuclide] (Pa233) at (2.0000,1.5000) {\NEChainNuclide{233}{Pa}};
+
+\node[nuclide] (U232)  at (1.0000,3.0000) {\NEChainNuclide{232}{U}};
+\node[nuclide] (U233)  at (2.0000,3.0000) {\NEChainNuclide{233}{U}};
+\node[nuclide] (U234)  at (3.0000,3.0000) {\NEChainNuclide{234}{U}};
+\node[nuclide] (U235)  at (4.0000,3.0000) {\NEChainNuclide{235}{U}};
+\node[nuclide] (U236)  at (5.0000,3.0000) {\NEChainNuclide{236}{U}};
+\node[nuclide] (U237)  at (6.0000,3.0000) {\NEChainNuclide{237}{U}};
+\node[nuclide] (U238)  at (7.0000,3.0000) {\NEChainNuclide{238}{U}};
+
+\node[nuclide] (Np237) at (6.0000,4.6500) {\NEChainNuclide{237}{Np}};
+\node[nuclide] (Np239) at (8.0000,4.6500) {\NEChainNuclide{239}{Np}};
+
+\node[nuclide] (Pu238) at (7.0000,6.3500) {\NEChainNuclide{238}{Pu}};
+\node[nuclide] (Pu239) at (8.0000,6.3500) {\NEChainNuclide{239}{Pu}};
+\node[nuclide] (Pu240) at (9.0000,6.3500) {\NEChainNuclide{240}{Pu}};
+\node[nuclide] (Pu241) at (10.0000,6.3500) {\NEChainNuclide{241}{Pu}};
+\node[nuclide] (Pu242) at (11.0000,6.3500) {\NEChainNuclide{242}{Pu}};
+
+\node[nuclide] (Am241)  at (10.0000,7.9000) {\NEChainNuclide{241}{Am}};
+\node[nuclide] (Am242m) at (11.0000,7.9000) {\NEChainNuclide{242\mathrm{m}}{Am}};
+\node[nuclide] (Am243)  at (12.0000,7.9000) {\NEChainNuclide{243}{Am}};
+\node[nuclide,text=NEChainOrange] (Am242g) at (11.0000,9.6500)
+  {\NEChainNuclide{242\mathrm{g}}{Am}};
+
+\node[nuclide] (Cm242) at (11.0000,11.2500) {\NEChainNuclide{242}{Cm}};
+\node[nuclide] (Cm243) at (12.0000,11.2500) {\NEChainNuclide{243}{Cm}};
+\node[nuclide] (Cm244) at (13.0000,11.2500) {\NEChainNuclide{244}{Cm}};
+
+% The pseudo states remain unboxed labels, as in the source.
+\coordinate (PseudoLeft)  at (1.5000,2.1500);
+\coordinate (PseudoRight) at (6.5000,2.1500);
+\node[pseudo] at (.3000,2.3000) {Pseudo};
+\node[pseudo] at (6.5000,2.0500) {Pseudo};
+
+% Routing points for two-color paths. The color changes occur at
+% these bends; only the final segment carries an arrowhead.
+\coordinate (Pa231Bend) at (0.0000,0.0000);
+\coordinate (Pa233Bend) at (2.0000,0.0000);
+\coordinate (U232Bend) at (1.0000,1.5000);
+\coordinate (U234Bend) at (3.0000,1.5000);
+\coordinate (Np239Bend) at (8.0000,3.0000);
+\coordinate (Pu238Bend) at (7.0000,4.6500);
+\coordinate (Pu240Bend) at (9.0000,4.9700);
+\coordinate (Am243Bend) at (12.0000,6.3500);
+\coordinate (Cm244Bend) at (13.0000,7.9000);
+
+% Draw paths behind the labels. Crossings without a dot are retained
+% as ordinary crossings, not extra graph nodes.
+\begin{pgfonlayer}{background}
+
+% ------------------------------------------------------------------
+% Branch notes below refer to the IAEA web page, not visible figure labels.
+% ------------------------------------------------------------------
+% (1), (2): horizontal curium paths.
+\draw[orange arrow] (Cm243.east) -- (Cm244.west);
+\draw[orange arrow] (Cm242.east) -- (Cm243.west);
+
+% (3), (4): vertically stacked americium states and curium.
+\draw[purple arrow] (Am242g.north) -- (Cm242.south);
+\draw[purple arrow] (Am242m.north) -- (Am242g.south);
+
+% (5), (6): the two branches out of 241Am.
+\draw[orange arrow] (Am241.east) -- (Am242m.west);
+\draw[orange arrow] (Am241.north east) -- (Am242g.south west);
+
+% (7): leftward return from 241Am to 237Np.
+\draw[purple arrow] (Am241.west) -- (6.0000,7.9000) -- (Np237.north);
+
+% (8)--(10): three nested returns from Cm to Pu.
+\draw[purple arrow] (Cm244.north) -- (13.0000,13.0500) --
+  (9.0000,13.0500) -- (Pu240.north);
+\draw[purple arrow] (Cm243.north) -- (12.0000,12.5000) --
+  (8.0000,12.5000) -- (Pu239.north);
+\draw[purple arrow] (Cm242.north) -- (11.0000,11.9500) --
+  (7.0000,11.9500) -- (Pu238.north);
+
+% (11): 241Pu to 241Am.
+\draw[purple arrow] (Pu241.north) -- (Am241.south);
+
+% (12): rightward orange segment, then upward purple segment.
+\draw[orange line] (Np239.north east) -- (Np239.north east |- Pu240Bend)
+  -- (Pu240Bend);
+\draw[purple arrow] (Pu240Bend) -- (Pu240.south);
+
+% (13): direct vertical path from 239Np to 239Pu.
+\draw[purple arrow] (Np239.north) -- (Pu239.south);
+
+% (14): 237Np to 238Pu, with the original color change at the bend.
+\draw[orange line] (Np237.east) -- (Pu238Bend);
+\draw[purple arrow] (Pu238Bend) -- (Pu238.south);
+
+% (15): leftward/downward return from 238Pu to 234U.
+\draw[purple arrow] (Pu238.west) -- (3.0000,6.3500) -- (U234.north);
+
+% (16): 238U to 239Np, with a color change at the bend.
+\draw[orange line] (U238.east) -- (Np239Bend);
+\draw[purple arrow] (Np239Bend) -- (Np239.south);
+
+% IAEA (19): 237U to 237Np (the downloaded drawing swapped 17/19).
+\draw[purple arrow] (U237.north) -- (Np237.south);
+
+% (18): 233Pa to 234U, with a color change at the bend.
+\draw[orange line] (Pa233.east) -- (U234Bend);
+\draw[purple arrow] (U234Bend) -- (U234.south);
+
+% IAEA (17): right-hand pseudo route, 238U -> Pseudo -> 237U.
+\draw[orange arrow] (U238.south west) -- (PseudoRight);
+\draw[purple arrow] (PseudoRight) -- (U237.south east);
+
+% (20): the final horizontal U-chain step.
+\draw[orange arrow] (U237.east) -- (U238.west);
+
+% (21): the left-hand pseudo route, 233U -> Pseudo -> 232U.
+\draw[orange arrow] (U233.south west) -- (PseudoLeft);
+\draw[purple arrow] (PseudoLeft) -- (U232.south east);
+
+% (22), (23): the two paths out of 232Th.
+\draw[orange line] (Th232.west) -- (Pa231Bend);
+\draw[purple arrow] (Pa231Bend) -- (Pa231.south);
+\draw[orange line] (Th232.east) -- (Pa233Bend);
+\draw[purple arrow] (Pa233Bend) -- (Pa233.south);
+
+% ------------------------------------------------------------------
+% Paths that are unnumbered in the supplied figure.
+% ------------------------------------------------------------------
+% Pa -> U paths.
+\draw[orange line] (Pa231.east) -- (U232Bend);
+\draw[purple arrow] (U232Bend) -- (U232.south);
+\draw[purple arrow] (Pa233.north) -- (U233.south);
+
+% Main uranium chain (the last step, (20), is drawn above).
+\foreach \from/\to in {U233/U234,U234/U235,U235/U236,U236/U237}
+  \draw[orange arrow] (\from.east) -- (\to.west);
+
+% Main plutonium chain.
+\foreach \from/\to in {Pu238/Pu239,Pu239/Pu240,Pu240/Pu241,Pu241/Pu242}
+  \draw[orange arrow] (\from.east) -- (\to.west);
+
+% Both americium states connect to 243Am.
+\draw[orange arrow] (Am242m.east) -- (Am243.west);
+\draw[orange arrow] (Am242g.south east) -- (Am243.north west);
+
+% Capture in 242Pu, followed by decay of the omitted intermediate, feeds 243Am.
+\draw[orange line] (Pu242.east) -- (Am243Bend);
+\draw[purple arrow] (Am243Bend) -- (Am243.south);
+
+% Right-hand path from 243Am to 244Cm.
+\draw[orange line] (Am243.east) -- (Cm244Bend);
+\draw[purple arrow] (Cm244Bend) -- (Cm244.south);
+
+% Outer return from 243Am to 239Np, below the Pu row.
+\draw[purple arrow] (Am243.south east) -- (12.2045,7.5500) --
+  (12.2045,4.6500) -- (Np239.east);
+
+\end{pgfonlayer}
+\end{tikzpicture}
+\endgroup
+\NEChainFinish

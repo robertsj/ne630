@@ -100,12 +100,16 @@ available for that lesson.
      - `PDF <_static/handouts/lesson-22/lesson_22_handout.pdf>`__
      - `OpenMC notebook <_static/notebooks/lesson_22.ipynb>`__
 
+   * - **Lesson 23** — Reactivity Impacts of Fuel Depletion
+     - `PDF <_static/handouts/lesson-23/lesson_23_handout.pdf>`__
+     - —
+
 Handout source and support files
 --------------------------------
 
 The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
 Download the complete source bundle for a ready-to-build copy, or pair a wrapper
-with its body file and the shared class. Lessons 15--22 are distributed as PDFs
+with its body file and the shared class. Lessons 15--23 are distributed as PDFs
 only.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|

@@ -63,7 +63,8 @@
 \usepackage{amsmath,booktabs,array,graphicx,xcolor,tikz,ragged2e}
 \usetikzlibrary{arrows.meta,calc,decorations.pathreplacing,positioning}
 \providecolor{ksupurple}{HTML}{512888}
-\providecolor{orange}{HTML}{CA7C1B}
+% Match the Wildcat theme's wcalerted, overriding xcolor's built-in orange.
+\definecolor{orange}{HTML}{CA7C1B}
 % These synthesis prompts are not OpenMC-specific.
 \renewtcolorbox{Explore}[1]{enhanced,boxrule=.5pt,arc=1pt,
  colback=orange!5,colframe=orange!65,left=6pt,right=6pt,top=4pt,bottom=4pt,
@@ -85,197 +86,247 @@
   \setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}}
 
 
-% SOURCE: lecture_23(1).tex, retaining all substantive frames and both examples.
-% Depletion-chain artwork is copied from slides/figures/static/depletion_chain.pdf.
-% Local clarification of isotope subscripts and a table header is visible.
+% FNRP Chapter 10; both numerical examples retain their supplied data.
+% The editable chain is included directly from figures/depletion_chain_tikz.tex.
 % No fuel density or enrichment convention is silently supplied.
-\hypersetup{pdftitle={NE 630 -- Lesson 23: Reactivity impacts of fuel depletion},pdfauthor={Jeremy Roberts}}
+\hypersetup{pdftitle={NE 630 -- Lesson 23: Reactivity impacts of fuel depletion},pdfauthor={Jeremy Roberts},pdfsubject={Fuel depletion and long-term core reactivity}}
 \begin{document}
 \NEbody
 \Lesson{23}{Reactivity impacts of fuel depletion}
  {FNRP \S\,10.4--10.5; Eqs.\ (10.27)--(10.39).}
- {How do nuclide inventories and core reactivity evolve with time, fluence, and burnup?}
+ {}
 \textbf{Objective:} Quantify the evolution of nuclides and core reactivity with burnup.
 
 \colstart
 \Sec{1}{Review: reactivity in time}
-During operation, ${}^{235}$U is consumed and parasitic fission products are born. The changing excess reactivity must be balanced by control.
+As a reactor operates (at power), its excess reactivity typically decreases
+because \textcolor{ksupurple}{${}^{235}$U is consumed} and
+\textcolor{ksupurple}{parasitic fission products (FPs) are born}. However,
+that excess reactivity must \textcolor{orange}{be balanced by control}.
 
-As in Lesson 22, write the absorption denominator as
-\begin{align*}
- \mathcal A(t)&=\bar\Sigma_{aT}^{F}(t)
-                  +\bar\Sigma_{aT}^{\mathrm{FP}}(t)\\
- &\quad+\varsigma\frac{V_M}{V_F}
-    \left[\bar\Sigma_{aT}^{M}
-          +\bar\Sigma_{aT}^{\mathrm{control}}(t)\right].
-\end{align*}
-Then the time-varying multiplication factor is
-$$
- \boxed{k(t)=
- \frac{\nu\bar\Sigma_{fT}^{F}(t)\,p\,\varepsilon P_{\mathrm{NL}}}
-      {\mathcal A(t)}.}
-$$
-\NEsmall{FNRP Eq.\ (10.4*), as used in the slides. $P_{\mathrm{NL}}$ is the nonleakage probability.}
-The adjustable control term is represented in the moderator volume. Rod position or soluble-poison concentration is changed to keep $k(t)=1$.
+\vspace{5pt}
+
+To represent these processes, define a time-varying multiplication factor as
+\begin{equation*}
+ k(t)=\frac{\textcolor{ksupurple}{\nu\bar\Sigma_{fT}^{F}(t)}
+                 \,p\,\varepsilon P_{\mathrm{NL}}}
+ {\bar\Sigma_{aT}^{F}(t)
+  +\textcolor{ksupurple}{\bar\Sigma_{aT}^{\mathrm{FP}}(t)}
+  +\varsigma\frac{V_M}{V_F}
+   \left(\bar\Sigma_{aT}^{M}
+   +\textcolor{orange}{\bar\Sigma_{aT}^{\mathrm{control}}(t)}\right)},
+ \tag{FNRP 10.4*}
+\end{equation*}
+where $P_{\mathrm{NL}}$ is the probability that neutrons do not leak from the system.
+The asterisk marks the explicit control term.
+
+
+
+\vspace{5pt}
+
+During operation, $\textcolor{orange}{\bar\Sigma_{aT}^{\mathrm{control}}(t)}$
+must be adjusted to maintain $k(t)=1$. Here,
+\textcolor{orange}{adjustable control} is introduced within the moderator
+volume, consistent with typical LWRs, whether by changing the
+\textcolor{orange}{rod position} or \textcolor{orange}{soluble poison concentration}.
+
+\vspace{5pt}
 
 \Sec{2}{A representative depletion chain}
-In principle, all nuclides connected through capture or decay should be modeled simultaneously. Each arrow \textbf{into} a nuclide represents production; each arrow \textbf{out} represents destruction.
 
-The representative LWR chain discussed in the slides still tracks \textbf{18 nuclides} for ${}^{235}$U-fueled systems. In addition, each fissile nuclide has its own fission-product distribution, so the full isotopic inventory remains complex.
+In theory, all nuclides connected through capture or decay should be
+simultaneously modeled as functions of time. A practical depletion chain for
+analysis of LWRs is shown below: each arrow \emph{into} a nuclide represents
+production, while an \emph{outward} arrow represents destruction.
 
-\IfFileExists{./figures/depletion_chain.pdf}{%
- \begin{center}
- \includegraphics[width=\linewidth]{./figures/depletion_chain.pdf}
- \end{center}
- \figcap{Representative chain referenced in the slides, adapted from the IAEA WIMS actinide chain.}
-}{%
- \begin{KeyBox}{Referenced chain figure}
- The original \texttt{depletion\_chain.pdf} is not embedded in the supplied slide TeX and was not attached. The source describes an adaptation of the
- \href{https://www-nds.iaea.org/wimsd/achain.htm}{IAEA WIMS actinide chain}, excluding $(n,2n)$ reactions and noting that ${}^{242}$Am requires special treatment.
- \end{KeyBox}
-}
-\NEsmall{The three-nuclide model below is the separate, more drastic approximation developed in FNRP.}
-
-\Sec{3}{Make the four simplifying assumptions}
-\textbf{1.} Track only ${}^{235}$U, ${}^{238}$U, and ${}^{239}$Pu.
-
-\textbf{2.} Ignore radioactive decay of these nuclides.
-
-\textbf{3.} Treat ${}^{239}$Pu as produced \emph{directly and immediately} by ${}^{238}$U$(n,\gamma)$.
-
-\textbf{4.} Treat the ${}^{238}$U inventory as constant: its amount is so large that depletion losses are neglected.
+\begin{center}
+\begingroup
+\def\NEDepletionChainEmbedded{}
+\input{figures/depletion_chain_tikz.tex}
+\endgroup
+\end{center}
+\figcap{Adapted from the \href{https://www-nds.iaea.org/wimsd/achain.htm}{IAEA WIMS-D chain}.
+\textcolor[HTML]{F58220}{Orange}: neutron-induced production;
+\textcolor[HTML]{512888}{purple}: decay.
+Mixed (orange+purple) paths collapse immediately decaying intermediates. The superscripts
+$\mathrm{m}$ and $\mathrm{g}$ refer to metastable and ground states; orange ${}^{242\mathrm{g}}$Am
+uses reduced-concentration bookkeeping for its branch to ${}^{242}$Cm.
+\textit{Pseudo} denotes a fictitious fission product that is introduced to account for non-negligible contributions from $(n,2n)$ interactions.  See the IAEA WIMS-D documentation for details. }
 
 \colnext
-\Sec{4}{Solve the simplified depletion model}
-For constant total flux $\phi$ and constant, spectrum-averaged cross sections, the ${}^{235}$U balance is
-\begin{align*}
- \frac{dN^{\mathrm{U}235}}{dt}
- &=-N^{\mathrm{U}235}(t)\bar\sigma_a^{\mathrm{U}235}\phi,\\
- N^{\mathrm{U}235}(t)
- &=N^{\mathrm{U}235}(0)
- e^{-\bar\sigma_a^{\mathrm{U}235}\phi t}.
-\end{align*}
-\NEsmall{FNRP Eqs.\ (10.27)$\rightarrow$(10.31).}
-The ${}^{238}$U approximation is
-\begin{align*}
- \frac{dN^{\mathrm{U}238}}{dt}
- &=-N^{\mathrm{U}238}(t)\bar\sigma_a^{\mathrm{U}238}\phi
- \simeq0,\\
- N^{\mathrm{U}238}(t)
- &=N^{\mathrm{U}238}(0).
-\end{align*}
-\NEsmall{FNRP Eqs.\ (10.27)$\rightarrow$(10.34).}
-Production of ${}^{239}$Pu by capture in ${}^{238}$U competes with absorption in ${}^{239}$Pu:
-\begin{align*}
- \frac{dN^{\mathrm{Pu}239}}{dt}
- &=N^{\mathrm{U}238}(0)\bar\sigma_\gamma^{\mathrm{U}238}\phi\\
- &\quad-N^{\mathrm{Pu}239}(t)\bar\sigma_a^{\mathrm{Pu}239}\phi.
-\end{align*}
-The closed-form result in the slide is
-$$
- \boxed{\begin{aligned}
- N^{\mathrm{Pu}239}(t)
- &=\frac{\bar\sigma_\gamma^{\mathrm{U}238}}
-        {\bar\sigma_a^{\mathrm{Pu}239}}
-     N^{\mathrm{U}238}(0)\\[-1pt]
- &\quad\times
-   \left[1-e^{-\bar\sigma_a^{\mathrm{Pu}239}\phi t}\right].
- \end{aligned}}
-$$
-\NEsmall{FNRP Eqs.\ (10.30)$\rightarrow$(10.37). The displayed Pu solution corresponds to an initially zero ${}^{239}$Pu inventory.}
 
-\Sec{5}{Time, fluence, and burnup}
-The \textbf{fluence} is the time-integrated flux:
-$$
- \boxed{\Phi(t)=\int_0^t\phi(t')\,dt',\qquad
-        [\Phi]=\mathrm{cm}^{-2}.}
-$$
-For the constant-flux example, $\Phi(t)=\phi t$.
+\Sec{3}{Further simplifications}
 
-\textbf{Burnup} is the energy produced per \emph{initial unit mass of actinides}. The slide lists
-\begin{center}
-\renewcommand{\arraystretch}{1.1}
-\begin{tabular}{@{}ll@{}}
-\toprule
-Unit & Interpretation\\
-\midrule
-MWd/kg & Megawatt-days per kilogram\\
-GWd/MTU & Gigawatt-days per metric ton of uranium\\
-J/kg & Joules per kilogram\\
-\bottomrule
-\end{tabular}
-\end{center}
-MWd/kg and GWd/MTU have the same numerical value when the initial mass basis is the same.
+Because each fissile nuclide has unique fission-product distributions,
+tracking the entire isotopic inventory remains quite complex!
+A much more drastic simplification is presented in FNRP based on these assumptions:
 
-The slides also mention \textbf{percent ${}^{235}$U} as the inventory-based measure used at the local TRIGA, while noting that this is not burnup \emph{per se}.
+\vspace{5pt}
+
+\textbf{1.} Only ${}^{235}$U, ${}^{238}$U, and ${}^{239}$Pu are important.
+\vspace{2pt}
+
+
+\textbf{2.} Ignore their decay.
+\vspace{2pt}
+
+\textbf{3.} ${}^{239}$Pu is produced \emph{directly} and \emph{immediately}
+from ${}^{238}$U$(n,\gamma)$ reactions.
+\vspace{2pt}
+
+\textbf{4.} The amount of ${}^{238}$U is so large that absorption losses
+are negligible, and the amount of ${}^{238}$U remains constant.
+
+\vspace{5pt}
+
+The resulting model can then be expressed by the following three boxed equations:
+
+\begin{equation*}
+\tag{10.27 $\rightarrow$ 10.31}
+\begin{split}
+\frac{dN^{\text{U}235}}{dt} &=  -N^{\text{U}235}(t) \bar{\sigma}^{\text{U}235}_a \phi \\
+ \longrightarrow \, & \boxed{N^{\text{U}235}(t) = N^{\text{U}235}(0) e^{-\bar{\sigma}^{\text{U}235}_a \phi t}}
+\end{split}
+\end{equation*}
+
+\begin{equation*}
+\tag{10.27 $\rightarrow$  10.34}
+\begin{split}
+\frac{dN^{\text{U}238}}{dt} &= -N^{\text{U}238}(t) \bar{\sigma}^{\text{U}238}_a \phi \approx 0 \\
+ \longrightarrow \, & \boxed{N^{\text{U}238}(t) = N^{\text{U}238}(0)}
+\end{split}
+\end{equation*}
+
+\begin{equation*}
+\tag{10.30 $\rightarrow$  10.37}
+\begin{split}
+\frac{dN^{\text{Pu}239}}{dt} &=
+ N^{\text{U}238}(t) \bar{\sigma}^{\text{U}238}_{\gamma} \phi
+ - N^{\text{Pu}239}(t) \bar{\sigma}^{\text{Pu}239}_a \phi \\
+\longrightarrow \, & \boxed{N^{\text{Pu}239}(t)
+  = \frac{\bar{\sigma}^{\text{U}238}_{\gamma}}{\bar{\sigma}^{\text{Pu}239}_a}
+    N^{\text{U}238}(0) \left [1 - e^{-\bar{\sigma}^{\text{Pu}239}_a \phi t} \right ]}
+\end{split}
+\end{equation*}
+
+
+% For constant total flux $\phi$ and constant, spectrum-averaged cross sections,
+% \begin{align*}
+%  \frac{dN^{\mathrm{U}235}}{dt}
+%  &=-N^{\mathrm{U}235}(t)\bar\sigma_a^{\mathrm{U}235}\phi,
+%  \tag{FNRP 10.27}\\
+%  N^{\mathrm{U}235}(t)
+%  &=N^{\mathrm{U}235}(0)e^{-\bar\sigma_a^{\mathrm{U}235}\phi t}.
+%  \tag{FNRP 10.31}
+% \end{align*}
+% Neglecting absorption losses in ${}^{238}$U,
+% \begin{align*}
+%  \frac{dN^{\mathrm{U}238}}{dt}
+%  &=-N^{\mathrm{U}238}(t)\bar\sigma_a^{\mathrm{U}238}\phi\approx0,
+%  \tag{FNRP 10.28}\\
+%  N^{\mathrm{U}238}(t)&\simeq N^{\mathrm{U}238}(0).
+%  \tag{FNRP 10.34}
+% \end{align*}
+% For ${}^{239}$Pu,
+% \begin{equation*}
+%  \frac{dN^{\mathrm{Pu}239}}{dt}
+%  =N^{\mathrm{U}238}(0)\bar\sigma_\gamma^{\mathrm{U}238}\phi
+%   -N^{\mathrm{Pu}239}(t)\bar\sigma_a^{\mathrm{Pu}239}\phi.
+%  \tag{FNRP 10.35}
+% \end{equation*}
+% With $N^{\mathrm{Pu}239}(0)=0$, this gives
+% \begin{equation*}
+%  N^{\mathrm{Pu}239}(t)
+%  =\frac{\bar\sigma_\gamma^{\mathrm{U}238}}{\bar\sigma_a^{\mathrm{Pu}239}}
+%  N^{\mathrm{U}238}(0)\left[1-e^{-\bar\sigma_a^{\mathrm{Pu}239}\phi t}\right].
+%  \tag{FNRP 10.37}
+% \end{equation*}
+
+\Sec{4}{Time, fluence, and burnup}
+Time is a familiar quantity, but alternatives can be useful when quantifying
+depletion effects. For example, the \textbf{fluence} is the time-integrated flux,
+\begin{equation*}
+ \Phi(t)=\int_0^t\phi(t')\,dt',
+ \tag{FNRP 10.32}
+\end{equation*}
+and has units of $\mathrm{cm}^{-2}$. For constant flux, $\Phi(t)=\phi t$.
+
+\vspace{5pt}
+
+\textbf{Burnup} is the energy produced per (initial) unit mass of actinides
+and is listed in a variety of units that include
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
+ \item MWd/kg (most common),
+ \item GWd/MTU (equivalent to MWd/kg on the same mass basis; MTU is
+ ``metric ton (of) uranium''),
+ \item J/kg, and
+ \item \% ${}^{235}$U (not burnup, \emph{per se}, but what we use at our TRIGA).
+\end{itemize}
 \colend
 
 \newpage
-\NEContinue{23}{Energy production, reactivity, and the two-part example}
+
 \colstart
-\Sec{6}{Compute burnup with the simplified model}
-The fission-rate density is $R_f(t)=\Sigma_f(t)\phi$ in fissions/(cm$^3$s). With the usual $200$ MeV per fission, the slides use
-$$
- \kappa\simeq3.2\times10^{-11}\ \mathrm{J/fission}.
-$$
-Expand the time-dependent fission cross section as
+
+\Sec{5}{Computing burnup with the simplified model}
+The energy produced per unit volume in one second is the product of the
+fission-rate density $R_f=\Sigma_f\phi$ [fissions/(cm$^3$s)] and the energy
+released per fission, $\kappa\approx3.2\times10^{-11}$ J/fission
+(assuming the usual 200 MeV/fission). For constant flux $\phi$, the
+accumulated energy per unit volume over $t'\in[0,t]$ is
 \begin{align*}
- \Sigma_f(t)
- &=\bar\sigma_f^{\mathrm{U}235}N^{\mathrm{U}235}(t)\\
- &\quad+\bar\sigma_f^{\mathrm{U}238}N^{\mathrm{U}238}(t)
-       +\bar\sigma_f^{\mathrm{Pu}239}N^{\mathrm{Pu}239}(t).
+ Q'''(t) &= \int\int_0^t q'''(t')\,dt' \\
+         &=\int_0^t\kappa\phi\,
+ \overbrace{\Big(\bar\sigma_f^{\mathrm{U}235}N^{\mathrm{U}235}(t')
+ +\bar\sigma_f^{\mathrm{U}238}N^{\mathrm{U}238}(t')
+ +\bar\sigma_f^{\mathrm{Pu}239}N^{\mathrm{Pu}239}(t')\Big)}^{\Sigma_f(t')}\,dt' \, ,
 \end{align*}
-For constant flux, the accumulated energy per unit volume is
-$$
- \boxed{q'''(t)=\int_0^t\kappa\phi\,\Sigma_f(t')\,dt'.}
-$$
-Here $q'''(t)$ denotes \textbf{accumulated energy per volume}, as in the slides, not instantaneous power density.
+where $q'''(t)$ is the instantaneous power density.
 
-For a chosen unit volume of UO$_2$, the slide estimates the initial actinide mass using
-$$
- m\simeq\rho_{\mathrm{UO_2}}\frac{238}{270},
- \qquad \boxed{B(t)=\frac{q'''(t)}{m}.}
-$$
-The enrichment should generally be considered in the mass conversion. Use consistent mass units before reporting $B$; for example, J/cm$^3$ divided by g/cm$^3$ initially gives J/g.
+\vspace{5pt}
 
-\NEsmall{\textbf{Isotope-label clarification.} In the slide's energy integral, the ${}^{238}$U term is paired with $N^{\mathrm{U}235}$ and the Pu term with $N^{\mathrm{U}239}$. Above, each fission cross section is paired with its matching nuclide density, consistent with the stated three-nuclide model.}
+The initial actinide mass per unit volume is
+$m_0 \approx\rho_{\mathrm{UO_2}}(238/270)$, though enrichment should generally
+be considered, and the corresponding burnup is
+\[
+ B(t)=\frac{Q'''(t)}{m_0}.
+\]
 
-\Sec{7}{Connect the depleted inventory to reactivity}
-For the explicit fuel-depletion expression, collect the thermal absorption terms into
-\begin{align*}
- \mathcal A_T(t)
- &=\bar\sigma_{aT}^{\mathrm{U}235}N^{\mathrm{U}235}(t)
-  +\bar\sigma_{aT}^{\mathrm{Pu}239}N^{\mathrm{Pu}239}(t)\\
- &\quad+\Sigma_{aT}^{\mathrm{U}238}
-       +\varsigma\frac{V_m}{V_f}\Sigma_{aT}^{m}.
-\end{align*}
-FNRP Eq.\ (10.39) then becomes
-$$
- \boxed{\begin{aligned}
- k(t)&=\frac{\varepsilon pP_{\mathrm{NL}}}{\mathcal A_T(t)}
- \Big[\nu\bar\sigma_{fT}^{\mathrm{U}235}N^{\mathrm{U}235}(t)\\
- &\hspace{39pt}
- +\nu\bar\sigma_{fT}^{\mathrm{Pu}239}N^{\mathrm{Pu}239}(t)\Big],
- \end{aligned}}
-$$
-with the appropriate $\nu$ for each fissile nuclide, and
-$$
- \rho(t)=1-\frac1{k(t)}.
-$$
-\begin{KeyBox}{The crucial distinction: one-group vs.\ thermal data}
-\textbf{Depletion:} use the total flux over the entire energy range and the corresponding \emph{one-group} cross sections.
+\Sec{6}{Reactivity and depletion}
 
-\textbf{Four-factor reactivity:} use the appropriate \emph{thermal-group} cross sections. The $T$ subscripts are retained explicitly in the slides and here.
-\end{KeyBox}
+Ignoring control and fission products, the multiplication factor can now be written as
+\begin{equation*}
+ k(t)=\frac{\big(\nu\bar\sigma_{fT}^{\mathrm{U}235}N^{\mathrm{U}235}(t)
+       +\nu\bar\sigma_{fT}^{\mathrm{Pu}239}N^{\mathrm{Pu}239}(t)\big)
+       \varepsilon pP_{\mathrm{NL}}}
+ {\bar\sigma_{aT}^{\mathrm{U}235}N^{\mathrm{U}235}(t)
+  +\bar\sigma_{aT}^{\mathrm{Pu}239}N^{\mathrm{Pu}239}(t)
+  +\Sigma_{aT}^{\mathrm{U}238}+\varsigma\frac{V_m}{V_f}\Sigma_{aT}^{m}}.
+ \tag{FNRP 10.39*}
+\end{equation*}
+
+The $T$ subscripts make the thermal-group cross sections explicit.
+Make sure to use the appropriate $\nu$ for each fissile nuclide.
+
+\vspace{5pt}
+
+\textbf{Important:} When doing depletion, we use the total flux over the
+entire energy range and must use the appropriate \emph{1-group} cross sections.
+When using the four-factor formula, we need the appropriate
+\emph{thermal-group} cross sections!
 
 \colnext
-\Sec{8}{Example, part 1: evolve the nuclides}
-Consider \textbf{4\% enriched UO$_2$} with the following spectrum-averaged, one-group cross sections:
+\Sec{7}{Example -- Part 1}
+Consider 4\% enriched UO$_2$ fuel for which the relevant, spectrum-averaged
+cross sections are
+
+\vspace{5pt}
+
 \begin{center}
 \renewcommand{\arraystretch}{1.12}
 \begin{tabular}{@{}lrr@{}}
 \toprule
-Nuclide & $\bar\sigma_a$ (b) & $\bar\sigma_f$ (b)\\
+Nuclide & $\bar\sigma_a$ [b] & $\bar\sigma_f$ [b]\\
 \midrule
 ${}^{235}$U  & $57.20$  & $46.89$\\
 ${}^{238}$U  & $1.02$   & $0.11$\\
@@ -283,22 +334,30 @@ ${}^{239}$Pu & $195.10$ & $124.41$\\
 \bottomrule
 \end{tabular}
 \end{center}
-The total flux is
-$$
- \phi=2\times10^{14}\ \mathrm{cm}^{-2}\mathrm{s}^{-1}.
-$$
-\textbf{(a)} Determine the ${}^{235}$U and ${}^{239}$Pu number densities after each of five years of operation.
 
-\textbf{(b)} Determine the fraction of all power generated by ${}^{239}$Pu after one year of operation.
-\par\vspace{13pt}
 
-\Sec{9}{Example, part 2: evaluate reactivity and burnup}
-Use the inventory from part 1, but use the following \textbf{thermal-group} data in the four-factor expression:
+\vspace{5pt}
+
+Assume the total flux is $\phi=2\times10^{14}$ cm$^{-2}$s$^{-1}$. Then
+\begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parsep}{0pt}
+ \item determine the number densities of ${}^{235}$U and ${}^{239}$Pu
+ after each of 5 years of operation, and
+ \item determine the fraction of all power generated due to ${}^{239}$Pu
+ after 1 year of operation.
+\end{enumerate}
+\par\vspace{8pt}
+
+\Sec{8}{Example -- Part 2}
+Consider the depletion we did above for Example -- Part 1. The appropriate
+\emph{thermal} cross sections for the fuel nuclides are
+
+\vspace{5pt}
+
 \begin{center}
 \renewcommand{\arraystretch}{1.12}
 \begin{tabular}{@{}lrrr@{}}
 \toprule
-Nuclide & $\bar\sigma_{aT}$ (b) & $\bar\sigma_{fT}$ (b) & $\bar\nu_T$\\
+Nuclide & $\bar\sigma_{aT}$ [b] & $\bar\sigma_{fT}$ [b] & $\bar\nu_T$\\
 \midrule
 ${}^{235}$U  & $297.40$  & $253.09$ & $2.43$\\
 ${}^{238}$U  & $1.32$    & $0.00$   & $0.00$\\
@@ -306,32 +365,19 @@ ${}^{239}$Pu & $1146.51$ & $732.22$ & $2.90$\\
 \bottomrule
 \end{tabular}
 \end{center}
-\NEsmall{\textbf{Header clarification.} The slide labels both cross-section columns $\bar\sigma_{aT}$. The second is shown as $\bar\sigma_{fT}$ here, consistent with its role in Eq.\ (10.39). All numerical entries are unchanged.}
 
-The other model parameters are
-\begin{align*}
- \varsigma&=1.1,& V_m/V_f&=1,\\
- p&=0.6,&\varepsilon&=1.3,\\
- P_{\mathrm{NL}}&=0.95,&
- \Sigma_{aT}^{m}&=0.007\ \mathrm{cm}^{-1}.
-\end{align*}
-\textbf{(a)} Compute the initial reactivity.
+\vspace{5pt}
 
-\textbf{(b)} Compute the reactivity, fluence, and burnup after each of five years of operation.
+Assuming $\varsigma=1.1$, $V_m/V_f=1$, $p=0.6$, $\varepsilon=1.3$,
+$P_{\mathrm{NL}}=0.95$, and $\Sigma_{aT}^{m}=0.007$ cm$^{-1}$, compute
+\begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parsep}{0pt}
+ \item the initial reactivity, and
+ \item the reactivity, fluence, and burnup after each of 5 years of operation.
+\end{enumerate}
 
-\textbf{Ponderable:} How does the fission rate change in time?
-\par\vspace{13pt}
+\vspace{5pt}
 
-\begin{KeyBox}{Inputs to specify before numerical evaluation}
-The slides do not give a UO$_2$ mass density or specify whether the 4\% enrichment is by mass or by atoms. State those choices before evaluating the initial number densities, absolute reaction rates, reactivity, and burnup. No density or enrichment convention has been inserted here.
-\end{KeyBox}
+\textbf{Ponderable:} How does the \emph{fission rate} change in time?
+
 \colend
-
-\begin{Explore}{Keep the calculation sequence explicit}
-Initial composition $\longrightarrow$ one-group depletion $\longrightarrow$
-nuclide inventories. Use those inventories with \emph{one-group} fission data
-to integrate energy and compute burnup, and with \emph{thermal-group} data to
-evaluate the four-factor reactivity model. The assigned constant flux does
-not impose a constant fission rate or power.
-\end{Explore}
 \end{document}

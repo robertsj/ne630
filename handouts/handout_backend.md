@@ -1,7 +1,7 @@
 # Shared NE 630 handout class
 
-`ne630handout.cls` is the new shared backend. Only `lesson_22_handout.tex`
-currently uses it. `ne630boardhandout.cls`,
+`ne630handout.cls` is the shared backend used by `lesson_22_handout.tex`
+and `lesson_24_handout.tex`. `ne630boardhandout.cls`,
 `ne630_ch04_reading_guide_common.tex`, and the other lesson sources retain
 their existing backend choices; this is not a course-wide class migration.
 

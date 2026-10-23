@@ -102,14 +102,22 @@ available for that lesson.
 
    * - **Lesson 23** — Reactivity Impacts of Fuel Depletion
      - `PDF <_static/handouts/lesson-23/lesson_23_handout.pdf>`__
-     - —
+     - `Depletion notebook <_static/notebooks/lesson_23.ipynb>`__
+   * - **Lesson 24** — Linear Reactivity Model
+     - `PDF <_static/handouts/lesson-24/lesson_24_handout.pdf>`__
+     - `Depletion and LRM notebook <_static/notebooks/lesson_24.ipynb>`__
+
+For Lessons 23 and 24, download the shared
+`depletion module <_static/notebooks/ne630_depletion.py>`__ into the same folder
+as the notebooks. The module requires NumPy and SciPy; the notebooks also use
+pandas and Matplotlib.
 
 Handout source and support files
 --------------------------------
 
 The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
 Download the complete source bundle for a ready-to-build copy, or pair a wrapper
-with its body file and the shared class. Lessons 15--23 are distributed as PDFs
+with its body file and the shared class. Lessons 15--24 are distributed as PDFs
 only.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|

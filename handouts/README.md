@@ -1,7 +1,7 @@
 # NE 630 board-supported handout framework
 
 This package contains a reusable LaTeX class and printable handouts for Lessons
-1--10 and 12--23.
+1--10 and 12--24.
 The design separates three kinds of content:
 
 1. **Fixed inputs** -- reading, objectives, notation, constants, data tables, and problem statements that students should not have to copy from the board.
@@ -10,11 +10,11 @@ The design separates three kinds of content:
 
 The default layout uses US Letter paper, two columns, approximately half-inch margins, a modern print-friendly typeface, and a restrained K-State-purple accent. The boxes retain their hierarchy when printed in grayscale.
 
-## Shared backend pilot (Lesson 22 only)
+## Shared backend (Lessons 22 and 24)
 
 [`ne630handout.cls`](ne630handout.cls) is the new course-wide backend, with
 Wildcat/Beamer colors and the combined board-handout and reading-guide
-interfaces. **Only Lesson 22 is migrated.** The old class and chapter-style
+interfaces. Lessons 22 and 24 use it. The old class and chapter-style
 backend remain unchanged for all other lessons.
 
 See [the backend guide](handout_backend.md) for authoring, feature coverage,
@@ -160,3 +160,26 @@ Original Downloads files are untouched. Lessons 22 and 23 are published as
 PDF-only handouts on the course site.
 Committing source updates does not republish the site; a release must rebuild
 and validate the student-facing exports separately.
+
+## Lesson 24
+
+Build with `make L24` (or `make lesson24`).
+`lesson_24_handout.tex` is the canonical, self-contained lesson source using
+`ne630handout.cls`; its inline PGFPlots curve requires no external assets.
+The two-page handout reviews depletion and PWR scales, then develops the
+linear reactivity model for equilibrium batch refueling. The reactivity curve is the actual fixed-power model-3 history from
+`../notebooks/lesson_24.ipynb`, plotted through 40 MWd/kg on a grid visible
+in both copies. Students use the eyeballed points (0, 0.25) and (35, 0.10)
+to approximate the post-xenon trend. The instructor copy explicitly gives
+the intercept 0.25 and signed slope −3/700 and overlays that line. Subsequent
+numerical checks use the same two-point approximation and identify
+extrapolations beyond 40 MWd/kg.
+
+The source defaults to `\handoutsolutionsfalse`. For a private numerical-check
+copy, flip only that flag in a temporary source copy, build with XeLaTeX, and
+keep the resulting `lesson_24_handout_instructor.pdf` local. Do not replace the
+student PDF with the instructor output. Rendered PDFs are ignored build artifacts.
+
+Lesson 24 is registered in the website exporter and course-site index as a
+student PDF download alongside its notebook and shared depletion module.
+The instructor PDF remains private and is excluded from publication.

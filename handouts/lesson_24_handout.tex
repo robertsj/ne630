@@ -1,0 +1,507 @@
+% NE 630 -- Lesson 24 handout
+% Build: make L24 (XeLaTeX). Original Downloads draft is preserved.
+% Set the single solution flag below true only for a private solution copy.
+\documentclass[compact]{ne630handout}
+\handoutsolutionsfalse
+\hypersetup{pdftitle={NE 630 -- Lesson 24: Linear Reactivity Model},
+  pdfauthor={Jeremy Roberts},pdfsubject={Equilibrium batch refueling and burnup}}
+\newcommand{\Step}[2]{\Sec{#1}{#2}}
+\newcommand{\PageTitle}[1]{\HandoutContinue{Lesson 24\enspace|\enspace #1}}
+
+\NewDocumentCommand{\Reveal}{O{0.75in} m}{%
+  \ifhandoutsolutions
+    \textcolor{HandoutSynthesis}{\sffamily\bfseries #2}%
+  \else
+    \makebox[#1][c]{\rule[-0.2ex]{#1}{0.35pt}}%
+  \fi
+}
+\NewDocumentCommand{\RevealMath}{O{0.75in} m}{%
+  \ifhandoutsolutions
+    \textcolor{HandoutSynthesis}{\ensuremath{#2}}%
+  \else
+    \makebox[#1][c]{\rule[-0.2ex]{#1}{0.35pt}}%
+  \fi
+}
+
+\newcommand{\Ufive}{{}^{235}\mathrm{U}}
+\newcommand{\Ueight}{{}^{238}\mathrm{U}}
+\newcommand{\Punine}{{}^{239}\mathrm{Pu}}
+
+\begin{document}
+\fontsize{8.85}{10.35}\selectfont
+\RaggedRight
+\setlength{\abovedisplayskip}{3.5pt}
+\setlength{\belowdisplayskip}{3.5pt}
+\setlength{\abovedisplayshortskip}{2.5pt}
+\setlength{\belowdisplayshortskip}{2.5pt}
+
+\Lesson{24}{Linear reactivity model}
+ {Linear Reactivity Model supplement; review Lesson 23.}
+ {How do batch refueling strategies change cycle length and discharge burnup?}
+\textbf{Objective:} Estimate cycle lengths and discharge burnups using the linear reactivity model.
+
+\noindent\begin{minipage}[t]{0.485\textwidth}\vspace{0pt}\RaggedRight
+\Step{1}{Review: reactivity and depletion}
+For constant total flux and one-group cross sections, constant $N^{\Ueight}$, and $N^{\Punine}(0)=0$, Lesson 23 gives
+\begin{align*}
+ N^{\Ufive}(t)&=N^{\Ufive}(0)e^{-\bar\sigma_a^{\Ufive}\phi t},\\
+ N^{\Ueight}(t)&=N^{\Ueight}(0),\\
+ N^{\Punine}(t)&=
+ \frac{\bar\sigma_\gamma^{\Ueight}}{\bar\sigma_a^{\Punine}}
+ N^{\Ueight}(0)
+ \left[1-e^{-\bar\sigma_a^{\Punine}\phi t}\right].
+\end{align*}
+Neglecting control and fission-product absorption,
+\begin{equation*}
+ k(t)=
+ \frac{\left[\bar\nu_T^{\Ufive}\bar\sigma_{fT}^{\Ufive}N^{\Ufive}(t)
+ +\bar\nu_T^{\Punine}\bar\sigma_{fT}^{\Punine}N^{\Punine}(t)\right]
+ \varepsilon pP_{\mathrm{NL}}}
+ {\bar\sigma_{aT}^{\Ufive}N^{\Ufive}(t)
+ +\bar\sigma_{aT}^{\Punine}N^{\Punine}(t)
+ +\Sigma_{aT}^{\Ueight}
+ +\varsigma\dfrac{V_m}{V_f}\Sigma_{aT}^{m}},
+ \tag{FNRP 10.39*}
+\end{equation*}
+with $\rho=(k-1)/k$. The asterisk makes thermal-group ($T$) cross sections and nuclide-specific neutron yields per fission explicit.
+
+\Step{2}{Let's get some rough PWR numbers}
+Let's do some back-of-the-envelope calculations to get rough (one- or two-significant-figure) numbers for a typical PWR. Use the rounded $V_F=10^7~\mathrm{cm^3}$ in parts 2--4; burnup is per initial uranium mass.
+
+\textbf{1. Fuel volume.} A $3000~\mathrm{MW_{th}}$ PWR has about $50{,}000$ rods, each roughly $3~\mathrm{m}$ high. With $r\simeq0.5~\mathrm{cm}$,
+\[
+ V_F\simeq(5\times10^4)\pi r^2h
+ \simeq \RevealMath[0.75in]{10^7\ \mathrm{cm^3}}.
+\]
+
+\textbf{2. Flux.} If $\bar\Sigma_f=0.05~\mathrm{cm^{-1}}$ and $\kappa\simeq3.2\times10^{-11}~\mathrm{J/fission}$, then
+\[
+ \phi=\frac{P}{V_F\bar\Sigma_f\kappa}
+ \simeq \RevealMath[1.05in]{2\times10^{14}\ \mathrm{cm^{-2}s^{-1}}}.
+\]
+
+\textbf{3. Fuel mass.} With $\rho_{\mathrm{UO_2}}=10~\mathrm{g/cm^3}$,
+\begin{align*}
+ m_{\mathrm{UO_2}}&=\rho_{\mathrm{UO_2}}V_F
+ \simeq\RevealMath[0.72in]{1.0\times10^5\ \mathrm{kg}},\\
+ m_{\mathrm U}&\simeq\frac{238}{270}m_{\mathrm{UO_2}}
+ \simeq\RevealMath[0.72in]{8.8\times10^4\ \mathrm{kg}}.
+\end{align*}
+
+\textbf{4. Burnup.} For five full-power years (not calendar years),
+\begin{align*}
+ B_{1\,\mathrm d}&\simeq\frac{3000~\mathrm{MWd}}{8.8\times10^4~\mathrm{kg}}
+ \simeq\RevealMath[0.65in]{0.034\ \mathrm{MWd/kg}},\\
+ B_{5\,\mathrm{yr}}&\simeq5(365)B_{1\,\mathrm d}
+ \simeq\RevealMath[0.65in]{62\ \mathrm{MWd/kg}}.
+\end{align*}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.485\textwidth}\vspace{0pt}\RaggedRight
+\Step{3}{Use a more realistic reactivity curve}
+Use the fixed-power curve from \texttt{lesson\_24.ipynb}: 4\% enriched UO$_2$ at $10.4~\mathrm{g/cm^3}$, $300~\mathrm{W/cm^3}$ fuel, and the expanded chain with Xe/Sm. The prescribed-spectrum rate ratio uses $P_{\mathrm{NL}}=1$; leakage is treated separately below.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.99\linewidth,height=2.15in,
+  xmin=0,xmax=40,ymin=0.06,ymax=0.28,
+  axis lines=left,
+  xlabel={$B$ (MWd/kg initial HM)},ylabel={$\rho_\infty$},
+  tick label style={font=\scriptsize},
+  label style={font=\scriptsize},
+  xtick={0,5,...,40},ytick={0.06,0.08,...,0.28},
+  scaled y ticks=false,yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=2},
+  minor x tick num=4,minor y tick num=1,
+  grid=both,major grid style={gray!45},minor grid style={gray!20}
+]
+% Actual fixed-power depletion history from lesson_24.ipynb, cells 2 and 5.
+% Fixed spectrum (0.35,0.55,0.10); Table-3.2 XS with U238 rod shielding.
+% Curve remains visible in BOTH student and instructor copies.
+\addplot[KSUPurple,thick] coordinates {
+  (0,0.27468133)
+  (2.2726812e-05,0.27467871)
+  (2.6014502e-05,0.27467832)
+  (2.9777795e-05,0.27467788)
+  (3.408549e-05,0.27467737)
+  (3.9016342e-05,0.27467677)
+  (4.4660498e-05,0.27467609)
+  (5.1121145e-05,0.2746753)
+  (5.8516397e-05,0.27467439)
+  (6.6981457e-05,0.27467333)
+  (7.6671083e-05,0.27467211)
+  (8.7762424e-05,0.27467068)
+  (0.00010045825,0.27466902)
+  (0.00011499068,0.27466708)
+  (0.00013162538,0.27466481)
+  (0.00015066648,0.27466215)
+  (0.00017246209,0.27465903)
+  (0.00019741069,0.27465534)
+  (0.00022596838,0.27465098)
+  (0.00025865727,0.27464581)
+  (0.00029607497,0.27463965)
+  (0.00033890557,0.2746323)
+  (0.00038793209,0.27462348)
+  (0.00044405087,0.27461288)
+  (0.00050828785,0.27460007)
+  (0.00058181745,0.27458455)
+  (0.00066598393,0.27456569)
+  (0.00076232605,0.27454268)
+  (0.00087260514,0.27451453)
+  (0.00099883736,0.27448001)
+  (0.0011433305,0.27443757)
+  (0.0013087262,0.27438531)
+  (0.0014980483,0.27432087)
+  (0.0017147579,0.27424136)
+  (0.0019628171,0.27414326)
+  (0.0022467608,0.27402228)
+  (0.0025717802,0.27387332)
+  (0.0029438173,0.27369033)
+  (0.0033696738,0.27346626)
+  (0.0038571353,0.27319309)
+  (0.0044151136,0.27286185)
+  (0.0050538098,0.27246286)
+  (0.0057849006,0.27198614)
+  (0.006621752,0.27142193)
+  (0.0075796634,0.27076163)
+  (0.0086761475,0.26999885)
+  (0.0099312505,0.26913083)
+  (0.011367918,0.26815994)
+  (0.013012417,0.2670951)
+  (0.01489481,0.265953)
+  (0.017049513,0.26475848)
+  (0.019515918,0.26354398)
+  (0.022339117,0.26234758)
+  (0.025570723,0.2612096)
+  (0.029269817,0.26016812)
+  (0.033504028,0.25925406)
+  (0.038350765,0.25848682)
+  (0.043898638,0.2578716)
+  (0.050249073,0.25739923)
+  (0.05751817,0.25704862)
+  (0.065838825,0.25679123)
+  (0.075363157,0.25659635)
+  (0.086265291,0.25643573)
+  (0.098744542,0.25628659)
+  (0.11302906,0.25613253)
+  (0.12937999,0.25596284)
+  (0.14809627,0.25577094)
+  (0.16952008,0.25555281)
+  (0.19404307,0.25530595)
+  (0.2221136,0.25502884)
+  (0.25424485,0.25472085)
+  (0.29102425,0.25438229)
+  (0.3331242,0.25401449)
+  (0.38131439,0.25361979)
+  (0.43647583,0.2532014)
+  (0.49961701,0.25276304)
+  (0.57189226,0.25230855)
+  (0.65462296,0.25184122)
+  (0.74932158,0.25136309)
+  (0.85771943,0.25087418)
+  (0.98179826,0.25037168)
+  (1,0.25030318)
+  (1.25,0.24941727)
+  (1.5,0.248612)
+  (1.75,0.24783624)
+  (2,0.24706442)
+  (2.25,0.24628281)
+  (2.5,0.24548496)
+  (2.75,0.24466781)
+  (3,0.24382979)
+  (3.25,0.24297118)
+  (3.5,0.24209227)
+  (3.75,0.24119325)
+  (4,0.24027529)
+  (4.25,0.23933914)
+  (4.5,0.2383852)
+  (4.75,0.23741466)
+  (5,0.23642829)
+  (5.25,0.23542649)
+  (5.5,0.23441034)
+  (5.75,0.23338057)
+  (6,0.23233756)
+  (6.25,0.23128227)
+  (6.5,0.23021536)
+  (6.75,0.22913722)
+  (7,0.22804867)
+  (7.25,0.22695033)
+  (7.5,0.22584259)
+  (7.75,0.22472614)
+  (8,0.22360155)
+  (8.25,0.2224692)
+  (8.5,0.2213297)
+  (8.75,0.22018356)
+  (9,0.21903113)
+  (9.25,0.21787295)
+  (9.5,0.21670948)
+  (9.75,0.21554105)
+  (10,0.21436813)
+  (10.25,0.21319113)
+  (10.5,0.21201037)
+  (10.75,0.21082625)
+  (11,0.20963914)
+  (11.25,0.20844933)
+  (11.5,0.20725716)
+  (11.75,0.20606297)
+  (12,0.20486702)
+  (12.25,0.20366962)
+  (12.5,0.20247105)
+  (12.75,0.20127156)
+  (13,0.20007141)
+  (13.25,0.19887084)
+  (13.5,0.19767009)
+  (13.75,0.19646938)
+  (14,0.19526891)
+  (14.25,0.19406889)
+  (14.5,0.19286953)
+  (14.75,0.19167099)
+  (15,0.19047345)
+  (15.25,0.18927709)
+  (15.5,0.18808205)
+  (15.75,0.18688849)
+  (16,0.18569657)
+  (16.25,0.1845064)
+  (16.5,0.18331811)
+  (16.75,0.18213185)
+  (17,0.18094769)
+  (17.25,0.17976576)
+  (17.5,0.17858619)
+  (17.75,0.17740902)
+  (18,0.17623436)
+  (18.25,0.17506234)
+  (18.5,0.17389297)
+  (18.75,0.17272634)
+  (19,0.17156257)
+  (19.25,0.17040167)
+  (19.5,0.16924369)
+  (19.75,0.16808874)
+  (20,0.16693683)
+  (20.25,0.16578799)
+  (20.5,0.16464233)
+  (20.75,0.16349982)
+  (21,0.1623605)
+  (21.25,0.16122447)
+  (21.5,0.16009169)
+  (21.75,0.15896217)
+  (22,0.15783603)
+  (22.25,0.15671321)
+  (22.5,0.15559371)
+  (22.75,0.15447764)
+  (23,0.15336493)
+  (23.25,0.1522556)
+  (23.5,0.15114971)
+  (23.75,0.15004721)
+  (24,0.14894811)
+  (24.25,0.14785247)
+  (24.5,0.14676023)
+  (24.75,0.14567139)
+  (25,0.14458602)
+  (25.25,0.14350405)
+  (25.5,0.14242547)
+  (25.75,0.14135034)
+  (26,0.14027862)
+  (26.25,0.13921026)
+  (26.5,0.13814534)
+  (26.75,0.1370838)
+  (27,0.13602562)
+  (27.25,0.13497084)
+  (27.5,0.13391942)
+  (27.75,0.13287134)
+  (28,0.13182663)
+  (28.25,0.13078526)
+  (28.5,0.12974719)
+  (28.75,0.12871247)
+  (29,0.12768106)
+  (29.25,0.12665293)
+  (29.5,0.12562811)
+  (29.75,0.12460658)
+  (30,0.1235883)
+  (30.25,0.12257331)
+  (30.5,0.12156158)
+  (30.75,0.12055308)
+  (31,0.11954784)
+  (31.25,0.11854584)
+  (31.5,0.11754706)
+  (31.75,0.1165515)
+  (32,0.11555918)
+  (32.25,0.11457004)
+  (32.5,0.11358412)
+  (32.75,0.11260142)
+  (33,0.1116219)
+  (33.25,0.11064557)
+  (33.5,0.10967247)
+  (33.75,0.10870253)
+  (34,0.10773578)
+  (34.25,0.10677225)
+  (34.5,0.10581189)
+  (34.75,0.10485471)
+  (35,0.10390076)
+  (35.25,0.10294998)
+  (35.5,0.10200239)
+  (35.75,0.10105803)
+  (36,0.10011686)
+  (36.25,0.099178883)
+  (36.5,0.098244164)
+  (36.75,0.097312642)
+  (37,0.096384332)
+  (37.25,0.095459303)
+  (37.5,0.094537493)
+  (37.75,0.093618916)
+  (38,0.09270365)
+  (38.25,0.091791631)
+  (38.5,0.09088287)
+  (38.75,0.089977458)
+  (39,0.089075325)
+  (39.25,0.088176485)
+  (39.5,0.087281029)
+  (39.75,0.086388894)
+  (40,0.085500092)
+};
+\ifhandoutsolutions
+\addplot[KSUOrange,dashed,thick,domain=0:40] {0.25-(0.15/35)*x};
+\fi
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{-5pt}
+By eye, extend the post-xenon trend back to $B=0$. For this exercise, take the line through $(0,0.25)$ and $(35,0.10)$ exactly. Estimate its slope and intercept in Step 5. The curve has no zero crossing in the plotted range.
+
+\Step{4}{State the three LRM assumptions}
+\begin{fixedbox}{Assumption 1: identical batches}
+Use $N$ equal-mass batches of initially identical fuel; each gains burnup $B_c$ per cycle. For $N=3$, refueling replaces one third of the core.
+
+At \textbf{BOC}, batch burnups are $0,B_c,2B_c$; at \textbf{EOC}, they are $B_c,2B_c,3B_c$. The oldest batch is discharged. In this model, EOC exhausts available excess reactivity.
+
+$B_c$ is the \textbf{cycle burnup}; $B_d=NB_c$ is the \textbf{discharge burnup}. These are burnups, not elapsed times.
+\end{fixedbox}
+
+\begin{fixedbox}{Assumption 2: linear fuel reactivity}
+\[
+ \boxed{\rho_\infty(B)=\rho_0-aB.}
+\]
+The subscript $\infty$ denotes infinite-medium fuel reactivity. Treat the constant leakage penalty $\rho_L$ separately; $a>0$ is the loss per unit burnup.
+\end{fixedbox}
+
+\begin{fixedbox}{Assumption 3: weighted core reactivity}
+\[
+ \boxed{\rho_{\mathrm{core}}=\sum_{i=1}^{N}w_i\rho_i-\rho_L},
+ \qquad \boxed{\sum_{i=1}^{N}w_i=1}.
+\]
+Here $\rho_i=\rho_\infty(B_i)$; $w_i$ are fixed weights. We use $w_i=1/N$. Adjustable control offsets positive $\rho_{\mathrm{core}}$ during operation.
+\end{fixedbox}
+\end{minipage}
+
+\newpage
+\PageTitle{Batches, cycle length, and discharge burnup}
+
+\noindent\begin{minipage}[t]{0.485\textwidth}\vspace{0pt}\RaggedRight
+\Step{5}{Fit a linear fuel-reactivity model}
+Use the eyeballed points $(B_1,\rho_1)=(0,0.25)$ and $(B_2,\rho_2)=(35,0.10)$ to approximate the post-xenon trend:
+\begin{align*}
+ \frac{\Delta\rho}{\Delta B}&=\frac{0.10-0.25}{35-0}
+ =\RevealMath[0.65in]{-0.004286},\\
+ a&=-\frac{\Delta\rho}{\Delta B}
+ =\RevealMath[0.65in]{0.004286},\\
+ \rho_0&=\rho_1+aB_1
+ =\RevealMath[0.52in]{0.25}.
+\end{align*}
+Reactivity is dimensionless; $a$ has units $(\mathrm{MWd/kg})^{-1}$. MWd/kg initial HM is numerically equal to GWd/MTU for the initial UO$_2$ fuel. The intercept approximates the post-xenon trend extended back to $B=0$, rather than the fresh-fuel startup value.
+
+\ifhandoutsolutions
+\textcolor{HandoutSynthesis}{\textbf{Instructor reference:} Use exactly $\rho_0=0.25$ and $a=0.15/35=3/700$ for this exercise:
+$\rho_\infty(B)=0.25-(3/700)B$.
+The signed slope is $-0.004285714\ldots$; the intercept is $0.25$. The dashed line shows this graphical approximation. Carry the unrounded ratio $3/700$ into the batch calculations below.}
+\par\smallskip
+\fi
+Use this same two-point approximation for the numerical checks below.
+
+\Step{6}{Test a proposed two-batch cycle}
+Take $N=2$, $\rho_L=0.05$, and suppose $B_c=10~\mathrm{GWd/MTU}$.
+
+At BOC, the two batches have burnups $0$ and $B_c$:
+\begin{align*}
+ \rho_{\mathrm{core}}^{\mathrm{BOC}}
+ &=\frac12\left[\rho_\infty(0)+\rho_\infty(B_c)\right]-\rho_L\\
+ &=\RevealMath[0.45in]{0.1786}.
+\end{align*}
+At EOC, the same batches have burnups $B_c$ and $2B_c$:
+\begin{align*}
+ \rho_{\mathrm{core}}^{\mathrm{EOC}}
+ &=\frac12\left[\rho_\infty(B_c)+\rho_\infty(2B_c)\right]-\rho_L\\
+ &\simeq\RevealMath[0.45in]{0.1357}.
+\end{align*}
+Because $\rho_{\mathrm{core}}^{\mathrm{EOC}}>0$, this model permits a longer cycle. Actual cycles also face thermal, fuel-integrity, and operating constraints.
+
+\begin{checkpoint}[Before continuing]
+Sketch the two batch burnups at BOC and EOC. Which batch is discharged? Which one is replaced by fresh fuel?
+\ifhandoutsolutions
+\par\smallskip\textcolor{KSUTeal}{\textbf{Check:} At EOC, the batch at $2B_c$ is discharged and replaced by fresh fuel. The batch at $B_c$ remains for a second cycle.}
+\else
+\par\vspace{0.40in}
+\fi
+\end{checkpoint}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.485\textwidth}\vspace{0pt}\RaggedRight
+\Step{7}{Choose $B_c$ so EOC is critical}
+For the two-batch core at EOC,
+\begin{align*}
+ \bar\rho_\infty^{\mathrm{EOC}}
+ &=\frac12\left[(\rho_0-aB_c)+(\rho_0-2aB_c)\right]\\
+ &=\rho_0-\frac32aB_c.
+\end{align*}
+Set $\rho_{\mathrm{core}}^{\mathrm{EOC}}=0$:
+\[
+ 0=\rho_0-\frac32aB_c-\rho_L,
+ \qquad
+ \boxed{B_c=\frac{2(\rho_0-\rho_L)}{3a}}.
+\]
+With the eyeballed two-point model,
+\begin{align*}
+ B_c&\simeq\RevealMath[0.78in]{31.11\ \mathrm{GWd/MTU}},\\
+ B_d=2B_c&\simeq\RevealMath[0.78in]{62.22\ \mathrm{GWd/MTU}}.
+\end{align*}
+For a one-batch core,
+\[
+ B_c^{(1)}=B_d^{(1)}=\frac{\rho_0-\rho_L}{a}
+ \simeq\RevealMath[0.72in]{46.67\ \mathrm{GWd/MTU}}.
+\]
+\textbf{Range check:} These limiting burnups extrapolate beyond the 40 MWd/kg fit range; they are algebraic LRM results, not recommended fuel-use limits.
+
+Thus, the two-batch core has a shorter cycle,
+$B_c^{(2)}=\tfrac23B_c^{(1)}$, but a higher discharge burnup,
+$B_d^{(2)}=\tfrac43B_d^{(1)}$--about $33\%$ higher.
+
+\Step{8}{Generalize to an $N$-batch core}
+At EOC, the batch reactivities are
+\begin{align*}
+ \rho_1&=\rho_0-aB_c,\\
+ \rho_2&=\rho_0-2aB_c,\\
+ &\ \vdots\\[-6pt]
+ \rho_N&=\rho_0-NaB_c.
+\end{align*}
+For equal batch weights,
+\begin{align*}
+ 0&=\rho_{\mathrm{core}}^{\mathrm{EOC}}\\
+ &=\frac1N\left[N\rho_0-aB_c(1+2+\cdots+N)\right]-\rho_L.
+\end{align*}
+Using $1+2+\cdots+N=N(N+1)/2$,
+\[
+ \boxed{B_c^{(N)}=\frac{2(\rho_0-\rho_L)}{a(N+1)}},
+ \qquad
+ \boxed{B_d^{(N)}=NB_c^{(N)}}.
+\]
+For the same $\rho_0$, $a$, and constant $\rho_L$ for all $N$ (with $\rho_0>\rho_L$),
+\[
+ \boxed{B_c^{(N)}=\frac{2}{N+1}B_c^{(1)}},
+ \qquad
+ \boxed{B_d^{(N)}=\frac{2N}{N+1}B_d^{(1)}}.
+\]
+\end{minipage}
+
+\begin{takeawaybox}[What the linear reactivity model says]
+Dividing a core into more equal batches makes each individual cycle shorter, but lets the discharged fuel remain in the core for more cycles and reach a larger burnup. The model is intentionally simple: it assumes an equilibrium cycle, equal batch burnup increments, linear fuel reactivity, fixed batch weights, and a constant leakage penalty.
+\end{takeawaybox}
+
+\end{document}

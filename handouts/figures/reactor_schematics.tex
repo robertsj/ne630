@@ -1,93 +1,4 @@
-% NE 630 -- shared reading-guide definitions, Lessons 15--23
-% Included by Lessons 15--21 and 23; Lesson 22 uses ne630handout.cls.
-% Layout/palette adapted from the user's ne630boardhandout class.
-% Content: supplied chapter(1).tex and lecture_15.tex through lecture_19.tex.
-% The supplied chapter numbers the four-factor discussion as Section 4.5.
-% Drawings below adapt supplied Fig. 4.1, Fig. 4.5, Fig. 4.6, and the L19
-% pin-cell drawing. They are qualitative schematics, not simulation results.
-\documentclass[10pt,letterpaper]{article}
-\usepackage{amsmath,mathtools}
-\usepackage{libertinus,microtype}
-\usepackage[left=0.48in,right=0.48in,top=0.48in,bottom=0.44in,
-  headheight=20pt,headsep=5pt,footskip=17pt,includeheadfoot]{geometry}
-\usepackage{graphicx,xcolor,tabularx,booktabs,array,ragged2e}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta,calc,positioning,patterns}
-\usepackage[most]{tcolorbox}
-\usepackage{fancyhdr,lastpage}
-\usepackage[hidelinks]{hyperref}
-\hypersetup{pdfauthor={NE 630},pdfsubject={The Power Reactor Core}}
-\definecolor{KSUPurple}{HTML}{512888}
-\definecolor{KSUDeepPurple}{HTML}{3B1B64}
-\definecolor{KSUOrange}{HTML}{CA7C1B}
-\definecolor{KSUGray}{HTML}{5D5D5D}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{3pt}
-\setlength{\emergencystretch}{1.5em}
-\setlength{\abovedisplayskip}{4pt}
-\setlength{\belowdisplayskip}{4pt}
-\setlength{\abovedisplayshortskip}{2pt}
-\setlength{\belowdisplayshortskip}{3pt}
-\setlength{\jot}{3pt}
-\renewcommand{\arraystretch}{1.12}
-\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
-\newcommand{\LessonNo}{15}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\sffamily\bfseries\small NE 630}
-\fancyhead[C]{\sffamily\small Nuclear Reactor Theory}
-\fancyhead[R]{\sffamily\bfseries\small Lesson \LessonNo}
-\fancyfoot[L]{\sffamily\scriptsize  }
-\fancyfoot[C]{\sffamily\scriptsize \thepage\ of \pageref*{LastPage}}
-\fancyfoot[R]{\sffamily\scriptsize }
-\renewcommand{\headrulewidth}{0.5pt}
-\makeatletter
-\renewcommand{\headrule}{\hbox to\headwidth{\color{KSUPurple}\leaders\hrule height .5pt\hfill}}
-\makeatother
-\newcommand{\Lesson}[4]{%
-  \renewcommand{\LessonNo}{#1}%
-  \noindent\begin{minipage}[c]{0.025\linewidth}\color{KSUPurple}\rule{3.5pt}{32pt}\end{minipage}%
-  \begin{minipage}[c]{0.815\linewidth}
-   {\sffamily\bfseries\fontsize{18}{20}\selectfont #2}\par
-   {\sffamily\fontsize{9}{10.5}\selectfont #4}
-  \end{minipage}\hfill
-  \begin{minipage}[c]{0.14\linewidth}\raggedleft
-    {\sffamily\color{KSUPurple}\bfseries\fontsize{25}{26}\selectfont #1}\par
-    {\sffamily\scriptsize LESSON}
-  \end{minipage}\par\vspace{3pt}
-  \begin{tcolorbox}[enhanced,boxrule=.45pt,arc=1pt,colback=KSUPurple!4,
-   colframe=KSUPurple!40,left=5pt,right=5pt,top=3pt,bottom=3pt,
-   before skip=0pt,after skip=6pt]
-   \sffamily\fontsize{9}{10.5}\selectfont\textbf{Read:} #3
-  \end{tcolorbox}}
-\newcommand{\Sec}[2]{\par\addvspace{5pt}\noindent
-  \colorbox{KSUPurple}{\color{white}\sffamily\bfseries\fontsize{9}{10}\selectfont\strut #1}
-  \hspace{3pt}{\sffamily\bfseries\color{KSUDeepPurple}\fontsize{10.2}{11.5}\selectfont #2}\par\vspace{1pt}}
-\newcommand{\eqread}[1]{{\sffamily\fontsize{7.9}{9}\selectfont\color{KSUGray}#1}}
-\newcommand{\figcap}[1]{\par\vspace{1pt}{\sffamily\fontsize{7.7}{9}\selectfont\color{KSUGray}#1}\par}
-\newtcolorbox{KeyBox}[1]{enhanced,boxrule=.45pt,arc=1pt,
- colback=KSUPurple!3,colframe=KSUPurple!40,left=5pt,right=5pt,top=4pt,bottom=4pt,
- before skip=4pt,after skip=4pt,before upper=\RaggedRight,fonttitle=\sffamily\bfseries\small,
- coltitle=KSUDeepPurple,title={#1},colbacktitle=KSUPurple!7,
- titlerule=0pt,toptitle=2pt,bottomtitle=2pt}
-\newtcolorbox{Explore}[1]{enhanced,boxrule=.5pt,arc=1pt,
- colback=KSUOrange!5,colframe=KSUOrange!65,left=6pt,right=6pt,top=4pt,bottom=4pt,
- before skip=7pt,after skip=3pt,before upper=\RaggedRight,
- title={OpenMC \enspace\textbar\enspace #1},fonttitle=\sffamily\bfseries\fontsize{9}{10}\selectfont,
- coltitle=KSUDeepPurple,colbacktitle=KSUOrange!10,titlerule=0pt,toptitle=2pt,bottomtitle=2pt}
-\newcommand{\SourceLine}[1]{\par\vspace{2pt}{\sffamily\fontsize{7.2}{8.4}\selectfont\color{KSUGray}#1}\par}
-\newcommand{\colstart}{\begin{minipage}[t]{.482\linewidth}\vspace{0pt}\RaggedRight}
-\newcommand{\colnext}{\end{minipage}\hfill\begin{minipage}[t]{.482\linewidth}\vspace{0pt}\RaggedRight}
-\newcommand{\colend}{\end{minipage}\par}
-\newcommand{\uunit}[1]{\,\mathrm{#1}}
-\newcommand{\metal}{\mathrm{metal}}
-\newcommand{\water}{\mathrm{w}}
-\newcommand{\fiiso}{\mathrm{fi}}
-\newcommand{\feiso}{\mathrm{fe}}
-\newcommand{\nucl}[2]{\ensuremath{{}^{#1}\mathrm{#2}}}
-
-
-
+% Existing Chapter 4 instructional diagrams, unchanged from the former common input.
 % Five reactor motifs, adapted from the supplied Fig. 4.1, with a compact TRISO zoom.
 \newcommand{\FamilyFigure}{%
 \begin{tikzpicture}[x=1cm,y=1cm,line width=.42pt,font=\sffamily\fontsize{7.5}{8.5}\selectfont,
@@ -110,14 +21,14 @@
  \draw[fill=black!7] (-.78,-.50) rectangle (.78,.50);
  \draw[fill=white] (0,0) circle (.39);
  \draw (0,0) circle (.34);
- \foreach \ang in {0,60,...,300}{\draw[fill=KSUPurple!27] (\ang:.21) circle (.07);} 
+ \foreach \ang in {0,60,...,300}{\draw[fill=KSUPurple!27] (\ang:.21) circle (.07);}
  \draw[fill=KSUPurple!27] (0,0) circle (.07);
  \node[align=center] at (-.58,0) {D$_2$O};
  \node[align=center] at (0,-.84) {\textbf{PHWR / CANDU}\\bundle in a pressure tube};
 \end{scope}
 \begin{scope}[shift={(9.25,0)}]
  \draw[fill=black!12] (-.84,-.50) rectangle (.84,.50);
- \foreach \x/\y in {-.50/.25,0/.25,.50/.25,-.25/-.20,.25/-.20}{\draw[fill=white] (\x,\y) circle (.10);} 
+ \foreach \x/\y in {-.50/.25,0/.25,.50/.25,-.25/-.20,.25/-.20}{\draw[fill=white] (\x,\y) circle (.10);}
  \foreach \x/\y in {-.56/-.18,-.19/.03,.19/.03,.56/-.18}{
    \draw[fill=KSUPurple!10,pattern=dots,pattern color=KSUPurple!70] (\x,\y) circle (.085);
    \draw (\x,\y) circle (.085);
@@ -134,7 +45,7 @@
  \draw[fill=gray!25] (0,0) circle (.24);       % inner PyC
  \draw[fill=green!12!black!8] (0,0) circle (.30); % SiC
  \draw[fill=gray!8] (0,0) circle (.36);        % outer PyC
- \foreach \r in {.10,.18,.24,.30,.36}{\draw (0,0) circle (\r);} 
+ \foreach \r in {.10,.18,.24,.30,.36}{\draw (0,0) circle (\r);}
  \node[font=\tiny] at (0,0) {K};
  \node[font=\tiny,anchor=west] at (.62,.25) {OPyC}; \draw[->] (.58,.24)--(.33,.24);
  \node[font=\tiny,anchor=west] at (.62,.06) {SiC};  \draw[->] (.58,.05)--(.28,.05);

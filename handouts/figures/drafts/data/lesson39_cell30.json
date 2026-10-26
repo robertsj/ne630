@@ -1,0 +1,41 @@
+{
+  "source": "../notebooks/lesson_39.ipynb",
+  "source_sha256": "200c945cabe32a22267b892081da77b71fdad50e0d280f6c2e9689efcbae31b3",
+  "cells": [
+    19,
+    21,
+    30
+  ],
+  "note": "",
+  "axes": [
+    {
+      "lines": [
+        {
+          "key": "a0_line0",
+          "label": "_child0",
+          "linestyle": "-",
+          "marker": "None"
+        },
+        {
+          "key": "a0_line1",
+          "label": "_child1",
+          "linestyle": "-",
+          "marker": "None"
+        }
+      ],
+      "xlabel": "$x$",
+      "ylabel": "$\\phi(x)$",
+      "title": "",
+      "xlim": [
+        -10.9945,
+        10.9945
+      ],
+      "ylim": [
+        5.6153166715246545,
+        77.30140667630815
+      ],
+      "xscale": "linear",
+      "yscale": "linear"
+    }
+  ]
+}

@@ -1,12 +1,14 @@
-% NE 630 shared handout backend. Existing backends are intentionally untouched.
+% NE 630: the single formatting backend for all course handouts.
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ne630handout}[2026/10/19 v1.0 Unified Wildcat handouts]
+\ProvidesClass{ne630handout}[2026/10/25 v2.0 Unified course handouts]
 \newif\ifhandoutsolutions
 \newif\ifhandoutcompact
 \newif\ifhandoutfallbackfonts
+\newif\ifhandoutboard
 \handoutsolutionsfalse
 \DeclareOption{solutions}{\handoutsolutionstrue}
 \DeclareOption{nosolutions}{\handoutsolutionsfalse}
+\DeclareOption{board}{\handoutboardtrue}
 \DeclareOption{compact}{\handoutcompacttrue}
 \DeclareOption{fallbackfonts}{\handoutfallbackfontstrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
@@ -79,14 +81,18 @@
 }
 \fi
 
+% Retain optical-size Latin Modern Mono in the legacy compact board profile.
+\ifhandoutboard\else
 \setmonofont{texgyrecursor-regular.otf}[
   BoldFont=texgyrecursor-bold.otf,ItalicFont=texgyrecursor-italic.otf,
   BoldItalicFont=texgyrecursor-bolditalic.otf]
+\fi
 \RequirePackage[letterpaper,left=.48in,right=.48in,top=.48in,bottom=.44in,
   headheight=20pt,headsep=5pt,footskip=17pt,includeheadfoot]{geometry}
 \RequirePackage{amsmath,mathtools,unicode-math}
 \setmathfont{LibertinusMath-Regular.otf}
-\RequirePackage{graphicx,xcolor,enumitem,paracol,ragged2e}
+\RequirePackage{graphicx,xcolor,enumitem,paracol,multicol,ragged2e}
+\RequirePackage{siunitx,cancel,xfrac,fvextra}
 \RequirePackage{tabularx,booktabs,array,needspace,fancyhdr,lastpage,xparse}
 \RequirePackage{tikz,pgfplots,listings}
 \usetikzlibrary{arrows.meta,angles,quotes,calc,intersections,positioning,
@@ -143,16 +149,43 @@
   label=\textcolor{wcprimary}{\textbullet}}
 \setlist[enumerate]{leftmargin=1.55em,itemsep=2pt,topsep=3pt,parsep=0pt,partopsep=0pt}
 \renewcommand{\arraystretch}{1.12}
+\ifhandoutboard\renewcommand{\arraystretch}{1}\fi
 \newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+% Typography is configured here; wrappers may request a measured compact size.
+\newcommand{\HandoutFontSize}{9.5}
+\newcommand{\HandoutLeading}{11.5}
+\newcommand{\HandoutParagraphSkip}{3pt}
+\ifhandoutcompact
+  \renewcommand{\HandoutFontSize}{9}
+  \renewcommand{\HandoutLeading}{10.7}
+  \renewcommand{\HandoutParagraphSkip}{2pt}
+\fi
+\ifhandoutboard
+  \renewcommand{\HandoutFontSize}{9}
+  \renewcommand{\HandoutLeading}{11}
+  \renewcommand{\HandoutParagraphSkip}{0pt}
+  \geometry{headsep=2pt,footskip=16pt}
+  \setlist[itemize]{itemsep=1pt,topsep=2pt}
+  \setlist[enumerate]{itemsep=1pt,topsep=2pt}
+\fi
+\NewDocumentCommand{\HandoutTypography}{m m m}{%
+  \gdef\HandoutFontSize{#1}\gdef\HandoutLeading{#2}%
+  \gdef\HandoutParagraphSkip{#3}}
 \newcommand{\HandoutBody}{%
-  \ifhandoutcompact\fontsize{9}{10.7}\selectfont\setlength{\parskip}{2pt}%
-  \else\fontsize{9.5}{11.5}\selectfont\setlength{\parskip}{3pt}\fi
-  \setlength{\abovedisplayskip}{5pt plus 1pt minus 1pt}%
-  \setlength{\belowdisplayskip}{5pt plus 1pt minus 1pt}%
+  \fontsize{\HandoutFontSize}{\HandoutLeading}\selectfont
+  \setlength{\parskip}{\HandoutParagraphSkip}%
+  \setlength{\topsep}{2pt}\setlength{\partopsep}{0pt}%
+  \setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}%
+  \setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}%
   \setlength{\abovedisplayshortskip}{3pt}%
   \setlength{\belowdisplayshortskip}{3pt}\setlength{\jot}{3pt}%
   \RaggedRight}
-\AtBeginDocument{\HandoutBody}
+\AtBeginDocument{%
+  \ifhandoutboard
+    \small
+    \fontsize{\HandoutFontSize}{\HandoutLeading}\selectfont
+    \setlength{\parskip}{\HandoutParagraphSkip}%
+  \else\HandoutBody\fi}
 
 % One metadata/title API; both historical interfaces delegate to it.
 \newcommand{\HandoutCourse}{NE 630}
@@ -167,7 +200,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\sffamily\bfseries\small\HandoutCourse}
-\fancyhead[C]{\sffamily\small Nuclear Reactor Theory}
+\fancyhead[C]{\sffamily\small\ifhandoutboard\HandoutTitle\else Nuclear Reactor Theory\fi}
 \fancyhead[R]{\sffamily\bfseries\small Lesson \LessonNo}
 \fancyfoot[C]{\sffamily\scriptsize\thepage\ of \pageref*{LastPage}}
 \renewcommand{\headrulewidth}{.5pt}
@@ -177,6 +210,39 @@
   \fancyhf{}\fancyfoot[C]{\sffamily\scriptsize\thepage\ of \pageref*{LastPage}}%
   \renewcommand{\headrulewidth}{0pt}}
 \NewDocumentCommand{\MakeHandoutTitle}{}{%
+\ifhandoutboard
+%
+  \thispagestyle{handoutfirst}%
+  \vspace*{\dimexpr-\headheight-\headsep\relax}%
+  \begin{tcolorbox}[
+    enhanced,
+    frame hidden,
+    colback=white,
+    left=0pt,right=0pt,top=1pt,bottom=2pt,
+    borderline west={4pt}{0pt}{KSUPurple},
+    before skip=0pt,after skip=3pt
+  ]
+    \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedleft\arraybackslash}p{1.20in}@{}}
+      {\sffamily\bfseries\fontsize{17}{19}\selectfont \HandoutTitle} &
+      {\sffamily\bfseries\large Lesson \HandoutLesson}\\[-1pt]
+      {\sffamily\small \HandoutCourse} &
+      {}
+    \end{tabularx}
+  \end{tcolorbox}
+  \begin{tcolorbox}[
+    enhanced,
+    boxrule=0.45pt,
+    colframe=KSUPurple!45,
+    colback=KSUPurple!4,
+    arc=1.2pt,
+    left=5pt,right=5pt,top=3pt,bottom=3pt,
+    before skip=0pt,after skip=5pt
+  ]
+    \sffamily\small\textbf{Prepare:} \HandoutReading
+  \end{tcolorbox}
+
+\else
+%
   \thispagestyle{handoutfirst}%
   \vspace*{\dimexpr-\headheight-\headsep\relax}%
   \noindent\begin{minipage}[c]{.025\linewidth}\color{wcprimary}\rule{3.5pt}{38pt}\end{minipage}%
@@ -194,19 +260,35 @@
   \end{tcolorbox}%
   \ifx\HandoutQuestion\empty\else
     {\sffamily\color{wcprimary120}\HandoutQuestion\par}\smallskip
-  \fi}
+  \fi
+\fi
+}
 \NewDocumentCommand{\Lesson}{m m m m}{%
   \HandoutSetup{NE 630}{#1}{#2}{#3}\gdef\HandoutQuestion{#4}\MakeHandoutTitle}
 \NewDocumentCommand{\HandoutContinue}{m}{%
   \par{\sffamily\bfseries\fontsize{13}{15}\selectfont\color{wcprimary}#1\par}%
   \vspace{2pt}{\color{wcprimary!35}\hrule height .5pt}\vspace{5pt}}
 \NewDocumentCommand{\HandoutSection}{m m}{%
+\ifhandoutboard
+%
+  \par\addvspace{5pt}\Needspace{3.2\baselineskip}%
+  \noindent
+  \colorbox{KSUPurple}{\color{white}\sffamily\bfseries\strut\hspace{2pt}#1\hspace{2pt}}%
+  \hspace{0.45em}{\sffamily\bfseries\color{KSUDeepPurple}#2}\par
+  \vspace{1pt}{\color{KSUPurple!35}\rule{\linewidth}{0.45pt}}\vspace{2pt}
+
+\else
+%
   \par\addvspace{6pt}\Needspace{3.2\baselineskip}\noindent
   \colorbox{wcprimary}{\color{white}\sffamily\bfseries\fontsize{9}{10}\selectfont\strut #1}%
-  \hspace{3pt}{\sffamily\bfseries\color{wcprimary120}\fontsize{10.5}{12}\selectfont #2}\par\vspace{2pt}}
+  \hspace{3pt}{\sffamily\bfseries\color{wcprimary120}\fontsize{10.5}{12}\selectfont #2}\par\vspace{2pt}
+\fi
+}
 \NewDocumentCommand{\Sec}{m m}{\HandoutSection{#1}{#2}}
 
-% Two-column modes: flowing board columns and explicitly paired guide columns.
+% Two-column modes: automatic reading flow, board columns, and paired guide columns.
+\NewDocumentEnvironment{handoutsmall}{O{8}}{\begingroup\fontsize{#1}{9.5}\selectfont}{\endgroup}
+\newenvironment{handoutflow}{\begin{multicols}{2}\raggedcolumns\RaggedRight}{\end{multicols}}
 \newenvironment{handoutcolumns}{\columnratio{.5}\begin{paracol}{2}\RaggedRight}{\end{paracol}}
 \newcommand{\colstart}{\par\noindent\begin{minipage}[t]{.482\linewidth}\vspace{0pt}\RaggedRight}
 \newcommand{\colnext}{\end{minipage}\hfill\begin{minipage}[t]{.482\linewidth}\vspace{0pt}\RaggedRight}
@@ -226,6 +308,22 @@
     colbacktitle=HandoutCheckpoint!12},
   handout synthesis/.style={handout base,colframe=HandoutSynthesis!65,colback=HandoutSynthesis!4,
     colbacktitle=HandoutSynthesis!10,coltitle=HandoutSynthesis!60!black}}
+\ifhandoutboard
+\tcbset{
+  handout base/.style={
+    enhanced,
+    boxrule=0.45pt,
+    arc=1.2pt,
+    left=5pt,right=5pt,top=4pt,bottom=4pt,
+    before skip=4pt,after skip=4pt,
+    fonttitle=\sffamily\bfseries\small,
+    coltitle=KSUDeepPurple,
+    attach boxed title to top left={xshift=4pt,yshift*=-1.4mm},
+    boxed title style={frame hidden,colback=white,left=2pt,right=2pt,top=0pt,bottom=0pt}
+  }
+}
+
+\fi
 \NewTColorBox{fixedbox}{m O{}}{handout reference,title={#1},#2}
 \NewTColorBox{boardbox}{m O{}}{handout workspace,title={#1},#2}
 \NewTColorBox{checkpoint}{O{Checkpoint} O{}}{handout checkpoint,title={#1},#2}
@@ -243,9 +341,10 @@
 \newcommand{\eqread}[1]{{\sffamily\fontsize{8}{9.5}\selectfont\color{KSUGray}#1}}
 \newcommand{\figcap}[1]{\par\vspace{1pt}{\sffamily\fontsize{8}{9.5}\selectfont\color{KSUGray}#1\par}}
 \newcommand{\SourceLine}[1]{\par\vspace{2pt}{\sffamily\fontsize{7.5}{9}\selectfont\color{KSUGray}#1\par}}
-\newcommand{\SourceEq}[1]{\par\nobreak\hfill\eqread{#1}\par}
+\newcommand{\SourceEq}[1]{\par\nobreak\hfill
+  \ifhandoutboard{\sffamily\scriptsize\color{KSUGray}#1}\else\eqread{#1}\fi\par}
 % Late-guide compatibility names: remove their old local definitions on migration.
-\newcommand{\NEContinue}[2]{\gdef\HandoutLesson{#1}\HandoutContinue{#2}}
+\newcommand{\NEContinue}[2]{\gdef\HandoutLesson{#1}\HandoutContinue{Lesson #1\enspace|\enspace #2}}
 \newcommand{\NEEx}[1]{\par\addvspace{4pt}\textbf{#1}\par}
 \newcommand{\NECheck}{\textbf{Definition check.}\ }
 \newcommand{\NEsmall}[1]{{\fontsize{8.3}{10}\selectfont\RaggedRight #1\par}}
@@ -267,7 +366,23 @@
   breaklines=true,breakatwhitespace=false,tabsize=4,
   frame=single,rulecolor=\color{wcprimary!35},framesep=4pt,
   xleftmargin=4pt,xrightmargin=4pt,aboveskip=5pt,belowskip=5pt}
-\lstdefinestyle{omc}{style=NEpython,basicstyle=\ttfamily\fontsize{6.65}{7.45}\selectfont}
+\lstdefinestyle{omc}{
+  language=Python,
+  basicstyle=\ttfamily\fontsize{6.65}{7.45}\selectfont,
+  keywordstyle=\color{KSUDeepPurple}\bfseries,
+  commentstyle=\color{KSUGray}\itshape,
+  stringstyle=\color{KSUOrange!85!black},
+  columns=fullflexible,keepspaces=true,showstringspaces=false,
+  breaklines=true,breakatwhitespace=true,
+  aboveskip=2pt,belowskip=2pt,
+  frame=single,rulecolor=\color{KSUPurple!25},
+  framesep=3pt,xleftmargin=1pt,xrightmargin=1pt
+}
+% Verbatim alternative for Python identifiers containing Greek characters.
+\newfontfamily\HandoutCodeFont{DejaVu Sans Mono}
+\DefineVerbatimEnvironment{NEunicodecode}{Verbatim}{breaklines=true,
+  breakanywhere=true,fontsize=\scriptsize,formatcom=\HandoutCodeFont,
+  frame=single,rulecolor=\color{wcprimary!35},framesep=4pt}
 
 % Board blanks, solution reveals, vocabulary, and unit helpers.
 \newenvironment{targetlist}{%
@@ -334,134 +449,28 @@
   \end{tcolorbox}
 }
 
-\newcommand{\unit}[1]{\,\mathrm{#1}}
+\RenewDocumentCommand{\unit}{m}{\,\mathrm{#1}}
 \newcommand{\Ktrue}{K_{\mathrm{true}}}
 \newcommand{\Kclassical}{K_{\mathrm{classical}}}
 
 
-% Legacy Chapter 4 figure helpers retained for future migrations.
-% Five reactor motifs, adapted from the supplied Fig. 4.1, with a compact TRISO zoom.
-\newcommand{\FamilyFigure}{%
-\begin{tikzpicture}[x=1cm,y=1cm,line width=.42pt,font=\sffamily\fontsize{7.5}{8.5}\selectfont,
- every node/.style={inner sep=1pt},>=Latex]
-\begin{scope}[shift={(0,0)}]
- \draw[fill=black!3] (-.60,-.50) rectangle (.60,.50);
- \draw[fill=black!35] (0,0) circle (.34);
- \draw[fill=KSUPurple!27] (0,0) circle (.29);
- \node at (0,0) {Fuel}; \node at (0,.42) {H$_2$O};
- \node[align=center] at (0,-.84) {\textbf{LWR}\\square pin lattice};
-\end{scope}
-\begin{scope}[shift={(3.05,0)}]
- \draw[fill=black!3] (90:.67)--(30:.67)--(-30:.67)--(-90:.67)--(-150:.67)--(150:.67)--cycle;
- \draw[fill=black!35] (0,0) circle (.38);
- \draw[fill=KSUPurple!27] (0,0) circle (.32);
- \node at (0,0) {Fuel}; \node at (0,.50) {Na};
- \node[align=center] at (0,-.84) {\textbf{SFR}\\triangular pin lattice};
-\end{scope}
-\begin{scope}[shift={(6.10,0)}]
- \draw[fill=black!7] (-.78,-.50) rectangle (.78,.50);
- \draw[fill=white] (0,0) circle (.39);
- \draw (0,0) circle (.34);
- \foreach \ang in {0,60,...,300}{\draw[fill=KSUPurple!27] (\ang:.21) circle (.07);}
- \draw[fill=KSUPurple!27] (0,0) circle (.07);
- \node[align=center] at (-.58,0) {D$_2$O};
- \node[align=center] at (0,-.84) {\textbf{PHWR / CANDU}\\bundle in a pressure tube};
-\end{scope}
-\begin{scope}[shift={(9.25,0)}]
- \draw[fill=black!12] (-.84,-.50) rectangle (.84,.50);
- \foreach \x/\y in {-.50/.25,0/.25,.50/.25,-.25/-.20,.25/-.20}{\draw[fill=white] (\x,\y) circle (.10);}
- \foreach \x/\y in {-.56/-.18,-.19/.03,.19/.03,.56/-.18}{
-   \draw[fill=KSUPurple!10,pattern=dots,pattern color=KSUPurple!70] (\x,\y) circle (.085);
-   \draw (\x,\y) circle (.085);
- }
- \node[anchor=west] at (.86,.22) {He};
- \draw[->] (.82,.22)--(.59,.22);
- \node[anchor=west] at (.86,-.18) {TRISO};
- \draw[->] (.82,-.18)--(.62,-.18);
- \node[align=center] at (0,-.84) {\textbf{HTGR}\\TRISO in graphite};
-\end{scope}
-\begin{scope}[shift={(12.55,0)}]
- \draw[fill=KSUPurple!70] (0,0) circle (.10);  % kernel
- \draw[fill=KSUPurple!18] (0,0) circle (.18);  % buffer
- \draw[fill=gray!25] (0,0) circle (.24);       % inner PyC
- \draw[fill=green!12!black!8] (0,0) circle (.30); % SiC
- \draw[fill=gray!8] (0,0) circle (.36);        % outer PyC
- \foreach \r in {.10,.18,.24,.30,.36}{\draw (0,0) circle (\r);}
- \node[font=\tiny] at (0,0) {K};
- \node[font=\tiny,anchor=west] at (.62,.25) {OPyC}; \draw[->] (.58,.24)--(.33,.24);
- \node[font=\tiny,anchor=west] at (.62,.06) {SiC};  \draw[->] (.58,.05)--(.28,.05);
- \node[font=\tiny,anchor=west] at (.62,-.12) {IPyC};\draw[->] (.58,-.11)--(.21,-.11);
- \node[font=\tiny,anchor=west] at (.62,-.30) {buffer};\draw[->] (.58,-.29)--(.14,-.20);
- \node[font=\tiny,anchor=east] at (-.62,.32) {kernel};\draw[->] (-.58,.30)--(-.08,.08);
- \node[align=center] at (0,-.84) {\textbf{TRISO particle}\\coated-fuel cross section};
-\end{scope}
-\end{tikzpicture}}
+% Shared step headings and solution reveals.
+\newcommand{\Step}[2]{\Sec{#1}{#2}}
+\newcommand{\PageTitle}[1]{\HandoutContinue{Lesson \HandoutLesson\enspace|\enspace #1}}
 
-% Square and hexagonal pin cells, adapted from the L19 cell figure and Fig. 4.1.
-\newcommand{\PinCellsFigure}{%
-\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily\fontsize{8.5}{10}\selectfont,
- line width=.55pt,>=Latex,every node/.style={inner sep=1pt}]
-\begin{scope}[shift={(0,0)}]
- \draw[fill=black!3] (-.88,-.88) rectangle (.88,.88);
- \draw[fill=KSUOrange!35] (0,0) circle (.58);
- \draw[fill=KSUPurple!25] (0,0) circle (.49);
- \draw[->] (0,0)--(45:.49) node[midway,above left=-1pt] {$r_f$};
- \draw[->] (0,0)--(-35:.58);\node[anchor=west] at (.57,-.40) {$r_c$};
- \draw[|<->|] (-.88,-1.10)--(.88,-1.10) node[midway,below=3pt] {$P$};
- \node at (0,1.10) {Square};
-\end{scope}
-\begin{scope}[shift={(3.80,0)}]
- \draw[fill=black!3] (90:1.016)--(30:1.016)--(-30:1.016)--(-90:1.016)--(-150:1.016)--(150:1.016)--cycle;
- \draw[fill=KSUOrange!35] (0,0) circle (.58);
- \draw[fill=KSUPurple!25] (0,0) circle (.49);
- \draw[densely dashed] (0,0)--(.88,0);
- \node[above] at (.69,.05) {$P/2$};
- \draw[|<->|] (-.88,-1.22)--(.88,-1.22) node[midway,below=3pt] {$P$};
- \node at (0,1.24) {Hexagonal};
- \node[anchor=west] at (.82,.77) {$a$};
-\end{scope}
-\end{tikzpicture}}
-
-% Bookkeeping cycle adapted from supplied Fig. 4.5 (not a spatial plot).
-\newcommand{\CycleFigure}{%
-\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,
- box/.style={draw=KSUPurple!45,fill=KSUPurple!3,rounded corners=1pt,
- minimum width=3.0cm,minimum height=1.05cm,align=center,inner sep=3pt},
- every node/.style={font=\sffamily\fontsize{8.2}{9.5}\selectfont}]
- \node[box] (n) at (0,0) {$n$\\thermal-fission births};
- \node[box] (en) at (3.85,0) {$\epsilon n$\\all fission births};
- \node[box] (epn) at (7.7,0) {$\epsilon p n$\\reach thermal energies};
- \node[box] (epfn) at (11.55,0) {$\epsilon p f n$\\absorbed in fuel};
- \node[box] (kn) at (15.4,0) {$\epsilon p f\eta_T n=k_\infty n$\\next thermal-fission births};
- \draw[->,line width=.6pt] (n)--(en) node[midway,above=2pt] {$\epsilon$};
- \draw[->,line width=.6pt] (en)--(epn) node[midway,above=2pt] {$p$};
- \draw[->,line width=.6pt] (epn)--(epfn) node[midway,above=2pt] {$f$};
- \draw[->,line width=.6pt] (epfn)--(kn) node[midway,above=2pt] {$\eta_T$};
-\end{tikzpicture}}
-
-% Qualitative Doppler/space-energy shielding sketch, adapted from Fig. 4.6.
-\newcommand{\ResonanceFigure}{%
-\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,
- ax/.style={->,line width=.5pt,draw=black!75},
- cold/.style={line width=.85pt,draw=KSUPurple},
- hot/.style={line width=.85pt,draw=KSUOrange,dashed},
- every node/.style={font=\sffamily\fontsize{8.1}{9}\selectfont,inner sep=1pt}]
-\begin{scope}
- \draw[ax] (0,0)--(3.5,0) node[right] {$E$};
- \draw[ax] (0,0)--(0,1.9) node[above] {$\sigma_a(E)$};
- \draw[cold] plot[smooth] coordinates {(0,.01)(.5,.04)(.9,.15)(1.2,.52)(1.4,1.2)(1.55,1.7)(1.7,1.2)(1.95,.43)(2.3,.10)(2.8,.03)(3.2,.01)};
- \draw[hot] plot[smooth] coordinates {(0,.02)(.5,.10)(.9,.28)(1.2,.72)(1.55,1.08)(1.9,.75)(2.3,.30)(2.8,.10)(3.2,.03)};
- \node[anchor=west,text=KSUPurple] at (.08,1.63) {$T_1$};
- \node[anchor=west,text=KSUOrange] at (2.26,1.09) {$T_2>T_1$};
-\end{scope}
-\begin{scope}[shift={(4.25,0)}]
- \draw[ax] (0,0)--(3.5,0) node[right] {$E$};
- \draw[ax] (0,0)--(0,1.9) node[above] {$\varphi_f/\varphi_m$};
- \draw[black!40,densely dotted] (0,1.5)--(3.2,1.5);
- \node[anchor=east] at (-.05,1.5) {$1$};
- \draw[cold] plot[smooth] coordinates {(0,1.5)(.6,1.49)(1,1.3)(1.25,.65)(1.5,.3)(1.75,.59)(2,1.26)(2.5,1.49)(3.2,1.5)};
- \draw[hot] plot[smooth] coordinates {(0,1.5)(.4,1.43)(.8,1.22)(1.2,.88)(1.55,.65)(1.9,.83)(2.3,1.18)(2.8,1.43)(3.2,1.49)};
-\end{scope}
-\end{tikzpicture}}
+\NewDocumentCommand{\Reveal}{O{0.75in} m}{%
+  \ifhandoutsolutions
+    \textcolor{HandoutSynthesis}{\sffamily\bfseries #2}%
+  \else
+    \makebox[#1][c]{\rule[-0.2ex]{#1}{0.35pt}}%
+  \fi
+}
+\NewDocumentCommand{\RevealMath}{O{0.75in} m}{%
+  \ifhandoutsolutions
+    \textcolor{HandoutSynthesis}{\ensuremath{#2}}%
+  \else
+    \makebox[#1][c]{\rule[-0.2ex]{#1}{0.35pt}}%
+  \fi
+}
 
 \endinput

@@ -6,7 +6,8 @@ Handouts
 
 Download and print each available handout before class. The PDF and student
 TeX wrapper are linked in the table; complete source bundles and supporting
-TeX files are linked below it. YouTube links point to lesson recordings. A dash
+TeX files are linked below it. Lessons 25--35 are seeded from Beamer slides;
+Lessons 36--39 use existing notebook content. YouTube links point to lesson recordings. A dash
 indicates that no handout or additional non-video resource is currently
 available for that lesson.
 
@@ -106,6 +107,51 @@ available for that lesson.
    * - **Lesson 24** — Linear Reactivity Model
      - `PDF <_static/handouts/lesson-24/lesson_24_handout.pdf>`__
      - `Depletion and LRM notebook <_static/notebooks/lesson_24.ipynb>`__
+   * - **Lesson 25** — Neutron Kinetics without Multiplication
+     - `Seeded PDF <_static/handouts/lesson-25/lesson_25_handout.pdf>`__
+     - —
+   * - **Lesson 26** — Neutron Kinetics with Multiplication
+     - `Seeded PDF <_static/handouts/lesson-26/lesson_26_handout.pdf>`__
+     - —
+   * - **Lesson 27** — Neutron Kinetics with Delayed Neutrons
+     - `Seeded PDF <_static/handouts/lesson-27/lesson_27_handout.pdf>`__
+     - —
+   * - **Lesson 28** — Step Insertions of Reactivity
+     - `Seeded PDF <_static/handouts/lesson-28/lesson_28_handout.pdf>`__
+     - —
+   * - **Lesson 29** — Point Kinetics with Feedback
+     - `Seeded PDF <_static/handouts/lesson-29/lesson_29_handout.pdf>`__
+     - —
+   * - **Lesson 30** — Review of Some Math
+     - `Seeded PDF <_static/handouts/lesson-30/lesson_30_handout.pdf>`__
+     - —
+   * - **Lesson 31** — Neutrons in Space
+     - `Seeded PDF <_static/handouts/lesson-31/lesson_31_handout.pdf>`__
+     - —
+   * - **Lesson 32** — One-Speed Diffusion in a Homogeneous Slab
+     - `Seeded PDF <_static/handouts/lesson-32/lesson_32_handout.pdf>`__
+     - —
+   * - **Lesson 33** — One-Speed Diffusion in Heterogeneous Slabs
+     - `Seeded PDF <_static/handouts/lesson-33/lesson_33_handout.pdf>`__
+     - —
+   * - **Lesson 34** — Diffusion with Multiplication and an Approach to Criticality
+     - `Seeded PDF <_static/handouts/lesson-34/lesson_34_handout.pdf>`__
+     - —
+   * - **Lesson 35** — Criticality in Slabs, Cylinders, and Spherical Elephants
+     - `Seeded PDF <_static/handouts/lesson-35/lesson_35_handout.pdf>`__
+     - —
+   * - **Lesson 36** — Two-Group Diffusion and Criticality
+     - `Seeded PDF <_static/handouts/lesson-36/lesson_36_handout.pdf>`__
+     - —
+   * - **Lesson 37** — The Reflected Reactor
+     - `Seeded PDF <_static/handouts/lesson-37/lesson_37_handout.pdf>`__
+     - —
+   * - **Lesson 38** — Modeling Reactor Control
+     - `Seeded PDF <_static/handouts/lesson-38/lesson_38_handout.pdf>`__
+     - —
+   * - **Lesson 39** — Numerical Diffusion and Transport
+     - `Seeded PDF <_static/handouts/lesson-39/lesson_39_handout.pdf>`__
+     - —
 
 For Lessons 23 and 24, download the shared
 `depletion module <_static/notebooks/ne630_depletion.py>`__ into the same folder
@@ -117,7 +163,7 @@ Handout source and support files
 
 The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
 Download the complete source bundle for a ready-to-build copy, or pair a wrapper
-with its body file and the shared class. Lessons 15--24 are distributed as PDFs
+with its body file and the shared class. Lessons 15--39 are distributed as PDFs
 only.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|
@@ -148,7 +194,7 @@ only.
   `body <_static/handouts/lesson-14/lesson_14_handout_body.tex>`__
 
 All bundles include the shared
-`ne630boardhandout.cls <_static/handouts/ne630boardhandout.cls>`__ class. No
+`ne630handout.cls <_static/handouts/ne630handout.cls>`__ class. No
 course-specific ``.sty`` file is currently required. Compile a downloaded
 bundle with:
 

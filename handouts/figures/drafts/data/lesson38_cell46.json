@@ -1,0 +1,91 @@
+{
+  "source": "../notebooks/lesson_38.ipynb",
+  "source_sha256": "5d1983f104fdbc6dda531120e4871908c52b3922f2fe9d62732a2933e80390cb",
+  "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "note": "Original source recomputed; the handout retains its original listings and historical stored text results.",
+  "axes": [
+    {
+      "lines": [
+        {
+          "key": "a0_line0",
+          "label": "_child0",
+          "linestyle": "-",
+          "marker": "None"
+        },
+        {
+          "key": "a0_line1",
+          "label": "_child1",
+          "linestyle": "-",
+          "marker": "None"
+        },
+        {
+          "key": "a0_line2",
+          "label": "_child2",
+          "linestyle": "None",
+          "marker": "o"
+        }
+      ],
+      "xlabel": "$k$",
+      "ylabel": "",
+      "title": "",
+      "xlim": [
+        1.2185,
+        1.2515
+      ],
+      "ylim": [
+        0.0,
+        0.5
+      ],
+      "xscale": "linear",
+      "yscale": "linear"
+    }
+  ]
+}

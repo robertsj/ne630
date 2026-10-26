@@ -11,6 +11,8 @@ __pycache__/
 /handouts/*.out
 /handouts/*.xdv
 /handouts/lesson_??_handout.pdf
+/handouts/lesson_??_derivations.pdf
+/handouts/handout_template.pdf
 /handouts/*_instructor.pdf
 /site/_static/handouts/
 
@@ -73,3 +75,6 @@ __pycache__/
 /slides/**/*.vrb
 /slides/**/*.w18
 /slides/**/*.xdv
+
+# Local Matplotlib cache for handout figure generators.
+/handouts/figures/.mplconfig/

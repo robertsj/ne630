@@ -16,7 +16,9 @@ REPOSITORY = Path(__file__).resolve().parents[2]
 SOURCE_DIRECTORY = REPOSITORY / "handouts"
 OUTPUT_DIRECTORY = REPOSITORY / "site" / "_static" / "handouts"
 LESSONS = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14)
-PDF_ONLY_LESSONS = (15, 16, 17, 18, 19, 20, 21, 22, 23, 24)
+PDF_ONLY_LESSONS = tuple(range(15, 40))
+# This generated export belonged to the retired formatting backend.
+OBSOLETE_EXPORTS = (Path("ne630boardhandout.cls"),)
 LESSON_SUPPORT_FILES = {
     5: ("spectra.pdf",),
     6: (
@@ -47,8 +49,8 @@ def _read_required(path: Path) -> bytes:
 
 
 def _validate_public_wrapper(path: Path, text: str) -> None:
-    if not re.search(r"\\documentclass\s*\{ne630boardhandout\}", text):
-        raise ExportError(f"{path.name} must use the shared ne630boardhandout class directly")
+    if not re.search(r"\\documentclass\s*(?:\[[^\]]*\]\s*)?\{ne630handout\}", text):
+        raise ExportError(f"{path.name} must use the shared ne630handout class directly")
     if "\\handoutsolutionsfalse" not in text:
         raise ExportError(f"{path.name} must set \\handoutsolutionsfalse for public export")
     if "\\handoutsolutionstrue" in text:
@@ -60,7 +62,7 @@ def _source_readme(lesson: int, support_files: tuple[str, ...]) -> bytes:
     file_lines = [
         f"  {basename}.tex       document wrapper; set \\handoutsolutionstrue for a solution copy",
         f"  {basename}_body.tex  handout body with blanks and solution payloads",
-        "  ne630boardhandout.cls     shared document class",
+        "  ne630handout.cls          shared document class",
     ]
     file_lines.extend(
         f"  {name:<24} "
@@ -101,8 +103,8 @@ def _zip_bytes(files: dict[str, bytes]) -> bytes:
 
 
 def expected_exports() -> dict[Path, bytes]:
-    class_bytes = _read_required(SOURCE_DIRECTORY / "ne630boardhandout.cls")
-    exports: dict[Path, bytes] = {Path("ne630boardhandout.cls"): class_bytes}
+    class_bytes = _read_required(SOURCE_DIRECTORY / "ne630handout.cls")
+    exports: dict[Path, bytes] = {Path("ne630handout.cls"): class_bytes}
 
     for lesson in LESSONS:
         basename = f"lesson_{lesson:02d}_handout"
@@ -126,7 +128,7 @@ def expected_exports() -> dict[Path, bytes]:
             "README.txt": readme,
             f"{basename}.tex": wrapper,
             f"{basename}_body.tex": body,
-            "ne630boardhandout.cls": class_bytes,
+            "ne630handout.cls": class_bytes,
             **support_contents,
         }
 
@@ -172,6 +174,10 @@ def check_exports(exports: dict[Path, bytes]) -> list[str]:
 
 
 def write_exports(exports: dict[Path, bytes]) -> None:
+    # Remove only the specifically retired generated class; unknown public
+    # files still trigger the guard below.
+    for relative in OBSOLETE_EXPORTS:
+        (OUTPUT_DIRECTORY / relative).unlink(missing_ok=True)
     errors = [error for error in check_exports(exports) if error.startswith("unexpected")]
     if errors:
         raise ExportError("\n".join(errors) + "\nRefusing to delete an unrecognized public file.")

@@ -1,0 +1,82 @@
+\documentclass[compact]{ne630handout}
+
+\handoutsolutionsfalse
+
+% Seeded from ../slides/lecture_30.tex; all substantive frames retained.
+
+% Title/primary objective moved into the common lesson header.
+
+% Beamer overlays, vertical spacing, columns, and title-page scaffolding removed.
+
+\hypersetup{pdftitle={NE 630 -- Lesson 30: Review of Some Math},pdfauthor={Jeremy Roberts}}
+
+\begin{document}
+
+\Lesson{30}{Review of Some Math}{No reading specified in the source slides.}{Students will be able to define, recognize, and solve a variety of two-point boundary-value problems.}
+\begin{handoutflow}
+
+
+Note: these slides represent a condensed summary of the in-class work we did to
+review this fundamental topic.
+
+% Source frame 3: The Quiz
+
+\Sec{1}{The Quiz}
+
+\noindent {\bf Problem 1}.  Consider the following equation:
+\begin{equation*}
+  \frac{d^2 y}{dx^2} + p(x)y(x) = q(x) \, .
+\end{equation*}
+List every feature of this equation that you can recall from a course like MATH 340.
+
+
+
+\noindent{\bf Problem 2}. Suppose we set $p(x) = p$ (a constant) and $q(x) = 0$ above.  Dig deep and determine the {\it general} solution $y(x)$.  {\it Hint}: it should involve some arbitrary constants of integration---how many?
+
+
+
+
+\noindent{\bf Problem 3}. Now, suppose $p(x) = p$ (a constant) and $q(x) = e^x$ above. How would you find $y(x)$ in this case?  Go ahead and do it if you can!
+
+% Source frame 4: The Review
+
+\Sec{2}{The Review}
+
+$y'' + p(x)y(x) = q(x)$ is a linear, second-order, ordinary differential equation with variable coefficients, and, assuming $q(x) \neq 0$, it is inhomogeneous.
+
+
+
+If we set $p(x) = p$ (a constant) and $q(x) = 0$, the equation becomes homogeneous with constant coefficients.  Constant coefficients should (almost always) suggest a solution of the form $e^{rx}$.  Drop this into $y'' + py(x) = 0$, find that $r^2 + p = 0$, and reason that $y(x)$ is some combination of $e^{i\sqrt{p}x}$ and $e^{-i\sqrt{p}x}$, i.e., $y(x) = y_H(x) = C_1 e^{i\sqrt{p}x} + C_2 ^{-i\sqrt{p}x}$, where $_H$ indicates a solution to a homogeneous problem.  We can do nothing more without further information!
+
+
+
+
+If we keep constant $p$ but set $q(x) = e^x$, we first seek a $y_P(x)$ that looks like $q(x)$, e.g., $y_P(x) = C_3 e^{x}$.  Drop that into $y'' + py(x) = e^x$ to find $C_3 e^{x} + p e^x = e^x$, which means that $C_3 + p = 1$ or $C_3 = 1 -p$.  Then the full (or what I'd call {\it general}) solution is $y(x) = y_H(x) + y_P(x)$ or $y(x) =  C_1 e^{i\sqrt{p}x} + C_2 ^{-i\sqrt{p}x} + (1-p) e^x$.  Again, we can do nothing more without further information!
+
+% Source frame 5: The (Maybe) New
+
+\Sec{3}{The (Maybe) New}
+
+The further information comes from {\it conditions} at two {\it boundaries} (i.e., {\bf boundary conditions} or BCs).  Maybe $y(x)$ is a temperature or neutron flux and we know it at $x = 0$ and $x = L$, e.g., $y(0) = 0$ and $y(L) = 1$.  If $q(x) = 0$, our solution must then satisfy $y(0) = C_1 + C_2 = 0$ and $y(L) =  C_1 e^{i\sqrt{p}L} + C_2 ^{-i\sqrt{p}L}$, or
+\begin{equation*}
+ \begin{bmatrix}
+  1 & 1 \\
+  e^{i\sqrt{p}L} & e^{-i\sqrt{p}L}
+ \end{bmatrix}
+ \begin{bmatrix}
+  C_1 \\
+  C_2
+ \end{bmatrix} =  \begin{bmatrix}
+  0 \\
+  1
+ \end{bmatrix} \, .
+\end{equation*}
+Often, solving ODEs ``all the way'' results in algebra!  Because  $y(L) \neq 0$, this problem is not homogeneous (i.e., the ODE and the BCs must have all terms proportional to $y(x)$ or its derivatives; the constant 1 breaks that).  If instead we set $y(L) = 0$, the problem {\it is} homogeneous, and we're left with this condundrum:
+$C_1 + C_2 = 0$, $C_1 e^{i\sqrt{p}L} + C_2 ^{-i\sqrt{p}L} = 0$, and, thus
+\begin{equation*}
+ C_2  e^{i\sqrt{p}L} = C_2  e^{-i\sqrt{p}L} \, !?!
+\end{equation*}
+Just like $k_{\infty}$ helped us when we couldn't find $\phi_1$, we're going to need to find which values of $\sqrt{p}$  satisfy this {\it eigenvalue} problem.
+
+\end{handoutflow}
+\end{document}

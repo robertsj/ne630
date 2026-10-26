@@ -1,7 +1,7 @@
 # NE 630 public course site
 
 This directory is the Sphinx source for the public NE 630 course-materials
-site. The initial page publishes student handouts for Lessons 1--10 and 12--24,
+site. The initial page publishes student handouts for Lessons 1--10 and 12--39,
 standalone notebooks for Lessons 8--12, 15--19, and 22--24, and available lesson videos.
 
 ## Build
@@ -41,8 +41,11 @@ the handout Makefile and then `site/scripts/export_handouts.py`, which creates
 the public files beneath `site/_static/handouts/`.
 
 The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, and referenced
-supporting files are version-controlled. Lessons 15--24 are exported as PDFs
-only. Rendered handout PDFs and the entire `site/_static/handouts/` export tree
+supporting files are version-controlled. All handouts use `ne630handout.cls`.
+Lessons 15--39 are exported as PDFs only; Lessons 25--39 are initial handout
+seeds. L25--35 contain the corresponding Beamer slide content; L36--39 use
+existing notebooks (see `handouts/README.md` for selections and coverage gaps). Rendered handout PDFs
+and the entire `site/_static/handouts/` export tree
 are ignored build artifacts on the source branch; they are generated during
 `make html` or `make check` and published in the rendered site on `gh-pages`.
 
@@ -76,7 +79,7 @@ the notebooks.
 
 Do not edit generated handout exports directly. The build renders each public
 PDF, and the exporter copies it while creating a complete source bundle from
-the canonical inputs. Board-handout wrappers must set
+the canonical inputs. Public handout wrappers must set
 `\handoutsolutionsfalse`, so the published source reproduces the non-solution
 PDF. A private solution copy can be made by changing that single line to
 `\handoutsolutionstrue` before compiling.
@@ -89,7 +92,7 @@ make check-handouts
 ```
 
 The public TeX requires XeLaTeX or LuaLaTeX. Each lesson bundle contains the
-wrapper with solutions disabled, the body source, shared `ne630boardhandout.cls`,
+wrapper with solutions disabled, the body source, shared `ne630handout.cls`,
 any supporting figures or reproducibility notebooks referenced by that lesson,
 and brief build instructions. No repository-local `.sty` file is currently
 required.

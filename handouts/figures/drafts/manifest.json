@@ -1,0 +1,420 @@
+{
+  "data_generators": [
+    {
+      "path": "figures/capture_notebook_plot_data.py",
+      "sha256": "91d6fee42b28db731f42ab8a4b713c0812ff6efde68fbf1d70abbb9d435e9e8c"
+    },
+    {
+      "path": "figures/digitize_two_group_illustrations.py",
+      "sha256": "91434262743856172084ca48c4c4ef00dcdb215e7b00a178d6a4837d0562b586"
+    }
+  ],
+  "replacements": {
+    "../slides/figures/generated/subcrit_mult.pgf": "figures/drafts/subcrit_mult.pdf",
+    "../slides/figures/generated/example_kinetics.pgf": "figures/drafts/example_kinetics.pdf",
+    "../slides/figures/generated/traces.pgf": "figures/drafts/traces.pdf",
+    "../slides/figures/generated/prompt_drop_illustration.pgf": "figures/drafts/prompt_drop_illustration.pdf",
+    "../slides/figures/generated/slab_bc.pgf": "figures/drafts/slab_bc.pdf",
+    "../slides/figures/generated/multiplying_slab.pgf": "figures/drafts/multiplying_slab.pdf",
+    "../slides/figures/generated/prompt_drop_illustration.png": "figures/drafts/prompt_drop_illustration.pdf"
+  },
+  "source_documents": [
+    {
+      "path": "../notebooks/lesson_26.ipynb",
+      "sha256": "c9cf9f14fc6adfe92874abcc210e56e924138b4a63a13a68e5cbcdc6b1162b46"
+    },
+    {
+      "path": "../notebooks/lesson_27.ipynb",
+      "sha256": "f1db16a0d1ec87314dfd4f94b28eced61bce83bbe5f670a6ef684d6ad2f7f21e"
+    },
+    {
+      "path": "../notebooks/lesson_28.ipynb",
+      "sha256": "d4fd703e12c048985330f041121eedb21cfeefc36475331df6e1d3b4db1fd01f"
+    },
+    {
+      "path": "../notebooks/Lesson_33_and_34_examples.ipynb",
+      "sha256": "584f06f7fc158bc6bfae4bef6c689c3cd789c6f431c3448df961c37fd297db48"
+    },
+    {
+      "path": "../notebooks/lesson_38.ipynb",
+      "sha256": "5d1983f104fdbc6dda531120e4871908c52b3922f2fe9d62732a2933e80390cb"
+    },
+    {
+      "path": "../notebooks/lesson_39.ipynb",
+      "sha256": "200c945cabe32a22267b892081da77b71fdad50e0d280f6c2e9689efcbae31b3"
+    },
+    {
+      "path": "ne630handout.cls",
+      "sha256": "94286aa1e49d6560c0580a46e84d396461aab19a3e631855ad590eebcd615793"
+    }
+  ],
+  "generator": "figures/build_draft_figures.py",
+  "generator_sha256": "3f210b6d5f4003b7dc9c8d671ee9a2563ec8e479f9f1dbad26468ac39621443e",
+  "colors": {
+    "purple": "#512888",
+    "orange": "#CA7C1B"
+  },
+  "figures": {
+    "subcrit_mult": {
+      "pages": 1,
+      "path": "figures/drafts/subcrit_mult.pdf",
+      "sha256": "fabe0f5343370a3d7cdf3dd2ae223c9526965d14764302f3a0267da3d8fe1cfc",
+      "sources": [
+        "notebooks/lesson_26.ipynb, cells24–26"
+      ],
+      "data": [],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    },
+    "example_kinetics": {
+      "pages": 1,
+      "path": "figures/drafts/example_kinetics.pdf",
+      "sha256": "2ed9678a2b5780ee430ddea53c9cb7b4b6f809ada6bcdcedcea7ae4ddb2e7b50",
+      "sources": [
+        "notebooks/lesson_27.ipynb, cells39,49–60"
+      ],
+      "data": [],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    },
+    "traces": {
+      "pages": 2,
+      "path": "figures/drafts/traces.pdf",
+      "sha256": "99e4fb1c3ff1ab1a161ddbfb6279609cf4b4d93d7bbd5b505970b90eca9d58b8",
+      "sources": [
+        "notebooks/lesson_28.ipynb, cell15"
+      ],
+      "data": [],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": "Same four trace panels, in two separately flowing column-sized parts; original unknown step labels and frequency annotations retained."
+    },
+    "prompt_drop_illustration": {
+      "pages": 1,
+      "path": "figures/drafts/prompt_drop_illustration.pdf",
+      "sha256": "78e752675a8eacae21d5b5fc106534d77540dbb9f1259ebbc9467f99f347d012",
+      "sources": [
+        "notebooks/lesson_28.ipynb, cells14,22"
+      ],
+      "data": [],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": "Analytic two-exponential solution for rho=-0.5 beta and Lambda=5e-5, redrawn instead of a raster attachment."
+    },
+    "slab_bc": {
+      "pages": 1,
+      "path": "figures/drafts/slab_bc.pdf",
+      "sha256": "1e2db733311611a5dde04e30782c74a3f28f4111b6d6873d3d67890d21634e14",
+      "sources": [
+        "slides/lecture_33.tex",
+        "slides/lecture_34.tex"
+      ],
+      "data": [],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    },
+    "multiplying_slab": {
+      "pages": 1,
+      "path": "figures/drafts/multiplying_slab.pdf",
+      "sha256": "1204580caa1cf36772b5041e18f28ef0a8054c8bbb5520ebb3154d1f583c5d37",
+      "sources": [
+        "notebooks/Lesson_33_and_34_examples.ipynb, cells45–48"
+      ],
+      "data": [],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    },
+    "lesson38_cell46": {
+      "pages": 1,
+      "path": "figures/drafts/lesson38_cell46.pdf",
+      "sha256": "0865a8fec687ac3efe3c5872ad23e785828f3e5e2fd1d5f3844486705180d161",
+      "sources": [
+        "../notebooks/lesson_38.ipynb: cells 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson38_cell46.json",
+          "sha256": "4fda6e9cb05c023df7dc0a3d6fadf1df89b00183509357a62d881df97b182059"
+        },
+        {
+          "path": "figures/drafts/data/lesson38_cell46.npz",
+          "sha256": "62a9efa8734afc2e0bcd22d42835bc8f8615dcb964e2d52e48295f48ac25b552"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": "Original source recomputed; the handout retains its original listings and historical stored text results."
+    },
+    "lesson38_cell50": {
+      "pages": 1,
+      "path": "figures/drafts/lesson38_cell50.pdf",
+      "sha256": "202fc93d226cceb364a8cf911dd826d4398c882a0fabdaf4038e47562e61b199",
+      "sources": [
+        "../notebooks/lesson_38.ipynb: cells 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson38_cell50.json",
+          "sha256": "53de3a6b412b2e08cb0d7a7a8ecb54b606142ba9f9ff0b232f93888a568cb832"
+        },
+        {
+          "path": "figures/drafts/data/lesson38_cell50.npz",
+          "sha256": "a301bfce9f47f23f729082ff7094c4988e894ee963812fe55f0c72dea58a1d71"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": "Original source recomputed; the handout retains its original listings and historical stored text results."
+    },
+    "lesson39_cell10": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell10.pdf",
+      "sha256": "d75adcfb3de54da3505ba5956e2d63e122f6d21ec85088d84730f2f065eca609",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 10"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell10.json",
+          "sha256": "8d1fd6af0da19260dd7b251a78d27cca702a3be6899bab1333b9dd2327459d50"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell10.npz",
+          "sha256": "b84e4a36eabd1460d482ef79a4259a498f443c07c0b87719b8b2039cf5ceac3f"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": "Digitized original curve pixels; source PNG is unchanged."
+    },
+    "lesson39_cell11": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell11.pdf",
+      "sha256": "35fcf0767126ba73f43a4d127c0cf8c1b27abcccdafb1a48f6478429d1ea47b5",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 11"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell11.json",
+          "sha256": "62e6f3ea0657e7932ec1de448ba15a768c620df1b9aace8f2ff548d27182a386"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell11.npz",
+          "sha256": "56631b52205a872259c791456096665695978ea35b4741e952e7a746e2426f84"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": "Digitized original curve pixels; source PNG is unchanged."
+    },
+    "lesson39_cell19": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell19.pdf",
+      "sha256": "f56149d363f5aa232e808bb281aad03f25453a85db2b65be7261af5912e1633a",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 19"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell19.json",
+          "sha256": "4236d85398ec6dfe86d41aa0c484112e93d85959215731cfb5aa48af087915d9"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell19.npz",
+          "sha256": "7755f8edbc2165aa7bcb063aa3c3b2af01d8ba4e378ce35c6c368207369d63b7"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    },
+    "lesson39_cell22": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell22.pdf",
+      "sha256": "6f944f2996979089d79ed518d3ef5ba1a3994b8c81c9f41b3f770cfef0be3da8",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 19,21,22"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell22.json",
+          "sha256": "9786b6b9a642d5ee765274550772241f14f2990a8fd31783dc4ae5e7e08f3737"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell22.npz",
+          "sha256": "1e7a7c6306bcadad7ac6ee37a71c51d7e01923e819a43b1f29aa4f8973f93818"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    },
+    "lesson39_cell24": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell24.pdf",
+      "sha256": "0c86410cb263c8fbc9f36a4cb6b22152c97fba21758dc585bff8752a41260184",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 19,21,24"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell24.json",
+          "sha256": "16d2c6501f867d746f29cfb0152c974ff3e2ca37f7aec79385c565e8ebe986b0"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell24.npz",
+          "sha256": "a08d77b67bc860e15e136a23ab52fb847a9e5cb5eb0e42876438afa75d691eb7"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    },
+    "lesson39_cell25": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell25.pdf",
+      "sha256": "796c19805e03a1fb541ce5e0545013830a6d5e802870a0077e5edd4186d8e5b1",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 19,21,25"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell25.json",
+          "sha256": "ca841780c31d1948b8cff51658a539067d2385eb0d9b1207f19d9fbc2f92882f"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell25.npz",
+          "sha256": "7e438bbc39be615ccfe690827618e19348fbdc0592e92533009b6afb08a91c15"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    },
+    "lesson39_cell27": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell27.pdf",
+      "sha256": "c82b0a81410bec1c2ddf9536d4825d319dc5ef2a82dddadbf378cc72567ee8b6",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 19,21,27"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell27.json",
+          "sha256": "ec8be02f4125033a513c14f0688cdc5a082034d032ab59f58ce604263df3764a"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell27.npz",
+          "sha256": "8f1a91fef058356096db0ca1802e4caeedbbb2676ddd432898c1d38a4acb1f5a"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": "For cells27/28, source_map=[1]+[0]*19 reproduces the stored localized-source illustration; notebook code is unchanged."
+    },
+    "lesson39_cell28": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell28.pdf",
+      "sha256": "0798a6dd77567b039f8d49952675c8fd2e8b52851d9fb9ba599a60989a99d7bb",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 19,21,28"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell28.json",
+          "sha256": "9a808b6316a7fcabf4e9172bff2d09bcfd92f15cf93191f4fdf6cd556fac7c5c"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell28.npz",
+          "sha256": "85be01a74e09b3716ac3c703939317b332c155b9f8f9be5ff116145e30c5956a"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": "For cells27/28, source_map=[1]+[0]*19 reproduces the stored localized-source illustration; notebook code is unchanged."
+    },
+    "lesson39_cell30": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell30.pdf",
+      "sha256": "b144a89546573131442c9f18b4de2bdf29a8df3ce55e0e914f8e16b64a0285b2",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 19,21,30"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell30.json",
+          "sha256": "4f1159e165a08da4cefd95c06c652c82e61be3fa094d84f7aa05070145964aec"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell30.npz",
+          "sha256": "ad0049b0ed49b3461aa0c552288c8e2608dad79a5e7637c77c0f3a0395aa1d8f"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    },
+    "lesson39_cell31": {
+      "pages": 1,
+      "path": "figures/drafts/lesson39_cell31.pdf",
+      "sha256": "06bbf72c6dab4721e9cc826d8e389ccc91040e964e946c9da776bf1a66854810",
+      "sources": [
+        "../notebooks/lesson_39.ipynb: cells 19,21,31"
+      ],
+      "data": [
+        {
+          "path": "figures/drafts/data/lesson39_cell31.json",
+          "sha256": "69ea00d65176444158d88c1b7f86c29ac6e7024f76cf2fb31bee70f9dce1b0be"
+        },
+        {
+          "path": "figures/drafts/data/lesson39_cell31.npz",
+          "sha256": "6a531444f56f68117476d7ef5963ee975cf6aa5cec3282ce71960d1187205012"
+        }
+      ],
+      "palette": [
+        "#512888",
+        "#CA7C1B"
+      ],
+      "note": ""
+    }
+  }
+}

@@ -127,3 +127,58 @@ but is no longer referenced by L22. The transient figure is unchanged.
 
 API reference: [OpenMC IncidentNeutron](https://docs.openmc.org/en/stable/pythonapi/generated/openmc.data.IncidentNeutron.html)
 and [DataLibrary](https://docs.openmc.org/en/stable/pythonapi/generated/openmc.data.DataLibrary.html).
+
+
+## Draft handouts L25–39
+
+All figure code, numerical data, original-image evidence, and rendered figures
+for these drafts live in this directory. The handouts reference local vector
+PDFs under `drafts/`; they do not load figures from `slides/`.
+
+```bash
+python handouts/figures/build_draft_figures.py
+python3 handouts/check_figure_assets.py
+```
+
+The generator reads its primary colors from `ne630handout.cls`: course purple `#512888` and orange `#CA7C1B`, related shades
+when more curves need distinguishing, and line patterns that survive grayscale
+printing. It produces figures at a readable single-column size. The four
+kinetics trace panels are stacked in two separately flowing column-sized parts; their original unknown
+reactivity labels and frequency annotations remain. Original photographs and
+attributed engineering images in L37 retain their source colors.
+
+`drafts/manifest.json` pins the generator, source documents, output PDFs, and
+numerical data by SHA-256. `drafts/data/*.json` describes each recovered plot;
+the adjacent NPZ contains its line coordinates. Ordinary builds require NumPy,
+SciPy, and Matplotlib. They do not require the external transport solver.
+
+The L38 numerical plots were recovered by running their existing notebook code.
+For L39, the available local `detran` build recovered the diffusion/transport
+comparison data. The localized-source example explicitly uses a 1-cm source at
+the left boundary (`source_map=[1]+[0]*19`), matching the historical figure and
+example description rather than the stale uniform-source map left in the
+notebook. Original code listings and stored textual outputs are unchanged.
+
+To refresh those numerical tables explicitly (this requires the source notebook
+Python dependencies and the original `detran` installation):
+
+```bash
+python handouts/figures/capture_notebook_plot_data.py --refresh
+python handouts/figures/build_draft_figures.py
+```
+
+The two historical two-group illustrations in L39 cells 10–11 exist only as
+PNG attachments. `digitize_two_group_illustrations.py` traces the original curve
+pixels into tables without modifying the source images or guessing reactor
+data. Axis calibration, source-image SHA-256, and approximately one-pixel curve
+location precision are recorded in the data JSON. This makes the limitation
+explicit; these illustrations are not newly solved benchmark results.
+
+```bash
+python handouts/figures/digitize_two_group_illustrations.py
+python handouts/figures/build_draft_figures.py
+```
+
+The original notebook PNGs remain under `notebook_37/`, `notebook_38/`, and
+`notebook_39/` as provenance evidence. Their hashes are still checked even where
+a new vector rendering is used. No source notebook is modified by figure builds.

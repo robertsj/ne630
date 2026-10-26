@@ -39,6 +39,9 @@ def _run(command: list[str], *, directory: Path | None = None) -> subprocess.Com
 
 def _extract_bundle(bundle: Path, destination: Path) -> None:
     with zipfile.ZipFile(bundle) as archive:
+        names = archive.namelist()
+        if "ne630handout.cls" not in names or "ne630boardhandout.cls" in names:
+            raise BuildCheckError(f"{bundle.name} must include only the canonical ne630handout class")
         for member in archive.infolist():
             relative = Path(member.filename)
             if relative.is_absolute() or ".." in relative.parts or member.is_dir():

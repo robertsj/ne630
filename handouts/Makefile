@@ -1,186 +1,56 @@
-LATEXMK = latexmk
+LATEXMK ?= latexmk
+PYTHON ?= python3
+PLOT_PYTHON ?= python
 OPENMC_PYTHON ?= python3
 XE135_PLOT_FLAGS ?=
-FLAGS = -xelatex -interaction=nonstopmode -halt-on-error
-WRAPPERS := $(wildcard lesson_??_handout.tex) handout_template.tex
-
-.PHONY: all L01 L02 L03 L04 L05 L06 L07 L08 L09 L10 L12 L13 L14 L15 L16 L17 L18 L19 L20 L21 L22 L23 L24 \
-	lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07 lesson08 lesson09 lesson10 \
-	lesson12 lesson13 lesson14 lesson15 lesson16 lesson17 lesson18 lesson19 lesson20 lesson21 lesson22 lesson23 lesson24 \
-	template check-class xe135-figure tidy clean
-
-all: lesson01 lesson02 lesson03 lesson04 lesson05 lesson06 lesson07 lesson08 lesson09 lesson10 \
-	lesson12 lesson13 lesson14 lesson15 lesson16 lesson17 lesson18 lesson19 lesson20 lesson21 lesson22 lesson23 lesson24
-
-L01: lesson_01_handout.pdf
-
-L02: lesson_02_handout.pdf
-
-L03: lesson_03_handout.pdf
-
-L04: lesson_04_handout.pdf
-
-L05: lesson_05_handout.pdf
-
-L06: lesson_06_handout.pdf
-
-L07: lesson_07_handout.pdf
-
-L08: lesson_08_handout.pdf
-
-L09: lesson_09_handout.pdf
-
-L10: lesson_10_handout.pdf
-
-L12: lesson_12_handout.pdf
-
-L13: lesson_13_handout.pdf
-
-L14: lesson_14_handout.pdf
-
-L15: lesson_15_handout.pdf
-
-L16: lesson_16_handout.pdf
-
-L17: lesson_17_handout.pdf
-
-L18: lesson_18_handout.pdf
-
-L19: lesson_19_handout.pdf
-
-L20: lesson_20_handout.pdf
-
-L21: lesson_21_handout.pdf
-
-L22: lesson_22_handout.pdf
-
-L23: lesson_23_handout.pdf
-
-L24: lesson_24_handout.pdf
-
-lesson01: L01
-
-lesson02: L02
-
-lesson03: L03
-
-lesson04: L04
-
-lesson05: L05
-
-lesson06: L06
-
-lesson07: L07
-
-lesson08: L08
-
-lesson09: L09
-
-lesson10: L10
-
-lesson12: L12
-
-lesson13: L13
-
-lesson14: L14
-
-lesson15: L15
-
-lesson16: L16
-
-lesson17: L17
-
-lesson18: L18
-
-lesson19: L19
-
-lesson20: L20
-
-lesson21: L21
-
-lesson22: L22
-
-lesson23: L23
-
-lesson24: L24
-
-lesson_01_handout.pdf: lesson_01_handout.tex lesson_01_handout_body.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_01_handout.tex
-
-lesson_02_handout.pdf: lesson_02_handout.tex lesson_02_handout_body.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_02_handout.tex
-
-lesson_03_handout.pdf: lesson_03_handout.tex lesson_03_handout_body.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_03_handout.tex
-
-lesson_04_handout.pdf: lesson_04_handout.tex lesson_04_handout_body.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_04_handout.tex
-
-lesson_05_handout.pdf: lesson_05_handout.tex lesson_05_handout_body.tex spectra.pdf ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_05_handout.tex
-
-lesson_06_handout.pdf: lesson_06_handout.tex lesson_06_handout_body.tex ne630boardhandout.cls figures/h1_xsec.pgf figures/u235_fission.pgf figures/u238_threshold.pdf
-	$(LATEXMK) $(FLAGS) lesson_06_handout.tex
-
-lesson_07_handout.pdf: lesson_07_handout.tex lesson_07_handout_body.tex ne630boardhandout.cls figures/u238_threshold.pdf
-	$(LATEXMK) $(FLAGS) lesson_07_handout.tex
-
-lesson_08_handout.pdf: lesson_08_handout.tex lesson_08_handout_body.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_08_handout.tex
-
-lesson_09_handout.pdf: lesson_09_handout.tex lesson_09_handout_body.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_09_handout.tex
-
-lesson_10_handout.pdf: lesson_10_handout.tex lesson_10_handout_body.tex ne630boardhandout.cls figures/nr.pdf figures/wr.pdf
-	$(LATEXMK) $(FLAGS) lesson_10_handout.tex
-
-lesson_12_handout.pdf: lesson_12_handout.tex lesson_12_handout_body.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_12_handout.tex
-
-lesson_13_handout.pdf: lesson_13_handout.tex lesson_13_handout_body.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_13_handout.tex
-
-lesson_14_handout.pdf: lesson_14_handout.tex lesson_14_handout_body.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) lesson_14_handout.tex
-
-lesson_15_handout.pdf: lesson_15_handout.tex ne630_ch04_reading_guide_common.tex
-	$(LATEXMK) $(FLAGS) lesson_15_handout.tex
-
-lesson_16_handout.pdf: lesson_16_handout.tex ne630_ch04_reading_guide_common.tex
-	$(LATEXMK) $(FLAGS) lesson_16_handout.tex
-
-lesson_17_handout.pdf: lesson_17_handout.tex ne630_ch04_reading_guide_common.tex
-	$(LATEXMK) $(FLAGS) lesson_17_handout.tex
-
-lesson_18_handout.pdf: lesson_18_handout.tex ne630_ch04_reading_guide_common.tex
-	$(LATEXMK) $(FLAGS) lesson_18_handout.tex
-
-lesson_19_handout.pdf: lesson_19_handout.tex ne630_ch04_reading_guide_common.tex
-	$(LATEXMK) $(FLAGS) lesson_19_handout.tex
-
-lesson_20_handout.pdf: lesson_20_handout.tex ne630_ch04_reading_guide_common.tex
-	$(LATEXMK) $(FLAGS) lesson_20_handout.tex
-
-lesson_21_handout.pdf: lesson_21_handout.tex ne630_ch04_reading_guide_common.tex
-	$(LATEXMK) $(FLAGS) lesson_21_handout.tex
-
-lesson_22_handout.pdf: lesson_22_handout.tex ne630handout.cls lesson_22_xenon_transient.py \
-	figures/xe135_capture.pgf figures/lesson_22_Xe_transient.pdf
-	$(LATEXMK) $(FLAGS) lesson_22_handout.tex
-
-lesson_23_handout.pdf: lesson_23_handout.tex ne630_ch04_reading_guide_common.tex figures/depletion_chain_tikz.tex
-	$(LATEXMK) $(FLAGS) lesson_23_handout.tex
-
-lesson_24_handout.pdf: lesson_24_handout.tex ne630handout.cls
-	$(LATEXMK) $(FLAGS) lesson_24_handout.tex
-
-handout_template.pdf: handout_template.tex ne630boardhandout.cls
-	$(LATEXMK) $(FLAGS) handout_template.tex
+FLAGS := -xelatex -interaction=nonstopmode -halt-on-error
+LESSONS := $(patsubst lesson_%_handout.tex,%,$(wildcard lesson_??_handout.tex))
+HANDOUTS := $(foreach n,$(LESSONS),lesson_$(n)_handout.pdf)
+SUPPLEMENT_SOURCES := $(wildcard lesson_??_derivations.tex)
+SUPPLEMENTS := $(SUPPLEMENT_SOURCES:.tex=.pdf)
+WRAPPERS := $(wildcard lesson_??_handout.tex) $(SUPPLEMENT_SOURCES) handout_template.tex
+SUPPORT := $(wildcard figures/*.tex figures/*.pgf figures/*.pdf) spectra.pdf
+DRAFT_NAMES := subcrit_mult example_kinetics traces prompt_drop_illustration slab_bc multiplying_slab \
+ lesson38_cell46 lesson38_cell50 lesson39_cell10 lesson39_cell11 lesson39_cell19 \
+ lesson39_cell22 lesson39_cell24 lesson39_cell25 lesson39_cell27 lesson39_cell28 lesson39_cell30 lesson39_cell31
+DRAFT_FIGURES := $(addprefix figures/drafts/,$(addsuffix .pdf,$(DRAFT_NAMES))) figures/drafts/manifest.json
+DRAFT_DATA := $(wildcard figures/drafts/data/*.json figures/drafts/data/*.npz)
+
+.PHONY: all template check-class check-content check-seeds xe135-figure tidy clean $(foreach n,$(LESSONS),L$(n) lesson$(n))
+
+all: $(HANDOUTS) $(SUPPLEMENTS)
+
+$(foreach n,$(LESSONS),$(eval L$(n): lesson_$(n)_handout.pdf))
+$(foreach n,$(LESSONS),$(eval lesson$(n): L$(n)))
+
+lesson_%_derivations.pdf: lesson_%_derivations.tex ne630handout.cls $(SUPPORT)
+	$(LATEXMK) $(FLAGS) $<
+
+# latexmk tracks transitive TeX inputs; these prerequisites trigger its first pass.
+lesson_%_handout.pdf: lesson_%_handout.tex ne630handout.cls $(SUPPORT)
+	$(LATEXMK) $(FLAGS) $<
+
+$(foreach n,01 02 03 04 05 06 07 08 09 10 12 13 14,$(eval lesson_$(n)_handout.pdf: lesson_$(n)_handout_body.tex))
+lesson_22_handout.pdf: lesson_22_xenon_transient.py
+$(foreach n,25 26 27 28 29 30 31 32 33 34 35 36 37 38 39,$(eval lesson_$(n)_handout.pdf: $(DRAFT_FIGURES)))
+$(foreach n,36 37 38 39,$(eval lesson_$(n)_handout.pdf: $(wildcard figures/notebook_$(n)/*.png)))
+
+$(DRAFT_FIGURES) &: figures/build_draft_figures.py ne630handout.cls $(DRAFT_DATA)
+	MPLCONFIGDIR=$(CURDIR)/figures/.mplconfig MPLBACKEND=Agg $(PLOT_PYTHON) figures/build_draft_figures.py
+
+handout_template.pdf: handout_template.tex ne630handout.cls
+	$(LATEXMK) $(FLAGS) $<
 
 template: handout_template.pdf
 
-check-class:
-	python3 check_handout_class.py
+check-class: $(DRAFT_FIGURES)
+	$(PYTHON) check_handout_class.py
+
+check-content:
+	$(PYTHON) check_handout_content.py
+
+check-seeds: $(DRAFT_FIGURES)
+	$(PYTHON) check_seeded_handouts.py
 
 # Explicit regeneration only: ordinary PDF builds use the checked-in PGF.
 xe135-figure:

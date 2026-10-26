@@ -1,0 +1,274 @@
+% Seeded from ../slides/lecture_35.tex; substantive frame content retained.
+% Title and primary objective become handout metadata; presentation commands removed.
+\documentclass[compact]{ne630handout}
+\handoutsolutionsfalse
+\begin{document}
+\Lesson{35}{Criticality in Slabs, Cylinders, and Spherical Elephants}{Not specified in the source slides.}{Students will be able to define and evaluate criticality conditions for slab and cylindrical systems.}
+\begin{handoutflow}
+
+
+% Source: lecture_35.tex, frame at line 78.
+\Sec{1}{Review: Diffusion with Multiplication}
+To solve
+\begin{equation*}
+  - \frac{d^2 \phi}{dx^2} + \frac{1 - k_{\infty}}{L^2} \phi(x) = \frac{S(x)}{D} \, ,
+\end{equation*}
+we let
+\begin{align*}
+ \textcolor{wcprimary}{\alpha^2} =  \frac{1-k_{\infty}}{L^2} \, , \quad \textcolor{wcprimary}{k_{\infty} < 1}
+ \qquad \text{and} \qquad
+ \overbrace{\textcolor{wcalerted}{B^2} =  \frac{k_{\infty}-1}{L^2}}^{\text{material buckling}} \, , \quad  \textcolor{wcalerted}{k_{\infty} > 1} \, ,
+\end{align*}
+so that
+\begin{align*}
+ \phi_h(x) =
+ \begin{cases}
+  \textcolor{wcprimary}{C_1 e^{\alpha x} + C_2 e^{-\alpha x}} \quad \text{-or-} & \\
+  \textcolor{wcprimary}{  C_1 \cosh(\alpha x) + C_2 \sinh(\alpha x)} & \textcolor{wcprimary}{k_{\infty}} < 1 \\
+   \textcolor{wcalerted}{ C_1 \cos(B x) + C_2 \sin(B x)} & \textcolor{wcalerted}{ k_{\infty} > 1} \, .
+ \end{cases}
+\end{align*}
+The 5-step process is otherwise unchanged: find $\phi_p(x)$,
+apply BC's and CC's to determine constants, and verify!
+
+% Source: lecture_35.tex, frame at line 105.
+\Sec{2}{A Critical Breakdown}
+We made three important observations about $\phi(x)$ while analyzing a source-driven,
+multiplying slab subject to zero-flux conditions:
+\begin{enumerate}
+ \item it increases quickly as $B \to \pi/a$
+ \item it blows up at $B = \pi/a$ (due to $\cos(Ba/2)$ vanishing in a denominator)
+ \item it becomes {\it negative} as $B$ is increased beyond $\pi/a$.
+\end{enumerate}
+
+This condition can be written and understood as follows:
+\begin{align*}
+ B^2  = \frac{k_{\infty}-1}{L^2} &= \left ( \frac{\pi}{a} \right )^2 = B_g^2 = \text{geometric buckling} \\
+ \tag{a}
+ \longrightarrow 1 = \frac{k_{\infty}}{1 + L^2  \left ( \frac{\pi}{a} \right )^2}
+                   &= k_{\infty} P_{\text{NL}} \\
+ \tag{b}
+                   &= \frac{\bar{\nu}\Sigma_f}{\Sigma_a + D  \left ( \frac{\pi}{a} \right )^2 } \\
+ \tag{c}
+                   &= k_{\text{eff}}
+\end{align*}
+All three statements (a), (b), and (c) correspond to {\bf criticality}.  Just as in real critical
+systems, we can only have a steady-state flux if there is no source!
+
+% Source: lecture_35.tex, frame at line 136.
+\Sec{3}{In Search of $k_{\text{eff}}$}
+When $B^2 \neq B_g^2$, we resort to the same trick we used
+for infinite, homogeneous systems: scale $\bar{\nu}\Sigma_f$ by $k_{\text{eff}}$ to obtain
+\begin{equation*}
+  -D \frac{d^2 \phi}{dx^2} + \Sigma_s \phi(x) = \frac{\bar{\nu}\Sigma_f}{k_{\text{eff}}} \phi(x) \, ,
+\end{equation*}
+or
+\begin{equation*}
+  \frac{d^2 \phi}{dx^2} + \overbrace{\frac{k_{\infty}/k_{\text{eff}} -1}{L^2}}^{B^2} \phi(x) = 0 \, .
+\end{equation*}
+In other words, $k_{\text{eff}}$ adjusts $k_{\infty}$ (or $\bar{\nu}\Sigma_f$) so that $B^2 = B^2_g$.
+Armed with this ``fission knob'', our goals will be to determine
+\begin{enumerate}
+ \item $k_{\text{eff}}$ given material and geometry properties
+ \item the value of some material or geometry property (e.g., enrichment or slab width) that produces a desired $k_{\text{eff}}$ (usually 1!)
+\end{enumerate}
+
+% Source: lecture_35.tex, frame at line 158.
+\Sec{4}{Interlude: Some Critical Thinking}
+{\bf Example 1}. Consider a homogeneous, multiplying slab of width $a$ subject to zero-flux
+boundary conditions.  If $D=1$, $\Sigma_a = 0.1$, and $k_{\infty} = 1.5$,
+what value of $a$ makes the reactor critical?
+
+{ \textcolor{wcprimary}{ {\bf Ans.}  $1 = k_{\infty}/(1+L^2 (\pi/a)^2)$ or
+$a = \sqrt{ (\pi^2 L^2)(k_{\infty}-1)} \approx 14.05$ cm.
+}}
+
+{\bf Example 2}.  If we replace $\phi(\pm a/2) = 0$ with $J^{\pm}(\mp a/2) = 0$, how
+would that value of $a$ change?
+
+{ \textcolor{wcprimary}{ {\bf Ans.}  Zero-flux conditions impose negative incident currents, so $a$ should be {\it smaller} than above since we remove the negative contributions.  Prove it!
+}}
+
+{\bf Example 3}.  If we modify the material in Example 1 so that $k_{\infty} = 0.99$, how does
+the critical value of $a$ change?
+
+{ \textcolor{wcprimary}{ {\bf Ans.}  If the slab ain't critical {\it without} leakage, it ain't critical {\it with} leakage!
+}}
+
+% Source: lecture_35.tex, frame at line 192.
+\Sec{5}{Inside the Volume}
+Let $s(\mathbf{r}, E, \hat{\Omega}, t)$ be a source density, so that $s(\cdots)\,\,d^3\mathbf{r}\,\,dE\,\,d\hat{\Omega}$ is the number of neutrons
+added to the volume per second. Then
+\begin{equation*}
+\tag{4--26}
+ \textcolor{wcprimary}{\text{(1)}  = \left[ \int_V s(\mathbf{r},E,\hat{\Omega},t)\,\,d^3\mathbf{r} \right] \,dE\,\,d\hat{\Omega}} \, .
+\end{equation*}
+
+Given $\Sigma_t(\mathbf{r},E)$,
+the total interaction rate in the volume is
+\begin{equation*}
+\tag{4--29}
+  \textcolor{wcalerted}{\text{(5)} = \left[ \int_V \Sigma_t(\mathbf{r},E)\, \psi(\mathbf{r},E,\hat{\Omega},t)\,\,d^3\mathbf{r} \right] \,dE\,\,d\hat{\Omega} } \, .
+\end{equation*}
+This assumes an {\it isotropic} medium in which $\Sigma_t$ does {\it not} depend on $\hat{\Omega}$.
+Finally, {\it in-scattering} from $(E',\hat{\Omega}')$ to $(E,\hat{\Omega})$ contributes
+\begin{equation}
+\tag{4--31}
+   \textcolor{wcprimary}{\text{(3)} = \int_V \left[ \int_0^\infty \!\!\int_{4\pi} \Sigma_s(\mathbf{r}, E'\!\to\!E, \hat{\Omega}'\!\to\!\hat{\Omega})\,
+  \psi(\mathbf{r}, E', \hat{\Omega}', t) \,d\hat{\Omega}' \,dE' \right] \,d^3\mathbf{r} } \, .
+\end{equation}
+
+% Source: lecture_35.tex, frame at line 220.
+\Sec{6}{Through the Surface}
+The rate at which neutrons are gained or lost through a surface element is
+\begin{equation}
+\tag{4--32}
+  \mathbf{j}(\mathbf{r},E,\hat{\Omega},t)\cdot \,d\mathbf{S} \;=\; \hat{\Omega}\, \psi(\mathbf{r},E,\hat{\Omega},t)\cdot \,d\mathbf{S}.
+\end{equation}
+Integrating over the entire surface, the {\it net} number \emph{leaving} is
+\begin{equation*}
+   \textcolor{wcalerted}{\text{(4)}}  - \textcolor{wcprimary}{\text{(2)}} = \int_S \hat{\Omega}\, \psi(\mathbf{r},E,\hat{\Omega},t)\cdot \,d\mathbf{S} .
+  \tag{4--33}
+\end{equation*}
+Recall Gauss' (divergence) theorem, i.e.,
+\begin{equation*}
+\tag{4--34}
+  \int_S \mathbf{F}(\mathbf{r})\cdot \,d\mathbf{S} \;=\; \int_V \nabla\!\cdot\! \mathbf{F}(\mathbf{r})\, \,d^3\mathbf{r} \, ,
+\end{equation*}
+which, because $\hat{\Omega}$ is independent of $\mathbf{r}$, lets us write
+\begin{equation*}
+ \textcolor{wcalerted}{\text{(4)}}  - \textcolor{wcprimary}{\text{(2)}}
+ = \int_S \hat{\Omega}\, \psi\cdot \,d\mathbf{S}
+  \;=\; \int_V \nabla\!\cdot\!\big(\hat{\Omega}\, \psi\big)\, \,d^3\mathbf{r}
+  \;=\; \textcolor{wcalerted}{ \int_V \hat{\Omega}\cdot \nabla \psi \, \,d^3\mathbf{r} } \, .
+\end{equation*}
+
+% Source: lecture_35.tex, frame at line 248.
+\Sec{7}{Shrinking $V$ for Differential Balance}
+If $V$ is arbitrary, then we collect the terms, take $V \to 0$ to eliminate the integrals,
+and welcome our new friend, the {\bf neutron transport equation}:
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \psi}{\partial t}
+  +  \textcolor{wcalerted}{ \hat{\Omega}\cdot\nabla \psi}
+  &+   \textcolor{wcalerted}{ \Sigma_t(\mathbf{r},E)\, \psi(\mathbf{r},E,\hat{\Omega},t)}
+   = \\
+  & \textcolor{wcprimary}{\int_0^\infty \!\!\int_{4\pi}
+  \Sigma_s(\mathbf{r}, E'\!\to\!E, \hat{\Omega}'\!\to\!\hat{\Omega})\,
+  \psi(\mathbf{r},E',\hat{\Omega}',t)\, \,d\hat{\Omega}'\, \,dE'} \\
+  & + \textcolor{wcprimary}{ s(\mathbf{r},E,\hat{\Omega},t) }.
+  \tag{4--40}
+\end{align*}
+
+{\bf Food for thought}: what term would we add to include multiplication (fission)?
+
+% Source: lecture_35.tex, frame at line 270.
+\Sec{8}{Eliminating $\hat{\Omega}$}
+While scary, the various terns comprising the NTE are familiar enough, but the dependence on $\hat{\Omega}$ remains a challenge for another day.  Integrating the NTE over $4 \pi$ leads to
+
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \phi}{\partial t}
+  &+ \nabla\!\cdot\! \mathbf{J}(\mathbf{r},E,t)
+   +\Sigma_t(\mathbf{r},E)\, \phi(\mathbf{r},E,t)\\
+  &=
+  \int_0^\infty \Sigma_s(\mathbf{r}, E'\!\to\!E)\, \phi(\mathbf{r},E',t)\, \,dE'
+  + S(\mathbf{r},E,t) \, ,
+  \tag{4--79}
+\end{align*}
+which is called the {\bf neutron continuity equation} (or NCE).
+
+{\bf Ponderable}.  Have we simplified our life?
+Unfortunately, we went from the NTE with one unknown ($\psi$) to the new NCE
+with two unknowns ($\phi$ and $\mathbf{J}$)!
+
+% Source: lecture_35.tex, frame at line 295.
+\Sec{9}{Finding Closure}
+We can't really do much with one equation and the unknowns $\phi$ and $\mathbf{J}$.
+The fix is a simple one: assume that the flow points where the neutron density, or,
+rather, flux falls:
+\begin{equation*}
+   \mathbf{J} \propto -\nabla \phi \, .
+\end{equation*}
+{\bf Ponderable}: How do we go from $\propto$ to $=$?
+
+Let $D$ be that constant of proportionality so that
+\begin{equation*}
+\tag{FNRP 6.11}
+   \mathbf{J} = -D \nabla \phi \, ,
+\end{equation*}
+which is known as {\bf Fick's law}.  Substitution of Fick's law
+into the NCE yields
+
+\begin{align*}
+  \frac{1}{v}\,\frac{\partial \phi}{\partial t}
+  &- \nabla\!\cdot\! D(\mathbf{r},E) \nabla \phi(\mathbf{r},E,t)
+   +\Sigma_t(\mathbf{r},E)\, \phi(\mathbf{r},E,t)\\
+  &=
+  \int_0^\infty \Sigma_s(\mathbf{r}, E'\!\to\!E)\, \phi(\mathbf{r},E',t)\, \,dE'
+  + S(\mathbf{r},E,t) \, ,
+\end{align*}
+which is, of course, a long lost friend!
+
+% Source: lecture_35.tex, frame at line 326.
+\Sec{10}{Simplify, Simplify}
+Now that we have space, it's time to say goodbye to $t$ and to
+replace $E$ by $g$:
+
+\begin{align*}
+ - \nabla\!\cdot\! D_g(\mathbf{r}) \nabla \phi_g(\mathbf{r})
+   + \Sigma_{tg}(\mathbf{r})\, \phi_g(\mathbf{r})
+  = \sum_{g'=1}^{G} \Sigma_{sg\gets g'} \phi_{g'}(\mathbf{r}) +  S_g(\mathbf{r}) \, .
+\end{align*}
+
+{\bf Example}: For $G=2$ and no upscatter, show that
+\begin{align*}
+ - \nabla\!\cdot\! D_1(\mathbf{r}) \nabla \phi_1(\mathbf{r})
+   + \Sigma_{r,1}(\mathbf{r})\, \phi_1(\mathbf{r})
+  &=  S_1(\mathbf{r},t) \\
+ - \nabla\!\cdot\! D_2(\mathbf{r}) \nabla \phi_2(\mathbf{r})
+   + \Sigma_{a,2}(\mathbf{r})\, \phi_2(\mathbf{r})
+  &=  \Sigma_{s,2\gets 1} \phi_{1}(\mathbf{r}) + S_2(\mathbf{r})
+\end{align*}
+What if $G=1$ and we introduce multiplication?
+
+\begin{align*}
+\tag{FNRP 6.12}
+\boxed{ - \nabla\!\cdot\! D(\mathbf{r}) \nabla \phi(\mathbf{r})
+   + \Sigma_{a}(\mathbf{r})\, \phi(\mathbf{r})
+  =  S(\mathbf{r}) + \bar{\nu}\Sigma_{f}(\mathbf{r})\, \phi(\mathbf{r})
+}
+\end{align*}
+
+% Source: lecture_35.tex, frame at line 359.
+\Sec{11}{Onto Slab Geometry}
+Much like integration over $4\pi$ hides some detail, so, too, does $\nabla\!\cdot\! D(\mathbf{r}) \nabla \phi(\mathbf{r})$.  Recall that, for Cartesian (or $xyz$) coordinates, the gradient and divergence operators act on scalar and vector functions according to
+\begin{align*}
+\nabla \phi(\mathbf{r})
+= \mathbf{i} \,\frac{\partial \phi}{\partial x}
+ + \mathbf{j}  \,\frac{\partial \phi}{\partial y}
+ + \mathbf{k}  \,\frac{\partial \phi}{\partial z} \quad \text{and} \quad
+\nabla\!\cdot\!\mathbf{J}(\mathbf{r})
+= \frac{\partial J_x}{\partial x}
+ + \frac{\partial J_y}{\partial y}
+ + \frac{\partial J_z}{\partial z} \, ,
+\end{align*}
+so that
+\begin{align*}
+\nabla\!\cdot\!\big(D(\mathbf{r})\,\nabla \phi(\mathbf{r})\big)
+&= \frac{\partial}{\partial x}\!\left(D\,\frac{\partial \phi}{\partial x}\right)
+ + \frac{\partial}{\partial y}\!\left(D\,\frac{\partial \phi}{\partial y}\right)
+ + \frac{\partial}{\partial z}\!\left(D\,\frac{\partial \phi}{\partial z}\right) \\[4pt]
+&= D(\mathbf{r})\,\nabla^2 \phi(\mathbf{r})
+  + \big(\nabla D(\mathbf{r})\big)\!\cdot\!\big(\nabla \phi(\mathbf{r})\big).
+\end{align*}
+
+If we make the bold assumption that $\phi(\mathbf{r}) = \phi(x)$, we find
+\begin{align*}
+\boxed{ - \frac{d}{dx} \left ( D(x) \frac{d\phi}{dx}   \right )
+   + \Sigma_{a}(x)\, \phi(x)
+  =  \bar{\nu}\Sigma_{f}(x)\, \phi(x) +  S(x)
+} \, ,
+\end{align*}
+the one-speed diffusion equation in slab geometry.
+
+\end{handoutflow}
+\end{document}

@@ -1,185 +1,113 @@
-# NE 630 board-supported handout framework
+# NE 630 handouts
 
-This package contains a reusable LaTeX class and printable handouts for Lessons
-1--10 and 12--24.
-The design separates three kinds of content:
+All 38 handouts (Lessons 01–10 and 12–39) use
+[`ne630handout.cls`](ne630handout.cls) directly. There is no Lesson 11 source.
+The Lesson 07 derivation supplement and handout template use the same class.
+The class owns fonts, page geometry, headers, colors, boxes, columns, listings,
+and common authoring commands. The former board class and Chapter 4 common
+preamble have been removed.
 
-1. **Fixed inputs** -- reading, objectives, notation, constants, data tables, and problem statements that students should not have to copy from the board.
-2. **Board-built structure** -- partially completed derivations, bookkeeping tables, and ruled spaces that are filled as the lesson develops.
-3. **Study checks** -- compact prediction, interpretation, and synthesis prompts.
-
-The default layout uses US Letter paper, two columns, approximately half-inch margins, a modern print-friendly typeface, and a restrained K-State-purple accent. The boxes retain their hierarchy when printed in grayscale.
-
-## Shared backend (Lessons 22 and 24)
-
-[`ne630handout.cls`](ne630handout.cls) is the new course-wide backend, with
-Wildcat/Beamer colors and the combined board-handout and reading-guide
-interfaces. Lessons 22 and 24 use it. The old class and chapter-style
-backend remain unchanged for all other lessons.
-
-See [the backend guide](handout_backend.md) for authoring, feature coverage,
-future migration notes, and the Lesson 22 slide-coverage map. Build L22 with
-`make L22`; run the isolated compatibility check with `make check-class`.
-The current instructor-edited L22 builds as two Letter pages.
-
-## Typography
-
-The handouts use Adobe Myriad Pro for text and Libertinus Math for equations.
-The class loads Myriad Pro from a local font installation rather than copying
-the proprietary font into this repository. It detects the standard Windows font
-directory from WSL (/mnt/c/Windows/Fonts/), native Windows TeX
-(C:/Windows/Fonts/), and Jeremy's local Adobe CC font cache
-(/home/robertsj/.local/share/fonts/adobe-cc/). If Myriad Pro is unavailable, it
-falls back to TeX Gyre Heros so drafts still compile.
-
-The configured text faces are Myriad Pro Regular, Semibold, and Semibold Italic.
-Because this installation does not include the regular italic face, regular
-italics use a subtle synthetic slant.
-
-## Color semantics
-
-Color identifies a box's instructional role, not its subject:
-
-- **Purple** marks supplied reference material, vocabulary, and course hierarchy.
-- **Gray** marks space students construct during lecture.
-- **Orange** marks a formative checkpoint or decision.
-- **Teal** marks synthesis, a key result, or a solution-only reveal.
-
-Titles provide the same distinctions for grayscale printing. With
-`\handoutsolutionsfalse`, graph curves and annotations are suppressed so plotted
-figures begin as labeled blank axes; switching the wrapper to
-`\handoutsolutionstrue` overlays the completed curves and reveals selected
-results.
-
-## Files
-
-- `ne630boardhandout.cls` -- reusable document class.
-- `handout_template.tex` -- blank two-page starting point with comments.
-- `lesson_XX_handout.tex` -- lesson wrapper with `\handoutsolutionsfalse` for the public handout.
-- `lesson_XX_handout_body.tex` -- lesson body with blanks and solution payloads.
-- `figures/` -- supporting figures used by Lessons 6, 7, and 10, including the
-  OpenMC notebook that generates the U-238 threshold plot.
-- `spectra.pdf` -- supporting spectrum figure used by Lesson 5.
-- `Makefile` -- builds the public non-solution PDFs with `latexmk`.
-
-Rendered `lesson_XX_handout.pdf` files are build artifacts. They are ignored on
-the course-development branch and copied into the generated site during the
-publication build. The published copies live on `gh-pages`.
+Existing instructional bodies, equations, figures, blanks, and solution reveals
+are retained. Lessons 25–35 retain every substantive frame from their Beamer
+slides, with title/objective frames promoted to metadata. Lessons 36–39 use
+existing notebook content, including Python listings, embedded images, and
+stored results. These seeded drafts have no two-page limit. Their bodies use the
+shared two-column `handoutflow` layout beneath full-width lesson metadata.
 
 ## Build
 
-```bash
-make
-```
-
-Build only one handout with its uppercase lesson target:
+Run from this directory with XeLaTeX and `latexmk` installed:
 
 ```bash
-make L07
+make L25                         # one lesson
+make lesson25                    # equivalent alias
+make all                         # every lesson and derivation supplement
+make template
+make check-content               # existing lessons/supplement versus Git HEAD
+make check-class                 # isolated compilation/variant checks
+make check-seeds                 # slide/notebook provenance and payload preservation
 ```
 
-The lowercase lesson targets are aliases for the public PDF targets. You can
-also compile a single version directly:
+The Makefile discovers `lesson_??_handout.tex`, so adding a lesson does not
+require another lesson-target definition. It automatically regenerates the
+draft figures under `figures/drafts/` using the local
+`figures/build_draft_figures.py` generator. Set `PLOT_PYTHON` to an
+interpreter with NumPy, SciPy, and Matplotlib; for this workspace:
 
 ```bash
-latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_02_handout.tex
+make L25 PLOT_PYTHON=/home/robertsj/miniforge3/bin/python
 ```
 
-Remove temporary LaTeX files while retaining compiled PDFs:
+`python3 check_seeded_handouts.py` runs the seed check directly. It compares
+ordered display/inline mathematics, tags, complete tables, code, and figure
+targets within each frame/section, and verifies manifest hashes and metadata.
+It does not validate inherited physics, prose exhaustively, plot data, or PDF
+appearance; those require separate review.
 
-```bash
-make tidy
-```
+`PYTHON` controls the check scripts. `OPENMC_PYTHON` is used only by the explicit
+`make xe135-figure` regeneration target; ordinary PDF builds use the supplied
+Xe-135 capture figure. No shell escape is required.
 
-Remove temporary files and compiled PDFs:
+`make tidy` removes LaTeX intermediates; `make clean` also removes compiled
+handout PDFs. Lesson PDFs are generated review/publication artifacts. Building
+or editing sources does not publish the course site.
 
-```bash
-make clean
-```
+## Files and authoring
 
-## Core interface
+- [`ne630handout.cls`](ne630handout.cls): the single formatting backend.
+- [`handout_template.tex`](handout_template.tex): a board-handout starting point.
+- `lesson_NN_handout.tex`: public lesson wrapper or self-contained lesson.
+- `lesson_NN_handout_body.tex`: retained early-lesson instructional bodies.
+- [`figures/reactor_schematics.tex`](figures/reactor_schematics.tex): Chapter 4
+  instructional diagrams, explicitly loaded by Lessons 15–18 rather than by
+  the class.
+- [`seeded_lessons.json`](seeded_lessons.json): source hashes, selected notebook
+  cells, extracted-image provenance, coverage gaps, and review notes for L25–39.
 
-```tex
-\documentclass{ne630boardhandout}
-\handoutsolutionsfalse % change to \handoutsolutionstrue for a private solution copy
-\HandoutSetup{NE 630}{01}{Lesson title}{FNRP Sections X.X--X.X}
+Use the default flowing layout, `[board]`, or `[compact]` to match the lesson's
+purpose. `[fallbackfonts]` forces the portable TeX Gyre Heros text font; otherwise
+Myriad Pro is selected when locally available. Equations use Libertinus Math.
+No proprietary fonts are distributed. `handoutflow` automatically flows and
+balances draft text across two columns; `handoutsmall` handles occasional wide
+tables/equations without changing their content. `\HandoutTypography{size}{leading}{skip}`
+provides a shared interface for measured lesson-specific typography.
 
-\begin{document}
-\MakeHandoutTitle
-\begin{handoutcolumns}
-  ...
-\end{handoutcolumns}
-\end{document}
-```
+The [backend guide](handout_backend.md) documents the authoring commands,
+solution switches, and validation scope. The [figure guide](figures/README.md)
+records existing figure provenance and regeneration details.
 
-Useful components are:
+## Source review notes
 
-```tex
-\HandoutSection{1}{Section title}
-\begin{fixedbox}{Fixed inputs} ... \end{fixedbox}
-\begin{boardbox}{Board development} ... \end{boardbox}
-\begin{checkpoint}[Prompt title] ... \end{checkpoint}
-\begin{takeawaybox}[Synthesis] ... \end{takeawaybox}
-\Blank[1.0in]
-\RevealBlank[1.0in]{solution-only result}
-\RuledLines{3}
-\SolutionCue{Solution-only note.}
-```
+The slide files for Lectures 36–39 duplicate Lecture 31. Their handouts now use:
 
-## Legacy board-handout authoring rule
+| Lesson | Topic | Notebook source |
+| --- | --- | --- |
+| 36 | Two-group diffusion and criticality | `lesson_35.ipynb`, cells 5–7; `L39_f24.ipynb`, cells 1–7 |
+| 37 | The reflected reactor | Complete `lesson_37.ipynb` |
+| 38 | Modeling reactor control | Complete `lesson_38.ipynb` |
+| 39 | Numerical diffusion and transport | Complete `lesson_39.ipynb` |
 
-Start with the two-page limit. Put on the sheet only material that is expensive
-or unhelpful to reproduce by hand: fixed data, long expressions, diagrams, and
-problem statements. Leave reasoning transitions, intermediate algebra,
-interpretation, and selected final results for lecture and student annotation.
+Cell indices are zero-based. L36 has no corresponding notebook: selected cells
+cover the equations, migration area, and modified one-group approximation, but
+do not supply a worked bare two-group criticality calculation or numerical
+solver. Readings and objectives for L36–38 come from their existing lesson pages.
+The canonical L39 notebook identifies itself as Lessons 39 and 40 together;
+`L39_f24.ipynb` instead covers a historical reactor-control lesson.
 
-## Lessons 22 and 23
+Notebook text and symbolic outputs retain their original content. Numerical
+plots are regenerated in course purple/orange from locally recovered data. L39
+transport data were recovered using the available external `detran` installation;
+ordinary builds use the saved data without requiring that solver. Two historical
+two-group illustrations are traced from the original curves, with their pixel
+precision recorded. Original images remain provenance evidence in `figures/`.
+Equation/code disagreements, stale numerical examples, and other inherited
+issues are recorded by source cell in the manifest. The backend guide summarizes
+the principal review items.
 
-Build with `make L22 L23` (or `make lesson22 lesson23`).
-
-- `lesson_22_handout.tex` uses `ne630handout.cls`: two pages covering the
-  Lesson 22 slides, including reactivity/control bookkeeping, iodine--xenon
-  balances, equilibrium worth, transient code/results, and the samarium
-  reading extension. Purple/orange equation emphasis follows the slides.
-- `lesson_22_xenon_transient.py` is included directly as the printed listing;
-  it requires NumPy, SciPy, and Matplotlib when run, but not to build the PDF.
-  The equilibrium and transient examples intentionally retain distinct inputs.
-- L22's capture cross section is a native PGF plot generated from OpenMC
-  Xe135 MT=102 data; its text inherits the handout fonts. See the
-  [figure guide](figures/README.md) for regeneration and data provenance.
-  The transient figure remains a local copy of the slide figure.
-- `lesson_23_handout.tex` is a two-page reading guide using
-  `ne630_ch04_reading_guide_common.tex`. Its editable depletion chain is included
-  directly from `figures/depletion_chain_tikz.tex`, retaining shared isotope
-  columns and element rows with fixed-size stacked labels. FNRP equation
-  numbers use `\tag`, with asterisks explained
-  where the expression is modified. See the [figure guide](figures/README.md)
-  for standalone compilation and the figure conventions.
-
-Original Downloads files are untouched. Lessons 22 and 23 are published as
-PDF-only handouts on the course site.
-Committing source updates does not republish the site; a release must rebuild
-and validate the student-facing exports separately.
-
-## Lesson 24
-
-Build with `make L24` (or `make lesson24`).
-`lesson_24_handout.tex` is the canonical, self-contained lesson source using
-`ne630handout.cls`; its inline PGFPlots curve requires no external assets.
-The two-page handout reviews depletion and PWR scales, then develops the
-linear reactivity model for equilibrium batch refueling. The reactivity curve is the actual fixed-power model-3 history from
-`../notebooks/lesson_24.ipynb`, plotted through 40 MWd/kg on a grid visible
-in both copies. Students use the eyeballed points (0, 0.25) and (35, 0.10)
-to approximate the post-xenon trend. The instructor copy explicitly gives
-the intercept 0.25 and signed slope −3/700 and overlays that line. Subsequent
-numerical checks use the same two-point approximation and identify
-extrapolations beyond 40 MWd/kg.
-
-The source defaults to `\handoutsolutionsfalse`. For a private numerical-check
-copy, flip only that flag in a temporary source copy, build with XeLaTeX, and
-keep the resulting `lesson_24_handout_instructor.pdf` local. Do not replace the
-student PDF with the instructor output. Rendered PDFs are ignored build artifacts.
-
-Lesson 24 is registered in the website exporter and course-site index as a
-student PDF download alongside its notebook and shared depletion module.
-The instructor PDF remains private and is excluded from publication.
+Several source inconsistencies remain for instructional review: L29's feedback
+sign, L30's ODE algebra, L33's printed
+flux/partial-current relation; L34's boundary/continuity notation and case labels;
+and L35's eigenproblem coefficient and critical-width expression. L35's title
+also promises cylindrical material while the stored deck returns to transport
+review after its slab examples. These have been preserved rather than silently
+corrected. See the backend guide and manifest for specifics.

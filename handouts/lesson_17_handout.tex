@@ -1,6 +1,8 @@
 % NE 630 -- Chapter 4 reading guide, Lesson 17
 % Standalone source: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_17_handout.tex
-\input{ne630_ch04_reading_guide_common.tex}
+\documentclass{ne630handout}
+\handoutsolutionsfalse
+\input{figures/reactor_schematics.tex}
 \hypersetup{pdftitle={NE 630: Chapter 4 Reading Guide -- Lesson 17: Thermal cells and the four factors}}
 \begin{document}
 \fontsize{9.5}{11.5}\selectfont
@@ -67,8 +69,8 @@ $\epsilon$ counts the additional fission-neutron production beyond thermal fissi
 A larger moderator-to-fuel thermal flux ratio makes moderator absorption more costly. Include cladding, dissolved boron, and other nonfuel absorbers in a more detailed balance.
 
 \colend
-\begin{Explore}{Measure the factors before interpreting them}
+\begin{OpenMCExplore}{Measure the factors before interpreting them}
 Use \texttt{CellFilter} and an incident-energy \texttt{EnergyFilter}; score \texttt{flux}, \texttt{absorption}, and \texttt{nu-fission}. Reaction-rate tallies already include volume. Divide a flux tally by $V^r\Delta E$ for a spectrum per eV, or by $V^r\Delta u$ for one per lethargy. Compare the chapter's product, the energy-independent $B/A$, and the eigenvalue; discuss omitted reactions and statistical uncertainty rather than forcing agreement.
-\end{Explore}
+\end{OpenMCExplore}
 %\SourceLine{Sources: Ch.\ 4, \S\S\,4.4--4.5; slide sets 17--18. OpenMC: \href{https://docs.openmc.org/en/stable/usersguide/tallies.html}{Tallies, \S\S\,8.1--8.2}. $B/A=k_\infty$ additionally assumes no leakage or net nonfission neutron production.}
 \end{document}

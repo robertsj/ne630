@@ -1,0 +1,868 @@
+{
+  "schema_version": 2,
+  "scope": "Seeded NE 630 Lessons 25–39. Paths are relative to handouts/.",
+  "preservation_policy": "L25–35 retain every substantive slide frame. L36 uses explicitly selected matching notebook cells because no lesson_36.ipynb exists; L37–39 retain their complete canonical notebook content. Instructional prose, mathematics, code and textual/symbolic outputs are retained. Layout is two-column; plots use approved local course-color renderings with numerical or tracing provenance. Original notebook PNGs remain source evidence. Inherited content issues are documented.",
+  "page_limit": null,
+  "totals": {
+    "lessons": 15,
+    "slide_lessons": 11,
+    "notebook_lessons": 4,
+    "source_frames": 107,
+    "substantive_frames": 85,
+    "notebook_cells": 150,
+    "handout_sections": 107
+  },
+  "lessons": [
+    {
+      "lesson": 25,
+      "handout": "lesson_25_handout.tex",
+      "source": "../slides/lecture_25.tex",
+      "source_sha256": "d4bb6d0c2b6eec6e4db4743d2541ef847cdb4264d8701582bddfd3129b0971b8",
+      "title": "Neutron Kinetics without Multiplication",
+      "source_internal_lesson": 25,
+      "frame_counts": {
+        "total": 11,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 9,
+        "handout_sections": 9
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 26,
+      "handout": "lesson_26_handout.tex",
+      "source": "../slides/lecture_26.tex",
+      "source_sha256": "5e3753cc16686baed157b0460a7384902f8c5fb49f2341ba774f77b3e38b1f77",
+      "title": "Neutron Kinetics with Multiplication",
+      "source_internal_lesson": 26,
+      "frame_counts": {
+        "total": 9,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 7,
+        "handout_sections": 7
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 27,
+      "handout": "lesson_27_handout.tex",
+      "source": "../slides/lecture_27.tex",
+      "source_sha256": "11223ffb0d401365f606d3f664ccaea063aaf025ab0fff1922e4f41174bf0451",
+      "title": "Neutron Kinetics with Delayed Neutrons",
+      "source_internal_lesson": 27,
+      "frame_counts": {
+        "total": 13,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 11,
+        "handout_sections": 11
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 28,
+      "handout": "lesson_28_handout.tex",
+      "source": "../slides/lecture_28.tex",
+      "source_sha256": "d1116b360c1663303718b29bd3b00394b0ebff858048058df7f3b9da989c91aa",
+      "title": "Step Insertions of Reactivity",
+      "source_internal_lesson": 28,
+      "frame_counts": {
+        "total": 10,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 8,
+        "handout_sections": 8
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 29,
+      "handout": "lesson_29_handout.tex",
+      "source": "../slides/lecture_29.tex",
+      "source_sha256": "06fc000121a364606de5b9eaf7356dc79d9fd7a5746862ac43623c9a9ce68b87",
+      "title": "Point Kinetics with Feedback",
+      "source_internal_lesson": 29,
+      "frame_counts": {
+        "total": 8,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 6,
+        "handout_sections": 6
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 30,
+      "handout": "lesson_30_handout.tex",
+      "source": "../slides/lecture_30.tex",
+      "source_sha256": "608f66f20dcec1507a3336c951da95c15409fc55c3e46e2b313c5a7b20aef719",
+      "title": "Review of Some Math",
+      "source_internal_lesson": 30,
+      "frame_counts": {
+        "total": 5,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 3,
+        "handout_sections": 3
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 31,
+      "handout": "lesson_31_handout.tex",
+      "source": "../slides/lecture_31.tex",
+      "source_sha256": "95497925e7acc6219b3dda042a0f9d409c3fd6cec2ba635458cf8c4f84bb67e6",
+      "title": "Neutrons in Space",
+      "source_internal_lesson": 31,
+      "frame_counts": {
+        "total": 13,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 11,
+        "handout_sections": 11
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 32,
+      "handout": "lesson_32_handout.tex",
+      "source": "../slides/lecture_32.tex",
+      "source_sha256": "000655e85e2faa014dc22fab53bf49185062f0ae601f8ef06bd7ea6dc4b4ebc2",
+      "title": "One-Speed Diffusion in a Homogeneous Slab",
+      "source_internal_lesson": 32,
+      "frame_counts": {
+        "total": 10,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 8,
+        "handout_sections": 8
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 33,
+      "handout": "lesson_33_handout.tex",
+      "source": "../slides/lecture_33.tex",
+      "source_sha256": "38c8d2ab68ab2ac5b9bdf5b573dba90778c9fc491161ec2da2c7aa23d54fa630",
+      "title": "One-Speed Diffusion in Heterogeneous Slabs",
+      "source_internal_lesson": 33,
+      "frame_counts": {
+        "total": 6,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 4,
+        "handout_sections": 4
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [
+        "Source partial-current answer prints phi = (J+ + J-)/2.",
+        "Boundary example prints an incomplete diffusion equation and names boundary b after specifying a."
+      ],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 34,
+      "handout": "lesson_34_handout.tex",
+      "source": "../slides/lecture_34.tex",
+      "source_sha256": "25c87b1470802fc4c835041ce31de2fc99f835810b73423d2ccabd60521c317f",
+      "title": "Diffusion with Multiplication and an Approach to Criticality",
+      "source_internal_lesson": 34,
+      "frame_counts": {
+        "total": 9,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 7,
+        "handout_sections": 7
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [
+        "Reflecting boundary condition lacks an equality sign.",
+        "Flux-continuity equation uses phi^(i+2).",
+        "Final solution cases are labeled k_inf < 0 and k_inf > 0; preceding discussion distinguishes values around 1.",
+        "Ponderable asks about k_inf = 0 after discussing the transition around 1.",
+        "Boundary example repeats the incomplete diffusion equation and boundary-label inconsistency from Lecture 33."
+      ],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 35,
+      "handout": "lesson_35_handout.tex",
+      "source": "../slides/lecture_35.tex",
+      "source_sha256": "886e7bcb59466508926e548f9aef1b637b3bcf36d5fb9263a3585f2e61000dd0",
+      "title": "Criticality in Slabs, Cylinders, and Spherical Elephants",
+      "source_internal_lesson": 35,
+      "frame_counts": {
+        "total": 13,
+        "title": 1,
+        "primary_objective": 1,
+        "substantive": 11,
+        "handout_sections": 11
+      },
+      "duplicate_of": null,
+      "warnings": [],
+      "source_review_notes": [
+        "Diffusion eigenproblem uses Sigma_s.",
+        "Printed critical-width expression is inconsistent with its stated numerical answer.",
+        "Title promises cylindrical/spherical material, while stored content returns to transport review after slab criticality."
+      ],
+      "source_kind": "slides",
+      "layout": "two-column handoutflow"
+    },
+    {
+      "lesson": 36,
+      "handout": "lesson_36_handout.tex",
+      "source_kind": "notebook",
+      "title": "Two-Group Diffusion and Criticality",
+      "metadata": {
+        "reading": "D\\&H, Sections 7.III.B--7.III.C; Lewis, Section 7.4.",
+        "focus": "Students will be able to write down the equations necessary to model multi-region reactors using the two-group approximation and to solve such equations numerically."
+      },
+      "notebook_sources": [
+        {
+          "source": "../notebooks/lesson_35.ipynb",
+          "source_sha256": "939cc010d76e6fa589b814669004b5c75e35c3410fbc476cf5b8dbcacf7a3a15",
+          "cells": [
+            5,
+            6,
+            7
+          ],
+          "coverage": "selected"
+        },
+        {
+          "source": "../notebooks/L39_f24.ipynb",
+          "source_sha256": "615f53b6d25d90282400bc0bc1e2d487f906096d501260e981d6d9ed3b8899ac",
+          "cells": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "coverage": "selected"
+        }
+      ],
+      "supplemental_sources": [
+        {
+          "source": "../pages/lesson_36.md",
+          "source_sha256": "c2301ed0b94710d5026660e713f67b6d1fff97858abd5fae458ebda9aa8aa256",
+          "role": "Macro objective and assigned reading"
+        }
+      ],
+      "notebook_assets": [],
+      "replaced_slide_source": {
+        "source": "../slides/lecture_36.tex",
+        "source_sha256": "95497925e7acc6219b3dda042a0f9d409c3fd6cec2ba635458cf8c4f84bb67e6",
+        "duplicate_of": "../slides/lecture_31.tex"
+      },
+      "warnings": [
+        "No lesson_36.ipynb exists. Selected sources do not include a worked bare two-group slab/cylinder criticality calculation or a numerical solver.",
+        "Migration area M^2=L_1^2+L_2^2 is stated; its neutron-life interpretation and derivation are absent from the selected notebook source."
+      ],
+      "source_review_notes": [
+        "L39_f24.ipynb cell 7 labels both fuel-region group fluxes phi_1; retained exactly.",
+        "L39_f24.ipynb cell 7 reflector expressions use differing modal indices for the cosh and sinh terms; retained exactly.",
+        "L39_f24.ipynb cell 7 says any coefficient C_i can be set to 1, without qualification; retained exactly."
+      ],
+      "selection_rationale": "No lesson_36.ipynb exists. Lesson 35 cells 5–7 provide the bare criticality/eigenvalue review; L39_f24 cells 1–7 are the existing two-group diffusion review matching the lesson 36 objectives. Unrelated reactor-control material is excluded.",
+      "coverage_gaps": [
+        "No lesson_36.ipynb exists. Selected sources do not include a worked bare two-group slab/cylinder criticality calculation or a numerical solver.",
+        "Migration area M^2=L_1^2+L_2^2 is stated; its neutron-life interpretation and derivation are absent from the selected notebook source."
+      ],
+      "cell_counts": {
+        "total": 10,
+        "nonempty": 10,
+        "markdown": 10,
+        "code": 0,
+        "stored_outputs": 0,
+        "handout_sections": 4
+      },
+      "layout": "two-column handoutflow",
+      "notebook_file_modified": false,
+      "plot_code_executed": false
+    },
+    {
+      "lesson": 37,
+      "handout": "lesson_37_handout.tex",
+      "source_kind": "notebook",
+      "title": "The Reflected Reactor",
+      "metadata": {
+        "reading": "Lewis, Sec.~7.5.",
+        "focus": "Students will be able to characterize both quantitatively and qualitatively the impact of a reflector region on an otherwise bare reactor core using diffusion theory."
+      },
+      "notebook_sources": [
+        {
+          "source": "../notebooks/lesson_37.ipynb",
+          "source_sha256": "b1c193f75d558f68dba6fd7268b4df8ede12cd6c8f344cc058be45a5e0a65781",
+          "cells": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ],
+          "coverage": "complete"
+        }
+      ],
+      "supplemental_sources": [
+        {
+          "source": "../pages/lesson_37.md",
+          "source_sha256": "f2711d645ca554474617c0af5c0a148c04df4ed6533b250138f681cee1d5e85a",
+          "role": "Macro objective and assigned reading"
+        }
+      ],
+      "notebook_assets": [
+        {
+          "source": "../notebooks/lesson_37.ipynb",
+          "cell": 14,
+          "path": "figures/notebook_37/cell_14_attachment.png",
+          "sha256": "71e552f66db33d06ae8c145f9465819a84038b30058465887ebdc6077873a50d",
+          "mime": "image/png",
+          "attachment": "image.png"
+        },
+        {
+          "source": "../notebooks/lesson_37.ipynb",
+          "cell": 15,
+          "path": "figures/notebook_37/cell_15_attachment.png",
+          "sha256": "47ff877871dc9db7c0a47f8a20acfce2251f4c89e06f01042febff120eaac86c",
+          "mime": "image/png",
+          "attachment": "image.png"
+        }
+      ],
+      "replaced_slide_source": {
+        "source": "../slides/lecture_37.tex",
+        "source_sha256": "95497925e7acc6219b3dda042a0f9d409c3fd6cec2ba635458cf8c4f84bb67e6",
+        "duplicate_of": "../slides/lecture_31.tex"
+      },
+      "warnings": [],
+      "source_review_notes": [
+        {
+          "cells": [
+            1
+          ],
+          "note": "Bare-slab ODE omits multiplication of B^2 by phi; reproduced unchanged."
+        },
+        {
+          "cells": [
+            36,
+            39,
+            41,
+            42,
+            44
+          ],
+          "note": "The displayed full-width formula contains a factor 2 that is omitted in a_prime code. The code yields17.5356 cm and agrees with its stored output; the displayed formula would yield35.0712 cm for the same data. Savings outputs follow the coded width. Both expressions are preserved for instructional review."
+        }
+      ],
+      "selection_rationale": "Use the corresponding same-number canonical lesson notebook. Preserve instructional source and textual/symbolic outputs; use approved local figure renderings.",
+      "cell_counts": {
+        "total": 45,
+        "nonempty": 45,
+        "markdown": 28,
+        "code": 17,
+        "stored_outputs": 12,
+        "handout_sections": 5
+      },
+      "layout": "two-column handoutflow",
+      "notebook_file_modified": false,
+      "plot_code_executed": false
+    },
+    {
+      "lesson": 38,
+      "handout": "lesson_38_handout.tex",
+      "source_kind": "notebook",
+      "title": "Modeling Reactor Control",
+      "metadata": {
+        "reading": "Lewis, Sec.~7.6.",
+        "focus": "Students will be able to use the one-group diffusion approximation to estimate how a small and localized perturbation in a reactor core changes the reactivity of the system."
+      },
+      "notebook_sources": [
+        {
+          "source": "../notebooks/lesson_38.ipynb",
+          "source_sha256": "5d1983f104fdbc6dda531120e4871908c52b3922f2fe9d62732a2933e80390cb",
+          "cells": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50
+          ],
+          "coverage": "complete"
+        }
+      ],
+      "supplemental_sources": [
+        {
+          "source": "../pages/lesson_38.md",
+          "source_sha256": "904018cdb71f5f67dd5e1f885117a02097bf683126cd9fa8b9de2ff688cc4099",
+          "role": "Macro objective and assigned reading"
+        }
+      ],
+      "notebook_assets": [
+        {
+          "source": "../notebooks/lesson_38.ipynb",
+          "cell": 46,
+          "path": "figures/notebook_38/cell_46_output_0.png",
+          "sha256": "c89c142c33d01e6c13f1d2618b1996e91cafb41e104d22ccb61debc2f76f05dd",
+          "mime": "image/png",
+          "output": 0,
+          "rendering": "lesson38_cell46"
+        },
+        {
+          "source": "../notebooks/lesson_38.ipynb",
+          "cell": 50,
+          "path": "figures/notebook_38/cell_50_output_0.png",
+          "sha256": "3c24e3c31f0d7b29348fa46d16be61d99e87ba0bceef8ef6d1bc7a77e36928c5",
+          "mime": "image/png",
+          "output": 0,
+          "rendering": "lesson38_cell50"
+        }
+      ],
+      "replaced_slide_source": {
+        "source": "../slides/lecture_38.tex",
+        "source_sha256": "95497925e7acc6219b3dda042a0f9d409c3fd6cec2ba635458cf8c4f84bb67e6",
+        "duplicate_of": "../slides/lecture_31.tex"
+      },
+      "warnings": [],
+      "source_review_notes": [
+        {
+          "cells": [
+            2,
+            4,
+            5,
+            7
+          ],
+          "note": "Reflected-width formula includes factor 2 while a_prime code omits it; stored numerical width and savings retained unchanged."
+        },
+        {
+          "cells": [
+            16
+          ],
+          "note": "Naive perturbation numerator integral limits run from +a/2 to -a/2 while denominator uses the opposite order; reproduced unchanged."
+        },
+        {
+          "cells": [
+            23
+          ],
+          "note": "Markdown sentence ends at \"will\"; preserved as stored."
+        },
+        {
+          "cells": [
+            26
+          ],
+          "note": "Flux-integral expression has an extraneous equality between phi(x) and C cos(Bx); preserved as stored."
+        },
+        {
+          "cells": [
+            30,
+            31
+          ],
+          "note": "Final first-order perturbation equality drops a minus sign; code keeps it. Output label says delta-rho_np although this is the first-order result. Preserved unchanged."
+        },
+        {
+          "cells": [
+            33,
+            34,
+            35,
+            36,
+            43
+          ],
+          "note": "Direct-perturbation discussion uses k1 approximately1.20739 and buckling outputs approximately0.0055/-0.0045 while previous stored first-order k1 is1.23189; later text also uses stale estimate1.21598. Numerical and prose differences retained unchanged."
+        },
+        {
+          "cells": [
+            37,
+            38
+          ],
+          "note": "Markdown defines alpha_II but writes B_II in hyperbolic flux; code uses alpha_II. Preserved unchanged."
+        },
+        {
+          "cells": [
+            38
+          ],
+          "note": "SymPy symbol string uses non-raw backslash escapes (including \\nu), retained byte-for-byte in listing."
+        },
+        {
+          "cells": [
+            50
+          ],
+          "note": "Stored plot labels phi(x) in cm; source axis label retained as stored."
+        }
+      ],
+      "selection_rationale": "Use the corresponding same-number canonical lesson notebook. Preserve instructional source and textual/symbolic outputs; use approved local figure renderings.",
+      "cell_counts": {
+        "total": 51,
+        "nonempty": 51,
+        "markdown": 33,
+        "code": 18,
+        "stored_outputs": 14,
+        "handout_sections": 5
+      },
+      "layout": "two-column handoutflow",
+      "notebook_file_modified": false,
+      "plot_code_executed": true
+    },
+    {
+      "lesson": 39,
+      "handout": "lesson_39_handout.tex",
+      "source_kind": "notebook",
+      "title": "Numerical Diffusion and Transport",
+      "metadata": {
+        "reading": "\\nolinkurl{notebooks/lesson_39.ipynb}.",
+        "focus": "Numerical methods to answer questions like \\emph{What does the flux look like in two-group problems?} and \\emph{When is ``diffusion theory'' a good approximation?}"
+      },
+      "notebook_sources": [
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "source_sha256": "200c945cabe32a22267b892081da77b71fdad50e0d280f6c2e9689efcbae31b3",
+          "cells": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43
+          ],
+          "coverage": "complete"
+        }
+      ],
+      "supplemental_sources": [],
+      "notebook_assets": [
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 10,
+          "path": "figures/notebook_39/cell_10_image.png",
+          "sha256": "fb44aae0ae02670461697024706c054227eea88159d3a784f493738df45309c3",
+          "mime": "image/png",
+          "attachment": "image.png",
+          "rendering": "lesson39_cell10"
+        },
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 11,
+          "path": "figures/notebook_39/cell_11_image-2.png",
+          "sha256": "896ff4da66200691bd150226f20c62e2691c72b134f85d5a870e9356499db681",
+          "mime": "image/png",
+          "attachment": "image-2.png",
+          "rendering": "lesson39_cell11"
+        },
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 19,
+          "path": "figures/notebook_39/cell_19_output_00.png",
+          "sha256": "21b617f8a73480a745d791e30d073acf8f614753496c4ebbea5ad7461b3f3b0f",
+          "mime": "image/png",
+          "output": 0,
+          "rendering": "lesson39_cell19"
+        },
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 22,
+          "path": "figures/notebook_39/cell_22_output_01.png",
+          "sha256": "131dfa5ec1bccd5c1c6ef9362670302cdc45370c6ebe538c4820b8e39c0ba01b",
+          "mime": "image/png",
+          "output": 1,
+          "rendering": "lesson39_cell22"
+        },
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 24,
+          "path": "figures/notebook_39/cell_24_output_00.png",
+          "sha256": "1aa34007222cee79a946b35a479c63b6a0b6885b3920387ddd3dc2735903799e",
+          "mime": "image/png",
+          "output": 0,
+          "rendering": "lesson39_cell24"
+        },
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 25,
+          "path": "figures/notebook_39/cell_25_output_00.png",
+          "sha256": "2fb158106f404a86124e6bb1fe7cd7f0d695fac9258cf491100fb0b73a508fa7",
+          "mime": "image/png",
+          "output": 0,
+          "rendering": "lesson39_cell25"
+        },
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 27,
+          "path": "figures/notebook_39/cell_27_output_01.png",
+          "sha256": "bab15260678c5ae3b335b0d397f3cdf61a32bcc9fbee9dfb88043d29c358657f",
+          "mime": "image/png",
+          "output": 1,
+          "rendering": "lesson39_cell27"
+        },
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 28,
+          "path": "figures/notebook_39/cell_28_output_00.png",
+          "sha256": "ba890a6486b8fc824ca374b2aeb0d815c869df99bf464b59ad36586bb7113c1d",
+          "mime": "image/png",
+          "output": 0,
+          "rendering": "lesson39_cell28"
+        },
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 30,
+          "path": "figures/notebook_39/cell_30_output_01.png",
+          "sha256": "2567437db218870526492fc9b3857e66c42457a0aefcaa159e08bff4e1d87d26",
+          "mime": "image/png",
+          "output": 1,
+          "rendering": "lesson39_cell30"
+        },
+        {
+          "source": "../notebooks/lesson_39.ipynb",
+          "cell": 31,
+          "path": "figures/notebook_39/cell_31_output_00.png",
+          "sha256": "b4e6ed568030e05c14f765bb04655b456218abca837364db51e272d4050ebac8",
+          "mime": "image/png",
+          "output": 0,
+          "rendering": "lesson39_cell31"
+        }
+      ],
+      "replaced_slide_source": {
+        "source": "../slides/lecture_39.tex",
+        "source_sha256": "95497925e7acc6219b3dda042a0f9d409c3fd6cec2ba635458cf8c4f84bb67e6",
+        "duplicate_of": "../slides/lecture_31.tex"
+      },
+      "warnings": [
+        "The canonical lesson_39.ipynb describes Lessons 39 and 40 together. The historical L39_f24.ipynb covers a different reactor-control lesson.",
+        "Transport-code listings require the original external detran installation. Plot data were recovered using the available local installation; ordinary figure builds use saved numerical data. Original source listings and textual outputs remain unchanged."
+      ],
+      "source_review_notes": [
+        {
+          "cells": [
+            0,
+            5
+          ],
+          "note": "The historical notebook calls itself Lessons 39 and 40 and retains its HW 38 Wednesday deadline and other time-specific directions."
+        },
+        {
+          "cells": [
+            3
+          ],
+          "note": "The naive perturbation numerator integral runs from a/2 to -a/2; the reversed limits are retained."
+        },
+        {
+          "cells": [
+            6
+          ],
+          "note": "The intermediate Bessel integration-by-parts term has the inherited sign/form shown; the final expression matches stored SymPy output."
+        },
+        {
+          "cells": [
+            15
+          ],
+          "note": "Cross-section values are labeled cm rather than inverse cm in the inherited review problem."
+        },
+        {
+          "cells": [
+            18
+          ],
+          "note": "The intermediate equation for C1 cosh(a/2L) omits a minus sign, though the following C1 and final flux have the minus sign."
+        },
+        {
+          "cells": [
+            21
+          ],
+          "note": "The source solver code requires external detran at an absolute local build path. Numerical data have now been recovered using the available installation; ordinary handout builds require only the saved data."
+        },
+        {
+          "cells": [
+            22,
+            27,
+            28
+          ],
+          "note": "The localized-source code does not reset source_map after the uniform-source example, while the stored figures show a localized source. The handout redraw explicitly uses source_map=[1]+[0]*19 to reproduce that illustration. Original instructional code and PNG evidence remain unchanged."
+        },
+        {
+          "cells": [
+            37
+          ],
+          "note": "Equation tags restart at (1) after the perturbation review, as in the notebook."
+        },
+        {
+          "cells": [
+            38,
+            41
+          ],
+          "note": "Cell 38 states J=(3/2) psi_1 for the linear angular-flux ansatz; integrating its stated moment gives (2/3) psi_1, which agrees with the final Fick-law expression in cell 41. The inherited cell 38 statement is retained."
+        }
+      ],
+      "selection_rationale": "Use the corresponding same-number canonical lesson notebook. Preserve instructional source and textual/symbolic outputs; use approved local figure renderings.",
+      "cell_counts": {
+        "total": 44,
+        "nonempty": 43,
+        "markdown": 33,
+        "code": 11,
+        "stored_outputs": 12,
+        "handout_sections": 8
+      },
+      "layout": "two-column handoutflow",
+      "notebook_file_modified": false,
+      "plot_code_executed": true
+    }
+  ],
+  "figure_policy": "All draft figure sources, data and renderings live under handouts/figures. Numerical plots use course purple/orange and line styles. Original notebook PNGs remain source evidence; numerical plots are redrawn from captured source results. The two source-only two-group illustrations are digitized with documented pixel precision.",
+  "figure_manifest": "figures/drafts/manifest.json"
+}

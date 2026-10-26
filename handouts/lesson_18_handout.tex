@@ -1,6 +1,8 @@
 % NE 630 -- Chapter 4 reading guide, Lesson 18
 % Standalone source: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_18_handout.tex
-\input{ne630_ch04_reading_guide_common.tex}
+\documentclass{ne630handout}
+\handoutsolutionsfalse
+\input{figures/reactor_schematics.tex}
 \hypersetup{pdftitle={NE 630: Chapter 4 Reading Guide -- Lesson 18: From unit-cell physics to design choices}}
 \begin{document}
 \fontsize{9.5}{11.5}\selectfont
@@ -62,8 +64,8 @@ An \textbf{undermoderated} cell lies on the low-moderator side of the maximum. T
 
 \textbf{Compare the two design levers.} For an SFR, use enrichment to meet an assigned $k_\infty$ target (Lesson 16). For a PWR, map the $P/D$ optimum at fixed fuel composition. Both choices remain constrained by heat removal, mechanical spacing, control, leakage, and fuel depletion.
 \colend
-\begin{Explore}{One controlled change per run}
+\begin{OpenMCExplore}{One controlled change per run}
 For the PWR, hold fuel/clad radii, enrichment, temperatures, and water density fixed while scanning $P$; record $k_\infty\pm\sigma_k$, the four factors, and $\zeta$. Repeat with boron, then vary fuel temperature and moderator density \emph{separately}. Use H-in-H$_2$O thermal scattering data. Compare with the SFR enrichment sweep. \textbf{Explain:} what improves neutron economy, what changes feedback, and what can't be modeled by the unit cell?
-\end{Explore}
+\end{OpenMCExplore}
 
 \end{document}

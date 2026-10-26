@@ -1,6 +1,8 @@
 % NE 630 -- Chapter 4 reading guide, Lesson 16
 % Standalone source: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_16_handout.tex
-\input{ne630_ch04_reading_guide_common.tex}
+\documentclass{ne630handout}
+\handoutsolutionsfalse
+\input{figures/reactor_schematics.tex}
 \hypersetup{pdftitle={NE 630: Chapter 4 Reading Guide -- Lesson 16: Fast-reactor unit cells}}
 \begin{document}
 \fontsize{9.5}{11.5}\selectfont
@@ -37,7 +39,7 @@ Mean free path and optical thickness (for characteristic dimension $d$):
 \[
  \lambda(E)=\frac1{\Sigma_t(E)},\qquad
  \tau(E)=d \Sigma_t(E).
-\] 
+\]
 Fast-energy cross sections are often small. For $d \ll\lambda$, spatial flux differences are modest:
 \[
  \varphi_f(E)\simeq\varphi_c(E)\simeq\varphi_{st}(E).
@@ -58,7 +60,7 @@ For a common spectrum $\varphi(E)$, define
 \]
 \eqread{Eqs.\ (4.2)--(4.8); leakage and nonfission neutron multiplication neglected.}
 
- 
+
 \Sec{4}{Enrichment is the fast-lattice lever}
 In the two-nuclide model ($fi$: fissile; $fe$: fertile),
 \[
@@ -80,11 +82,11 @@ Solving for an assigned lattice target $k_*$ gives
  \frac{k_*(a_{fe}+C)-b_{fe}}
  {(b_{fi}-b_{fe})-k_*(a_{fi}-a_{fe})}.
 \]
- 
+
 \textbf{Match the enrichment basis:} $\widetilde e$ is an atom fraction; OpenMC's uranium \texttt{add\_element} uses U-235 \emph{weight percent}. Convert, or set isotope atom fractions explicitly.
 \colend
-\begin{Explore}{Exploring fast spectra}
-Compare a fuel--cladding--Na hexagonal cell with its inventory-matched homogeneous mixture. Set \texttt{HexagonalPrism}'s \texttt{edge\_length} to $P/\sqrt3$. Suppress axial and lateral leakage; compare regional spectra, regional reaction rates, and $k_\infty$. 
-\end{Explore}
+\begin{OpenMCExplore}{Exploring fast spectra}
+Compare a fuel--cladding--Na hexagonal cell with its inventory-matched homogeneous mixture. Set \texttt{HexagonalPrism}'s \texttt{edge\_length} to $P/\sqrt3$. Suppress axial and lateral leakage; compare regional spectra, regional reaction rates, and $k_\infty$.
+\end{OpenMCExplore}
 \SourceLine{Sources: Ch.\ 4, \S\,4.3; slide sets 16--17. OpenMC: \href{https://docs.openmc.org/en/stable/pythonapi/generated/openmc.model.HexagonalPrism.html}{HexagonalPrism}; \href{https://docs.openmc.org/en/stable/pythonapi/generated/openmc.Material.html}{Material.add\_element}.}
 \end{document}

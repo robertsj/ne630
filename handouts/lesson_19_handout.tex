@@ -1,21 +1,9 @@
 % NE 630 -- Lesson 19 OpenMC unit-cell modeling cheat sheet
 % Standalone source: latexmk -xelatex -interaction=nonstopmode -halt-on-error lesson_19_handout.tex
-\input{ne630_ch04_reading_guide_common.tex}
-\usepackage{listings}
+\documentclass{ne630handout}
+\handoutsolutionsfalse
 \hypersetup{pdftitle={NE 630: Lesson 19 -- OpenMC Unit-Cell Modeling Cheat Sheet}}
 
-\lstdefinestyle{omc}{
-  language=Python,
-  basicstyle=\ttfamily\fontsize{6.65}{7.45}\selectfont,
-  keywordstyle=\color{KSUDeepPurple}\bfseries,
-  commentstyle=\color{KSUGray}\itshape,
-  stringstyle=\color{KSUOrange!85!black},
-  columns=fullflexible,keepspaces=true,showstringspaces=false,
-  breaklines=true,breakatwhitespace=true,
-  aboveskip=2pt,belowskip=2pt,
-  frame=single,rulecolor=\color{KSUPurple!25},
-  framesep=3pt,xleftmargin=1pt,xrightmargin=1pt
-}
 \lstset{style=omc}
 
 \begin{document}
@@ -281,12 +269,12 @@ $B/A$ with
        depletion, control worth, thermal limits, or whole-core safety margins.
 \end{itemize}
 
-\begin{Explore}{Minimal experiment pattern}
+\begin{OpenMCExplore}{Minimal experiment pattern}
 Write one builder \texttt{build\_model(parameters)} and one reducer
 \texttt{run\_case(parameters)}.  Sweep pitch for the PWR or enrichment for
 the SFR, retain every input and uncertainty, bracket a target, then perform
 one higher-statistics confirmation run with an independent seed.
-\end{Explore}
+\end{OpenMCExplore}
 \colend
 
 \SourceLine{Companion notebooks: \texttt{notebooks/lesson\_17.ipynb} (PWR) and

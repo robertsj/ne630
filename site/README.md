@@ -2,7 +2,7 @@
 
 This directory is the Sphinx source for the public NE 630 course-materials
 site. The initial page publishes student handouts for Lessons 1--10 and 12--39,
-standalone notebooks for Lessons 8--12, 15--19, and 22--25, and available lesson videos.
+standalone notebooks for Lessons 8--12, 15--19, and 22--26, and available lesson videos.
 
 ## Build
 
@@ -51,7 +51,7 @@ are ignored build artifacts on the source branch; they are generated during
 
 Standalone lesson notebooks remain canonical in `notebooks/`. Public download
 copies live beneath `site/_static/notebooks/` and must be byte-for-byte
-identical to their canonical files. The Lesson 8--12, Lesson 15--19, and Lesson 22--25
+identical to their canonical files. The Lesson 8--12, Lesson 15--19, and Lesson 22--26
 notebooks are published alongside the lesson materials as independent course
 resources.
 Verify their publication copies with:
@@ -71,6 +71,7 @@ cmp notebooks/lesson_22.ipynb site/_static/notebooks/lesson_22.ipynb
 cmp notebooks/lesson_23.ipynb site/_static/notebooks/lesson_23.ipynb
 cmp notebooks/lesson_24.ipynb site/_static/notebooks/lesson_24.ipynb
 cmp notebooks/lesson_25.ipynb site/_static/notebooks/lesson_25.ipynb
+cmp notebooks/lesson_26.ipynb site/_static/notebooks/lesson_26.ipynb
 cmp notebooks/ne630_depletion.py site/_static/notebooks/ne630_depletion.py
 ```
 

@@ -112,7 +112,7 @@ available for that lesson.
      - `OpenMC notebook <_static/notebooks/lesson_25.ipynb>`__
    * - **Lesson 26** — Neutron Kinetics with Multiplication
      - `PDF <_static/handouts/lesson-26/lesson_26_handout.pdf>`__
-     - —
+     - `OpenMC notebook <_static/notebooks/lesson_26.ipynb>`__
    * - **Lesson 27** — Neutron Kinetics with Delayed Neutrons
      - `Seeded PDF <_static/handouts/lesson-27/lesson_27_handout.pdf>`__
      - —

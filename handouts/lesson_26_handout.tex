@@ -2,7 +2,8 @@
 
 \handoutsolutionsfalse
 
-% Seeded from ../slides/lecture_26.tex; all substantive frames retained.
+% Adapted from ../slides/lecture_26.tex and revised by the instructor.
+% Back-page ODE exercises added for time-dependent accelerator sources.
 
 % Title/primary objective moved into the common lesson header.
 
@@ -10,9 +11,10 @@
 
 \hypersetup{pdftitle={NE 630 -- Lesson 26: Neutron Kinetics with Multiplication},pdfauthor={Jeremy Roberts}}
 
+% Assigned reading: ../administrivia/schedule-source.psv.
 \begin{document}
 
-\Lesson{26}{Neutron Kinetics with Multiplication}{No reading specified in the source slides.}{Students will be able to write down, solve, and explain each term of a first-order, ordinary differential equation that models the neutron flux, the neutron density, or the number of neutrons in a multiplying system as a function of time.}
+\Lesson{26}{Neutron Kinetics with Multiplication}{FNRP 5.2--5.3.}{Students will be able to write down, solve, and explain each term of a first-order, ordinary differential equation that models the neutron flux, the neutron density, or the number of neutrons in a multiplying system as a function of time.}
 \begin{handoutflow}
 
 
@@ -45,20 +47,10 @@ and the neutron speed is $v(E) \approx 1.384\cdot 10^{6}\sqrt{E} \, \si{\centi\m
 
 % Source frame 4: Review: The Neutron Lifetime
 
-\Sec{2}{Review: The Neutron Lifetime}
-
-{\bf Example}. What's $l_{\infty} = \frac{1}{\bar{v} \bar{\Sigma}_a}$ for thermal neutrons in room-temperature water?  Assume $\bar{\sigma}^{\text{H}_2\text{O}}_a = 0.6$ [b].
-
-
-
-\textcolor{wcprimary}{
-{\bf Ans.}
-$N=6.022\cdot 10^{23}/18$, so $\Sigma_a = N\,\bar\sigma_a \approx 2.0\times10^{-2}\ \text{cm}^{-1}$.  For thermal neutrons, $\bar{v}\approx2.5\times10^5$ cm/s.  Thus $l_{\infty} \approx 2.0\times10^{-4} = 200$ $\mu$s.  Compare to  \url{https://journals.aps.org/pr/abstract/10.1103/PhysRev.61.152}.
-}
 
 % Source frame 5: Adding Back Multiplication
 
-\Sec{3}{Adding Back Multiplication}
+\Sec{2}{Adding Back Multiplication}
 
 With multiplication, we have\footnote{For source-free, {\it steady-state} problems, the multiplication factor $\textcolor{wcprimary}{k_{\text{eff}}}$ allowed us to adjust the fission rate and enforce a steady state solution.  For kinetics problems, we need no such adjustment!}
 \begin{equation*}
@@ -82,10 +74,12 @@ Let $\bar{\Sigma}_a = \bar{\Sigma}_t - \bar{\Sigma}_s$ and $\phi(t) = n'''(t)\ba
  \Aboxed{\frac{dn}{dt} &= \left ( \frac{k_{\infty} - 1}{l_{\infty}} \right ) n(t)
   + S(t)} \, .
 \end{align*}
+Here and below, $n(t)$ is the total neutron population, and $S(t)$ denotes
+the volume-integrated source in neutrons/s (rather than neutrons/cm$^3$/s).
 
 % Source frame 6: Kinetics with Multiplication
 
-\Sec{4}{Kinetics with Multiplication}
+\Sec{3}{Kinetics with Multiplication}
 
 For finite systems with leakage, the text explains how to incorporate the non-leakage probability $P_{NL}$, and the resulting FNRP (5.22) is identical FNRP (5.12) without the $\infty$'s on $k$ and $l$:
 \begin{equation*}
@@ -115,7 +109,7 @@ where $\Lambda = l/k$ is the {\bf prompt generation time}.
 
 % Source frame 7: Kinetics of Source-Driven, Subcritical Systems
 
-\Sec{5}{Kinetics of Source-Driven, Subcritical Systems}
+\Sec{4}{Kinetics of Source-Driven, Subcritical Systems}
 
 When $S(t) \neq 0$, we go from
 
@@ -142,16 +136,22 @@ If we further set $n(0) = 0$, we get FNRP (5.26).
 
 % Source frame 8: Revisiting Subcritical Multiplication
 
-\Sec{6}{Revisiting Subcritical Multiplication}
+\Sec{5}{Revisiting Subcritical Multiplication}
 
 Let $n(0) = 0$, $S_0 = 1$, and $l_{\infty} = 10^{-2}$.  What happens to $n(t)$ for $0 \leq t \leq 10$ s as $k_{\infty}$ increases from 0 to 1?\footnote{Recall that, for an infinite, homogeneous medium, $\phi = S_0/(\bar{\Sigma}_a-\bar{\nu}\bar{\Sigma}_f) = (S_0/\bar{\Sigma}_a)/(1-k_{\infty})$!}
 
 \resizebox{\linewidth}{!}{\includegraphics{figures/drafts/subcrit_mult.pdf}}
 
+
+{\bf Ponderable}: How would the curve look when $k_{\infty}$ is exactly 1?
+
+\end{handoutflow}
+\newpage
+\begin{handoutflow}
+
 % Source frame 9: Appendix: Solve $dn/dt = [(k-1)/l]n(t)$
 
-\Needspace{12\baselineskip}
-\Sec{7}{Appendix: Solve $dn/dt = [(k-1)/l]n(t)$}
+\Sec{6}{Appendix: Solving the ODE}
 
 {\bf Problem.} Let $S(t) = 0$ and $n(0) = n_0$. Determine $n(t)$.
 
@@ -181,7 +181,7 @@ Let $n(0) = 0$, $S_0 = 1$, and $l_{\infty} = 10^{-2}$.  What happens to $n(t)$ f
   {\small
   {\bf 3. Integrate Using Appropriate Technique}
   \begin{align*}
-    \int^{n(t)}_{n(0)} \frac{dn}{n(t')} &=
+    \int^{n(t)}_{n(0)} \frac{dn'}{n'} &=
      \left(\frac{k - 1}{l}\right)
      \int^{t}_{0} dt' \\[4pt]
     \ln\!\left(\frac{n(t)}{n(0)}\right)
@@ -194,6 +194,124 @@ Let $n(0) = 0$, $S_0 = 1$, and $l_{\infty} = 10^{-2}$.  What happens to $n(t)$ f
     \boxed{ n(t)  =  n_0 e^{\left ( \displaystyle\frac{k - 1}{l}  \right ) t} }
   \end{equation*}
   }
+
+\textbf{With a source:} For constant $k<1$, let $\tau=l/(1-k)$.
+The ODE is linear; multiply by the integrating factor $e^{t/\tau}$:
+\[
+ \frac{dn}{dt}+\frac{n}{\tau}=S(t)
+ \quad\Longrightarrow\quad
+ \frac{d}{dt}\big(ne^{t/\tau}\big)=S(t)e^{t/\tau}.
+\]
+Thus, for any specified source history,
+\[
+ \boxed{n(t)=n(0)e^{-t/\tau}
+       +\int_0^t S(t')e^{-(t-t')/\tau}\,dt'.}
+\]
+For a piecewise source, solve one interval at a time and use the final
+population from one interval as the initial condition for the next.
+
+\Sec{7}{An Accelerator-Driven Source}
+
+An accelerator beam strikes a target, producing neutrons that enter a
+subcritical assembly. At fixed beam energy, target conditions, and coupling,
+assume $S(t)$ is proportional to the beam current. Pulsed targets are used
+in practice as neutron sources (e.g., \href{https://neutrons-user-facilities.ornl.gov/how-sns-works/}{SNS}), but accelerator driven, sub-critical reactors
+remain an active area of research.
+
+\vspace{5pt}
+
+\textbf{Assumptions:} Fixed spatial shape and spectrum; constant $k$ and $l$;
+no feedback or depletion. Treat all fission neutrons as prompt, as in this
+lesson. Delayed-neutron precursors and their slow post-pulse tail are omitted.
+Use
+\[
+ k=0.90,\qquad l=10^{-4}\ \mathrm{s},\qquad
+ S_0=10^8\ \text{neutrons/s}.
+\]
+Then $\tau=1$ ms and the steady population for $S=S_0$ is
+$n_{\mathrm{ss}}=S_0\tau=10^5$ neutrons. Start each exercise with $n(0)=0$.
+
+\columnbreak
+
+\Sec{8}{Time-Dependent Sources: ODE Practice}
+
+\textbf{Example 1: One beam pulse.} Let $S(t)=S_0$ for $0\leq t<T$,
+then turn the beam off, with $T=2$ ms. Determine $n(t)$ during and after
+the pulse. Is $n(t)$ continuous at $T$? Is $dn/dt$?
+
+\vspace{5pt}
+
+{\color{wcprimary}\small
+\textbf{Ans.} Solve the constant-source problem, then use $n(T)$ as the
+initial condition for the source-free decay:
+\[
+ n(t)=
+ \begin{cases}
+ S_0\tau(1-e^{-t/\tau}), & 0\leq t\leq T,\\[3pt]
+ S_0\tau(1-e^{-T/\tau})e^{-(t-T)/\tau}, & t>T.
+ \end{cases}
+\]
+The population is continuous, but its derivative jumps by $-S_0$ at beam
+shutoff. Check: $n(T)=8.65\times10^4$ and
+$n(T+3\tau)=4.30\times10^3$ neutrons.\par}
+
+
+\vfill
+\textbf{Example 2: A gradual beam startup.} Ramp the beam current from zero
+to its full value over $T=2$ ms:
+\[
+ S(t)=
+ \begin{cases}
+ S_0t/T, & 0\leq t\leq T,\\
+ S_0, & t>T.
+ \end{cases}
+\]
+Determine $n(t)$ on both intervals. Compare $n(T)$ with Example 1.
+Does reaching full beam current imply that the neutron population is
+already at steady state?
+
+\vspace{5pt}
+
+{\color{wcprimary}\small
+\textbf{Check.} During the ramp,
+\[
+ n(t)=\frac{S_0\tau}{T}\big[t-\tau(1-e^{-t/\tau})\big].
+\]
+At $T$, $n(T)=5.68\times10^4$ neutrons. Thereafter, the difference
+$n(t)-n_{\mathrm{ss}}$ decays exponentially.\par}
+
+\vfill
+
+\textbf{Example 3: A fading beam.} Let $S(t)=S_0e^{-t/T_s}$.
+Obtain $n(t)$ for $T_s\ne\tau$. Then solve the special case $T_s=\tau$
+directly, or take the limit of your result. For $T_s=2\tau$, when is
+the neutron population largest? Why is the maximum not at $t=0$?
+
+\vspace{5pt}
+
+{\color{wcprimary}\small
+\textbf{Check.} When $T_s=\tau$, $n(t)=S_0t e^{-t/\tau}$.
+When $T_s=2\tau$, the peak is at $t=2\tau\ln2$ and
+$n_{\max}=S_0\tau/2=5.00\times10^4$ neutrons.\par}
+
+\vfill
+
+\textbf{Example 4: A modulated beam.} Let
+$S(t)=S_0[1+\epsilon\cos(\omega t)]$, with $0<\epsilon<1$.
+Find the long-time periodic response in the form
+\[
+ n_{\mathrm{per}}(t)=S_0\tau+A\cos(\omega t-\delta).
+\]
+Determine $A$ and $\delta$, then add the transient needed for $n(0)=0$.
+For $\epsilon=0.20$, compare $\omega\tau=0.1$, $1$, and $10$.
+Does the neutron population follow the rapid beam modulation?
+
+\vspace{5pt}
+
+{\color{wcprimary}\small
+\textbf{Check.} $A/(S_0\tau)=\epsilon/\sqrt{1+(\omega\tau)^2}$ and
+$\delta=\tan^{-1}(\omega\tau)$. The three relative amplitudes are
+$0.199$, $0.141$, and $0.0199$.\par}
 
 \end{handoutflow}
 \end{document}

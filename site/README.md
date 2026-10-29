@@ -2,7 +2,7 @@
 
 This directory is the Sphinx source for the public NE 630 course-materials
 site. The initial page publishes student handouts for Lessons 1--10 and 12--39,
-standalone notebooks for Lessons 8--12, 15--19, and 22--24, and available lesson videos.
+standalone notebooks for Lessons 8--12, 15--19, and 22--26, and available lesson videos.
 
 ## Build
 
@@ -42,8 +42,8 @@ the public files beneath `site/_static/handouts/`.
 
 The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, and referenced
 supporting files are version-controlled. All handouts use `ne630handout.cls`.
-Lessons 15--39 are exported as PDFs only; Lessons 25--39 are initial handout
-seeds. L25--35 contain the corresponding Beamer slide content; L36--39 use
+Lessons 15--39 are exported as PDFs only; Lessons 27--39 are initial handout
+seeds. L27--35 contain the corresponding Beamer slide content; L36--39 use
 existing notebooks (see `handouts/README.md` for selections and coverage gaps). Rendered handout PDFs
 and the entire `site/_static/handouts/` export tree
 are ignored build artifacts on the source branch; they are generated during
@@ -51,7 +51,7 @@ are ignored build artifacts on the source branch; they are generated during
 
 Standalone lesson notebooks remain canonical in `notebooks/`. Public download
 copies live beneath `site/_static/notebooks/` and must be byte-for-byte
-identical to their canonical files. The Lesson 8--12, Lesson 15--19, and Lesson 22--24
+identical to their canonical files. The Lesson 8--12, Lesson 15--19, and Lesson 22--26
 notebooks are published alongside the lesson materials as independent course
 resources.
 Verify their publication copies with:
@@ -70,6 +70,8 @@ cmp notebooks/lesson_19.ipynb site/_static/notebooks/lesson_19.ipynb
 cmp notebooks/lesson_22.ipynb site/_static/notebooks/lesson_22.ipynb
 cmp notebooks/lesson_23.ipynb site/_static/notebooks/lesson_23.ipynb
 cmp notebooks/lesson_24.ipynb site/_static/notebooks/lesson_24.ipynb
+cmp notebooks/lesson_25.ipynb site/_static/notebooks/lesson_25.ipynb
+cmp notebooks/lesson_26.ipynb site/_static/notebooks/lesson_26.ipynb
 cmp notebooks/ne630_depletion.py site/_static/notebooks/ne630_depletion.py
 ```
 

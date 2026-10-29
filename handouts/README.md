@@ -8,11 +8,16 @@ and common authoring commands. The former board class and Chapter 4 common
 preamble have been removed.
 
 Existing instructional bodies, equations, figures, blanks, and solution reveals
-are retained. Lessons 25–35 retain every substantive frame from their Beamer
+are retained. Lessons 27–35 retain every substantive frame from their Beamer
 slides, with title/objective frames promoted to metadata. Lessons 36–39 use
 existing notebook content, including Python listings, embedded images, and
 stored results. These seeded drafts have no two-page limit. Their bodies use the
 shared two-column `handoutflow` layout beneath full-width lesson metadata.
+
+Lessons 25 and 26 have been instructor-revised and published beyond their
+initial slide-derived seeds. Lesson 26 is a two-page handout with the ODE
+appendix and time-dependent accelerator-source exercises on the back page;
+its approved body is not expected to match the original seed frame-for-frame.
 
 ## Build
 

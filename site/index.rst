@@ -6,7 +6,7 @@ Handouts
 
 Download and print each available handout before class. The PDF and student
 TeX wrapper are linked in the table; complete source bundles and supporting
-TeX files are linked below it. Lessons 25--35 are seeded from Beamer slides;
+TeX files are linked below it. Lessons 27--35 are seeded from Beamer slides;
 Lessons 36--39 use existing notebook content. YouTube links point to lesson recordings. A dash
 indicates that no handout or additional non-video resource is currently
 available for that lesson.
@@ -108,11 +108,11 @@ available for that lesson.
      - `PDF <_static/handouts/lesson-24/lesson_24_handout.pdf>`__
      - `Depletion and LRM notebook <_static/notebooks/lesson_24.ipynb>`__
    * - **Lesson 25** — Neutron Kinetics without Multiplication
-     - `Seeded PDF <_static/handouts/lesson-25/lesson_25_handout.pdf>`__
-     - —
+     - `PDF <_static/handouts/lesson-25/lesson_25_handout.pdf>`__
+     - `OpenMC notebook <_static/notebooks/lesson_25.ipynb>`__
    * - **Lesson 26** — Neutron Kinetics with Multiplication
-     - `Seeded PDF <_static/handouts/lesson-26/lesson_26_handout.pdf>`__
-     - —
+     - `PDF <_static/handouts/lesson-26/lesson_26_handout.pdf>`__
+     - `OpenMC notebook <_static/notebooks/lesson_26.ipynb>`__
    * - **Lesson 27** — Neutron Kinetics with Delayed Neutrons
      - `Seeded PDF <_static/handouts/lesson-27/lesson_27_handout.pdf>`__
      - —

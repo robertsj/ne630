@@ -21,6 +21,9 @@ are:
 - [HW20.md](markdown/HW20.md)
 - [HW21.md](markdown/HW21.md)
 - [HW22.md](markdown/HW22.md)
+- [HW23.md](markdown/HW23.md)
+- [HW25.md](markdown/HW25.md)
+- [HW26.md](markdown/HW26.md)
 
 The combined [HW01-06.html](html/HW01-06.html) page presents each homework and
 each problem as a nested, collapsible section. All sections are closed when the
@@ -50,6 +53,9 @@ Canvas assignment's Rich Content Editor in HTML view:
 - [HW20.html](html/HW20.html)
 - [HW21.html](html/HW21.html)
 - [HW22.html](html/HW22.html)
+- [HW23.html](html/HW23.html)
+- [HW25.html](html/HW25.html)
+- [HW26.html](html/HW26.html)
 
 The Canvas fragments use semantic HTML without document wrappers, scripts, or
 styles. They are generated through `../build/convert_to_canvas.py`, which uses
@@ -66,6 +72,9 @@ homework number):
     python3 convert_to_canvas.py ../homework/markdown/HW20.md ../homework/html/HW20.html
     python3 convert_to_canvas.py ../homework/markdown/HW21.md ../homework/html/HW21.html
     python3 convert_to_canvas.py ../homework/markdown/HW22.md ../homework/html/HW22.html
+    python3 convert_to_canvas.py ../homework/markdown/HW23.md ../homework/html/HW23.html
+    python3 convert_to_canvas.py ../homework/markdown/HW25.md ../homework/html/HW25.html
+    python3 convert_to_canvas.py ../homework/markdown/HW26.md ../homework/html/HW26.html
     rm tmp.html
 
 The combined-page builder requires Pandoc and the installed markdown-it-py
@@ -93,3 +102,16 @@ Homeworks 20 and 21; there is no Homework 19 source in `ne630_problems`.
 Homework 22 retains all four parts of the xenon problem from Source Lesson 22,
 with the control-rod model and fixed full-power conditions made explicit for
 the xenon-worth comparisons.
+Homework 23 retains both problems (FNRP 10.13 and 10.14) from Source Lesson 23:
+uranium/plutonium conversion and power sharing, and the thorium–protactinium–
+uranium buildup chain. The draft makes the atom-fraction enrichment convention,
+initial inventories, and constant-flux/cross-section assumptions explicit;
+the source's worked solutions and numerical verification code are omitted.
+
+Draft Homework 25 retains all three problems from Source Lesson 25: neutron
+lifetimes, mean-speed weighting, and equilibrium multibatch burnup. Draft
+Homework 26 retains the two Source Lesson 26 problems on prompt-neutron growth
+and a fixed-spectrum source transient, then adds the pulsed accelerator-driven
+reactor problem. Source provenance and corrected legacy units/data are recorded
+in the Markdown comments. Worked solutions and verification plots are maintained
+separately in the instructor-only `solutions/` directory, not these Canvas files.

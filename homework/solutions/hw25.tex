@@ -1,0 +1,146 @@
+% Source: ne630_problems/lesson_25 at 9c3dc61; student statements match HW25.md.
+
+% Adapted solutions correct legacy units, arithmetic, and data inconsistencies.
+
+\noindent{\bf Problem 1 [FNRP 5.1]}
+
+Determine the mean neutron lifetime against absorption, \(l_\infty\), in
+each of the following infinite, homogeneous media. Treat the neutrons as
+monoenergetic and use the specified absorption cross sections.
+
+\begin{itemize}
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}
+\item
+  \textbf{(a)} Graphite containing \(0.0253~\mathrm{eV}\) neutrons, with
+  \(\Sigma_a=0.273\times10^{-3}~\mathrm{cm^{-1}}\).
+\item
+  \textbf{(b)} Iron containing \(1~\mathrm{MeV}\) neutrons, with
+  \(\Sigma_a=0.738\times10^{-3}~\mathrm{cm^{-1}}\).
+\end{itemize}
+
+A \(0.0253~\mathrm{eV}\) neutron has speed \(2200~\mathrm{m/s}\). Use
+the nonrelativistic relationship between speed and kinetic energy to
+determine the speed needed in part (b). State each lifetime in seconds
+and in a convenient smaller unit.
+
+
+\begin{adaptedsolution}
+For an infinite monoenergetic medium, the absorption probability per unit time is $v\Sigma_a$. Thus FNRP Eq.~(5.5) gives
+\[
+l_\infty=\frac{1}{v\Sigma_a}.
+\]
+\textbf{(a)} With $v=2.2\times10^5~\mathrm{cm/s}$,
+\[
+\boxed{l_\infty=\frac{1}{(2.2\times10^5)(0.273\times10^{-3})}
+=0.0166500~\mathrm{s}=16.6500~\mathrm{ms}.}
+\]
+\textbf{(b)} Since $v\propto\sqrt E$,
+\[
+v=(2.2\times10^5)\sqrt{\frac{10^6}{0.0253}}
+=1.38313\times10^9~\mathrm{cm/s},
+\]
+\[
+\boxed{l_\infty=\frac{1}{(1.38313\times10^9)(0.738\times10^{-3})}
+=9.79673\times10^{-7}~\mathrm{s}=0.979673~\mu\mathrm{s}.}
+\]
+These are absorption lifetimes, not mean times between all collisions. The 1-MeV neutrons are fast, not thermal. No spectral averaging is needed for the monoenergetic approximation.
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 2}
+
+In class, we defined the mean neutron speed as
+
+\[
+\bar v=
+\frac{\displaystyle\int_0^\infty\phi(E)\,dE}
+     {\displaystyle\int_0^\infty\frac{\phi(E)}{v(E)}\,dE}.
+\]
+
+Is this consistent with FNRP Eq. (3.44)? Explain by relating the
+energy-dependent neutron flux \(\phi(E)\) to the energy-dependent
+neutron number density \(\widetilde n'''(E)\). Identify the weighting
+used in the textbook definition and show the equivalence algebraically.
+
+
+\begin{adaptedsolution}
+Yes. FNRP Eq.~(3.44) is the neutron-number-density-weighted arithmetic mean:
+\[
+\bar v=\frac{\displaystyle\int_0^\infty v(E)\widetilde n'''(E)\,dE}
+{\displaystyle\int_0^\infty\widetilde n'''(E)\,dE}.
+\]
+Since $\phi(E)=v(E)\widetilde n'''(E)$, substitution gives
+\[
+\boxed{\bar v=\frac{\displaystyle\int_0^\infty\phi(E)\,dE}
+{\displaystyle\int_0^\infty\phi(E)/v(E)\,dE}.}
+\]
+Equivalently, $1/\bar v$ is the flux-weighted mean of $1/v(E)$: the expression is a \emph{flux-weighted harmonic mean} of speed. It is not the flux-weighted arithmetic mean of speed. Both definitions count the same neutron population and therefore agree.
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 3}
+
+The infinite-medium reactivity of a batch of fuel is approximated by the
+linear reactivity model
+
+\[
+\rho_\infty(B)=\rho_0-AB=0.243-0.00664B,
+\]
+
+where reactivity is dimensionless and \(B\) is in \(\mathrm{MWd/kg}\) of
+initial heavy metal. Thus, \(A=0.00664~(\mathrm{MWd/kg})^{-1}\).
+
+Consider equilibrium \(N\)-batch refueling with identical batch masses
+and equal reactivity weights. Each batch accumulates the same burnup
+increment per cycle; the oldest batch is discharged at the end of each
+cycle. Assume a constant leakage penalty \(\rho_L=0.05\), subtracted
+from the batch-averaged infinite-medium reactivity, and criticality at
+the end of each cycle.
+
+\begin{itemize}
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}
+\item
+  \textbf{(a)} Estimate the cycle burnup increment \(B_c^{(N)}\) and
+  discharge burnup \(B_d^{(N)}\) for \(N=1,2,3,4,5\). Report the results
+  in a table.
+\item
+  \textbf{(b)} Determine the limiting discharge burnup as
+  \(N\to\infty\).
+\end{itemize}
+
+Here, ``cycle length'' means a burnup increment, not a time interval; no
+specific power is supplied to convert burnup to days.
+
+
+\begin{adaptedsolution}
+\textbf{(a)} At equilibrium end of cycle, the $N$ batches have burnups
+$B_c,2B_c,\ldots,NB_c$. Equal weighting and end-of-cycle criticality give
+\[
+0=\frac{1}{N}\sum_{j=1}^N(\rho_0-AjB_c)-\rho_L
+=\rho_0-\rho_L-AB_c\frac{N+1}{2}.
+\]
+Consequently,
+\[
+\boxed{B_c^{(N)}=\frac{2(\rho_0-\rho_L)}{A(N+1)},\qquad
+B_d^{(N)}=NB_c^{(N)}=\frac{2N(\rho_0-\rho_L)}{A(N+1)}.}
+\]
+Using $\rho_0-\rho_L=0.193$, the burnups in $\mathrm{MWd/kg}$ are
+\begin{center}
+\begin{tabular}{rrr}\toprule
+$N$ & $B_c^{(N)}$ & $B_d^{(N)}$\\\midrule
+1 & 29.066 & 29.066\\
+2 & 19.378 & 38.755\\
+3 & 14.533 & 43.599\\
+4 & 11.627 & 46.506\\
+5 & 9.689 & 48.444\\\bottomrule
+\end{tabular}
+\end{center}
+\textbf{(b)} The limiting discharge burnup is
+\[
+\boxed{\lim_{N\to\infty}B_d^{(N)}=\frac{2(0.243-0.05)}{0.00664}
+=58.133~\mathrm{MWd/kg}.}
+\]
+The leakage penalty is a subtraction of $0.05$ in reactivity, not a 5\% reduction in $k$. Calendar cycle length cannot be determined without a specific power.
+\end{adaptedsolution}

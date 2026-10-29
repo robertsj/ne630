@@ -1,0 +1,416 @@
+<h1 id="homework-26-lesson-26">Homework 26: Lesson 26</h1>
+<!-- Problems 1–2 adapted from ne630_problems/lesson_26/statement.tex at
+9c3dc61 and checked against HW26_Solution.ipynb. Corrected the flux-ratio
+orientation and source units. Use the table's 0.0427 cm^-1 downscatter value
+throughout and switch the source on at t=0, as in the statement.
+Problem 3 is a new instructor-requested accelerator-driven reactor exercise.
+Problem statements only; instructor solutions are maintained separately. -->
+<h2 id="problem-1-fnrp-5.4">Problem 1 [FNRP 5.4]</h2>
+<p>Suppose that a fissile material is discovered for which all fission neutrons are emitted promptly. A reactor fueled with this material has a constant neutron lifetime <img
+class="equation_image"
+title="l=0.002~\mathrm{s}"
+src="/equation_images/l%253D0.002~%255Cmathrm%257Bs%257D"
+alt="LaTeX: l=0.002~\mathrm{s}"
+data-equation-content="l=0.002~\mathrm{s}"
+/>, and its neutron population is governed by FNRP Eq. (5.22). Assume a fixed flux shape, so fission power is proportional to neutron population. Neglect feedback.</p>
+<p>The reactor is initially critical and has no external neutron source. At <img
+class="equation_image"
+title="t=0"
+src="/equation_images/t%253D0"
+alt="LaTeX: t=0"
+data-equation-content="t=0"
+/>, impose a step change in reactivity and hold the new value constant.</p>
+<ul>
+<li><strong>(a)</strong> What reactor period is required for the power to triple in <img
+class="equation_image"
+title="10~\mathrm{s}"
+src="/equation_images/10~%255Cmathrm%257Bs%257D"
+alt="LaTeX: 10~\mathrm{s}"
+data-equation-content="10~\mathrm{s}"
+/>?</li>
+<li><strong>(b)</strong> Determine the required multiplication factor <img
+class="equation_image"
+title="k"
+src="/equation_images/k"
+alt="LaTeX: k"
+data-equation-content="k"
+/> and reactivity <img
+class="equation_image"
+title="\rho=(k-1)/k"
+src="/equation_images/%255Crho%253D(k-1)%252Fk"
+alt="LaTeX: \rho=(k-1)/k"
+data-equation-content="\rho=(k-1)/k"
+/>. Express <img
+class="equation_image"
+title="\rho"
+src="/equation_images/%255Crho"
+alt="LaTeX: \rho"
+data-equation-content="\rho"
+/> as a dimensionless quantity and in pcm.</li>
+</ul>
+<p>The reactor period is the time required for the neutron population to increase by a factor of <img
+class="equation_image"
+title="e"
+src="/equation_images/e"
+alt="LaTeX: e"
+data-equation-content="e"
+/>. One pcm is <img
+class="equation_image"
+title="10^{-5}"
+src="/equation_images/10%255E%257B-5%257D"
+alt="LaTeX: 10^{-5}"
+data-equation-content="10^{-5}"
+/> in dimensionless reactivity.</p>
+<h2 id="problem-2">Problem 2</h2>
+<p>Consider the infinite, homogeneous water–uranium medium from Homework 13, Problem 2, but assume that all fission neutrons are prompt. The two-group cross sections are repeated below; all are in <img
+class="equation_image"
+title="\mathrm{cm^{-1}}"
+src="/equation_images/%255Cmathrm%257Bcm%255E%257B-1%257D%257D"
+alt="LaTeX: \mathrm{cm^{-1}}"
+data-equation-content="\mathrm{cm^{-1}}"
+/>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Quantity</th>
+<th style="text-align: right;">Group 1</th>
+<th style="text-align: right;">Group 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img
+class="equation_image"
+title="\Sigma_\gamma"
+src="/equation_images/%255CSigma_%255Cgamma"
+alt="LaTeX: \Sigma_\gamma"
+data-equation-content="\Sigma_\gamma"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="2.04\times10^{-3}"
+src="/equation_images/2.04%255Ctimes10%255E%257B-3%257D"
+alt="LaTeX: 2.04\times10^{-3}"
+data-equation-content="2.04\times10^{-3}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="1.91\times10^{-2}"
+src="/equation_images/1.91%255Ctimes10%255E%257B-2%257D"
+alt="LaTeX: 1.91\times10^{-2}"
+data-equation-content="1.91\times10^{-2}"
+/></td>
+</tr>
+<tr class="even">
+<td><img
+class="equation_image"
+title="\Sigma_f"
+src="/equation_images/%255CSigma_f"
+alt="LaTeX: \Sigma_f"
+data-equation-content="\Sigma_f"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="2.96\times10^{-4}"
+src="/equation_images/2.96%255Ctimes10%255E%257B-4%257D"
+alt="LaTeX: 2.96\times10^{-4}"
+data-equation-content="2.96\times10^{-4}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="1.38\times10^{-2}"
+src="/equation_images/1.38%255Ctimes10%255E%257B-2%257D"
+alt="LaTeX: 1.38\times10^{-2}"
+data-equation-content="1.38\times10^{-2}"
+/></td>
+</tr>
+<tr class="odd">
+<td><img
+class="equation_image"
+title="\overline\nu\Sigma_f"
+src="/equation_images/%255Coverline%255Cnu%255CSigma_f"
+alt="LaTeX: \overline\nu\Sigma_f"
+data-equation-content="\overline\nu\Sigma_f"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="7.38\times10^{-4}"
+src="/equation_images/7.38%255Ctimes10%255E%257B-4%257D"
+alt="LaTeX: 7.38\times10^{-4}"
+data-equation-content="7.38\times10^{-4}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="3.36\times10^{-2}"
+src="/equation_images/3.36%255Ctimes10%255E%257B-2%257D"
+alt="LaTeX: 3.36\times10^{-2}"
+data-equation-content="3.36\times10^{-2}"
+/></td>
+</tr>
+<tr class="even">
+<td><img
+class="equation_image"
+title="\Sigma_{s,1\gets g}"
+src="/equation_images/%255CSigma_%257Bs%252C1%255Cgets%2520g%257D"
+alt="LaTeX: \Sigma_{s,1\gets g}"
+data-equation-content="\Sigma_{s,1\gets g}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="7.21\times10^{-1}"
+src="/equation_images/7.21%255Ctimes10%255E%257B-1%257D"
+alt="LaTeX: 7.21\times10^{-1}"
+data-equation-content="7.21\times10^{-1}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="0"
+src="/equation_images/0"
+alt="LaTeX: 0"
+data-equation-content="0"
+/></td>
+</tr>
+<tr class="odd">
+<td><img
+class="equation_image"
+title="\Sigma_{s,2\gets g}"
+src="/equation_images/%255CSigma_%257Bs%252C2%255Cgets%2520g%257D"
+alt="LaTeX: \Sigma_{s,2\gets g}"
+data-equation-content="\Sigma_{s,2\gets g}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="4.27\times10^{-2}"
+src="/equation_images/4.27%255Ctimes10%255E%257B-2%257D"
+alt="LaTeX: 4.27\times10^{-2}"
+data-equation-content="4.27\times10^{-2}"
+/></td>
+<td style="text-align: right;"><img
+class="equation_image"
+title="2.72"
+src="/equation_images/2.72"
+alt="LaTeX: 2.72"
+data-equation-content="2.72"
+/></td>
+</tr>
+</tbody>
+</table>
+<p>Use <img
+class="equation_image"
+title="\Sigma_{a,g}=\Sigma_{\gamma,g}+\Sigma_{f,g}"
+src="/equation_images/%255CSigma_%257Ba%252Cg%257D%253D%255CSigma_%257B%255Cgamma%252Cg%257D%252B%255CSigma_%257Bf%252Cg%257D"
+alt="LaTeX: \Sigma_{a,g}=\Sigma_{\gamma,g}+\Sigma_{f,g}"
+data-equation-content="\Sigma_{a,g}=\Sigma_{\gamma,g}+\Sigma_{f,g}"
+/> and mean group speeds <img
+class="equation_image"
+title="\bar v_1=10^6~\mathrm{m/s}"
+src="/equation_images/%255Cbar%2520v_1%253D10%255E6~%255Cmathrm%257Bm%252Fs%257D"
+alt="LaTeX: \bar v_1=10^6~\mathrm{m/s}"
+data-equation-content="\bar v_1=10^6~\mathrm{m/s}"
+/> and <img
+class="equation_image"
+title="\bar v_2=2.2\times10^3~\mathrm{m/s}"
+src="/equation_images/%255Cbar%2520v_2%253D2.2%255Ctimes10%255E3~%255Cmathrm%257Bm%252Fs%257D"
+alt="LaTeX: \bar v_2=2.2\times10^3~\mathrm{m/s}"
+data-equation-content="\bar v_2=2.2\times10^3~\mathrm{m/s}"
+/>. For this one-group transient approximation, assume a fixed spectrum with</p>
+<p><img
+class="equation_image"
+title="\frac{\phi_1(t)}{\phi_2(t)}
+=\frac{\Sigma_{a,2}}{\Sigma_{s,2\gets1}}.
+"
+src="/equation_images/%255Cfrac%257B%255Cphi_1(t)%257D%257B%255Cphi_2(t)%257D%250A%253D%255Cfrac%257B%255CSigma_%257Ba%252C2%257D%257D%257B%255CSigma_%257Bs%252C2%255Cgets1%257D%257D.%250A"
+alt="LaTeX: \frac{\phi_1(t)}{\phi_2(t)}
+=\frac{\Sigma_{a,2}}{\Sigma_{s,2\gets1}}.
+"
+data-equation-content="\frac{\phi_1(t)}{\phi_2(t)}
+=\frac{\Sigma_{a,2}}{\Sigma_{s,2\gets1}}.
+"
+/></p>
+<p>This is the steady two-group spectral shape for fast-only fission and external sources with no upscatter. Impose this shape throughout the transient, rather than solving separate time-dependent group equations.</p>
+<p>Initially the neutron population is zero. At <img
+class="equation_image"
+title="t=0"
+src="/equation_images/t%253D0"
+alt="LaTeX: t=0"
+data-equation-content="t=0"
+/>, switch on a uniform fast-neutron source of strength <img
+class="equation_image"
+title="S_0=100~\mathrm{neutrons\,cm^{-3}\,s^{-1}}"
+src="/equation_images/S_0%253D100~%255Cmathrm%257Bneutrons%255C%252Ccm%255E%257B-3%257D%255C%252Cs%255E%257B-1%257D%257D"
+alt="LaTeX: S_0=100~\mathrm{neutrons\,cm^{-3}\,s^{-1}}"
+data-equation-content="S_0=100~\mathrm{neutrons\,cm^{-3}\,s^{-1}}"
+/> and hold it constant. Neglect changes in the material properties and feedback.</p>
+<ul>
+<li><strong>(a)</strong> Determine the effective one-group absorption cross section <img
+class="equation_image"
+title="\bar\Sigma_a"
+src="/equation_images/%255Cbar%255CSigma_a"
+alt="LaTeX: \bar\Sigma_a"
+data-equation-content="\bar\Sigma_a"
+/>.</li>
+<li><strong>(b)</strong> Determine the mean neutron speed <img
+class="equation_image"
+title="\bar v"
+src="/equation_images/%255Cbar%2520v"
+alt="LaTeX: \bar v"
+data-equation-content="\bar v"
+/>. Be consistent about converting meters to centimeters.</li>
+<li><strong>(c)</strong> Determine the mean neutron lifetime <img
+class="equation_image"
+title="l_\infty"
+src="/equation_images/l_%255Cinfty"
+alt="LaTeX: l_\infty"
+data-equation-content="l_\infty"
+/>.</li>
+<li><strong>(d)</strong> Collapse <img
+class="equation_image"
+title="\overline\nu\Sigma_f"
+src="/equation_images/%255Coverline%255Cnu%255CSigma_f"
+alt="LaTeX: \overline\nu\Sigma_f"
+data-equation-content="\overline\nu\Sigma_f"
+/> with the same flux weights and determine <img
+class="equation_image"
+title="k_\infty"
+src="/equation_images/k_%255Cinfty"
+alt="LaTeX: k_\infty"
+data-equation-content="k_\infty"
+/> and <img
+class="equation_image"
+title="\rho_\infty"
+src="/equation_images/%255Crho_%255Cinfty"
+alt="LaTeX: \rho_\infty"
+data-equation-content="\rho_\infty"
+/> for the one-group model.</li>
+<li><strong>(e)</strong> Write and solve the initial-value problem for the total neutron number density <img
+class="equation_image"
+title="n&#x27;&#x27;&#x27;(t)"
+src="/equation_images/n%2527%2527%2527(t)"
+alt="LaTeX: n&#x27;&#x27;&#x27;(t)"
+data-equation-content="n&#x27;&#x27;&#x27;(t)"
+/>. Compute and plot the <strong>volumetric absorption rate</strong>, <img
+class="equation_image"
+title="R_a(t)=\bar\Sigma_a\bar v\,n&#x27;&#x27;&#x27;(t)"
+src="/equation_images/R_a(t)%253D%255Cbar%255CSigma_a%255Cbar%2520v%255C%252Cn%2527%2527%2527(t)"
+alt="LaTeX: R_a(t)=\bar\Sigma_a\bar v\,n&#x27;&#x27;&#x27;(t)"
+data-equation-content="R_a(t)=\bar\Sigma_a\bar v\,n&#x27;&#x27;&#x27;(t)"
+/>, for <img
+class="equation_image"
+title="0\le t\le0.1~\mathrm{s}"
+src="/equation_images/0%255Cle%2520t%255Cle0.1~%255Cmathrm%257Bs%257D"
+alt="LaTeX: 0\le t\le0.1~\mathrm{s}"
+data-equation-content="0\le t\le0.1~\mathrm{s}"
+/>. Determine its steady limit and compare it with Homework 13, Problem 2. Explain why the steady limits agree even though a fixed spectrum is an approximation during the transient.</li>
+</ul>
+<h2 id="problem-3-pulsed-accelerator-driven-reactor">Problem 3: Pulsed Accelerator-Driven Reactor</h2>
+<p>Consider an idealized one-group accelerator-driven subcritical reactor with</p>
+<p><img
+class="equation_image"
+title="k=0.95,\qquad l=10^{-4}~\mathrm{s},\qquad
+\bar\nu=2.5,\qquad E_f=200~\mathrm{MeV/fission}.
+"
+src="/equation_images/k%253D0.95%252C%255Cqquad%2520l%253D10%255E%257B-4%257D~%255Cmathrm%257Bs%257D%252C%255Cqquad%250A%255Cbar%255Cnu%253D2.5%252C%255Cqquad%2520E_f%253D200~%255Cmathrm%257BMeV%252Ffission%257D.%250A"
+alt="LaTeX: k=0.95,\qquad l=10^{-4}~\mathrm{s},\qquad
+\bar\nu=2.5,\qquad E_f=200~\mathrm{MeV/fission}.
+"
+data-equation-content="k=0.95,\qquad l=10^{-4}~\mathrm{s},\qquad
+\bar\nu=2.5,\qquad E_f=200~\mathrm{MeV/fission}.
+"
+/></p>
+<p>Here, <img
+class="equation_image"
+title="E_f"
+src="/equation_images/E_f"
+alt="LaTeX: E_f"
+data-equation-content="E_f"
+/> is recoverable fission energy. A proton accelerator sends <strong>1-GeV protons</strong> to a neutron-producing target. The beam current is <strong>10 mA during each 1-ms pulse</strong>, and pulses begin every <strong>10 ms</strong>. The current is zero between pulses. Each incident proton supplies <strong>20 effective source neutrons</strong> to the reactor; this yield already includes target-to-core coupling. The accelerator draws <strong>25 MW of electrical power while the beam is on</strong> and zero between pulses.</p>
+<p>Assume a fixed spatial shape and energy spectrum, constant reactor properties, all fission neutrons emitted promptly, and negligible feedback and depletion. Count only fission energy as reactor thermal power; neglect direct beam heating. The parameters define a hypothetical teaching model. Use <img
+class="equation_image"
+title="e=1.602176634\times10^{-19}~\mathrm{C}"
+src="/equation_images/e%253D1.602176634%255Ctimes10%255E%257B-19%257D~%255Cmathrm%257BC%257D"
+alt="LaTeX: e=1.602176634\times10^{-19}~\mathrm{C}"
+data-equation-content="e=1.602176634\times10^{-19}~\mathrm{C}"
+/> and <img
+class="equation_image"
+title="1~\mathrm{eV}=1.602176634\times10^{-19}~\mathrm{J}"
+src="/equation_images/1~%255Cmathrm%257BeV%257D%253D1.602176634%255Ctimes10%255E%257B-19%257D~%255Cmathrm%257BJ%257D"
+alt="LaTeX: 1~\mathrm{eV}=1.602176634\times10^{-19}~\mathrm{J}"
+data-equation-content="1~\mathrm{eV}=1.602176634\times10^{-19}~\mathrm{J}"
+/>.</p>
+<p>After many pulses, the neutron population is periodic: <img
+class="equation_image"
+title="n(t+T_c)=n(t)"
+src="/equation_images/n(t%252BT_c)%253Dn(t)"
+alt="LaTeX: n(t+T_c)=n(t)"
+data-equation-content="n(t+T_c)=n(t)"
+/>, where <img
+class="equation_image"
+title="T_c=10~\mathrm{ms}"
+src="/equation_images/T_c%253D10~%255Cmathrm%257Bms%257D"
+alt="LaTeX: T_c=10~\mathrm{ms}"
+data-equation-content="T_c=10~\mathrm{ms}"
+/> includes both the on- and off-time. For any quantity <img
+class="equation_image"
+title="X(t)"
+src="/equation_images/X(t)"
+alt="LaTeX: X(t)"
+data-equation-content="X(t)"
+/>, define</p>
+<p><img
+class="equation_image"
+title="\langle X\rangle=\frac{1}{T_c}\int_0^{T_c}X(t)\,dt.
+"
+src="/equation_images/%255Clangle%2520X%255Crangle%253D%255Cfrac%257B1%257D%257BT_c%257D%255Cint_0%255E%257BT_c%257DX(t)%255C%252Cdt.%250A"
+alt="LaTeX: \langle X\rangle=\frac{1}{T_c}\int_0^{T_c}X(t)\,dt.
+"
+data-equation-content="\langle X\rangle=\frac{1}{T_c}\int_0^{T_c}X(t)\,dt.
+"
+/></p>
+<ul>
+<li><p><strong>(a)</strong> Determine the duty factor, proton rate and neutron source strength during a pulse, and cycle-averaged neutron source strength. Also calculate the proton beam power while on and its cycle average. Distinguish beam power from the specified electrical consumption.</p></li>
+<li><p><strong>(b)</strong> Starting from</p>
+<p><img
+class="equation_image"
+title="\frac{dn}{dt}=\frac{k-1}{l}n(t)+S(t),
+"
+src="/equation_images/%255Cfrac%257Bdn%257D%257Bdt%257D%253D%255Cfrac%257Bk-1%257D%257Bl%257Dn(t)%252BS(t)%252C%250A"
+alt="LaTeX: \frac{dn}{dt}=\frac{k-1}{l}n(t)+S(t),
+"
+data-equation-content="\frac{dn}{dt}=\frac{k-1}{l}n(t)+S(t),
+"
+/></p>
+<p>integrate over one <strong>complete cycle</strong> to determine the average neutron population without solving the transient. Do not assume that <img
+class="equation_image"
+title="n(t)"
+src="/equation_images/n(t)"
+alt="LaTeX: n(t)"
+data-equation-content="n(t)"
+/> is constant during the cycle or zero between pulses.</p></li>
+<li><p><strong>(c)</strong> The fission-neutron production rate is <img
+class="equation_image"
+title="k n(t)/l"
+src="/equation_images/k%2520n(t)%252Fl"
+alt="LaTeX: k n(t)/l"
+data-equation-content="k n(t)/l"
+/>. Determine the cycle-averaged fission rate and reactor thermal power. Calculate the fission energy released per cycle and compare the average thermal power with the average accelerator electrical consumption. Explain why this comparison alone does not determine net electrical output.</p></li>
+<li><p><strong>(d)</strong> Predict how the average thermal power and electrical consumption change if the pulse duration doubles to <img
+class="equation_image"
+title="2~\mathrm{ms}"
+src="/equation_images/2~%255Cmathrm%257Bms%257D"
+alt="LaTeX: 2~\mathrm{ms}"
+data-equation-content="2~\mathrm{ms}"
+/> while the repetition period and peak current remain fixed. Then compare the original pulsed case with a continuous beam having the <strong>same average current</strong>. Does pulsing itself increase average reactor thermal power under these assumptions?</p></li>
+</ul>
+<p>In this problem, <img
+class="equation_image"
+title="n(t)"
+src="/equation_images/n(t)"
+alt="LaTeX: n(t)"
+data-equation-content="n(t)"
+/> is the total neutron population and <img
+class="equation_image"
+title="S(t)"
+src="/equation_images/S(t)"
+alt="LaTeX: S(t)"
+data-equation-content="S(t)"
+/> is the total source rate in neutrons/s, not a source density.</p>

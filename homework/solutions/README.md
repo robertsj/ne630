@@ -1,7 +1,7 @@
 # Fall 2026 NE 630 solution manual
 
 This directory builds one instructor-only PDF covering Homework 01 through
-Homework 18:
+Homework 18, plus draft Homeworks 25 and 26 (19–24 are not yet included):
 
 ```bash
 make
@@ -37,6 +37,29 @@ adapted from `ne630_problems/lesson_18/p_over_d.csv`; one plainly inconsistent
 epsilon entry at `P/D=2.5` is corrected and documented in `hw18.tex`.
 The figure builder requires NumPy and Matplotlib. To select a scientific
 Python environment explicitly, run `make PYTHON=/path/to/environment/bin/python`.
+
+Homeworks 25 and 26 retain the three Lesson 25 problems and two Lesson 26
+problems from `ne630_problems` at `9c3dc61`. Homework 26 adds a new pulsed
+accelerator-driven reactor exercise as Problem 3. The statements match the
+student Markdown drafts, and the new exercise's solution is labeled DRAFT.
+The adapted solutions correct the legacy fast-neutron description, missing
+integration differential, flux-ratio orientation, source units, and inconsistent
+downscatter/rounded-removal data. The stated `0.0427 cm^-1` downscatter value
+is used consistently; the resulting one-group and two-group steady balances agree.
+
+`build_hw25_26_figures.py` verifies the numerical answers, checks the steady
+two-group balance and both transient models independently, and regenerates the
+two Homework 26 solution plots. It requires NumPy, SciPy, and Matplotlib:
+
+```bash
+python build_hw25_26_figures.py
+make PYTHON=/path/to/environment/bin/python
+```
+
+The pulsed-source solution integrates over a complete periodic cycle, including
+the neutron tail after beam shutoff. Its thermal/electrical power comparison is
+not a claim of net electrical production. The optional waveform plot is an
+instructor check, not an additional student requirement.
 
 This manual contains solutions and must not be added to the student-facing
 Sphinx or `gh-pages` publication pipeline.

@@ -1,0 +1,158 @@
+<h1 id="homework-25-lesson-25">Homework 25: Lesson 25</h1>
+<!-- Draft adapted from ne630_problems/lesson_25/statement.tex at 9c3dc61.
+All three source problems retained. Corrected the description of 1-MeV
+neutrons as thermal; made burnup units and equal batch weighting explicit.
+Problem statements only; instructor solutions are maintained separately. -->
+<h2 id="problem-1-fnrp-5.1">Problem 1 [FNRP 5.1]</h2>
+<p>Determine the mean neutron lifetime against absorption, <img
+class="equation_image"
+title="l_\infty"
+src="/equation_images/l_%255Cinfty"
+alt="LaTeX: l_\infty"
+data-equation-content="l_\infty"
+/>, in each of the following infinite, homogeneous media. Treat the neutrons as monoenergetic and use the specified absorption cross sections.</p>
+<ul>
+<li><strong>(a)</strong> Graphite containing <img
+class="equation_image"
+title="0.0253~\mathrm{eV}"
+src="/equation_images/0.0253~%255Cmathrm%257BeV%257D"
+alt="LaTeX: 0.0253~\mathrm{eV}"
+data-equation-content="0.0253~\mathrm{eV}"
+/> neutrons, with <img
+class="equation_image"
+title="\Sigma_a=0.273\times10^{-3}~\mathrm{cm^{-1}}"
+src="/equation_images/%255CSigma_a%253D0.273%255Ctimes10%255E%257B-3%257D~%255Cmathrm%257Bcm%255E%257B-1%257D%257D"
+alt="LaTeX: \Sigma_a=0.273\times10^{-3}~\mathrm{cm^{-1}}"
+data-equation-content="\Sigma_a=0.273\times10^{-3}~\mathrm{cm^{-1}}"
+/>.</li>
+<li><strong>(b)</strong> Iron containing <img
+class="equation_image"
+title="1~\mathrm{MeV}"
+src="/equation_images/1~%255Cmathrm%257BMeV%257D"
+alt="LaTeX: 1~\mathrm{MeV}"
+data-equation-content="1~\mathrm{MeV}"
+/> neutrons, with <img
+class="equation_image"
+title="\Sigma_a=0.738\times10^{-3}~\mathrm{cm^{-1}}"
+src="/equation_images/%255CSigma_a%253D0.738%255Ctimes10%255E%257B-3%257D~%255Cmathrm%257Bcm%255E%257B-1%257D%257D"
+alt="LaTeX: \Sigma_a=0.738\times10^{-3}~\mathrm{cm^{-1}}"
+data-equation-content="\Sigma_a=0.738\times10^{-3}~\mathrm{cm^{-1}}"
+/>.</li>
+</ul>
+<p>A <img
+class="equation_image"
+title="0.0253~\mathrm{eV}"
+src="/equation_images/0.0253~%255Cmathrm%257BeV%257D"
+alt="LaTeX: 0.0253~\mathrm{eV}"
+data-equation-content="0.0253~\mathrm{eV}"
+/> neutron has speed <img
+class="equation_image"
+title="2200~\mathrm{m/s}"
+src="/equation_images/2200~%255Cmathrm%257Bm%252Fs%257D"
+alt="LaTeX: 2200~\mathrm{m/s}"
+data-equation-content="2200~\mathrm{m/s}"
+/>. Use the nonrelativistic relationship between speed and kinetic energy to determine the speed needed in part (b). State each lifetime in seconds and in a convenient smaller unit.</p>
+<h2 id="problem-2">Problem 2</h2>
+<p>In class, we defined the mean neutron speed as</p>
+<p><img
+class="equation_image"
+title="\bar v=
+\frac{\displaystyle\int_0^\infty\phi(E)\,dE}
+     {\displaystyle\int_0^\infty\frac{\phi(E)}{v(E)}\,dE}.
+"
+src="/equation_images/%255Cbar%2520v%253D%250A%255Cfrac%257B%255Cdisplaystyle%255Cint_0%255E%255Cinfty%255Cphi(E)%255C%252CdE%257D%250A%2520%2520%2520%2520%2520%257B%255Cdisplaystyle%255Cint_0%255E%255Cinfty%255Cfrac%257B%255Cphi(E)%257D%257Bv(E)%257D%255C%252CdE%257D.%250A"
+alt="LaTeX: \bar v=
+\frac{\displaystyle\int_0^\infty\phi(E)\,dE}
+     {\displaystyle\int_0^\infty\frac{\phi(E)}{v(E)}\,dE}.
+"
+data-equation-content="\bar v=
+\frac{\displaystyle\int_0^\infty\phi(E)\,dE}
+     {\displaystyle\int_0^\infty\frac{\phi(E)}{v(E)}\,dE}.
+"
+/></p>
+<p>Is this consistent with FNRP Eq. (3.44)? Explain by relating the energy-dependent neutron flux <img
+class="equation_image"
+title="\phi(E)"
+src="/equation_images/%255Cphi(E)"
+alt="LaTeX: \phi(E)"
+data-equation-content="\phi(E)"
+/> to the energy-dependent neutron number density <img
+class="equation_image"
+title="\widetilde n&#x27;&#x27;&#x27;(E)"
+src="/equation_images/%255Cwidetilde%2520n%2527%2527%2527(E)"
+alt="LaTeX: \widetilde n&#x27;&#x27;&#x27;(E)"
+data-equation-content="\widetilde n&#x27;&#x27;&#x27;(E)"
+/>. Identify the weighting used in the textbook definition and show the equivalence algebraically.</p>
+<h2 id="problem-3">Problem 3</h2>
+<p>The infinite-medium reactivity of a batch of fuel is approximated by the linear reactivity model</p>
+<p><img
+class="equation_image"
+title="\rho_\infty(B)=\rho_0-AB=0.243-0.00664B,
+"
+src="/equation_images/%255Crho_%255Cinfty(B)%253D%255Crho_0-AB%253D0.243-0.00664B%252C%250A"
+alt="LaTeX: \rho_\infty(B)=\rho_0-AB=0.243-0.00664B,
+"
+data-equation-content="\rho_\infty(B)=\rho_0-AB=0.243-0.00664B,
+"
+/></p>
+<p>where reactivity is dimensionless and <img
+class="equation_image"
+title="B"
+src="/equation_images/B"
+alt="LaTeX: B"
+data-equation-content="B"
+/> is in <img
+class="equation_image"
+title="\mathrm{MWd/kg}"
+src="/equation_images/%255Cmathrm%257BMWd%252Fkg%257D"
+alt="LaTeX: \mathrm{MWd/kg}"
+data-equation-content="\mathrm{MWd/kg}"
+/> of initial heavy metal. Thus, <img
+class="equation_image"
+title="A=0.00664~(\mathrm{MWd/kg})^{-1}"
+src="/equation_images/A%253D0.00664~(%255Cmathrm%257BMWd%252Fkg%257D)%255E%257B-1%257D"
+alt="LaTeX: A=0.00664~(\mathrm{MWd/kg})^{-1}"
+data-equation-content="A=0.00664~(\mathrm{MWd/kg})^{-1}"
+/>.</p>
+<p>Consider equilibrium <img
+class="equation_image"
+title="N"
+src="/equation_images/N"
+alt="LaTeX: N"
+data-equation-content="N"
+/>-batch refueling with identical batch masses and equal reactivity weights. Each batch accumulates the same burnup increment per cycle; the oldest batch is discharged at the end of each cycle. Assume a constant leakage penalty <img
+class="equation_image"
+title="\rho_L=0.05"
+src="/equation_images/%255Crho_L%253D0.05"
+alt="LaTeX: \rho_L=0.05"
+data-equation-content="\rho_L=0.05"
+/>, subtracted from the batch-averaged infinite-medium reactivity, and criticality at the end of each cycle.</p>
+<ul>
+<li><strong>(a)</strong> Estimate the cycle burnup increment <img
+class="equation_image"
+title="B_c^{(N)}"
+src="/equation_images/B_c%255E%257B(N)%257D"
+alt="LaTeX: B_c^{(N)}"
+data-equation-content="B_c^{(N)}"
+/> and discharge burnup <img
+class="equation_image"
+title="B_d^{(N)}"
+src="/equation_images/B_d%255E%257B(N)%257D"
+alt="LaTeX: B_d^{(N)}"
+data-equation-content="B_d^{(N)}"
+/> for <img
+class="equation_image"
+title="N=1,2,3,4,5"
+src="/equation_images/N%253D1%252C2%252C3%252C4%252C5"
+alt="LaTeX: N=1,2,3,4,5"
+data-equation-content="N=1,2,3,4,5"
+/>. Report the results in a table.</li>
+<li><strong>(b)</strong> Determine the limiting discharge burnup as <img
+class="equation_image"
+title="N\to\infty"
+src="/equation_images/N%255Cto%255Cinfty"
+alt="LaTeX: N\to\infty"
+data-equation-content="N\to\infty"
+/>.</li>
+</ul>
+<p>Here, “cycle length” means a burnup increment, not a time interval; no specific power is supplied to convert burnup to days.</p>

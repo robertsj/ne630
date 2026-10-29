@@ -112,13 +112,14 @@ available for that lesson.
      - `OpenMC notebook <_static/notebooks/lesson_25.ipynb>`__
    * - **Lesson 26** — Neutron Kinetics with Multiplication
      - `PDF <_static/handouts/lesson-26/lesson_26_handout.pdf>`__
-     - `OpenMC notebook <_static/notebooks/lesson_26.ipynb>`__
+     - `OpenMC notebook <_static/notebooks/lesson_26.ipynb>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=fAXneZd8Oog>`__
    * - **Lesson 27** — Neutron Kinetics with Delayed Neutrons
      - `Seeded PDF <_static/handouts/lesson-27/lesson_27_handout.pdf>`__
-     - —
+     - `YouTube video <https://www.youtube.com/watch?v=ZK5YeYxdV5Y>`__
    * - **Lesson 28** — Step Insertions of Reactivity
      - `Seeded PDF <_static/handouts/lesson-28/lesson_28_handout.pdf>`__
-     - —
+     - `YouTube video <https://www.youtube.com/watch?v=Y9Ma9rpXB00>`__
    * - **Lesson 29** — Point Kinetics with Feedback
      - `Seeded PDF <_static/handouts/lesson-29/lesson_29_handout.pdf>`__
      - —

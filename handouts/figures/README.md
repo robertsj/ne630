@@ -182,3 +182,19 @@ python handouts/figures/build_draft_figures.py
 The original notebook PNGs remain under `notebook_37/`, `notebook_38/`, and
 `notebook_39/` as provenance evidence. Their hashes are still checked even where
 a new vector rendering is used. No source notebook is modified by figure builds.
+
+
+## Revised Lesson 27: physical Br-87 precursor
+
+`lesson_27_traces.pdf` is the supplied vector, four-panel graphical exercise.
+`make_lesson_27_traces.py` generates it using the same Br-87-only parameters
+as the revised handout and verifies the modal solution against matrix
+exponentials and the one-group inhour relation. It does not modify the
+historical `drafts/traces.pdf` used by the original slide-derived lesson.
+
+Ordinary handout builds use the supplied PDF. Explicit regeneration:
+
+    make -C handouts lesson27-figure PLOT_PYTHON=/home/robertsj/miniforge3/bin/python
+
+The generator can also run from any working directory; its PDF is written
+beside the script (not into a nested `figures/figures/` directory).

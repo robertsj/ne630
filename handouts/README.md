@@ -8,7 +8,7 @@ and common authoring commands. The former board class and Chapter 4 common
 preamble have been removed.
 
 Existing instructional bodies, equations, figures, blanks, and solution reveals
-are retained. Lessons 27–35 retain every substantive frame from their Beamer
+are retained. Lessons 29–35 retain every substantive frame from their Beamer
 slides, with title/objective frames promoted to metadata. Lessons 36–39 use
 existing notebook content, including Python listings, embedded images, and
 stored results. These seeded drafts have no two-page limit. Their bodies use the
@@ -18,6 +18,17 @@ Lessons 25 and 26 have been instructor-revised and published beyond their
 initial slide-derived seeds. Lesson 26 is a two-page handout with the ODE
 appendix and time-dependent accelerator-source exercises on the back page;
 its approved body is not expected to match the original seed frame-for-frame.
+
+Lessons 27 and 28 use revised two-page handouts rather than their original
+slide-derived seeds. Both retain student mode by default. Lesson 27's supplied
+Br-87 exercise figure and its standalone regeneration script live in `figures/`.
+Ordinary PDF builds require no external notebook or module and do not regenerate
+the historical draft-figure batch for these two lessons.
+
+The historical seed manifest and seed-comparison checks describe the original
+L27–28 seeds, not these revisions; use student/private compilation, solution
+visibility, numerical figure checks, and visual review for release validation.
+The public site continues to distribute Lessons 27 and 28 as student PDFs only.
 
 ## Build
 

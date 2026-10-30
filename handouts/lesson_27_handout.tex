@@ -1,275 +1,203 @@
 \documentclass[compact]{ne630handout}
+\HandoutTypography{9}{10.7}{5pt}
 
 \handoutsolutionsfalse
+% Uncomment to reveal numerical answers and instructor cues.
+% \handoutsolutionstrue
+\ifdefined\instructorsolutions\handoutsolutionstrue\fi
 
-% Seeded from ../slides/lecture_27.tex; all substantive frames retained.
+\hypersetup{pdftitle={NE 630 -- Lesson 27: One-Group Delayed-Neutron Kinetics},
+  pdfauthor={Jeremy Roberts}}
 
-% Title/primary objective moved into the common lesson header.
-
-% Beamer overlays, vertical spacing, columns, and title-page scaffolding removed.
-
-\hypersetup{pdftitle={NE 630 -- Lesson 27: Neutron Kinetics with Delayed Neutrons},pdfauthor={Jeremy Roberts}}
-
-% Assigned reading: ../administrivia/schedule-source.psv.
 \begin{document}
+\Lesson{27}{One-Group Delayed-Neutron Kinetics}{FNRP 5.4; one-group results from 5.5.}
+{Relate a physical precursor concentration to $(n,C)$, find a critical equilibrium,
+and infer reactivity from neutron-density traces.}
 
-\Lesson{27}{Neutron Kinetics with Delayed Neutrons}{FNRP 5.4.}{Students will be able to write down, solve, and explain each term of a first-order, ordinary differential equation that models the populations of neutrons and delayed-neutron precursors as functions of time.}
 \begin{handoutflow}
+\Sec{1}{One physical precursor}
 
+Use \textbf{bromine-87} as the only delayed-neutron precursor.
+Treat all remaining fission neutrons as prompt; neglect precursor capture
+and parent ingrowth. Here, \emph{one group} means one precursor group.
+\[
+ {}^{87}\mathrm{Br}\xrightarrow{\beta^-}{}^{87}\mathrm{Kr}^{*}
+       \xrightarrow{n}{}^{86}\mathrm{Kr}.
+\]
+Use the following data:
+\[
+ \begin{array}{rlrl}
+ \gamma&=0.01274\ {\rm nuclei/fission},&
+ f_n&=0.0260,\\
+ t_{1/2}&=55.65\ {\rm s},&
+ \bar\nu&=2.43.
+ \end{array}
+\]
+Here $f_n$ is the probability that a Br-87 decay produces a neutron.
+For the \textbf{actual} Br-87 number density $N(t)$,
+\[
+ \frac{dN}{dt}=\gamma\Sigma_f\phi-\lambda N,
+ \qquad \lambda=\frac{\ln 2}{t_{1/2}},
+\]
+and the delayed-neutron production rate is $f_n\lambda N$.
+\SourceLine{Br-87 decay reference: P. Dimitriou et al.,
+\href{https://doi.org/10.1016/j.nds.2021.04.006}
+{\emph{Nuclear Data Sheets} 173, 144--238 (2021)},
+Table XXIII, ENDF/B-VIII.0 column ($t_{1/2}=55.65$ s, $f_n=0.026$).}
 
-% Source frame 3: Review: Subcritical Multiplication
+\Sec{2}{The classic $(n,C)$ equations}
 
-\Sec{1}{Review: Subcritical Multiplication}
-
-Consider
+Define the delayed-neutron-equivalent concentration and delayed fraction:
+\[
+ \boxed{C=f_nN,\qquad N=\frac{C}{f_n}},\qquad
+ \beta=\frac{f_n\gamma}{\bar\nu}=1.3631\times10^{-4}.
+\]
+$C$ counts the \emph{expected} future delayed neutrons per unit volume;
+it is not the total number density of Br-87.
+With $\phi=\bar v n$ and $\Lambda=(\bar\nu\Sigma_f\bar v)^{-1}$,
 \begin{equation*}
-\tag{FNRP 5.22}
- \frac{dn}{dt}  = \overbrace{ [(k_{\infty} - 1)/l_{\infty}] }^{\rho_{\infty}/\Lambda_{\infty}} n(t) + S_0 \, .
+ \boxed{\begin{aligned}
+ \frac{dn}{dt}&=\frac{\rho(t)-\beta}{\Lambda}\,n+\lambda C+S(t),\\
+ \frac{dC}{dt}&=\frac{\beta}{\Lambda}\,n-\lambda C .
+ \end{aligned}}
 \end{equation*}
-What happens to $n(t)$ as $k_{\infty} \to 1$?
+$n,C,N$ have units cm$^{-3}$; $S$ has units cm$^{-3}$s$^{-1}$.
+The reactivity is $\rho=(k-1)/k$.
+Identify prompt production minus loss, delayed production, and precursor loss.
 
-%\resizebox{\linewidth}{!}{\includegraphics{figures/drafts/subcrit_mult.pdf}}
+\Sec{3}{Critical steady state, with $S=0$}
 
-% Source frame 4: Delayed Neutron Precursors
+Set both derivatives to zero:
+\[
+ C_0=\frac{\beta n_0}{\lambda\Lambda},\qquad
+ 0=\frac{\rho-\beta}{\Lambda}n_0+\lambda C_0
+   =\frac{\rho}{\Lambda}n_0.
+\]
+Thus a nonzero source-free equilibrium requires \textbf{$\rho=0$}.
+Its amplitude $n_0$ must be specified by the operating density or power.
+The corresponding physical precursor concentration is
+\[
+ \boxed{N_0=\frac{C_0}{f_n}
+       =\frac{\gamma\Sigma_f\phi_0}{\lambda}.}
+\]
+\textbf{Check.} For $n_0=10^8$ cm$^{-3}$ and
+$\Lambda=5\times10^{-5}$ s, calculate
+\[
+ C_0=\RevealMath[1.08in]{2.189\times10^{10}}\ {\rm cm}^{-3},\qquad
+ N_0=\RevealMath[1.08in]{8.418\times10^{11}}\ {\rm cm}^{-3}.
+\]
+Why can the precursor inventory greatly exceed the neutron inventory?
 
-\Sec{2}{Delayed Neutron Precursors}
+\columnbreak
+\Sec{4}{A step produces two exponential modes}
 
-Each fission produces two, neutron-rich fission fragments.
-
-Some of these fragments produce radioactive daughters that decay by neutron emission, and we call the initial nuclide a {\bf delayed neutron precursor}  or just {\bf precursor}.  The total fraction of all neutrons (eventually) produced by fission that are delayed is called $\beta$.
-
-For thermal fission of ${}^{235}$U, about two-thirds of these delayed neutrons are produced by
-just 10 nuclides (out of hundreds).
-
-
-
-\begin{center}
-\begin{tabular}{rrr}
-\toprule
-\textbf{Precursor} & \textbf{$t_{1/2}$ (s)}  & \textbf{\%$\beta$} \\
-\midrule
-$^{137}$I  & 24.5 & 12.8 \\
-$^{94}$Rb  & 2.8  & 9.6 \\
-$^{89}$Br  & 4.4  & 9.3 \\
-$^{90}$Br  & 1.9  & 8.1 \\
-$^{88}$Br  & 16.3 & 6.7 \\
-$^{85}$As  & 2.1  & 5.4 \\
-$^{138}$I  & 6.5  & 4.6 \\
-$^{139}$I  & 2.3  & 4.1 \\
-$^{95}$Rb  & 0.4  & 3.9 \\
-$^{87}$Br  & 55.7 & 2.9 \\
-\midrule
-\textbf{subtotal} &  & \textbf{67.5} \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-% Source frame 5: Precursors By Example
-
-\Sec{3}{Precursors By Example}
-
-Among the most important precursors is ${}^{87}$Br, which leads to neutron emission via
-\begin{equation*}
-   {}^{236}\text{U}^* \xrightarrow[\gamma = 0.01274]{\text{fission}}
-     {}^{87}\text{Br} \xrightarrow[t_{1/2}=55.65~\text{s}]{\beta^{-}}
-     {}^{87}\text{Kr}^*  \xrightarrow[f = 0.0260]{n} {}^{86}\text{Kr} \, ,
-\end{equation*}
-and where the final decay of ${}^{87}\text{Kr}^*$ is essentially instantaneous.
-
-
-
-As we did for ${}^{135}$Xe, we can explicitly track the concentration of ${}^{87}$Br in time for a {\it constant} flux by solving
-
-\begin{equation*}
-\tag{27.1}
-  \frac{d N_{\text{Br-87}}}{dt} = -\lambda_{\text{Br-87}} N_{\text{Br-87}}(t) + \gamma_{\text{Br-87}} \Sigma_f \phi \, .
-\end{equation*}
-
-{\bf Example}: What is the steady-state concentration of ${}^{87}$Br?
-
-
-\textcolor{wcprimary}{
-{\bf Ans.} $N^{\infty}_{\text{Br-87}} = \frac{\gamma_{\text{Br-87}} \Sigma_f \phi}{\lambda_{\text{Br-87}}}$.
-}
-
-% Source frame 6: The Delayed Neutron Precursor Fraction
-
-\Sec{4}{The Delayed Neutron Precursor Fraction}
-
-The total neutron emission rate density (in steady state!) is
-\begin{align*}
-  R_n
-    = \bar{\nu}\Sigma_f \phi
-    &=  \bar{\nu}_p\Sigma_f \phi + f^n_{\text{Br-87}} \lambda_{\text{Br-87}} N^{\infty}_{\text{Br-87}} \\
-    &= (\bar{\nu}_p + f^n_{\text{Br-87}} \gamma)\Sigma_f \phi \\
-    &= (\bar{\nu}_p  + \bar{\nu}_d)\Sigma_f \phi  \, ,
-\end{align*}
-where $p$ and $d$ indicate {\it prompt} and {\it delayed}.
-Thus, the fraction of all neutrons emitted from an initial fission event that are delayed is
-\begin{align*}
- \frac{ \bar{\nu}_d}{\bar{\nu}} =  \frac{f^n_{\text{Br-87}} \gamma_{\text{Br-87}}}{\bar{\nu}} = \frac{f^n_{\text{Br-87}} \gamma_{\text{Br-87}}}{\bar{\nu}_p + f^n_{\text{Br-87}} \gamma_{\text{Br-87}}} \equiv \beta_{\text{Br-87}} \, .
-\end{align*}
-
-{\bf Example}: Compute $\beta_{\text{Br-87}}$ for ${}^{235}$U (for which $\bar{\nu} = 2.43$).
-
-
-
-{\small {\bf Ans}. $\beta_{\text{Br-87}} = 0.0260(0.01274)/2.43 \approx 0.000136$.
-}
-
-% Source frame 7: The Delayed Neutron Precursor Concentration
-
-\Sec{5}{The Delayed Neutron Precursor Concentration}
-
-With $\beta_{\text{Br-87}}$, we can modify the neutron kinetics equation (FNRP 5.22) with the equation for $N_{\text{Br-87}}$, or
-\begin{align*}
-  \frac{dn}{dt} &=
-    \left ( \frac{\rho - \beta_{\text{Br-87}}}{\Lambda} \right ) n(t) +
-       f_{\text{Br-87}} \lambda_{\text{Br-87}} N_{\text{Br-87}} (t) + S(t) \\
-  \frac{d N_{\text{Br-87}}}{dt} &= -\lambda_{\text{Br-87}} N_{\text{Br-87}}(t) + \gamma_{\text{Br-87}} \Sigma_f \phi(t) \, .
-\end{align*}
-
-Although complete, we can simplify the notation a little bit by defining
-\begin{equation*}
-    C_{\text{Br-87}} = f_n N_{\text{Br-87}}
-\end{equation*}
-where $C_{\text{Br-87}}$ represents the concentration of only
-those ${}^{87}$Br nuclei that ultimately decay by neutron emission.
-
-% Source frame 8: The Single-Precursor Equations
-
-\Sec{6}{The Single-Precursor Equations}
-
-Rewriting the equations in terms of $ C_{\text{Br-87}}$ leads to
-\begin{equation*}
-\boxed{
-  \frac{dn}{dt} = \left ( \frac{\rho - \beta}{\Lambda} \right ) n(t) +  \lambda_{\text{Br-87}} C_{\text{Br-87}} (t) + S(t)}  \, ,
-\end{equation*}
-and
-\begin{equation*}
-  \boxed{\frac{d C_{\text{Br-87}}}{dt} = -\lambda_{\text{Br-87}} C_{\text{Br-87}}(t) + \beta_{\text{Br-87}} \bar{\nu} \Sigma_f \overbrace{\bar{v}n(t)}^{\phi(t)} }\, .
-\end{equation*}
-Though specific to ${}^{87}$Br, these equations have the proper form for single-precursor kinetics!
-
-
-
-
-{\bf Example}. Suppose the only precursor were Br-87.  If $l = l_p = 10^{-5}$ s, what is the average lifetime of all neutrons? Assume that a delayed neutron's lifetime starts at the fission and ends with its death.
-
-
-
-\textcolor{wcprimary}{{\small {\bf Ans.} $l_d = l_p + 55.54/\ln(2)$ and
-$\bar{l} = (1-\beta) l_p + \beta l_d\approx 0.01$ s.
-}}
-
-% Source frame 9: The Kinetics Equations with Multiple Precursors
-
-\Sec{7}{The Kinetics Equations with Multiple Precursors}
-
-Because there are hundreds of precursors, it a universal practice is to lump the precursors into groups defined by effective $\beta$'s and $\lambda$'s for each fissile nuclide of interest as in Table 5.1 from FNRP:
-
-\begin{center}
-\begin{handoutsmall}[8]
-\begin{tabular}{lccc}
-\toprule
-\multicolumn{1}{c}{\textbf{Approximate Half-life (s)}} &
-\multicolumn{3}{c}{\textbf{Delayed Neutron Fraction} $\beta_i$} \\
-\cmidrule(lr){2-4}
- & $^{233}$U & $^{235}$U & $^{239}$Pu \\
-\midrule
-56   & 0.00023 & 0.00021 & 0.00007 \\
-23   & 0.00078 & 0.00142 & 0.00063 \\
-6.2  & 0.00064 & 0.00128 & 0.00044 \\
-2.3  & 0.00074 & 0.00257 & 0.00069 \\
-0.61 & 0.00014 & 0.00075 & 0.00018 \\
-0.23 & 0.00008 & 0.00027 & 0.00009 \\
-\midrule
-\textbf{Total delayed fraction}, $\beta = \sum^N_{i=1} \beta_i$  &
-  \textbf{0.00261} & \textbf{0.00650} & \textbf{0.00210} \\
-\textbf{Total neutrons/fission}, $\bar{\nu} = \bar{\nu}_p + \bar{\nu}_d $ &
-  \textbf{2.50} & \textbf{2.43} & \textbf{2.90} \\
-\bottomrule
-\end{tabular}
-\end{handoutsmall}
-\end{center}
-
-% Source frame 10: The Point Kinetics Equations (PKEs)
-
-\Sec{8}{The Point Kinetics Equations (PKEs)}
-
-Using data from Table 5.1, the point kinetics equations are defined as
-\begin{equation*}
-  \tag{FNRP 5.47}
-  \boxed{\frac{dn}{dt} =
-     \left ( \frac{\rho(t) - \beta}{\Lambda} \right ) n(t) +
-     \sum^N_{i=1} \lambda_i C_i (t) + S(t)
-  }
-\end{equation*}
-and
-\begin{align*}
-  \frac{d C_i}{dt} &= -\lambda_i C_i(t) + \beta_i\bar{\nu} \Sigma_f \bar{v} n(t) \, \quad i = 1, 2, \ldots, N \\
-  \tag{FNRP 5.48}
-  \Aboxed{\frac{d C_i}{dt} &= -\lambda_i C_i(t) + \frac{\beta_i}{\Lambda} n(t) \, \quad i = 1, 2, \ldots, N } \, .
-\end{align*}
-where $\Lambda = (\bar{\nu}\Sigma_f \bar{v})^{-1}$.
-
-
-{\bf Ponderable}: Above, $\rho(t)$ is a function of time.  What real-world things could lead to a time-dependent reactivity?
-
-% Source frame 11: Specifying Initial Conditions for PKEs
-
-\Sec{9}{Specifying Initial Conditions for PKEs}
-
-Of course, such sets of {\it first-order, ordinary differential equations} are not complete without appropriate {\bf initial conditions}!  The most common initial condition for reactor kinetics is to start from a critical, steady-state configuration at a known power.
-
-
-
-{\bf Example}. Suppose a reactor is operating at a constant power $P_0$ such that the neutron population is $n_0$.
-\begin{itemize}
- \item Determine an expression for the initial values $C_i(0)$.
- \item Using the precursor data from Table 5.1, $n_0 = 10^{8}$, and $\Lambda = 5\cdot 10^{-5}$ s, determine each of the initial precursor concentrations.
-\end{itemize}
-
-\textcolor{wcprimary}{{\small
-{\bf Ans.} From FNRP 5.48, set $d C_i/dt$ to zero and find $C_i(0) = (\beta_i n_0)/(\lambda_i \Lambda)$ for $i = 1, 2, \ldots, 6$.
-Then, substitute numerical data from Table 5.1 to find, e.g., $C_1(0) \approx 3.39\cdot 10^{10}$ cm$^{-3}$.  Quite often, $C_i(0) \gg n(0)$!
-}}
-
-% Source frame 12: Numerical Solutions of PKEs
-
-\Sec{10}{Numerical Solutions of PKEs}
-
-Most computer tools for solving systems of first-order equations require that the system be written in the following form:
-\begin{equation*}
-  \frac{d}{dt} \mathbf{y} = \mathbf{f}(\mathbf{y}(t), t) \, .
-\end{equation*}
-
-Equations (5.47) and (5.48) can be written as
-{\fontsize{7.6}{9.5}\selectfont
-\begin{align*}
- \frac{d}{dt}
-   \overbrace{\left [ \begin{array}{c} n(t) \\ C_1(t) \\  \vdots \\ C_N(t) \end{array} \right ]}^{\mathbf{y}}
+Start at the critical equilibrium above. At $t=0$, impose a constant
+$\rho$ while keeping $S=0$ and the material parameters fixed:
+\[
+ \frac{d}{dt}\begin{bmatrix}n\\ C\end{bmatrix}
  =
-   \overbrace{\left [ \begin{array}{cccc}
-       (\rho(t)-\beta)/\Lambda        & \lambda_1 & \ldots & \lambda_N \\
-       \beta_1 /\Lambda  & -\lambda_1 & \ldots & 0        \\
-                             \vdots & \vdots & \ddots & \vdots        \\
-       \beta_N /\Lambda  & 0 & \ldots & -\lambda_N \\
-   \end{array} \right ]}^{\mathbf{A}} \times
-   \left [ \begin{array}{c} n(t) \\ C_1(t) \\  \vdots \\ C_N(t) \end{array} \right ] +
-   \overbrace{\left [ \begin{array}{c} S(t) \\ 0 \\  \vdots \\ 0 \end{array} \right ]}^{\mathbf{b}} \, .
-\end{align*}
-}
+ \begin{bmatrix}
+  (\rho-\beta)/\Lambda & \lambda\\
+  \beta/\Lambda &-\lambda
+ \end{bmatrix}
+ \begin{bmatrix}n\\ C\end{bmatrix}.
+\]
+For a mode proportional to $e^{\omega t}$, the eigenvalues satisfy
+\[
+ \boxed{\Lambda\omega^2+
+  (\beta-\rho+\lambda\Lambda)\omega-\lambda\rho=0.}
+\]
+For the sub-prompt-critical insertions used below, call the larger root
+$\omega_s$ and the smaller root $\omega_f$. Then
+\[
+ n(t)=A_s e^{\omega_s t}+A_f e^{\omega_f t}.
+\]
+The initial conditions give
+\[
+ A_s+A_f=n_0,\qquad
+ \omega_s A_s+\omega_f A_f=\frac{\rho}{\Lambda}n_0.
+\]
+The fast mode dies away first. Both $n$ and $C$ remain \textbf{continuous}
+at $t=0$; their derivatives can change immediately.
 
-so we already have the form needed where $\mathbf{f}(\mathbf{y},t) = \mathbf{A}\mathbf{y}+\mathbf{b}$.  Example code based on SciPy's {\tt odeint} is available on Canvas in the Jupyter notebook.
+\Sec{5}{Measure the late-time period}
 
-% Source frame 13: Numerical Solutions of PKEs
+After the fast mode has become negligible,
+\[
+ n(t)\simeq A_s e^{t/T},\qquad \boxed{T=\frac{1}{\omega_s}}.
+\]
+Choose two points on the straight, late part of a semilog trace:
+\[
+ \boxed{T=\frac{t_b-t_a}{\ln[n(t_b)/n(t_a)]}.}
+\]
+$T>0$ means growth; $T<0$ means decay. A population doubles in
+$T\ln 2$ for $T>0$, or halves in $|T|\ln 2$ for $T<0$.
+Substituting $\omega=1/T$ into the quadratic gives a direct
+\textbf{one-group period--reactivity relation}:
+\[
+ \boxed{\rho=\frac{\Lambda}{T}+\frac{\beta}{1+\lambda T}.}
+\]
+This is the one-group version of the \emph{inhour} equation.
 
-\Sec{11}{Numerical Solutions of PKEs}
+\Sec{6}{Estimate the prompt jump or drop}
 
-Using the precursor data from Table 5.1, $n_0 = 10^{8}$, and $\Lambda = 5\cdot 10^{-5}$ s, $n(t)$ and $C_i(t)$ are shown below for a small step insertion of reactivity between 1 and 2 seconds.  Example code is on Canvas.
+For a step sufficiently below prompt criticality, $C$ changes little
+during the fast adjustment. Set $dn/dt\simeq0$ while retaining $C\simeq C_0$:
+\[
+ 0\simeq\frac{\rho-\beta}{\Lambda}n_1+\lambda C_0
+ \quad\Longrightarrow\quad
+ \boxed{J\equiv\frac{n_1}{n_0}\simeq\frac{\beta}{\beta-\rho}.}
+\]
+Consequently, $\rho/\beta\simeq1-1/J$. The apparent jump describes
+a short, continuous adjustment; it is not $n(0^+)/n(0^-)$.
+The approximation fails near $\rho=\beta$.
 
-\resizebox{\linewidth}{!}{\includegraphics{figures/drafts/example_kinetics.pdf}}
+\textbf{Units.} Reactivity in dollars is $\rho/\beta$; in pcm it is
+$10^5\rho$.
+
 
 \end{handoutflow}
+
+\clearpage
+\HandoutContinue{Graphical exercise: use a ruler and judgment}
+All four panels use the \textbf{same Br-87-only model}:
+$\beta=1.3631\times10^{-4}$, $\lambda=0.012455$ s$^{-1}$,
+$\Lambda=5\times10^{-5}$ s, $S=0$, and initial critical equilibrium.
+Each reactivity step occurs at $t=0$. The same unknown $\rho_A$ appears
+in (a,c), and the same unknown $\rho_B$ in (b,d).
+
+\noindent\includegraphics[width=\linewidth]{figures/lesson_27_traces.pdf}
+
+\begin{enumerate}[itemsep=2pt,topsep=2pt]
+\item From (a,b), estimate the apparent jump/drop factor $J$ for each curve.
+      Use the settled trend after the fast adjustment; extrapolate gently
+      toward $t=0$ if needed.
+\item From the straight portions of (c,d), mark two widely separated points,
+      estimate the \emph{signed} period $T$, and show your ruler construction.
+\item Estimate $\rho_A/\beta$ and $\rho_B/\beta$ twice: from $J$ and from $T$.
+      Check the known $\pm0.2\beta$ curves. Explain small disagreements.
+\end{enumerate}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.65}
+\begin{tabularx}{.98\linewidth}{@{}lYYYY@{}}
+\toprule
+\textbf{Trace} & \textbf{$J$ from plot} & \textbf{$T$ (s) from plot} &
+\textbf{$\rho/\beta$ from $J$} & \textbf{$\rho/\beta$ from $T$}\\
+\midrule
+$+0.2\beta$ & \RevealMath[.8in]{1.25} & \RevealMath[.9in]{+323} &
+ \RevealMath[.8in]{+0.20} & \RevealMath[.8in]{+0.20}\\
+$\rho_A$ & \RevealMath[.8in]{1.96\text{--}2.0} &
+ \RevealMath[.9in]{+81.7} & \RevealMath[.8in]{+0.49\text{--}0.50} &
+ \RevealMath[.8in]{+0.50}\\
+$-0.2\beta$ & \RevealMath[.8in]{0.834} & \RevealMath[.9in]{-483} &
+ \RevealMath[.8in]{-0.20} & \RevealMath[.8in]{-0.20}\\
+$\rho_B$ & \RevealMath[.8in]{0.668} & \RevealMath[.9in]{-241} &
+ \RevealMath[.8in]{-0.50} & \RevealMath[.8in]{-0.50}\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\textbf{Discuss.} Why does the negative insertion not remove all neutrons
+immediately? Which part of each response is governed by precursor decay?
+Use $\rho_A$ and $\rho_B$ to practice conversion to dollars and pcm.
 \end{document}

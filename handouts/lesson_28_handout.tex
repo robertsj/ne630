@@ -1,238 +1,273 @@
 \documentclass[compact]{ne630handout}
+\HandoutTypography{9}{10.7}{5pt}
 
 \handoutsolutionsfalse
+% Uncomment to reveal numerical answers and instructor cues.
+% \handoutsolutionstrue
+\ifdefined\instructorsolutions\handoutsolutionstrue\fi
 
-% Seeded from ../slides/lecture_28.tex; all substantive frames retained.
+\hypersetup{pdftitle={NE 630 -- Lesson 28: Precursor Groups and the Inhour Equation},
+  pdfauthor={Jeremy Roberts}}
 
-% Title/primary objective moved into the common lesson header.
-
-% Beamer overlays, vertical spacing, columns, and title-page scaffolding removed.
-
-\hypersetup{pdftitle={NE 630 -- Lesson 28: Step Insertions of Reactivity},pdfauthor={Jeremy Roberts}}
-
-% Assigned reading: ../administrivia/schedule-source.psv.
 \begin{document}
+\Lesson{28}{Precursor Groups and the Inhour Equation}{FNRP 5.4--5.5, especially Table 5.1.}
+{Construct a grouped-precursor model, derive the inhour equation,
+and compare reactor periods from one- and six-group models.}
 
-\Lesson{28}{Step Insertions of Reactivity}{FNRP 5.5.}{Students will be able to solve the kinetics equations subject to step insertions of reactivity and to predict neutron and precursor densities and reactor periods from those solutions and approximations thereof.}
 \begin{handoutflow}
+\Sec{1}{From one nuclide to precursor groups}
 
+Many nuclides produce delayed neutrons. For thermal fission of U-235,
+the ten examples below account for about 72\% of delayed neutrons
+in the cited evaluation.
+The last column gives each nuclide's percentage of the total delayed-neutron
+yield, not a percentage of all fission neutrons.
 
-% Source frame 3: Review: The Point Kinetics Equations
+% Shares: Dimitriou et al. (2021), Table VII, U-235 thermal, CRP column.
+% Half-lives: Tables I--II; As-85 from the linked ENSDF evaluation.
+\begin{center}
+{\fontsize{8}{9.5}\selectfont
+\begin{tabular}{lrr}
+\toprule
+\textbf{Precursor} & $t_{1/2}$ (s) & \textbf{Share of delayed yield (\%)}\\
+\midrule
+$^{137}$I  & 24.6  & 16.3\\
+$^{89}$Br  & 4.34  & 11.1\\
+$^{94}$Rb  & 2.70  & 9.3\\
+$^{90}$Br  & 1.91  & 7.4\\
+$^{88}$Br  & 16.3  & 7.3\\
+$^{85}$As  & 2.02  & 5.3\\
+$^{138}$I  & 6.25  & 4.7\\
+$^{139}$I  & 2.28  & 3.5\\
+$^{95}$Rb  & 0.378 & 3.5\\
+$^{87}$Br  & 55.6  & 3.2\\
+\midrule
+\textbf{Subtotal} & & \textbf{71.6}\\
+\bottomrule
+\end{tabular}}
+\end{center}
+\SourceLine{Yield shares: P. Dimitriou et al.,
+\href{https://doi.org/10.1016/j.nds.2021.04.006}
+{\emph{Nuclear Data Sheets} 173, 144--238 (2021)}, Table VII,
+U-235 thermal, CRP column (CRP+ENDF/B-VIII.0 decay data;
+JEFF-3.1.1 fission yields). Half-lives rounded from Tables I--II;
+As-85 from \href{https://www.nndc.bnl.gov/ensnds/85/Se/beta_decay_2.021_s.pdf}
+{B. Singh and J. Chen, ENSDF (2014)}.}
 
-\Sec{1}{Review: The Point Kinetics Equations}
+\textbf{Average by delayed-neutron yield.} Let $s_j$ be the delayed-yield
+share of nuclide $j$. Normalize the shares over the precursors being averaged:
+\[
+ \boxed{\bar{t}_{1/2}=\frac{\sum_j s_j t_{1/2,j}}{\sum_j s_j},\qquad
+ \bar{\lambda}=\frac{\ln2}{\bar{t}_{1/2}}.}
+\]
+This preserves the mean delay $\bar{t}_{1/2}/\ln2$.
+For the ten listed nuclides, divide by $71.6$: $\bar{t}_{1/2}=11.66$ s
+and $\bar{\lambda}=0.05946$ s$^{-1}$ \emph{for this subset}.
+The remaining $28.4\%$ is needed for a full U-235 average.
+\SourceLine{Averaging procedure: FNRP Eqs. (5.32)--(5.34).}
 
-The time evolution of the neutron population (or density!) is described by
-\begin{equation*}
-  \tag{FNRP 5.47}
-  \frac{dn}{dt} =
-     \left ( \frac{\rho(t) - \beta}{\Lambda} \right ) n(t) +
-     \sum^N_{i=1} \lambda_i C_i (t) + S(t) \, ,
-\end{equation*}
-while the precursor populations (or densities!) evolve according to
-\begin{align*}
-  \tag{FNRP 5.48}
-  \frac{d C_i}{dt} = -\lambda_i C_i(t) + \frac{\beta_i}{\Lambda} n(t) \, \quad i = 1, 2, \ldots, N \, ,
-\end{align*}
-where $\beta = \sum_i \beta_i$ is the total delayed neutron precursor fraction.
-These delayed neutrons increase the average neutron lifetime\footnote{Without delayed neutrons, the growth of a neutron population follows $e^{[(k-1)/l]t}$, so increasing $l$ even a little slows that growth a lot!} according to
-\begin{align*}
-\tag{FNRP 5.36}
- \bar{l} &= (1-\beta)l + \beta l_d \\
-         &= l + \beta/\lambda \, .
-\end{align*}
+\columnbreak
+Represent the combined release of all precursors
+with $G$ effective groups, each with delayed fraction $\beta_i$ and
+decay constant $\lambda_i=\ln2/t_{1/2,i}$.
+The values below are from FNRP~Table~5.1.
 
-% Source frame 4: Review: A Single Precursor Group
+\begin{center}
+{\fontsize{8}{9.5}\selectfont
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{crrrr}
+\toprule
+ & & \multicolumn{3}{c}{\textbf{Delayed fraction $\beta_i$}}\\
+\cmidrule(lr){3-5}
+$i$ & $t_{1/2,i}$ (s) & U-233 & U-235 & Pu-239\\
+\midrule
+1 & 56   & 0.00023 & 0.00021 & 0.00007\\
+2 & 23   & 0.00078 & 0.00142 & 0.00063\\
+3 & 6.2  & 0.00064 & 0.00128 & 0.00044\\
+4 & 2.3  & 0.00074 & 0.00257 & 0.00069\\
+5 & 0.61 & 0.00014 & 0.00075 & 0.00018\\
+6 & 0.23 & 0.00008 & 0.00027 & 0.00009\\
+\midrule
+\multicolumn{2}{l}{$\beta=\sum_i\beta_i$}
+  & 0.00261 & 0.00650 & 0.00210\\
+\multicolumn{2}{l}{$\bar\nu$ (neutrons/fission)}
+  & 2.50 & 2.43 & 2.90\\
+\bottomrule
+\end{tabular}}
+\end{center}
+Each $C_i$ is an \textbf{effective delayed-neutron reservoir}.
+Unlike Lesson 27's $C=f_nN_{\rm Br}$, a grouped $C_i$ alone does not
+determine an individual nuclide's concentration.
 
-\Sec{2}{Review: A Single Precursor Group}
+\Sec{2}{Equations and initial conditions}
 
-One can reduce the $N$ precursor equations to one by defining
-\begin{equation*}
-\tag{FNRP 5.31 \& 5.34}
- \beta = \sum^N_{i=1} \beta_i \qquad \text{and} \qquad
-\frac{1}{\lambda} = \left(\frac{1}{\beta} \sum_{i=1}^N \frac{\beta_i}{\lambda_i}\right) \, .
-\end{equation*}
+With $\beta=\sum_{i=1}^{G}\beta_i$,
+\[
+ \boxed{\begin{aligned}
+ \frac{dn}{dt}&=\frac{\rho(t)-\beta}{\Lambda}n+
+                 \sum_{i=1}^{G}\lambda_i C_i+S(t),\\
+ \frac{dC_i}{dt}&=\frac{\beta_i}{\Lambda}n-\lambda_i C_i,
+                       \qquad i=1,\ldots,G .
+ \end{aligned}}
+\]
+For an initially critical, source-free equilibrium,
+\[
+ \rho(0^-)=0,\qquad n(0)=n_0,\qquad
+ \boxed{C_i(0)=\frac{\beta_i n_0}{\lambda_i\Lambda}.}
+\]
+These equations have the matrix form
+$\dot{\mathbf y}=\mathbf A(\rho)\mathbf y+\mathbf b$,
+where $\mathbf y=[n,C_1,\ldots,C_G]^T$ and
+$\mathbf b=[S,0,\ldots,0]^T$.
+The $7\times7$ matrix for six groups has
+\[
+ \begin{aligned}
+ A_{00}&=(\rho-\beta)/\Lambda,& A_{0i}&=\lambda_i,\\
+ A_{i0}&=\beta_i/\Lambda,& A_{ii}&=-\lambda_i
+ \end{aligned}
+\]
+and all other entries zero.
 
-Then the PKEs reduce to
-\begin{align*}
- \frac{dn}{dt} = \frac{\rho(t)-\beta}{\Lambda}n(t) + \lambda C(t) \qquad \text{and} \qquad
- \frac{dC}{dt} = -\lambda C(t) + \frac{\beta}{\Lambda} n(t) \, .
-\end{align*}
+\textbf{Check.} With U-235, $n_0=10^8$ cm$^{-3}$, and
+$\Lambda=5\times10^{-5}$ s, calculate $C_1(0)$.
+Why is setting all $C_i(0)=0$ a different physical experiment?
+\[
+ C_1(0)=\RevealMath[1.4in]{3.393\times10^{10}}\ {\rm cm}^{-3}.
+\]
 
+\end{handoutflow}
 
+\clearpage
+\HandoutContinue{Reactor periods and a numerical comparison}
+\begin{handoutflow}
+\Sec{3}{The pathway to the inhour equation}
 
-{\bf Example}: Assume a ${}^{235}$U-fueled reactor is initially critical, i.e., $\rho(t<0)=0$, with $n(0) = 10^9$.
-With $\Lambda = 10^{-4}$ and $\rho(t\geq 0)=\rho_0=0.25\$$, write down the equations, with numerical
-coefficients, needed to find $n(t)$ and $C(t)$.
+After a step, take $\rho$ constant and $S=0$.
+\textbf{Try one exponential mode:}
+\[
+ n(t)=a e^{\omega t},\qquad C_i(t)=b_i e^{\omega t}.
+\]
+\textbf{Eliminate the precursor amplitudes:}
+\[
+ (\omega+\lambda_i)b_i=\frac{\beta_i}{\Lambda}a
+ \quad\Longrightarrow\quad
+ b_i=\frac{\beta_i a}{\Lambda(\omega+\lambda_i)}.
+\]
+\textbf{Substitute into the neutron equation:}
+\[
+ \Lambda\omega=\rho-\beta+
+                  \sum_{i=1}^{G}\frac{\beta_i\lambda_i}{\omega+\lambda_i}.
+\]
+\textbf{Use $\beta=\sum_i\beta_i$ and rearrange:}
+\[
+ \boxed{\rho=\Lambda\omega+
+          \sum_{i=1}^{G}\frac{\beta_i\omega}{\omega+\lambda_i}.}
+\]
+This is the \textbf{inhour equation}. It is rational; clearing the
+denominators gives the degree-$(G+1)$ characteristic polynomial.
+The poles $-\lambda_i$ are not roots.
 
+The full solution is a sum of $G+1$ modes, with amplitudes fixed by the
+initial state. The largest eigenvalue $\omega_\star$ determines the
+late-time signed period $T=1/\omega_\star$:
+\[
+ \boxed{\rho=\frac{\Lambda}{T}
+            +\sum_{i=1}^{G}\frac{\beta_i}{1+\lambda_iT}.}
+\]
+At criticality, $\omega_\star=0$ and the equilibrium period is infinite.
+For a negative insertion, $T<0$.
 
-\textcolor{wcprimary}
-{{\small
-{\bf Ans}.  Using data from Table 5.1, $\beta = 0.00650$ and $\lambda = 0.07664$.  Then, FNRP (5.29) gives $C(0) = \beta n(0) / (\lambda \Lambda) \approx 8.48 \cdot 10^{11}$.  Finally, $\rho_0 = 0.25~(\$) = 0.25\beta~(\Delta k/k)=  162.5~(\text{pcm})$.
-}}
+\Sec{4}{One effective group and useful limits}
 
-% Source frame 5: Step Insertions and the In-Hour Equation
+\textbf{Near criticality}, if $|\omega_\star|\ll\lambda_i$ for every group,
+\[
+ T\simeq\frac{\Lambda+\sum_i\beta_i/\lambda_i}{\rho}.
+\]
+A one-group model using Section 1's average preserves the equilibrium
+total precursor inventory:
+\[
+ \beta_{\rm 1g}=\beta,\qquad
+ \lambda_{\rm 1g}=\bar\lambda=\frac{\beta}{\sum_i\beta_i/\lambda_i}.
+\]
+For the U-235 groups on page 1, $\bar t_{1/2}=9.044$ s and
+$\bar\lambda=0.076641$ s$^{-1}$. This reproduces the small-reactivity
+limit. A mixture still has several modes; one effective group cannot
+reproduce every transient. This is distinct from L27's Br-87-only model.
 
-\Sec{3}{Step Insertions and the In-Hour Equation}
+\textbf{Well above prompt criticality},
+\[
+ T\simeq\frac{\Lambda}{\rho-\beta}.
+\]
+This estimate requires the delayed term to be small relative to
+$\rho-\beta$; the full period is finite at $\rho=\beta$.
 
-Whether we have $N$ precursor groups or just one group, the PKEs can be solved
-analytically only for special cases in which $\rho(t)$ and $S(t)$ are simple functions of
-time (e.g., a constant or a sinusoid).
+\textbf{For a sufficiently large negative insertion},
+\[
+ \omega_\star\longrightarrow-\lambda_1,\qquad
+ T\longrightarrow-\frac{1}{\lambda_1}=-80.79\ {\rm s}.
+\]
+Earlier decay can be much faster than this late-time limit.
 
-For a constant, {\bf step insertion of reactivity} $\rho(t) = \rho$, the PKEs have {\it constant coefficients}.
+\columnbreak
+\Sec{5}{Work with \texttt{ne630\_kinetics}}
 
-If we further take $S(t) = 0$, then the solutions (i.e., $n(t)$, $C_i(t)$) must be sums of exponential functions
-with different time constants.
+Save \texttt{ne630\_kinetics.py} beside your notebook or script.
+Use Python with NumPy and SciPy; add Matplotlib for plots.
+Import it as \texttt{import ne630\_kinetics as kin}.
+The defaults are the six U-235 groups, $\Lambda=5\times10^{-5}$ s,
+critical initial equilibrium, $S=0$, and no feedback.
+Reactivity arguments are dimensionless: $\rho=d\,\texttt{kin.BETA}$
+for an insertion of $d$ dollars. Times are in seconds.
 
+\textbf{From a terminal}, run
+\mbox{\texttt{python ne630\_kinetics.py}} to print period tables and
+checks; it also writes \texttt{numerical\_results.json} beside the module.
+Import the module in your own notebook, script, or interactive Python
+session to vary the cases and make plots.
 
-In other words,
-\begin{align*}
-   n(t)   &= \sum_{j=1}^{N+1} A_j e^{\omega_j t} \\
-   C_i(t) &= \sum_{j=1}^{N+1} B_{ij} e^{\omega_j t} \, ,  \,i = 1, \ldots, N \, ,
-\end{align*}
+\textbf{For a step}, use \texttt{kin.sample\_times(tmax)} and
+\texttt{kin.solve\_step(rho, times)}. The result \texttt{sol} contains
+times in \texttt{sol.t}, $n/n_0$ in \texttt{sol.y[0]}, and $C_i/n_0$ in
+\texttt{sol.y[i]} ($i=1,\ldots,6$).
+\texttt{kin.dominant\_period(rho)} returns the signed period.
+For one group, pass \texttt{beta=[kin.BETA]} and
+\texttt{lam=[lambda\_eff]} to both functions, with
+\texttt{lambda\_eff} set to the full six-group $\bar\lambda$ from Section 4.
+Each model initializes its own critical precursor inventory.
 
-whose time constants $\omega_j$ satisfy
+\Sec{6}{Compare one group with six}
 
-\begin{equation*}
-\tag{FNRP 5.53}
-   \boxed{\rho = \left ( \Lambda + \sum_{i=1}^N \frac{\beta_i}{\omega + \lambda_i} \right ) \omega} \, .
-\end{equation*}
-This result is the {\bf inhour equation} and represents a polynomial of degree $N+1$ whose
-roots are the $\omega_j$.
+\textbf{Verify equilibrium.} Set $\rho=0$: all densities should remain
+constant. Inspect \texttt{kin.matrix} to connect the implementation to
+Section 2.
 
-% Source frame 6: The Reactor Period
+\textbf{Compute periods.} Run $\rho/\beta=0.02$ and $0.2$.
+Compare the six-group period, the effective one-group period, and the
+small-reactivity estimate in Section 4.
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+$\rho/\beta$ & $T_{\rm 6g}$ (s) & $T_{\rm 1g}$ (s)\\
+\midrule
+0.02 & \RevealMath[.82in]{617.6} & \RevealMath[.82in]{639.7}\\
+0.2  & \RevealMath[.82in]{36.88} & \RevealMath[.82in]{52.24}\\
+\bottomrule
+\end{tabular}
+\end{center}
+Use \texttt{kin.inhour\_residual} to check that each six-group
+frequency $1/T$ satisfies the inhour equation at the imposed $\rho$.
 
-\Sec{4}{The Reactor Period}
+\textbf{Plot and explain.} Plot both $0.2\beta$ traces over
+$0$--$200$ s on semilog axes. Compare the late slope with $1/T$.
+Why does preserving the mean delay and equilibrium inventory fail to
+preserve the whole transient? Which insertion is better represented
+by one effective group?
 
-\noindent\includegraphics[width=\linewidth,page=1]{figures/drafts/traces.pdf}\par\medskip
-\noindent\includegraphics[width=\linewidth,page=2]{figures/drafts/traces.pdf}
-
-Shown at the left are {\it traces} for several step insertions of reactivity.
-In all cases, after the immediate {\it jump} or {\it drop}, the solution follows
-\begin{equation*}
-   n(t) \approx A_1 e^{\omega_1 t} = A_1 e^{t/T} \, ,
-\end{equation*}
-where $T$ is the {\bf (stable) reactor period}.
-
-
-{\bf Example}: Estimate the period {\it graphically} for $\rho = 0.2\beta$, $\rho = \rho_A$, and $\rho = \rho_B$.
-Then, use the inhour equation to estimate $\rho_A$ and $\rho_B$.
-
-
-
-\textcolor{wcprimary}{
-{\bf Ans.}
-}
-
-% Source frame 7: Step Insertions with One Precursor Group
-
-\Sec{5}{Step Insertions with One Precursor Group}
-
-{\small
-
-Write the PKEs as
-\begin{equation*}
- \frac{d}{dt}
-   \overbrace{\left [
-     \begin{array}{c} n(t) \\
-                      C(t)
-      \end{array} \right ]}^{\mathbf{y}(t)}
- =
-   \overbrace{\left [ \begin{array}{cc}
-       (\rho-\beta)/\Lambda    & \lambda \\
-       \beta /\Lambda          & -\lambda \\
-   \end{array} \right ]}^{\mathbf{M}}
-   \left [ \begin{array}{c} n(t) \\ C(t) \end{array} \right ] \, , \quad \left [
-     \begin{array}{c} n(0) \\
-                      C(0)
-      \end{array} \right ] = \left [
-     \begin{array}{c} n_0 \\
-                      C_0
-      \end{array} \right ] \, .
-\end{equation*}
-
-The eigenvalues $\omega$ of $\mathbf{M}$ satisfy
-\begin{equation*}
-\begin{aligned}
- \overbrace{1}^{a} \omega^2 +
-           \overbrace{\left (\lambda - \frac{\rho - \beta}{\Lambda} \right )}^{b} \omega +
-            \overbrace{\left ( -\frac{\lambda \beta}{\Lambda} -\frac{\lambda(\rho - \beta)}{\Lambda} \right )}^{c} = 0  \longrightarrow \\ \boxed{\omega_{1/2} = \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}} \, .
-\end{aligned}
-\end{equation*}
-
-The solutions are then
-\begin{equation*}
-  n(t) = A_1 e^{\omega_1 t} + A_2 e^{\omega_2 t} \qquad \text{and} \qquad
-  C(t) = B_1 e^{\omega_1 t} + B_2 e^{\omega_2 t} \, .
-\end{equation*}
-
-We need to find the four unknowns $A_1$, $A_2$, $B_1$, and $B_2$ noting that
-\begin{itemize}
- \item the initial conditions give two equations.
- \item the PKEs give two more equations, and setting $t = 0$ eliminates the exponentials!
-\end{itemize}
-
-}
-
-% Source frame 8: Step Insertions with One Precursor Group
-
-\Sec{6}{Step Insertions with One Precursor Group}
-
-\begin{NEunicodecode}
-from math import sqrt
-def step_insert(ρ, β, Λ, λ, n0):
-  c0 = β*n0/(λ*Λ)
-  a = 1
-  b = λ*(1-(ρ-β)/(λ*Λ))
-  c = -1*(λ*(ρ-β)/Λ + λ*β/Λ)
-  d = sqrt(b**2-4*a*c)
-  ω1 = (-b+d)/(2*a)
-  ω2 = (-b-d)/(2*a)
-  A1 = (ρ*n0/Λ - n0*ω2)/(ω1-ω2)
-  A2 = n0 - A1
-  B1 = (-β*n0*ω2/(λ*Λ))/(ω1-ω2)
-  B2 = β*n0/(λ*Λ) - B1
-  return ω1, ω2, A1, A2, B1, B2
-\end{NEunicodecode}
-
-$\rho=-0.5\beta$, $\Lambda = 5\cdot 10^{-5}$
-
-\resizebox{\linewidth}{!}{\includegraphics{figures/drafts/prompt_drop_illustration.pdf}}
-
-% Source frame 9: Prompt Jump/Drop Approximation
-
-\Sec{7}{Prompt Jump/Drop Approximation}
-
-As the traces illustrate, after a small insertion $\Delta \rho \ll \beta$, the population swiftly jumps or drops.  On the linear scale, the population appears to jump immediately from $n_0$ to some new value $n_1$.  The ratio of this new value to the initial value satisfies
-\begin{equation*}
-\boxed{\frac{n_1}{n_0} = \frac{\beta - \rho_0}{\beta - \rho_1}} \, ,
-  \tag{Prompt Jump Approximation}
-\end{equation*}
-where $\rho_0$ is the initial reactivity (usually zero, but $|\rho_0| \ll \beta$ always) and the new reactivity $\rho_1 = \rho_0 + \Delta \rho$.
-
-
-
-{\bf Example}. Use the prompt jump approximation to verify
-the $\pm 0.2\beta$ traces.  What is $\rho \pm 0.2\beta$ in \$? pcm?
-
-% Source frame 10: Periods for Very Small and Very Large Insertions
-
-\Sec{8}{Periods for Very Small and Very Large Insertions}
-
-A ``small'' reactivity is any $|\rho| \ll \beta$.  In this case,
-
-\begin{equation*}
-\tag{FNRP 5.57}
- T \approx \frac{\beta}{\rho \lambda}\, .
-\end{equation*}
-
-For reactivities $\rho > \beta$, the neutron population grows exponentially with prompt neutrons alone and, hence, the period is very small and well approximated by
-
-\begin{equation*}
-\tag{FNRP 5.58}
- T \approx \frac{\Lambda}{\rho - \beta} \, .
-\end{equation*}
-
-Finally, for large {\it negative} insertions, $T \approx 1/\lambda$, or, for multiple precursor groups, $T \approx 1/\lambda_1$, where $\lambda_1$ corresponds to the longest lives group.
-
+\textbf{Notebook enrichment.} Continue in
+\nolinkurl{lesson_28_exploration.ipynb} for the closer-to-critical
+$0.002\beta$ case, prompt-critical crossings, negative-reactivity tails,
+and finite pulses that demonstrate precursor memory.
+The notebook uses the same module and six-group data.
 \end{handoutflow}
 \end{document}

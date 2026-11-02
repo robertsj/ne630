@@ -8,7 +8,7 @@ and common authoring commands. The former board class and Chapter 4 common
 preamble have been removed.
 
 Existing instructional bodies, equations, figures, blanks, and solution reveals
-are retained. Lessons 27–35 retain every substantive frame from their Beamer
+are retained. Lessons 29–35 retain every substantive frame from their Beamer
 slides, with title/objective frames promoted to metadata. Lessons 36–39 use
 existing notebook content, including Python listings, embedded images, and
 stored results. These seeded drafts have no two-page limit. Their bodies use the
@@ -18,6 +18,19 @@ Lessons 25 and 26 have been instructor-revised and published beyond their
 initial slide-derived seeds. Lesson 26 is a two-page handout with the ODE
 appendix and time-dependent accelerator-source exercises on the back page;
 its approved body is not expected to match the original seed frame-for-frame.
+
+Lessons 27 and 28 now use instructor revisions rather than their slide-derived
+seeds. Both are two pages and use 5 pt paragraph spacing. L28 retains the
+individual precursor table and averaging procedure; extended numerical
+experiments live in its companion notebook.
+L27's Br-87 exercise figure and generator live in
+`figures/`; the L28 companion is `../code/lesson_28_exploration.ipynb`
+with `../code/ne630_kinetics.py`. The older `../code/lesson_28.ipynb` remains
+unchanged as historical course material. See
+[revision notes](lessons_27_28_revision_notes.md) for the author's numerical
+references, local paths, and verification scope. The historical seed manifest
+and seed-comparison checks have not been rebaselined to these revisions;
+they are not acceptance tests for L27–28.
 
 ## Build
 

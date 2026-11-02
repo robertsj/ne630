@@ -16,7 +16,7 @@ DRAFT_NAMES := subcrit_mult example_kinetics traces prompt_drop_illustration sla
 DRAFT_FIGURES := $(addprefix figures/drafts/,$(addsuffix .pdf,$(DRAFT_NAMES))) figures/drafts/manifest.json
 DRAFT_DATA := $(wildcard figures/drafts/data/*.json figures/drafts/data/*.npz)
 
-.PHONY: all template check-class check-content check-seeds xe135-figure tidy clean $(foreach n,$(LESSONS),L$(n) lesson$(n))
+.PHONY: all template check-class check-content check-seeds xe135-figure lesson27-figure tidy clean $(foreach n,$(LESSONS),L$(n) lesson$(n))
 
 all: $(HANDOUTS) $(SUPPLEMENTS)
 
@@ -32,7 +32,8 @@ lesson_%_handout.pdf: lesson_%_handout.tex ne630handout.cls $(SUPPORT)
 
 $(foreach n,01 02 03 04 05 06 07 08 09 10 12 13 14,$(eval lesson_$(n)_handout.pdf: lesson_$(n)_handout_body.tex))
 lesson_22_handout.pdf: lesson_22_xenon_transient.py
-$(foreach n,25 26 27 28 29 30 31 32 33 34 35 36 37 38 39,$(eval lesson_$(n)_handout.pdf: $(DRAFT_FIGURES)))
+lesson_27_handout.pdf: figures/lesson_27_traces.pdf
+$(foreach n,25 26 29 30 31 32 33 34 35 36 37 38 39,$(eval lesson_$(n)_handout.pdf: $(DRAFT_FIGURES)))
 $(foreach n,36 37 38 39,$(eval lesson_$(n)_handout.pdf: $(wildcard figures/notebook_$(n)/*.png)))
 
 $(DRAFT_FIGURES) &: figures/build_draft_figures.py ne630handout.cls $(DRAFT_DATA)
@@ -55,6 +56,10 @@ check-seeds: $(DRAFT_FIGURES)
 # Explicit regeneration only: ordinary PDF builds use the checked-in PGF.
 xe135-figure:
 	$(OPENMC_PYTHON) figures/plot_xe135_capture.py $(XE135_PLOT_FLAGS)
+
+# Revised L27 uses its supplied Br-87 figure, independent of draft figures.
+lesson27-figure:
+	MPLCONFIGDIR=$(CURDIR)/figures/.mplconfig MPLBACKEND=Agg $(PLOT_PYTHON) figures/make_lesson_27_traces.py
 
 tidy:
 	$(LATEXMK) -c $(WRAPPERS)

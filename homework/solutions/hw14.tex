@@ -44,7 +44,7 @@ The infinite-medium group balance is
 \begin{equation}
 \Sigma_{r,g}\phi_g
 = S_g
-+ \sum_{\substack{h=1\\h\ne g}}^3 \Sigma_{s,g\leftarrow h}\phi_h
++ \sum_{\substack{g'=1\\g'\ne g}}^3 \Sigma_{s,g\leftarrow g'}\phi_{g'}
 + \frac{\chi_g}{k_\infty}s_f''' .
 \label{eq:hw14-general-balance}
 \end{equation}
@@ -52,7 +52,7 @@ For Problem~1 there is no fission source, so the final term is zero.  Removal
 from a group counts absorption plus scattering out of that group:
 \[
 \Sigma_{r,g}=\Sigma_{a,g}
-+\sum_{\substack{h=1\\h\ne g}}^3 \Sigma_{s,h\leftarrow g}.
++\sum_{\substack{g'=1\\g'\ne g}}^3 \Sigma_{s,g'\leftarrow g}.
 \]
 
 \noindent\textit{Prepare the cross-section data.}
@@ -203,65 +203,78 @@ N_U=\frac{N_C}{R},\qquad
 N^{(235)}=0.02\,\frac{N_C}{R},\qquad
 N^{(238)}=0.98\,\frac{N_C}{R}.
 \]
-Let
+Define $c=N_C10^{-24}=0.113416984$ and let
 \[
-c=N_C10^{-24}=0.113416984.
+\Sigma_{x,g}^{(U)}
+=c\left(0.02\sigma_{x,g}^{(235)}+0.98\sigma_{x,g}^{(238)}\right),
+\qquad x\in\{f,a,\gamma\}.
 \]
-For any microscopic reaction coefficient in uranium, define the enrichment
-average
-\[
-u_{x,g}=0.02\sigma_{x,g}^{(235)}+0.98\sigma_{x,g}^{(238)}.
-\]
-From the prepared data in Problem~1,
+These are the macroscopic reaction coefficients for the enriched uranium
+mixture at $R=1$; the uranium contribution at general $R$ is
+$\Sigma_{x,g}^{(U)}/R$.  From the prepared data in Problem~1,
 \[
 \begin{array}{c|rrr}
-g & u_{f,g} & u_{a,g} & u_{\gamma,g}\\
+g & \Sigma_{f,g}^{(U)} & \Sigma_{a,g}^{(U)} & \Sigma_{\gamma,g}^{(U)}\\
 \hline
-1 & 0.32232 & 0.37958 & 0.05726\\
-2 & 0.47268264 & 24.36565761 & 23.89297497\\
-3 & 10.10001029 & 14.1916 & 4.09158971
+1 & 0.32232c & 0.37958c & 0.05726c\\
+2 & 0.47268264c & 24.36565761c & 23.89297497c\\
+3 & 10.10001029c & 14.1916c & 4.09158971c
 \end{array}
 \]
-in barns.  The corresponding uranium-mixture transfer coefficients are
-\[
-u_{s,2\leftarrow1}=0.02693037,\qquad
-u_{s,3\leftarrow2}=0.00690485
-\]
-in barns.
+in $\mathrm{cm^{-1}}$.
 
 \noindent\textit{Build the $R$-dependent macroscopic coefficients.}
-The absorption and fission coefficients are
+Define $\Sigma_{a,g}^{(C)}=c\sigma_{a,g}^{(C)}$ for the carbon contribution.
+The total absorption and fission coefficients are
 \[
 \Sigma_{a,g}(R)
-=c\left(\sigma_{a,g}^{(C)}+\frac{u_{a,g}}{R}\right),
+=\Sigma_{a,g}^{(C)}+\frac{\Sigma_{a,g}^{(U)}}{R},
 \qquad
-\Sigma_{f,g}(R)=c\frac{u_{f,g}}{R}.
+\Sigma_{f,g}(R)=\frac{\Sigma_{f,g}^{(U)}}{R}.
 \]
-The off-diagonal scattering transfers are
+For scattering, let $\Sigma_{s,g\leftarrow g'}^{(C)}$ and
+$\Sigma_{s,g\leftarrow g'}^{(U)}$ denote the carbon and enriched-uranium
+contributions, respectively, at $R=1$.  The off-diagonal transfers are
+\begin{center}
+\begin{tabular}{c|cc}
+\toprule
+Transfer & $\Sigma_{s,g\leftarrow g'}^{(C)}$ &
+$\Sigma_{s,g\leftarrow g'}^{(U)}$ \\
+\midrule
+$2\leftarrow1$ & $0.161702956c$ & $0.02693037c$\\
+$3\leftarrow2$ & $0.065914510c$ & $0.00690485c$\\
+\bottomrule
+\end{tabular}
+\end{center}
+All entries are in $\mathrm{cm^{-1}}$.  At general $R$,
 \[
-\Sigma_{s,2\leftarrow1}(R)
-=c\left(0.161702956+\frac{u_{s,2\leftarrow1}}{R}\right),
+\Sigma_{s,g\leftarrow g'}(R)
+=\Sigma_{s,g\leftarrow g'}^{(C)}
++\frac{\Sigma_{s,g\leftarrow g'}^{(U)}}{R},
 \]
-\[
-\Sigma_{s,3\leftarrow2}(R)
-=c\left(0.065914510+\frac{u_{s,3\leftarrow2}}{R}\right).
-\]
+and all other off-diagonal transfers are zero.
 
 \noindent\textit{Solve the homogeneous eigenvalue problem.}
-For an infinite homogeneous multiplying medium, the source-free group
-balances are
-\begin{align}
-(\Sigma_{a,1}+\Sigma_{s,2\leftarrow1})\phi_1
-  &= \frac{s_f'''}{k_\infty},\\
-(\Sigma_{a,2}+\Sigma_{s,3\leftarrow2})\phi_2
-  &= \Sigma_{s,2\leftarrow1}\phi_1,\\
-\Sigma_{a,3}\phi_3 &= \Sigma_{s,3\leftarrow2}\phi_2,
-\label{eq:hw14-eig-balances}
-\end{align}
-where
+The fission production is
 \[
 s_f'''=\sum_{g=1}^3 \nu\Sigma_{f,g}(R)\phi_g .
 \]
+For an infinite homogeneous multiplying medium, the source-free group
+balances are
+\[
+\Sigma_{r,g}(R)=\Sigma_{a,g}(R)
++\sum_{\substack{g'=1\\g'\ne g}}^3\Sigma_{s,g'\leftarrow g}(R).
+\]
+\begin{equation}
+\Sigma_{r,g}(R)\phi_g
+=\sum_{\substack{g'=1\\g'\ne g}}^3
+ \Sigma_{s,g\leftarrow g'}(R)\phi_{g'}
+ +\frac{\chi_g}{k_\infty}s_f'''.
+\label{eq:hw14-eig-balances}
+\end{equation}
+where $\chi_g$ is the fission spectrum, as in Problem~1.  With the same
+group-1 fission-source approximation, these balances reduce to the triangular
+system implied by the nonzero transfers $2\leftarrow1$ and $3\leftarrow2$.
 FNRP Table~3.2 does not give $\bar{\nu}$ values, so the expression below uses
 a common named value $\nu$.  If group- or isotope-dependent yields are used,
 replace $\nu\Sigma_{f,g}$ by
@@ -273,7 +286,7 @@ Normalize the eigenvector by $\phi_1$:
 \[
 x(R)=\frac{\phi_2}{\phi_1},\qquad y(R)=\frac{\phi_3}{\phi_1}.
 \]
-The lower two rows of Eq.~\eqref{eq:hw14-eig-balances} give
+The group-2 and group-3 balances in Eq.~\eqref{eq:hw14-eig-balances} give
 \[
 x(R)=
 \frac{\Sigma_{s,2\leftarrow1}(R)}

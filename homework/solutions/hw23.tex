@@ -1,0 +1,127 @@
+% Adapted from ne630_problems/lesson_23/statement.tex at 9c3dc61.
+% Statements: current homework/markdown/HW23.md. See README for corrections.
+\noindent\textbf{Problem 1 [FNRP 10.13]}
+
+Consider uranium fuel in a thermal reactor with an initial enrichment of 4\%. For this problem, interpret the enrichment as the atom fraction of \({}^{235}\mathrm{U}\) in the initial uranium, with the balance consisting of \({}^{238}\mathrm{U}\). Assume that no \({}^{239}\mathrm{Pu}\) is initially present. Use the thermal cross sections in FNRP Table 3.2 and the approximations in FNRP Eqs. (10.31) and (10.37), including a constant \({}^{238}\mathrm{U}\) number density.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(a)} What is the \textbf{conversion ratio (CR)} at the beginning of core life?
+\item
+  \textbf{(b)} What is the conversion ratio after half of the initial \({}^{235}\mathrm{U}\) has been consumed; that is, when its number density is one-half of its initial value?
+\item
+  \textbf{(c)} At the same point in core life as in part (b), what fraction of the total fission power is produced by \({}^{239}\mathrm{Pu}\)? Assume equal recoverable energy per fission for \({}^{235}\mathrm{U}\) and \({}^{239}\mathrm{Pu}\), and neglect fission in \({}^{238}\mathrm{U}\).
+\end{itemize}
+
+\textbf{Hint:} Use fluence to identify the point at which half of the initial \({}^{235}\mathrm{U}\) remains, then evaluate the corresponding \({}^{239}\mathrm{Pu}\) inventory.
+
+\begin{adaptedsolution}
+
+Write number densities relative to the initial uranium atom density $N_U$:
+$N_{28}=0.96N_U$, $N_{25}(0)=0.04N_U$, $N_{49}(0)=0$.
+Use Table 3.2 values, in barns,
+$\sigma_{\gamma,28}=2.42$, $\sigma_{a,25}=591$,
+$\sigma_{a,49}=973$, $\sigma_{f,25}=505$, $\sigma_{f,49}=698$.
+Under the stated constant-$N_{28}$ approximation,
+\[
+CR=\frac{\sigma_{\gamma,28}N_{28}}
+{\sigma_{a,25}N_{25}+\sigma_{a,49}N_{49}}.
+\]
+\textbf{(a)} Initially $\boxed{CR(0)=2.42(0.96)/[591(0.04)]=0.0982741}$.
+
+\textbf{(b)} With fluence $\Phi=\int_0^t\phi\,dt$,
+\[
+N_{25}=N_{25}(0)e^{-\sigma_{a,25}\Phi},\qquad
+\Phi_* =\frac{\ln2}{591\times10^{-24}}
+=1.17284\times10^{21}~\mathrm{cm^{-2}}.
+\]
+Using the specified effective immediate breeding approximation,
+\[
+\frac{N_{49}(\Phi_*)}{N_U}
+=\frac{2.42}{973}(0.96)[1-e^{-973\times10^{-24}\Phi_*}]
+=0.00162494.
+\]
+Hence $\boxed{CR(\Phi_*)=0.173359}$.
+
+\textbf{(c)} Equal fission energies and negligible U-238 fission imply
+\[
+\boxed{\frac{P_{Pu}}{P_{total}}=
+\frac{698(0.00162494)}{505(0.02)+698(0.00162494)}
+=0.100960\simeq10.10\%}.
+\]
+Retain unrounded inventories until the final division. Absorption (not just
+fission) removes fissile atoms in $CR$ and in the depletion exponent.
+
+\end{adaptedsolution}
+
+\newpage
+\noindent\textbf{Problem 2 [FNRP 10.14]}
+
+Thorium-232 is a fertile nuclide that can be transmuted to fissile uranium-233 through the following chain:
+
+\[
+{}^{232}_{90}\mathrm{Th}
+\xrightarrow{(n,\gamma)}{}^{233}_{90}\mathrm{Th}
+\xrightarrow[22~\mathrm{min}]{\beta^-}{}^{233}_{91}\mathrm{Pa}
+\xrightarrow[27.4~\mathrm{days}]{\beta^-}{}^{233}_{92}\mathrm{U}.
+\]
+
+The times shown are half-lives. A fresh core initially contains only \({}^{232}\mathrm{Th}\) and \({}^{235}\mathrm{U}\), so the initial number densities of \({}^{233}\mathrm{Pa}\) and \({}^{233}\mathrm{U}\) are zero. Assume a constant \({}^{232}\mathrm{Th}\) number density, constant neutron flux \(\phi\), and constant effective microscopic cross sections. Neutron capture in thorium therefore occurs at the constant rate \(\Sigma_a^{\mathrm{Th}}\phi\) per unit volume, with thorium absorption treated as radiative capture in this model.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(a)} Neglect the short half-life of \({}^{233}\mathrm{Th}\) by treating its decay to \({}^{233}\mathrm{Pa}\) as instantaneous. Write and solve the differential equation for the \({}^{233}\mathrm{Pa}\) number density as a function of time. Include both radioactive decay and neutron absorption losses; absorption in \({}^{233}\mathrm{Pa}\) cannot be neglected.
+\item
+  \textbf{(b)} Write and solve the differential equation for the \({}^{233}\mathrm{U}\) number density as a function of time. Include production from \({}^{233}\mathrm{Pa}\) decay and removal by neutron absorption, including fission. Neglect radioactive decay of \({}^{233}\mathrm{U}\) on the timescale of interest.
+\end{itemize}
+
+Give symbolic solutions in terms of the specified production rate, flux, microscopic absorption cross sections, and the \({}^{233}\mathrm{Pa}\) decay constant. State the initial conditions used in each part.
+
+\begin{adaptedsolution}
+
+Define $Q=\Sigma_a^{Th}\phi$, $a=\lambda_{Pa}+\sigma_a^{Pa}\phi$,
+$b=\sigma_a^U\phi$, and
+$\lambda_{Pa}=\ln2/[27.4(86400)]~\mathrm{s^{-1}}$.
+The initial conditions are $P(0)=U(0)=0$.
+
+\textbf{(a)} Instantaneous Th-233 decay makes $Q$ the Pa-233 production rate:
+\[
+\dot P+aP=Q,\qquad
+\frac{d}{dt}(Pe^{at})=Qe^{at},\qquad
+\boxed{P(t)=\frac Qa(1-e^{-at})}.
+\]
+For a nonzero initial inventory the added term is $+P(0)e^{-at}$,
+not the negative sign printed in the legacy intermediate expression.
+Every integrating-factor exponent includes its time variable.
+
+\textbf{(b)} Only radioactive Pa decay produces U-233; Pa absorption is a loss:
+\[
+\dot U+bU=\lambda_{Pa}P,\qquad
+U(t)=\lambda_{Pa}\int_0^t P(s)e^{-b(t-s)}\,ds.
+\]
+For $a\ne b$ and $b>0$,
+\[
+\boxed{U(t)=\frac{\lambda_{Pa}Q}{a}
+\left[\frac{1-e^{-bt}}b-
+\frac{e^{-at}-e^{-bt}}{b-a}\right]}.
+\]
+The continuous equal-rate limit, useful for robust evaluation, is
+\[
+U(t)\big|_{b=a}=\frac{\lambda_{Pa}Q}{a}
+\left[\frac{1-e^{-at}}a-te^{-at}\right].
+\]
+If $b=0$, replace the first bracketed term by $t$; uranium then accumulates
+without a finite equilibrium. For $a,b>0$,
+\[
+P_\infty=Q/a,\qquad U_\infty=\lambda_{Pa}Q/(ab).
+\]
+Checks: $P(0)=U(0)=0$, $P'(0)=Q$, $U'(0)=0$,
+$U(t)\sim\lambda_{Pa}Qt^2/2$ near zero; the steady production/loss rates balance.
+The verification script compares these formulas to an independent
+\texttt{solve\_ivp} solution for unequal rates, equal rates, and zero U absorption.
+The symbolic answer requires no extra Pa cross-section estimate or assumed
+fuel density, so none is imported from the legacy optional numerical example.
+
+\end{adaptedsolution}

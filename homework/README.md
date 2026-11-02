@@ -18,6 +18,7 @@ are:
 - [HW16.md](markdown/HW16.md)
 - [HW17.md](markdown/HW17.md)
 - [HW18.md](markdown/HW18.md)
+- [HW19.md](markdown/HW19.md)
 - [HW20.md](markdown/HW20.md)
 - [HW21.md](markdown/HW21.md)
 - [HW22.md](markdown/HW22.md)
@@ -50,6 +51,7 @@ Canvas assignment's Rich Content Editor in HTML view:
 - [HW16.html](html/HW16.html)
 - [HW17.html](html/HW17.html)
 - [HW18.html](html/HW18.html)
+- [HW19.html](html/HW19.html)
 - [HW20.html](html/HW20.html)
 - [HW21.html](html/HW21.html)
 - [HW22.html](html/HW22.html)
@@ -69,6 +71,7 @@ For later homework, run the converter from `../build` (substitute the desired
 homework number):
 
     cd ../build
+    python3 convert_to_canvas.py ../homework/markdown/HW19.md ../homework/html/HW19.html
     python3 convert_to_canvas.py ../homework/markdown/HW20.md ../homework/html/HW20.html
     python3 convert_to_canvas.py ../homework/markdown/HW21.md ../homework/html/HW21.html
     python3 convert_to_canvas.py ../homework/markdown/HW22.md ../homework/html/HW22.html
@@ -98,7 +101,10 @@ Problem 1 of `ne630_problems/lesson_16/statement.tex` is assigned as Homework
 15. The remaining two problems from that source form Homework 16. Source
 Lessons 17 and 18 supply matching Homeworks 17 and 18. This split is recorded
 in each Markdown and solution source. Source Lessons 20 and 21 supply matching
-Homeworks 20 and 21; there is no Homework 19 source in `ne630_problems`.
+Homeworks 20 and 21. Homework 19 was entered directly in Canvas; its statement
+was supplied by Jeremy on 2026-11-02 and is now retained here. It uses the
+Lesson 19 SFR unit-cell notebook and targets **k-infinity = 1**, not the
+notebook's illustrative finite-system target 1/0.90.
 Homework 22 retains all four parts of the xenon problem from Source Lesson 22,
 with the control-rod model and fixed full-power conditions made explicit for
 the xenon-worth comparisons.

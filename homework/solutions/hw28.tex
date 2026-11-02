@@ -1,0 +1,153 @@
+% Adapted from ne630_problems/lesson_28/statement.tex and HW28_sol.ipynb,
+% commit 9c3dc61. Source-based draft; no current HW28 assignment found.
+% Correct missing n factor; supply previously absent bonus solution and limits.
+\noindent\textit{Source-based draft: verify against the assigned HW28.}
+
+\medskip
+\noindent\textbf{Problem 1 [FNRP 5.9].}
+Find the asymptotic periods of U-235-, Pu-239-, and U-233-fueled reactors
+when (a) one cent of reactivity is added to an initially critical system,
+and (b) one cent is withdrawn.
+
+\begin{adaptedsolution}
+The inhour relation for the dominant growth rate $\omega$ is
+\[
+\rho=\Lambda\omega+\sum_i\frac{\beta_i\omega}{\omega+\lambda_i}.
+\]
+For small reactivity, $|\omega|\ll\lambda_i$ and
+$\Lambda\ll\sum_i\beta_i/\lambda_i$ give
+\[
+\rho\simeq\omega\sum_i\frac{\beta_i}{\lambda_i},\qquad
+\lambda_{eff}=\frac{\beta}{\sum_i\beta_i/\lambda_i},\qquad
+\boxed{T=\frac1\omega\simeq\frac{\beta}{\lambda_{eff}\rho}}.
+\]
+One cent means $\rho=\pm0.01\beta$, not 0.01 in absolute reactivity.
+Using the six-group data in the source notebook (common listed half-lives
+$56,23,6.2,2.3,0.61,0.23$ s), the results are
+\begin{center}\begin{tabular}{lrrr}
+\toprule
+Fuel&$\lambda_{eff}$ ($\mathrm{s^{-1}}$)&$T$ for $+1$ cent (s)&$T$ for $-1$ cent (s)\\\midrule
+U-235&0.0766409&1304.79&$-1304.79$\\
+Pu-239&0.0636875&1570.17&$-1570.17$\\
+U-233&0.0494377&2022.75&$-2022.75$\\\bottomrule
+\end{tabular}\end{center}
+For reproducibility the respective six-group $\beta_i$ values are
+\[
+\begin{array}{c|rrrrrr}
+&1&2&3&4&5&6\\\hline
+10^5\beta_i^{235}&21&142&128&257&75&27\\
+10^5\beta_i^{239}&7&63&44&69&18&9\\
+10^5\beta_i^{233}&23&78&64&74&14&8
+\end{array}
+\]
+The approximate periods in minutes are $\pm21.746$, $\pm26.169$, and
+$\pm33.712$, respectively. A negative period denotes exponential decay.
+Equal positive/negative magnitudes hold only to leading order in small
+reactivity. Exact six-group periods require the rightmost inhour root and
+a specified $\Lambda$; the assignment gives none for this problem.
+\end{adaptedsolution}
+
+\newpage
+\noindent\textbf{Problem 2.}
+An initially critical reactor has $n_0=10^6~\mathrm{cm^{-3}}$ and equilibrium
+precursors. At $t=0$ impose a constant $\rho_0=\pm0.2\beta$, with
+$\beta=0.0065$, $\lambda=0.08~\mathrm{s^{-1}}$, and $\Lambda=5\times10^{-5}$ s.
+Find $n,c$ at 0, 0.1, and 10 s, showing roots and coefficients. Use
+\[
+\dot n=\frac{\rho_0-\beta}{\Lambda}\,n+\lambda c,\qquad
+\dot c=\frac\beta\Lambda n-\lambda c.
+\]
+The factor $n$ in the first equation corrects a typo in the source statement.
+
+\begin{adaptedsolution}
+The initial condition is $c_0=\beta n_0/(\lambda\Lambda)=1.625\times10^9$
+cm$^{-3}$. With exponential modes, the characteristic equation is
+\[
+\omega^2+B\omega+C=0,\qquad
+B=\lambda+\frac{\beta-\rho_0}{\Lambda},\quad
+C=-\frac{\lambda\rho_0}{\Lambda}.
+\]
+Let $\omega_1>\omega_2$ be its roots. Then
+\begin{align*}
+n(t)&=a_1e^{\omega_1t}+a_2e^{\omega_2t},&
+c(t)&=b_1e^{\omega_1t}+b_2e^{\omega_2t},\\
+a_1&=\frac{n_0(\rho_0/\Lambda-\omega_2)}{\omega_1-\omega_2},&
+a_2&=n_0-a_1,\\
+b_i&=\frac{\beta a_i}{\Lambda(\omega_i+\lambda)}.
+\end{align*}
+These are growth/decay rates in $\mathrm{s^{-1}}$, not time constants in seconds.
+\begin{center}\begin{tabular}{lrr}
+\toprule
+Quantity&$+0.2\beta$&$-0.2\beta$\\\midrule
+$B$ ($\mathrm{s^{-1}}$)&104.08&156.08\\
+$C$ ($\mathrm{s^{-2}}$)&$-2.08$&2.08\\
+$\omega_1$ ($\mathrm{s^{-1}}$)&0.0199807914&$-0.0133276373$\\
+$\omega_2$ ($\mathrm{s^{-1}}$)&$-104.099981$&$-156.066672$\\
+$a_1$ ($\mathrm{cm^{-3}}$)&$1.24952006\times10^6$&$8.33475710\times10^5$\\
+$a_2$ ($\mathrm{cm^{-3}}$)&$-2.49520061\times10^5$&$1.66524290\times10^5$\\
+$b_1$ ($\mathrm{cm^{-3}}$)&$1.62468816\times10^9$&$1.62513878\times10^9$\\
+$b_2$ ($\mathrm{cm^{-3}}$)&$3.11840165\times10^5$&$-1.38782098\times10^5$\\\bottomrule
+\end{tabular}\end{center}
+\begin{center}\begin{tabular}{rrrr}
+\toprule
+$\rho_0/\beta$&$t$ (s)&$n$ ($\mathrm{cm^{-3}}$)&$c$ ($\mathrm{cm^{-3}}$)\\\midrule
+$+0.2$&0&$1.000000\times10^6$&$1.625000\times10^9$\\
+$+0.2$&0.1&$1.252012\times10^6$&$1.627938\times10^9$\\
+$+0.2$&10&$1.525874\times10^6$&$1.984017\times10^9$\\
+$-0.2$&0&$1.000000\times10^6$&$1.625000\times10^9$\\
+$-0.2$&0.1&$8.323657\times10^5$&$1.622974\times10^9$\\
+$-0.2$&10&$7.294773\times10^5$&$1.422359\times10^9$\\\bottomrule
+\end{tabular}\end{center}
+Checks: $a_1+a_2=n_0$, $b_1+b_2=c_0$,
+$\dot n(0^+)=\rho_0n_0/\Lambda$, and $\dot c(0^+)=0$.
+The numerical values agree with an independent matrix-exponential solution.
+\end{adaptedsolution}
+
+\newpage
+\noindent\textbf{Problem 3 (Bonus).}
+For a constant step $\rho$ from critical equilibrium, derive the familiar
+two-mode approximation
+\[
+n(t)\simeq n_0\left[
+\frac\rho{\rho-\beta}e^{(\rho-\beta)t/\Lambda}
++\frac\beta{\beta-\rho}e^{\lambda\rho t/(\beta-\rho)}\right].
+\]
+The source specifies $|\beta-\rho|/(\lambda\Lambda)\gg1$ and
+$\beta/(\lambda\Lambda)\gg1$. State the additional restriction needed
+near prompt criticality.
+
+\begin{draftsolution}
+Put $d=\beta-\rho$. The exact equation from Problem 2 is
+\[
+\Lambda\omega^2+(d+\lambda\Lambda)\omega-\lambda\rho=0.
+\]
+Away from $d=0$, separated fast and slow scales require
+\[
+\frac{\lambda\Lambda}{|d|}\ll1,\qquad
+\frac{\lambda\Lambda|\rho|}{d^2}\ll1.
+\]
+The second condition does not follow in general from the two conditions
+printed in the source. Under these restrictions,
+\[
+\omega_f\simeq-\frac d\Lambda=\frac{\rho-\beta}\Lambda,
+\qquad \omega_s\simeq\frac{\lambda\rho}d.
+\]
+Apply $a_f+a_s=n_0$ and
+$\omega_f a_f+\omega_s a_s=\rho n_0/\Lambda$.
+To leading order in the scale separation,
+\[
+a_f\simeq-\frac\rho d n_0=\frac\rho{\rho-\beta}n_0,
+\qquad a_s\simeq\frac\beta d n_0,
+\]
+which proves the displayed approximation. It satisfies $n(0)=n_0$ exactly,
+while its initial derivative agrees only to the retained asymptotic order.
+For $\rho<\beta$, the fast mode decays; the amplitude of the remaining
+slow mode is the prompt-jump estimate $n_0\beta/(\beta-\rho)$.
+
+\textbf{Why the qualification matters.} For example, take
+$\beta=0.0065$, $\lambda\Lambda=10^{-8}$, and $d=10^{-6}$.
+Then $|d|/(\lambda\Lambda)=100$ and $\beta/(\lambda\Lambda)=650000$, yet
+$\lambda\Lambda|\rho|/d^2=64.99$, so the proposed root separation fails.
+As $\rho\to\beta$, use the exact quadratic; the displayed approximation
+is singular there. This derivation replaces the legacy ``office hours'' answer.
+\end{draftsolution}

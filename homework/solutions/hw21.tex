@@ -1,0 +1,182 @@
+% Adapted from ne630_problems/lesson_21/statement.tex at 9c3dc61.
+% Statements: current homework/markdown/HW21.md. See README for corrections.
+\noindent\textbf{Problem 1}
+
+Consider the hot, full-power conditions from Homework 20, Problem 2(e). In a PWR, excess reactivity is usually balanced with boric acid dissolved in the coolant rather than by partially inserting control rods, which would produce asymmetric axial power distributions. Set \(x=0\) and assume
+
+\[
+\Sigma^{\mathrm{M}}_{a,2}
+=N_{\mathrm{H}}\sigma^{\mathrm{H}}_a
++N_{\mathrm{O}}\sigma^{\mathrm{O}}_a
++N_{\mathrm{B}}\sigma^{\mathrm{B}}_a.
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(a)} What concentration of \({}^{10}\mathrm{B}\) in the water, in parts per million (ppm), is needed to achieve criticality? Use the cross sections in FNRP Table 3.2.
+\item
+  \textbf{(b)} Compute the moderator temperature coefficient, \(\alpha_m\), with and without this boron concentration. Assume that water has a coefficient of thermal expansion \(\beta_m=0.004~\mathrm{K^{-1}}\). How does adding boric acid affect the moderator temperature coefficient?
+\end{itemize}
+
+\begin{adaptedsolution}
+
+\textbf{(a) Critical boron.} Use $C_{fp}=0.7759321~\mathrm{cm^{-1}}$
+from HW20. Let $\Sigma_{a,B}^{ref}$ be the boron contribution at the
+reference water density $1~\mathrm{g/cm^3}$. With rods withdrawn,
+\[
+1=\frac{C_{fp}}{\Sigma_{a,f}+2\varsigma(0.66)
+(\Sigma_{a,m}^{300}+\Sigma_{a,B}^{ref})}.
+\]
+Hence $\Sigma_{a,B}^{ref}=0.1653076~\mathrm{cm^{-1}}$ and, using
+$\sigma_{a,B10}=3409$ b,
+\[
+N_{B10}^{hot}=0.66\frac{\Sigma_{a,B}^{ref}}{3409\times10^{-24}}
+=3.20044\times10^{19}~\mathrm{cm^{-3}}.
+\]
+\textbf{The assignment does not specify the ppm convention.} State it:
+\begin{align*}
+10^6\frac{N_{B10}}{N_{\mathrm{H_2O}}}&=\boxed{1449.43}
+&&\text{B-10 atoms per million water molecules},\\
+10^6\frac{m_{B10}}{m_{water}}&=\boxed{805.24}
+&&\text{B-10 mass ppm relative to water}.
+\end{align*}
+With 20 atom-\% B-10, $M_B\simeq10.8$ and $M_{water}=18$,
+the corresponding natural-boron mass ratio is about $4348$ ppm relative to
+water, or $\boxed{4329}$ ppm by mass of solution. These conversions neglect
+solute volume and the effect of acid hydrogen/oxygen on the simple model.
+The source's $7247$ value is \emph{natural-boron atoms per million water
+molecules}, not mass ppm. \href{https://docs.openmc.org/en/stable/pythonapi/generated/openmc.model.borated_water.html}{OpenMC's \texttt{borated\_water}} takes
+\emph{elemental-boron mass ppm}, so those numbers must not be compared directly.
+
+\textbf{(b) Moderator coefficient.} At fixed boron/water ratio and fuel
+temperature, all moderator absorption terms and slowing-down power scale
+with density. Define the textbook logarithmic coefficient
+$a_m=\partial\ln k/\partial T_m$ and the strict reactivity coefficient
+$\alpha_m=\partial\rho/\partial T_m$. Since $\rho=1-1/k$,
+\[
+a_m=-\beta_m[\ln(1/p)-(1-f)],\qquad
+\alpha_m=\frac{a_m}{k}.
+\]
+They coincide at criticality, but not for the strongly supercritical
+unborated comparison. Here $\beta_m=0.004~\mathrm{K^{-1}}$ and
+$p=0.7292725$.
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+Coolant & $f$ & $k_{eff}$ & $10^5a_m$ & $10^5\alpha_m$\\\midrule
+No boron&0.942173&1.484148&$-103.15$&$-69.50$\\
+Critical boron&0.634824&1.000000&$+19.79$&$+19.79$\\\bottomrule
+\end{tabular}
+\end{center}
+The last two columns are per kelvin; $10^5\alpha_m$ is in pcm/K.
+The source reports $10^5a_m$ as its MTC. Either convention is acceptable
+if defined and applied consistently. Boron makes the coefficient more
+positive: density loss now removes appreciably more absorption, offsetting
+the reduced resonance escape probability. In this approximation it reverses
+the sign. The verification script checks both derivatives by central differences.
+
+\end{adaptedsolution}
+
+\newpage
+\noindent\textbf{Problem 2 [Adapted from FNRP 9.1]}
+
+FNRP Table 4.2 gives the four factors for a pressurized water reactor at \(300~\mathrm{K}\). Assume the reactor is fueled with \(\mathrm{UO}_2\) pins having diameter \(1.1~\mathrm{cm}\) and density \(11.0~\mathrm{g\,cm^{-3}}\). Determine the fuel temperature coefficient and plot its value from 300 to \(1000~\mathrm{K}\).
+
+\begin{adaptedsolution}
+
+The source uses $p(300)=0.63$ from Table 4.2. With the specified $D=1.1$ cm,
+\[
+\bar\gamma=0.0061+0.0047\frac4{11(1.1)}=0.00765372~\mathrm{K^{-1/2}}.
+\]
+Holding the other factors fixed,
+\[
+p(T)=p(300)^{1+\bar\gamma(\sqrt T-\sqrt{300})},\qquad
+\boxed{a_f=\frac{\partial\ln k}{\partial T_f}
+=-\frac{\bar\gamma\ln(1/0.63)}{2\sqrt{T_f}}
+=-\frac{0.00176814}{\sqrt{T_f}}~\mathrm{K^{-1}}}.
+\]
+The source's coefficient is $a_f$; if $\alpha_f$ means $d\rho/dT_f$,
+divide by the state's $k$. Its value requires a specified nonleakage/control
+normalization. Values of $10^5a_f$ at 300, 600, and 1000 K are respectively
+$-10.208$, $-7.218$, and $-5.591~\mathrm{K^{-1}}$.
+\begin{figure}[H]\centering
+\includegraphics[width=.74\textwidth]{hw21_fuel_coefficient.png}
+\caption{Fuel-temperature dependence in the stated resonance-integral model.}
+\end{figure}
+The coefficient is negative and decreases in magnitude as $T_f$ rises.
+
+\end{adaptedsolution}
+
+\newpage
+\noindent\textbf{Problem 3 [Bonus]}
+
+Using the OpenMC model of a PWR fuel element at nominal full-power conditions and assuming \(P_{\mathrm{NL}}=0.95\):
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(a)} Determine the critical boron concentration in ppm. Recall that the model uses \texttt{openmc.\allowbreak model.\allowbreak borated\_water} to define \texttt{water}.
+\item
+  \textbf{(b)} Compute \(\alpha_m\) with and without boron and include the uncertainty. \texttt{openmc.\allowbreak model.\allowbreak borated\_water} automatically computes the water density for a specified temperature. How do these values compare with the results from Problem 1?
+\item
+  \textbf{(c)} Compute \(\alpha_f\) with and without boron and include the uncertainty. Set the fuel temperature with \texttt{uo2.temperature\ =\ T\_fuel}; broadened-resonance data are available at 600, 900, and \(1200~\mathrm{K}\). How does the result compare with Problem 2 at the same fuel temperature?
+\end{itemize}
+
+For independent quantities \(x\) and \(y\) with uncertainties \(\sigma_x\) and \(\sigma_y\), the uncertainty of \(z=x-y\) is \(\sigma_z=\sqrt{\sigma_x^2+\sigma_y^2}\).
+
+\begin{adaptedsolution}
+
+\textbf{Legacy transport benchmark, not a new OpenMC execution.}
+The source solution used $r_f=0.45$ cm, $r_c=0.46$ cm, pitch $1.2$ cm,
+10,000 particles/batch, 100 batches, and 10 inactive batches. Its
+\emph{cell} eigenvalues, denoted $k_{cell}$ here, were:
+\begin{center}\begin{tabular}{rrrr}
+\toprule
+Natural B mass ppm&$T_f$ (K)&$T_m$ (K)&$k_{cell}$ (one standard deviation)\\\midrule
+0&1200&600&$1.28397\pm0.00096$\\
+0&900&600&$1.29557\pm0.00112$\\
+0&1200&610&$1.27228\pm0.00096$\\
+4800&1200&600&$1.05104\pm0.00097$\\
+4800&900&600&$1.05924\pm0.00090$\\
+4800&1200&610&$1.05259\pm0.00094$\\\bottomrule
+\end{tabular}\end{center}
+With $k_{eff}=0.95k_{cell}$, the target is $k_{cell}=1/0.95=1.052632$,
+\emph{not} $k_{eff}=1.052632$. At 4800 ppm the source's result gives
+$k_{eff}=0.998488\pm0.000922$, about 1.64 standard deviations below unity.
+Thus 4800 ppm is a near-critical legacy estimate, not a precisely established root.
+For a new model, bracket and solve $0.95k_{cell}(b)-1=0$, then verify the
+chosen concentration with an independent seed; report concentration uncertainty
+from $\sigma_b\simeq\sigma_k/|dk_{cell}/db|$. A single borated tally cannot
+determine a reliable local slope or an exact critical concentration.
+
+For independent tallies at two temperatures, use
+\begin{align*}
+\widehat a&=\frac{\ln(k_1/k_0)}{\Delta T},&
+\sigma_a&=\frac{\sqrt{(\sigma_1/k_1)^2+(\sigma_0/k_0)^2}}{|\Delta T|},\\
+\widehat\alpha&=\frac{1/(P_{NL}k_0)-1/(P_{NL}k_1)}{\Delta T},&
+\sigma_\alpha&=\frac{\sqrt{[\sigma_1/(P_{NL}k_1^2)]^2+
+[\sigma_0/(P_{NL}k_0^2)]^2}}{|\Delta T|}.
+\end{align*}
+Here the $k_i$ in these expressions are cell eigenvalues and $P_{NL}$ is fixed.
+The resulting interval-average coefficients (all multiplied by $10^5$) are
+\begin{center}\begin{tabular}{lrr}
+\toprule
+Case & $\widehat a\pm\sigma_a$ & $\widehat\alpha\pm\sigma_\alpha$\\\midrule
+Fuel, no B (900--1200 K)&$-2.998\pm0.381$&$-2.447\pm0.311$\\
+Moderator, no B (600--610 K)&$-91.46\pm10.62$&$-75.33\pm8.75$\\
+Fuel, 4800 ppm (900--1200 K)&$-2.591\pm0.418$&$-2.584\pm0.417$\\
+Moderator, 4800 ppm (600--610 K)&$14.74\pm12.84$&$14.75\pm12.85$\\\bottomrule
+\end{tabular}\end{center}
+The source's sign/trend comparison survives, but the positive borated MTC
+is only about 1.15 standard deviations from zero. At 1200 K the simple
+Problem 2 formula gives $10^5a_f=-5.104$, larger in magnitude than these
+900--1200 K transport slopes; the geometry, spectrum, and derivative interval
+also differ. Compare conventions before comparing magnitudes.
+For a new run, change moderator temperature at fixed pressure and mass ppm,
+allowing \texttt{borated\_water} to recompute density; change only fuel
+temperature for the fuel derivative. Retain scattering and temperature data
+consistent with that model.
+
+
+\end{adaptedsolution}

@@ -1,0 +1,103 @@
+% Adapted from ne630_problems/lesson_22/statement.tex at 9c3dc61.
+% Statements: current homework/markdown/HW22.md. See README for corrections.
+\noindent\textbf{Problem 1}
+
+This problem builds on Homework 20, Problem 2 and Homework 21, Problem 1. After several days at full power, the concentration of \({}^{135}\mathrm{Xe}\) in the PWR reaches equilibrium. Assume that the thermal flux in the fuel at full power is
+
+\[
+\phi^{\mathrm{F}}_2=3\times10^{13}~\mathrm{cm^{-2}\,s^{-1}}.
+\]
+
+Use the iodine--xenon model from Lesson 22, with fission yields and half-lives from FNRP Chapter 10 and the absorption cross section from FNRP Table 3.2. For the reactivity comparisons below, use the control-rod model and full-power conditions from Homework 20, Problem 2(e), changing only the xenon concentration unless a different control-rod position is specified.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(a)} Determine the equilibrium number density of \({}^{135}\mathrm{Xe}\) in \(\mathrm{cm^{-3}}\).
+\item
+  \textbf{(b)} Compute the corresponding macroscopic absorption cross section, \(\Sigma_a^{\mathrm{fp}}\), in \(\mathrm{cm^{-1}}\), using the microscopic cross section in FNRP Table 3.2. Here, the superscript \(\mathrm{fp}\) denotes the fission-product contribution from xenon.
+\item
+  \textbf{(c)} With the control-rod fraction held at \(x=x_{\mathrm{fp}}\), the full-power critical setting from Homework 20, Problem 2(e), recompute the reactivity, \(\rho\), including equilibrium \({}^{135}\mathrm{Xe}\). This reactivity is called the \textbf{equilibrium xenon worth}.
+\item
+  \textbf{(d)} Suppose the reactor is shut down after reaching equilibrium at full power. Xenon is no longer removed by neutron absorption, so its concentration initially increases, peaks at \(11.3~\mathrm{h}\) after shutdown, and then decreases as it decays. Compute this peak concentration and repeat part (c) to determine the \textbf{peak xenon worth}. Does the reactor have sufficient excess reactivity to return to full power? Check by evaluating the reactivity with the peak xenon concentration and the control rods fully withdrawn (\(x=0\)).
+\end{itemize}
+
+The ability to return to full power after a short shutdown or a period of low-power operation is particularly important for naval reactors.
+
+\begin{adaptedsolution}
+
+Use the HW20 full-power fuel-volume fission cross section
+$\Sigma_{f,f}=0.3716912~\mathrm{cm^{-1}}$, not a cell-volume average,
+and the specified thermal flux. The source's textbook inputs are
+\[
+\gamma_I=0.0639,\quad\gamma_X=0.00237,\quad
+\lambda_I=\frac{\ln2}{6.7(3600)},\quad
+\lambda_X=\frac{\ln2}{9.2(3600)},\quad
+\sigma_X=2.64\times10^{-18}~\mathrm{cm^2}.
+\]
+Neglect iodine absorption. Let $F=\Sigma_{f,f}\phi$. Then
+\[
+\dot I=\gamma_I F-\lambda_I I,\qquad
+\dot X=\gamma_X F+\lambda_I I-(\lambda_X+\sigma_X\phi)X.
+\]
+\textbf{(a)--(b)} At equilibrium,
+\[
+I_0=\frac{\gamma_I F}{\lambda_I}=2.47946\times10^{16},\qquad
+\boxed{X_0=\frac{(\gamma_I+\gamma_X)F}{\lambda_X+\sigma_X\phi}
+=7.38012\times10^{15}~\mathrm{cm^{-3}}},
+\]
+\[
+\boxed{\Sigma_{a,X}=\sigma_X X_0=0.0194835~\mathrm{cm^{-1}}}.
+\]
+\textbf{(c)} The xenon-free state at $x_{fp}=0.6615676$ is critical, so
+its denominator equals $C_{fp}=0.7759321~\mathrm{cm^{-1}}$. Adding xenon gives
+\[
+k=\frac{C_{fp}}{C_{fp}+\sigma_X X},\qquad
+\boxed{\rho_X=-\frac{\sigma_X X}{C_{fp}}}.
+\]
+Thus $k=0.975505$ and $\boxed{\rho_{X,eq}=-0.0251098=-2511~\mathrm{pcm}}$.
+This exact reactivity difference is not the fractional change in $k$.
+
+\textbf{(d)} After zero-flux shutdown,
+\[
+I(t)=I_0e^{-\lambda_I t},\qquad
+X(t)=X_0e^{-\lambda_X t}
++\frac{\lambda_I I_0}{\lambda_I-\lambda_X}
+(e^{-\lambda_X t}-e^{-\lambda_I t}).
+\]
+\textbf{Assignment/source inconsistency:} the stated 11.3 h is not the
+maximum for these inputs. Evaluating the requested time gives
+\[
+\boxed{X(11.3~\mathrm h)=1.37496\times10^{16}~\mathrm{cm^{-3}}},\qquad
+\boxed{\rho_X(11.3~\mathrm h)=-0.0467809=-4678~\mathrm{pcm}}.
+\]
+For the actual maximum, define $A=\lambda_I I_0/(\lambda_I-\lambda_X)$.
+Differentiation gives
+\[
+t_{max}=\frac{\ln[\lambda_I A/(\lambda_X(X_0+A))]}{\lambda_I-\lambda_X}
+=\boxed{8.51278~\mathrm h}.
+\]
+The corresponding results are
+\[
+\boxed{X_{max}=1.41121\times10^{16}~\mathrm{cm^{-3}}},\qquad
+\boxed{\rho_{X,max}=-0.0480144=-4801~\mathrm{pcm}}.
+\]
+For grading, accept the explicitly requested 11.3-h evaluation while noting
+that a differentiated maximum is different. Correct the assignment before
+requiring a unique peak-time answer.
+
+At the actual maximum with rods withdrawn,
+\[
+\rho(x=0,X_{max})=1-\frac{D(0.66)+\sigma_X X_{max}}{C_{fp}}
+=\boxed{0.278198>0}.
+\]
+The model therefore has sufficient available control worth. This comparison
+holds hot full-power material conditions fixed as instructed; it is not the
+actual reactivity trajectory of a cooling, shut-down core, and restart changes
+the subsequent xenon dynamics.
+\begin{figure}[H]\centering
+\includegraphics[width=.97\textwidth]{hw22_xenon.png}
+\caption{Zero-flux xenon decay chain and its worth at fixed hot material conditions.}
+\end{figure}
+
+\end{adaptedsolution}

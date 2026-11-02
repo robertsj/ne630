@@ -1,0 +1,174 @@
+% Adapted from ne630_problems/lesson_20/statement.tex at 9c3dc61.
+% Statements: current homework/markdown/HW20.md. See README for corrections.
+\noindent\textbf{Problem 1}
+
+Suppose a sodium-cooled fast reactor is modeled in OpenMC and has \(k_{\mathrm{eff}}=1.00234\). Compute the reactivity, \(\rho\), and express it in each of the following units:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(a)} \(\Delta k/k\),
+\item
+  \textbf{(b)} percent,
+\item
+  \textbf{(c)} pcm,
+\item
+  \textbf{(d)} dollars, assuming all fission is from \({}^{235}\mathrm{U}\), and
+\item
+  \textbf{(e)} dollars, assuming all fission is from \({}^{239}\mathrm{Pu}\).
+\end{itemize}
+
+If you did not record the needed delayed-neutron fractions in class, use appropriate \(\beta\) values from FNRP Table~5.1.
+
+\begin{adaptedsolution}
+
+Use the exact definition before rounding:
+\[
+\rho=1-\frac1{1.00234}=0.00233453718.
+\]
+Thus (a)--(e) are respectively
+\[
+\boxed{0.00233454~\Delta k/k},\quad
+\boxed{0.233454\%},\quad\boxed{233.454~\mathrm{pcm}},\quad
+\boxed{0.359160\$},\quad\boxed{1.11168\$}.
+\]
+The dollar conversions use $\beta_{235}=0.0065$ and
+$\beta_{239}=0.0021$ from the source solution. One dollar is $\rho=\beta$;
+a dollar is not a fixed number of pcm for every fuel composition.
+
+\end{adaptedsolution}
+
+\newpage
+\noindent\textbf{Problem 2}
+
+Consider again the PWR described in FNRP Problem 4.6, which was studied in Homework 17. Walk through the basic steps that bring the reactor from cold shutdown conditions to criticality at full-power conditions using the modified four-factor formula, similar to FNRP Eq. (10.3):
+
+\[
+k_{\infty}
+=\overbrace{
+  \frac{\nu\Sigma^{\mathrm{F}}_{f,2}}
+  {\Sigma^{\mathrm{F}}_{a,2}
+   +\Sigma^{\mathrm{control}}_{a,2}
+   +\varsigma(V_{\mathrm{M}}/V_{\mathrm{F}})\Sigma^{\mathrm{M}}_{a,2}}
+}^{\eta f}p\epsilon.
+\]
+
+The subscript 2 indicates the thermal group (\(E<1~\mathrm{eV}\)), while the superscripts \(\mathrm{F}\), \(\mathrm{M}\), and \(\mathrm{control}\) indicate fuel, moderator, and control-rod values. Where needed, use the cross sections in FNRP Table 3.2.
+
+Using a programming language or spreadsheet to support your work is strongly recommended. Show the basic steps and enough intermediate results for a reader to follow the process. Keep your work organized because you will build on this solution in a future homework.
+
+\begin{itemize}
+\item
+  \textbf{(a)} Compute the four factors for \(T_f=T_m=300~\mathrm{K}\) (room temperature). Assume that the nonleakage probability is \(P_{\mathrm{NL}}=0.95\) and compute \(\rho\). This reactivity is the \textbf{excess reactivity}, \(\rho_{\mathrm{ex}}\): the core reactivity with all removable control, such as control rods and \href{https://www.nuclear-power.com/glossary/boron-10/boric-acid-chemical-shim/}{chemical shim}, completely removed.
+\item
+  \textbf{(b)} Suppose the \textbf{shutdown margin} is \(\rho_{\mathrm{sd}}=-4\%~\Delta k/k\); that is, with all control rods fully inserted, the core reactivity is \(-0.04\). The total \textbf{reactivity worth} of the control rods is
+
+  \[
+  \Delta\rho=\rho_{\mathrm{ex}}-\rho_{\mathrm{sd}}
+  =\rho_{\mathrm{ex}}+0.04.
+  \]
+
+  What must \(\Sigma^{\mathrm{control}}_{a,2}\) be in this \textbf{cold shutdown} state? The NRC definition of shutdown margin excludes the control assembly with the highest reactivity worth; this simplified model cannot make that distinction.
+\item
+  \textbf{(c)} Represent partial control-rod insertion by a fraction \(x\), so the corresponding macroscopic cross section is \(x\Sigma^{\mathrm{control}}_{a,2}\). As \(x\) ranges from 0 to 1, the core reactivity should range from \(\rho_{\mathrm{ex}}\) to \(-0.04\). Determine the value of \(x\) that makes the reactor critical. Call this value \(x_{\mathrm{cc}}\), where ``cc'' denotes cold critical.
+\item
+  \textbf{(d)} Next, run the reactor coolant pumps until the coolant and fuel reach \(600~\mathrm{K}\), corresponding to \textbf{hot zero-power} conditions. Assume the coolant density is \(0.66~\mathrm{g\,cm^{-3}}\). Recompute \(\rho\) using \(x=x_{\mathrm{cc}}\); this reactivity is the \textbf{temperature defect}. Then find the control-rod fraction that makes the reactor critical and call it \(x_{\mathrm{hzp}}\).
+\item
+  \textbf{(e)} Finally, bring the reactor to \textbf{full-power} conditions so the fuel temperature increases to \(1200~\mathrm{K}\). Recompute \(\rho\) using \(x=x_{\mathrm{hzp}}\); this reactivity is the \textbf{power defect}. Determine the corresponding critical control-rod fraction, \(x_{\mathrm{fp}}\).
+\end{itemize}
+
+\begin{adaptedsolution}
+
+\textbf{Model and conventions.}
+Retain the legacy HW20--22 numerical convention: $N_A=6.022\times10^{23}$,
+rounded UO$_2$ molar mass $270~\mathrm{g/mol}$, $D=1$ cm,
+$e=0.03$, $\rho_f=11~\mathrm{g/cm^3}$, $V_m/V_f=2$,
+$\varsigma=1.16$, $\epsilon=1.24$, $\nu=2.43$, and $P_{NL}=0.95$.
+Use $\xi\Sigma_{s,m}=1.28~\mathrm{cm^{-1}}$ at unit water density
+(the source's Table 3.1 value). HW17's microscopic scattering calculation
+instead gives a slightly different slowing-down power and hence $p$;
+do not mix those two numerical conventions within this homework chain.
+Thermal group cross sections are held fixed except for moderator density;
+this is the specified four-factor approximation, not a temperature-dependent
+transport calculation. The fuel and rod macroscopic cross sections are on
+the fuel-volume basis used in the stated formula.
+
+From Table 3.2, in barns, use
+$\sigma_{f,235}=505$, $\sigma_{a,235}=591$,
+$\sigma_{a,238}=2.42$, and
+$\sigma_{a,\mathrm{H_2O}}=2(0.295)+0.000169$.
+Then
+\begin{align*}
+N_f&=11N_A/270,&N_m&=N_A/18,\\
+\Sigma_{a,f}&=0.4925804~\mathrm{cm^{-1}},&
+\Sigma_{f,f}&=0.3716912~\mathrm{cm^{-1}},\\
+\Sigma_{a,m}^{300}&=0.01974443~\mathrm{cm^{-1}}.
+\end{align*}
+Let $d=\rho_m/(1~\mathrm{g/cm^3})$. The resonance model is
+\begin{align*}
+I_0&=4.45+26.6\sqrt{4/[11(1.1D)]}=19.743925~\mathrm b,\\
+\bar\gamma&=0.0061+0.0047[4/(11D)]=0.00780909~\mathrm{K^{-1/2}},\\
+I(T_f)&=I_0[1+\bar\gamma(\sqrt{T_f}-\sqrt{300})],\\
+p(T_f,d)&=\exp\left[-\frac{0.97N_f I(T_f)10^{-24}}{2(1.28)d}\right].
+\end{align*}
+The effective diameter $1.1D$ is used in $I_0$, not applied a second time
+to $\bar\gamma$; a consistently declared alternative convention deserves credit.
+
+For concise algebra define two quantities with units $\mathrm{cm^{-1}}$:
+\[
+C(T_f,d)=\nu\Sigma_{f,f}\epsilon p(T_f,d)P_{NL},\qquad
+D(d)=\Sigma_{a,f}+2\varsigma d\Sigma_{a,m}^{300}.
+\]
+Thus $k_{\mathrm{eff}}=C/[D+x\Sigma_{a,c}]$ and
+$\rho=1-(D+x\Sigma_{a,c})/C$.
+
+\textbf{(a) Cold, uncontrolled.}
+\[
+(\eta,f,p,\epsilon)=(1.833629,\ 0.914918,\ 0.832317,\ 1.24),
+\]
+\[
+k_\infty=1.731427,\quad k_{\mathrm{eff}}=1.644855,\quad
+\boxed{\rho_{\mathrm{ex}}=0.3920438}.
+\]
+\textbf{(b) Cold shutdown.} $k_{sd}=1/1.04=0.9615385$ gives
+\[
+\boxed{\Sigma_{a,c}=C(300,1)/k_{sd}-D(1)=0.3826049~\mathrm{cm^{-1}}}.
+\]
+The positive magnitude of the bank worth is $0.4320438$; insertion changes
+reactivity by its negative.
+
+\textbf{(c) Cold critical.} In general,
+\[
+\boxed{x(k;T_f,d)=\frac{C(T_f,d)/k-D(d)}{\Sigma_{a,c}}}.
+\]
+The division by $\Sigma_{a,c}$ is essential: it is absent in one displayed
+formula in the legacy answer, though present in its code.
+Putting $k=1$ gives $\boxed{x_{cc}=0.9074168}$.
+
+\textbf{(d)--(e) Heatup and power increase.}
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+State & $T_f$ (K)&$d$&$p$&critical $x$\\\midrule
+Cold &300&1.00&0.832317&0.907417\\
+Hot zero power &600&0.66&0.745520&0.706749\\
+Full power &1200&0.66&0.729272&0.661568\\\bottomrule
+\end{tabular}
+\end{center}
+Holding $x=x_{cc}$ while heating gives
+\[
+\boxed{\rho_{td}=1-\frac{D(0.66)+x_{cc}\Sigma_{a,c}}{C(600,0.66)}
+=-0.0967911}.
+\]
+Holding $x=x_{hzp}$ while raising fuel temperature gives
+\[
+\boxed{\rho_{pd}=1-\frac{D(0.66)+x_{hzp}\Sigma_{a,c}}{C(1200,0.66)}
+=-0.0222784}.
+\]
+Both defects require rod withdrawal to regain criticality.
+\textbf{Correction to the source's final check:} the hot uncontrolled excess
+is $\rho(1200,0.66,x=0)=\boxed{0.326213}$, not
+$\rho_{ex}+\rho_{td}+\rho_{pd}=0.272974$. The latter combines differences
+evaluated at different rod positions and is not a telescoping state change.
+
+\end{adaptedsolution}

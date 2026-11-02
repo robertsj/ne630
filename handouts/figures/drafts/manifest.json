@@ -24,11 +24,11 @@
       "sha256": "c9cf9f14fc6adfe92874abcc210e56e924138b4a63a13a68e5cbcdc6b1162b46"
     },
     {
-      "path": "../notebooks/lesson_27.ipynb",
+      "path": "../code/lesson_27.ipynb",
       "sha256": "f1db16a0d1ec87314dfd4f94b28eced61bce83bbe5f670a6ef684d6ad2f7f21e"
     },
     {
-      "path": "../notebooks/lesson_28.ipynb",
+      "path": "../code/lesson_28.ipynb",
       "sha256": "d4fd703e12c048985330f041121eedb21cfeefc36475331df6e1d3b4db1fd01f"
     },
     {
@@ -49,7 +49,7 @@
     }
   ],
   "generator": "figures/build_draft_figures.py",
-  "generator_sha256": "3f210b6d5f4003b7dc9c8d671ee9a2563ec8e479f9f1dbad26468ac39621443e",
+  "generator_sha256": "a0d58f2866ecc963fde80eb8821feae97e603a407b4ee01e36d29451446bf448",
   "colors": {
     "purple": "#512888",
     "orange": "#CA7C1B"
@@ -74,7 +74,7 @@
       "path": "figures/drafts/example_kinetics.pdf",
       "sha256": "2ed9678a2b5780ee430ddea53c9cb7b4b6f809ada6bcdcedcea7ae4ddb2e7b50",
       "sources": [
-        "notebooks/lesson_27.ipynb, cells39,49–60"
+        "code/lesson_27.ipynb, cells39,49–60"
       ],
       "data": [],
       "palette": [
@@ -88,7 +88,7 @@
       "path": "figures/drafts/traces.pdf",
       "sha256": "99e4fb1c3ff1ab1a161ddbfb6279609cf4b4d93d7bbd5b505970b90eca9d58b8",
       "sources": [
-        "notebooks/lesson_28.ipynb, cell15"
+        "code/lesson_28.ipynb, cell15"
       ],
       "data": [],
       "palette": [
@@ -102,7 +102,7 @@
       "path": "figures/drafts/prompt_drop_illustration.pdf",
       "sha256": "78e752675a8eacae21d5b5fc106534d77540dbb9f1259ebbc9467f99f347d012",
       "sources": [
-        "notebooks/lesson_28.ipynb, cells14,22"
+        "code/lesson_28.ipynb, cells14,22"
       ],
       "data": [],
       "palette": [

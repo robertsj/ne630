@@ -32,6 +32,9 @@ __pycache__/
 
 # Local notebook checkpoints and OpenMC run products (not lesson sources).
 /notebooks/.ipynb_checkpoints/
+/code/.ipynb_checkpoints/
+/code/figures/
+/code/traces.pdf
 /notebooks/.ne630_draft_runs/
 /notebooks/lesson_12_sphere_runs/
 /notebooks/model.xml

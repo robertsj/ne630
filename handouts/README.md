@@ -26,13 +26,12 @@ yield-weighted averaging procedure; extended numerical experiments live in
 its companion notebook. Lesson 27's supplied Br-87 exercise figure and its
 standalone regeneration script live in `figures/`.
 
-The local L28 companion is `../code/lesson_28_exploration.ipynb` with
-`../code/ne630_kinetics.py`. The older `../code/lesson_28.ipynb` remains
-historical course material. These code companions are separate from the
-handout PDF build and public handout exports. The instructor's earlier
-revision notes were referenced as `lessons_27_28_revision_notes.md` for
-numerical references, local paths, and verification scope; that file is not
-present in this checkout.
+The L28 support module is ../code/ne630_kinetics.py; it provides f and solve.
+Its historical notebooks are ../code/lesson_27.ipynb and
+../code/lesson_28.ipynb. The module is downloadable from the Lesson 28 row
+under the established _static/notebooks/ URL convention.
+The local lesson_28_exploration.ipynb is excluded from this release because
+it still depends on a former incompatible module API.
 
 Ordinary PDF builds require no external notebook or module and do not
 regenerate the historical draft-figure batch for these two lessons.
@@ -41,7 +40,7 @@ rebaselined: they describe the original L27–28 seeds, not these revisions,
 and are not acceptance tests for L27–28. Use student/private compilation,
 solution visibility, numerical figure checks, and visual review for release
 validation. The public site continues to distribute Lessons 27 and 28 as
-student PDFs only.
+student PDFs; Lesson 28 also links its Python support module.
 
 ## Build
 

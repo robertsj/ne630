@@ -50,17 +50,12 @@ and the entire `site/_static/handouts/` export tree
 are ignored build artifacts on the source branch; they are generated during
 `make html` or `make check` and published in the rendered site on `gh-pages`.
 
-Canonical depletion notebooks (Lessons 23–24) and their module now live in
-`code/`; the other published notebooks remain in `notebooks/`. Public download
-copies live beneath `site/_static/notebooks/` and must be byte-for-byte
-identical to their canonical files. The Lesson 8--12, Lesson 15--19, and Lesson 22--26
-notebooks are published alongside the lesson materials as independent course
-resources.
-The existing download URLs are unchanged. `make html` refreshes only the
-three relocated depletion assets using `site/scripts/export_code.py`;
-`make check-code` checks them without changing files. These are export copies,
-not a second canonical implementation. The kinetics notebooks/module remain
-local course sources and are not added to the public site by this move.
+Canonical kinetics notebooks (Lessons 27–28) and their module live in code/.
+The existing depletion notebooks remain in notebooks/ in this release.
+Download copies use site/_static/notebooks/ and retain their stable URLs.
+The Lesson 28 kinetics module is newly downloadable; its notebooks are not.
+make sync-code refreshes the module and existing depletion exports, and
+make check-code verifies byte identity. This does not deploy the site.
 
 Verify the publication copies with:
 
@@ -76,11 +71,11 @@ cmp notebooks/lesson_17.ipynb site/_static/notebooks/lesson_17.ipynb
 cmp notebooks/lesson_18.ipynb site/_static/notebooks/lesson_18.ipynb
 cmp notebooks/lesson_19.ipynb site/_static/notebooks/lesson_19.ipynb
 cmp notebooks/lesson_22.ipynb site/_static/notebooks/lesson_22.ipynb
-cmp code/lesson_23.ipynb site/_static/notebooks/lesson_23.ipynb
-cmp code/lesson_24.ipynb site/_static/notebooks/lesson_24.ipynb
+cmp notebooks/lesson_23.ipynb site/_static/notebooks/lesson_23.ipynb
+cmp notebooks/lesson_24.ipynb site/_static/notebooks/lesson_24.ipynb
 cmp notebooks/lesson_25.ipynb site/_static/notebooks/lesson_25.ipynb
 cmp notebooks/lesson_26.ipynb site/_static/notebooks/lesson_26.ipynb
-cmp code/ne630_depletion.py site/_static/notebooks/ne630_depletion.py
+cmp notebooks/ne630_depletion.py site/_static/notebooks/ne630_depletion.py
 ```
 
 Lessons 23 and 24 require the shared `ne630_depletion.py` module, published
@@ -111,3 +106,6 @@ Deployment to a `gh-pages` branch is intentionally separate from the local
 build. Review `_build/html/` and the Git diff before creating or updating that
 branch. See [PUBLISHING.md](PUBLISHING.md) for the first-publication and update
 procedures.
+
+Lesson 28: save ne630_kinetics.py beside your notebook or script. NumPy and
+SciPy are required; direct execution plots the L27 pulse using Matplotlib.

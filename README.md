@@ -17,7 +17,9 @@ Course content is organized mainly in:
 
 - `pages/` for lesson pages and homework-facing Markdown/HTML.
 - `slides/` for lecture slide sources.
-- `notebooks/` for computational examples and tutorials.
+- `code/` for the kinetics (Lessons 27–28)
+  notebooks with their shared Python modules; see [code/README.md](code/README.md).
+- `notebooks/` for the other computational examples and tutorials.
 - `build/` for generated Canvas-oriented HTML tooling.
 
 For Fall 2026 and later terms, CourseDog is treated as the official syllabus

@@ -1,7 +1,7 @@
 # Fall 2026 NE 630 solution manual
 
 This directory builds one instructor-only PDF covering Homework 01 through
-Homework 18, plus draft Homeworks 25 and 26 (19–24 are not yet included):
+Homework 18, plus Homeworks 25–28 (19–24 are not yet included):
 
 ```bash
 make
@@ -63,3 +63,32 @@ instructor check, not an additional student requirement.
 
 This manual contains solutions and must not be added to the student-facing
 Sphinx or `gh-pages` publication pipeline.
+
+## Homeworks 27 and 28
+
+The existing manual now includes `hw27.tex` (two problems) and `hw28.tex`
+(three problems). Source provenance, numbering,
+limited prompt corrections, and unresolved source limitations are documented
+in `../README.md`. Matching worked solutions are adapted from source Lessons
+27–28 and checked against their notebooks. Problem 3 has no worked source
+solution and is marked for instructor review; no answer was invented.
+
+Run only the new numerical checks/assets with:
+
+    /home/robertsj/miniforge3/bin/python build_hw27_28_checks.py
+
+This checks HW27 critical equilibrium and each piecewise transient against
+independent Radau integration, and HW28 two-mode analytical coefficients and
+densities against both matrix exponentials and Radau. Data and check values
+are retained in `data/hw27_28/`; the missing legacy HW27 solution plot is
+regenerated as `figures/hw27_neutron_density.png`. None of this uses or repairs
+the separate course `ne630_kinetics.py` API mismatch.
+
+For a narrowly scoped rebuild in this dirty checkout, the verified invocation was:
+
+    PATH=/home/robertsj/miniforge3/bin:$PATH make PYTHON=/home/robertsj/miniforge3/bin/python FIGURES=figures/hw27_neutron_density.png
+
+The existing broad figure wildcard also selects unrelated HW24 assets and its
+current timestamps would rerun the HW24 builder. The command-line override
+avoids that regeneration; LaTeX still reads all existing manual figures. The
+77-page manual builds with HW27 starting on page 72 and HW28 on page 75.

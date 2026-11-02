@@ -7,7 +7,7 @@ BUILDDIR    := _build
 DOCTREEDIR  := $(BUILDDIR)/doctrees
 PYTHON      ?= python3
 
-.PHONY: help build-handouts html sync-handouts check-handouts check clean
+.PHONY: help build-handouts html sync-handouts check-handouts sync-code check-code check clean
 
 help:
 	@$(SPHINXBUILD) --help
@@ -21,10 +21,17 @@ sync-handouts: build-handouts
 check-handouts: sync-handouts
 	$(PYTHON) site/scripts/export_handouts.py --check
 
-html: sync-handouts
+sync-code:
+	$(PYTHON) site/scripts/export_code.py
+
+check-code:
+	$(PYTHON) site/scripts/export_code.py --check
+
+html: sync-handouts sync-code
 	$(SPHINXBUILD) -d "$(DOCTREEDIR)" -b html "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS)
 
-check: check-handouts
+check: check-handouts sync-code
+	$(PYTHON) site/scripts/export_code.py --check
 	$(PYTHON) site/scripts/check_handout_builds.py
 	$(SPHINXBUILD) -W -d "$(DOCTREEDIR)" -b html "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS)
 	$(PYTHON) site/scripts/check_site.py "$(BUILDDIR)/html"

@@ -1,0 +1,88 @@
+<h1 id="homework-27-lesson-27">Homework 27: Lesson 27</h1>
+<h2 id="problem-1">Problem 1</h2>
+<p>A power reactor is fueled with slightly enriched uranium. At the end of core life 30% of the power comes from the fissioning of the built up plutonium-239. Calculate the effective value of <img
+class="equation_image"
+title="\beta"
+src="/equation_images/%255Cbeta"
+alt="LaTeX: \beta"
+data-equation-content="\beta"
+/> at the beginning and at the end of core life; determine the percent increase or decrease.</p>
+<h2 id="problem-2">Problem 2</h2>
+<p>Consider a uranium-fueled reactor that is initially critical with a neutron density of <img
+class="equation_image"
+title="n&#x27;&#x27;&#x27;(0)=10^6~\mathrm{cm^{-3}}"
+src="/equation_images/n%2527%2527%2527(0)%253D10%255E6~%255Cmathrm%257Bcm%255E%257B-3%257D%257D"
+alt="LaTeX: n&#x27;&#x27;&#x27;(0)=10^6~\mathrm{cm^{-3}}"
+data-equation-content="n&#x27;&#x27;&#x27;(0)=10^6~\mathrm{cm^{-3}}"
+/>. Solve the kinetics equations numerically and plot the resulting neutron density for <img
+class="equation_image"
+title="t\in[0,10]~\mathrm{s}"
+src="/equation_images/t%255Cin%255B0%252C10%255D~%255Cmathrm%257Bs%257D"
+alt="LaTeX: t\in[0,10]~\mathrm{s}"
+data-equation-content="t\in[0,10]~\mathrm{s}"
+/> for the following cases using the six-group precursor data in Table 5.1:</p>
+<p><strong>(a)</strong> A positive step in reactivity to go up in power characterized by the following reactivity:</p>
+<p><img
+class="equation_image"
+title="\rho(t)=
+\begin{cases}
+0 &amp; 0\le t&lt;1,\\
+0.25\beta &amp; 1\le t&lt;6,\\
+0 &amp; 6\le t\le10.
+\end{cases}
+"
+src="/equation_images/%255Crho(t)%253D%250A%255Cbegin%257Bcases%257D%250A0%2520%2526%25200%255Cle%2520t%253C1%252C%255C%255C%250A0.25%255Cbeta%2520%2526%25201%255Cle%2520t%253C6%252C%255C%255C%250A0%2520%2526%25206%255Cle%2520t%255Cle10.%250A%255Cend%257Bcases%257D%250A"
+alt="LaTeX: \rho(t)=
+\begin{cases}
+0 &amp; 0\le t&lt;1,\\
+0.25\beta &amp; 1\le t&lt;6,\\
+0 &amp; 6\le t\le10.
+\end{cases}
+"
+data-equation-content="\rho(t)=
+\begin{cases}
+0 &amp; 0\le t&lt;1,\\
+0.25\beta &amp; 1\le t&lt;6,\\
+0 &amp; 6\le t\le10.
+\end{cases}
+"
+/></p>
+<p><strong>(b)</strong> A negative step in reactivity to go down in power characterized by the following reactivity:</p>
+<p><img
+class="equation_image"
+title="\rho(t)=
+\begin{cases}
+0 &amp; 0\le t&lt;1,\\
+-0.25\beta &amp; 1\le t&lt;6,\\
+0 &amp; 6\le t\le10.
+\end{cases}
+"
+src="/equation_images/%255Crho(t)%253D%250A%255Cbegin%257Bcases%257D%250A0%2520%2526%25200%255Cle%2520t%253C1%252C%255C%255C%250A-0.25%255Cbeta%2520%2526%25201%255Cle%2520t%253C6%252C%255C%255C%250A0%2520%2526%25206%255Cle%2520t%255Cle10.%250A%255Cend%257Bcases%257D%250A"
+alt="LaTeX: \rho(t)=
+\begin{cases}
+0 &amp; 0\le t&lt;1,\\
+-0.25\beta &amp; 1\le t&lt;6,\\
+0 &amp; 6\le t\le10.
+\end{cases}
+"
+data-equation-content="\rho(t)=
+\begin{cases}
+0 &amp; 0\le t&lt;1,\\
+-0.25\beta &amp; 1\le t&lt;6,\\
+0 &amp; 6\le t\le10.
+\end{cases}
+"
+/></p>
+<p>Here, <img
+class="equation_image"
+title="t"
+src="/equation_images/t"
+alt="LaTeX: t"
+data-equation-content="t"
+/> is in seconds. Remember, you need to find the appropriate precursor concentrations for steady state to use for initial conditions. You may assume that <img
+class="equation_image"
+title="\Lambda=50\times10^{-6}~\mathrm{s}"
+src="/equation_images/%255CLambda%253D50%255Ctimes10%255E%257B-6%257D~%255Cmathrm%257Bs%257D"
+alt="LaTeX: \Lambda=50\times10^{-6}~\mathrm{s}"
+data-equation-content="\Lambda=50\times10^{-6}~\mathrm{s}"
+/> for simplicity.</p>

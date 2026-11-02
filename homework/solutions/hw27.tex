@@ -1,0 +1,113 @@
+% Source: ne630_problems/lesson_27, HEAD 4f375f82; see homework/README.md.
+% Current homework/markdown/HW27.md is authoritative; refreshed 2026-11-02.
+% FNRP 5.2 attribution retained privately here; removed from current heading.
+
+\noindent{\bf Problem 1}
+
+A power reactor is fueled with slightly enriched uranium. At the end of
+core life 30\% of the power comes from the fissioning of the built up
+plutonium-239. Calculate the effective value of \(\beta\) at the
+beginning and at the end of core life; determine the percent increase or
+decrease.
+
+\begin{adaptedsolution}
+Assume, as in the source solution, that all beginning-of-life power is
+from U-235 and that U-235 and Pu-239 release equal energy per fission.
+Use $\beta^{235}=0.0065$, $\beta^{239}=0.00210$,
+$\bar\nu^{235}=2.43$, and $\bar\nu^{239}=2.90$ (FNRP Table 5.1).
+Then $\beta_{\mathrm{BOC}}=0.0065$. Weight delayed-neutron production
+by total neutron production, not just fission power:
+\[
+\beta_{\mathrm{EOC}}=
+\frac{0.7(2.43)(0.0065)+0.3(2.90)(0.00210)}{0.7(2.43)+0.3(2.90)}
+=\boxed{0.00501108518}.
+\]
+The percent change is $100(\beta_{\mathrm{EOC}}/\beta_{\mathrm{BOC}}-1)
+=\boxed{-22.9064\%}$, i.e., a decrease. This is the source's production-weighted
+mixture approximation; an adjoint-importance-weighted reactor $\beta_{\rm eff}$
+would require additional information not supplied in the problem.
+\end{adaptedsolution}
+
+\newpage
+
+\noindent{\bf Problem 2}
+
+Consider a uranium-fueled reactor that is initially critical with a
+neutron density of \(n'''(0)=10^6~\mathrm{cm^{-3}}\). Solve the kinetics
+equations numerically and plot the resulting neutron density for
+\(t\in[0,10]~\mathrm{s}\) for the following cases using the six-group
+precursor data in Table 5.1:
+
+\textbf{(a)} A positive step in reactivity to go up in power
+characterized by the following reactivity:
+
+\[
+\rho(t)=
+\begin{cases}
+0 & 0\le t<1,\\
+0.25\beta & 1\le t<6,\\
+0 & 6\le t\le10.
+\end{cases}
+\]
+
+\textbf{(b)} A negative step in reactivity to go down in power
+characterized by the following reactivity:
+
+\[
+\rho(t)=
+\begin{cases}
+0 & 0\le t<1,\\
+-0.25\beta & 1\le t<6,\\
+0 & 6\le t\le10.
+\end{cases}
+\]
+
+Here, \(t\) is in seconds. Remember, you need to find the appropriate
+precursor concentrations for steady state to use for initial conditions.
+You may assume that \(\Lambda=50\times10^{-6}~\mathrm{s}\) for
+simplicity.
+
+\begin{adaptedsolution}
+Use the six-group data retained in the source statement and notebook:
+\[
+\begin{aligned}
+t_{1/2,i}&=(56,23,6.2,2.3,0.61,0.23)~\mathrm{s},\\
+\beta_i&=(0.00021,0.00142,0.00128,0.00257,0.00075,0.00027),\\
+\lambda_i&=\ln2/t_{1/2,i},\qquad \beta=\sum_i\beta_i=0.0065.
+\end{aligned}
+\]
+With $n$ denoting the stated neutron density $n'''$, solve
+\[
+\dot n=\frac{\rho-\beta}{\Lambda}n+\sum_i\lambda_i c_i,
+\qquad \dot c_i=\frac{\beta_i}{\Lambda}n-\lambda_i c_i.
+\]
+Critical equilibrium requires $c_i(0)=\beta_i n(0)/(\lambda_i\Lambda)$:
+\[
+\mathbf c(0)=10^6(339.322,942.368,228.985,170.555,13.2007,1.79183)
+~\mathrm{cm^{-3}}.
+\]
+On each constant-reactivity interval, propagate the full seven-component
+state by $\mathbf y(t)=\exp[M(\rho)(t-t_0)]\mathbf y(t_0)$.
+Carry both neutron and precursor concentrations continuously across 1 s
+and 6 s; do not reset precursors at either switch.
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Case & $n(6~\mathrm{s})$ & $n(10~\mathrm{s})$\\
+\midrule
+$+0.25\beta$ & $1.884542\times10^6$ & $1.283494\times10^6$\\
+$-0.25\beta$ & $6.587321\times10^5$ & $8.761338\times10^5$\\
+\bottomrule
+\end{tabular}
+\end{center}
+All densities are in $\mathrm{cm^{-3}}$. The initial density remains
+$10^6~\mathrm{cm^{-3}}$ until 1 s. Returning reactivity to zero at 6 s
+does not restore the original equilibrium inventory immediately.
+\begin{center}
+\includegraphics[width=0.94\linewidth]{hw27_neutron_density.png}
+\end{center}
+The targeted verifier reproduces the legacy plot using exact piecewise
+matrix exponentials and independently checks every sampled state with
+Radau integration. Source \texttt{prob2.pdf} is not present in the bank;
+the figure above is regenerated from its retained numerical data.
+\end{adaptedsolution}

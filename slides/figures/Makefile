@@ -67,8 +67,8 @@ RECOVERABLE_INPUTS := \
 	../../notebooks/lesson_22.ipynb \
 	../../notebooks/lesson_24.ipynb \
 	../../notebooks/lesson_26.ipynb \
-	../../notebooks/lesson_27.ipynb \
-	../../notebooks/lesson_28.ipynb \
+	../../code/lesson_27.ipynb \
+	../../code/lesson_28.ipynb \
 	../../notebooks/Lesson_33_and_34_examples.ipynb
 
 LEGACY_ROOT_OUTPUTS := $(notdir $(ALL_OUTPUTS) $(EXTRA_OUTPUTS)) \

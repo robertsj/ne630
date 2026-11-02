@@ -1,0 +1,132 @@
+{
+  "authoritative_markdown_sha256": {
+    "HW27.md": "cb43b0bc0d88d7d54cc0e70749cc45fed877536e179339f00337e6cf49a1e7d5",
+    "HW28.md": "b6ac658130a951f85483dd2ebe3cff44f582db1606a0ee1fad0103bd7cc325ed"
+  },
+  "hw27_beta_end": 0.005011085180863477,
+  "hw27_beta_change_percent": -22.90638183286958,
+  "hw27_initial_precursors": [
+    339321873.6170842,
+    942368400.708671,
+    228984556.88989627,
+    170555407.73389322,
+    13200659.624134015,
+    1791827.2407840926
+  ],
+  "hw27_up_n": {
+    "1": 999999.9999999998,
+    "6": 1884541.8874838925,
+    "10": 1283493.7996136176
+  },
+  "hw27_down_n": {
+    "1": 999999.9999999998,
+    "6": 658732.0880435326,
+    "10": 876133.7799510446
+  },
+  "hw28_periods": {
+    "U-235": {
+      "lambda_s-1": 0.07664087859545618,
+      "period_magnitude_s": 1304.7867121649715
+    },
+    "Pu-239": {
+      "lambda_s-1": 0.06368747475119273,
+      "period_magnitude_s": 1570.1674527160808
+    },
+    "U-233": {
+      "lambda_s-1": 0.04943772281811284,
+      "period_magnitude_s": 2022.7468884016298
+    }
+  },
+  "hw28_step": {
+    "0.2": {
+      "B": 104.07999999999998,
+      "C": -2.0799999999999996,
+      "w1": 0.019980791391001052,
+      "w2": -104.09998079139098,
+      "a1": 1249520.0614144793,
+      "a2": -249520.06141447928,
+      "b1": 1624688159.8348978,
+      "b2": 311840.165102005,
+      "times": [
+        0.0,
+        0.1,
+        10.0
+      ],
+      "values": [
+        [
+          1000000.0,
+          1624999999.9999998
+        ],
+        [
+          1252011.679314526,
+          1627937670.0490794
+        ],
+        [
+          1525874.122042249,
+          1984017460.8114417
+        ]
+      ]
+    },
+    "-0.2": {
+      "B": 156.07999999999998,
+      "C": 2.0799999999999996,
+      "w1": -0.013327637275213605,
+      "w2": -156.06667236272477,
+      "a1": 833475.710447321,
+      "a2": 166524.28955267905,
+      "b1": 1625138782.097944,
+      "b2": -138782.09794425964,
+      "times": [
+        0.0,
+        0.1,
+        10.0
+      ],
+      "values": [
+        [
+          1000000.0,
+          1624999999.9999998
+        ],
+        [
+          832365.6519291367,
+          1622974298.746656
+        ],
+        [
+          729477.2541188505,
+          1422359117.9287157
+        ]
+      ]
+    }
+  },
+  "hw28_problem3_caveat": {
+    "beta_over_lambda_Lambda": 1624.9999999999995,
+    "abs_beta_minus_rho_over_lambda_Lambda": 25.00000000000006,
+    "root_separation_parameter": 10.239999999999945,
+    "note": "Current Problem 3 retains insufficient hypotheses near prompt criticality. No worked source solution; retain authoritative prompt and flag privately for instructor review.",
+    "asymptotic_counterexample": [
+      {
+        "epsilon": 0.0001,
+        "beta_over_lambda_Lambda": 10000.0,
+        "delta_over_lambda_Lambda": 10.0,
+        "root_separation_parameter": 399.5999999999999,
+        "exact_positive_rate": 7.568095903521611,
+        "claimed_positive_rate": 79.91999999999999
+      },
+      {
+        "epsilon": 1e-08,
+        "beta_over_lambda_Lambda": 100000000.0,
+        "delta_over_lambda_Lambda": 100.0,
+        "root_separation_parameter": 39999.96000000001,
+        "exact_positive_rate": 795.9698009399341,
+        "claimed_positive_rate": 79999.92
+      },
+      {
+        "epsilon": 1e-12,
+        "beta_over_lambda_Lambda": 1000000000000.0,
+        "delta_over_lambda_Lambda": 1000.0,
+        "root_separation_parameter": 3999999.996,
+        "exact_positive_rate": 79959.96997883539,
+        "claimed_positive_rate": 79999999.92
+      }
+    ]
+  }
+}

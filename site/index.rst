@@ -119,7 +119,8 @@ available for that lesson.
      - `YouTube video <https://www.youtube.com/watch?v=ZK5YeYxdV5Y>`__
    * - **Lesson 28** — Precursor Groups and the Inhour Equation
      - `PDF <_static/handouts/lesson-28/lesson_28_handout.pdf>`__
-     - `YouTube video <https://www.youtube.com/watch?v=Y9Ma9rpXB00>`__
+     - `Python module <_static/notebooks/ne630_kinetics.py>`__ |middot|
+       `YouTube video <https://www.youtube.com/watch?v=Y9Ma9rpXB00>`__
    * - **Lesson 29** — Point Kinetics with Feedback
      - `Seeded PDF <_static/handouts/lesson-29/lesson_29_handout.pdf>`__
      - —
@@ -158,6 +159,9 @@ For Lessons 23 and 24, download the shared
 `depletion module <_static/notebooks/ne630_depletion.py>`__ into the same folder
 as the notebooks. The module requires NumPy and SciPy; the notebooks also use
 pandas and Matplotlib.
+
+For Lesson 28, save the kinetics module beside your notebook or script. It
+requires NumPy and SciPy; running the module directly also uses Matplotlib.
 
 Handout source and support files
 --------------------------------

@@ -6,7 +6,7 @@ Handouts
 
 Download and print each available handout before class. The PDF and student
 TeX wrapper are linked in the table; complete source bundles and supporting
-TeX files are linked below it. Lessons 27--35 are seeded from Beamer slides;
+TeX files are linked below it. Lessons 29--35 are seeded from Beamer slides;
 Lessons 36--39 use existing notebook content. YouTube links point to lesson recordings. A dash
 indicates that no handout or additional non-video resource is currently
 available for that lesson.
@@ -114,11 +114,11 @@ available for that lesson.
      - `PDF <_static/handouts/lesson-26/lesson_26_handout.pdf>`__
      - `OpenMC notebook <_static/notebooks/lesson_26.ipynb>`__ |middot|
        `YouTube video <https://www.youtube.com/watch?v=fAXneZd8Oog>`__
-   * - **Lesson 27** — Neutron Kinetics with Delayed Neutrons
-     - `Seeded PDF <_static/handouts/lesson-27/lesson_27_handout.pdf>`__
+   * - **Lesson 27** — One-Group Delayed-Neutron Kinetics
+     - `PDF <_static/handouts/lesson-27/lesson_27_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=ZK5YeYxdV5Y>`__
-   * - **Lesson 28** — Step Insertions of Reactivity
-     - `Seeded PDF <_static/handouts/lesson-28/lesson_28_handout.pdf>`__
+   * - **Lesson 28** — Precursor Groups and the Inhour Equation
+     - `PDF <_static/handouts/lesson-28/lesson_28_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=Y9Ma9rpXB00>`__
    * - **Lesson 29** — Point Kinetics with Feedback
      - `Seeded PDF <_static/handouts/lesson-29/lesson_29_handout.pdf>`__

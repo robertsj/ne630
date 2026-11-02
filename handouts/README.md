@@ -19,18 +19,29 @@ initial slide-derived seeds. Lesson 26 is a two-page handout with the ODE
 appendix and time-dependent accelerator-source exercises on the back page;
 its approved body is not expected to match the original seed frame-for-frame.
 
-Lessons 27 and 28 now use instructor revisions rather than their slide-derived
-seeds. Both are two pages and use 5 pt paragraph spacing. L28 retains the
-individual precursor table and averaging procedure; extended numerical
-experiments live in its companion notebook.
-L27's Br-87 exercise figure and generator live in
-`figures/`; the L28 companion is `../code/lesson_28_exploration.ipynb`
-with `../code/ne630_kinetics.py`. The older `../code/lesson_28.ipynb` remains
-unchanged as historical course material. See
-[revision notes](lessons_27_28_revision_notes.md) for the author's numerical
-references, local paths, and verification scope. The historical seed manifest
-and seed-comparison checks have not been rebaselined to these revisions;
-they are not acceptance tests for L27–28.
+Lessons 27 and 28 use instructor-revised two-page handouts rather than their
+original slide-derived seeds. Both use 5 pt paragraph spacing and retain
+student mode by default. L28 retains the individual precursor table and
+yield-weighted averaging procedure; extended numerical experiments live in
+its companion notebook. Lesson 27's supplied Br-87 exercise figure and its
+standalone regeneration script live in `figures/`.
+
+The local L28 companion is `../code/lesson_28_exploration.ipynb` with
+`../code/ne630_kinetics.py`. The older `../code/lesson_28.ipynb` remains
+historical course material. These code companions are separate from the
+handout PDF build and public handout exports. The instructor's earlier
+revision notes were referenced as `lessons_27_28_revision_notes.md` for
+numerical references, local paths, and verification scope; that file is not
+present in this checkout.
+
+Ordinary PDF builds require no external notebook or module and do not
+regenerate the historical draft-figure batch for these two lessons.
+The historical seed manifest and seed-comparison checks have not been
+rebaselined: they describe the original L27–28 seeds, not these revisions,
+and are not acceptance tests for L27–28. Use student/private compilation,
+solution visibility, numerical figure checks, and visual review for release
+validation. The public site continues to distribute Lessons 27 and 28 as
+student PDFs only.
 
 ## Build
 

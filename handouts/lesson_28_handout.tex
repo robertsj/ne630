@@ -20,31 +20,28 @@ and compare reactor periods from one- and six-group models.}
 Many nuclides produce delayed neutrons. For thermal fission of U-235,
 the ten examples below account for about 72\% of delayed neutrons
 in the cited evaluation.
-The last column gives each nuclide's percentage of the total delayed-neutron
+The share columns give each nuclide's percentage of the total delayed-neutron
 yield, not a percentage of all fission neutrons.
 
 % Shares: Dimitriou et al. (2021), Table VII, U-235 thermal, CRP column.
 % Half-lives: Tables I--II; As-85 from the linked ENSDF evaluation.
 \begin{center}
 {\fontsize{8}{9.5}\selectfont
-\begin{tabular}{lrr}
+\begin{tabular}{lrr@{\hspace{1.5em}}lrr}
 \toprule
-\textbf{Precursor} & $t_{1/2}$ (s) & \textbf{Share of delayed yield (\%)}\\
+\textbf{Precursor} & $t_{1/2}$ (s) & \textbf{Share (\%)}
+& \textbf{Precursor} & $t_{1/2}$ (s) & \textbf{Share (\%)} \\
 \midrule
-$^{137}$I  & 24.6  & 16.3\\
-$^{89}$Br  & 4.34  & 11.1\\
-$^{94}$Rb  & 2.70  & 9.3\\
-$^{90}$Br  & 1.91  & 7.4\\
-$^{88}$Br  & 16.3  & 7.3\\
-$^{85}$As  & 2.02  & 5.3\\
-$^{138}$I  & 6.25  & 4.7\\
-$^{139}$I  & 2.28  & 3.5\\
-$^{95}$Rb  & 0.378 & 3.5\\
-$^{87}$Br  & 55.6  & 3.2\\
+$^{137}$I & 24.6 & 16.3 & $^{85}$As & 2.02 & 5.3 \\
+$^{89}$Br & 4.34 & 11.1 & $^{138}$I & 6.25 & 4.7 \\
+$^{94}$Rb & 2.70 & 9.3 & $^{139}$I & 2.28 & 3.5 \\
+$^{90}$Br & 1.91 & 7.4 & $^{95}$Rb & 0.378 & 3.5 \\
+$^{88}$Br & 16.3 & 7.3 & $^{87}$Br & 55.6 & 3.2 \\
 \midrule
-\textbf{Subtotal} & & \textbf{71.6}\\
+\multicolumn{6}{c}{\textbf{Subtotal (\% of delayed yield) = 71.6}}  \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
+}
 \end{center}
 \SourceLine{Yield shares: P. Dimitriou et al.,
 \href{https://doi.org/10.1016/j.nds.2021.04.006}
@@ -53,6 +50,8 @@ U-235 thermal, CRP column (CRP+ENDF/B-VIII.0 decay data;
 JEFF-3.1.1 fission yields). Half-lives rounded from Tables I--II;
 As-85 from \href{https://www.nndc.bnl.gov/ensnds/85/Se/beta_decay_2.021_s.pdf}
 {B. Singh and J. Chen, ENSDF (2014)}.}
+
+\vspace{5pt}
 
 \textbf{Average by delayed-neutron yield.} Let $s_j$ be the delayed-yield
 share of nuclide $j$. Normalize the shares over the precursors being averaged:
@@ -66,11 +65,12 @@ and $\bar{\lambda}=0.05946$ s$^{-1}$ \emph{for this subset}.
 The remaining $28.4\%$ is needed for a full U-235 average.
 \SourceLine{Averaging procedure: FNRP Eqs. (5.32)--(5.34).}
 
-\columnbreak
+\vspace{5pt}
+
 Represent the combined release of all precursors
 with $G$ effective groups, each with delayed fraction $\beta_i$ and
 decay constant $\lambda_i=\ln2/t_{1/2,i}$.
-The values below are from FNRP~Table~5.1.
+The six-group example ($G=6$) below is from FNRP~Table~5.1.
 
 \begin{center}
 {\fontsize{8}{9.5}\selectfont
@@ -95,9 +95,12 @@ $i$ & $t_{1/2,i}$ (s) & U-233 & U-235 & Pu-239\\
 \bottomrule
 \end{tabular}}
 \end{center}
-Each $C_i$ is an \textbf{effective delayed-neutron reservoir}.
+Each $C_i$ is an \textbf{effective delayed-neutron precursor concentration}:
+a reservoir of expected future delayed neutrons.
 Unlike Lesson 27's $C=f_nN_{\rm Br}$, a grouped $C_i$ alone does not
 determine an individual nuclide's concentration.
+
+\columnbreak
 
 \Sec{2}{Equations and initial conditions}
 
@@ -119,14 +122,14 @@ These equations have the matrix form
 $\dot{\mathbf y}=\mathbf A(\rho)\mathbf y+\mathbf b$,
 where $\mathbf y=[n,C_1,\ldots,C_G]^T$ and
 $\mathbf b=[S,0,\ldots,0]^T$.
-The $7\times7$ matrix for six groups has
+The $(G+1)\times(G+1)$ matrix ($7\times7$ for $G=6$) has
 \[
  \begin{aligned}
  A_{00}&=(\rho-\beta)/\Lambda,& A_{0i}&=\lambda_i,\\
  A_{i0}&=\beta_i/\Lambda,& A_{ii}&=-\lambda_i
  \end{aligned}
 \]
-and all other entries zero.
+for $i=1,\ldots,G$, and all other entries zero.
 
 \textbf{Check.} With U-235, $n_0=10^8$ cm$^{-3}$, and
 $\Lambda=5\times10^{-5}$ s, calculate $C_1(0)$.
@@ -135,47 +138,53 @@ Why is setting all $C_i(0)=0$ a different physical experiment?
  C_1(0)=\RevealMath[1.4in]{3.393\times10^{10}}\ {\rm cm}^{-3}.
 \]
 
-\end{handoutflow}
 
-\clearpage
-\HandoutContinue{Reactor periods and a numerical comparison}
-\begin{handoutflow}
 \Sec{3}{The pathway to the inhour equation}
 
-After a step, take $\rho$ constant and $S=0$.
-\textbf{Try one exponential mode:}
+After a step insertion, take $\rho$ constant and $S=0$.
+The coefficients are constant; try one exponential mode:
 \[
- n(t)=a e^{\omega t},\qquad C_i(t)=b_i e^{\omega t}.
+ n(t)=a e^{\omega t},\qquad C_i(t)=b_i e^{\omega t} \, .
 \]
-\textbf{Eliminate the precursor amplitudes:}
+Substitute $n(t)$ and $C_i(t)$ into the precursor equations,
+and eliminate $b_i$:
 \[
  (\omega+\lambda_i)b_i=\frac{\beta_i}{\Lambda}a
  \quad\Longrightarrow\quad
  b_i=\frac{\beta_i a}{\Lambda(\omega+\lambda_i)}.
 \]
-\textbf{Substitute into the neutron equation:}
+Substitution into the neutron equation gives
 \[
  \Lambda\omega=\rho-\beta+
                   \sum_{i=1}^{G}\frac{\beta_i\lambda_i}{\omega+\lambda_i}.
 \]
-\textbf{Use $\beta=\sum_i\beta_i$ and rearrange:}
+Use $\beta=\sum_i\beta_i$ and rearrange to obtain
 \[
  \boxed{\rho=\Lambda\omega+
           \sum_{i=1}^{G}\frac{\beta_i\omega}{\omega+\lambda_i}.}
 \]
 This is the \textbf{inhour equation}. It is rational; clearing the
 denominators gives the degree-$(G+1)$ characteristic polynomial.
-The poles $-\lambda_i$ are not roots.
+For positive $\beta_i$ and distinct $\lambda_i$, as here, the poles
+$-\lambda_i$ are not roots.
 
-The full solution is a sum of $G+1$ modes, with amplitudes fixed by the
-initial state. The largest eigenvalue $\omega_\star$ determines the
-late-time signed period $T=1/\omega_\star$:
+The full solution is a sum of $G+1$ modes (seven for six groups), with
+amplitudes fixed by the initial state. The largest eigenvalue
+$\omega_\star$ determines the late-time signed \emph{stable period},
+$T=1/\omega_\star$:
 \[
  \boxed{\rho=\frac{\Lambda}{T}
             +\sum_{i=1}^{G}\frac{\beta_i}{1+\lambda_iT}.}
 \]
 At criticality, $\omega_\star=0$ and the equilibrium period is infinite.
 For a negative insertion, $T<0$.
+
+\end{handoutflow}
+
+\clearpage
+\HandoutContinue{Reactor periods and a numerical comparison}
+\begin{handoutflow}
+
 
 \Sec{4}{One effective group and useful limits}
 

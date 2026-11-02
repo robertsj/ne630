@@ -2,7 +2,8 @@
 
 This directory builds one instructor-only PDF covering Homework 01 through
 Homework 28.
-HW24, HW27, and HW28 are source-based drafts pending assignment confirmation:
+HW24 remains a source-based draft pending assignment confirmation. HW27 and
+HW28 now follow the current student statements fetched from the remote branch:
 
 ```bash
 make
@@ -69,8 +70,9 @@ Sphinx or `gh-pages` publication pipeline.
 ## HW19–24 and HW27–28 additions (2026-11-02)
 
 HW20–23 statements match the current student Markdown (converted with Pandoc).
-HW24, HW27, and HW28 use `ne630_problems` at `9c3dc61` because no current
-assignment files were found. HW19 uses the Canvas statement supplied by Jeremy
+HW24 uses `ne630_problems` at `9c3dc61` because no current assignment file was
+found. HW27 and HW28 were reconciled with current student statements and
+source provenance from remote commit `e8dee7c`. HW19 uses the Canvas statement supplied by Jeremy
 on November 2, 2026, now archived in `../markdown/HW19.md` and `../html/HW19.html`.
 Its solution is new and uses actual OpenMC runs of the Lesson 19 cell.
 
@@ -99,8 +101,8 @@ HW19 study below does.
 | 22 | Current statement says the peak is 11.3 h; given half-lives/yields/flux imply 8.51278 h. Supplies both 11.3-h requested evaluation and actual peak; recommends correcting the statement before requiring one unique answer. Fixed hot-state, fuel-volume worth convention retained. |
 | 23 | Matches current atom-fraction/constant-inventory assumptions; corrects sign on a general initial-condition term and missing time factors in legacy integrating factors. Adds equal-rate and zero-removal limits without importing unneeded example material data. |
 | 24 | Source Problem 1 duplicates current HW25 Problem 3; retained explicitly rather than silently renumbered. Includes unequal-power three-batch bonus. |
-| 27 | Follows signed reactivity histories rather than ambiguous insertion/removal wording. Distinguishes production-weighted beta from true importance-weighted beta_eff. Uses segmented stiff integration at 1 and 6 s; all precursor inventories retained. |
-| 28 | Restores missing n in neutron equation; distinguishes modal rates from time constants. Preserves small-reactivity period approximation because generation time is unspecified in Problem 1. Supplies missing bonus derivation and adds the scale-separation condition absent from the source near prompt criticality. |
+| 27 | Uses current remote student statement and its checked solution/figure. Follows signed reactivity histories rather than ambiguous insertion/removal wording. Distinguishes production-weighted beta from true importance-weighted beta_eff. Uses segmented stiff integration at 1 and 6 s; all precursor inventories retained. |
+| 28 | Restores missing n in neutron equation; distinguishes modal rates from time constants. Preserves small-reactivity period approximation because generation time is unspecified in Problem 1. Uses current Problem 3 (no longer bonus), preserves the remote validity warning and asymptotic counterexample, and supplies a labeled new derivation under the additional scale-separation restriction. The student prompt remains unchanged and requires instructor review. |
 
 OpenMC concentration convention checked against the
 [official API documentation](https://docs.openmc.org/en/stable/pythonapi/generated/openmc.model.borated_water.html).
@@ -155,3 +157,30 @@ The saved five-run reference study gives a first estimate of 9.02404 atom%
 (check: 1.015286 ± 0.000954), then a locally refined estimate of 8.75096 atom%
 (check: 0.999839 ± 0.000886). The first result is retained explicitly rather
 than replaced silently by the refined result.
+
+
+### Remote reconciliation (2026-11-02)
+
+Remote commit `e8dee7c` adds authoritative HW27–28 student statements and
+independently checked solutions. The merged manual uses those statements,
+HW27's neutron-density figure and full equilibrium inventory, and HW28's
+expanded coefficient/results tables. HW28 Problem 3 retains the source's
+original student wording but includes both the remote counterexample and our
+new, explicitly qualified derivation. It is not marked as a bonus. Only HW24
+still lacks a confirmed current assignment statement.
+
+The additional targeted verifier is retained:
+
+```bash
+python build_hw27_28_checks.py
+```
+
+It compares exact piecewise matrix exponentials with independent Radau
+integration, verifies one-group modal coefficients and densities, and tests
+the counterexample family for the insufficient Problem 3 hypotheses.
+Its CSV/JSON results live in `data/hw27_28/`, and its figure is
+`figures/hw27_neutron_density.png`. The earlier `hw27_six_group.png` and
+`build_hw20_28_figures.py` remain as an independent check of the same model.
+No transport calculation is repeated by this verifier. It does not depend on
+the separate course `ne630_kinetics.py` module. Use a Python environment with
+NumPy, SciPy, and Matplotlib for these scripts and the normal manual build.

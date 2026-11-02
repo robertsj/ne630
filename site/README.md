@@ -50,12 +50,14 @@ and the entire `site/_static/handouts/` export tree
 are ignored build artifacts on the source branch; they are generated during
 `make html` or `make check` and published in the rendered site on `gh-pages`.
 
-Standalone lesson notebooks remain canonical in `notebooks/`. Public download
-copies live beneath `site/_static/notebooks/` and must be byte-for-byte
-identical to their canonical files. The Lesson 8--12, Lesson 15--19, and Lesson 22--26
-notebooks are published alongside the lesson materials as independent course
-resources.
-Verify their publication copies with:
+Canonical kinetics notebooks (Lessons 27–28) and their module live in code/.
+The existing depletion notebooks remain in notebooks/ in this release.
+Download copies use site/_static/notebooks/ and retain their stable URLs.
+The Lesson 28 kinetics module is newly downloadable; its notebooks are not.
+make sync-code refreshes the module and existing depletion exports, and
+make check-code verifies byte identity. This does not deploy the site.
+
+Verify the publication copies with:
 
 ```bash
 cmp notebooks/lesson_8.ipynb site/_static/notebooks/lesson_8.ipynb
@@ -104,3 +106,6 @@ Deployment to a `gh-pages` branch is intentionally separate from the local
 build. Review `_build/html/` and the Git diff before creating or updating that
 branch. See [PUBLISHING.md](PUBLISHING.md) for the first-publication and update
 procedures.
+
+Lesson 28: save ne630_kinetics.py beside your notebook or script. NumPy and
+SciPy are required; direct execution plots the L27 pulse using Matplotlib.

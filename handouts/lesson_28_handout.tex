@@ -20,7 +20,7 @@ and compare reactor periods from one- and six-group models.}
 Many nuclides produce delayed neutrons. For thermal fission of U-235,
 the ten examples below account for about 72\% of delayed neutrons
 in the cited evaluation.
-The last column gives each nuclide's percentage of the total delayed-neutron
+The share columns give each nuclide's percentage of the total delayed-neutron
 yield, not a percentage of all fission neutrons.
 
 % Shares: Dimitriou et al. (2021), Table VII, U-235 thermal, CRP column.
@@ -68,9 +68,9 @@ The remaining $28.4\%$ is needed for a full U-235 average.
 \vspace{5pt}
 
 Represent the combined release of all precursors
-with 6 effective groups, each with delayed fraction $\beta_i$ and
+with $G$ effective groups, each with delayed fraction $\beta_i$ and
 decay constant $\lambda_i=\ln2/t_{1/2,i}$.
-The values below are from FNRP~Table~5.1.
+The six-group example ($G=6$) below is from FNRP~Table~5.1.
 
 \begin{center}
 {\fontsize{8}{9.5}\selectfont
@@ -95,7 +95,8 @@ $i$ & $t_{1/2,i}$ (s) & U-233 & U-235 & Pu-239\\
 \bottomrule
 \end{tabular}}
 \end{center}
-Each $C_i$ is an \textbf{effective delayed-neutron precursor concentration}.
+Each $C_i$ is an \textbf{effective delayed-neutron precursor concentration}:
+a reservoir of expected future delayed neutrons.
 Unlike Lesson 27's $C=f_nN_{\rm Br}$, a grouped $C_i$ alone does not
 determine an individual nuclide's concentration.
 
@@ -103,13 +104,13 @@ determine an individual nuclide's concentration.
 
 \Sec{2}{Equations and initial conditions}
 
-With $\beta=\sum_{i=1}^{6}\beta_i$,
+With $\beta=\sum_{i=1}^{G}\beta_i$,
 \[
  \boxed{\begin{aligned}
  \frac{dn}{dt}&=\frac{\rho(t)-\beta}{\Lambda}n+
-                 \sum_{i=1}^{6}\lambda_i C_i+S(t),\\
+                 \sum_{i=1}^{G}\lambda_i C_i+S(t),\\
  \frac{dC_i}{dt}&=\frac{\beta_i}{\Lambda}n-\lambda_i C_i,
-                       \qquad i=1,\ldots,6 .
+                       \qquad i=1,\ldots,G .
  \end{aligned}}
 \]
 For an initially critical, source-free equilibrium,
@@ -119,16 +120,16 @@ For an initially critical, source-free equilibrium,
 \]
 These equations have the matrix form
 $\dot{\mathbf y}=\mathbf A(\rho)\mathbf y+\mathbf b$,
-where $\mathbf y=[n,C_1,\ldots,C_6]^T$ and
+where $\mathbf y=[n,C_1,\ldots,C_G]^T$ and
 $\mathbf b=[S,0,\ldots,0]^T$.
-The $7\times7$ matrix for six precursor groups has
+The $(G+1)\times(G+1)$ matrix ($7\times7$ for $G=6$) has
 \[
  \begin{aligned}
  A_{00}&=(\rho-\beta)/\Lambda,& A_{0i}&=\lambda_i,\\
  A_{i0}&=\beta_i/\Lambda,& A_{ii}&=-\lambda_i
  \end{aligned}
 \]
-and all other entries zero.
+for $i=1,\ldots,G$, and all other entries zero.
 
 \textbf{Check.} With U-235, $n_0=10^8$ cm$^{-3}$, and
 $\Lambda=5\times10^{-5}$ s, calculate $C_1(0)$.
@@ -141,11 +142,11 @@ Why is setting all $C_i(0)=0$ a different physical experiment?
 \Sec{3}{The pathway to the inhour equation}
 
 After a step insertion, take $\rho$ constant and $S=0$.
-We know the solution is exponential (constant coefficients), so
+The coefficients are constant; try one exponential mode:
 \[
  n(t)=a e^{\omega t},\qquad C_i(t)=b_i e^{\omega t} \, .
 \]
-Subsitute $n(t)$ and $C_i(t)$ into the precursor equations,
+Substitute $n(t)$ and $C_i(t)$ into the precursor equations,
 and eliminate $b_i$:
 \[
  (\omega+\lambda_i)b_i=\frac{\beta_i}{\Lambda}a
@@ -155,23 +156,27 @@ and eliminate $b_i$:
 Substitution into the neutron equation gives
 \[
  \Lambda\omega=\rho-\beta+
-                  \sum_{i=1}^{6}\frac{\beta_i\lambda_i}{\omega+\lambda_i}.
+                  \sum_{i=1}^{G}\frac{\beta_i\lambda_i}{\omega+\lambda_i}.
 \]
-With $\beta=\sum_i\beta_i$ and some algebra, we obtain 
+Use $\beta=\sum_i\beta_i$ and rearrange to obtain
 \[
  \boxed{\rho=\Lambda\omega+
-          \sum_{i=1}^{6}\frac{\beta_i\omega}{\omega+\lambda_i}.}
+          \sum_{i=1}^{G}\frac{\beta_i\omega}{\omega+\lambda_i}.}
 \]
-This is the \textbf{inhour equation}. 
+This is the \textbf{inhour equation}. It is rational; clearing the
+denominators gives the degree-$(G+1)$ characteristic polynomial.
+For positive $\beta_i$ and distinct $\lambda_i$, as here, the poles
+$-\lambda_i$ are not roots.
 
-The full solution is a sum of $6+1$ modes, with amplitudes fixed by the
-initial condition. The largest eigenvalue $\omega_\star$ determines the
-\emph{stable period} of the reactor, $T=1/\omega_\star$:
+The full solution is a sum of $G+1$ modes (seven for six groups), with
+amplitudes fixed by the initial state. The largest eigenvalue
+$\omega_\star$ determines the late-time signed \emph{stable period},
+$T=1/\omega_\star$:
 \[
  \boxed{\rho=\frac{\Lambda}{T}
-            +\sum_{i=1}^{6}\frac{\beta_i}{1+\lambda_iT}.}
+            +\sum_{i=1}^{G}\frac{\beta_i}{1+\lambda_iT}.}
 \]
-At criticality, $\omega_\star=0$ and the period is infinite.
+At criticality, $\omega_\star=0$ and the equilibrium period is infinite.
 For a negative insertion, $T<0$.
 
 \end{handoutflow}
@@ -196,7 +201,7 @@ total precursor inventory:
 For the U-235 groups on page 1, $\bar t_{1/2}=9.044$ s and
 $\bar\lambda=0.076641$ s$^{-1}$. This reproduces the small-reactivity
 limit. A mixture still has several modes; one effective group cannot
-reproduce every transient!
+reproduce every transient. This is distinct from L27's Br-87-only model.
 
 \textbf{Well above prompt criticality},
 \[
@@ -212,38 +217,91 @@ $\rho-\beta$; the full period is finite at $\rho=\beta$.
 \]
 Earlier decay can be much faster than this late-time limit.
 
-\columnbreak
 \Sec{5}{Work with \texttt{ne630\_kinetics}}
 
 Save \texttt{ne630\_kinetics.py} beside your notebook or script.
-Use Python with NumPy and SciPy; add Matplotlib for plots.
-Import it as \texttt{import ne630\_kinetics as kin}.
-The defaults are the six U-235 groups, $\Lambda=5\times10^{-5}$ s,
-critical initial equilibrium, $S=0$, and no feedback.
-Reactivity arguments are dimensionless: $\rho=d\,\texttt{kin.BETA}$
-for an insertion of $d$ dollars. Times are in seconds.
+Its two functions are below. \texttt{f} is the right side of
+Section 2's equations for $\mathbf y=[n,C_1,\ldots,C_G]^T$, with
+$S=0$ and no feedback. \texttt{solve} starts from critical
+equilibrium and passes \texttt{f} to SciPy's \texttt{solve\_ivp}.
 
-\textbf{From a terminal}, run
-\mbox{\texttt{python ne630\_kinetics.py}} to print period tables and
-checks; it also writes \texttt{numerical\_results.json} beside the module.
-Import the module in your own notebook, script, or interactive Python
-session to vary the cases and make plots.
+\begin{lstlisting}[style=NEpython]
+import numpy as np
+from scipy.integrate import solve_ivp
 
-\textbf{For a step}, use \texttt{kin.sample\_times(tmax)} and
-\texttt{kin.solve\_step(rho, times)}. The result \texttt{sol} contains
-times in \texttt{sol.t}, $n/n_0$ in \texttt{sol.y[0]}, and $C_i/n_0$ in
-\texttt{sol.y[i]} ($i=1,\ldots,6$).
-\texttt{kin.dominant\_period(rho)} returns the signed period.
-For one group, pass \texttt{beta=[kin.BETA]} and
-\texttt{lam=[lambda\_eff]} to both functions, with
-\texttt{lambda\_eff} set to the full six-group $\bar\lambda$ from Section 4.
-Each model initializes its own critical precursor inventory.
+def f(t, y, rho, betas, lambdas, Lambda):
+    n = y[0]           # Unpack the unknowns so that
+    C = y[1:]          #   the equations are clearer.
+    beta = sum(betas)  # Total delayed neutron fraction
+    dndt = ((rho(t)-beta)/Lambda)*n + sum(C*lambdas)
+    dCdt = -C*lambdas + betas*n/Lambda
+    dydt = np.zeros(len(y))
+    dydt[0] = dndt     # Collect the derivatives
+    dydt[1:] = dCdt    #   into one array that we return
+    return dydt
+
+
+def solve(rho, times, n0, betas, lambdas, Lambda):
+    """Return n(t) and C_i(t), starting critical at n0.
+
+    rho is a function of t, and C[i] is group i+1.
+    """
+    y0 = np.zeros(len(betas) + 1)
+    y0[0] = n0
+    y0[1:] = betas * n0 / (lambdas * Lambda)
+    # Limit the step to the spacing of times so that the
+    # solver cannot step right over a change in rho.
+    hmax = np.max(np.diff(times))
+    sol = solve_ivp(f, (times[0], times[-1]), y0,
+                    args=(rho, betas, lambdas, Lambda),
+                    t_eval=times, max_step=hmax,
+                    method="LSODA", rtol=1e-8)
+    return sol.y[0], sol.y[1:]
+\end{lstlisting}
+
+\columnbreak
+
+\texttt{solve} returns \texttt{n} at each time in \texttt{times} and
+\texttt{C}, where \texttt{C[i]} is $C_{i+1}$; with $n_0=1$, these are
+$n/n_0$ and $C_i/n_0$. The argument \texttt{rho} is a Python function
+of $t$ (s) that returns the dimensionless reactivity, so $d$ dollars
+is $\rho=d\beta$. Enter the U-235 data from page~1.
+For one group, pass $[\beta]$ and Section 4's $[\bar\lambda]$;
+\texttt{solve} builds that model's own critical precursor inventory.
+
+\begin{lstlisting}[style=NEpython]
+import numpy as np
+from ne630_kinetics import solve
+
+betas = np.array([0.00021, 0.00142, 0.00128,
+                  0.00257, 0.00075, 0.00027])
+thalfs = np.array([56, 23, 6.2, 2.3, 0.61, 0.23])  # s
+lambdas = np.log(2)/thalfs
+Lambda = 5e-5                       # s
+beta = sum(betas)
+d = 0.2                             # dollars
+
+def rho(t):
+    return d*beta                   # step at t = 0
+
+times = np.linspace(0, 200, 2001)   # s
+n6, C6 = solve(rho, times, 1.0, betas, lambdas, Lambda)
+b1, l1 = np.array([beta]), np.array([0.076641])
+n1, C1 = solve(rho, times, 1.0, b1, l1, Lambda)
+\end{lstlisting}
+
+Once the faster modes have decayed, $\ln n$ is a straight line with
+slope $1/T$, so $T\simeq(t_2-t_1)/\ln[n(t_2)/n(t_1)]$ for two late times.
+Because \texttt{hmax} is the spacing of \texttt{times}, choose
+\texttt{times} finely enough to catch every change in $\rho$.
+From a terminal, \mbox{\texttt{python ne630\_kinetics.py}} plots
+Lesson 27's Example 4.
 
 \Sec{6}{Compare one group with six}
 
 \textbf{Verify equilibrium.} Set $\rho=0$: all densities should remain
-constant. Inspect \texttt{kin.matrix} to connect the implementation to
-Section 2.
+constant. Inspect \texttt{f} against Section 2 and check that evaluating
+it at the critical equilibrium gives zero derivatives.
 
 \textbf{Compute periods.} Run $\rho/\beta=0.02$ and $0.2$.
 Compare the six-group period, the effective one-group period, and the
@@ -259,8 +317,9 @@ $\rho/\beta$ & $T_{\rm 6g}$ (s) & $T_{\rm 1g}$ (s)\\
 \bottomrule
 \end{tabular}
 \end{center}
-Use \texttt{kin.inhour\_residual} to check that each six-group
-frequency $1/T$ satisfies the inhour equation at the imposed $\rho$.
+Substitute each six-group frequency $\omega=1/T$ into the inhour
+equation in Section 3 and check that its right-hand side equals the
+imposed $\rho$.
 
 \textbf{Plot and explain.} Plot both $0.2\beta$ traces over
 $0$--$200$ s on semilog axes. Compare the late slope with $1/T$.
@@ -268,10 +327,11 @@ Why does preserving the mean delay and equilibrium inventory fail to
 preserve the whole transient? Which insertion is better represented
 by one effective group?
 
-\textbf{Notebook enrichment.} Continue in
-\nolinkurl{lesson_28_exploration.ipynb} for the closer-to-critical
-$0.002\beta$ case, prompt-critical crossings, negative-reactivity tails,
-and finite pulses that demonstrate precursor memory.
-The notebook uses the same module and six-group data.
+\textbf{Solution verification.}  Whenever we solve an engineering problem,
+we are responsible for verifying the correctness of our solution.  How can 
+we verify that our computed neutron densities and precursor concentrations are 
+correct?
+
+
 \end{handoutflow}
 \end{document}

@@ -10,8 +10,9 @@ SOURCES := $(TARGET).tex \
 HW18_FIGURES := figures/hw18_koo.png figures/hw18_log_four_factors.png
 HW19_FIGURES := figures/hw19_enrichment.png figures/hw19_convergence.png
 HW26_FIGURES := figures/hw26_absorption_rate.png figures/hw26_pulse_power.png
+HW27_FIGURES := figures/hw27_neutron_density.png
 HW20_28_FIGURES := figures/hw21_fuel_coefficient.png figures/hw22_xenon.png figures/hw27_six_group.png
-FIGURES := $(wildcard figures/*) $(HW18_FIGURES) $(HW19_FIGURES) $(HW26_FIGURES) $(HW20_28_FIGURES)
+FIGURES := $(wildcard figures/*) $(HW18_FIGURES) $(HW19_FIGURES) $(HW26_FIGURES) $(HW20_28_FIGURES) $(HW27_FIGURES)
 
 .PHONY: all tidy clean
 
@@ -31,6 +32,9 @@ $(HW26_FIGURES) &: build_hw25_26_figures.py
 
 $(HW20_28_FIGURES) &: build_hw20_28_figures.py
 	$(PYTHON) build_hw20_28_figures.py
+
+$(HW27_FIGURES): build_hw27_28_checks.py
+	$(PYTHON) build_hw27_28_checks.py
 
 tidy:
 	$(LATEXMK) -c $(TARGET).tex

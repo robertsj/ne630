@@ -100,7 +100,7 @@ def build_subcritical_multiplication(output_dir: Path = DEFAULT_OUTPUT_DIR) -> N
 
 
 def build_example_kinetics(output_dir: Path = DEFAULT_OUTPUT_DIR) -> None:
-    """Source: notebooks/lesson_27.ipynb, cells 39 and 49--60."""
+    """Source: code/lesson_27.ipynb, cells 39 and 49--60."""
 
     betas = np.array([0.00021, 0.00142, 0.00128, 0.00257, 0.00075, 0.00027])
     half_lives = np.array([56, 23, 6.2, 2.3, 0.61, 0.23])
@@ -159,7 +159,7 @@ def solve_one_group(reactivity, beta=0.0065, Lambda=5e-5, decay=0.0766, n0=1.0):
 
 
 def build_traces(output_dir: Path = DEFAULT_OUTPUT_DIR) -> None:
-    """Source: notebooks/lesson_28.ipynb, cell 15."""
+    """Source: code/lesson_28.ipynb, cell 15."""
 
     beta = 0.0065
     fig, axes = plt.subplots(2, 2, figsize=(7, 7))
@@ -365,9 +365,9 @@ def _tex_asset_path(path: Path) -> str:
 
 
 def extract_prompt_drop_illustration(output_dir: Path = DEFAULT_OUTPUT_DIR) -> None:
-    """Source: attachment in notebooks/lesson_28.ipynb, cell 22."""
+    """Source: attachment in code/lesson_28.ipynb, cell 22."""
 
-    notebook_data = json.loads((NOTEBOOK_DIR / "lesson_28.ipynb").read_text(encoding="utf-8"))
+    notebook_data = json.loads((REPO_ROOT / "code/lesson_28.ipynb").read_text(encoding="utf-8"))
     attachments = notebook_data["cells"][22].get("attachments", {})
     encoded = attachments["image.png"]["image/png"]
     output_dir.mkdir(parents=True, exist_ok=True)

@@ -19,16 +19,28 @@ initial slide-derived seeds. Lesson 26 is a two-page handout with the ODE
 appendix and time-dependent accelerator-source exercises on the back page;
 its approved body is not expected to match the original seed frame-for-frame.
 
-Lessons 27 and 28 use revised two-page handouts rather than their original
-slide-derived seeds. Both retain student mode by default. Lesson 27's supplied
-Br-87 exercise figure and its standalone regeneration script live in `figures/`.
-Ordinary PDF builds require no external notebook or module and do not regenerate
-the historical draft-figure batch for these two lessons.
+Lessons 27 and 28 use instructor-revised two-page handouts rather than their
+original slide-derived seeds. Both use 5 pt paragraph spacing and retain
+student mode by default. L28 retains the individual precursor table and
+yield-weighted averaging procedure; extended numerical experiments live in
+its companion notebook. Lesson 27's supplied Br-87 exercise figure and its
+standalone regeneration script live in `figures/`.
 
-The historical seed manifest and seed-comparison checks describe the original
-L27–28 seeds, not these revisions; use student/private compilation, solution
-visibility, numerical figure checks, and visual review for release validation.
-The public site continues to distribute Lessons 27 and 28 as student PDFs only.
+The L28 support module is ../code/ne630_kinetics.py; it provides f and solve.
+Its historical notebooks are ../code/lesson_27.ipynb and
+../code/lesson_28.ipynb. The module is downloadable from the Lesson 28 row
+under the established _static/notebooks/ URL convention.
+The local lesson_28_exploration.ipynb is excluded from this release because
+it still depends on a former incompatible module API.
+
+Ordinary PDF builds require no external notebook or module and do not
+regenerate the historical draft-figure batch for these two lessons.
+The historical seed manifest and seed-comparison checks have not been
+rebaselined: they describe the original L27–28 seeds, not these revisions,
+and are not acceptance tests for L27–28. Use student/private compilation,
+solution visibility, numerical figure checks, and visual review for release
+validation. The public site continues to distribute Lessons 27 and 28 as
+student PDFs; Lesson 28 also links its Python support module.
 
 ## Build
 

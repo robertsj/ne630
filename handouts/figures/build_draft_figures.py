@@ -87,7 +87,7 @@ def legacy():
     fig,ax=base((3.45,2.7))
     for i in range(7):ax.plot(t,values[:,i],color=COLORS[i],ls=STYLES[i],label='$n(t)$' if i==0 else rf'$C_{i}(t)$')
     ax.set(xlabel='$t$ [s]',yscale='log');ax.legend(ncol=2)
-    save(fig,'example_kinetics',['notebooks/lesson_27.ipynb, cells39,49–60'])
+    save(fig,'example_kinetics',['code/lesson_27.ipynb, cells39,49–60'])
 
     pages=[]
     for end,height in ((.1,3.4),(10,2.5)):
@@ -108,14 +108,14 @@ def legacy():
             axes[0].set_position([.16,.63,.82,.23])
             axes[1].set_position([.16,.13,.82,.23])
         pages.append(fig)
-    save(pages,'traces',['notebooks/lesson_28.ipynb, cell15'],note='Same four trace panels, in two separately flowing column-sized parts; original unknown step labels and frequency annotations retained.')
+    save(pages,'traces',['code/lesson_28.ipynb, cell15'],note='Same four trace panels, in two separately flowing column-sized parts; original unknown step labels and frequency annotations retained.')
 
     a1,a2,w1,w2=solve_one_group(-.5*.0065)
     tt=np.linspace(0,.2,1000)
     fig,ax=base()
     for y,c,ls,label in [(a1*np.exp(w1*tt),PURPLE,':',r'$a_1e^{\omega_1t}$'),(a2*np.exp(w2*tt),ORANGE,'--',r'$a_2e^{\omega_2t}$'),(a1*np.exp(w1*tt)+a2*np.exp(w2*tt),GRAY,'-',r'$n(t)$')]:ax.plot(tt,y,color=c,ls=ls,label=label)
     ax.set(xlabel='$t$ [s]',ylabel='$n(t)/n_0$');ax.legend()
-    save(fig,'prompt_drop_illustration',['notebooks/lesson_28.ipynb, cells14,22'],note='Analytic two-exponential solution for rho=-0.5 beta and Lambda=5e-5, redrawn instead of a raster attachment.')
+    save(fig,'prompt_drop_illustration',['code/lesson_28.ipynb, cells14,22'],note='Analytic two-exponential solution for rho=-0.5 beta and Lambda=5e-5, redrawn instead of a raster attachment.')
 
     x=np.linspace(0,10,1000);L=np.sqrt(10)
     zf=10*(1-np.cosh(x/L)/np.cosh(10/L))
@@ -169,8 +169,9 @@ def main():
     replacements['../slides/figures/generated/prompt_drop_illustration.png']='figures/drafts/prompt_drop_illustration.pdf'
     documents=[]
     for name in ('lesson_26.ipynb','lesson_27.ipynb','lesson_28.ipynb','Lesson_33_and_34_examples.ipynb','lesson_38.ipynb','lesson_39.ipynb'):
-        p=ROOT.parents[1]/'notebooks'/name
-        documents.append({'path':'../notebooks/'+name,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+        directory = 'code' if name in ('lesson_27.ipynb', 'lesson_28.ipynb') else 'notebooks'
+        p=ROOT.parents[1]/directory/name
+        documents.append({'path':'../'+directory+'/'+name,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
     data_generators=[{'path':'figures/'+name,'sha256':hashlib.sha256((ROOT/name).read_bytes()).hexdigest()} for name in ('capture_notebook_plot_data.py','digitize_two_group_illustrations.py')]
     class_path=ROOT.parent/'ne630handout.cls'
     documents.append({'path':'ne630handout.cls','sha256':hashlib.sha256(class_path.read_bytes()).hexdigest()})

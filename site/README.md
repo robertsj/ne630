@@ -49,12 +49,19 @@ and the entire `site/_static/handouts/` export tree
 are ignored build artifacts on the source branch; they are generated during
 `make html` or `make check` and published in the rendered site on `gh-pages`.
 
-Standalone lesson notebooks remain canonical in `notebooks/`. Public download
+Canonical depletion notebooks (Lessons 23–24) and their module now live in
+`code/`; the other published notebooks remain in `notebooks/`. Public download
 copies live beneath `site/_static/notebooks/` and must be byte-for-byte
 identical to their canonical files. The Lesson 8--12, Lesson 15--19, and Lesson 22--26
 notebooks are published alongside the lesson materials as independent course
 resources.
-Verify their publication copies with:
+The existing download URLs are unchanged. `make html` refreshes only the
+three relocated depletion assets using `site/scripts/export_code.py`;
+`make check-code` checks them without changing files. These are export copies,
+not a second canonical implementation. The kinetics notebooks/module remain
+local course sources and are not added to the public site by this move.
+
+Verify the publication copies with:
 
 ```bash
 cmp notebooks/lesson_8.ipynb site/_static/notebooks/lesson_8.ipynb
@@ -68,11 +75,11 @@ cmp notebooks/lesson_17.ipynb site/_static/notebooks/lesson_17.ipynb
 cmp notebooks/lesson_18.ipynb site/_static/notebooks/lesson_18.ipynb
 cmp notebooks/lesson_19.ipynb site/_static/notebooks/lesson_19.ipynb
 cmp notebooks/lesson_22.ipynb site/_static/notebooks/lesson_22.ipynb
-cmp notebooks/lesson_23.ipynb site/_static/notebooks/lesson_23.ipynb
-cmp notebooks/lesson_24.ipynb site/_static/notebooks/lesson_24.ipynb
+cmp code/lesson_23.ipynb site/_static/notebooks/lesson_23.ipynb
+cmp code/lesson_24.ipynb site/_static/notebooks/lesson_24.ipynb
 cmp notebooks/lesson_25.ipynb site/_static/notebooks/lesson_25.ipynb
 cmp notebooks/lesson_26.ipynb site/_static/notebooks/lesson_26.ipynb
-cmp notebooks/ne630_depletion.py site/_static/notebooks/ne630_depletion.py
+cmp code/ne630_depletion.py site/_static/notebooks/ne630_depletion.py
 ```
 
 Lessons 23 and 24 require the shared `ne630_depletion.py` module, published

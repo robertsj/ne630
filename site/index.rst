@@ -6,8 +6,7 @@ Handouts
 
 Download and print each available handout before class. The PDF and student
 TeX wrapper are linked in the table; complete source bundles and supporting
-TeX files are linked below it. Lessons 29--35 are seeded from Beamer slides;
-Lessons 36--39 use existing notebook content. YouTube links point to lesson recordings. A dash
+TeX files are linked below it. YouTube links point to lesson recordings. A dash
 indicates that no handout or additional non-video resource is currently
 available for that lesson.
 
@@ -122,37 +121,43 @@ available for that lesson.
      - `Python module <_static/notebooks/ne630_kinetics.py>`__ |middot|
        `YouTube video <https://www.youtube.com/watch?v=Y9Ma9rpXB00>`__
    * - **Lesson 29** — Point Kinetics with Feedback
-     - `Seeded PDF <_static/handouts/lesson-29/lesson_29_handout.pdf>`__
      - —
+     - `YouTube video <https://www.youtube.com/watch?v=coqwwddT_oU>`__
    * - **Lesson 30** — Review of Some Math
-     - `Seeded PDF <_static/handouts/lesson-30/lesson_30_handout.pdf>`__
+     - —
      - —
    * - **Lesson 31** — Neutrons in Space
-     - `Seeded PDF <_static/handouts/lesson-31/lesson_31_handout.pdf>`__
      - —
+     - `YouTube video <https://www.youtube.com/watch?v=dCeRWmcJYyc>`__
    * - **Lesson 32** — One-Speed Diffusion in a Homogeneous Slab
-     - `Seeded PDF <_static/handouts/lesson-32/lesson_32_handout.pdf>`__
      - —
+     - `YouTube video <https://www.youtube.com/watch?v=gcoRc_tfe54>`__
    * - **Lesson 33** — One-Speed Diffusion in Heterogeneous Slabs
-     - `Seeded PDF <_static/handouts/lesson-33/lesson_33_handout.pdf>`__
      - —
+     - `YouTube video <https://www.youtube.com/watch?v=mhXa47hdBU0>`__
    * - **Lesson 34** — Diffusion with Multiplication and an Approach to Criticality
-     - `Seeded PDF <_static/handouts/lesson-34/lesson_34_handout.pdf>`__
      - —
+     - `YouTube video <https://www.youtube.com/watch?v=KLGX_3lGhxU>`__
    * - **Lesson 35** — Criticality in Slabs, Cylinders, and Spherical Elephants
-     - `Seeded PDF <_static/handouts/lesson-35/lesson_35_handout.pdf>`__
      - —
+     - `YouTube video <https://www.youtube.com/watch?v=b3PJZsHlV3k>`__
    * - **Lesson 36** — Two-Group Diffusion and Criticality
-     - `Seeded PDF <_static/handouts/lesson-36/lesson_36_handout.pdf>`__
      - —
+     - `YouTube video <https://www.youtube.com/watch?v=3l3oQsf1A1k>`__
    * - **Lesson 37** — The Reflected Reactor
-     - `Seeded PDF <_static/handouts/lesson-37/lesson_37_handout.pdf>`__
      - —
-   * - **Lesson 38** — Modeling Reactor Control
-     - `Seeded PDF <_static/handouts/lesson-38/lesson_38_handout.pdf>`__
+     - `YouTube video <https://www.youtube.com/watch?v=DMLRWho-pZs>`__
+   * - **Lesson 38** — Perturbation Theory and Reactor Control
      - —
-   * - **Lesson 39** — Numerical Diffusion and Transport
-     - `Seeded PDF <_static/handouts/lesson-39/lesson_39_handout.pdf>`__
+     - `YouTube video <https://www.youtube.com/watch?v=DF3mdGZ_P8M>`__
+   * - **Lesson 39** — Testing When Diffusion Is Good Enough
+     - —
+     - `YouTube video <https://www.youtube.com/watch?v=akfZqLH-l20>`__
+   * - **Lesson 40** — Preview of Neutron Transport Theory
+     - —
+     - `YouTube video <https://www.youtube.com/watch?v=jVAzwndCmps>`__
+   * - **Lesson 41** — Review
+     - —
      - —
 
 For Lessons 23 and 24, download the shared
@@ -168,7 +173,7 @@ Handout source and support files
 
 The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
 Download the complete source bundle for a ready-to-build copy, or pair a wrapper
-with its body file and the shared class. Lessons 15--39 are distributed as PDFs
+with its body file and the shared class. Lessons 15--28 are distributed as PDFs
 only.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|

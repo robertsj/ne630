@@ -1,55 +1,63 @@
-% New HW24 solution, checked numerically with build_hw24_solution.py.
-% This expanded assignment is distinct from the legacy Lesson-24 algebra sheet.
-% Private instructor material. Numerical tables are generated, not hand-entered.
-\subsection*{Review notes and reproducibility}
-This solution follows the current local \texttt{homework/markdown/HW24.md},
-confirmed by the instructor on November 2, 2026: depletion;
-reactivity and poison cross sections; three-batch cycle estimates;
-and the infinite-dilution mistake. The starter comments specify the
-301-point fit grid; numerical bounds and sensitivity checks support the
-instructor reference. The Gd addition is an isotope number density in fuel;
-it leaves the original uranium and oxygen inventories unchanged. It is not
-a natural-Gd or gadolinia mass fraction.
+% HW24 problem statement transcribed from homework/markdown/HW24.md via Pandoc.
+% Only LaTeX formatting changes; all solution bodies and numerical assets retained.
+Use \texttt{ne630\_depletion} to compare two otherwise identical PWR-like fuel pincells, one with and one without a gadolinium burnable poison (BP). Estimate the cycle length of a three-batch core, assess the linear reactivity model (LRM), and investigate the consequences of omitting U-238 resonance self-shielding.
 
-Run \texttt{python build\_hw24\_solution.py} from this directory, then
-\texttt{make} for the full HW01--28 manual, or
-\texttt{make hw24\_review.pdf} for the standalone copy. The executed
-\texttt{hw24\_solution.ipynb} contains the same numerical source and its
-outputs. The retained CSV tables and \texttt{provenance.json} in
-\texttt{data/hw24/} include solver settings, package versions, source hashes,
-unrounded results, and verification evidence. All reactivities below are
-dimensionless unless a percent or pcm unit is shown explicitly.
+\subsection*{Files and common inputs}
 
-The numerical reference uses the assigned starter grid augmented by
-0.01-day sampling during the first 30 days and about 0.208-day sampling
-afterward. Fits use linear interpolation onto exactly 301 evenly spaced
-points from 1 to 40 MWd/kg. Extrema include both endpoints and all relevant
-interpolation knots. Digits retained in generated tables identify the
-calculation; they do not measure physical model accuracy.
+Download the \href{https://robertsj.github.io/ne630/_static/notebooks/lesson_24.ipynb}{Lesson 24 notebook} and the \href{https://robertsj.github.io/ne630/_static/notebooks/ne630_depletion.py}{depletion module}, and save them in the same folder. Use NumPy, SciPy, pandas, and Matplotlib. The \href{https://robertsj.github.io/ne630/_static/handouts/lesson-24/lesson_24_handout.pdf}{Lesson 24 handout} provides the batch-refueling framework.
 
-\subsection*{Common inputs from the current assignment}
-Use the Lesson 24 notebook and \texttt{ne630\_depletion}, with NumPy, SciPy,
-pandas, and Matplotlib. Both cells use $V_m/V_f=2$, water density
-$0.7$ g/cm$^3$, moderator/fuel flux ratios $(1,1,1.16)$, and
-\texttt{nonleakage=1}; leakage is applied separately as $\rho_L=0.05$.
-Use 4\% U-235 by initial uranium mass, UO$_2$ density 10.4 g/cm$^3$,
-fuel diameter 0.82 cm, and initial Gd-157 loadings of 0 or $10^{18}$
-atoms/cm$^3$ fuel. All other tracked nuclides initially vanish, including
-I/Xe and Pm/Sm. Use model 3 with explicit poisons, constant
-$P^{\prime\prime\prime}=300$ W/cm$^3$ fuel, spectrum $(0.35,0.55,0.10)$,
-and U-238 shielding \texttt{UO2Shielding(10.4,0.82)}. Irradiate from
-0 to 3.5 full-power years, with $\mathrm{YEAR}=365.25\,\mathrm{DAY}$.
-Use the initial HM density excluding Gd, the module burnup, and
-\texttt{neutronics("rate\_ratio")["rho"]}. Three equal-mass batches
-have equal weights and burnup increments. The reference reproduces
-the starter time grid before adding the finer samples documented above.
+Use three equal-mass batches with equal weights and burnup increments, and an additive leakage reactivity penalty of \(\rho_L=0.05\). The burnable poison (BP) is a uniformly irradiated, single-isotope Gd-157 addition that preserves the initial UO\textsubscript{2} inventory; its density is not a natural-Gd or Gd\textsubscript{2}O\textsubscript{3} weight fraction. The model does not resolve spatial self-shielding of gadolinia.
+
+You may copy and paste the following as a first cell in your notebook:
+
+\begin{Verbatim}[fontsize=\footnotesize,breaklines=true]
+import numpy as np
+from ne630_depletion import (
+    DAY, YEAR, Cell, UO2Shielding,
+    three_group_xs, uo2_initial, solve_depletion,
+)
+
+cell = Cell(
+    moderator_to_fuel_volume=2.0,             # V_m / V_f
+    water_density_g_cm3=0.7,                 # g/cm^3 moderator
+    moderator_flux_ratios=(1.0, 1.0, 1.16),  # phi_m / phi_f: fast, intermediate, thermal
+    nonleakage=1.0,                          # Apply leakage separately in the LRM.
+)
+# UO2 density: 10.4 g/cm^3 fuel; fuel diameter: 0.82 cm.
+xs3 = three_group_xs(shielding=UO2Shielding(10.4, 0.82))
+# Irradiate for 0–3.5 full-power years; YEAR = 365.25*DAY.
+times = np.unique(np.r_[0., np.geomspace(60., 30*DAY, 80),
+                        np.linspace(30*DAY, 3.5*YEAR, 601)])
+# For part (3), fit on 301 evenly spaced burnups from 1 to 40 MWd/kg initial HM.
+
+results = {}
+# Gd-157 loadings in atoms/cm^3 fuel, without and with BP.
+# 1.0e18 atoms/cm^3 = 1.0e-6 atoms/(barn cm), about 2.61e-4 g/cm^3 of Gd-157.
+for label, gd157 in {"without BP": 0.0, "with BP": 1.0e18}.items():
+    initial = uo2_initial(
+        0.04,                       # U-235 enrichment: 4% by initial uranium mass.
+        10.4,                       # UO2 density, g/cm^3 fuel.
+        enrichment_basis="weight",
+        gd157_atoms_cm3=gd157,
+    )
+    results[label] = solve_depletion(
+        times, initial=initial,
+        model=3,                    # Expanded actinide chain.
+        include_poisons=True,       # Include explicit I/Xe and Pm/Sm chains.
+        power_density_w_cm3=300.0,   # W/cm^3 fuel, held constant.
+        spectrum=(0.35, 0.55, 0.10),  # Fixed integrated fractions: fast/intermediate/thermal.
+        xs3=xs3, cell=cell,
+    )
+\end{Verbatim}
+
+\begingroup\emergencystretch=3em
+At fixed power, \texttt{result.\allowbreak{}total\_\allowbreak{}flux} is a time history. Use \texttt{result.\allowbreak{}initial\_\allowbreak{}hm\_\allowbreak{}kg\_\allowbreak{}cm3} for the initial heavy-metal density (excluding Gd), \texttt{result.\allowbreak{}burnup\_\allowbreak{}mwd\_\allowbreak{}kg} for burnup, and \texttt{result.\allowbreak{}neutronics("rate\_\allowbreak{}ratio"){[}"rho"{]}} for reactivity. All other tracked nuclides start at zero, including the I/Xe and Pm/Sm chains. Adapt the lesson notebook's examples to the two cases and three batches specified here.
+\par\endgroup
 
 \clearpage
 \subsection*{(1) Deplete the two pincells}
-\textbf{Problem.} Run both cases using the shielded U-238 data. Confirm
-constant power and burnup proportional to elapsed time. Plot flux versus
-time, report its initial and final values for each case, and explain why
-fixed power does not imply fixed flux.
+
+Run both cases using the shielded U-238 data. Confirm that the power remains constant and that burnup is proportional to elapsed time. Plot the flux versus time and report its initial and final values for each case. Explain why specifying fixed power does not mean specifying fixed flux.
 
 \begin{draftsolution}
 Using the module's integer molar masses and 4\% uranium mass enrichment,
@@ -87,9 +95,11 @@ An actual spectrum and power distribution would respond to poison loading.
 \end{center}
 
 \clearpage
-\subsection*{(2) Reactivity and macroscopic poison cross sections}
-\textbf{Problem.} Plot reactivity over 0--40 MWd/kg and macroscopic
-Gd-157 and Xe-135 absorption over the first 30 days for the Gd-bearing case.
+\subsection*{(2) Compare reactivity and poison absorption}
+
+Plot \(\rho_\infty(B)\) for both cases on the same axes over 0--40 MWd/kg (units of \(dk/k\)).
+
+In addition, plot the macroscopic Gd-157 and Xe-135 absorption cross sections over the first 30 days of operation for the Gd-case.
 
 \begin{draftsolution}
 The plotted cross sections are spectrum-averaged macroscopic absorption:
@@ -147,12 +157,23 @@ are immaterial at the intended reporting precision.
 
 
 \clearpage
-\subsection*{(3) Fit and three-batch cycle estimate}
-\textbf{Problem.} For each case, fit $\rho_\infty(B)=\rho_0-aB$ on
-301 evenly spaced points from 1 to 40 MWd/kg, addressing the early peak
-or dip. At equilibrium EOC the batch burnups are $B_c$, $2B_c$, and
-$3B_c$. Set their average reactivity minus 0.05 to zero; derive and
-evaluate $B_c$, $B_d=3B_c$, and the cycle length in full-power days.
+\subsection*{(3) Estimate a three-batch cycle length}
+
+For each case, fit
+
+\[
+\rho_\infty(B)=\rho_0-aB \, ,
+\]
+
+making sure to address the early peak (or dip) in some way.
+
+At equilibrium EOC, the three batch burnups are \(B_c\), \(2B_c\), and \(3B_c\). Apply
+
+\[
+  0=\frac{\rho_\infty(B_c)+\rho_\infty(2B_c)+\rho_\infty(3B_c)}{3}-0.05.
+\]
+
+Derive and evaluate expressions for the cycle burnup \(B_c\) and discharge burnup \(B_d=3B_c\). Convert \(B_c\) to full-power days.
 
 \begin{draftsolution}
 Fit $\rho_\infty(B)=\rho_0-aB$ on the 301 evenly spaced burnup points
@@ -204,76 +225,45 @@ reactivity, especially for the Gd-bearing fuel.
 \end{center}
 
 \clearpage
-\subsection*{(4) Infinite-dilution U-238 and the cycle-length error}
-\textbf{Problem.} Use \texttt{xs\_unshielded} in place of \texttt{xs3}
-and rerun the non-Gd case. Repeat its part (3) fit and cycle estimate,
-and evaluate $\Delta B_c=B_{c,I_\infty}-B_{c,\mathrm{shielded}}$ and
-$\Delta t_{\mathrm{days}}=10^6\rho_{\mathrm{HM},0}\Delta B_c/300$.
-Check units and use the cycle difference, not the discharge difference.
-Assume one operating day at Wolf Creek earns exactly \$1 million gross
-revenue; report $L_{\mathrm{million\ dollars}}=\max(0,-\Delta t)$,
-or unsupported promised days if the cycle is overestimated.
+\subsection*{(4) The million-dollar cross-section mistake}
+
+Suppose your friend from \emph{some other university} saved a few keystrokes and used the \textbf{infinite-dilution U-238 resonance integral}, \(I_\infty\), instead of the shielded value. Make this change:
+
+\begin{Verbatim}[fontsize=\footnotesize,breaklines=true]
+xs_unshielded = three_group_xs(shielding=None)
+\end{Verbatim}
+
+Use \texttt{xs\_unshielded} in place of \texttt{xs3} and rerun the non-Gd case. Then, repeat (3) for this unshielded case and determine the cycle length error
+\[
+\Delta B_c=B_{c,I_\infty}-B_{c,\mathrm{shielded}},
+\qquad
+\Delta t_{\mathrm{days}}=
+\frac{\Delta B_c\,\rho_{\mathrm{HM},0}\,10^6}{P^{\prime\prime\prime}},
+\]
+where \(\Delta B_c\) is in MWd/kg, \(\rho_{\mathrm{HM},0}\) is in kg/cm\textsuperscript{3} fuel, and \(P^{\prime\prime\prime}=300\) W/cm\textsuperscript{3} fuel. Use the \textbf{cycle} burnup difference, not the discharge burnup difference. Check the units!
+
+\textbf{For this exercise, assume one operating day at Wolf Creek earns exactly \$1 million in gross revenue.} How many millions of dollars of revenue could an underestimated cycle leave on the table?
+\[
+L_{\mathrm{million\ dollars}}=\max(0,-\Delta t_{\mathrm{days}}).
+\]
+If the model overestimates the cycle length, report the unsupported promised days instead!
 
 \begin{draftsolution}
-The assigned shielding correlation gives
+Our simple model for self-shielding is based on the effective resonance integral for U-238 absorption, or
 \[
  I_{\mathrm{shielded}}=4.45+26.6\sqrt{\frac{4}{10.4(0.82)}}
  =22.66747\ \mathrm b,
  \qquad I_\infty=278\ \mathrm b.
 \]
-These are effective intermediate-group absorption integrals; their ratio
-is about 12.26. The corresponding one-group non-fission U-238 absorption
-cross sections are about 1.34482 and 13.54258 b, respectively, because
-the fast and thermal terms are retained. The assignment's code change
-also scales the tiny intermediate-group U-238 fission integral, as
-implemented in \texttt{three\_group\_xs}.
+The ratio of the unshielded and shielded values is about 12.26, which means we will expect
+a substantial increase in resonance absorption and a corresponding reduction in the reactivity.
 
-Extra U-238 capture initially imposes a large neutron loss and then feeds
-U-239 $\to$ Np-239 $\to$ Pu-239. At 3.5 years, the no-Gd shielded
-Pu-239 density is approximately $2.25945\times10^{20}$ atoms/cm$^3$,
-while the altered model gives $1.47944\times10^{21}$ atoms/cm$^3$.
-The enhanced breeding increases fission production, so the altered
-fixed-power flux falls to $5.46496\times10^{13}$ n/cm$^2$/s.
-These inventory changes require new depletion solves; a final balance
-with changed cross sections alone would not reproduce them.
+That reduction turns out to be \emph{huge}! The unshielded case has $\rho(0)=-1.505267$, corresponding
+to $k$ near 0.399.  It does rise as Pu-239 is produced, but it does not reach criticality within 40 MWd/kg or so.  Hence, any batching will also fail to achieve criticality.  Therefore, we can say the cycle length is 0 MWd/kg.  Compared to the $\approx 44$ MWd/kg of the shielded case, our poor colleague made a \$44 million error.
 
-The altered non-Gd case initially has $\rho=-1.505267$, corresponding
-to $k$ near 0.399.
-Reactivity below $-1$ is mathematically allowed by $\rho=1-1/k$.
-Its reactivity remains negative throughout the available history. Its rising
-post-startup fit has $a\simeq-0.01959<0$ and
-$\rho_0\simeq-0.81545<0.05$. The decreasing-reactivity cycle assumptions
-both fail. The positive formal $B_c\simeq22.09$ is produced by dividing
-two negative numbers; it has no valid cycle interpretation. This rising curve does not describe
-an initially operable, depleting equilibrium cycle.
 
-Subtracting the shielded non-Gd formal cycle estimate nonetheless gives the
-requested arithmetic:
-\input{data/hw24/errors.tex}
-Here
-\[
- \Delta t=\Delta B_c\frac{10^6\rho_{\mathrm{HM},0}}{P^{\prime\prime\prime}}
- \quad\left[
- \frac{\mathrm{MW\,day}}{\mathrm{kg}}
- \frac{\mathrm{kg}}{\mathrm{cm^3}}
- \frac{10^6\ \mathrm{W/MW}}{\mathrm{W/cm^3}}
- =\mathrm{day}\right].
-\]
-The sign is negative: the blind formula underestimates the formal cycle
-by about 43.70 days, or \$43.70 million under the stipulated gross-revenue
-conversion. It is the \emph{cycle} burnup difference; using the discharge
-difference would introduce a factor-of-three error.
 
-\textbf{Interpretation.} This
-dollar figure is formal arithmetic from an invalid altered model, and
-even the shielded limiting discharge extrapolates outside the history.
-It establishes neither a defensible operating schedule nor an actual
-financial loss. The imposed-power ODE can integrate a subcritical state;
-it does not supply the missing source or prove self-sustained operation.
 \end{draftsolution}
-\begin{center}
-\includegraphics[width=\textwidth]{hw24_cross_section_effect.png}
-\end{center}
 
 \clearpage
 \subsection*{Additional verification: nonlinear batch-average comparison}
@@ -336,3 +326,29 @@ These checks verify the solution to the specified teaching equations.
 The prescribed spectrum, approximate data, omitted Gd spatial
 self-shielding, incomplete chain, equal batch weights, and absence of
 feedback or explicit control remain model limitations.
+
+\subsection*{Review notes and reproducibility}
+This solution follows the current local \texttt{homework/markdown/HW24.md},
+confirmed by the instructor on November 2, 2026: depletion;
+reactivity and poison cross sections; three-batch cycle estimates;
+and the infinite-dilution mistake. The starter comments specify the
+301-point fit grid; numerical bounds and sensitivity checks support the
+instructor reference. The Gd addition is an isotope number density in fuel;
+it leaves the original uranium and oxygen inventories unchanged. It is not
+a natural-Gd or gadolinia mass fraction.
+
+Run \texttt{python build\_hw24\_solution.py} from this directory, then
+\texttt{make} for the full HW01--28 manual, or
+\texttt{make hw24\_review.pdf} for the standalone copy. The executed
+\texttt{hw24\_solution.ipynb} contains the same numerical source and its
+outputs. The retained CSV tables and \texttt{provenance.json} in
+\texttt{data/hw24/} include solver settings, package versions, source hashes,
+unrounded results, and verification evidence. All reactivities below are
+dimensionless unless a percent or pcm unit is shown explicitly.
+
+The numerical reference uses the assigned starter grid augmented by
+0.01-day sampling during the first 30 days and about 0.208-day sampling
+afterward. Fits use linear interpolation onto exactly 301 evenly spaced
+points from 1 to 40 MWd/kg. Extrema include both endpoints and all relevant
+interpolation knots. Digits retained in generated tables identify the
+calculation; they do not measure physical model accuracy.

@@ -1,0 +1,43 @@
+check,measured,upper_bound,passed
+shielded_no_Gd: independent rho balance (pcm),1.11022302463e-11,1e-08,True
+shielded_no_Gd: independent power relative error,6.66133814775e-16,1e-12,True
+shielded_no_Gd: initial HM formula relative error,2.22044604925e-16,1e-12,True
+shielded_no_Gd: linear burnup absolute error (MWd/kg),1.42108547152e-14,1e-07,True
+shielded_no_Gd: formal LRM EOC algebra residual (pcm),1.38777878078e-12,1e-08,True
+shielded_no_Gd: Gd157 macroscopic absorption relative error,0,1e-12,True
+shielded_no_Gd: Xe135 macroscopic absorption relative error,0,1e-12,True
+shielded_Gd: independent rho balance (pcm),1.11022302463e-11,1e-08,True
+shielded_Gd: independent power relative error,6.66133814775e-16,1e-12,True
+shielded_Gd: initial HM formula relative error,2.22044604925e-16,1e-12,True
+shielded_Gd: linear burnup absolute error (MWd/kg),3.5527136788e-14,1e-07,True
+shielded_Gd: formal LRM EOC algebra residual (pcm),6.93889390391e-13,1e-08,True
+shielded_Gd: Gd157 macroscopic absorption relative error,0,1e-12,True
+shielded_Gd: Xe135 macroscopic absorption relative error,0,1e-12,True
+shielded_Gd: analytic Gd density error / initial Gd,3.4908155464e-08,2e-06,True
+shielded_Gd: Gd capture atom conservation / initial Gd,1.647744e-11,1e-07,True
+Iinf_no_Gd: independent rho balance (pcm),4.4408920985e-11,1e-08,True
+Iinf_no_Gd: independent power relative error,7.77156117238e-16,1e-12,True
+Iinf_no_Gd: initial HM formula relative error,2.22044604925e-16,1e-12,True
+Iinf_no_Gd: linear burnup absolute error (MWd/kg),2.13162820728e-14,1e-07,True
+Iinf_no_Gd: formal LRM EOC algebra residual (pcm),2.08166817117e-12,1e-08,True
+Iinf_no_Gd: Gd157 macroscopic absorption relative error,0,1e-12,True
+Iinf_no_Gd: Xe135 macroscopic absorption relative error,0,1e-12,True
+shielded_no_Gd: tighter BDF max rho change (pcm),0.00143551677212,0.02,True
+shielded_no_Gd: BDF vs Radau max rho difference (pcm),3.7820768739e-05,0.002,True
+shielded_no_Gd: tighter BDF formal Bc change (MWd/kg),2.82215065539e-07,2e-05,True
+shielded_no_Gd: finer sampling formal Bc change (MWd/kg),3.78119402455e-08,0.002,True
+shielded_no_Gd: finer sampling extrema change (pcm),1.47038534126e-05,0.1,True
+shielded_no_Gd: finer sampling core10 extrema change (pcm),1.01597175117e-05,0.1,True
+shielded_Gd: tighter BDF max rho change (pcm),0.0014357875,0.02,True
+shielded_Gd: BDF vs Radau max rho difference (pcm),3.78223896647e-05,0.002,True
+shielded_Gd: tighter BDF formal Bc change (MWd/kg),3.51125255094e-07,2e-05,True
+shielded_Gd: finer sampling formal Bc change (MWd/kg),5.85293591371e-08,0.002,True
+shielded_Gd: finer sampling extrema change (pcm),1.47038686782e-05,0.1,True
+shielded_Gd: finer sampling core10 extrema change (pcm),4.58424409544e-06,0.1,True
+Iinf_no_Gd: tighter BDF max rho change (pcm),0.00143401266417,0.02,True
+Iinf_no_Gd: BDF vs Radau max rho difference (pcm),3.67149421976e-05,0.002,True
+Iinf_no_Gd: tighter BDF formal Bc change (MWd/kg),4.39480238867e-07,2e-05,True
+Iinf_no_Gd: finer sampling formal Bc change (MWd/kg),7.50839731722e-07,0.002,True
+Iinf_no_Gd: finer sampling extrema change (pcm),0.00704388423145,0.1,True
+Iinf_no_Gd: finer sampling core10 extrema change (pcm),0.000718552006784,0.1,True
+shielded: Gd/no-Gd actinide invariance / initial HM atoms,2.87942363555e-13,1e-08,True

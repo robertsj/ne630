@@ -1,9 +1,7 @@
 # Fall 2026 NE 630 solution manual
 
 This directory builds one instructor-only PDF covering Homework 01 through
-Homework 28.
-HW24 remains a source-based draft pending assignment confirmation. HW27 and
-HW28 now follow the current student statements fetched from the remote branch:
+Homework 28, including the current local four-part depletion/Gd Homework 24:
 
 ```bash
 make
@@ -66,49 +64,131 @@ instructor check, not an additional student requirement.
 This manual contains solutions and must not be added to the student-facing
 Sphinx or `gh-pages` publication pipeline.
 
-
-## HW19–24 and HW27–28 additions (2026-11-02)
-
-HW20–23 statements match the current student Markdown (converted with Pandoc).
-HW24 uses `ne630_problems` at `9c3dc61` because no current assignment file was
-found. HW27 and HW28 were reconciled with current student statements and
-source provenance from remote commit `e8dee7c`. HW19 uses the Canvas statement supplied by Jeremy
-on November 2, 2026, now archived in `../markdown/HW19.md` and `../html/HW19.html`.
-Its solution is new and uses actual OpenMC runs of the Lesson 19 cell.
-
-The new verification/figure builder requires NumPy, SciPy, and Matplotlib:
+Homework 24 is included in the canonical manual and also has a standalone instructor review packet:
 
 ```bash
-python build_hw20_28_figures.py
-make PYTHON=/home/robertsj/opt/miniforge3/bin/python
+make hw24_review.pdf PYTHON=/path/to/scientific/python
 ```
 
-It checks control criticality, analytic temperature derivatives against finite
-differences, xenon decay against an independent ODE and its peak condition,
-Pa/U formulas including coincident-rate and zero-U-removal limits, unequal-batch
-criticality, six-group `solve_ivp` against matrix exponentials on each interval,
-and the one-group modal solution against a matrix exponential. It regenerates
-three instructor-only figures. This builder does not run OpenMC; the separate
-HW19 study below does.
+The [review PDF](hw24_review.pdf) contains the written solution, generated
+tables and plots, and the disposition of the invalid
+infinite-dilution cycle model. Its section source is [hw24.tex](hw24.tex);
+both PDFs now use the same section and numerical assets in the full HW01--28 manual.
 
-### Deviations and grading decisions
+The solution follows the current local `../markdown/HW24.md`, confirmed by the instructor on November 2, 2026, with four required parts. Part (2) plots
+spectrum-averaged macroscopic Gd-157 and Xe-135 absorption in cm⁻¹ for
+the Gd-bearing case during the first 30 days; its samples and endpoints
+are retained in the `poison_absorption_*.csv` files. The cross-section
+mistake is part (4) and reruns only the non-Gd case with infinite-dilution data.
+The earlier 10 MWd/kg core
+comparison is retained as an optional verification appendix.
 
-| HW | Treatment |
-| --- | --- |
-| 19 | Canvas statement recovered. Uses U-235 atom fraction among uranium atoms, converting the default 15 wt% first. Targets k-infinity = 1, not the notebook's illustrative 1/0.90 finite-core target. Reports the first interpolation and its independent check even when refinement is needed. |
-| 20 | Preserves legacy rounded 270 g/mol and table slowing-down power 1.28 cm⁻¹, explicitly distinguished from HW17's microscopic estimate. Repairs missing rod-cross-section divisor; replaces invalid addition of defects from different control states with direct hot-excess evaluation. |
-| 21 | Separates number-ratio ppm, B-10 mass ppm, and natural-boron mass ppm; OpenMC accepts elemental-boron mass ppm. Separates d(log k)/dT from dρ/dT away from criticality. Retains labeled historical transport data, fixes cell/effective-k terminology, and propagates tally errors consistently. 4800 ppm is a near-critical historical estimate, not a newly fitted root. |
-| 22 | Current statement says the peak is 11.3 h; given half-lives/yields/flux imply 8.51278 h. Supplies both 11.3-h requested evaluation and actual peak; recommends correcting the statement before requiring one unique answer. Fixed hot-state, fuel-volume worth convention retained. |
-| 23 | Matches current atom-fraction/constant-inventory assumptions; corrects sign on a general initial-condition term and missing time factors in legacy integrating factors. Adds equal-rate and zero-removal limits without importing unneeded example material data. |
-| 24 | Source Problem 1 duplicates current HW25 Problem 3; retained explicitly rather than silently renumbered. Includes unequal-power three-batch bonus. |
-| 27 | Uses current remote student statement and its checked solution/figure. Follows signed reactivity histories rather than ambiguous insertion/removal wording. Distinguishes production-weighted beta from true importance-weighted beta_eff. Uses segmented stiff integration at 1 and 6 s; all precursor inventories retained. |
-| 28 | Restores missing n in neutron equation; distinguishes modal rates from time constants. Preserves small-reactivity period approximation because generation time is unspecified in Problem 1. Uses current Problem 3 (no longer bonus), preserves the remote validity warning and asymptotic counterexample, and supplies a labeled new derivation under the additional scale-separation restriction. The student prompt remains unchanged and requires instructor review. |
+[build_hw24_solution.py](build_hw24_solution.py) reruns the three calculations
+and fails if any numerical verification check fails. It requires NumPy,
+SciPy, pandas, and Matplotlib. The checks include independent power,
+burnup, heavy-metal mass and neutron balances; analytic Gd depletion;
+solver convergence with BDF and Radau; sampling sensitivity; and EOC
+interpolation bounds. [data/hw24/](data/hw24/) retains summary, financial
+arithmetic, verification and core-history CSV files, complete inventory
+histories compressed as `.csv.gz`, and source hashes/package versions in
+`provenance.json`. pandas reads the compressed CSV files directly.
 
-OpenMC concentration convention checked against the
-[official API documentation](https://docs.openmc.org/en/stable/pythonapi/generated/openmc.model.borated_water.html).
-The source problem repository and existing student assignments were not modified.
-The missing HW19 student statement was recovered from the supplied Canvas text.
-These solutions and plots are instructor-only and are not part of gh-pages.
+The executed [solution notebook](hw24_solution.ipynb) embeds the same
+numerical source, including the verification checks. Run it from inside
+this checkout. To regenerate its source after changing the builder, run
+`python build_hw24_solution.py --notebook` (also requires nbformat), then
+execute all cells with Jupyter or nbclient. Regeneration clears previous
+outputs; execute the notebook before presenting it as verified.
+
+This solution uses a finer grid than the starter to resolve startup; the
+retained starter-grid comparison quantifies the small difference. Both
+shielded limiting discharge burnups exceed the simulated history. Every
+nonlinear EOC residual at a fitted limiting cycle is therefore explicitly
+unsupported. The approximately $43.70 million figure is formal
+arithmetic from an invalid altered cycle model, not established losses.
+
+
+## Homeworks 27 and 28
+
+The existing manual now includes `hw27.tex` (two problems) and `hw28.tex`
+(three current problems, with Problem 3 no longer labeled bonus). Source provenance, numbering,
+limited prompt corrections, and unresolved source limitations are documented
+in `../README.md`. Matching worked solutions are adapted from source Lessons
+27–28 and checked against their notebooks. Problem 3 has no worked source solution. The qualified new derivation from
+upstream `232ceea` is included, together with its additional scale-separation
+restriction and the counterexample to the unchanged student hypotheses.
+
+Run only the new numerical checks/assets with:
+
+    /home/robertsj/miniforge3/bin/python build_hw27_28_checks.py
+
+This checks HW27 critical equilibrium and each piecewise transient against
+independent Radau integration, and HW28 two-mode analytical coefficients and
+densities against both matrix exponentials and Radau. Data and check values
+are retained in `data/hw27_28/`; the missing legacy HW27 solution plot is
+regenerated as `figures/hw27_neutron_density.png`. None of this uses or repairs
+the unrelated course `ne630_kinetics.py` API mismatch.
+
+Build the complete canonical manual without a figure override:
+
+    PATH=/home/robertsj/miniforge3/bin:$PATH make PYTHON=/home/robertsj/miniforge3/bin/python
+
+HW24 tables and figures are explicit prerequisites; its builder tracks the
+authoritative Markdown and local `code/ne630_depletion.py`. The existing
+executed HW24 notebook embeds the identical builder source and is retained.
+
+## HW19–24 working-tree reconciliation (November 2, 2026)
+
+The remote was fetched and `origin/Fall2026` remained at `232ceea`. Only
+missing HW19–23 manual sources/dependencies and the qualified HW28 solution
+were initially imported from upstream. The November 3 commit is based on
+that history and retains its HW19 statement and transport provenance.
+Current student Markdown/HTML, the local depletion module, and notebook
+inputs are unchanged. The conflicting upstream HW24 statement was rejected.
+The local HW24 derivation and numerical builder already matched all four
+parts; the solution now includes the common inputs and fuller problem
+statements, and its three cases and 42 checks have been rerun locally.
+The former legacy-HW24 block was removed from the imported multi-homework
+checker so it cannot be mistaken for the current assignment.
+
+HW19 uses the instructor-supplied Canvas statement retained in `hw19.tex`,
+with upstream OpenMC results in `data/hw19_results.json`. These are retained
+transport calculations, not newly run calculations in this reconciliation.
+`build_hw19_figures.py` redraws these results without OpenMC; only explicit
+`--run` launches transport. `hw19_sfr_model.py` retains the Lesson 19 model.
+The input is U-235 atom fraction among uranium: the default 15 wt% converts
+to 0.1516279521. The initial interpolated 9.02404 atom% gives
+1.015286 ± 0.000954; the refined 8.75096 atom% gives 0.999839 ± 0.000886.
+Do not interpret the cell threshold as finite-core criticality.
+
+`build_hw20_28_figures.py` checks HW20–23 and HW27–28 with NumPy, SciPy,
+and Matplotlib. It verifies control balances, temperature derivatives,
+Xe against an independent ODE/peak condition, Pa/U equal-rate and
+zero-removal limits, and kinetic modes against matrix exponentials.
+It regenerates the HW21, HW22, and independent HW27 figures; it does not
+use or repair the unrelated course kinetics module.
+
+Inherited qualifications are retained, not resolved by changing prompts:
+
+- HW20 uses the stated rounded 270 g/mol and slowing-down power 1.28 cm⁻¹;
+  direct hot-excess evaluation avoids adding defects from different states.
+- HW21 distinguishes number-ratio, B-10 mass, and natural-boron mass ppm;
+  historical transport coefficients are labeled, not newly simulated.
+- HW22 retains the requested 11.3-hour evaluation and the computed actual
+  peak of 8.51278 hours; the discrepancy remains an instructor decision.
+- HW23 follows current atom-fraction and constant-U-238 assumptions, with
+  corrected initial-condition signs and time factors plus limiting cases.
+- HW24 has four required parts, not the legacy batch-algebra problems.
+  The optional 10 MWd/kg core comparison is not a fifth assigned problem.
+- HW28 Problem 3 remains conditional on additional scale separation.
+
+The corrected source and supporting assets are committed on Fall2026.
+Generated solution PDFs remain ignored and local-only; no Sphinx, gh-pages,
+or Canvas publication is part of this source update.
+
+The startup/extrema table uses explicit pandas column access and a
+regression assertion requiring both shielded rows and their exact reference
+values. The executed notebook embeds the same corrected source.
 
 
 ### HW19 reproducible transport study
@@ -159,28 +239,21 @@ The saved five-run reference study gives a first estimate of 9.02404 atom%
 than replaced silently by the refined result.
 
 
-### Remote reconciliation (2026-11-02)
+### Deviations and grading decisions
 
-Remote commit `e8dee7c` adds authoritative HW27–28 student statements and
-independently checked solutions. The merged manual uses those statements,
-HW27's neutron-density figure and full equilibrium inventory, and HW28's
-expanded coefficient/results tables. HW28 Problem 3 retains the source's
-original student wording but includes both the remote counterexample and our
-new, explicitly qualified derivation. It is not marked as a bonus. Only HW24
-still lacks a confirmed current assignment statement.
+| HW | Treatment |
+| --- | --- |
+| 19 | Canvas statement recovered. Uses U-235 atom fraction among uranium atoms, converting the default 15 wt% first. Targets k-infinity = 1, not the notebook's illustrative 1/0.90 finite-core target. Reports the first interpolation and its independent check even when refinement is needed. |
+| 20 | Preserves legacy rounded 270 g/mol and table slowing-down power 1.28 cm⁻¹, explicitly distinguished from HW17's microscopic estimate. Repairs missing rod-cross-section divisor; replaces invalid addition of defects from different control states with direct hot-excess evaluation. |
+| 21 | Separates number-ratio ppm, B-10 mass ppm, and natural-boron mass ppm; OpenMC accepts elemental-boron mass ppm. Separates d(log k)/dT from dρ/dT away from criticality. Retains labeled historical transport data, fixes cell/effective-k terminology, and propagates tally errors consistently. 4800 ppm is a near-critical historical estimate, not a newly fitted root. |
+| 22 | Current statement says the peak is 11.3 h; given half-lives/yields/flux imply 8.51278 h. Supplies both 11.3-h requested evaluation and actual peak; recommends correcting the statement before requiring one unique answer. Fixed hot-state, fuel-volume worth convention retained. |
+| 23 | Matches current atom-fraction/constant-inventory assumptions; corrects sign on a general initial-condition term and missing time factors in legacy integrating factors. Adds equal-rate and zero-removal limits without importing unneeded example material data. |
+| 24 | Current four-part depletion/Gd assignment replaces the legacy batch-algebra sheet. The infinite-dilution cycle is invalid; its revenue difference is formal arithmetic only. The optional 10-MWd/kg check is not a fifth assigned problem. |
+| 27 | Uses current remote student statement and its checked solution/figure. Follows signed reactivity histories rather than ambiguous insertion/removal wording. Distinguishes production-weighted beta from true importance-weighted beta_eff. Uses segmented stiff integration at 1 and 6 s; all precursor inventories retained. |
+| 28 | Restores missing n in neutron equation; distinguishes modal rates from time constants. Preserves small-reactivity period approximation because generation time is unspecified in Problem 1. Uses current Problem 3 (no longer bonus), preserves the remote validity warning and asymptotic counterexample, and supplies a labeled new derivation under the additional scale-separation restriction. The student prompt remains unchanged and requires instructor review. |
 
-The additional targeted verifier is retained:
-
-```bash
-python build_hw27_28_checks.py
-```
-
-It compares exact piecewise matrix exponentials with independent Radau
-integration, verifies one-group modal coefficients and densities, and tests
-the counterexample family for the insufficient Problem 3 hypotheses.
-Its CSV/JSON results live in `data/hw27_28/`, and its figure is
-`figures/hw27_neutron_density.png`. The earlier `hw27_six_group.png` and
-`build_hw20_28_figures.py` remain as an independent check of the same model.
-No transport calculation is repeated by this verifier. It does not depend on
-the separate course `ne630_kinetics.py` module. Use a Python environment with
-NumPy, SciPy, and Matplotlib for these scripts and the normal manual build.
+OpenMC concentration convention checked against the
+[official API documentation](https://docs.openmc.org/en/stable/pythonapi/generated/openmc.model.borated_water.html).
+The source problem repository and existing student assignments were not modified.
+The missing HW19 student statement was recovered from the supplied Canvas text.
+These solutions and plots are instructor-only and are not part of gh-pages.

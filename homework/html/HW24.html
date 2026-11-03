@@ -1,0 +1,188 @@
+<h1 id="homework-24-burnable-poison-batch-refueling-and-a-million-dollar-cross-section">Homework 24: Burnable poison, batch refueling, and a million-dollar cross section</h1>
+<p>Use <code>ne630_depletion</code> to compare two otherwise identical PWR-like fuel pincells, one with and one without a gadolinium burnable poison (BP). Estimate the cycle length of a three-batch core, assess the linear reactivity model (LRM), and investigate the consequences of omitting U-238 resonance self-shielding.</p>
+<h2 id="files-and-common-inputs">Files and common inputs</h2>
+<p>Download the <a href="https://robertsj.github.io/ne630/_static/notebooks/lesson_24.ipynb">Lesson 24 notebook</a> and the <a href="https://robertsj.github.io/ne630/_static/notebooks/ne630_depletion.py">depletion module</a>, and save them in the same folder. Use NumPy, SciPy, pandas, and Matplotlib. The <a href="https://robertsj.github.io/ne630/_static/handouts/lesson-24/lesson_24_handout.pdf">Lesson 24 handout</a> provides the batch-refueling framework.</p>
+<p>Use three equal-mass batches with equal weights and burnup increments, and an additive leakage reactivity penalty of <img
+class="equation_image"
+title="\rho_L=0.05"
+src="/equation_images/%255Crho_L%253D0.05"
+alt="LaTeX: \rho_L=0.05"
+data-equation-content="\rho_L=0.05"
+/>. The burnable poison (BP) is a uniformly irradiated, single-isotope Gd-157 addition that preserves the initial UO₂ inventory; its density is not a natural-Gd or Gd₂O₃ weight fraction. The model does not resolve spatial self-shielding of gadolinia.</p>
+<p>You may copy and paste the following as a first cell in your notebook:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ne630_depletion <span class="im">import</span> (</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    DAY, YEAR, Cell, UO2Shielding,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    three_group_xs, uo2_initial, solve_depletion,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>cell <span class="op">=</span> Cell(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    moderator_to_fuel_volume<span class="op">=</span><span class="fl">2.0</span>,             <span class="co"># V_m / V_f</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    water_density_g_cm3<span class="op">=</span><span class="fl">0.7</span>,                 <span class="co"># g/cm^3 moderator</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    moderator_flux_ratios<span class="op">=</span>(<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">1.16</span>),  <span class="co"># phi_m / phi_f: fast, intermediate, thermal</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    nonleakage<span class="op">=</span><span class="fl">1.0</span>,                          <span class="co"># Apply leakage separately in the LRM.</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># UO2 density: 10.4 g/cm^3 fuel; fuel diameter: 0.82 cm.</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>xs3 <span class="op">=</span> three_group_xs(shielding<span class="op">=</span>UO2Shielding(<span class="fl">10.4</span>, <span class="fl">0.82</span>))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Irradiate for 0–3.5 full-power years; YEAR = 365.25*DAY.</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> np.unique(np.r_[<span class="fl">0.</span>, np.geomspace(<span class="fl">60.</span>, <span class="dv">30</span><span class="op">*</span>DAY, <span class="dv">80</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                        np.linspace(<span class="dv">30</span><span class="op">*</span>DAY, <span class="fl">3.5</span><span class="op">*</span>YEAR, <span class="dv">601</span>)])</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># For part (3), fit on 301 evenly spaced burnups from 1 to 40 MWd/kg initial HM.</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> {}</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Gd-157 loadings in atoms/cm^3 fuel, without and with BP.</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.0e18 atoms/cm^3 = 1.0e-6 atoms/(barn cm), about 2.61e-4 g/cm^3 of Gd-157.</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> label, gd157 <span class="kw">in</span> {<span class="st">&quot;without BP&quot;</span>: <span class="fl">0.0</span>, <span class="st">&quot;with BP&quot;</span>: <span class="fl">1.0e18</span>}.items():</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    initial <span class="op">=</span> uo2_initial(</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.04</span>,                       <span class="co"># U-235 enrichment: 4% by initial uranium mass.</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="fl">10.4</span>,                       <span class="co"># UO2 density, g/cm^3 fuel.</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        enrichment_basis<span class="op">=</span><span class="st">&quot;weight&quot;</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        gd157_atoms_cm3<span class="op">=</span>gd157,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    results[label] <span class="op">=</span> solve_depletion(</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        times, initial<span class="op">=</span>initial,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        model<span class="op">=</span><span class="dv">3</span>,                    <span class="co"># Expanded actinide chain.</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        include_poisons<span class="op">=</span><span class="va">True</span>,       <span class="co"># Include explicit I/Xe and Pm/Sm chains.</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        power_density_w_cm3<span class="op">=</span><span class="fl">300.0</span>,   <span class="co"># W/cm^3 fuel, held constant.</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        spectrum<span class="op">=</span>(<span class="fl">0.35</span>, <span class="fl">0.55</span>, <span class="fl">0.10</span>),  <span class="co"># Fixed integrated fractions: fast/intermediate/thermal.</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        xs3<span class="op">=</span>xs3, cell<span class="op">=</span>cell,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<p>At fixed power, <code>result.total_flux</code> is a time history. Use <code>result.initial_hm_kg_cm3</code> for the initial heavy-metal density (excluding Gd), <code>result.burnup_mwd_kg</code> for burnup, and <code>result.neutronics("rate_ratio")["rho"]</code> for reactivity. All other tracked nuclides start at zero, including the I/Xe and Pm/Sm chains. Adapt the lesson notebook’s examples to the two cases and three batches specified here.</p>
+<h2 id="deplete-the-two-pincells">(1) Deplete the two pincells</h2>
+<p>Run both cases using the shielded U-238 data. Confirm that the power remains constant and that burnup is proportional to elapsed time. Plot the flux versus time and report its initial and final values for each case. Explain why specifying fixed power does not mean specifying fixed flux.</p>
+<h2 id="compare-reactivity-and-poison-absorption">(2) Compare reactivity and poison absorption</h2>
+<p>Plot <img
+class="equation_image"
+title="\rho_\infty(B)"
+src="/equation_images/%255Crho_%255Cinfty(B)"
+alt="LaTeX: \rho_\infty(B)"
+data-equation-content="\rho_\infty(B)"
+/> for both cases on the same axes over 0–40 MWd/kg (units of <img
+class="equation_image"
+title="dk/k"
+src="/equation_images/dk%252Fk"
+alt="LaTeX: dk/k"
+data-equation-content="dk/k"
+/>).</p>
+<p>In addition, plot the macroscopic Gd-157 and Xe-135 absorption cross sections over the first 30 days of operation for the Gd-case.</p>
+<h2 id="estimate-a-three-batch-cycle-length">(3) Estimate a three-batch cycle length</h2>
+<p>For each case, fit</p>
+<p><img
+class="equation_image"
+title="\rho_\infty(B)=\rho_0-aB \, ,
+"
+src="/equation_images/%255Crho_%255Cinfty(B)%253D%255Crho_0-aB%2520%255C%252C%2520%252C%250A"
+alt="LaTeX: \rho_\infty(B)=\rho_0-aB \, ,
+"
+data-equation-content="\rho_\infty(B)=\rho_0-aB \, ,
+"
+/></p>
+<p>making sure to address the early peak (or dip) in some way.</p>
+<p>At equilibrium EOC, the three batch burnups are <img
+class="equation_image"
+title="B_c"
+src="/equation_images/B_c"
+alt="LaTeX: B_c"
+data-equation-content="B_c"
+/>, <img
+class="equation_image"
+title="2B_c"
+src="/equation_images/2B_c"
+alt="LaTeX: 2B_c"
+data-equation-content="2B_c"
+/>, and <img
+class="equation_image"
+title="3B_c"
+src="/equation_images/3B_c"
+alt="LaTeX: 3B_c"
+data-equation-content="3B_c"
+/>. Apply</p>
+<p><img
+class="equation_image"
+title="  0=\frac{\rho_\infty(B_c)+\rho_\infty(2B_c)+\rho_\infty(3B_c)}{3}-0.05.
+"
+src="/equation_images/%2520%25200%253D%255Cfrac%257B%255Crho_%255Cinfty(B_c)%252B%255Crho_%255Cinfty(2B_c)%252B%255Crho_%255Cinfty(3B_c)%257D%257B3%257D-0.05.%250A"
+alt="LaTeX:   0=\frac{\rho_\infty(B_c)+\rho_\infty(2B_c)+\rho_\infty(3B_c)}{3}-0.05.
+"
+data-equation-content="  0=\frac{\rho_\infty(B_c)+\rho_\infty(2B_c)+\rho_\infty(3B_c)}{3}-0.05.
+"
+/></p>
+<p>Derive and evaluate expressions for the cycle burnup <img
+class="equation_image"
+title="B_c"
+src="/equation_images/B_c"
+alt="LaTeX: B_c"
+data-equation-content="B_c"
+/> and discharge burnup <img
+class="equation_image"
+title="B_d=3B_c"
+src="/equation_images/B_d%253D3B_c"
+alt="LaTeX: B_d=3B_c"
+data-equation-content="B_d=3B_c"
+/>. Convert <img
+class="equation_image"
+title="B_c"
+src="/equation_images/B_c"
+alt="LaTeX: B_c"
+data-equation-content="B_c"
+/> to full-power days.</p>
+<h2 id="the-million-dollar-cross-section-mistake">(4) The million-dollar cross-section mistake</h2>
+<p>Suppose your friend from <em>some other university</em> saved a few keystrokes and used the <strong>infinite-dilution U-238 resonance integral</strong>, <img
+class="equation_image"
+title="I_\infty"
+src="/equation_images/I_%255Cinfty"
+alt="LaTeX: I_\infty"
+data-equation-content="I_\infty"
+/>, instead of the shielded value. Make this change:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>xs_unshielded <span class="op">=</span> three_group_xs(shielding<span class="op">=</span><span class="va">None</span>)</span></code></pre></div>
+<p>Use <code>xs_unshielded</code> in place of <code>xs3</code> and rerun the non-Gd case. Then, repeat (3) for this unshielded case and determine the cycle length error</p>
+<p><img
+class="equation_image"
+title="\Delta B_c=B_{c,I_\infty}-B_{c,\mathrm{shielded}},
+\qquad
+\Delta t_{\mathrm{days}}=
+\frac{\Delta B_c\,\rho_{\mathrm{HM},0}\,10^6}{P^{\prime\prime\prime}},
+"
+src="/equation_images/%255CDelta%2520B_c%253DB_%257Bc%252CI_%255Cinfty%257D-B_%257Bc%252C%255Cmathrm%257Bshielded%257D%257D%252C%250A%255Cqquad%250A%255CDelta%2520t_%257B%255Cmathrm%257Bdays%257D%257D%253D%250A%255Cfrac%257B%255CDelta%2520B_c%255C%252C%255Crho_%257B%255Cmathrm%257BHM%257D%252C0%257D%255C%252C10%255E6%257D%257BP%255E%257B%255Cprime%255Cprime%255Cprime%257D%257D%252C%250A"
+alt="LaTeX: \Delta B_c=B_{c,I_\infty}-B_{c,\mathrm{shielded}},
+\qquad
+\Delta t_{\mathrm{days}}=
+\frac{\Delta B_c\,\rho_{\mathrm{HM},0}\,10^6}{P^{\prime\prime\prime}},
+"
+data-equation-content="\Delta B_c=B_{c,I_\infty}-B_{c,\mathrm{shielded}},
+\qquad
+\Delta t_{\mathrm{days}}=
+\frac{\Delta B_c\,\rho_{\mathrm{HM},0}\,10^6}{P^{\prime\prime\prime}},
+"
+/></p>
+<p>where <img
+class="equation_image"
+title="\Delta B_c"
+src="/equation_images/%255CDelta%2520B_c"
+alt="LaTeX: \Delta B_c"
+data-equation-content="\Delta B_c"
+/> is in MWd/kg, <img
+class="equation_image"
+title="\rho_{\mathrm{HM},0}"
+src="/equation_images/%255Crho_%257B%255Cmathrm%257BHM%257D%252C0%257D"
+alt="LaTeX: \rho_{\mathrm{HM},0}"
+data-equation-content="\rho_{\mathrm{HM},0}"
+/> is in kg/cm³ fuel, and <img
+class="equation_image"
+title="P^{\prime\prime\prime}=300"
+src="/equation_images/P%255E%257B%255Cprime%255Cprime%255Cprime%257D%253D300"
+alt="LaTeX: P^{\prime\prime\prime}=300"
+data-equation-content="P^{\prime\prime\prime}=300"
+/> W/cm³ fuel. Use the <strong>cycle</strong> burnup difference, not the discharge burnup difference. Check the units!</p>
+<p><strong>For this exercise, assume one operating day at Wolf Creek earns exactly $1 million in gross revenue.</strong> How many millions of dollars of revenue could an underestimated cycle leave on the table?</p>
+<p><img
+class="equation_image"
+title="L_{\mathrm{million\ dollars}}=\max(0,-\Delta t_{\mathrm{days}}).
+"
+src="/equation_images/L_%257B%255Cmathrm%257Bmillion%255C%2520dollars%257D%257D%253D%255Cmax(0%252C-%255CDelta%2520t_%257B%255Cmathrm%257Bdays%257D%257D).%250A"
+alt="LaTeX: L_{\mathrm{million\ dollars}}=\max(0,-\Delta t_{\mathrm{days}}).
+"
+data-equation-content="L_{\mathrm{million\ dollars}}=\max(0,-\Delta t_{\mathrm{days}}).
+"
+/></p>
+<p>If the model overestimates the cycle length, report the unsupported promised days instead!</p>

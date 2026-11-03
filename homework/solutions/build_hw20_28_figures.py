@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce/verify HW20--24 and 27--28 solution numbers and figures.
+"""Reproduce/verify HW20--23 and 27--28 solution numbers and figures.
 
 Inputs: ne630_problems at 9c3dc61; current HW20--23 Markdown governs.
 No transport runs: HW21 bonus uses explicitly identified legacy tally data.
@@ -138,12 +138,6 @@ def main():
         q=solve_ivp(lambda t,y:[rate-a*y[0],decay*y[0]-b*y[1]],(0,12),[0,0],t_eval=t,rtol=2e-11,atol=1e-12)
         assert q.success;close(q.y,np.array([pa,u]),atol=5e-11)
 
-    ns=np.arange(1,6);bc=2*(.243-.05)/(.00664*(ns+1))
-    powers=np.array([1.3,.9,.8]);bc3=3*(.243-.05)/(.00664*(powers@np.cumsum(powers)))
-    close(np.mean(powers*(.243-.00664*bc3*np.cumsum(powers)))-.05,0)
-    hw24=dict(cycle=bc.tolist(),discharge=(ns*bc).tolist(),limit=2*(.243-.05)/.00664,
-              unequal_cycle=bc3,unequal_discharge=3*bc3)
-
     lam=np.log(2)/np.array([56,23,6.2,2.3,.61,.23])
     bet=np.array([.00021,.00142,.00128,.00257,.00075,.00027]);L=50e-6;n0=1e6
     y0=np.r_[n0,bet*n0/(L*lam)]
@@ -181,9 +175,9 @@ def main():
             v=np.array([aa@np.exp(w*t),bb@np.exp(w*t)])
             close(v,expm(A*t)@initial,rtol=2e-10);vals.append(v.tolist())
         hw28[str(sign)]=dict(B=B,C=C0,roots=w.tolist(),a=aa.tolist(),b=bb.tolist(),values=vals)
-    result=dict(hw20=hw20,hw21=hw21,hw22=hw22,hw23=hw23,hw24=hw24,hw27=hw27,hw28=hw28)
+    result=dict(hw20=hw20,hw21=hw21,hw22=hw22,hw23=hw23,hw27=hw27,hw28=hw28)
     print(json.dumps(result,indent=2))
-    print('PASS: critical states, finite-difference coefficients, Xe ODE/peak, Pa/U limits, batch balance, six-group IVP/expm, and one-group roots/expm.')
+    print('PASS: critical states, finite-difference coefficients, Xe ODE/peak, Pa/U limits, six-group IVP/expm, and one-group roots/expm.')
 
 
 if __name__ == '__main__':

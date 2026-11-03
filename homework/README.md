@@ -23,6 +23,7 @@ are:
 - [HW21.md](markdown/HW21.md)
 - [HW22.md](markdown/HW22.md)
 - [HW23.md](markdown/HW23.md)
+- [HW24.md](markdown/HW24.md)
 - [HW25.md](markdown/HW25.md)
 - [HW26.md](markdown/HW26.md)
 - [HW27.md](markdown/HW27.md)
@@ -58,6 +59,7 @@ Canvas assignment's Rich Content Editor in HTML view:
 - [HW21.html](html/HW21.html)
 - [HW22.html](html/HW22.html)
 - [HW23.html](html/HW23.html)
+- [HW24.html](html/HW24.html)
 - [HW25.html](html/HW25.html)
 - [HW26.html](html/HW26.html)
 - [HW27.html](html/HW27.html)
@@ -80,6 +82,7 @@ homework number):
     python3 convert_to_canvas.py ../homework/markdown/HW21.md ../homework/html/HW21.html
     python3 convert_to_canvas.py ../homework/markdown/HW22.md ../homework/html/HW22.html
     python3 convert_to_canvas.py ../homework/markdown/HW23.md ../homework/html/HW23.html
+    python3 convert_to_canvas.py ../homework/markdown/HW24.md ../homework/html/HW24.html
     python3 convert_to_canvas.py ../homework/markdown/HW25.md ../homework/html/HW25.html
     python3 convert_to_canvas.py ../homework/markdown/HW26.md ../homework/html/HW26.html
     python3 convert_to_canvas.py ../homework/markdown/HW27.md ../homework/html/HW27.html
@@ -120,6 +123,12 @@ uranium/plutonium conversion and power sharing, and the thoriumâ€“protactiniumâ€
 uranium buildup chain. The draft makes the atom-fraction enrichment convention,
 initial inventories, and constant-flux/cross-section assumptions explicit;
 the source's worked solutions and numerical verification code are omitted.
+
+Homework 24 uses `ne630_depletion` to compare fixed-power pincell depletion
+with and without a specified Gd-157 loading, examine startup poison absorption,
+fit three-batch cycle estimates, and rerun the non-Gd case with
+infinite-dilution U-238 data. The Canvas HTML is generated
+from its Markdown source; it contains problem statements only.
 
 Draft Homework 25 retains all three problems from Source Lesson 25: neutron
 lifetimes, mean-speed weighting, and equilibrium multibatch burnup. Draft

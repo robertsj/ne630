@@ -121,7 +121,7 @@ available for that lesson.
      - `Python module <_static/notebooks/ne630_kinetics.py>`__ |middot|
        `YouTube video <https://www.youtube.com/watch?v=Y9Ma9rpXB00>`__
    * - **Lesson 29** — Point Kinetics with Feedback
-     - —
+     - `PDF <_static/handouts/lesson-29/lesson_29_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=coqwwddT_oU>`__
    * - **Lesson 30** — Review of Some Math
      - —

@@ -139,3 +139,11 @@ and L35's eigenproblem coefficient and critical-width expression. L35's title
 also promises cylindrical material while the stored deck returns to transport
 review after its slab examples. These have been preserved rather than silently
 corrected. See the backend guide and manifest for specifics.
+
+## Revised Lesson 29
+
+Lesson 29 uses the instructor-supplied feedback handout with embedded plot
+tables. Build with `make L29`. Regenerate tables with
+`python refresh_plot_tables.py` (NumPy and SciPy required), then rebuild.
+Review numerical annotations if model parameters change. Historical seed
+coverage checks do not apply to this revision.

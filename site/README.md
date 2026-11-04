@@ -43,7 +43,8 @@ the public files beneath `site/_static/handouts/`.
 The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, and referenced
 supporting files are version-controlled. All handouts use `ne630handout.cls`.
 Lessons 15--39 are exported as PDFs only. Lessons 27--28 use revised two-page
-handouts. Lessons 29--39 are initial handout seeds; L29--35 contain the
+handouts. Lesson 29 is the revised two-page feedback handout.
+Lessons 30--39 are initial handout seeds; L30--35 contain the
 corresponding Beamer slide content, and L36--39 use
 existing notebooks (see `handouts/README.md` for selections and coverage gaps). Rendered handout PDFs
 and the entire `site/_static/handouts/` export tree

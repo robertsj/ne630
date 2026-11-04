@@ -33,7 +33,7 @@ lesson_%_handout.pdf: lesson_%_handout.tex ne630handout.cls $(SUPPORT)
 $(foreach n,01 02 03 04 05 06 07 08 09 10 12 13 14,$(eval lesson_$(n)_handout.pdf: lesson_$(n)_handout_body.tex))
 lesson_22_handout.pdf: lesson_22_xenon_transient.py
 lesson_27_handout.pdf: figures/lesson_27_traces.pdf
-$(foreach n,25 26 29 30 31 32 33 34 35 36 37 38 39,$(eval lesson_$(n)_handout.pdf: $(DRAFT_FIGURES)))
+$(foreach n,25 26 30 31 32 33 34 35 36 37 38 39,$(eval lesson_$(n)_handout.pdf: $(DRAFT_FIGURES)))
 $(foreach n,36 37 38 39,$(eval lesson_$(n)_handout.pdf: $(wildcard figures/notebook_$(n)/*.png)))
 
 $(DRAFT_FIGURES) &: figures/build_draft_figures.py ne630handout.cls $(DRAFT_DATA)

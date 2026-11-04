@@ -1,174 +1,467 @@
+% Compile with XeLaTeX and the NE 630 course class.
+% Tables on page 2 cache output from the printed solver; no figure files are required.
 \documentclass[compact]{ne630handout}
-
 \handoutsolutionsfalse
+\HandoutTypography{9.5}{11.7}{4pt}
+\hypersetup{pdftitle={NE 630 -- Lesson 29: Point Kinetics with Feedback},
+  pdfauthor={Jeremy Roberts}}
+\lstdefinestyle{feedback python}{style=NEpython,
+  basicstyle=\HandoutCodeFont\fontsize{7.2}{9.3}\selectfont,
+  stringstyle=\color{wcalerted!65!black},
+  commentstyle=\color{black!68}}
+\definecolor{modelB}{HTML}{AF5A05}
+\pgfplotsset{
+  feedback axis/.style={width=\linewidth,height=2.42in,scale only axis=false,
+    axis lines=box,axis line style={black!55},axis on top=false,
+    tick align=outside,tick style={black!55},major tick length=2pt,
+    tick label style={font=\fontsize{8}{9}\selectfont},
+    label style={font=\fontsize{9}{10}\selectfont},
+    ymajorgrids,grid style={black!11},scaled ticks=false,
+    xticklabel style={/pgf/number format/1000 sep={}},
+    enlarge x limits=false,enlarge y limits=false,clip mode=individual},
+  fixed trace/.style={black!65,dashed,line width=1.15pt,no marks},
+  A trace/.style={wcprimary,solid,line width=1.4pt,no marks},
+  B trace/.style={modelB,dash pattern=on 5pt off 1.8pt on 1.3pt off 1.8pt,
+                  line width=1.4pt,no marks}}
+\newcommand{\traces}[2]{%
+  \addplot[fixed trace] table[x=t,y=fixed#2] {#1};
+  \addplot[A trace] table[x=t,y=A#2] {#1};
+  \addplot[B trace] table[x=t,y=B#2] {#1};}
+\newcommand{\legendline}[1]{\tikz[baseline=-.6ex]{\draw[/pgfplots/#1 trace] (0,0)--(.70,0);}}
+\newcommand{\paircol}{.487\linewidth}
+\newcommand{\plotstart}{\begin{minipage}[t]{\paircol}\centering\begin{tikzpicture}}
+\newcommand{\plotend}{\end{tikzpicture}\end{minipage}}
 
-% Seeded from ../slides/lecture_29.tex; all substantive frames retained.
-
-% Title/primary objective moved into the common lesson header.
-
-% Beamer overlays, vertical spacing, columns, and title-page scaffolding removed.
-
-\hypersetup{pdftitle={NE 630 -- Lesson 29: Point Kinetics with Feedback},pdfauthor={Jeremy Roberts}}
-
-% Assigned reading: ../administrivia/schedule-source.psv.
 \begin{document}
+\Lesson{29}{Point Kinetics with Feedback}{FNRP 5.6 and 9.5}
+{After a positive reactivity insertion, what determines whether neutron density settles at a higher level or rises to a peak and falls?}
 
-\Lesson{29}{Point Kinetics with Feedback}{FNRP 5.6; supplement.}{Students will be able to solve the kinetics equations subject to step insertions of reactivity and to predict neutron and precursor densities and reactor periods from those solutions and approximations thereof.}
 \begin{handoutflow}
+\Sec{1}{Start from critical equilibrium}
 
+For one precursor group and no external neutron source, the neutron density $n$ and effective precursor concentration $C$ obey
+$$
+  \dot n=\frac{\rho-\beta}{\Lambda}\,n+\lambda C,
+  \qquad \dot C=\frac{\beta}{\Lambda}\,n-\lambda C .
+$$
+At $t=0^-$, $\rho=0$, $n=n_0$, and $C=C_0=\beta n_0/(\lambda\Lambda)$.
+A step insertion changes $\dot n$ at once. Both $n$ and $C$ are continuous.
 
-% Source frame 3: Review: PKEs with One Precursor Group
+\textbf{Recall from Lesson 28.} For constant $\rho$, try $n,C\propto e^{\omega t}$. Rearranging the characteristic equation gives the one-group inhour relation
+$$
+\omega^2+\left(\lambda-\frac{\rho-\beta}{\Lambda}\right)\omega
+  -\frac{\lambda\rho}{\Lambda}=0
+\quad\Longrightarrow\quad
+\rho=\omega\!\left(\Lambda+\frac{\beta}{\omega+\lambda}\right).
+$$
+When fuel heats up, $\rho$ changes during the insertion. The instantaneous growth rate $\dot n/n$ then depends on both $\rho(t)$ and the precursor inventory.
 
-\Sec{1}{Review: PKEs with One Precursor Group}
+\Sec{2}{Let the fuel temperature set reactivity}
 
-With just one group of precursors, the PKEs are
-\begin{align*}
- \frac{dn}{dt} = \frac{\rho(t)-\beta}{\Lambda}n(t) + \lambda C(t) \qquad \text{and} \qquad
- \frac{dC}{dt} = -\lambda C(t) + \frac{\beta}{\Lambda} n(t) \, ,
-\end{align*}
-with $n(0)$ and $C(0)$ given as initial conditions.
-For a step insertion of reactivity $\rho$, the solutions can be written as
-\begin{equation*}
-  n(t) = A_1 e^{\omega_1 t} + A_2 e^{\omega_2 t} \qquad \text{and} \qquad
-  C(t) = B_1 e^{\omega_1 t} + B_2 e^{\omega_2 t} \, ,
-\end{equation*}
-where $A_1$, $A_2$, $B_1$, and $B_2$ are undetermined, and $\omega_1 \geq \omega_2$ are the roots of
-\begin{equation*}
- \omega^2 +
-         \left (\lambda - \frac{\rho - \beta}{\Lambda} \right ) \omega -
-           \frac{\lambda \rho}{\Lambda}  = 0  \, .
-\end{equation*}
+Write $\theta=T_f-T_{f0}$ for the fuel temperature rise and $\rho_{\rm ext}$ for the imposed reactivity. With $\theta(0)=0$,
+$$
+  \boxed{\rho(t)=\rho_{\rm ext}(t)+\alpha_f\,\theta(t)},
+  \qquad \alpha_f=-3\times10^{-5}\ {\rm K}^{-1}.
+$$
+A 100 K rise thus offsets a 300 pcm insertion. Here $1\ {\rm pcm}=10^{-5}$ in reactivity, and one dollar is $\beta$.
 
+Write $p=n/n_0=P/P_0$ for relative power at fixed flux shape and spectrum. A lumped heat balance with fixed coolant temperature $T_c$ reads
+$$
+ C_{\rm th}\dot T_f=P_0 p-H(T_f-T_c).
+$$
+$C_{\rm th}$ is the fuel heat capacity (J/K) and $H$ the fuel-to-coolant thermal conductance (W/K).
 
+\textbf{Model A. Fast heat removal.}
+In the quasistatic limit, heat removed balances power at each instant. Subtract the initial balance $H(T_{f0}-T_c)=P_0$ to get
+$$
+ \theta=A(p-1),\qquad \dot\theta=A\dot p,\qquad A=P_0/H.
+$$
 
-{\bf Example}: Solve this equation for $\rho$.
+\textbf{Model B. Adiabatic fuel.}
+Neglect heat removal during the transient. Deposited energy accumulates as sensible heat.
+$$
+ \dot\theta=Bp,\qquad \theta(t)=B\!\int_0^t p(s)\,ds,
+ \qquad B=P_0/C_{\rm th}.
+$$
+Both cases start from the same critical neutron state. For B, assume cooling balanced $P_0$ before $t=0$ and ceases at the start of the run. Thus $\dot\theta(0^+)=B$ even at $p=1$.
 
-\textcolor{wcprimary}{Ans.
-\begin{equation*}
-\tag{``One-Group Inhour Equation''}
-\boxed{\rho = \omega \left ( \Lambda + \frac{\beta}{\omega+\lambda} \right )} \,
-\end{equation*}
-}
+\columnbreak
+\Sec{3}{Add one state to Lesson 28's solver}
 
-% Source frame 4: Review: The Reactor Period
+Use $\mathbf y=(n,C,\theta)$. The notebook supplies $\beta$, $\Lambda$, $\lambda$, $n_0$, and $\alpha_f$. Set $A=100$ K for the reference fuel-to-coolant temperature difference. Use $B=240$ K/s, corresponding to $P_0/V\simeq720$ W/cm$^3$ and $C_{\rm th}/V\simeq3$ J/(cm$^3$ K). The \texttt{fixed} case holds $T_f=T_{f0}$.
 
-\Sec{2}{Review: The Reactor Period}
+\begin{lstlisting}[style=feedback python]
+import numpy as np
+from scipy.integrate import solve_ivp
 
-\noindent\includegraphics[width=\linewidth,page=1]{figures/drafts/traces.pdf}\par\medskip
-\noindent\includegraphics[width=\linewidth,page=2]{figures/drafts/traces.pdf}
+beta, Lambda = 0.0065, 1e-4            # Lambda in s
+lam = np.log(2) / 5.0                  # 1/s
+alpha = -3e-5                          # 1/K
+A, B = 100.0, 240.0                    # K, K/s
+n0 = 1e9                               # 1/cm^3
+y0 = [n0, beta*n0/(lam*Lambda), 0.0]  # n, C, theta
 
-Shown at the left are {\it traces} for several step insertions of reactivity.
-In all cases, after the immediate {\it jump} or {\it drop}, the solution follows
-\begin{equation*}
-   n(t) \approx A_1 e^{\omega_1 t} = A_1 e^{t/T} \, ,
-\end{equation*}
-where $T$ is the {\bf (stable) reactor period}.
+def f(t, y, rho_ext, model):
+    n, C, theta = y
+    rho = rho_ext + alpha*theta
+    dn = (rho - beta)*n/Lambda + lam*C
+    dC = beta*n/Lambda - lam*C
+    if model == "A":
+        dT = A*dn/n0
+    elif model == "B":
+        dT = B*n/n0
+    elif model == "fixed":
+        dT = 0.0
+    else:
+        raise ValueError("Use A, B, or fixed")
+    return dn, dC, dT
 
+def solve(rho_ext, times, model, start=y0):
+    sol = solve_ivp(f, (times[0], times[-1]), start,
+                    args=(rho_ext, model), t_eval=times,
+                    method="LSODA", rtol=1e-8, atol=1e-9)
+    if not sol.success:
+        raise RuntimeError(sol.message)
+    return sol.y
+\end{lstlisting}
 
-{\bf Example}: Estimate the period {\it graphically} for $\rho = 0.2\beta$, $\rho = \rho_A$, and $\rho = \rho_B$.
-Then, estimate $\rho_A$ and $\rho_B$ assuming $\beta =  0.0065$, $\Lambda = 50$ $\mu$s, and $\lambda= 0.08$.
+\textbf{Apply the 300 pcm insertion for 5 s.}
+Restart at the withdrawal time with the final state of the first solve. The stored fuel heat and precursor inventory carry over.
+\begin{lstlisting}[style=feedback python]
+t1 = np.linspace(0, 5, 1001)
+t2 = np.linspace(5, 10, 1001)
+one = solve(0.003, t1, "B")
+two = solve(0.0, t2, "B", one[:, -1])
+\end{lstlisting}
 
-
-
-\textcolor{wcprimary}{
-{\bf Ans.}  52.9 s, 75.56 s, -98.97 s \\
-$\rho_A \approx 0.15\$$, $\rho_B \approx -0.15\$$.
-}
-
-% Source frame 5: Review: Prompt Jump/Drop Approximation
-
-\Sec{3}{Review: Prompt Jump/Drop Approximation}
-
-As the traces illustrate, after a small insertion $\Delta \rho \ll \beta$, the population swiftly jumps or drops.  On the linear scale, the population appears to jump immediately from $n_0$ to some new value $n_1$.  The ratio of this new value to the initial value satisfies
-\begin{equation*}
-\boxed{\frac{n_1}{n_0} = \frac{\beta - \rho_0}{\beta - \rho_1}} \, ,
-  \tag{Prompt Jump Approximation}
-\end{equation*}
-where $\rho_0$ is the initial reactivity (usually zero, but $|\rho_0| \ll \beta$ always) and the new reactivity $\rho_1 = \rho_0 + \Delta \rho$.
-
-
-
-{\bf Example}. Use the prompt jump approximation to verify
-the $\pm 0.2\beta$ traces.  What is $\rho \pm 0.2\beta$ in \$? pcm?
-
-% Source frame 6: Review: Periods for Very Small and Very Large Insertions
-
-\Sec{4}{Review: Periods for Very Small and Very Large Insertions}
-
-A ``small'' reactivity is any $|\rho| \ll \beta$.  In this case,
-
-\begin{equation*}
-\tag{FNRP 5.57}
- T \approx \frac{\beta}{\rho \lambda}\, .
-\end{equation*}
-
-For reactivities $\rho > \beta$, the neutron population grows exponentially with prompt neutrons alone and, hence, the period is very small and well approximated by
-
-\begin{equation*}
-\tag{FNRP 5.58}
- T \approx \frac{\Lambda}{\rho - \beta} \, .
-\end{equation*}
-
-Finally, for large {\it negative} insertions, $T \approx 1/\lambda$, or, for multiple precursor groups, $T \approx 1/\lambda_1$, where $\lambda_1$ corresponds to the longest lives group.
-
-% Source frame 7: PKEs with Feedback
-
-\Sec{5}{PKEs with Feedback}
-
-Above, we had
-\begin{align*}
- \frac{dn}{dt} = \frac{\rho(t)-\beta}{\Lambda}n(t) + \lambda C(t) \qquad \text{and} \qquad
- \frac{dC}{dt} = -\lambda C(t) + \frac{\beta}{\Lambda} n(t) \, .
-\end{align*}
-
-
-
-Recall that reactivity depends on the fuel temperature, at least approximately, according to
-
-\begin{equation*}
-\rho(t) = \rho_0 - \alpha_{f}  T_f(t)
-\end{equation*}
-where
-\begin{equation*}
-  \frac{d\rho}{dT_f} \equiv \alpha_{f} \quad (\approx \text{-3 pcm/K for a PWR}) \, .
-\end{equation*}
-
-Hence, we have
-
-\begin{equation*}
-  \frac{d\rho}{dt} = \frac{d\rho}{dT_f} \frac{dT_f}{dt} = \alpha_{T_f} \frac{dT_f}{dt} \, .
-\end{equation*}
-
-What comes next?
-
-% Source frame 8: Temperature Models
-
-\Needspace{18\baselineskip}
-\Sec{6}{Temperature Models}
-
-One simple model for the fuel temperature is
-\begin{equation*}
-  \tag{Model A}
-  \frac{d T_f}{dt} = a \frac{dn}{dt} \, .
-\end{equation*}
-Another simple model sets
-\begin{equation*}
-  \tag{Model B}
-  \frac{d T_f}{dt} = b  n(t) \, .
-\end{equation*}
-
-These models represent the extremes of the true physical situation, in which (a) the kinetic energy of fission fragments is transferred to fuel nuclei, causing the temperature of the fuel to rises (or fall) in time;  (b) the temperature difference between the fuel and coolant drives transfer of heat to the coolant; and (b) the coolant absorbs the heat and carries it away from the fuel.
-
-
-
-{\bf Ponderable}: What assumptions about the transfer of heat leads to each model?
-
-{\small
-\textcolor{wcprimary}
-{
- {\bf Ans.} Model A assumes instantaneous heat transfer from the fuel.  Model B assumes no heat transfer from the fuel (i.e., the fuel is perfectly insulated).
-}
-}
-
+\textbf{Start a fresh prompt excursion.} Hold $\rho_{\rm ext}=1.5\beta$ for the full interval shown. Replace \texttt{"B"} with \texttt{"A"} or \texttt{"fixed"} to compare the three curves on page 2.
+\begin{lstlisting}[style=feedback python]
+tp = np.linspace(0, 0.20, 501)        # seconds
+n, C, theta = solve(1.5*beta, tp, "B")
+p = n/n0
+dollars = (1.5*beta + alpha*theta)/beta
+\end{lstlisting}
 \end{handoutflow}
+
+\clearpage
+\HandoutContinue{Two insertions, three temperature histories}
+
+\begin{center}
+\legendline{fixed}\enspace Fixed $T_f$\qquad
+\legendline{A}\enspace Model A (fast heat removal)\qquad
+\legendline{B}\enspace Model B (adiabatic fuel)
+\end{center}
+
+% Numerical output for the four plots (t in s for milddata, ms for promptdata).
+\pgfplotstableread{
+t fixedn fixedr An Ar Bn Br
+0 1 0.46153846 1 0.46153846 1 0.46153846
+0.001 1.0294811 0.46153846 1.0290374 0.44813659 1.0294445 0.46041436
+0.0011828921 1.0347623 0.46153846 1.0341431 0.44578011 1.0347108 0.46020527
+0.0013992337 1.0409658 0.46153846 1.0401023 0.44302971 1.0408936 0.45995657
+0.0016551426 1.0482436 0.46153846 1.0470401 0.43982765 1.0481421 0.45966048
+0.0019578551 1.0567687 0.46153846 1.0550928 0.43611102 1.056626 0.4593076
+0.0023159313 1.0667372 0.46153846 1.0644057 0.43181274 1.0665362 0.45888653
+0.0027394969 1.0783687 0.46153846 1.0751295 0.42686332 1.0780856 0.45838342
+0.0032405293 1.0919069 0.46153846 1.0874135 0.42119376 1.0915077 0.45778136
+0.0038331965 1.1076179 0.46153846 1.1013969 0.41473991 1.1070542 0.45705967
+0.0045342579 1.1257869 0.46153846 1.1171947 0.40744859 1.12499 0.45619298
+0.0053635379 1.1467118 0.46153846 1.1348806 0.39928589 1.1455836 0.45515007
+0.0063444866 1.1706934 0.46153846 1.1544631 0.39024778 1.1690939 0.45389243
+0.0075048432 1.1980201 0.46153846 1.175859 0.38037278 1.195749 0.45237251
+0.0088774198 1.2289471 0.46153846 1.1988626 0.36975573 1.2257176 0.45053151
+0.01050103 1.2636678 0.46153846 1.223118 0.35856092 1.2590694 0.44829678
+0.012421585 1.3022787 0.46153846 1.2480995 0.34703101 1.295724 0.44557875
+0.014693395 1.3447361 0.46153846 1.273111 0.33548722 1.3353866 0.44226738
+0.017380701 1.3908086 0.46153846 1.2973169 0.32431526 1.3774728 0.43822843
+0.020559495 1.4400289 0.46153846 1.3198129 0.31393253 1.4210251 0.43329961
+0.024319664 1.4916531 0.46153846 1.3397383 0.30473619 1.4646333 0.42728724
+0.028767539 1.544639 0.46153846 1.3564161 0.29703874 1.5063737 0.41996424
+0.034028894 1.5976584 0.46153846 1.3694857 0.2910066 1.5437982 0.41107027
+0.040252511 1.6491587 0.46153846 1.3789839 0.28662283 1.5740095 0.40031547
+0.047614377 1.6974853 0.46153846 1.3853336 0.2836922 1.5938686 0.38738857
+0.056322671 1.7410662 0.46153846 1.3892319 0.28189297 1.6003714 0.37196988
+0.066623644 1.7786392 0.46153846 1.391472 0.28085906 1.5911882 0.35374733
+0.078808583 1.8094784 0.46153846 1.3927668 0.28026149 1.5652829 0.33243174
+0.093222051 1.8335564 0.46153846 1.393639 0.27985893 1.5234069 0.30776466
+0.11027163 1.8515763 0.46153846 1.3944046 0.27950556 1.4681851 0.27951201
+0.13043944 1.8648356 0.46153846 1.3952235 0.27912759 1.4035818 0.24744158
+0.15429578 1.8749498 0.46153846 1.3961695 0.27869101 1.3338388 0.2112915
+0.18251526 1.8835242 0.46153846 1.3972826 0.27817727 1.2623797 0.17074471
+0.21589587 1.8918984 0.46153846 1.3985962 0.277571 1.1912787 0.12542198
+0.25538152 1.9010468 0.46153846 1.4001464 0.27685552 1.1214676 0.074892848
+0.30208878 1.9116341 0.46153846 1.401975 0.27601152 1.0532887 0.018691652
+0.35733844 1.9241508 0.46153846 1.4041311 0.2750164 0.98691 -0.04367166
+0.42269282 1.9390444 0.46153846 1.4066718 0.2738438 0.92247382 -0.11270685
+0.5 1.9568081 0.46153846 1.4096634 0.27246304 0.86011149 -0.1889406
+0.65 1.9917401 0.46153846 1.4154262 0.26980329 0.76709491 -0.32371059
+0.8 2.0272957 0.46153846 1.421134 0.26716891 0.69742249 -0.44512924
+0.95 2.0634861 0.46153846 1.4267874 0.26455966 0.64242939 -0.55627577
+1.1 2.1003224 0.46153846 1.4323868 0.26197533 0.59741632 -0.65916294
+1.25 2.1378164 0.46153846 1.4379327 0.25941569 0.55957353 -0.75519716
+1.4 2.1759797 0.46153846 1.4434255 0.25688052 0.52709965 -0.84540984
+1.55 2.2148243 0.46153846 1.4488659 0.2543696 0.4987773 -0.93058571
+1.7 2.2543624 0.46153846 1.4542541 0.25188271 0.47374903 -1.0113394
+1.85 2.2946062 0.46153846 1.4595908 0.24941964 0.45139042 -1.0881638
+2 2.3355684 0.46153846 1.4648763 0.24698017 0.43123403 -1.1614618
+2.15 2.3772619 0.46153846 1.4701111 0.24456409 0.41292178 -1.2315682
+2.3 2.4196997 0.46153846 1.4752958 0.24217119 0.39617388 -1.2987654
+2.45 2.462895 0.46153846 1.4804306 0.23980124 0.38076794 -1.3632941
+2.6 2.5068615 0.46153846 1.4855162 0.23745406 0.36652461 -1.4253619
+2.75 2.5516128 0.46153846 1.4905529 0.23512942 0.35329728 -1.4851493
+2.9 2.597163 0.46153846 1.4955412 0.23282713 0.34096474 -1.5428149
+3.05 2.6435264 0.46153846 1.5004816 0.23054698 0.32942575 -1.5984985
+3.2 2.6907174 0.46153846 1.5053744 0.22828876 0.31859493 -1.6523248
+3.35 2.7387508 0.46153846 1.5102201 0.22605228 0.30839965 -1.7044052
+3.5 2.7876417 0.46153846 1.5150191 0.22383733 0.29877772 -1.7548401
+3.65 2.8374054 0.46153846 1.5197719 0.22164373 0.28967544 -1.8037201
+3.8 2.8880575 0.46153846 1.5244789 0.21947126 0.2810462 -1.8511277
+3.95 2.9396137 0.46153846 1.5291405 0.21731975 0.27284926 -1.8971379
+4.1 2.9920903 0.46153846 1.5337572 0.21518898 0.26504885 -1.9418195
+4.25 3.0455037 0.46153846 1.5383293 0.21307878 0.2576134 -1.9852359
+4.4 3.0998706 0.46153846 1.5428573 0.21098896 0.25051488 -2.0274451
+4.55 3.1552081 0.46153846 1.5473415 0.20891931 0.24372836 -2.0685012
+4.7 3.2115334 0.46153846 1.5517824 0.20686966 0.23723152 -2.108454
+4.85 3.2688642 0.46153846 1.5561804 0.20483983 0.23100432 -2.14735
+5 3.3272184 0.46153846 1.5605358 0.20282961 0.22502871 -2.1852324
+5 3.3272184 0 1.5605358 -0.25870885 0.22502871 -2.6467709
+5.001 3.2309634 0 1.5166149 -0.23843764 0.21897987 -2.6470167
+5.0011829 3.2140273 0 1.5091671 -0.23500021 0.21801966 -2.6470609
+5.0013992 3.1942525 0 1.5005753 -0.23103474 0.21693597 -2.647113
+5.0016551 3.171218 0 1.4907077 -0.22648046 0.21572335 -2.6471744
+5.0019579 3.1444618 0 1.479434 -0.22127722 0.21438012 -2.6472465
+5.0023159 3.1134858 0 1.4666325 -0.21536886 0.21290993 -2.6473312
+5.0027395 3.0777652 0 1.4522001 -0.20870775 0.21132331 -2.6474307
+5.0032405 3.0367645 0 1.4360647 -0.20126065 0.20963937 -2.6475475
+5.0038332 2.9899615 0 1.418201 -0.19301583 0.20788691 -2.6476846
+5.0045343 2.9368815 0 1.3986478 -0.18399131 0.20610488 -2.6478453
+5.0053635 2.8771444 0 1.3775279 -0.17424364 0.20434145 -2.6480338
+5.0063445 2.8105243 0 1.3550653 -0.16387629 0.20265127 -2.6482549
+5.0075048 2.7370235 0 1.3316002 -0.15304626 0.20109057 -2.6485143
+5.0088774 2.6569569 0 1.3075952 -0.14196702 0.19971039 -2.6488189
+5.010501 2.571041 0 1.2836284 -0.13090542 0.19854865 -2.649177
+5.0124216 2.4804743 0 1.2603695 -0.12017052 0.19762309 -2.6495983
+5.0146934 2.3869924 0 1.2385339 -0.11009255 0.19692702 -2.6500947
+5.0173807 2.2928717 0 1.2188158 -0.10099191 0.19643026 -2.6506801
+5.0205595 2.2008526 0 1.2018045 -0.093140548 0.19608562 -2.6513711
+5.0243197 2.11396 0 1.1878968 -0.086721618 0.19583934 -2.6521872
+5.0287675 2.0352081 0 1.1772254 -0.081796359 0.19564192 -2.6531516
+5.0340289 1.967213 0 1.1696273 -0.078289535 0.19545519 -2.6542912
+5.0402525 1.9117737 0 1.1646718 -0.076002356 0.19525385 -2.655638
+5.0476144 1.8695278 0 1.1617512 -0.074654386 0.19502248 -2.6572293
+5.0563227 1.8398059 0 1.1602122 -0.073944072 0.19475097 -2.6591092
+5.0666236 1.8207754 0 1.1594828 -0.073607441 0.19443081 -2.6613295
+5.0788086 1.809872 0 1.1591505 -0.073454075 0.1940531 -2.6639512
+5.0932221 1.804392 0 1.1589715 -0.073371484 0.19360765 -2.6670458
+5.1102716 1.8020318 0 1.1588294 -0.073305878 0.19308261 -2.6706973
+5.1304394 1.8011842 0 1.1586788 -0.073236387 0.19246413 -2.6750038
+5.1542958 1.8009385 0 1.1585042 -0.073155773 0.19173615 -2.6800801
+5.1825153 1.8008831 0 1.1582983 -0.073060731 0.19088002 -2.6860601
+5.2158959 1.8008738 0 1.1580551 -0.072948492 0.18987426 -2.6930994
+5.2553815 1.8008727 0 1.1577679 -0.072815958 0.18869413 -2.7013782
+5.3020888 1.8008726 0 1.1574289 -0.07265951 0.1873114 -2.7111049
+5.3573384 1.8008726 0 1.157029 -0.072474903 0.18569401 -2.7225187
+5.4226928 1.8008726 0 1.1565572 -0.072257165 0.18380583 -2.7358931
+5.5 1.8008726 0 1.1560011 -0.072000488 0.18160657 -2.7515384
+5.65 1.8008726 0 1.1549279 -0.071505169 0.17744185 -2.7813652
+5.8 1.8008726 0 1.1538624 -0.071013411 0.17340706 -2.8105109
+5.95 1.8008726 0 1.1528046 -0.070525185 0.16949614 -2.8389966
+6.1 1.8008726 0 1.1517543 -0.070040465 0.16570344 -2.8668423
+6.25 1.8008726 0 1.1507116 -0.069559223 0.16202369 -2.8940674
+6.4 1.8008726 0 1.1496764 -0.069081432 0.15845194 -2.92069
+6.55 1.8008726 0 1.1486486 -0.068607067 0.15498356 -2.9467279
+6.7 1.8008726 0 1.1476282 -0.0681361 0.15161421 -2.9721977
+6.85 1.8008726 0 1.1466151 -0.067668506 0.1483398 -2.9971157
+7 1.8008726 0 1.1456092 -0.067204258 0.14515649 -3.0214972
+7.15 1.8008726 0 1.1446106 -0.066743331 0.14206066 -3.0453572
+7.3 1.8008726 0 1.143619 -0.0662857 0.13904888 -3.0687097
+7.45 1.8008726 0 1.1426346 -0.065831339 0.13611794 -3.0915687
+7.6 1.8008726 0 1.1416571 -0.065380223 0.13326479 -3.1139471
+7.75 1.8008726 0 1.1406867 -0.064932327 0.13048653 -3.1358577
+7.9 1.8008726 0 1.1397232 -0.064487628 0.12778043 -3.1573128
+8.05 1.8008726 0 1.1387665 -0.0640461 0.12514391 -3.178324
+8.2 1.8008726 0 1.1378167 -0.063607719 0.12257449 -3.1989028
+8.35 1.8008726 0 1.1368737 -0.063172461 0.12006983 -3.21906
+8.5 1.8008726 0 1.1359373 -0.062740303 0.11762772 -3.2388064
+8.65 1.8008726 0 1.1350076 -0.062311221 0.11524603 -3.258152
+8.8 1.8008726 0 1.1340846 -0.061885191 0.11292274 -3.2771067
+8.95 1.8008726 0 1.1331681 -0.06146219 0.11065595 -3.2956802
+9.1 1.8008726 0 1.1322581 -0.061042196 0.1084438 -3.3138816
+9.25 1.8008726 0 1.1313546 -0.060625185 0.10628454 -3.3317198
+9.4 1.8008726 0 1.1304575 -0.060211135 0.10417651 -3.3492036
+9.55 1.8008726 0 1.1295667 -0.059800023 0.1021181 -3.3663412
+9.7 1.8008726 0 1.1286823 -0.059391828 0.10010778 -3.3831409
+9.85 1.8008726 0 1.1278041 -0.058986526 0.098144082 -3.3996104
+10 1.8008726 0 1.1269322 -0.058584097 0.096225602 -3.4157574
+}\milddata
+\pgfplotstableread{
+t fixedn fixedr An Ar Bn Br
+0 1 1.5 1 1.5 1 1.5
+1.6666667 1.1669823 1.5 1.1623992 1.4250465 1.166863 1.4980012
+3.3333333 1.3432632 1.5 1.3228587 1.3509883 1.3426984 1.4956861
+5 1.5293648 1.5 1.4788886 1.2789745 1.5278706 1.4930378
+6.6666667 1.7258386 1.5 1.6282717 1.2100284 1.7227342 1.4900387
+8.3333333 1.9332668 1.5 1.7691793 1.1449942 1.9276288 1.4866707
+10 2.1522646 1.5 1.9002397 1.0845048 2.142874 1.482915
+11.666667 2.3834816 1.5 2.0205603 1.0289722 2.3687634 1.478752
+13.333333 2.6276038 1.5 2.1297055 0.97859747 2.605558 1.474162
+15 2.8853557 1.5 2.2276436 0.93339528 2.8534785 1.4691247
+16.666667 3.1575027 1.5 2.3146735 0.89322761 3.1126979 1.4636192
+18.333333 3.444853 1.5 2.3913447 0.85784089 3.3833321 1.4576246
+20 3.7482602 1.5 2.458379 0.82690198 3.6654313 1.4511198
+21.666667 4.0686258 1.5 2.5166011 0.80003028 3.9589694 1.4440837
+23.333333 4.406902 1.5 2.5668809 0.77682421 4.2638344 1.4364951
+25 4.7640942 1.5 2.6100895 0.75688176 4.5798169 1.4283334
+26.666667 5.1412647 1.5 2.647067 0.73981524 4.9066 1.4195784
+28.333333 5.539535 1.5 2.6786009 0.72526112 5.243748 1.4102104
+30 5.9600898 1.5 2.7054141 0.71288582 5.5906963 1.4002108
+31.666667 6.4041803 1.5 2.7281583 0.70238848 5.9467408 1.3895622
+33.333333 6.8731278 1.5 2.7474135 0.69350145 6.3110297 1.3782485
+35 7.3683279 1.5 2.76369 0.68598921 6.682555 1.3662555
+36.666667 7.8912547 1.5 2.7774328 0.67964642 7.060147 1.3535707
+38.333333 8.4434647 1.5 2.7890267 0.67429536 7.44247 1.3401843
+40 9.026602 1.5 2.7988032 0.66978316 7.8280211 1.3260889
+41.666667 9.6424031 1.5 2.8070455 0.66597898 8.2151316 1.3112799
+43.333333 10.292702 1.5 2.8139955 0.66277133 8.6019721 1.2957562
+45 10.979435 1.5 2.8198581 0.66006547 8.9865614 1.2795202
+46.666667 11.704648 1.5 2.8248074 0.65778121 9.3667789 1.2625778
+48.333333 12.470502 1.5 2.82899 0.65585077 9.7403819 1.2449392
+50 13.279277 1.5 2.8325298 0.65421702 10.105027 1.2266188
+51.666667 14.133385 1.5 2.835531 0.65283186 10.458296 1.2076353
+53.333333 15.035369 1.5 2.8380812 0.65165484 10.797724 1.1880121
+55 15.987919 1.5 2.8402539 0.65065203 11.120837 1.1677768
+56.666667 16.993872 1.5 2.8421109 0.64979495 11.425182 1.1469621
+58.333333 18.056228 1.5 2.8437039 0.64905973 11.708373 1.1256046
+60 19.178152 1.5 2.8450762 0.64842637 11.968124 1.1037456
+61.666667 20.362989 1.5 2.846264 0.64787815 12.202296 1.0814303
+63.333333 21.614272 1.5 2.8472977 0.64740106 12.408934 1.0587079
+65 22.93573 1.5 2.8482026 0.6469834 12.586305 1.0356307
+66.666667 24.331304 1.5 2.849 0.64661538 12.732931 1.0122543
+68.333333 25.805154 1.5 2.8497076 0.6462888 12.847624 0.9886365
+70 27.361676 1.5 2.8503402 0.64599685 12.929507 0.96483713
+71.666667 29.005511 1.5 2.8509101 0.6457338 12.978032 0.94091732
+73.333333 30.74156 1.5 2.8514278 0.64549488 12.992995 0.9169389
+75 32.575001 1.5 2.8519018 0.64527611 12.974539 0.89296376
+76.666667 34.511302 1.5 2.8523393 0.64507417 12.923146 0.86905319
+78.333333 36.556238 1.5 2.8527464 0.64488627 12.839634 0.8452673
+80 38.715908 1.5 2.8531281 0.64471009 12.725133 0.82166438
+81.666667 40.996752 1.5 2.8534886 0.6445437 12.581063 0.79830039
+83.333333 43.405575 1.5 2.8538314 0.64438549 12.409101 0.7752284
+85 45.949561 1.5 2.8541594 0.6442341 12.211154 0.75249816
+86.666667 48.636299 1.5 2.8544751 0.64408842 11.989312 0.73015576
+88.333333 51.473803 1.5 2.8547804 0.64394749 11.745817 0.70824326
+90 54.470538 1.5 2.8550772 0.64381054 11.483015 0.68679847
+91.666667 57.635443 1.5 2.8553667 0.6436769 11.203321 0.66585483
+93.333333 60.97796 1.5 2.8556502 0.64354605 10.909177 0.64544126
+95 64.508061 1.5 2.8559287 0.64341751 10.603018 0.62558218
+96.666667 68.236276 1.5 2.856203 0.64329091 10.287235 0.60629757
+98.333333 72.173728 1.5 2.8564738 0.64316594 9.9641495 0.58760304
+100 76.332166 1.5 2.8567416 0.64304233 9.6359826 0.56950999
+101.66667 80.723995 1.5 2.857007 0.64291985 9.3048373 0.55202585
+103.33333 85.362318 1.5 2.8572703 0.64279832 8.9726792 0.53515429
+105 90.260974 1.5 2.8575319 0.6426776 8.6413243 0.51889546
+106.66667 95.43458 1.5 2.857792 0.64255754 8.3124294 0.50324634
+108.33333 100.89857 1.5 2.8580509 0.64243805 7.9874874 0.48820098
+110 106.66925 1.5 2.8583087 0.64231904 7.6678253 0.47375083
+111.66667 112.76384 1.5 2.8585657 0.64220043 7.3546054 0.45988504
+113.33333 119.20051 1.5 2.858822 0.64208215 7.0488293 0.44659078
+115 125.99849 1.5 2.8590776 0.64196416 6.7513434 0.43385349
+116.66667 133.17805 1.5 2.8593328 0.64184642 6.4628473 0.42165721
+118.33333 140.76061 1.5 2.8595874 0.64172889 6.1839019 0.40998479
+120 148.7688 1.5 2.8598417 0.64161153 5.91494 0.39881819
+121.66667 157.22652 1.5 2.8600956 0.64149432 5.6562762 0.38813868
+123.33333 166.159 1.5 2.8603493 0.64137725 5.4081183 0.37792702
+125 175.5929 1.5 2.8606027 0.64126029 5.1705777 0.3681637
+126.66667 185.55636 1.5 2.8608559 0.64114343 4.9436801 0.3588291
+128.33333 196.07913 1.5 2.8611089 0.64102666 4.7273761 0.34990359
+130 207.1926 1.5 2.8613617 0.64090997 4.5215511 0.34136772
+131.66667 218.92993 1.5 2.8616144 0.64079335 4.326034 0.33320229
+133.33333 231.32616 1.5 2.861867 0.64067679 4.1406071 0.32538847
+135 244.41826 1.5 2.8621194 0.64056028 3.9650128 0.31790785
+136.66667 258.24531 1.5 2.8623717 0.64044383 3.7989621 0.31074254
+138.33333 272.84857 1.5 2.8626239 0.64032742 3.6421405 0.30387523
+140 288.27163 1.5 2.862876 0.64021106 3.4942144 0.29728917
+141.66667 304.56049 1.5 2.8631281 0.64009474 3.3548361 0.29096825
+143.33333 321.76378 1.5 2.86338 0.63997846 3.2236488 0.28489704
+145 339.93284 1.5 2.8636319 0.63986221 3.1002905 0.27906073
+146.66667 359.12187 1.5 2.8638837 0.639746 2.9843974 0.27344522
+148.33333 379.38815 1.5 2.8641354 0.63962983 2.8756074 0.26803705
+150 400.79215 1.5 2.864387 0.63951368 2.7735622 0.26282344
+151.66667 423.39775 1.5 2.8646386 0.63939757 2.6779097 0.25779227
+153.33333 447.27242 1.5 2.8648901 0.63928149 2.5883058 0.25293205
+155 472.48739 1.5 2.8651415 0.63916544 2.5044154 0.24823193
+156.66667 499.11792 1.5 2.8653929 0.63904942 2.4259143 0.24368166
+158.33333 527.24347 1.5 2.8656442 0.63893343 2.3524893 0.23927159
+160 556.94799 1.5 2.8658955 0.63881746 2.2838393 0.23499261
+161.66667 588.32012 1.5 2.8661467 0.63870153 2.2196755 0.23083619
+163.33333 621.45348 1.5 2.8663978 0.63858562 2.159722 0.22679429
+165 656.44696 1.5 2.8666489 0.63846974 2.1037153 0.2228594
+166.66667 693.40498 1.5 2.8668999 0.63835389 2.051405 0.21902446
+168.33333 732.43784 1.5 2.8671508 0.63823807 2.0025532 0.21528285
+170 773.66203 1.5 2.8674017 0.63812227 1.9569344 0.21162842
+171.66667 817.20057 1.5 2.8676526 0.63800651 1.9143356 0.20805539
+173.33333 863.18339 1.5 2.8679033 0.63789077 1.8745552 0.20455837
+175 911.74772 1.5 2.8681541 0.63777505 1.8374036 0.20113234
+176.66667 963.0385 1.5 2.8684047 0.63765936 1.8027019 0.19777261
+178.33333 1017.2088 1.5 2.8686553 0.6375437 1.7702821 0.19447481
+180 1074.4203 1.5 2.8689058 0.63742807 1.7399864 0.19123487
+181.66667 1134.8436 1.5 2.8691563 0.63731247 1.7116669 0.18804903
+183.33333 1198.6593 1.5 2.8694067 0.63719689 1.6851847 0.18491374
+185 1266.0576 1.5 2.8696571 0.63708134 1.6604101 0.18182575
+186.66667 1337.2397 1.5 2.8699074 0.63696581 1.6372218 0.17878202
+188.33333 1412.4181 1.5 2.8701577 0.63685031 1.6155064 0.17577972
+190 1491.8172 1.5 2.8704078 0.63673484 1.5951579 0.17281623
+191.66667 1575.6738 1.5 2.870658 0.63661939 1.5760778 0.16988913
+193.33333 1664.2382 1.5 2.8709081 0.63650398 1.558174 0.16699615
+195 1757.7748 1.5 2.8711581 0.63638858 1.5413609 0.1641352
+196.66667 1856.5627 1.5 2.871408 0.63627322 1.5255587 0.16130435
+198.33333 1960.8966 1.5 2.8716579 0.63615788 1.5106932 0.15850179
+200 2071.0881 1.5 2.8719078 0.63604257 1.4966957 0.15572587
+}\promptdata
+
+\Sec{4}{Insert 300 pcm, then withdraw it at 5 s}
+The same positive insertion brings all three cases to $\rho/\beta=0.462$ at $t=0^+$. Read each density history alongside its net reactivity. The vertical guide marks withdrawal.
+\par\noindent\plotstart
+\begin{axis}[feedback axis,xmin=0,xmax=10,xtick={0,2,4,6,8,10},xlabel={Time (s)},
+ ymin=0,ymax=3.6,ytick={0,1,2,3},ylabel={Relative neutron density $n/n_0$}]
+\draw[black!45,densely dotted] (axis cs:5,0)--(axis cs:5,3.6);
+\traces{\milddata}{n}
+\end{axis}\plotend\hfill\plotstart
+\begin{axis}[feedback axis,xmin=0,xmax=10,xtick={0,2,4,6,8,10},xlabel={Time (s)},
+ ymin=-3.6,ymax=.8,ytick={-3,-2,-1,0},ylabel={Net reactivity $\rho/\beta$}]
+\draw[black!45,densely dotted] (axis cs:5,-3.6)--(axis cs:5,.8);
+\traces{\milddata}{r}
+\end{axis}\plotend
+
+\textbf{At withdrawal.} Just before 5 s, $n/n_0$ is 3.33 at fixed $T_f$, 1.56 in A, and 0.225 in B.
+Removing the insertion lowers $\rho$ by the same 300 pcm in every case. In Model A the fuel cools as power falls. In Model B it keeps heating as long as fissions deposit energy.
+
+\Sec{5}{Hold a prompt-supercritical insertion of 1.50 dollars}
+Here $\rho_{\rm ext}=975$ pcm exceeds $\beta=650$ pcm. At fixed temperature the prompt term has an e-folding time of $\Lambda/(\rho_{\rm ext}-\beta)=31$ ms. Follow the adiabatic curve from the prompt-critical crossing (right) to the density peak (left).
+\par\noindent\plotstart
+\begin{axis}[feedback axis,xmin=0,xmax=200,xtick={0,50,100,150,200},xlabel={Time (ms)},
+ restrict y to domain*=-1:18,ymin=0,ymax=15.5,ytick={0,3,6,9,12,15},ylabel={Relative neutron density $n/n_0$}]
+\traces{\promptdata}{n}
+\fill[modelB] (axis cs:73.24,12.993) circle[radius=2pt];
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,text=modelB] at (axis cs:75,13.0) {peak at 73.2 ms};
+\end{axis}\plotend\hfill\plotstart
+\begin{axis}[feedback axis,xmin=0,xmax=200,xtick={0,50,100,150,200},xlabel={Time (ms)},
+ ymin=0,ymax=1.67,ytick={0,.5,1,1.5},ylabel={Net reactivity $\rho/\beta$}]
+\draw[black!50,densely dotted] (axis cs:0,1)--(axis cs:200,1);
+\traces{\promptdata}{r}
+\fill[modelB] (axis cs:67.53,1) circle[radius=2pt];
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,text=modelB] at (axis cs:70,1) {67.5 ms};
+\end{axis}\plotend
+
+\textbf{Why does the peak come later?} At $\rho=\beta$ the prompt term vanishes, but $\dot n=\lambda C>0$.
+Model B reaches this threshold after a fuel temperature rise of $(975-650)/3\simeq108$ K. Density peaks at $13.0\,n_0$ when $\rho/\beta\simeq0.918$ and the prompt loss just balances $\lambda C$. With $T_f$ fixed, density has already reached $76.3\,n_0$ by 100 ms, above the plotted range.
+
+\begin{checkpoint}[Two checks on the curves]
+\textbf{After withdrawal at fixed temperature,} add the neutron and precursor equations to show that
+$\frac{d}{dt}(n+C)=\rho n/\Lambda$. Which inventory is conserved after 5 s? Use the inventory at withdrawal and $C_\infty=\beta n_\infty/(\lambda\Lambda)$ to explain why $n$ settles near $1.80\,n_0$.
+
+\smallskip
+\textbf{If the 1.50-dollar insertion stays in,} a positive steady power requires $\rho=0$. Use Model A to predict the eventual $n/n_0$. Which term in Model B prevents a steady fuel temperature at positive power?
+\end{checkpoint}
+
 \end{document}

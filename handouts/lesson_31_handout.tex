@@ -42,10 +42,10 @@ places to match what we've previously adopted.
 
 Let the \textbf{angular density} of neutrons be described by
 \begin{equation}
-  n(\br, E, \bO, t)\, \dV\, \dE\, \dO \quad [ \si{\per\centi\meter\cubed\per\electronvolt\per\steradian} ] \, ,
+  n(\br, E, \bO, t) \quad [ \si{\per\centi\meter\cubed\per\electronvolt\per\steradian} ] \, ,
   \tag{4--8}
 \end{equation}
-which is the expected number of neutrons in the differential \emph{phase-space} volume
+so that $n(\br,E,\bO,t)\,\dV\,\dE\,\dO$ is the expected number of neutrons in the differential \emph{phase-space} volume
 centered at $(\br, E, \bO)$ at time $t$. The direction unit vector is
 $\bO = \mathbf{v}/\lVert\mathbf{v}\rVert$ where $\mathbf{v}$ is the neutron velocity.
 
@@ -152,7 +152,7 @@ the total interaction rate in the volume is
   \textcolor{wcalerted}{\text{(5)} = \left[ \int_V \Sigma_t(\br,E)\, \angflux(\br,E,\bO,t)\,\dV \right] \dE\,\dO } \, .
 \end{equation*}
 This assumes an {\it isotropic} medium in which $\Sigma_t$ does {\it not} depend on $\bO$.
-Finally, {\it in-scattering} from $(E',\bO')$ to $(E,\bO)$ contributes
+For the remaining balance terms, divide by $\dE\,\dO$ and work per unit energy and solid angle. Finally, {\it in-scattering} from $(E',\bO')$ to $(E,\bO)$ contributes
 \begin{equation}
 \tag{4--31}
    \textcolor{wcprimary}{\text{(3)} = \int_V \left[ \int_0^\infty \!\!\int_{4\pi} \Sigma_s(\br, E'\!\to\!E, \bO'\!\to\!\bO)\,
@@ -211,7 +211,7 @@ and welcome our new friend, the {\bf neutron transport equation}:
 
 \Sec{8}{Eliminating $\bO$}
 
-While scary, the various terns comprising the NTE are familiar enough, but the dependence on $\bO$ remains a challenge for another day.  Integrating the NTE over $4 \pi$ leads to
+While scary, the various terms comprising the NTE are familiar enough, but the dependence on $\bO$ remains a challenge for another day.  Integrating the NTE over $4 \pi$ leads to
 
 \begin{align*}
   \frac{1}{v}\,\frac{\partial \flux}{\partial t}
@@ -278,7 +278,7 @@ replace $E$ by $g$:
 \begin{align*}
  - \nabla\!\cdot\! D_1(\br) \nabla \phi_1(\br)
    + \Sigma_{r,1}(\br)\, \flux_1(\br)
-  &=  S_1(\br,t) \\
+  &=  S_1(\br) \\
  - \nabla\!\cdot\! D_2(\br) \nabla \phi_2(\br)
    + \Sigma_{a,2}(\br)\, \flux_2(\br)
   &=  \Sigma_{s,2\gets 1} \phi_{1}(\br) + S_2(\br)

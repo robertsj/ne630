@@ -124,10 +124,10 @@ available for that lesson.
      - `PDF <_static/handouts/lesson-29/lesson_29_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=coqwwddT_oU>`__
    * - **Lesson 30** — Review of Some Math
-     - —
+     - `PDF <_static/handouts/lesson-30/lesson_30_handout.pdf>`__
      - —
    * - **Lesson 31** — Neutrons in Space
-     - —
+     - `PDF <_static/handouts/lesson-31/lesson_31_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=dCeRWmcJYyc>`__
    * - **Lesson 32** — One-Speed Diffusion in a Homogeneous Slab
      - —
@@ -173,7 +173,7 @@ Handout source and support files
 
 The TeX links in the table point to each wrapper with ``\handoutsolutionsfalse``.
 Download the complete source bundle for a ready-to-build copy, or pair a wrapper
-with its body file and the shared class. Lessons 15--28 are distributed as PDFs
+with its body file and the shared class. Lessons 15--31 are distributed as PDFs
 only.
 
 * **Lesson 1:** `source bundle <_static/handouts/lesson-01/lesson_01_handout_source.zip>`__ |middot|

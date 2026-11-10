@@ -1,7 +1,7 @@
 # NE 630 public course site
 
 This directory is the Sphinx source for the public NE 630 course-materials
-site. The initial page publishes student handouts for Lessons 1--10 and 12--39,
+site. The public page links student handouts for Lessons 1--10 and 12--31,
 standalone notebooks for Lessons 8--12, 15--19, and 22--26, and available lesson videos.
 
 ## Build
@@ -44,7 +44,7 @@ The canonical Lesson 1--10 and 12--14 wrappers, bodies, class, and referenced
 supporting files are version-controlled. All handouts use `ne630handout.cls`.
 Lessons 15--39 are exported as PDFs only. Lessons 27--28 use revised two-page
 handouts. Lesson 29 is the revised two-page feedback handout.
-Lessons 30--39 are initial handout seeds; L30--35 contain the
+Lessons 30--31 are published slide-derived handouts; Lessons 32--39 remain unpublished seeds; L30--35 contain the
 corresponding Beamer slide content, and L36--39 use
 existing notebooks (see `handouts/README.md` for selections and coverage gaps). Rendered handout PDFs
 and the entire `site/_static/handouts/` export tree
@@ -110,3 +110,12 @@ procedures.
 
 Lesson 28: save ne630_kinetics.py beside your notebook or script. NumPy and
 SciPy are required; direct execution plots the L27 pulse using Matplotlib.
+
+## Lesson 30–31 release (November 10, 2026)
+
+Published the two student-facing PDFs only, preserving the existing live
+source-bundle and shared-class downloads. Lesson 30 corrects missing exponential
+factors and uses the particular solution exp(x)/(1+p), with the resonant
+p=-1 and repeated-root p=0 cases distinguished. Lesson 31 clarifies angular
+density units and the differential balance convention, and removes a stray
+time argument from a steady-state source.

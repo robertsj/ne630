@@ -1,0 +1,268 @@
+% ne630guide.sty -- programmed reading-guide layer on top of ne630handout.cls.
+%
+% Layout: paired worksheet boxes by default; [reference] uses paracol.
+% The left column (60%) carries numbered
+% frames (F1, F2, ...) and sequential subcells (F1(a), F1(b), ...).
+% Each subcell pairs one prompt and writing area with tinted feedback.
+% Shared givens precede each sequence; result illustrations belong in feedback.
+% Section headings and quizzes span both columns through \Span (which closes
+% and reopens paracol in the reference edition). Quiz answers are printed
+% upside down in a page footnote.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ne630guide}[2026/11/12 v1.0 Programmed reading guides for NE 630]
+\@ifclassloaded{ne630handout}{}{%
+  \PackageError{ne630guide}{This package requires ne630handout.cls}{Set TEXINPUTS to include ../handouts}}
+
+% Orientation can be selected in the source or passed in before compilation.
+% geometry is already loaded by the handout class; retain its margins.
+\newif\ifguidehandwriting
+\guidehandwritingtrue
+\newif\ifguideplaywrite
+\newif\ifguideindieflower
+\newif\ifguideeulermath
+\DeclareOption{landscape}{\geometry{landscape}}
+\DeclareOption{portrait}{\geometry{portrait}}
+\DeclareOption{handwriting}{\guidehandwritingtrue}
+\DeclareOption{reference}{\guidehandwritingfalse}
+\DeclareOption{playwrite}{\guideplaywritetrue}
+\DeclareOption{indieflower}{\guideindieflowertrue}
+\DeclareOption{eulermath}{\guideeulermathtrue}
+\ProcessOptions\relax
+
+% Model student writing at a physical size independent of the compact body.
+\ifguideindieflower
+  \newfontfamily\GuideHandwritingFont{IndieFlower-Regular.ttf}[
+    Path=fonts/indieflower/,
+    % Light synthetic weight to balance Euler Math in the answer cells.
+    FakeBold=1.0,
+    BoldFont=IndieFlower-Regular.ttf,
+    ItalicFont=IndieFlower-Regular.ttf,
+    BoldItalicFont=IndieFlower-Regular.ttf]
+\else\ifguideplaywrite
+  \newfontfamily\GuideHandwritingFont{PlaywriteUSModern-Regular.ttf}[
+    Path=fonts/playwrite/,
+    BoldFont=PlaywriteUSModern-Regular.ttf,
+    ItalicFont=PlaywriteUSModern-Regular.ttf,
+    BoldItalicFont=PlaywriteUSModern-Regular.ttf]
+\else
+  \newfontfamily\GuideHandwritingFont{ComicNeue-Regular.otf}[
+    BoldFont=ComicNeue-Bold.otf,ItalicFont=ComicNeue-Italic.otf,
+    BoldItalicFont=ComicNeue-BoldItalic.otf]
+\fi\fi
+\ifguideeulermath
+  \setmathfont[version=guideanswers]{Euler-Math.otf}
+  \setmathfont[version=normal]{LibertinusMath-Regular.otf}
+\fi
+\newcommand{\GuideHandwritingSize}{13}
+\newcommand{\GuideWritingPitch}{7mm}
+\newcommand{\GuideAnswerPartSkip}{2mm}
+\newcommand{\GuideAnswerPart}[1]{%
+  \ifguidehandwriting
+    \par
+    \ifstrequal{#1}{a}{}{\addvspace{\GuideAnswerPartSkip}}%
+    \noindent
+  \fi
+  (#1)~}
+\newcommand{\GuideAnswerStyle}{%
+  \ifguidehandwriting
+    \GuideHandwritingFont
+    \fontsize{\GuideHandwritingSize}{\GuideWritingPitch}\selectfont
+    \ifguideeulermath\mathversion{guideanswers}\fi
+    % Let siunitx quantities inherit the model answer's handwriting font.
+    \sisetup{mode=text,reset-text-family=false}%
+  \fi}
+% Explanatory notes remain in the same typography as the prompts.
+\NewDocumentCommand{\GuideCommentary}{+m}{%
+  \par\smallskip
+  {\normalfont\HandoutBody
+   \ifguideeulermath\mathversion{normal}\fi
+   \sisetup{mode=math}#1\par}}
+\newcommand{\GuideSubcellLines}{3}
+% Shared givens contain no questions from later steps.
+\NewDocumentCommand{\GuideContext}{+m}{%
+  \ifguidehandwriting
+    \begin{tcolorbox}[enhanced,breakable,colback=wcprimary!3,
+      colframe=wcprimary!20,boxrule=.3pt,sharp corners,
+      left=5pt,right=5pt,top=4pt,bottom=4pt,
+      before skip=3pt,after skip=3pt]#1\end{tcolorbox}%
+  \else #1\par\fi}
+\NewDocumentCommand{\GuideContextFigure}{+m}{%
+  \ifguidehandwriting
+    \par\begin{center}\begin{minipage}{.60\linewidth}#1\end{minipage}\end{center}%
+  \else #1\fi}
+\NewDocumentCommand{\GuideSubcell}{O{\GuideSubcellLines} m +m +m}{%
+  \ifguidehandwriting
+    \GuideWorksheetCell{\thepframe(#2)}{#1}{#3}{#4}%
+  \else
+    \par\noindent\textbf{(#2)}~#3\par\switchcolumn
+    \noindent{\sffamily\bfseries\scriptsize\color{wcexample}\thepframe(#2)}~#4\par
+    \switchcolumn*\par
+  \fi}
+
+% --- counters -----------------------------------------------------------------
+\newcounter{pframe}
+\renewcommand{\thepframe}{F\arabic{pframe}}
+\newcounter{quiz}
+\newcounter{gsec}
+\newcounter{gfig}
+% paracol keeps counters column-local unless told otherwise.
+\globalcounter*
+
+% --- metadata and title block -------------------------------------------------
+\newcommand{\GuideChapter}{0}
+\newcommand{\GuideTitle}{Reading guide}
+\newcommand{\GuideReading}{}
+\newcommand{\GuideLessons}{}
+\NewDocumentCommand{\Guide}{m m m m}{%
+  \gdef\GuideChapter{#1}\gdef\GuideTitle{#2}\gdef\GuideReading{#3}\gdef\GuideLessons{#4}%
+  \HandoutSetup{NE 630}{#1}{#2}{#3}%
+  \renewcommand{\thequiz}{#1.\arabic{quiz}}%
+  \fancyhead[R]{\sffamily\bfseries\small Reading Guide\enspace|\enspace FNRP Ch.~#1}%
+  \fancyhead[C]{\sffamily\small Answer, reveal, correct; then uncover the next question}%
+  \MakeGuideTitle}
+\NewDocumentCommand{\MakeGuideTitle}{}{%
+  \thispagestyle{handoutfirst}%
+  \vspace*{\dimexpr-\headheight-\headsep\relax}%
+  \noindent\begin{minipage}[c]{.025\linewidth}\color{wcprimary}\rule{3.5pt}{38pt}\end{minipage}%
+  \begin{minipage}[c]{.80\linewidth}
+    {\sffamily\bfseries\fontsize{17}{19}\selectfont\GuideTitle\par}%
+    {\sffamily\fontsize{8.5}{10}\selectfont NE 630\enspace|\enspace Nuclear Reactor Theory\enspace|\enspace Programmed reading guide\par}%
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.155\linewidth}\raggedleft
+    {\sffamily\bfseries\fontsize{26}{28}\selectfont\color{wcprimary}\GuideChapter\par}%
+    {\sffamily\scriptsize FNRP CHAPTER}
+  \end{minipage}\par\vspace{3pt}%
+  \begin{tcolorbox}[handout base,colback=wcprimary!4,colframe=wcprimary!35,
+    top=3pt,bottom=3pt,before skip=0pt,after skip=4pt]
+    {\sffamily\fontsize{8.5}{10}\selectfont\textbf{Read:} \GuideReading\par
+     \textbf{Lessons:} \GuideLessons\par}
+  \end{tcolorbox}}
+
+% --- the programmed two-column body ------------------------------------------
+\newcommand{\ProgrammedSetup}{%
+  \columnratio{0.60}%
+  \setlength{\columnsep}{14pt}%
+  \setlength{\columnseprule}{0.4pt}%
+  \colseprulecolor{wcprimary!30}%
+  \backgroundcolor{c[1]}{wcexample!6}%
+  \footnotelayout{m}}
+\newenvironment{programmed}{\ProgrammedSetup\begin{paracol}{2}\RaggedRight}{\end{paracol}}
+% Full-width material between frames (headings, quizzes, wide figures).
+\newcommand{\Span}[1]{\end{paracol}\par\noindent #1\par\begin{paracol}{2}\RaggedRight}
+% Numbered section heading spanning both columns.
+\newcommand{\GSec}[1]{\Span{\refstepcounter{gsec}\Sec{\arabic{gsec}}{#1}}}
+
+% A frame: left prompt, then \response, then right answer/commentary.
+\NewDocumentEnvironment{pframe}{O{}}{%
+  \par\refstepcounter{pframe}%
+  \noindent{\sffamily\bfseries\small\color{wcprimary}\thepframe}%
+  \ifx\relax#1\relax\else\enspace{\sffamily\bfseries\small\color{wcprimary120}#1}\fi
+  \par\nobreak\vspace{1pt}\nobreak\ignorespaces
+}{\par\switchcolumn*\par}
+\newcommand{\response}{\par\switchcolumn\noindent{\sffamily\bfseries\scriptsize\color{wcexample}\thepframe}\enspace\ignorespaces}
+\newcommand{\Chain}{{\sffamily\bfseries\scriptsize\color{wcalerted}CHAIN}\enspace}
+
+% The student edition keeps each prompt, workspace, and answer on one page.
+% A boxed pair avoids independent column page breaks as the cover slides down.
+\newcommand{\GuideWritingLines}{4}
+\ExplSyntaxOn
+\NewDocumentCommand{\GuideWritingSpace}{m}{
+  \par\nobreak
+  {\color{wcprimary!22}
+   \int_step_inline:nn {#1}
+     {\vspace*{\GuideWritingPitch}\hrule height .25pt\relax}}
+  \vspace{2mm}
+}
+\ExplSyntaxOff
+\ExplSyntaxOn
+\NewDocumentCommand{\GuideRenderWorksheet}{+m}{
+  \tl_if_in:nnTF {#1} {\GuideSubcell}
+    {
+      \par\addvspace{6pt}\Needspace{5\baselineskip}
+      {\sffamily\bfseries\small\color{wcprimary}
+       \thepframe\enspace\GuideFrameTitle\par}
+      #1
+    }
+    {\GuideSingleWorksheet #1\GuideFrameEnd}
+}
+\ExplSyntaxOff
+\ifguidehandwriting
+  % Fix the page header width before a worksheet's minipage can ship a page.
+  \AtBeginDocument{\setlength{\headwidth}{\textwidth}}
+  \renewenvironment{programmed}{\par}{\par}
+  \renewcommand{\Span}[1]{\par\noindent #1\par}
+  \NewDocumentCommand{\GuideWorksheetCell}{m m +m +m}{%
+    \begin{tcolorbox}[enhanced,sidebyside,sidebyside align=top seam,
+      lefthand ratio=.60,sidebyside gap=14pt,
+      colback=white,colbacklower=wcexample!6,colframe=wcprimary!30,
+      boxrule=.4pt,sharp corners,left=5pt,right=5pt,top=5pt,bottom=5pt,
+      before skip=5pt,after skip=5pt,
+      underlay={\path[fill=wcexample!6]
+        (segmentation.north) rectangle (interior.south east);},
+      segmentation style={solid,draw=wcprimary!30}]
+      \RaggedRight
+      {\sffamily\bfseries\small\color{wcprimary}#1}\par\nobreak
+      #3\GuideWritingSpace{#2}%
+      \tcblower
+      \RaggedRight
+      {\sffamily\bfseries\scriptsize\color{wcexample}#1\enspace Check your work}\par
+      {\GuideAnswerStyle #4\par}%
+    \end{tcolorbox}%
+  }
+  \long\def\GuideSingleWorksheet#1\response#2\GuideFrameEnd{%
+    \GuideWorksheetCell{\thepframe\enspace\GuideFrameTitle}{\GuideFrameLines}{#1}{#2}}
+  \RenewDocumentEnvironment{pframe}{O{} O{\GuideWritingLines} +b}{%
+    \refstepcounter{pframe}%
+    \def\GuideFrameLines{#2}\def\GuideFrameTitle{#1}%
+    \GuideRenderWorksheet{#3}%
+  }{}
+\fi
+
+% --- quizzes --------------------------------------------------------------------
+% \begin{quiz}{<answers>} ... items ... \end{quiz}; the answers go upside down
+% into a page footnote attached to the quiz title.
+\NewDocumentEnvironment{quiz}{m +b}{%
+  \refstepcounter{quiz}\stepcounter{footnote}%
+  \begin{tcolorbox}[handout checkpoint,
+    title={Quiz \thequiz\footnotemark[\value{footnote}]\enspace{\mdseries answers are printed upside down in the footnote}}]
+  \begin{enumerate}[label=\arabic*.,leftmargin=1.5em,itemsep=2pt,topsep=1pt]
+  #2
+  \end{enumerate}
+  \end{tcolorbox}%
+  \footnotetext[\value{footnote}]{\rotatebox[origin=c]{180}{\parbox{\dimexpr\linewidth-3em\relax}{%
+    \sffamily\scriptsize Quiz \thequiz\ answers: #1}}}}{}
+\newcommand{\opt}[1]{{\sffamily\bfseries\small(#1)}}
+
+% --- small helpers ----------------------------------------------------------------
+\newcommand{\Term}[1]{\textbf{\textcolor{wcprimary120}{#1}}}
+\newcommand{\FNRP}[1]{FNRP~(#1)}
+\newcommand{\gfigcap}[1]{\refstepcounter{gfig}\par\vspace{1pt}%
+  {\sffamily\fontsize{8}{9.5}\selectfont\color{KSUGray}\textbf{Figure \arabic{gfig}.} #1\par}}
+% Key-term list as a breakable description list.
+\newenvironment{keyterms}{%
+  \begin{description}[leftmargin=0pt,labelindent=0pt,itemsep=1.5pt,parsep=0pt,topsep=2pt,
+    font=\sffamily\bfseries\color{wcprimary120},style=unboxed]}{\end{description}}
+\newcommand{\gterm}[2]{\item[#1] #2}
+
+% --- vector notation ---------------------------------------------------------------
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\bO}{\hat{\Omega}}
+\newcommand{\bn}{\hat{\mathbf{n}}}
+\newcommand{\JJ}{\mathbf{J}}
+\newcommand{\ih}{\hat{\imath}}
+\newcommand{\jh}{\hat{\jmath}}
+\newcommand{\kh}{\hat{k}}
+\newcommand{\rh}{\hat{r}}
+\newcommand{\dV}{\,dV}
+\newcommand{\dO}{\,d\bO}
+\newcommand{\dA}{\,dA}
+\newcommand{\dE}{\,dE}
+\newcommand{\grad}{\nabla}
+\newcommand{\dvg}{\nabla\!\cdot\!}
+\newcommand{\sv}{s'''}
+\newcommand{\ssurf}{s''}
+\newcommand{\kinf}{k_\infty}
+\newcommand{\PNL}{P_{\mathrm{NL}}}
+\newcommand{\Rt}{\widetilde R}
+\newcommand{\Ht}{\widetilde H}
+\endinput

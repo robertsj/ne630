@@ -1,0 +1,1009 @@
+% Programmed reading guide for FNRP Chapter 6 (Spatial Diffusion of Neutrons).
+% Build: make ch06_guide.pdf   (XeLaTeX via latexmk; the class is in ../handouts)
+% Every number quoted below is recomputed by tools/verify_examples.py.
+\documentclass[compact]{ne630handout}
+\usepackage{ne630guide}
+\handoutsolutionsfalse
+\hypersetup{pdftitle={NE 630 -- Reading Guide: FNRP Chapter 6, Spatial Diffusion of Neutrons},pdfauthor={Jeremy Roberts}}
+
+\begin{document}
+\Guide{6}{Spatial Diffusion of Neutrons}
+ {FNRP Sections 6.1--6.7 (one-group diffusion theory in nonmultiplying and multiplying media). Companion handouts: Lessons 31--34; Section 6.6 returns in Lesson 39.}
+ {31 (6.1--6.2), 32 (6.3), 33 (6.4), 34 (6.5 and 6.7), 39 (6.6).}
+
+\begin{KeyBox}{How to use this guide}
+\ifguidehandwriting
+\textbf{One cell at a time.} Use one sheet to cover all rows below the current cell and a second sheet to cover its tinted answer. Read only the current question (for example, F1(a)) and write in its ruled space. Reveal that cell\textquotesingle s answer, compare your reasoning, and correct your work. Only then uncover the next question, F1(b). Shared givens appear above each sequence; keep them available as you work.\par\smallskip
+\fi
+Each numbered frame (F1, F2, \ldots) in the left column poses one small task: define a term, compute one number, or check one step. The tinted right-hand column holds the answer and commentary for the same frame, aligned with it. \textbf{Cover the tinted column with a sheet of paper}, work the frame, slide the sheet down, and compare. Frames marked \Chain chain together: each uses the previous answer as its input, and the input is restated, so a missed frame never blocks the next one. Chained frames add up to a homework-scale problem. After each section a short quiz checks the ideas; its answers are printed upside down in the footnote. Budget about two minutes per frame.
+\end{KeyBox}
+
+\begin{KeyBox}{Why this guide reorders Lewis}
+Lewis opens Chapter 6 with a neutron balance on a small cube, Eq.~(6.1), and reaches the diffusion equation in one page. That is efficient, but the leakage term is the one students misread most often. This guide starts one level deeper, with the direction-resolved count of Lesson 31, builds up the ideas of current, net flow through a surface of arbitrary orientation, and divergence, and only then meets Eq.~(6.1) as a special case. Sections~4--8 then follow Lewis's order. Notation: Lewis writes vectors with arrows ($\vec J$, $\vec\nabla$); the course writes them in bold ($\JJ$, $\grad$). Lewis marks sources by their units: $\sv$ per \si{\centi\meter\cubed}, $\ssurf$ per \si{\centi\meter\squared}, $s'$ per \si{\centi\meter}, and $s_p$ for a point source (per second). The course handouts write $S(x)$ for $\sv$. ``FNRP~(6.10)'' means Eq.~(6.10) of the textbook.
+\end{KeyBox}
+
+\begin{programmed}
+\GSec{Counting neutrons in phase space (FNRP 6.1--6.2; Lesson 31)}
+
+\begin{pframe}[Where is a neutron, and what is it doing?]
+\GuideContext{A neutron's state is its position $\br=(x,y,z)$, its kinetic energy $E$, and its direction of travel $\bO$, a unit vector. Together $(\br,E,\bO)$ is a point in \Term{phase space}. The \Term{angular density} $n(\br,E,\bO,t)$ is defined so that $n\,d^3r\dE\dO$ is the expected number of neutrons at time $t$ inside the small position box $d^3r$ about $\br$, with energies in $dE$ about $E$, traveling within the small cone of directions $d\bO$ about $\bO$ (Fig.~\ref{fig:cell}).
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}[scale=0.85,>=stealth]
+\draw[->] (0,0) -- (3.3,0) node[right,font=\scriptsize]{$x$};
+\draw[->] (0,0) -- (0,2.5) node[above,font=\scriptsize]{$z$};
+\draw[->] (0,0) -- (-1.1,-0.9) node[below left,font=\scriptsize]{$y$};
+\draw[->,thick,wcprimary] (0,0) -- (1.9,1.3) node[midway,above left,font=\scriptsize]{$\br$};
+\begin{scope}[shift={(1.9,1.3)}]
+ \draw (0,0) rectangle (0.5,0.5);
+ \draw (0,0.5) -- (0.2,0.7) -- (0.7,0.7) -- (0.5,0.5);
+ \draw (0.5,0) -- (0.7,0.2) -- (0.7,0.7);
+ \node[below right,font=\scriptsize] at (0.45,0.05) {$d^3r$};
+ \draw[->,thick,wcalerted] (0.25,0.25) -- ++(1.1,0.55) node[right,font=\scriptsize]{$\bO$};
+ \draw[wcalerted!60] (0.25,0.25) -- ++(1.0,0.8);
+ \draw[wcalerted!60] (0.25,0.25) -- ++(1.15,0.3);
+ \node[font=\scriptsize,wcalerted] at (1.3,1.25) {$d\bO$};
+\end{scope}
+\draw[->] (0,-1.5) -- (3.3,-1.5) node[right,font=\scriptsize]{$E$};
+\draw[very thick,wcexample] (1.5,-1.5) -- (1.9,-1.5);
+\draw (1.5,-1.58)--(1.5,-1.42); \draw (1.9,-1.58)--(1.9,-1.42);
+\node[below,font=\scriptsize] at (1.7,-1.58) {$dE$};
+\end{tikzpicture}
+\gfigcap{A phase-space cell: a position box $d^3r$ at $\br$, an energy interval $dE$, and a cone of directions $d\bO$.}\label{fig:cell}
+\end{center}}}
+
+\GuideSubcell{a}{How many independent variables does $n$ depend on?}{
+Seven: three for position, one for energy, two for direction (a unit vector has two free angles, polar and azimuthal), and time.}
+
+\GuideSubcell{b}{State the units of $n$.}{
+$n\,d^3r\dE\dO$ is a pure number, so $n$ is measured in neutrons per \si{\centi\meter\cubed} per \si{\electronvolt} per steradian: \si{\per\centi\meter\cubed\per\electronvolt\per\steradian}.
+\GuideCommentary{Lewis skips this level of detail in Chapter~6 and works directly with the direction-integrated quantities of F3; we start here because the leakage term in his Eq.~(6.1) is easiest to understand when you can picture individual directions of travel.}}
+
+\end{pframe}
+
+\begin{pframe}[From density to flux]
+\GuideContext{The \Term{angular flux} is $\psi=v\,n$, where $v$ is the neutron speed (fixed by $E$).}
+
+\GuideSubcell{a}{What are the units of $\psi$?}{
+\si{\per\centi\meter\squared\per\electronvolt\per\steradian\per\second}: one more factor of \si{\centi\meter\per\second} than $n$.}
+
+\GuideSubcell{b}{Multiply $\psi\dE\dO$ by a cross section $\Sigma_x(\br,E)$ [\si{\per\centi\meter}]. What have you computed, and in what units?}{
+$\Sigma_x\psi\dE\dO$ is the rate of reaction $x$ per \si{\centi\meter\cubed} per second caused by the neutrons in the cell, in \si{\per\centi\meter\cubed\per\second}. Think of $\psi\dE\dO$ as the total path length traveled per \si{\centi\meter\cubed} per second by those neutrons; path length times the probability of interaction per unit path ($\Sigma_x$) is interactions.
+\GuideCommentary{This is Lesson~9's $R_x=\Sigma_x\phi$, now resolved in direction.}}
+
+\end{pframe}
+
+\begin{pframe}[Scalar flux and net current]
+\GuideContext{Integrating over all directions gives the \Term{scalar flux} and the \Term{current},
+\begin{equation*}
+\phi(\br,E,t)=\int_{4\pi}\psi\dO,\qquad
+\JJ(\br,E,t)=\int_{4\pi}\bO\,\psi\dO .
+\end{equation*}
+Chapter~6 also integrates over energy (one group), so $\phi(\br)$ and $\JJ(\br)$ both carry units \si{\per\centi\meter\squared\per\second}.}
+
+\GuideSubcell{a}{If $\psi$ is isotropic, $\psi=\phi/4\pi$, what is $\JJ$?}{
+$\JJ=(\phi/4\pi)\int\bO\dO=\mathbf 0$: equal numbers go every way, so there is no net flow although $\phi\neq0$.}
+
+\GuideSubcell{b}{If every neutron at $\br$ travels in the single direction $\bO_0$ (a beam), how are $|\JJ|$ and $\phi$ related?}{
+$\JJ=\phi\,\bO_0$ and $|\JJ|=\phi$: for a beam, the ``flux'' of Chapter~2 and the current coincide.
+\GuideCommentary{Flux and current share units but answer different questions. $\phi$ counts path length (reaction rates); $\JJ$ counts net crossings (leakage). Keeping these apart removes the single most common confusion in Chapter~6.}}
+
+\end{pframe}
+
+\begin{pframe}[Net flow through a surface element]
+\GuideContext{Take a small flat surface $dA$ with unit normal $\bn$. A neutron traveling along $\bO$ crosses it in the $+\bn$ sense if $\bO\cdot\bn>0$ and in the $-\bn$ sense if $\bO\cdot\bn<0$. The rate at which neutrons in $d\bO$ cross $dA$ is $(\bO\cdot\bn)\,\psi\dO\dA$ (Fig.~\ref{fig:surface}).
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}[scale=0.9,>=stealth]
+\draw[fill=wcprimary!10,draw=wcprimary] (0,0) -- (2.2,0.6) -- (2.6,1.9) -- (0.4,1.3) -- cycle;
+\node[font=\scriptsize] at (1.75,0.75) {$dA$};
+\draw[->,thick] (1.3,0.95) -- (0.8,2.25) node[above,font=\scriptsize]{$\bn$};
+\draw[->,thick,wcalerted] (2.2,0.0) -- (1.3,0.95);
+\draw[->,thick,wcalerted] (1.3,0.95) -- (0.4,1.9) node[above left,font=\scriptsize]{$\bO$};
+\draw (1.3,0.95) ++(111:0.55) arc (111:133.5:0.55);
+\node[font=\scriptsize] at (0.98,1.65) {$\theta$};
+\end{tikzpicture}
+\gfigcap{A surface element with unit normal $\bn$ crossed by neutrons traveling along $\bO$; only the component $\bO\cdot\bn=\cos\theta$ counts.}\label{fig:surface}
+\end{center}}}
+
+\GuideSubcell{a}{Integrate over all directions and express the net crossing rate through $dA$ in terms of $\JJ$.}{
+$\int(\bO\cdot\bn)\psi\dO\dA=\bn\cdot\big(\int\bO\psi\dO\big)dA=\JJ\cdot\bn\dA$. The net flow through any surface element is the component of $\JJ$ along its normal.}
+
+\GuideSubcell{b}{A beam of flux $\phi_0$ travels along $\ih$; the surface normal makes angle $\theta$ with $\ih$. Give the net rate per unit area for $\theta=0^\circ$, $60^\circ$, $90^\circ$, and $180^\circ$.}{
+$\JJ=\phi_0\ih$, so $\JJ\cdot\bn=\phi_0\cos\theta$: $\phi_0$, $\phi_0/2$, $0$, and $-\phi_0$ per \si{\centi\meter\squared} per second. The negative value at $180^\circ$ means the net flow is against $\bn$. A surface seen edge-on ($90^\circ$) is crossed by nobody.}
+
+\end{pframe}
+
+\begin{pframe}[Partial currents]
+Split the crossings by sense:
+\begin{equation*}
+J^{+}=\int_{\bO\cdot\bn>0}(\bO\cdot\bn)\,\psi\dO,\qquad
+J^{-}=-\int_{\bO\cdot\bn<0}(\bO\cdot\bn)\,\psi\dO,
+\end{equation*}
+both positive, so that $\JJ\cdot\bn=J^{+}-J^{-}$. These are the \Term{partial currents}, \FNRP{6.31}. For an isotropic distribution $\psi=\phi/4\pi$, compute $J^{+}$. Hint: with $\bn$ as polar axis, $\bO\cdot\bn=\mu=\cos\theta$ and $d\bO=d\mu\,d\varphi$, with $\mu\in(0,1)$ on the $+$ side.
+\response
+$J^{+}=\dfrac{\phi}{4\pi}\displaystyle\int_0^{2\pi}\!d\varphi\int_0^1\mu\,d\mu=\dfrac{\phi}{4\pi}(2\pi)\Big(\dfrac12\Big)=\dfrac{\phi}{4}$. Likewise $J^{-}=\phi/4$, so $\JJ\cdot\bn=0$ as in F3(a).
+\GuideCommentary{The ``$\phi/4$'' is worth memorizing: it is the one-way crossing rate of an isotropic population, and it is where the $\tfrac14$ in \FNRP{6.32} comes from.}
+\end{pframe}
+
+\begin{pframe}[Diffusion theory's angular shape]
+\GuideContext{Diffusion theory assumes $\psi$ is at most mildly anisotropic (FNRP Appendix~C):
+\begin{equation*}
+\psi(\br,\bO)\approx\frac{1}{4\pi}\big[\phi(\br)+3\,\bO\cdot\JJ(\br)\big].
+\end{equation*}}
+
+\GuideSubcell{a}{Check that $\int\psi\dO=\phi$ and $\int\bO\psi\dO=\JJ$, using $\int\bO\dO=\mathbf 0$ and $\int\bO(\bO\cdot\JJ)\dO=\tfrac{4\pi}{3}\JJ$.}{
+$\int\psi\dO=\frac{1}{4\pi}[4\pi\phi+0]=\phi$ and $\int\bO\psi\dO=\frac{1}{4\pi}[\mathbf 0+3\cdot\frac{4\pi}{3}\JJ]=\JJ$.}
+
+\GuideSubcell{b}{Repeat the F5 integral for this $\psi$ to show $J^{\pm}=\phi/4\pm J_n/2$ with $J_n=\JJ\cdot\bn$, \FNRP{6.32}. You will need $\int_0^1\mu^2d\mu=\int_{-1}^0\mu^2d\mu=\tfrac13$ and $\int_{-1}^0\mu\,d\mu=-\tfrac12$.}{
+On the $+$ side the $\phi$ term gives $\phi/4$ (F5) and the $\JJ$ term gives $\frac{2\pi}{4\pi}\,3J_n\int_0^1\mu^2d\mu=J_n/2$, so $J^{+}=\phi/4+J_n/2$. On the $-$ side, $\int_{\mu<0}\mu\psi\dO=\frac12[-\phi/2+J_n]$, and the leading minus sign in the definition of $J^{-}$ gives $J^{-}=\phi/4-J_n/2$.
+\GuideCommentary{Two relations to keep: $J^{+}+J^{-}=\phi/2$ and $J^{+}-J^{-}=J_n$. Both reappear as boundary conditions in Section~5.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (b); 3 (c); 4 (b).}
+\item The scalar flux at a point is zero only if \opt{a} $\JJ=\mathbf 0$ there; \opt{b} no neutrons are present there; \opt{c} the distribution is isotropic; \opt{d} $D=0$.
+\item Where the angular distribution is exactly isotropic, \opt{a} $\phi=0$; \opt{b} $\JJ=\mathbf 0$; \opt{c} $J^{+}=0$; \opt{d} $J^{+}=\phi$.
+\item The net rate at which neutrons cross a surface element $dA$ with unit normal $\bn$ is \opt{a} $\phi\dA$; \opt{b} $|\JJ|\dA$; \opt{c} $\JJ\cdot\bn\dA$; \opt{d} $(J^{+}+J^{-})\dA$.
+\item For the diffusion-theory angular shape, $J^{+}+J^{-}$ equals \opt{a} $\phi$; \opt{b} $\phi/2$; \opt{c} $\phi/4$; \opt{d} $J_n$.
+\end{quiz}}
+
+\GSec{Vector fields and flows through closed surfaces (a MATH 222 refresher)}
+
+\begin{pframe}[A uniform current through a box]
+\GuideContext{Let $\JJ=J_0\ih$ everywhere and take the cube $0\le x,y,z\le\ell$ (Fig.~\ref{fig:uniform}). Write outward normals and signed net outflows.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}[>=stealth]
+\foreach \x in {-0.6,0,...,2.4} \foreach \y in {-0.4,0.1,...,2.1} \draw[->,wcprimary!70] (\x,\y) -- ++(0.42,0);
+\draw[very thick,wcalerted] (0.2,0.2) rectangle (1.8,1.6);
+\draw[->,thick] (1.8,0.9) -- ++(0.45,0) node[right,font=\scriptsize]{$\bn=\ih$};
+\draw[->,thick] (0.2,0.9) -- ++(-0.45,0) node[left,font=\scriptsize]{$\bn=-\ih$};
+\draw[->,thick] (1.0,1.6) -- ++(0,0.45) node[above,font=\scriptsize]{$\bn=\jh$};
+\draw[->,thick] (1.0,0.2) -- ++(0,-0.45) node[below,font=\scriptsize]{$\bn=-\jh$};
+\node[font=\scriptsize,wcprimary] at (3.3,2.2) {$\JJ=J_0\ih$};
+\end{tikzpicture}
+\gfigcap{A uniform current field and a box; outward normals on four of the six faces.}\label{fig:uniform}
+\end{center}}}
+
+\GuideSubcell{a}{For the face $x=\ell$, state $\bn$ and compute $\JJ\cdot\bn\,A$.}{
+$\bn=\ih$; the outflow is $+J_0\ell^2$.}
+
+\GuideSubcell{b}{For the face $x=0$, state $\bn$ and compute $\JJ\cdot\bn\,A$.}{
+$\bn=-\ih$; the outflow is $-J_0\ell^2$, a net inflow.}
+
+\GuideSubcell{c}{For the four $y$ and $z$ faces, state the outward normals and net outflows.}{
+$\bn=\mp\jh$ at $y=0,\ell$ and $\bn=\mp\kh$ at $z=0,\ell$. Each outflow is zero because $\JJ\perp\bn$.}
+
+\GuideSubcell{d}{Add the six face contributions. What is the total net outflow?}{
+$J_0\ell^2-J_0\ell^2=0$.
+\GuideCommentary{Everything that enters through the back face leaves through the front. A uniform field neither accumulates nor depletes neutrons anywhere; in the next frame, its divergence is zero.}}
+
+\end{pframe}
+
+\begin{pframe}[A stretching current: divergence]
+\GuideContext{Now $\JJ=a\,x\,\ih$ with $a>0$ (Fig.~\ref{fig:stretch}): the current grows with $x$. Same cube.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}[>=stealth]
+\foreach \x in {0.1,0.5,...,2.5} \foreach \y in {-0.4,0.1,...,2.1} \draw[->,wcprimary!70] (\x,\y) -- ++({0.25*\x+0.04},0);
+\draw[very thick,wcalerted] (0.2,0.2) rectangle (1.8,1.6);
+\node[font=\scriptsize,wcprimary] at (3.3,2.2) {$\JJ=a\,x\,\ih$};
+\node[font=\scriptsize] at (0.2,-0.7) {$x=0$};
+\node[font=\scriptsize] at (1.8,-0.7) {$x=\ell$};
+\end{tikzpicture}
+\gfigcap{A current that grows with $x$: more leaves the front face than enters the back face.}\label{fig:stretch}
+\end{center}}}
+
+\GuideSubcell{a}{For the cube $0\le x,y,z\le\ell$, find the net outflow through its six faces.}{
+Front face $x=\ell$: $J_x(\ell)\,\ell^2=a\ell^3$. Back face $x=0$: $J_x(0)=0$. Other faces: $0$. Total $a\ell^3=aV$.}
+
+\GuideSubcell{b}{The \Term{divergence} is $\dvg\JJ=\partial J_x/\partial x+\partial J_y/\partial y+\partial J_z/\partial z$. Compute it and integrate it over the cube.}{
+$\dvg\JJ=a$ and $\int_V a\dV=aV$.}
+
+\GuideSubcell{c}{Compare the surface outflow from part (a) with the volume integral from part (b).}{
+Equal. This is \Term{Gauss's divergence theorem},
+\begin{equation*}
+\oint_S\JJ\cdot\bn\dA=\int_V\dvg\JJ\dV,
+\end{equation*}
+which turns a surface count (hard) into a volume integral (easy). More neutrons leave than enter, so they must be created inside or the population is draining; the balance of Section~3 keeps track of exactly that.
+\GuideCommentary{Lewis does this face by face for an infinitesimal cube in \FNRP{6.2}--(6.4): his bracket $[J_x(x+\tfrac12dx)-J_x(x-\tfrac12dx)]\,dy\,dz$ is the front-minus-back count of this frame.}}
+
+\end{pframe}
+
+\begin{pframe}[Arbitrary normals]
+\GuideContext{In two dimensions take the constant current $\JJ=(3,4)$ \si{\per\centi\meter\squared\per\second}.}
+
+\GuideSubcell{a}{Compute $\JJ\cdot\bn$ for $\bn=(0.6,0.8)$ and interpret its sign.}{
+$1.8+3.2=5.0$: $\bn$ is parallel to $\JJ$ ($|\JJ|=5$), so the whole current crosses in the $+\bn$ sense.}
+
+\GuideSubcell{b}{Compute $\JJ\cdot\bn$ for $\bn=(0.8,-0.6)$ and interpret its sign.}{
+$2.4-2.4=0$: the surface is parallel to $\JJ$ and nothing crosses it.}
+
+\GuideSubcell{c}{Compute $\JJ\cdot\bn$ for $\bn=(-0.6,-0.8)$ and interpret its sign.}{
+$-5.0$: a net inflow against $\bn$.
+\GuideCommentary{Only the component of $\JJ$ along $\bn$ counts (Fig.~\ref{fig:surface}); the algebra confirms the picture.}}
+
+\end{pframe}
+
+\begin{pframe}[A radial current]
+\GuideContext{A point source emits $s_p$ neutrons per second at the origin of a medium with no absorption. By symmetry $\JJ=J_r(r)\,\rh$.}
+
+\GuideSubcell{a}{Use a sphere of radius $R$ as the closed surface: what must $J_r(R)$ be if neutrons are neither created nor lost for $r>0$?}{
+$\oint\JJ\cdot\bn\dA=J_r(R)\cdot4\pi R^2$ must equal $s_p$ for every $R$, so $J_r(R)=s_p/4\pi R^2$.}
+
+\GuideSubcell{b}{Write $J_r(r)$.}{
+$J_r(r)=s_p/4\pi r^2$: the geometric $1/r^2$ of Lesson~4.}
+
+\GuideSubcell{c}{Verify that $\dvg\JJ=\dfrac{1}{r^2}\dfrac{d}{dr}\big(r^2J_r\big)$ vanishes for $r>0$.}{
+$r^2J_r=s_p/4\pi$ is constant, so the divergence is zero: no sources or sinks away from the origin. With absorption (Section~6) $r^2J_r$ decreases with $r$ and $\dvg\JJ=-\Sigma_a\phi<0$.}
+
+\end{pframe}
+
+\begin{pframe}[Divergence as leakage density]
+\GuideContext{Anticipating Section~3, take $\JJ=-D\grad\phi$ with $\phi(x)=\phi_0\cos(\pi x/a)$ on the slab $|x|\le a/2$ and constant $D$.}
+
+\GuideSubcell{a}{Compute $\JJ$.}{
+$\JJ=-D\,\phi'(x)\,\ih=D\phi_0(\pi/a)\sin(\pi x/a)\,\ih$: positive for $x>0$, negative for $x<0$, so neutrons flow outward from the center toward both faces.
+\GuideCommentary{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.0cm,xlabel={$x$ (cm)},xmin=-5,xmax=5,ymin=-0.5,ymax=1.1,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.03,0.08)},anchor=south west},
+ tick label style={font=\scriptsize},label style={font=\scriptsize},domain=-5:5,samples=81]
+\addplot[wcprimary,thick] {cos(deg(pi*x/10))}; \addlegendentry{$\phi/\phi_0$}
+\addplot[wcalerted,thick,dashed] {0.3142*sin(deg(pi*x/10))}; \addlegendentry{$J_x/\phi_0$}
+\addplot[black!40,thin] {0};
+\end{axis}
+\end{tikzpicture}
+\gfigcap{The cosine flux of F11 and its current for $D=\SI{1}{\centi\meter}$, $a=\SI{10}{\centi\meter}$; neutrons flow outward from the center.}\label{fig:cosine}
+\end{center}}}
+
+\GuideSubcell{b}{Compute $\dvg\JJ$ and write it as a multiple of $\phi(x)$.}{
+$\dvg\JJ=D\phi_0(\pi/a)^2\cos(\pi x/a)=D(\pi/a)^2\phi(x)$. The net outflow per unit volume is proportional to the flux itself, with coefficient $DB^2$ where $B=\pi/a$: your first sight of a \Term{buckling} (Section~8).}
+
+\GuideSubcell{c}{With $D=\SI{1}{\centi\meter}$ and $a=\SI{10}{\centi\meter}$ evaluate the multiplier (Fig.~\ref{fig:cosine}).}{
+$D(\pi/a)^2=(\pi/10)^2=\SI{0.0987}{\per\centi\meter}$, comparable to a typical $\Sigma_a$.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Gauss's theorem, checked]
+\GuideContext{Continue F11 with $D=\SI{1}{\centi\meter}$, $a=\SI{10}{\centi\meter}$, and $J_x=D\phi_0(\pi/a)\sin(\pi x/a)$.}
+
+\GuideSubcell{a}{Compute the total leakage per unit face area by summing the outflow through the faces at $x=\pm a/2$.}{
+At $x=a/2$, $\bn=\ih$: $J_x(a/2)=D\phi_0\pi/a$. At $x=-a/2$, $\bn=-\ih$: $-J_x(-a/2)=+D\phi_0\pi/a$. Sum: $2D\phi_0\pi/a=0.628\,\phi_0$.}
+
+\GuideSubcell{b}{Compute the same leakage by integrating $\dvg\JJ$ across the slab. Compare with part (a).}{
+$\int_{-a/2}^{a/2}D(\pi/a)^2\phi_0\allowbreak\cos(\pi x/a)\,dx=\allowbreak D(\pi/a)^2\phi_0\,(2a/\pi)=\allowbreak 2D\phi_0\pi/a=0.628\,\phi_0$. Same.
+\GuideCommentary{The theorem lets us replace ``leakage through the boundary'' by $\int\dvg\JJ\dV$ inside the balance equation, and then shrink the volume to a point (F14).}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (a); 2 (b); 3 (b); 4 (c).}
+\item If $\dvg\JJ>0$ at a point, then \opt{a} more neutrons leave a small volume around the point than enter it; \opt{b} the flux is zero there; \opt{c} $\JJ=\mathbf 0$ there; \opt{d} the medium is a vacuum.
+\item For the uniform current $\JJ=J_0\jh$, the net outflow through any closed surface is \opt{a} $J_0$ times its area; \opt{b} zero; \opt{c} $J_0$ times its volume; \opt{d} negative.
+\item The divergence theorem converts \opt{a} a volume integral of $\phi$ into a surface integral of $\phi$; \opt{b} a surface integral of $\JJ\cdot\bn$ into a volume integral of $\dvg\JJ$; \opt{c} $\grad\phi$ into $\JJ$; \opt{d} a time derivative into a space derivative.
+\item For $\JJ=s_p\rh/4\pi r^2$, the net outflow through a sphere of radius $2R$ compared with one of radius $R$ is \opt{a} four times smaller; \opt{b} four times larger; \opt{c} the same; \opt{d} zero.
+\end{quiz}}
+
+\GSec{Balance, continuity, and the diffusion equation (FNRP 6.2; Lesson 31)}
+
+\begin{pframe}[Balance for a finite control volume]
+\GuideContext{Fix a \Term{control volume} $V$ with surface $S$ and outward normal $\bn$. Build the balance one term at a time, using $n$, $\sv(\br)$ [\si{\per\centi\meter\cubed\per\second}], $\nu\Sigma_f$, $\Sigma_a$, $\phi$, and $\JJ$.}
+
+\GuideSubcell{a}{Write the rate of change of the number of neutrons inside $V$.}{
+$\displaystyle\frac{d}{dt}\int_V n\dV$.}
+
+\GuideSubcell{b}{Write the total source-emission rate in $V$.}{
+$\displaystyle\int_V\sv\dV$.}
+
+\GuideSubcell{c}{Write the total fission-production rate in $V$.}{
+$\displaystyle\int_V\nu\Sigma_f\phi\dV$.}
+
+\GuideSubcell{d}{Write the total absorption rate in $V$.}{
+$\displaystyle\int_V\Sigma_a\phi\dV$.}
+
+\GuideSubcell{e}{Write the net leakage rate out through $S$.}{
+$\displaystyle\oint_S\JJ\cdot\bn\dA$.}
+
+\GuideSubcell{f}{Combine these terms as accumulation $=$ gains $-$ losses. What changes at steady state?}{
+\begin{align*}
+\frac{d}{dt}\!\int_V n\dV
+ &=\int_V\sv\dV+\int_V\nu\Sigma_f\phi\dV\\
+ &\quad-\int_V\Sigma_a\phi\dV-\oint_S\JJ\cdot\bn\dA .
+\end{align*}
+Steady state: drop the left side.
+\GuideCommentary{Compare \FNRP{6.1}, the same four terms per unit volume for an infinitesimal cube. Scattering is absent: in one-group theory a scattered neutron stays in the group and in $V$, so it is neither a gain nor a loss. Direction-resolved in-scatter and out-scatter cancel upon integration over all directions (Lesson~31).}}
+
+\end{pframe}
+
+\begin{pframe}[Shrink the volume: the continuity equation]
+Apply Gauss's theorem (F8) to the leakage term, collect everything under one $\int_V$, and argue that because $V$ is arbitrary the integrand itself must vanish. Write the resulting differential equation.
+\response
+\begin{equation*}
+\dvg\JJ+\Sigma_a\phi=\sv+\nu\Sigma_f\phi ,
+\tag{6.10}
+\end{equation*}
+the \Term{neutron continuity equation}. If the integrand were nonzero somewhere, a small $V$ around that point would violate the balance, so it vanishes everywhere.
+\GuideCommentary{Lewis's route, \FNRP{6.2}--(6.8), evaluates the leakage face by face for a cube and takes $dx\to0$; the divergence appears as the limit of front-minus-back differences. Same equation, two derivations; use whichever you can reproduce on a blank page.}
+\end{pframe}
+
+\begin{pframe}[Counting unknowns: why Fick's law]
+\GuideContext{Equation (6.10) is one scalar equation.}
+
+\GuideSubcell{a}{How many unknown scalar fields does it contain?}{
+Four: $\phi$ and the three components of $\JJ$.}
+
+\GuideSubcell{b}{\Term{Fick's law}, \FNRP{6.11}, $\JJ=-D\grad\phi$, closes the system. In words, what does it assert, and in which direction does $\JJ$ point relative to the flux?}{
+Neutrons flow from where the flux is high to where it is low, at a rate proportional to the steepness of the drop; $\JJ$ points down the gradient. It is an approximation (Lewis says ``Fick's approximation''), valid when the angular distribution is nearly isotropic (F6 and Section~7).}
+
+\GuideSubcell{c}{Name two other engineering laws of the same form.}{
+Fourier's law $\mathbf q=-k\grad T$ for heat, Fick's first law for solutes, Darcy's law for groundwater, Ohm's law in the form $\mathbf j=-\sigma\grad V$.}
+
+\end{pframe}
+
+\begin{pframe}[The diffusion equation and $D$]
+\GuideContext{Insert Fick's law into (6.10). Then use $D=1/3\Sigma_{tr}$ with the \Term{transport cross section} $\Sigma_{tr}=\Sigma_t-\bar\mu\Sigma_s$, where $\bar\mu\approx2/3A$ is the average cosine of the scattering angle, \FNRP{6.13}.}
+
+\GuideSubcell{a}{Write the diffusion equation.}{
+$-\dvg D\grad\phi+\Sigma_a\phi=\sv+\nu\Sigma_f\phi$, \FNRP{6.12}.}
+
+\GuideSubcell{b}{For a material with $A=12$, $\Sigma_t=\SI{0.400}{\per\centi\meter}$, and $\Sigma_s=\SI{0.3998}{\per\centi\meter}$, compute $\bar\mu$, $\Sigma_{tr}$, and $D$.}{
+$\bar\mu=2/36=0.0556$; $\Sigma_{tr}=0.400-0.0556\times0.3998=\SI{0.3778}{\per\centi\meter}$; $D=1/(3\times0.3778)=\SI{0.882}{\centi\meter}$.}
+
+\GuideSubcell{c}{What would $D$ be if scattering were isotropic in the laboratory?}{
+$D=1/3\Sigma_t=\SI{0.833}{\centi\meter}$.
+\GuideCommentary{Forward-peaked scattering ($\bar\mu>0$) lets neutrons travel farther before forgetting their direction, so it increases $D$. For hydrogen ($A=1$, $\bar\mu=2/3$) the correction is large; for heavy nuclei it is negligible.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1: from a flux to its source]
+Take the slab of F11: $|x|\le a/2$, $a=\SI{10}{\centi\meter}$, constant $D=\SI{1}{\centi\meter}$ and $\Sigma_a=\SI{0.10}{\per\centi\meter}$, no fission, and suppose the flux is $\phi(x)=\phi_0\cos(\pi x/a)$. What source distribution $\sv(x)$ sustains it? Use the diffusion equation; F11 gave $\dvg\JJ=D(\pi/a)^2\phi=0.0987\,\phi(x)$.
+\response
+$\sv=\dvg\JJ+\Sigma_a\phi=[D(\pi/a)^2+\Sigma_a]\,\phi(x)=(0.0987+0.100)\,\phi(x)=0.1987\,\phi(x)$ \si{\per\centi\meter\cubed\per\second}.
+\GuideCommentary{The source has the same cosine shape; half of it ($0.0987/0.1987=49.7\%$) feeds leakage and half feeds absorption. This is the structure of homework problem 31.1, in one dimension instead of three.}
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1 continued: a balance audit]
+\GuideContext{Using $\sv=0.1987\,\phi(x)$ from F17 (per unit face area; keep $\phi_0$ as a factor), use the whole slab. Use $\int_{-a/2}^{a/2}\cos(\pi x/a)\,dx=2a/\pi=\SI{6.366}{\centi\meter}$.}
+
+\GuideSubcell{a}{Compute the total source rate over the whole slab, per unit face area; retain $\phi_0$ as a factor.}{
+$0.1987\times6.366\,\phi_0=1.265\,\phi_0$.}
+
+\GuideSubcell{b}{Compute the total absorption rate over the whole slab, per unit face area.}{
+$0.100\times6.366\,\phi_0=0.637\,\phi_0$.}
+
+\GuideSubcell{c}{Compute the total leakage rate per unit face area. You may use F12: $2J_x(a/2)=0.628\,\phi_0$.}{
+$0.628\,\phi_0$.}
+
+\GuideSubcell{d}{Check that the source rate from part (a) equals absorption from part (b) plus leakage from part (c).}{
+$0.637+0.628=1.265$.
+\GuideCommentary{A solution of the diffusion equation conserves neutrons over any volume automatically; checking it is the cheapest way to catch an algebra error, and homework 31.2 and 32.1(c) require it.}}
+
+\end{pframe}
+
+\begin{pframe}[Cousins of the diffusion equation]
+\GuideContext{The steady fin equation of heat transfer reads $k\,d^2T/dx^2-(hP/A)(T-T_\infty)=0$; the source-free diffusion equation in a slab reads $D\,d^2\phi/dx^2-\Sigma_a\phi=0$.}
+
+\GuideSubcell{a}{Which quantities play the roles of $D$, $\Sigma_a$, and $\phi$?}{
+$k\leftrightarrow D$ (conduction and diffusion), $hP/A\leftrightarrow\Sigma_a$ (loss to the surroundings along the fin, absorption), $T-T_\infty\leftrightarrow\phi$.}
+
+\GuideSubcell{b}{The fin solution decays as $e^{-mx}$ with $m=\sqrt{hP/kA}$. What is the neutron analog of $1/m$?}{
+$1/m\leftrightarrow\sqrt{D/\Sigma_a}=L$, the diffusion length of the next section.
+\GuideCommentary{If you have solved fins, RC transmission lines, or Debye screening, you have already solved Section~4.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (b); 3 (a); 4 (b).}
+\item In one-group diffusion theory, elastic scattering appears in the balance equation as \opt{a} a loss term $\Sigma_s\phi$; \opt{b} a gain term; \opt{c} not at all; \opt{d} a leakage term.
+\item Fick's law states that \opt{a} $\JJ\propto\phi$; \opt{b} $\JJ\propto-\grad\phi$; \opt{c} $\JJ=\mathbf 0$; \opt{d} $\phi\propto-\dvg\JJ$.
+\item Increasing the average scattering cosine $\bar\mu$ at fixed $\Sigma_t$ and $\Sigma_s$ \opt{a} increases $D$; \opt{b} decreases $D$; \opt{c} leaves $D$ unchanged; \opt{d} increases $\Sigma_a$.
+\item The continuity equation (6.10) is exact given its one-group premise; the diffusion equation (6.12) adds \opt{a} Gauss's theorem; \opt{b} Fick's approximation; \opt{c} steady state; \opt{d} spherical symmetry.
+\end{quiz}}
+
+\GSec{Nonmultiplying systems, plane geometry (FNRP 6.3; Lesson 32)}
+
+\begin{pframe}[The diffusion length]
+\GuideContext{With constant $D$ and $\Sigma_a$ and no fission, (6.12) becomes $-\nabla^2\phi+\phi/L^2=\sv/D$ with the \Term{diffusion length} $L=\sqrt{D/\Sigma_a}$, \FNRP{6.14}--(6.15).}
+
+\GuideSubcell{a}{Compute $L$ for the toy set: $D=\SI{1}{\centi\meter}$, $\Sigma_a=\SI{0.10}{\per\centi\meter}$.}{
+$\sqrt{10}=\SI{3.16}{\centi\meter}$;}
+
+\GuideSubcell{b}{Compute $L$ for graphite: $D=\SI{0.84}{\centi\meter}$, $\Sigma_a=\SI{2.1e-4}{\per\centi\meter}$ (FNRP problem~6.3).}{
+$\sqrt{4000}=\SI{63.2}{\centi\meter}$;}
+
+\GuideSubcell{c}{Compute $L$ for light water: $D=\SI{0.16}{\centi\meter}$, $\Sigma_a=\SI{0.0197}{\per\centi\meter}$.}{
+$\sqrt{8.12}=\SI{2.85}{\centi\meter}$. Water absorbs strongly, graphite barely at all. $L$ is the distance over which a flux disturbance decays (F22) and, as Section~7 shows, the rms distance a neutron diffuses from birth to absorption divided by $\sqrt6$.
+\GuideCommentary{These three materials are reused throughout the guide.}}
+
+\end{pframe}
+
+\begin{pframe}[Trial solutions]
+\GuideContext{Source-free, one dimension: $d^2\phi/dx^2-\phi/L^2=0$. Try $\phi=Ce^{\kappa x}$.}
+
+\GuideSubcell{a}{Which $\kappa$ work?}{
+$C(\kappa^2-1/L^2)e^{\kappa x}=0$ requires $\kappa=\pm1/L$.}
+
+\GuideSubcell{b}{Write the \Term{general solution} two ways, with exponentials and with $\cosh$ and $\sinh$.}{
+$\phi=C_1e^{x/L}+C_2e^{-x/L}=A\cosh(x/L)+B\sinh(x/L)$ with $A=C_1+C_2$, $B=C_1-C_2$.}
+
+\GuideSubcell{c}{Why are there two constants?}{
+A second-order equation needs two conditions, supplied by boundary or interface conditions.
+\GuideCommentary{Use exponentials on semi-infinite domains (boundedness kills one of them) and hyperbolic functions on finite symmetric slabs ($\cosh$ is even, $\sinh$ is odd).}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2: a half-space]
+\GuideContext{The medium occupies $x\ge0$; neutrons enter from the left so that $\phi(0)=\phi_0$, and $\phi\to0$ as $x\to\infty$.}
+
+\GuideSubcell{a}{Which constant must vanish and why?}{
+$C_1=0$, otherwise $\phi\to\infty$.}
+
+\GuideSubcell{b}{Write $\phi(x)$.}{
+$\phi=\phi_0e^{-x/L}$, \FNRP{6.23}.}
+
+\GuideSubcell{c}{Compute $J_x(x)$ from Fick's law and, with the toy set ($D=\SI{1}{\centi\meter}$, $L=\SI{3.162}{\centi\meter}$), evaluate $J_x(0)/\phi_0$.}{
+$J_x=-D\phi'=(D/L)\phi_0e^{-x/L}$, so $J_x(0)/\phi_0=1/3.162=0.316$. Positive: neutrons flow into the medium, down the flux gradient.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2 continued: inflow equals absorption]
+\GuideContext{Everything entering the half-space at $x=0$ is eventually absorbed. Check it:}
+
+\GuideSubcell{a}{integrate the absorption rate $\Sigma_a\phi$ over $0\le x<\infty$.}{
+$\Sigma_a\phi_0\int_0^\infty e^{-x/L}dx=\Sigma_a\phi_0L=0.10\times3.162\,\phi_0=0.316\,\phi_0$.}
+
+\GuideSubcell{b}{compare with $J_x(0)=0.316\,\phi_0$ from F22.}{
+Equal, because $D/L=\Sigma_aL$ is just $L^2=D/\Sigma_a$ rearranged.
+\GuideCommentary{The balance is built into the solution; you did not have to impose it.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2 continued: how deep?]
+What fraction of the neutrons entering the half-space is absorbed within one, two, and three diffusion lengths of the surface?
+\response
+The fraction absorbed in $[0,nL]$ is $1-e^{-n}$: $0.632$, $0.865$, $0.950$. Three diffusion lengths hold 95\% of the absorptions: \SI{190}{\centi\meter} of graphite, \SI{8.6}{\centi\meter} of water.
+\end{pframe}
+
+\begin{pframe}[Uniform source in a slab]
+\GuideContext{Slab $|x|\le a$, uniform source $s_0'''$, zero flux at $x=\pm a$, \FNRP{6.24}--(6.30).}
+
+\GuideSubcell{a}{Verify that the constant $\phi_p=s_0'''/\Sigma_a$ is a \Term{particular solution}.}{
+Its second derivative is zero, and $\phi_p/L^2=s_0'''/D$ gives $\phi_p=s_0'''L^2/D=s_0'''/\Sigma_a$.}
+
+\GuideSubcell{b}{Why does the general part contain $\cosh(x/L)$ but no $\sinh(x/L)$?}{
+The problem is symmetric about $x=0$; $\sinh$ is odd and would make $\phi(x)\ne\phi(-x)$.}
+
+\GuideSubcell{c}{Apply $\phi(a)=0$ to obtain
+\begin{equation*}
+\phi(x)=\frac{s_0'''}{\Sigma_a}\left[1-\frac{\cosh(x/L)}{\cosh(a/L)}\right].
+\end{equation*}}{
+$\phi=A\cosh(x/L)+s_0'''/\Sigma_a$ with $\phi(a)=0$ gives $A=-(s_0'''/\Sigma_a)/\cosh(a/L)$.}
+
+\GuideSubcell{d}{Evaluate $\phi(0)/\phi_p$ for $a/L=1$, $2$, and $5$ (Fig.~\ref{fig:slab}).}{
+$1-1/\cosh(a/L)=0.352$, $0.734$, $0.987$.
+\GuideCommentary{A slab thinner than a diffusion length never approaches the infinite-medium value; a slab five $L$ thick reaches it everywhere except near its faces.}
+\GuideCommentary{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.2cm,xlabel={$x/a$},ylabel={$\phi/\phi_p$},xmin=-1,xmax=1,ymin=0,ymax=1.08,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.5,0.98)},anchor=north},legend columns=3,
+ tick label style={font=\scriptsize},label style={font=\scriptsize},domain=-1:1,samples=101]
+\addplot[wcprimary,thick] {1-cosh(1*x)/cosh(1)}; \addlegendentry{$a/L=1$}
+\addplot[wcalerted,thick,dashed] {1-cosh(2*x)/cosh(2)}; \addlegendentry{$a/L=2$}
+\addplot[wcexample,thick,dotted] {1-cosh(5*x)/cosh(5)}; \addlegendentry{$a/L=5$}
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Uniform-source slab with zero-flux faces for three slab half-widths measured in diffusion lengths.}\label{fig:slab}
+\end{center}}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3: leakage from the uniform-source slab]
+\GuideContext{Use the solution of F25.}
+
+\GuideSubcell{a}{Compute $J_x(a)=-D\phi'(a)$.}{
+$\phi'(x)=-(s_0'''/\Sigma_a)(1/L)\sinh(x/L)/\cosh(a/L)$, so $J_x(a)=(D/L)(s_0'''/\Sigma_a)\tanh(a/L)=s_0'''L\tanh(a/L)$, again because $D/(L\Sigma_a)=L$.}
+
+\GuideSubcell{b}{The total leakage from both faces divided by the total source $2as_0'''$ is the leakage fraction; show that it equals $(L/a)\tanh(a/L)$.}{
+$2J_x(a)/(2as_0''')=(L/a)\tanh(a/L)$.}
+
+\GuideSubcell{c}{Evaluate it for $a/L=1$, $2$, $5$ and state the absorbed fraction.}{
+$0.762$, $0.482$, $0.200$; absorbed $0.238$, $0.518$, $0.800$.
+\GuideCommentary{Thin slabs leak; once $a\gg L$ the leakage fraction falls like $L/a$. You have reproduced the structure of FNRP problem~6.3 and homework 32.1(c).}}
+
+\end{pframe}
+
+\begin{pframe}[Verify, do not trust]
+Lesson~32 asks you to verify solutions. Show in two lines that $\phi(x)=(s_0'''/\Sigma_a)[1-\cosh(x/L)/\cosh(a/L)]$ satisfies $-D\phi''+\Sigma_a\phi=s_0'''$ and both boundary conditions.
+\response
+$\phi''=-(s_0'''/\Sigma_a)(1/L^2)\cosh(x/L)/\cosh(a/L)$. Then $-D\phi''+\Sigma_a\phi=(s_0'''/\Sigma_a)\big[(D/L^2)\tfrac{\cosh}{\cosh}+\Sigma_a-\Sigma_a\tfrac{\cosh}{\cosh}\big]=(s_0'''/\Sigma_a)\Sigma_a=s_0'''$ because $D/L^2=\Sigma_a$. At $x=\pm a$ the bracket is $1-1=0$.
+\GuideCommentary{Make this a reflex: substitute back, check the boundaries, then audit the balance as in F18.}
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (b); 3 (b); 4 (c).}
+\item Doubling $\Sigma_a$ at fixed $D$ \opt{a} doubles $L$; \opt{b} halves $L$; \opt{c} divides $L$ by $\sqrt2$; \opt{d} multiplies $L$ by $\sqrt2$.
+\item In a source-free half-space with $\phi(0)=\phi_0$, the current at the surface equals \opt{a} $\phi_0/4$; \opt{b} $D\phi_0/L$; \opt{c} $\Sigma_a\phi_0$; \opt{d} zero.
+\item For a uniform source in a slab with zero-flux faces, the central flux approaches $s_0'''/\Sigma_a$ when \opt{a} $a\ll L$; \opt{b} $a\gg L$; \opt{c} $D\to\infty$; \opt{d} never.
+\item The particular solution for a uniform source is \opt{a} a $\cosh$; \opt{b} an exponential; \opt{c} a constant; \opt{d} zero.
+\end{quiz}}
+
+\GSec{Boundary conditions (FNRP 6.4; Lesson 33)}
+
+\begin{pframe}[Vacuum boundary]
+\GuideContext{At a right-hand boundary $x_r$ next to a vacuum, no neutrons come back: $J^{-}(x_r)=0$. With Fick's law, F6 becomes $J^{\pm}=\phi/4\mp(D/2)\,d\phi/dx$, \FNRP{6.33}.}
+
+\GuideSubcell{a}{Show that the condition is $\phi(x_r)/|\phi'(x_r)|=2D$.}{
+At a right boundary $\phi'<0$, so $J^{-}=\phi/4+(D/2)\phi'=\phi/4-(D/2)|\phi'|=0$ gives $\phi/|\phi'|=2D$, which is \FNRP{6.35} with $D=\lambda/3$.}
+
+\GuideSubcell{b}{Explain why a straight-line extrapolation of $\phi$ then reaches zero a distance $d=2D=\tfrac23\lambda_{tr}$ beyond the surface, the \Term{extrapolation distance} (Fig.~\ref{fig:extrap}).}{
+A line through $(x_r,\phi(x_r))$ with slope $-|\phi'|$ reaches zero at $x_r+\phi/|\phi'|=x_r+2D$.
+\GuideCommentary{\begin{center}
+\begin{tikzpicture}[>=stealth]
+\fill[wcprimary!6] (0,0) rectangle (3,2.2);
+\draw[->] (0,0) -- (4.8,0) node[right,font=\scriptsize]{$x$};
+\draw[->] (0,0) -- (0,2.4) node[above,font=\scriptsize]{$\phi$};
+\draw[thick] (3,0) -- (3,2.2);
+\node[font=\scriptsize] at (1.5,2.35) {medium};
+\node[font=\scriptsize] at (3.9,2.35) {vacuum};
+\draw[thick,wcprimary,domain=0:3,samples=40] plot (\x,{2-0.12*\x*\x});
+\draw[dashed,thick,wcalerted] (3,0.92) -- (4.278,0);
+\draw[<->] (3,-0.3) -- (4.278,-0.3) node[midway,below,font=\scriptsize]{$d=2D$};
+\node[below,font=\scriptsize] at (3,0) {$x_r$};
+\node[below,font=\scriptsize] at (4.4,0) {$\tilde x_r$};
+\end{tikzpicture}
+\gfigcap{The vacuum condition $J^{-}=0$ fixes the ratio of flux to slope at the surface; extended as a straight line, the flux would vanish at the extrapolated boundary $\tilde x_r=x_r+2D$.}\label{fig:extrap}
+\end{center}}}
+
+\GuideSubcell{c}{Evaluate $d$ for the toy set and for graphite. (Transport theory gives $d=0.7104\lambda_{tr}$; diffusion theory's $0.667\lambda_{tr}$ is close.).}{
+\SI{2.0}{\centi\meter} and \SI{1.68}{\centi\meter}.
+\GuideCommentary{For a \SI{50}{\centi\meter} slab that is a 3--4\% change in size: small, but not negligible for criticality (Chapter~7).}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3 continued: extrapolated boundary]
+Replace $\phi(\pm a)=0$ by $\phi(\pm\tilde a)=0$ with $\tilde a=a+2D$, Lewis's tilde convention for an \Term{extrapolated boundary}. For the toy set with $a=\SI{10}{\centi\meter}$ ($L=\SI{3.162}{\centi\meter}$, so $\tilde a=\SI{12}{\centi\meter}$), recompute $\phi(0)/\phi_p$ from F25 and compare with the value for $\phi(\pm10)=0$.
+\response
+$1-1/\cosh(12/3.162)=1-1/22.2=0.955$, versus $1-1/\cosh(10/3.162)=0.915$. Forcing the flux to zero on the physical surface removes about 4\% of the central flux, which is Lesson~33's warning that the zero-flux condition ``eats neutrons.'' The vacuum condition $J^{-}=0$ is the honest one; the extrapolated zero is a convenient stand-in, and plain $\phi=0$ on the surface is acceptable only when the system is many $D$ across.
+\end{pframe}
+
+\begin{pframe}[Reflecting boundary]
+\GuideSubcell{a}{State the \Term{reflecting condition} in terms of $J$ and in terms of $\phi'$.}{
+$J_x=0$, equivalently $\phi'=0$, \FNRP{6.36}: no net flow across a symmetry plane or a perfect mirror.}
+
+\GuideSubcell{b}{The uniform-source slab of F25 is symmetric about $x=0$. Reformulate it on $0\le x\le a$ with a reflecting condition at $0$ and show that you recover the same solution with one fewer step.}{
+$\phi=A\cosh(x/L)+B\sinh(x/L)+s_0'''/\Sigma_a$; $\phi'(0)=B/L=0$ removes the $\sinh$ at once; $\phi(a)=0$ fixes $A$ as before.
+\GuideCommentary{Symmetry arguments save algebra and are essential for Chapter~7's cylinder.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4: surface source and albedo]
+A half-space is bombarded by a \Term{surface source} of $\ssurf$ neutrons \si{\per\centi\meter\squared\per\second}, so $J^{+}(0)=\ssurf$. The solution is $\phi=\phi_0e^{-x/L}$ with $\phi_0$ fixed by $J^{+}(0)=(\tfrac14+D/2L)\phi_0$, \FNRP{6.37}--(6.39). The \Term{albedo} $\alpha=J^{-}(0)/J^{+}(0)=(1-2D/L)/(1+2D/L)$, \FNRP{6.41}, is the fraction reflected back. Compute $2D/L$ and $\alpha$ for graphite ($D=0.84$, $L=63.2$), water ($0.16$, $2.85$), and the toy set ($1$, $3.162$), all in \si{\centi\meter}. Which is the better reflector, and what fraction is absorbed in each?
+\response
+$2D/L$: $0.0266$, $0.112$, $0.632$. $\alpha$: $0.948$, $0.798$, $0.225$. Absorbed, $1-\alpha$: 5\%, 20\%, 77\%. Graphite returns 95\% of what hits it: a good reflector has a large $L$ relative to $D$, that is, small $\Sigma_a$ with strong scattering. If $2D/L>1$ the formula gives $\alpha<0$ (FNRP problem~6.5); diffusion theory has failed, because a medium that absorbs most neutrons within a mean free path cannot host a nearly isotropic distribution.
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4 continued: surface flux]
+\GuideSubcell{a}{From $J^{+}(0)=\ssurf$ find $\phi_0/\ssurf=(\tfrac14+D/2L)^{-1}$ for the three materials of F31.}{
+$3.90$, $3.60$, $2.45$.}
+
+\GuideSubcell{b}{Check with F6: $\phi=2(J^{+}+J^{-})=2\ssurf(1+\alpha)$.}{
+$2(1.948)=3.90$, $2(1.798)=3.60$, $2(1.225)=2.45$.
+\GuideCommentary{A strongly reflecting surface has $\phi_0\approx4\ssurf$: the incident and reflected streams together look nearly isotropic, and $\phi/4$ per side (F5) adds up.}}
+
+\end{pframe}
+
+\begin{pframe}[Interface conditions]
+\GuideContext{Two regions meet at $x_0$. Both $\phi$ and the net current $J$ are continuous, \FNRP{6.42}--(6.43); the slope need not be.}
+
+\GuideSubcell{a}{Region~1 ($x<x_0$) has $D_1=\SI{1}{\centi\meter}$ and $\phi'(x_0^-)=-0.10$ (in flux units per \si{\centi\meter}); region~2 has $D_2=\SI{2}{\centi\meter}$. What is $\phi'(x_0^+)$?}{
+$D_1\phi'(x_0^-)=D_2\phi'(x_0^+)$ gives $\phi'(x_0^+)=-0.05$: the flux bends and is steeper in the low-$D$ (short mean free path) material.}
+
+\GuideSubcell{b}{Sketch $\phi$ across the interface.}{
+A continuous curve with a kink (Fig.~\ref{fig:kink}).
+\GuideCommentary{\begin{center}
+\begin{tikzpicture}[>=stealth]
+\draw[->] (0,0) -- (4.8,0) node[right,font=\scriptsize]{$x$};
+\draw[->] (0,0) -- (0,2.5) node[above,font=\scriptsize]{$\phi$};
+\draw[thick] (2.2,0) -- (2.2,2.3);
+\node[font=\scriptsize] at (1.1,2.4) {region 1, $D_1$};
+\node[font=\scriptsize] at (3.5,2.4) {region 2, $D_2=2D_1$};
+\draw[thick,wcprimary,domain=0:2.2,samples=30] plot (\x,{1.2-0.45*(\x-2.2)+0.03*(\x-2.2)*(\x-2.2)});
+\draw[thick,wcprimary,domain=2.2:4.5,samples=30] plot (\x,{1.2-0.225*(\x-2.2)+0.02*(\x-2.2)*(\x-2.2)});
+\node[below,font=\scriptsize] at (2.2,0) {$x_0$};
+\node[font=\scriptsize,wcalerted] at (2.75,1.55) {kink};
+\end{tikzpicture}
+\gfigcap{Flux across an interface: continuous value, discontinuous slope, continuous current $-D\phi'$.}\label{fig:kink}
+\end{center}}}
+
+\GuideSubcell{c}{If a thin planar source $s''_{pl}$ sits on the interface, how does the current condition change?}{
+$J(x_0^+)-J(x_0^-)=s''_{pl}$: the current jumps by the source strength, \FNRP{6.44}; the flux stays continuous.
+\GuideCommentary{Physically, the neutron density cannot be double-valued at a point, and crossings counted from either side of a surface must agree.}}
+
+\end{pframe}
+
+\begin{pframe}[Bookkeeping for $N$ regions]
+\GuideContext{Each homogeneous region contributes two constants of integration.}
+
+\GuideSubcell{a}{For $N$ regions in a slab, how many constants, interface equations, and boundary equations are there?}{
+$2N$ constants; $N-1$ interfaces $\times2=2N-2$ equations; plus 2 boundary conditions: $2N$ equations for $2N$ unknowns, a linear system for \texttt{numpy.linalg.solve}.}
+
+\GuideSubcell{b}{Homework 33.1 has two regions, reflection at $x=0$, and vacuum at $x=a$. List the four equations symbolically; do not solve them.}{
+$\phi_{\mathrm I}'(0)=0$; $\phi_{\mathrm I}(a/2)=\phi_{\mathrm{II}}(a/2)$; $D_{\mathrm I}\phi_{\mathrm I}'(a/2)=D_{\mathrm{II}}\phi_{\mathrm{II}}'(a/2)$; $J^{-}(a)=\phi_{\mathrm{II}}(a)/4+(D_{\mathrm{II}}/2)\phi_{\mathrm{II}}'(a)=0$ (or $\phi_{\mathrm{II}}(\tilde a)=0$ if you extrapolate). Each region's $\phi$ carries its own particular solution $s_i'''/\Sigma_{a,i}$.}
+
+\end{pframe}
+
+\begin{pframe}[Conditions at $r=0$]
+\GuideContext{In spheres and cylinders the center is a boundary.}
+
+\GuideSubcell{a}{With no source at the center, what condition applies and why?}{
+$\phi$ finite, FNRP: $0<\phi(0)<\infty$. Solutions like $e^{-r/L}/r$ blow up at $r=0$ and are excluded unless a source sits there.}
+
+\GuideSubcell{b}{With a point source $s_p$ at the center of a sphere, write the condition on $J_r$.}{
+$s_p=\lim_{r\to0}4\pi r^2J_r(r)$: the whole source must flow out through a vanishing sphere (F10).}
+
+\GuideSubcell{c}{For a line source $s_l\prime$ along a cylinder's axis, write the corresponding condition on $J_r$.}{
+$s_l'=\lim_{r\to0}2\pi rJ_r(r)$ per unit length.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (c); 3 (b); 4 (b).}
+\item The vacuum boundary condition of diffusion theory is \opt{a} $\phi=0$ at the surface; \opt{b} $J=0$ at the surface; \opt{c} $J^{-}=0$, no neutrons entering; \opt{d} $\phi'=0$.
+\item At an interface between materials with $D_1\neq D_2$, \opt{a} $\phi$ is discontinuous; \opt{b} $\phi'$ is continuous; \opt{c} $J$ is continuous; \opt{d} $J^{-}=0$.
+\item An albedo of $0.95$ means \opt{a} 95\% of incident neutrons are absorbed; \opt{b} 95\% are reflected; \opt{c} $\phi=0.95$ at the surface; \opt{d} $D/L=0.95$.
+\item A reflecting boundary at $x=0$ corresponds to \opt{a} $\phi(0)=0$; \opt{b} $\phi'(0)=0$; \opt{c} $\phi(0)=\phi_0$; \opt{d} $J^{+}(0)=0$.
+\end{quiz}}
+
+\GSec{Nonmultiplying systems, spherical geometry (FNRP 6.5; Lesson 34)}
+
+\begin{pframe}[The $1/r$ substitution]
+In spherical symmetry $\nabla^2\phi=\dfrac{1}{r^2}\dfrac{d}{dr}\Big(r^2\dfrac{d\phi}{dr}\Big)$. Put $\phi=\psi(r)/r$ and show that the source-free equation \FNRP{6.46} becomes $\psi''-\psi/L^2=0$, \FNRP{6.48}.
+\response
+$\phi'=\psi'/r-\psi/r^2$, so $r^2\phi'=r\psi'-\psi$ and $(r^2\phi')'=r\psi''+\psi'-\psi'=r\psi''$. Hence $\nabla^2\phi=\psi''/r$ and the equation reads $\psi''/r-\psi/rL^2=0$.
+\GuideCommentary{Every slab result of F21 transfers to spheres after division by $r$: $\phi=[C_1e^{r/L}+C_2e^{-r/L}]/r$.}
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 5: point source in an infinite medium]
+\GuideContext{Point source $s_p$ at the origin of an infinite medium.}
+
+\GuideSubcell{a}{Which exponential survives $\phi(\infty)=0$?}{
+$\phi=C_2e^{-r/L}/r$.}
+
+\GuideSubcell{b}{Apply $s_p=\lim_{r\to0}4\pi r^2J_r$ to show $\phi=s_pe^{-r/L}/4\pi Dr$, \FNRP{6.54}.}{
+$J_r=-D\phi'=DC_2e^{-r/L}(1/r^2+1/rL)$, so $4\pi r^2J_r=4\pi DC_2e^{-r/L}(1+r/L)\to4\pi DC_2$ as $r\to0$, giving $C_2=s_p/4\pi D$.}
+
+\GuideSubcell{c}{Compare with the uncollided flux $s_pe^{-r/\lambda}/4\pi r^2$ of Chapter~2.}{
+The total flux falls as $e^{-r/L}/r$, the uncollided flux as $e^{-r/\lambda}/r^2$: the total decays more slowly in both the exponential ($L\gg\lambda$) and the power.
+\GuideCommentary{Scattering spreads the neutrons but keeps them around.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 5 continued: all are absorbed]
+Show that $\int_{\text{all space}}\Sigma_a\phi\dV=s_p$, \FNRP{6.55} (problem~6.7). Use $dV=4\pi r^2dr$ and $\int_0^\infty re^{-r/L}dr=L^2$.
+\response
+$\Sigma_a\int_0^\infty\dfrac{s_p}{4\pi Dr}e^{-r/L}\,4\pi r^2dr=\dfrac{\Sigma_as_p}{D}L^2=s_p$ since $L^2=D/\Sigma_a$.
+\GuideCommentary{In an infinite medium nothing leaks to infinity, so absorption must account for every source neutron.}
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 5 continued: within radius $R$]
+\GuideSubcell{a}{Show that the fraction of source neutrons absorbed inside $r\le R$ is $F(R)=1-e^{-R/L}(1+R/L)$.}{
+$\dfrac{\Sigma_as_p}{D}\displaystyle\int_0^Rre^{-r/L}dr=\dfrac{s_p}{L^2}\big[L^2-L(R+L)e^{-R/L}\big]=s_p\big[1-(1+R/L)e^{-R/L}\big]$.}
+
+\GuideSubcell{b}{Evaluate for $R=L$, $2L$, $3L$ and compare with the slab numbers of F24.}{
+$0.264$, $0.594$, $0.801$ versus $0.632$, $0.865$, $0.950$ in the slab: neutrons spreading in three dimensions need more diffusion lengths to be absorbed.}
+
+\GuideSubcell{c}{What is $4\pi R^2J_r(R)$ in terms of $F$?}{
+$4\pi R^2J_r=s_p(1+R/L)e^{-R/L}=s_p[1-F(R)]$: whatever has not been absorbed inside $R$ is flowing out through $R$. Balance again.}
+
+\end{pframe}
+
+\begin{pframe}[Two-region sphere: the structure]
+\GuideContext{A sphere of radius $R$ with $D$, $\Sigma_a$, and uniform source $s_0'''$ is surrounded to infinity by a source-free medium with $\widehat D$, $\widehat\Sigma_a$, \FNRP{6.56}--(6.69).}
+
+\GuideSubcell{a}{Write the general solution in each region.}{
+Inside: $[C_1e^{r/L}+C_2e^{-r/L}]/r+s_0'''/\Sigma_a$; outside: $[C_1'e^{r/\widehat L}+C_2'e^{-r/\widehat L}]/r$.}
+
+\GuideSubcell{b}{List the four conditions and say which constant each fixes or relates.}{
+$\phi(0)$ finite: $C_2=-C_1$ (the $\sinh$ form); $\phi(\infty)=0$: $C_1'=0$; flux continuity and current continuity $D\phi'=\widehat D\phi'$ at $R$: two equations for $C_1$ and $C_2'$.}
+
+\GuideSubcell{c}{The result has the form $\phi(R)=(1-C)\,s_0'''/\Sigma_a$ with $C$ given by \FNRP{6.69}. For identical media ($\widehat D=D$, $\widehat L=L$) and $R/L=2$, evaluate $C$.}{
+$C=\big[1+\big((R/L)\coth(R/L)-1\big)/(R/\widehat L+1)\big]^{-1}=[1+(2\times1.037-1)/3]^{-1}=0.736$, so $\phi(R)=0.264\,s_0'''/\Sigma_a$.}
+
+\GuideSubcell{d}{What happens to $C$ if the outer medium is a very strong absorber ($\widehat L\to0$)?}{
+$R/\widehat L\to\infty$ makes the fraction vanish and $C\to1$, so $\phi(R)\to0$: a black outer medium behaves like a zero-flux boundary.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (b); 3 (b); 4 (a).}
+\item The substitution $\phi=\psi/r$ turns the spherical source-free diffusion equation into \opt{a} Bessel's equation; \opt{b} the slab equation for $\psi$; \opt{c} a first-order equation; \opt{d} an algebraic equation.
+\item Far from a point source in an infinite medium the flux falls off as \opt{a} $e^{-r/\lambda}/r^2$; \opt{b} $e^{-r/L}/r$; \opt{c} $1/r^2$; \opt{d} $e^{-r/L}$.
+\item The condition $s_p=\lim_{r\to0}4\pi r^2J_r$ expresses \opt{a} Fick's law; \opt{b} that the whole source leaves through a vanishing sphere; \opt{c} flux continuity; \opt{d} that $\phi(0)=0$.
+\item For a point source in an infinite medium, the fraction absorbed within one diffusion length is about \opt{a} $0.26$; \opt{b} $0.63$; \opt{c} $0.95$; \opt{d} $1.0$.
+\end{quiz}}
+
+\GSec{When is diffusion theory valid? (FNRP 6.6; Lesson 39)}
+
+\begin{pframe}[Three angular pictures]
+\GuideContext{Figure~\ref{fig:polar} shows three angular populations. Compare each with the F6 approximation: an isotropic distribution plus a small $\bO\cdot\JJ$ tilt.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}[>=stealth,scale=0.78]
+\begin{scope}
+ \foreach \a in {-10,-5,0,5,10} \draw[->,wcprimary] (0,0) -- (\a:1.4);
+ \node[font=\scriptsize] at (0.3,-1.0) {(a) beam};
+\end{scope}
+\begin{scope}[shift={(3.6,0)}]
+ \foreach \a in {0,30,...,330} \draw[->,wcprimary] (0,0) -- (\a:{0.6*(1+0.6*cos(\a))});
+ \node[font=\scriptsize] at (0,-1.3) {(b) drifting right};
+\end{scope}
+\begin{scope}[shift={(7.0,0)}]
+ \foreach \a in {0,30,...,330} \draw[->,wcprimary] (0,0) -- (\a:0.6);
+ \node[font=\scriptsize] at (0,-1.3) {(c) isotropic};
+\end{scope}
+\end{tikzpicture}
+\gfigcap{Arrow lengths show how many neutrons travel in each direction (after FNRP Fig.~6.3).}\label{fig:polar}
+\end{center}}}
+
+\GuideSubcell{a}{For the beam in panel (a), is the F6 approximation adequate? Where would strong anisotropy occur?}{
+No. A small tilt of an isotropic population cannot represent a beam.
+\GuideCommentary{Strong anisotropy occurs near localized sources, next to vacuum boundaries (nothing returns), and inside strong absorbers, where Lewis warns that diffusion theory errs.}}
+
+\GuideSubcell{b}{For the mildly drifting population in panel (b), is F6 adequate? Explain and identify a plausible setting.}{
+Yes: an almost isotropic population with a small rightward bias is represented by the $\bO\cdot\JJ$ term. Expect it in a scattering medium with a weak flux gradient, away from sources and boundaries.}
+
+\GuideSubcell{c}{For the isotropic population in panel (c), is F6 adequate? Where would you expect it?}{
+Yes: $\JJ\approx\mathbf 0$ removes the tilt. This is the deep interior of a large uniform region, where $\grad\phi\approx\mathbf 0$.}
+
+\end{pframe}
+
+\begin{pframe}[The scattering ratio $c$]
+\GuideContext{With $c=\Sigma_s/\Sigma_t$ and $D=\lambda/3$ (isotropic scattering), \FNRP{6.75} gives $L=\lambda/\sqrt{3(1-c)}$.}
+
+\GuideSubcell{a}{Derive it from $L^2=D/\Sigma_a$ and $\Sigma_a=(1-c)\Sigma_t$.}{
+$L^2=(\lambda/3)\big/\big((1-c)/\lambda\big)=\lambda^2/3(1-c)$.}
+
+\GuideSubcell{b}{Compute $L/\lambda$ for $c=0.99$, $0.9$, and $0.7$.}{
+$5.77$, $1.83$, $1.05$.}
+
+\GuideSubcell{c}{Lewis's criterion is $c\gtrsim0.7$. Restate it in terms of collisions.}{
+A neutron must scatter many times before absorption, on average $1/(1-c)$ collisions, so that it forgets its birth direction and the population becomes nearly isotropic. For $c=0.7$ that is only about three collisions; below that, $L\approx\lambda$ and neutrons are absorbed before they diffuse.}
+
+\end{pframe}
+
+\begin{pframe}[What $L$ measures]
+\GuideContext{\FNRP{6.70}--(6.73): the mean square distance from birth to absorption around a point source is $\overline{r^2}=6L^2$.}
+
+\GuideSubcell{a}{Compute the rms distance for graphite ($L=\SI{63.2}{\centi\meter}$) and water (\SI{2.85}{\centi\meter}).}{
+$\sqrt6L=\SI{155}{\centi\meter}$ and \SI{7.0}{\centi\meter}.}
+
+\GuideSubcell{b}{Why is it so much larger than the mean free path (graphite: $\lambda\approx3D=\SI{2.5}{\centi\meter}$)?}{
+A graphite neutron makes about $1/(1-c)\approx1900$ collisions ($c=0.99947$) before absorption; its path is a random walk whose net displacement grows like $\sqrt{\text{steps}}\times\lambda$. In FNRP Fig.~6.4 the dashed segments average $\lambda$ and the straight line from birth to death is of order $L$.}
+
+\end{pframe}
+
+\begin{pframe}[Uncollided versus total flux]
+\GuideContext{FNRP problem~6.11 gives $\phi_u/\phi=\sqrt{(1-c)/3}\,(L/r)\exp[-\alpha r/L]$ with $\alpha=[3(1-c)]^{-1/2}-1$. For graphite ($c=0.99947$, $\lambda=\SI{2.52}{\centi\meter}$, $L=\SI{63.2}{\centi\meter}$):}
+
+\GuideSubcell{a}{evaluate $\alpha$.}{
+$\sqrt{3(1-c)}=0.0399$, so $\alpha=24.1$.}
+
+\GuideSubcell{b}{evaluate the ratio at $r=\lambda$, $r=0.1L$, and $r=L$.}{
+$r=\lambda$ ($r/L=0.0398$): $0.128$; $r=0.1L=\SI{6.3}{\centi\meter}$: $0.012$; $r=L$: $5\times10^{-13}$.}
+
+\GuideSubcell{c}{conclude where the diffusion solution for a point source can be trusted.}{
+Within a mean free path of the source, 13\% of the neutrons are still uncollided and beam-like, so diffusion theory is poor there; a few mean free paths out it is excellent.
+\GuideCommentary{Keep sources, boundaries, and strong absorbers a few $\lambda$ away from where you need accuracy.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (b); 3 (b); 4 (a).}
+\item Diffusion theory is least reliable \opt{a} deep inside a large moderator; \opt{b} next to a vacuum boundary; \opt{c} where $\grad\phi=\mathbf 0$; \opt{d} where $c\approx1$.
+\item For $c=\Sigma_s/\Sigma_t$ close to one, \opt{a} $L\ll\lambda$; \opt{b} $L\gg\lambda$; \opt{c} $L=\lambda$; \opt{d} $D=0$.
+\item The rms distance from birth to absorption equals \opt{a} $L$; \opt{b} $\sqrt6L$; \opt{c} $\lambda$; \opt{d} $6L^2$.
+\item The uncollided flux from a point source differs from the total diffusing flux by \opt{a} an extra factor $1/r$ and a shorter decay length; \opt{b} nothing; \opt{c} only a constant; \opt{d} a factor $r^2$.
+\end{quiz}}
+
+\GSec{Multiplying systems (FNRP 6.7; Lesson 34)}
+
+\begin{pframe}[Fission in the balance]
+\GuideContext{With $\nu\Sigma_f>0$, uniform properties, and a uniform source $s_0'''$, \FNRP{6.81} reads $-\nabla^2\phi+(1-\kinf)\phi/L^2=s_0'''/D$ with $\kinf=\nu\Sigma_f/\Sigma_a$.}
+
+\GuideSubcell{a}{Show that the particular solution is $\phi_p=s_0'''/[(1-\kinf)\Sigma_a]$.}{
+A constant $\phi_p$ gives $(1-\kinf)\phi_p/L^2=s_0'''/D$, so $\phi_p=s_0'''L^2/[(1-\kinf)D]=s_0'''/[(1-\kinf)\Sigma_a]$.}
+
+\GuideSubcell{b}{For $\kinf=0.9$, by what factor does fission amplify the flux compared with the nonmultiplying value $s_0'''/\Sigma_a$?}{
+$1/(1-0.9)=10$.}
+
+\GuideSubcell{c}{What does $\phi_p$ do as $\kinf\to1$, and where have you seen this before?}{
+It diverges. An infinite medium with a source has a steady state only for $\kinf<1$, and its level is the \Term{subcritical multiplication} $1/(1-\kinf)$ of Lesson~26.}
+
+\end{pframe}
+
+\begin{pframe}[Two families of shapes]
+\GuideContext{With $\psi=r\phi$ (F36) the source-free spherical equation is $\psi''-(1-\kinf)\psi/L^2=0$.}
+
+\GuideSubcell{a}{For $\kinf<1$ define $\kappa^2=(1-\kinf)/L^2$ and give $\psi$.}{
+$\psi=C_1\sinh(\kappa r)+C_2\cosh(\kappa r)$, exponentials in disguise.}
+
+\GuideSubcell{b}{For $\kinf>1$ define the \Term{material buckling} $B_m^2=(\kinf-1)/L^2$ and give $\psi$.}{
+$\psi=C_1\sin(B_mr)+C_2\cos(B_mr)$, oscillatory.}
+
+\GuideSubcell{c}{With the toy set ($L^2=\SI{10}{\centi\meter\squared}$) compute $\kappa$ for $\kinf=0.9$ and $B_m$ for $\kinf=1.5$.}{
+$\kappa=\sqrt{0.1/10}=\SI{0.100}{\per\centi\meter}$; $B_m=\sqrt{0.5/10}=\SI{0.224}{\per\centi\meter}$.
+\GuideCommentary{The sign of $1-\kinf$ decides between hyperbolic and trigonometric shapes, as in Lesson~34.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6: subcritical sphere, $\kinf<1$]
+\GuideContext{A sphere of extrapolated radius $\Rt$ with a uniform source, finite flux at the center, and $\phi(\Rt)=0$ has, by \FNRP{6.95},
+\begin{equation*}
+\phi(r)=\phi_p\left[1-\frac{\Rt\,\sinh(\kappa r)}{r\,\sinh(\kappa\Rt)}\right].
+\end{equation*}
+Toy set, $\kinf=0.9$ ($\kappa=\SI{0.100}{\per\centi\meter}$), $\Rt=\SI{20}{\centi\meter}$, $s_0'''=\SI{1}{\per\centi\meter\cubed\per\second}$, $\Sigma_a=\SI{0.1}{\per\centi\meter}$.}
+
+\GuideSubcell{a}{Compute $\phi_p=s_0\prime\prime\prime/[(1-\kinf)\Sigma_a]$.}{
+$\phi_p=1/(0.1\times0.1)=\SI{100}{\per\centi\meter\squared\per\second}$.}
+
+\GuideSubcell{b}{Compute $\phi(0)$, using $\lim_{r\to0}\sinh(\kappa r)/r=\kappa$.}{
+$\phi(0)=\phi_p[1-\kappa\Rt/\sinh(\kappa\Rt)]=100[1-2/\sinh2]=100[1-2/3.627]=44.9$.}
+
+\GuideSubcell{c}{Express $\phi(0)$ in units of $s_0\prime\prime\prime/\Sigma_a$ (Fig.~\ref{fig:sphere}).}{
+$4.49\,s_0'''/\Sigma_a$.
+\GuideCommentary{Leakage from a sphere only two ``$\kappa$-lengths'' in radius removes more than half of the infinite-medium amplification.}
+\GuideCommentary{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.2cm,xlabel={$r$ (cm)},ylabel={$\phi/(s_0'''/\Sigma_a)$},xmin=0,xmax=20,ymin=0,ymax=5,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.97,0.95)},anchor=north east},
+ tick label style={font=\scriptsize},label style={font=\scriptsize}]
+\addplot[wcprimary,thick,domain=0.05:20,samples=120] {10*(1-20*sinh(0.1*x)/(x*sinh(2)))}; \addlegendentry{$\kinf=0.9$, $\Rt=20$}
+\addplot[wcalerted,thick,dashed,domain=0.05:10,samples=120] {2*(10*sin(deg(0.2236*x))/(x*sin(deg(2.236)))-1)}; \addlegendentry{$\kinf=1.5$, $\Rt=10$}
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Source-driven subcritical spheres of F47 and F48 with the toy data; both are far below the infinite-medium levels of 10 and 20.}\label{fig:sphere}
+\end{center}}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6 continued: $\kinf>1$ but still subcritical]
+\GuideContext{For $\kinf>1$ the solution is \FNRP{6.103},
+\begin{equation*}
+\phi(r)=\phi_p'\left[\frac{\Rt\,\sin(B_mr)}{r\,\sin(B_m\Rt)}-1\right],\qquad
+\phi_p'=\frac{s_0'''}{(\kinf-1)\Sigma_a}.
+\end{equation*}
+Toy set, $\kinf=1.5$ ($B_m=\SI{0.224}{\per\centi\meter}$), $\Rt=\SI{10}{\centi\meter}$, $s_0'''=1$, $\Sigma_a=0.1$.}
+
+\GuideSubcell{a}{Compute $\phi_p\prime$.}{
+$1/(0.5\times0.1)=20$.}
+
+\GuideSubcell{b}{Compute $B_m\Rt$.}{
+$2.236$ rad ($128^\circ$).}
+
+\GuideSubcell{c}{Compute $\phi(0)$.}{
+$\phi(0)=20[2.236/\sin(2.236)-1]=20[2.842-1]=36.8$, that is, $3.68\,s_0'''/\Sigma_a$.}
+
+\GuideSubcell{d}{Describe what happens as $\Rt$ grows toward $\pi/B_m$.}{
+$\sin(B_m\Rt)\to0$ and $\phi(0)\to\infty$ at $\Rt=\pi/B_m=\SI{14.05}{\centi\meter}$: the sphere becomes critical and no steady source-driven solution exists.
+\GuideCommentary{Beyond that radius the formula gives negative flux, which is a signal, not a solution.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6 continued: criticality and nonleakage]
+\GuideContext{The critical condition $B_m\Rt=\pi$, \FNRP{6.104}, rearranges to $1=\kinf/[1+(\pi L/\Rt)^2]=\kinf\PNL$, \FNRP{6.105}--(6.106). Toy set, $\kinf=1.5$, $L^2=\SI{10}{\centi\meter\squared}$:}
+
+\GuideSubcell{a}{Find the critical radius.}{
+$\pi/B_m=\pi/0.2236=\SI{14.05}{\centi\meter}$.}
+
+\GuideSubcell{b}{Find $\PNL$ at criticality.}{
+$1/\kinf=0.667$: one third of the neutrons must leak for this material to be exactly critical.}
+
+\GuideSubcell{c}{Compute $k=\kinf\PNL$ for $\Rt=\SI{10}{\centi\meter}$ and \SI{20}{\centi\meter}, using $B_g=\pi/\Rt$.}{
+$\Rt=10$: $1.5/(1+10\times0.0987)=0.755$; $\Rt=20$: $1.5/(1+10\times0.0247)=1.203$.}
+
+\GuideSubcell{d}{Interpret the $\Rt=\SI{20}{\centi\meter}$ result.}{
+Supercritical: with a source present the population grows without bound; without one, Chapter~7's eigenvalue form is the right tool.
+\GuideCommentary{The Lesson~35 example finds the same \SI{14.05}{\centi\meter} for the critical slab width, because both conditions read $B_g=\pi/(\text{size})$.}}
+
+\end{pframe}
+
+\begin{pframe}[Buckling: geometric versus material]
+\GuideContext{Define the \Term{geometric buckling} $B_g$ (size and shape only; $B_g=\pi/\Rt$ for a sphere) and the material buckling $B_m=\sqrt{(\kinf-1)/L^2}$ (material only).}
+
+\GuideSubcell{a}{State the \Term{criticality condition} and the subcritical and supercritical inequalities.}{
+$B_g=B_m$: critical. $B_g>B_m$: subcritical (too small; too much curvature and leakage). $B_g<B_m$: supercritical.}
+
+\GuideSubcell{b}{Why ``buckling''?}{
+$-\nabla^2\phi/\phi=B^2$ measures how strongly the flux curves downward, or buckles; a small reactor needs more curvature to reach zero at its surface.}
+
+\GuideSubcell{c}{Write $\PNL$ in the general form \FNRP{6.108} and $k$ for any shape.}{
+$\PNL=1/(1+L^2B_g^2)$ and $k=\kinf\PNL$.
+\GuideCommentary{Every shape has its own $B_g$; Chapter~7 derives $2.405/\Rt$ and $\pi/\Ht$ for the cylinder.}}
+
+\end{pframe}
+
+\begin{pframe}[The critical solution has no scale]
+\GuideContext{Set $s_0'''=0$ in \FNRP{6.102}: $\phi=C_1\sin(B_mr)/r$.}
+
+\GuideSubcell{a}{Why is $C_1$ undetermined?}{
+The equation and both conditions are homogeneous (every term proportional to $\phi$), so any multiple of a solution is a solution: an eigenvalue problem, as in Lesson~30's review.}
+
+\GuideSubcell{b}{Why must the solution be positive for $0\le r<\Rt$, and what does that exclude?}{
+A flux counts path length; negative values are meaningless. That excludes $B_m\Rt=2\pi,3\pi,\ldots$, whose shapes change sign (higher modes).}
+
+\GuideSubcell{c}{What physical quantity eventually fixes $C_1$?}{
+The reactor power: FNRP Section~7.3 shows $C\propto P/\gamma\Sigma_fV$.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (b); 3 (c); 4 (a).}
+\item In a uniform subcritical medium with a uniform source, fission multiplies the flux by \opt{a} $\kinf$; \opt{b} $1/(1-\kinf)$; \opt{c} $1/\kinf$; \opt{d} $1-\kinf$.
+\item For $\kinf>1$ the source-free spherical solution involves \opt{a} $\sinh(\kappa r)/r$; \opt{b} $\sin(Br)/r$; \opt{c} $e^{-r/L}/r$; \opt{d} a constant.
+\item A sphere is critical when \opt{a} $B_g>B_m$; \opt{b} $B_g<B_m$; \opt{c} $B_g=B_m$; \opt{d} $L=\Rt$.
+\item The nonleakage probability $1/(1+L^2B^2)$ increases when \opt{a} the reactor gets larger; \opt{b} $L$ gets larger; \opt{c} $B$ gets larger; \opt{d} $\kinf$ gets larger.
+\end{quiz}}
+
+\end{programmed}
+
+\ifguidehandwriting\clearpage\fi
+
+\Sec{9}{Key terms}
+\begin{multicols}{2}
+\begin{keyterms}
+\gterm{phase space}{the set of states $(\br,E,\bO)$ a neutron can occupy; a cell $d^3r\dE\dO$ is a small box in it (F1).}
+\gterm{angular density $n$}{expected neutrons per unit phase-space volume, \si{\per\centi\meter\cubed\per\electronvolt\per\steradian} (F1).}
+\gterm{angular flux $\psi=vn$}{path length traveled per unit volume, time, energy, and solid angle (F2).}
+\gterm{scalar flux $\phi$}{$\int_{4\pi}\psi\dO$; path length per unit volume and time; reaction rate $=\Sigma_x\phi$ (F3).}
+\gterm{current $\JJ$}{$\int_{4\pi}\bO\psi\dO$; a vector whose component along $\bn$ is the net crossing rate per unit area (F3--F4).}
+\gterm{partial currents $J^{\pm}$}{one-way crossing rates; $J^{\pm}=\phi/4\pm J_n/2$ in diffusion theory (F5--F6).}
+\gterm{outward normal $\bn$}{unit vector perpendicular to a surface, pointing out of the enclosed volume (F7).}
+\gterm{divergence $\dvg\JJ$}{net outflow per unit volume; $\partial J_x/\partial x+\partial J_y/\partial y+\partial J_z/\partial z$ (F8).}
+\gterm{divergence (Gauss's) theorem}{$\oint_S\JJ\cdot\bn\dA=\int_V\dvg\JJ\dV$ (F8, F12).}
+\gterm{gradient $\grad\phi$}{vector of partial derivatives, pointing uphill in $\phi$ (F15).}
+\gterm{Laplacian $\nabla^2\phi$}{$\dvg\grad\phi$; in slabs $d^2\phi/dx^2$, in spheres $r^{-2}(r^2\phi')'$ (F36).}
+\gterm{control volume}{any fixed region over which neutrons are counted (F13).}
+\gterm{continuity equation}{$\dvg\JJ+\Sigma_a\phi=\sv+\nu\Sigma_f\phi$, exact one-group balance, \FNRP{6.10} (F14).}
+\gterm{Fick's law (approximation)}{$\JJ=-D\grad\phi$, \FNRP{6.11} (F15).}
+\gterm{diffusion coefficient $D$}{$1/3\Sigma_{tr}$, units of length (F16).}
+\gterm{transport cross section $\Sigma_{tr}$}{$\Sigma_t-\bar\mu\Sigma_s$; corrects for forward-peaked scattering (F16).}
+\gterm{diffusion equation}{$-\dvg D\grad\phi+\Sigma_a\phi=\sv+\nu\Sigma_f\phi$, \FNRP{6.12} (F16).}
+\gterm{diffusion length $L$}{$\sqrt{D/\Sigma_a}$; decay length of flux disturbances; rms birth-to-absorption distance is $\sqrt6L$ (F20, F43).}
+\gterm{general (homogeneous) solution}{solves the source-free equation; carries the constants of integration (F21).}
+\gterm{particular solution}{any one solution with the source present; a constant for a uniform source (F25).}
+\gterm{boundary condition}{a statement about $\phi$, $J$, or $J^{\pm}$ on the domain's edge needed to fix the constants (F21).}
+\gterm{vacuum boundary}{$J^{-}=0$ (right side) or $J^{+}=0$ (left side): no re-entering neutrons (F28).}
+\gterm{extrapolation distance}{$d=2D=\tfrac23\lambda_{tr}$ (transport: $0.7104\lambda_{tr}$); where the linearly extended flux would vanish (F28).}
+\gterm{extrapolated boundary $\tilde x$}{the physical boundary moved outward by $d$, where $\phi=0$ is imposed (F29).}
+\gterm{reflecting boundary}{$J=0$, that is $\phi'=0$; a symmetry plane or perfect mirror (F30).}
+\gterm{surface source $\ssurf$}{neutrons injected per unit area per second; sets $J^{+}$ on the surface (F31).}
+\gterm{albedo $\alpha$}{$J^{-}/J^{+}$ at a surface; $(1-2D/L)/(1+2D/L)$ for a half-space (F31).}
+\gterm{interface conditions}{continuity of $\phi$ and of $J=-D\phi'$ between regions; $J$ jumps by a planar source (F33).}
+\gterm{scattering ratio $c$}{$\Sigma_s/\Sigma_t$; diffusion theory needs $c\gtrsim0.7$ (F42).}
+\gterm{mean free path $\lambda$}{$1/\Sigma_t$; rms distance to first collision is $\sqrt2\lambda$ (F43--F44).}
+\gterm{uncollided flux $\phi_u$}{$s_pe^{-r/\lambda}/4\pi r^2$; the beam-like part near a source (F44).}
+\gterm{multiplying medium}{one with $\nu\Sigma_f>0$; $\kinf=\nu\Sigma_f/\Sigma_a$ (F45).}
+\gterm{subcritical multiplication}{factor $1/(1-\kinf)$ by which a source is amplified in an infinite medium (F45).}
+\gterm{material buckling $B_m$}{$\sqrt{(\kinf-1)/L^2}$; material only (F46).}
+\gterm{geometric buckling $B_g$}{$\pi/\Rt$ for a sphere; size and shape only (F50).}
+\gterm{criticality condition}{$B_g=B_m$, equivalently $\kinf\PNL=1$ (F49--F50).}
+\gterm{nonleakage probability $\PNL$}{$1/(1+L^2B_g^2)$; $k=\kinf\PNL$ (F49).}
+\gterm{fundamental mode}{the everywhere-positive critical shape, e.g. $\sin(B_mr)/r$; its amplitude is set by power (F51).}
+\end{keyterms}
+\end{multicols}
+
+\Sec{10}{Where the end-of-chapter problems live}
+\begin{handoutsmall}[8.3]
+\begin{tabularx}{\linewidth}{@{}p{0.95in}Y@{}}
+\toprule
+FNRP problem & Frames that build the needed pieces\\
+\midrule
+6.1, 6.3 & slab with incident neutrons: partial currents F5--F6, half-space F22--F24, albedo F31--F32, bookkeeping F34\\
+6.2, 6.4 & multi-region slabs: interface conditions F33, equation count F34, uniform-source particular solution F25\\
+6.5 & negative albedo and validity: F31, F42\\
+6.6 & graphite sphere albedo and absorption: F31, F36--F39\\
+6.7, 6.8 & point-source checks: F37--F38, F35\\
+6.9, 6.15, 6.16 & point source in a finite sphere, with and without fission: F37--F39, F46--F49\\
+6.10 & spherical shell source: planar-source jump F33(c), $1/r$ substitution F36\\
+6.11 & uncollided-to-total ratio: F44\\
+6.12 & exponential source in a half-space with $\kinf<1$: particular solution F25, F45--F46\\
+6.13, 6.14, 6.17 & two-region sphere and limits $\kinf\to1$: F40, F47--F48 (for $\kinf=1$ the particular solution is quadratic in $r$)\\
+6.18 & center flux versus $\kinf$ and $\Rt/L$: F47--F49\\
+\bottomrule
+\end{tabularx}
+\end{handoutsmall}
+
+\begin{takeawaybox}[Learning objectives]
+The objectives this chapter implies, and how they compare with the Lesson 31--34 and 39 objectives already in the course, are tabulated in \texttt{reading\_guide/learning\_objectives.md}. Items flagged there as new (for example, the albedo, the extrapolation distance, the point-source kernel, the $\sqrt6L$ interpretation, and the $c\gtrsim0.7$ validity criterion) are the ones this guide spends extra frames on.
+\end{takeawaybox}
+\end{document}

@@ -1,0 +1,656 @@
+% Programmed reading guide for FNRP Chapter 7 (Neutron Distributions in Reactors).
+% Build: make ch07_guide.pdf   (XeLaTeX via latexmk; the class is in ../handouts)
+% Every number quoted below is recomputed by tools/verify_examples.py.
+\documentclass[compact]{ne630handout}
+\usepackage{ne630guide}
+\handoutsolutionsfalse
+\hypersetup{pdftitle={NE 630 -- Reading Guide: FNRP Chapter 7, Neutron Distributions in Reactors},pdfauthor={Jeremy Roberts}}
+
+\begin{document}
+\Guide{7}{Neutron Distributions in Reactors}
+ {FNRP Sections 7.1--7.6 (the $k$-eigenvalue problem, the bare cylinder, two-group leakage and the migration length, reflectors, and control poisons). Companion handouts: Lessons 35--38.}
+ {35 (7.1--7.3), 36 (7.4, with Duderstadt and Hamilton 7.III), 37 (7.5), 38 (7.6).}
+
+\begin{KeyBox}{How to use this guide}
+\ifguidehandwriting
+\textbf{One cell at a time.} Use one sheet to cover all rows below the current cell and a second sheet to cover its tinted answer. Read only the current question (for example, F1(a)) and write in its ruled space. Reveal that cell\textquotesingle s answer, compare your reasoning, and correct your work. Only then uncover the next question, F1(b). Shared givens appear above each sequence; keep them available as you work.\par\smallskip
+\fi
+Same rules as the Chapter~6 guide. Each frame in the left column poses one small task; the tinted right column holds the answer and commentary, aligned with it. \textbf{Cover the tinted column}, work the frame, then compare. Frames marked \Chain reuse the previous answer, which is restated, so a missed frame never blocks the next one. Quiz answers are upside down in the footnote. Three worked settings recur: the \emph{toy set} of Lessons 33--35 ($D=\SI{1}{\centi\meter}$, $\Sigma_a=\SI{0.10}{\per\centi\meter}$, $\kinf=1.5$, so $L^2=\SI{10}{\centi\meter\squared}$); a \emph{PWR-size core} ($\Rt=\SI{150}{\centi\meter}$, $\Ht=\SI{360}{\centi\meter}$, migration length $M=\SI{7.62}{\centi\meter}$ from FNRP Table~7.1); and, for Section~5, a matching one-group set for that core ($\nu\Sigma_f=\SI{0.0243}{\per\centi\meter}$, $\Sigma_a=\SI{0.02384}{\per\centi\meter}$, $D=\SI{1.384}{\centi\meter}$), chosen to be exactly critical. The last set is illustrative, not the output of a lattice calculation.
+\end{KeyBox}
+
+\begin{KeyBox}{What changes from Chapter 6}
+Chapter~6 ended with a critical sphere: a source-free steady state exists only when $B_g=B_m$, and its amplitude is free. Chapter~7 asks what to do when a design is \emph{not} exactly critical, and answers with the $k$-eigenvalue form of the diffusion equation. It then treats the finite cylinder of a power reactor, which needs separation of variables and Bessel functions, pins the flux amplitude to the reactor power, replaces $L$ by the migration length $M$ to account for leakage while slowing down, and finally handles the two things real cores have that the bare uniform model lacks: reflectors and control poisons. The vector-calculus ideas of the Chapter~6 guide (Gauss's theorem, continuity of flux and current) return in Sections~4 and~5.
+\end{KeyBox}
+
+\begin{programmed}
+\GSec{The $k$-eigenvalue form (FNRP 7.1--7.2; Lesson 35)}
+
+\begin{pframe}[A source-free steady state is special]
+\GuideContext{With the source removed, \FNRP{6.12} becomes $\dvg D\grad\phi+\nu\Sigma_f\phi-\Sigma_a\phi=0$, \FNRP{7.1}.}
+
+\GuideSubcell{a}{Under what single condition does this equation have a positive solution?}{
+Only when the configuration is exactly critical: losses balance gains with no help from a source (Chapter~6 guide, F49--F51).}
+
+\GuideSubcell{b}{What happens to the neutron population otherwise, and which chapter describes it?}{
+It grows or decays in time; the kinetics equations of Chapter~5 describe the transient.}
+
+\GuideSubcell{c}{Why is it still useful to pose a steady problem for a reactor that is not exactly critical?}{
+Design is a search. We guess a size, shape, and composition and need a number that says how far from critical the guess is, together with the flux shape, without solving a time-dependent problem each time.}
+
+\end{pframe}
+
+\begin{pframe}[The fission knob]
+\GuideContext{Suppose we could scale the number of neutrons per fission, $\nu\to\nu_0=\nu/k$, where $\nu_0$ is the value that would make the configuration exactly critical.}
+
+\GuideSubcell{a}{Write the resulting equation, \FNRP{7.3}.}{
+$\dvg D\grad\phi+\dfrac1k\nu\Sigma_f\phi-\Sigma_a\phi=0$.}
+
+\GuideSubcell{b}{If the reactor needs more neutrons per fission than nature provides ($\nu_0>\nu$), is $k$ above or below one?}{
+$k=\nu/\nu_0<1$: subcritical.}
+
+\GuideSubcell{c}{In Lesson~35's language, what does $k$ do to $\kinf$?}{
+It rescales $\kinf$ to $\kinf/k$ so that the material buckling matches the geometric buckling.
+\GuideCommentary{The ``fission knob'' turns the criticality search into an ordinary solve for $k$.}}
+
+\end{pframe}
+
+\begin{pframe}[Eigenvalue language]
+\GuideContext{Equation (7.3) is an \Term{eigenvalue problem}: $k$ is the eigenvalue and $\phi$ the eigenfunction.}
+
+\GuideSubcell{a}{For a slab $|x|\le a/2$ with $\phi(\pm a/2)=0$, list the family of shapes that satisfy $\phi''+B^2\phi=0$ and the boundary conditions.}{
+$\cos\big((2n+1)\pi x/a\big)$ and $\sin\big(2n\pi x/a\big)$ for $n=0,1,2,\ldots$; that is, $B=m\pi/a$ with $m=1,2,3,\ldots$}
+
+\GuideSubcell{b}{Which is the \Term{fundamental mode}, and why are the others rejected physically?}{
+$\cos(\pi x/a)$, $m=1$: the only shape positive everywhere inside. The others change sign, and a flux cannot be negative.}
+
+\GuideSubcell{c}{How does $k$ rank among the eigenvalues?}{
+The fundamental mode has the smallest $B$ and therefore, by \FNRP{7.6}, the largest $k$: the multiplication is the largest eigenvalue.
+\GuideCommentary{Each higher mode has its own smaller eigenvalue; those matter for transients and for numerical methods (Lesson~39), not for criticality.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1: slab $k$ from the buckling]
+\GuideContext{For a uniform reactor \FNRP{7.4}--(7.6) give $k=\kinf/(1+L^2B^2)$ with $B$ the geometric buckling. Toy set ($L^2=\SI{10}{\centi\meter\squared}$, $\kinf=1.5$), slab with zero flux at $x=\pm a/2$, $B=\pi/a$.}
+
+\GuideSubcell{a}{Compute $k$ for $a=\SI{14.05}{\centi\meter}$.}{
+$B^2=(\pi/14.05)^2=0.0500$; $k=1.5/(1+0.500)=1.000$, critical: the same \SI{14.05}{\centi\meter} as the Chapter~6 sphere of radius $\Rt$, because both conditions read $B=\pi/(\text{size})$.}
+
+\GuideSubcell{b}{Compute $k$ for $a=\SI{20}{\centi\meter}$.}{
+$B^2=0.02467$; $k=1.5/1.2467=1.203$.}
+
+\GuideSubcell{c}{Compute $k$ for $a=\SI{10}{\centi\meter}$.}{
+$B^2=0.0987$; $k=1.5/1.987=0.755$.
+\GuideCommentary{Bigger is more critical. The leakage term $L^2B^2$ is $0.50$, $0.25$, and $0.99$ times the absorption in the three cases.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1 continued: two kinds of search]
+\GuideSubcell{a}{For $a=\SI{20}{\centi\meter}$ (so $L^2B^2=0.2467$), what $\kinf$ makes the slab exactly critical?}{
+$\kinf=1+L^2B^2=1.247$.}
+
+\GuideSubcell{b}{Lewis names two kinds of criticality search. State them and say which chain frame did which.}{
+Fix the composition and search the size (radius, height): F4(a) found the critical width. Fix the size and search the composition (enrichment, fuel-to-moderator ratio, poison): this frame found the required $\kinf$.
+\GuideCommentary{In practice both are iterated, and $k$ from (7.6) tells you how far off each guess is.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (b); 3 (a); 4 (b).}
+\item The eigenvalue $k$ in (7.3) is \opt{a} the number of neutrons per fission; \opt{b} the factor by which $\nu$ would have to be divided to make the reactor exactly critical; \opt{c} the nonleakage probability; \opt{d} the buckling.
+\item The fundamental mode is \opt{a} the eigenfunction with the most sign changes; \opt{b} the everywhere-positive eigenfunction; \opt{c} any solution with $\phi=0$ on the boundary; \opt{d} the time-dependent solution.
+\item For a bare slab of width $a$ the geometric buckling is \opt{a} $\pi/a$; \opt{b} $2.405/a$; \opt{c} $\pi^2/a$; \opt{d} $a/\pi$.
+\item If $\kinf=1.25$ and $L^2B^2=0.25$, then $k$ is \opt{a} $1.25$; \opt{b} $1.00$; \opt{c} $0.80$; \opt{d} $0.25$.
+\end{quiz}}
+
+\GSec{The bare cylinder (FNRP 7.3; Lesson 35)}
+
+\begin{pframe}[Separating variables]
+\GuideContext{In $r$--$z$ geometry the \Term{Helmholtz equation} \FNRP{7.9} reads
+\begin{equation*}
+\frac1r\frac{\partial}{\partial r}\Big(r\frac{\partial\phi}{\partial r}\Big)+\frac{\partial^2\phi}{\partial z^2}+B^2\phi=0 .
+\end{equation*}
+Substitute $\phi=\zeta(r)\,\xi(z)$ and divide by $\zeta\xi$ (Fig.~\ref{fig:cyl}).
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}[>=stealth,scale=0.9]
+\draw[thick,wcprimary] (0,0) ellipse (1.4 and 0.45);
+\draw[thick,wcprimary] (-1.4,0) -- (-1.4,3.0);
+\draw[thick,wcprimary] (1.4,0) -- (1.4,3.0);
+\draw[thick,wcprimary] (-1.4,3.0) arc (180:360:1.4 and 0.45);
+\draw[thick,wcprimary,dashed] (1.4,3.0) arc (0:180:1.4 and 0.45);
+\draw[->] (0,1.5) -- (0,3.9) node[above,font=\scriptsize]{$z$};
+\draw[->] (0,1.5) -- (2.1,1.5) node[right,font=\scriptsize]{$r$};
+\draw[<->] (0,3.0) -- (1.4,3.0) node[midway,above,font=\scriptsize]{$\Rt$};
+\draw[<->] (-1.9,0) -- (-1.9,3.0) node[midway,left,font=\scriptsize]{$\Ht$};
+\draw[dashed,black!50] (-1.4,1.5) -- (1.4,1.5);
+\node[font=\scriptsize,black!60] at (-0.9,1.72) {$z=0$};
+\end{tikzpicture}
+\gfigcap{The bare cylinder with extrapolated radius $\Rt$ and height $\Ht$; the origin is at the center of the core.}\label{fig:cyl}
+\end{center}}}
+
+\GuideSubcell{a}{Why must each of the two derivative terms equal a constant?}{
+After division one term depends only on $r$ and the other only on $z$, and their sum is the constant $-B^2$. Move the $z$ term to the right: a function of $r$ alone equals a function of $z$ alone for every $r$ and $z$, which is possible only if both are the same constant.}
+
+\GuideSubcell{b}{Name the constants $-B_r^2$ and $-B_z^2$; how are they related to $B^2$?}{
+$B_r^2+B_z^2=B^2$, \FNRP{7.13}: the leakage curvatures add.}
+
+\end{pframe}
+
+\begin{pframe}[Axial shape]
+\GuideContext{$\xi''+B_z^2\xi=0$ with $\xi(\pm\Ht/2)=0$.}
+
+\GuideSubcell{a}{Write the general solution.}{
+$C_1\sin(B_zz)+C_2\cos(B_zz)$.}
+
+\GuideSubcell{b}{Use symmetry about the midplane to drop one term.}{
+The problem is even in $z$; $\sin$ is odd, so $C_1=0$.}
+
+\GuideSubcell{c}{Apply the boundary condition, list the allowed $B_z$, and choose the physical one, \FNRP{7.17}.}{
+$\cos(B_z\Ht/2)=0$ requires $B_z\Ht/2=\pi/2,3\pi/2,\ldots$; only $\pi/2$ keeps $\xi>0$ throughout, so $B_z=\pi/\Ht$.
+\GuideCommentary{This is the slab of F3 with $a\to\Ht$.}}
+
+\end{pframe}
+
+\begin{pframe}[Radial shape: Bessel functions]
+\GuideContext{$\frac1r(r\zeta')'+B_r^2\zeta=0$ is Bessel's equation of order zero, with solution $\zeta=C_1'J_0(B_rr)+C_2'Y_0(B_rr)$, \FNRP{7.18} and Fig.~\ref{fig:bessel}.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.4cm,xlabel={$x$},xmin=0,xmax=10,ymin=-1.1,ymax=1.1,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.97,0.95)},anchor=north east},legend columns=3,
+ tick label style={font=\scriptsize},label style={font=\scriptsize}]
+\addplot[wcprimary,thick] table[x=x,y=J0] {figures/data/bessel.dat}; \addlegendentry{$J_0$}
+\addplot[wcalerted,thick,dashed] table[x=x,y=J1] {figures/data/bessel.dat}; \addlegendentry{$J_1$}
+\addplot[wcexample,thick,dotted,restrict y to domain=-1.1:1.1] table[x=x,y=Y0] {figures/data/bessel.dat}; \addlegendentry{$Y_0$}
+\addplot[black!50,thin] coordinates {(0,0) (10,0)};
+\addplot[black!60,thin,dashed] coordinates {(2.405,-1.1) (2.405,1.1)};
+\node[font=\scriptsize] at (axis cs:3.35,-0.85) {$2.405$};
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Bessel functions of order zero and one (tabulated by \texttt{tools/verify\_examples.py}); $Y_0$ diverges at the origin.}\label{fig:bessel}
+\end{center}}}
+
+\GuideSubcell{a}{Why is $C_2'=0$?}{
+$Y_0\to-\infty$ at $r=0$, and the flux on the axis must be finite.}
+
+\GuideSubcell{b}{The first zero of $J_0$ is at $2.405$; write $B_r$, \FNRP{7.19}, and explain why the later zeros ($5.520$, $8.654$) are rejected.}{
+$B_r=2.405/\Rt$. With a later zero, $\zeta$ would pass through zero inside the core and turn negative.}
+
+\GuideSubcell{c}{Using the series $J_0(x)=1-x^2/4+x^4/64-x^6/2304+\cdots$, evaluate $J_0$ at $r=\Rt/2$ ($x=1.2025$) and compare with the tabulated $0.670$.}{
+$1-0.3615+0.0327-0.0013=0.670$; four terms suffice at this $x$, which is Lesson~35's point about series solutions.}
+
+\GuideSubcell{d}{$J_1(2.405)=0.519$ is needed for the power; where does $J_1$ appear on the figure?}{
+$J_0'=-J_1$, so $J_1$ is the magnitude of the slope of $J_0$; it peaks near $x=1.84$ and is $0.519$ at the first zero of $J_0$, where $J_0$ is steepest.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2: buckling of a PWR-size core]
+\GuideContext{Take $\Rt=\SI{150}{\centi\meter}$ and $\Ht=\SI{360}{\centi\meter}$, roughly a large PWR.}
+
+\GuideSubcell{a}{Compute $B_r^2$.}{
+$(2.405/150)^2=\SI{2.570e-4}{\per\centi\meter\squared}$.}
+
+\GuideSubcell{b}{Compute $B_z^2$.}{
+$(\pi/360)^2=\SI{7.615e-5}{\per\centi\meter\squared}$.}
+
+\GuideSubcell{c}{Compute $B^2=B_r^2+B_z^2$, \FNRP{7.20}.}{
+$\SI{3.332e-4}{\per\centi\meter\squared}$.}
+
+\GuideSubcell{d}{Compute the fraction of $B^2$ that is radial.}{
+77\%.
+\GuideCommentary{The diameter (\SI{300}{\centi\meter}) is smaller than the height (\SI{360}{\centi\meter}), but radial leakage dominates by more than that difference suggests: for equal half-dimensions a cylinder's radial curvature $2.405/\Rt$ exceeds a slab's $(\pi/2)/(\Ht/2)$.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2 continued: $k$ from $M$]
+\GuideContext{Section~3 justifies replacing $L$ by the migration length $M$; for a PWR, $M=\SI{7.62}{\centi\meter}$ (Table~7.1). With $B^2=\SI{3.332e-4}{\per\centi\meter\squared}$ from F9.}
+
+\GuideSubcell{a}{Compute $M^2B^2$.}{
+$58.06\times3.332\times10^{-4}=0.01935$.}
+
+\GuideSubcell{b}{Compute $\PNL=1/(1+M^2B^2)$, \FNRP{7.8}.}{
+$0.981$: a large thermal core leaks under 2\% of its neutrons.}
+
+\GuideSubcell{c}{Find the $\kinf$ that makes this core critical.}{
+$\kinf=1/\PNL=1.019$.}
+
+\GuideSubcell{d}{Compute $k$ and $\rho=(k-1)/k$ if the actual $\kinf$ is $1.05$.}{
+$k=1.05\times0.981=1.030$ and $\rho=0.029=2.9\%$: an excess reactivity that control poisons must hold down (Lesson~20; Section~5 here).}
+
+\end{pframe}
+
+\begin{pframe}[Power sets the amplitude]
+\GuideContext{With $\gamma=\SI{3.1e-11}{\joule}$ per fission, $P=\gamma\int\Sigma_f\phi\dV$, \FNRP{7.22}. For the bare cylinder $\phi=C\,J_0(2.405r/\Rt)\cos(\pi z/\Ht)$ and \FNRP{7.26}--(7.29) give $C=3.63\,P/\gamma\Sigma_fV$.}
+
+\GuideSubcell{a}{Show that $3.63$ is the \Term{peak-to-average flux ratio} and split it into radial and axial factors, using $\int_0^{\Rt}J_0(2.405r/\Rt)\,r\,dr=(\Rt^2/2.405)J_1(2.405)$ and the axial average $2/\pi$.}{
+The area average of $J_0$ is $2J_1(2.405)/2.405=0.432$, so the radial peak-to-average ratio is $2.405/(2\times0.519)=2.32$; the axial average of the cosine is $2/\pi=0.637$, so the axial ratio is $\pi/2=1.57$; the product is $3.64$ (Lewis rounds to $3.63$).}
+
+\GuideSubcell{b}{Why is the ratio independent of $P$, $\Rt$, and $\Ht$?}{
+The shape is fixed by the geometry alone; power scales $C$ but not the ratio.
+\GuideCommentary{Reflectors (Section~4) flatten the shape and lower the ratio.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2 continued: fluxes in the PWR-size core]
+\GuideContext{$P=\SI{3000}{\mega\watt}$ thermal, $\Rt=\SI{150}{\centi\meter}$, $\Ht=\SI{360}{\centi\meter}$, illustrative one-group $\Sigma_f=\SI{0.0100}{\per\centi\meter}$.}
+
+\GuideSubcell{a}{Compute the core volume and the average power density.}{
+$V=\pi\Rt^2\Ht=\SI{2.54e7}{\centi\meter\cubed}$; $\bar P'''=\SI{3e9}{\watt}/\SI{2.54e7}{\centi\meter\cubed}=\SI{118}{\watt\per\centi\meter\cubed}$.}
+
+\GuideSubcell{b}{Compute the peak power density.}{
+$3.63\times118=\SI{429}{\watt\per\centi\meter\cubed}$.}
+
+\GuideSubcell{c}{Compute the average flux $\bar P\prime\prime\prime/\gamma\Sigma_f$.}{
+$\bar\phi=118/(3.1\times10^{-11}\times0.0100)=\SI{3.8e14}{\per\centi\meter\squared\per\second}$.}
+
+\GuideSubcell{d}{Compute the peak flux.}{
+$\SI{1.4e15}{\per\centi\meter\squared\per\second}$.
+\GuideCommentary{The peak governs fuel temperature limits (Chapter~8) and is one reason real cores are reflected and nonuniformly loaded.}}
+
+\end{pframe}
+
+\begin{pframe}[Shape and size]
+\GuideSubcell{a}{For a cylinder with $\Ht=2\Rt$ (height equal to diameter) show that $B^2=33.0/\Ht^2$, the form used in \FNRP{7.53}.}{
+$B^2=(2.405/\Rt)^2+(\pi/\Ht)^2=[4(2.405)^2+\pi^2]/\Ht^2=(23.14+9.87)/\Ht^2=33.0/\Ht^2$.}
+
+\GuideSubcell{b}{FNRP problem~7.2 asks which height-to-diameter ratio minimizes the critical volume of a bare cylinder. Set up the minimization; the result is in the response.}{
+For fixed material and $k$ the buckling $B^2$ is fixed; minimize $V=\pi\Rt^2\Ht$ subject to $(2.405/\Rt)^2+(\pi/\Ht)^2=B^2$. Setting the derivative with respect to the aspect ratio to zero gives $\Ht=1.847\,\Rt$, that is $H/D=0.924$: a slightly squat cylinder, close enough to $H=D$ that Lewis uses the latter.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (b); 3 (b); 4 (b).}
+\item Separation of variables works for the bare cylinder because \opt{a} $D$ varies with $r$; \opt{b} the boundary conditions sit on coordinate surfaces $r=\Rt$ and $z=\pm\Ht/2$; \opt{c} the flux is constant; \opt{d} Bessel functions are polynomials.
+\item The radial buckling of a bare cylinder is \opt{a} $\pi/\Rt$; \opt{b} $2.405/\Rt$; \opt{c} $\pi/\Ht$; \opt{d} $2.405/\Ht$.
+\item $Y_0$ is excluded from the radial solution because \opt{a} it is negative at the boundary; \opt{b} it diverges on the axis; \opt{c} it does not solve the equation; \opt{d} it has no zeros.
+\item The peak-to-average flux ratio of a bare uniform cylinder \opt{a} grows with power; \opt{b} is about $3.6$ regardless of size; \opt{c} equals $1$; \opt{d} equals $2.405$.
+\end{quiz}}
+
+\GSec{Neutron leakage: two groups and migration (FNRP 7.4; Lesson 36)}
+
+\begin{pframe}[Two groups, Lewis style]
+\GuideContext{Lewis's two-group equations \FNRP{7.31} and (7.33) are
+\begin{align*}
+-\dvg D_1\grad\phi_1+\Sigma_r\phi_1&=\tfrac1k\,\varepsilon\eta_Tf\Sigma_a\phi_2,\\
+-\dvg D_2\grad\phi_2+\Sigma_a\phi_2&=p\,\Sigma_r\phi_1,
+\end{align*}
+with $\Sigma_a$ the thermal absorption cross section. Lesson~36 writes the thermal source as $\Sigma_{s,2\gets1}\phi_1$ and the fission source as $\tfrac1k(\nu\Sigma_{f1}\phi_1+\nu\Sigma_{f2}\phi_2)$.}
+
+\GuideSubcell{a}{Match Lewis's symbols to the course's.}{
+$p\Sigma_r\leftrightarrow\Sigma_{s,2\gets1}$; $\Sigma_r\leftrightarrow\Sigma_{r,1}=\Sigma_{a1}+\Sigma_{s,2\gets1}$; $\varepsilon\eta_Tf\Sigma_a\phi_2\leftrightarrow\nu\Sigma_{f2}\phi_2$ with fast fission folded in.}
+
+\GuideSubcell{b}{In words, what does the \Term{removal cross section} $\Sigma_r$ count?}{
+The rate, per unit fast flux, at which neutrons leave the fast group, by slowing down past the group boundary or by absorption while fast.}
+
+\GuideSubcell{c}{Where did $\varepsilon$ and $p$ go in the course's form?}{
+$\varepsilon$ is carried by the explicit $\nu\Sigma_{f1}\phi_1$ term; $p$ is the fraction $\Sigma_{s,2\gets1}/\Sigma_{r,1}$ of removals that reach thermal energies instead of being captured in resonances.
+\GuideCommentary{Lewis's form displays the four factors, the course's form displays the cross sections; the balance is the same.}}
+
+\end{pframe}
+
+\begin{pframe}[Group diffusion lengths]
+\GuideContext{Dividing by $\Sigma_r$ and $\Sigma_a$ defines $L_1^2=D_1/\Sigma_r$ and $L_2^2=D_2/\Sigma_a$, \FNRP{7.35}--(7.36). For the fast group Lewis uses the \Term{Fermi age} $\tau=\int D(E)/[\xi\Sigma_s(E)E]\,dE\approx(D_1/\xi\Sigma_s)\ln(E_1/E_2)$, so $\Sigma_r\approx\xi\Sigma_s/\ln(E_1/E_2)=\Sigma_s/n$ with $n$ the number of collisions needed to slow down (Lesson~7).}
+
+\GuideSubcell{a}{With $E_1=\SI{2}{\mega\electronvolt}$ and $E_2=\SI{0.0253}{\electronvolt}$, compute $\ln(E_1/E_2)$ and $n$ for water ($\xi=0.92$).}{
+$\ln(7.9\times10^7)=18.2$; $n=18.2/0.92=19.8$ collisions.}
+
+\GuideSubcell{b}{In one sentence, why does a strong moderator have a short $L_1$?}{
+Few collisions are needed to thermalize, so a fast neutron is removed after a short random walk: $L_1\approx\sqrt{nD_1/\Sigma_s}$ is small when $n$ is small. Graphite ($\xi=0.158$) needs about 115 collisions, hence $L_1=\SI{19.5}{\centi\meter}$ versus \SI{5.1}{\centi\meter} for water in Table~7.1.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3: two-group nonleakage]
+\GuideContext{With Helmholtz shapes in both groups, \FNRP{7.39}--(7.40), the equations collapse to \FNRP{7.43}, $k=\kinf/[(1+L_1^2B^2)(1+L_2^2B^2)]$. PWR values from Table~7.1: $L_1=\SI{7.36}{\centi\meter}$, $L_2=\SI{1.96}{\centi\meter}$; $B^2=\SI{3.332e-4}{\per\centi\meter\squared}$ from F9.}
+
+\GuideSubcell{a}{Compute the fast and thermal factors, $1+L_1^2B^2$ and $1+L_2^2B^2$.}{
+$1+54.17\times3.332\times10^{-4}=1.01805$ and $1+3.842\times3.332\times10^{-4}=1.00128$.}
+
+\GuideSubcell{b}{Compute $\PNL$.}{
+$\PNL=1/(1.01805\times1.00128)=0.9810$.}
+
+\GuideSubcell{c}{State what physical probability the reciprocal of each factor represents.}{
+The first is the probability of not leaking while slowing down (fast nonleakage), the second of not leaking while thermal.
+\GuideCommentary{Almost all PWR leakage is fast leakage: thermal neutrons are absorbed within about \SI{2}{\centi\meter} of where they thermalize, fast ones wander \SI{7}{\centi\meter}.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3 continued: the migration area]
+\GuideContext{Multiply the factors out, \FNRP{7.48}, and drop the $B^4$ term to get $\PNL\approx1/(1+M^2B^2)$ with the \Term{migration area} $M^2=L_1^2+L_2^2$, \FNRP{7.49}--(7.51).}
+
+\GuideSubcell{a}{Compute $M^2$ and $M$ for the PWR and compare with Table~7.1.}{
+$54.17+3.84=\SI{58.0}{\centi\meter\squared}$; $M=\SI{7.62}{\centi\meter}$, as tabulated.}
+
+\GuideSubcell{b}{Recompute $\PNL$ with $M^2$ for $B^2=\SI{3.332e-4}{\per\centi\meter\squared}$ and compare with F16.}{
+$1/(1+0.01935)=0.9810$, the same to four digits; the dropped term $L_1^2L_2^2B^4=7\times10^{-5}$ is negligible.}
+
+\GuideSubcell{c}{Repeat both for a small core with $\Ht/M=10$, so that $M^2B^2=33.0/(\Ht/M)^2=0.33$, and comment.}{
+$M^2$ form: $1/1.33=0.752$. Two-group: $L_1^2B^2=0.308$ and $L_2^2B^2=0.0219$, so $\PNL=1/(1.308\times1.022)=0.748$.
+\GuideCommentary{The one-group-with-$M$ approximation is 0.5\% high for a core only ten migration lengths across: fine for large power reactors, marginal for small ones.}}
+
+\end{pframe}
+
+\begin{pframe}[Reading Table 7.1]
+\GuideContext{FNRP Table~7.1 lists $L_1$, $L_2$, and $M$ (cm) for $\mathrm{H_2O}$ ($5.10$, $2.85$, $5.84$), a PWR ($7.36$, $1.96$, $7.62$), $\mathrm{D_2O}$ ($11.5$, $173$, $174$), a CANDU core ($11.6$, $15.6$, $19.4$), graphite ($19.5$, $59.0$, $62.0$), and an HTGR core ($17.1$, $10.6$, $20.2$).}
+
+\GuideSubcell{a}{Why is $L_2$ for pure $\mathrm{D_2O}$ enormous and for the CANDU core much smaller?}{
+$\mathrm{D_2O}$ barely absorbs, so $L_2=\sqrt{D/\Sigma_a}$ explodes; fuel in the core adds absorption and cuts $L_2$ to \SI{15.6}{\centi\meter}.}
+
+\GuideSubcell{b}{Why is the PWR's $L_2$ smaller than water's but its $L_1$ larger?}{
+Fuel absorbs thermal neutrons (smaller $L_2$); fuel and structure displace hydrogen, so fast neutrons scatter less often and travel farther before thermalizing (larger $L_1$).}
+
+\GuideSubcell{c}{For the same buckling, rank PWR, CANDU, and HTGR cores by leakage.}{
+Leakage grows with $M^2B^2$, so PWR ($7.62$) $<$ CANDU ($19.4$) $<$ HTGR ($20.2$): light-water cores are the most compact per unit leakage, which is why they can be small.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4: leakage and design]
+\GuideContext{With $\Ht=2\Rt$, \FNRP{7.53} gives $k=\kinf/[1+33.0(M/\Ht)^2]$. Lewis's design sketch: the lattice fixes $M$ and the achievable average power density $\bar P'''$; the required power fixes $V=P/\bar P'''$ and hence $\Ht=(4V/\pi)^{1/3}$; then $\PNL$ follows, and the enrichment sets $\kinf$. Take $\bar P'''=\SI{100}{\watt\per\centi\meter\cubed}$ and $M=\SI{7.62}{\centi\meter}$.}
+
+\GuideSubcell{a}{For $P=\SI{3000}{\mega\watt}$, compute $V$, $\Ht$, $33.0(M/\Ht)^2$, and $\PNL$.}{
+$V=\SI{30}{\meter\cubed}$; $\Ht=(4\times30/\pi)^{1/3}=\SI{3.37}{\meter}$; $33.0(7.62/337)^2=0.0169$; $\PNL=0.983$.}
+
+\GuideSubcell{b}{For $P=\SI{300}{\mega\watt}$, compute $V$, $\Ht$, $33.0(M/\Ht)^2$, and $\PNL$. Compare with part (a).}{
+$V=\SI{3}{\meter\cubed}$; $\Ht=\SI{1.56}{\meter}$; $0.0784$; $\PNL=0.927$.
+\GuideCommentary{A tenfold smaller reactor at the same power density leaks 7\% instead of 2\%, so a small modular core needs about 5\% more $\kinf$ (enrichment) or a reflector (Section~4). Volume scales with $P$; leakage scales with $(M/\Ht)^2\propto P^{-2/3}$.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (b); 3 (b); 4 (c).}
+\item The removal cross section $\Sigma_r$ measures \opt{a} thermal absorption; \opt{b} the rate at which neutrons leave the fast group per unit fast flux; \opt{c} fast fission; \opt{d} leakage.
+\item The migration area $M^2$ equals \opt{a} $L_1L_2$; \opt{b} $L_1^2+L_2^2$; \opt{c} $L_2^2$ only; \opt{d} $D/\Sigma_a$.
+\item In a PWR most leakage occurs \opt{a} while neutrons are thermal; \opt{b} while neutrons are fast; \opt{c} equally in both groups; \opt{d} never.
+\item Doubling a reactor's height and diameter at fixed composition \opt{a} doubles $B^2$; \opt{b} halves $B^2$; \opt{c} quarters $B^2$; \opt{d} leaves $B^2$ unchanged.
+\end{quiz}}
+
+\GSec{Reflected reactors (FNRP 7.5; Lesson 37)}
+
+\begin{pframe}[What a reflector does]
+\GuideSubcell{a}{In one sentence, how does a \Term{reflector} raise $k$?}{
+Neutrons that leave the core scatter in the reflector and some re-enter, so the effective leakage drops: the albedo of the Chapter~6 guide (F31), now applied to a reactor surface.}
+
+\GuideSubcell{b}{Lewis says reflectors matter most for small cores; express ``small'' with the dimensionless ratio he uses.}{
+$\Ht/M$ small, say below 10 to 20: the reflector savings is a fixed length of order $\widehat M$, which is a large fraction of a small core.}
+
+\GuideSubcell{c}{List the properties of a good reflector material and name two candidates.}{
+Small $\Sigma_a$ and large $\Sigma_s$, hence small $\widehat M$ and a high albedo: water, heavy water, graphite, beryllium. Steel is a poor neutron reflector but a fine gamma shield.}
+
+\end{pframe}
+
+\begin{pframe}[The reflector equation]
+With no fission, (7.3) in the reflector reduces to $\nabla^2\phi-\phi/\widehat M^2=0$, \FNRP{7.54}, where $\widehat M$ is the reflector's migration length. For an axial reflector on the cylinder, separate variables as in F6 and show that the axial part obeys $\zeta''-\alpha^2\zeta=0$ with $\alpha^2=B_r^2+1/\widehat M^2$, \FNRP{7.58}--(7.59). Why does the core's radial buckling appear in the reflector's axial equation?
+\response
+$\phi=\psi(r)\zeta(z)$ with the same radial shape $J_0(B_rr)$, because the radial zero-flux condition at $\Rt$ applies in the reflector as in the core; replacing the radial term by $-B_r^2$ leaves $\zeta''/\zeta=B_r^2+1/\widehat M^2$.
+\GuideCommentary{Radial leakage out of the reflector slab adds to its absorption, so the axial decay rate $\alpha$ is steeper than $1/\widehat M$ alone.}
+\end{pframe}
+
+\begin{pframe}[Matching core and reflector]
+\GuideContext{Core: $\chi(z)=C_2\cos(B_z'z)$, \FNRP{7.63}. Reflector of thickness $a$: $\zeta(z)=C'\sinh[\alpha(H'/2+a-z)]$, \FNRP{7.62}, chosen to vanish at the outer surface $z=H'/2+a$. Match at $z=H'/2$.}
+
+\GuideSubcell{a}{Write continuity of flux at the core--reflector interface.}{
+$C_2\cos(B_z'H'/2)=C'\sinh(\alpha a)$.}
+
+\GuideSubcell{b}{Write continuity of current at the same interface. Check the signs of both derivatives.}{
+$DB_z'C_2\sin(B_z'H'/2)=\widehat D\alpha C'\cosh(\alpha a)$. Both derivatives are negative; the signs cancel.}
+
+\GuideSubcell{c}{Divide current continuity by flux continuity to obtain the criticality condition, \FNRP{7.68}.}{
+$B_z'D\tan(B_z'H'/2)=\alpha\widehat D\coth(\alpha a)$.}
+
+\GuideSubcell{d}{Why does this ratio eliminate the constants and the power?}{
+The amplitudes $C_2$ and $C'$ scale together with the power. Their ratio cancels between the two homogeneous interface conditions, leaving geometry and materials only.
+\GuideCommentary{This is Lesson~37's trick of dividing current continuity by flux continuity.}}
+
+\end{pframe}
+
+\begin{pframe}[The thick-reflector limit]
+\GuideContext{For a reflector many $\widehat M$ thick, $\coth(\alpha a)\to1$.}
+
+\GuideSubcell{a}{Write the resulting condition, \FNRP{7.69}, and solve it for $H'$, \FNRP{7.70}.}{
+$B_z'\tan(B_z'H'/2)=\alpha\widehat D/D$, so $H'=\dfrac{2}{B_z'}\arctan\!\Big(\dfrac{\alpha\widehat D}{B_z'D}\Big)$.}
+
+\GuideSubcell{b}{Lewis uses it two ways: fix $B_z'=\pi/\Ht$ (same composition as a bare core of height $\Ht$) and find the shorter critical height $H'$; or fix $H'=\Ht$ and find the smaller $B_z'$. State what each tells a designer.}{
+First use: the core can be shorter by $2s_z$, where the \Term{reflector savings} is $s_z=(\Ht-H')/2$, \FNRP{7.71}. Second use: at the same height the buckling drops, so $k$ rises and $\kinf$ (enrichment) can be reduced; the flux is also flatter (F25).}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 5: axial reflector savings for the PWR-size core]
+\GuideContext{Core from F9 ($\Rt=\SI{150}{\centi\meter}$, bare $\Ht=\SI{360}{\centi\meter}$, so $B_z'=\pi/360=\SI{0.008727}{\per\centi\meter}$ and $B_r^2=\SI{2.570e-4}{\per\centi\meter\squared}$); water reflector with $\widehat M=\SI{5.84}{\centi\meter}$; take $\widehat D=D$ for this estimate.}
+
+\GuideSubcell{a}{Compute $\alpha^2$ and $\alpha$.}{
+$\alpha^2=2.570\times10^{-4}+1/5.84^2=2.570\times10^{-4}+0.02932=\SI{0.02958}{\per\centi\meter\squared}$; $\alpha=\SI{0.1720}{\per\centi\meter}$.}
+
+\GuideSubcell{b}{Compute the argument $\alpha\widehat D/(B_z\prime D)$.}{
+$0.1720/0.008727=19.7$.}
+
+\GuideSubcell{c}{Compute the reflected critical height $H\prime$.}{
+$H'=(2/0.008727)\arctan(19.7)=229.2\times1.520=\SI{348.4}{\centi\meter}$.}
+
+\GuideSubcell{d}{Compute the axial reflector savings $s_z$.}{
+$s_z=(360-348.4)/2=\SI{5.8}{\centi\meter}$.}
+
+\GuideSubcell{e}{Compare with the thick-reflector estimate $s_z\approx\widehat MD/\widehat D$ (Fig.~\ref{fig:refl}).}{
+$\widehat M=\SI{5.84}{\centi\meter}$: the rule of thumb is excellent, because $\arctan(19.7)$ is within 3\% of $\pi/2$. The estimate scales with $D/\widehat D$, so a reflector with a smaller diffusion coefficient than the core saves more height; one-group estimates with very different $D$ and $\widehat D$ exaggerate the effect, which is one reason reflector calculations are usually done in two groups (Lesson~37).
+\GuideCommentary{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.2cm,xlabel={$z$ (cm), near the top of the core},ylabel={$\phi/\phi(0)$},xmin=120,xmax=220,ymin=0,ymax=0.5,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.97,0.95)},anchor=north east},
+ tick label style={font=\scriptsize},label style={font=\scriptsize}]
+\addplot[wcprimary,thick,domain=120:180,samples=60] {cos(deg(pi*x/360))}; \addlegendentry{bare, $\Ht=360$}
+\addplot[wcalerted,thick,dashed,domain=120:174.2,samples=60] {cos(deg(0.0087266*x))}; \addlegendentry{reflected core, $H'=348.4$}
+\addplot[wcalerted,thick,dashed,domain=174.2:214.2,samples=60] {0.0506*sinh(0.172*(214.2-x))/sinh(0.172*40)}; \addlegendentry{reflector tail}
+\addplot[black!50,thin,dashed] coordinates {(174.2,0) (174.2,0.5)};
+\addplot[black!50,thin,dashed] coordinates {(180,0) (180,0.5)};
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Axial flux near the top of the core for the bare core and for the same composition with a thick water reflector (F24 numbers, $\widehat D=D$); the core is shorter by $2s_z$ and the flux no longer falls to zero at its edge.}\label{fig:refl}
+\end{center}}}
+
+\end{pframe}
+
+\begin{pframe}[Flux flattening]
+\GuideContext{FNRP Table~7.2 lists maximum and minimum flux (average $=1$) for a bare core ($1.571$, $0$) and for axially reflected cores with $\Ht/M=10$ ($1.373$, $0.323$) and $\Ht/M=50$ ($1.515$, $0.091$).}
+
+\GuideSubcell{a}{Why does a reflector flatten the flux?}{
+Neutrons returning from the reflector feed the core edge, so the flux no longer has to fall to zero there: the core's cosine is truncated before its zeros (Fig.~\ref{fig:refl}).}
+
+\GuideSubcell{b}{Why does the effect fade for large $\Ht/M$?}{
+The savings and the edge peaking are both of order $\widehat M$, a fixed length, which is a small fraction of a large core.}
+
+\GuideSubcell{c}{Treating $s_z\approx\widehat M\approx M$ as a fixed length, what fraction of the half-height is saved for $\Ht/M=10$ and $50$?}{
+$s_z/(\Ht/2)=2M/\Ht$: 20\% versus 4\%.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (b); 3 (a); 4 (b).}
+\item The reflector savings is \opt{a} the reduction in required $\kinf$; \opt{b} the reduction in the critical core half-height (or radius) when a reflector is added; \opt{c} the reflector thickness; \opt{d} the albedo.
+\item In the reflector the axial solution is a hyperbolic sine because \opt{a} $\kinf>1$ there; \opt{b} there is no fission, so the equation has a positive coefficient multiplying $\phi$; \opt{c} the reflector is thin; \opt{d} the flux is zero there.
+\item $\alpha^2=B_r^2+1/\widehat M^2$ exceeds $1/\widehat M^2$ because \opt{a} radial leakage from the reflector adds to its losses; \opt{b} the reflector multiplies; \opt{c} $B_r$ is negative; \opt{d} $\widehat M$ is zero.
+\item Adding a thick reflector to a large core ($\Ht/M\approx50$) changes the flux shape \opt{a} drastically everywhere; \opt{b} mainly within a few migration lengths of the edge; \opt{c} not at all; \opt{d} by making it negative.
+\end{quiz}}
+
+\GSec{Control poisons (FNRP 7.6; Lesson 38)}
+
+\begin{pframe}[Three ways to insert poison]
+\GuideContext{Lewis models a \Term{control poison} as $\Sigma_a\to\Sigma_a+\delta\Sigma_a$, with $\Sigma_f$ and $D$ unchanged. Classify each absorber by its spatial distribution and purpose.}
+
+\GuideSubcell{a}{Classify soluble boron. What reactivity changes does it control?}{
+Uniform $\delta\Sigma_a$ over the core. It holds down slow reactivity changes from depletion without distorting the flux (Lesson~23).}
+
+\GuideSubcell{b}{Classify a control rod. What is it used for?}{
+Localized $\delta\Sigma_a$. It is used for startup, shutdown, and power changes, and it distorts the flux.}
+
+\GuideSubcell{c}{Classify a burnable absorber. How does its role change through the fuel cycle?}{
+Distributed but deliberately nonuniform, embedded in fuel. It burns out as the cycle proceeds (Lesson~23).
+\GuideCommentary{Optimizing its distribution is beyond this chapter.}}
+
+\end{pframe}
+
+\begin{pframe}[An exact expression for the worth]
+\GuideContext{Multiply the perturbed equation \FNRP{7.72} by the unperturbed flux $\phi$, multiply the unperturbed equation (7.3) by $\phi'$, integrate both over the core, and subtract.}
+
+\GuideSubcell{a}{Which integral vanishes, and by what argument, \FNRP{7.76}--(7.78)?}{
+$D\int(\phi\nabla^2\phi'-\phi'\nabla^2\phi)\dV=D\oint(\phi\grad\phi'-\phi'\grad\phi)\cdot\bn\dA=0$, by Green's identity (the divergence theorem of the Chapter~6 guide, F8) and because both fluxes vanish on the extrapolated surface.}
+
+\GuideSubcell{b}{Starting from a critical reactor ($k=1$) with $\rho=(k'-1)/k'$, write the exact result, \FNRP{7.80}.}{
+$\rho=-\displaystyle\int\phi\,\delta\Sigma_a\,\phi'\dV\Big/\int\phi\,\nu\Sigma_f\,\phi'\dV$.}
+
+\GuideSubcell{c}{Why is it called a \Term{reactivity worth}?}{
+It is the reactivity the absorber is worth: what the poison removes or, read the other way, how much excess reactivity it can hold down.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6: uniform poison]
+\GuideContext{For uniform $\delta\Sigma_a$, the fluxes cancel out of (7.80): $\rho=-\delta\Sigma_a/\nu\Sigma_f=-(1/\kinf)(\delta\Sigma_a/\Sigma_a)$, \FNRP{7.81}, with no approximation. Use the PWR-size core of F10, with $\kinf=1.019$ at critical.}
+
+\GuideSubcell{a}{Compute $\rho$ for a 1\% increase in $\Sigma_a$, in percent and in pcm.}{
+$\rho=-0.01/1.019=-0.00981=-0.981\%=-981$~pcm.}
+
+\GuideSubcell{b}{Check directly using $\nu\Sigma_f=\SI{0.0243}{\per\centi\meter}$, $\Sigma_a=\SI{0.02384}{\per\centi\meter}$, $D=\SI{1.384}{\centi\meter}$, and $B^2=\SI{3.332e-4}{\per\centi\meter\squared}$. Recompute $k'=\nu\Sigma_f/(1.01\Sigma_a+DB^2)$ and $\rho=(k'-1)/k'$.}{
+$k'=0.0243/(0.02408+4.61\times10^{-4})=0.9903$ and $\rho=-0.00981$. The two methods agree.
+\GuideCommentary{Note that $\rho\neq-1\%$: only the absorbed share of the losses grew by 1\%; leakage, 1.9\% of the losses, did not. The one-group set is chosen so that $k=1$ before the poison: $\nu\Sigma_f=\Sigma_a+DB^2$.}}
+
+\end{pframe}
+
+\begin{pframe}[First-order perturbation]
+\GuideContext{For a localized poison the perturbed flux $\phi'$ is unknown. Setting $\phi'\approx\phi$ gives the \Term{first-order perturbation} estimate $\rho\approx-\int\delta\Sigma_a\phi^2\dV\big/\int\nu\Sigma_f\phi^2\dV$, \FNRP{7.82}.}
+
+\GuideSubcell{a}{Why $\phi^2$ rather than $\phi$ (compare Lesson~38's ``na\"ive'' estimate)?}{
+The exact form weights the change by the flux the absorber sees, $\phi'$, and by the importance of the neutrons it removes to the chain reaction; for one-group diffusion theory the importance function equals $\phi$ itself (the problem is self-adjoint), so the weight is $\phi\cdot\phi$.}
+
+\GuideSubcell{b}{Where in the core is a given lump of absorber worth the most?}{
+Where $\phi^2$ is largest: the center.}
+
+\GuideSubcell{c}{Compare the worth of the same small absorber at $r=\Rt/2$ and on the axis, both at the midplane.}{
+The ratio is $J_0^2(2.405/2)=0.670^2=0.449$, \FNRP{7.87}: the off-center rod is worth 45\% of the central one.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 7: a partially inserted rod]
+\GuideContext{For a thin rod inserted a depth $x$ from the top, \FNRP{7.84}--(7.86) give $\rho_{r,x}=\big[x/\Ht-\sin(2\pi x/\Ht)/2\pi\big]\rho_{r,H}$, normalized to the fully inserted worth.}
+
+\GuideSubcell{a}{Evaluate the bracket at $x/\Ht=0.25$, $0.5$, and $0.75$.}{
+$0.0908$, $0.500$, $0.909$.}
+
+\GuideSubcell{b}{Differentiate to find where the \Term{differential worth} $d\rho/dx$ is largest; Fig.~\ref{fig:rod} shows both curves.}{
+$\dfrac{d}{dx}[\cdots]=\dfrac1{\Ht}\big(1-\cos(2\pi x/\Ht)\big)=\dfrac{2}{\Ht}\sin^2(\pi x/\Ht)$: largest at the midplane $x=\Ht/2$, zero at both ends. The first quarter of the travel buys only 9\% of the worth.
+\GuideCommentary{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.2cm,xlabel={insertion fraction $x/\Ht$},xmin=0,xmax=1,ymin=0,ymax=1.05,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.03,0.95)},anchor=north west},
+ tick label style={font=\scriptsize},label style={font=\scriptsize},domain=0:1,samples=101]
+\addplot[wcprimary,thick] {x-sin(deg(2*pi*x))/(2*pi)}; \addlegendentry{integral worth $\rho_{r,x}/\rho_{r,H}$}
+\addplot[wcalerted,thick,dashed] {sin(deg(pi*x))^2}; \addlegendentry{differential worth (normalized)}
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Integral and differential worth of a single rod versus insertion depth for a bare uniform core (after FNRP Fig.~7.8).}\label{fig:rod}
+\end{center}}}
+
+\GuideSubcell{c}{Why is this S-shape independent of the rod's radial position?}{
+The radial and axial dependences separate: $J_0^2(B_rr)$ multiplies the whole curve, so normalization removes it.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 7 continued: numbers for the PWR-size core]
+\GuideContext{For the uniform core with $\phi=CJ_0(B_rr)\cos(B_zz)$, the denominator of (7.84) is $\nu\Sigma_fC^2(\Ht/2)\pi\Rt^2J_1^2(2.405)$ (use $\int_0^{\Rt}J_0^2(B_rr)\,r\,dr=\tfrac12\Rt^2J_1^2(2.405)$ and $\int\cos^2dz=\Ht/2$), and a full-length central rod of cross-section $a_c$ and absorption $\Sigma_{ac}$ has numerator $a_c\Sigma_{ac}C^2(\Ht/2)$.}
+
+\GuideSubcell{a}{Show that $\rho_{0,H}=-a_c\Sigma_{ac}/[\nu\Sigma_f\pi\Rt^2J_1^2(2.405)]$.}{
+$\Ht/2$ and $C^2$ cancel between numerator and denominator.}
+
+\GuideSubcell{b}{Evaluate it for $a_c\Sigma_{ac}=\SI{2}{\centi\meter}$ (for example a \SI{2}{\centi\meter\squared} gray rod with $\Sigma_{ac}=\SI{1}{\per\centi\meter}$), $\nu\Sigma_f=\SI{0.0243}{\per\centi\meter}$, $\Rt=\SI{150}{\centi\meter}$, $J_1^2(2.405)=0.2695$.}{
+$\rho=-2/(0.0243\times\pi\times150^2\times0.2695)=-2/463=-0.0043=-432$~pcm.}
+
+\GuideSubcell{c}{Using F29 and F30, give the worth of the same rod at $r=\Rt/2$ fully inserted, and on the axis half inserted.}{
+$0.449\times432=194$~pcm and $0.5\times432=216$~pcm. A gray rod of this strength is worth a few hundred pcm.
+\GuideCommentary{Strongly absorbing (black) rods violate both the small-perturbation assumption and diffusion theory itself (Chapter~6 guide, F42), and in practice are represented by transport-derived boundary conditions at the rod surface.}}
+
+\end{pframe}
+
+\begin{pframe}[Rod banks and coupling]
+\GuideContext{For a bank of rods the flux distortion is too large for perturbation theory, and Lewis solves a two-region axial problem (rodded and unrodded) with a transcendental criticality condition, \FNRP{7.99}--(7.100).}
+
+\GuideSubcell{a}{Compute $\Ht/M$ for the PWR-size core ($\Ht=\SI{360}{\centi\meter}$, $M=\SI{7.62}{\centi\meter}$) and for a small fast core ($\Ht=\SI{100}{\centi\meter}$, $M=\SI{19.2}{\centi\meter}$); which is \Term{tightly coupled} and which \Term{loosely coupled}?}{
+$47$ and $5.2$: the PWR is loosely coupled, the fast core tightly.}
+
+\GuideSubcell{b}{From FNRP Figs.~7.10--7.11, how do bank worth versus insertion and the axial flux differ between $\Ht/M=10$ and $50$?}{
+Tightly coupled: the worth curve stays close to the S-curve of F30 and the flux stays nearly a cosine. Loosely coupled: the bank has little effect until it is more than halfway in, and the flux is pushed toward the bottom of the core, so the peak-to-average ratio grows.}
+
+\GuideSubcell{c}{Why do large thermal reactors worry about power peaking during rod motion?}{
+Disturbances propagate only a few migration lengths per generation, so a loosely coupled core can tilt its power distribution strongly; local power-density limits (Chapter~8) then bind before the total power does.}
+
+\end{pframe}
+
+\begin{pframe}[Limiting cases of the bank model]
+\GuideContext{In the bank model $\alpha^2=\frac{1}{M^2}(\kinf/k-1)-B_r^2$ and $\beta^2=\frac{1}{M^2}(\kinf/k)\rho_b$, with $\rho_b$ the worth of the fully inserted bank, \FNRP{7.93}--(7.94).}
+
+\GuideSubcell{a}{Rods out: show that $\chi_u(\Ht)=0$ gives $\alpha^2=B_z^2$ and hence $k_u=\kinf/[1+M^2(B_r^2+B_z^2)]$, \FNRP{7.101}.}{
+$\chi_u=C\sin(\alpha z)$ vanishing at $z=\Ht$ needs $\alpha\Ht=\pi$; substitute $\alpha^2=B_z^2$ into its definition and solve for $k$.}
+
+\GuideSubcell{b}{Rods fully in: with $\alpha^2-\beta^2=B_z^2$, show $k_r=(1-\rho_b)k_u$.}{
+$\alpha^2-\beta^2=B_z^2$ means $\frac{1}{M^2}\frac{\kinf}{k}(1-\rho_b)-\frac1{M^2}-B_r^2=B_z^2$, so $k=\kinf(1-\rho_b)/[1+M^2B^2]=(1-\rho_b)k_u$.}
+
+\GuideSubcell{c}{Which of the two forms in \FNRP{7.98} applies when the bank is strong enough that $\beta^2>\alpha^2$?}{
+The $\sinh$ form: the rodded region is effectively subcritical, and the flux decays into it instead of curving.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (b); 3 (b); 4 (b).}
+\item The reactivity worth of a uniform poison is \opt{a} $-\delta\Sigma_a/\Sigma_a$; \opt{b} $-\delta\Sigma_a/\nu\Sigma_f$; \opt{c} $-\delta\Sigma_a/D$; \opt{d} $-\kinf\delta\Sigma_a$.
+\item First-order perturbation theory weights a local absorption change by \opt{a} $\phi$; \opt{b} $\phi^2$; \opt{c} $1/\phi$; \opt{d} $J$.
+\item The differential worth of a single rod is largest \opt{a} at the top of the core; \opt{b} at the midplane; \opt{c} at the bottom; \opt{d} uniformly along the rod.
+\item A core with $\Ht/M=50$ is \opt{a} tightly coupled; \opt{b} loosely coupled; \opt{c} subcritical; \opt{d} reflected.
+\end{quiz}}
+
+\end{programmed}
+
+\ifguidehandwriting\clearpage\fi
+
+\Sec{6}{Key terms}
+\begin{multicols}{2}
+\begin{keyterms}
+\gterm{$k$-eigenvalue problem}{$\dvg D\grad\phi+(\nu\Sigma_f/k)\phi-\Sigma_a\phi=0$; $k$ scales fission so that a steady solution exists (F2).}
+\gterm{eigenvalue, eigenfunction}{$k$ and the matching flux shape; a homogeneous problem has solutions only for special $k$ (F3).}
+\gterm{fundamental mode}{the everywhere-positive eigenfunction; it has the largest eigenvalue, which is the multiplication (F3).}
+\gterm{criticality search}{varying size or composition until $k=1$ (F5).}
+\gterm{Helmholtz equation}{$\nabla^2\phi+B^2\phi=0$; the flux-shape equation of a uniform reactor (F6).}
+\gterm{separation of variables}{$\phi=\zeta(r)\xi(z)$; works when boundaries are coordinate surfaces (F6).}
+\gterm{geometric buckling (cylinder)}{$B^2=(2.405/\Rt)^2+(\pi/\Ht)^2$ (F9).}
+\gterm{Bessel functions $J_0$, $Y_0$, $J_1$}{radial solutions; $Y_0$ diverges on the axis; $J_0(2.405)=0$; $J_0'=-J_1$ (F8).}
+\gterm{extrapolated radius and height $\Rt$, $\Ht$}{physical dimensions plus the extrapolation distance, where $\phi=0$ is imposed (F6).}
+\gterm{power normalization}{$C=3.63P/\gamma\Sigma_fV$ fixes the flux amplitude from the power (F11).}
+\gterm{peak-to-average flux ratio}{$3.63$ for a bare cylinder: $2.32$ radial times $1.57$ axial (F11).}
+\gterm{two-group approximation}{fast and thermal diffusion equations coupled by removal and fission (F14).}
+\gterm{removal cross section $\Sigma_r$}{rate per unit fast flux at which neutrons leave the fast group (F14).}
+\gterm{group diffusion lengths $L_1$, $L_2$}{$\sqrt{D_1/\Sigma_r}$ and $\sqrt{D_2/\Sigma_a}$ (F15).}
+\gterm{Fermi age $\tau$}{$\int D/(\xi\Sigma_sE)\,dE$; the fast diffusion area, $L_1^2=\tau$ (F15).}
+\gterm{migration area, length $M^2$, $M$}{$L_1^2+L_2^2$ and its root; the one-group stand-in for two-group leakage (F17).}
+\gterm{nonleakage probability (two-group)}{$1/[(1+L_1^2B^2)(1+L_2^2B^2)]\approx1/(1+M^2B^2)$ (F16--F17).}
+\gterm{reflector}{a nonmultiplying scattering region around the core that returns escaping neutrons (F20).}
+\gterm{reflector savings $s_z$}{the reduction in critical half-height, $(\Ht-H')/2\approx\widehat MD/\widehat D$ for a thick reflector (F23--F24).}
+\gterm{flux flattening}{reduced peak-to-average ratio produced by a reflector (F25).}
+\gterm{control poison}{a deliberate absorber, modeled as $\delta\Sigma_a$ (F26).}
+\gterm{reactivity worth}{the reactivity change an absorber produces; exact form \FNRP{7.80} (F27).}
+\gterm{first-order perturbation theory}{$\rho\approx-\int\delta\Sigma_a\phi^2dV/\int\nu\Sigma_f\phi^2dV$; valid for small, weak changes (F29).}
+\gterm{integral and differential rod worth}{$\rho_{r,x}$ versus insertion and its derivative; S-curve and midplane peak (F30).}
+\gterm{tightly, loosely coupled}{small and large $\Ht/M$; governs flux tilt under rod banks (F32).}
+\end{keyterms}
+\end{multicols}
+
+\Sec{7}{Where the end-of-chapter problems live}
+\begin{handoutsmall}[8.3]
+\begin{tabularx}{\linewidth}{@{}p{0.95in}Y@{}}
+\toprule
+FNRP problem & Frames that build the needed pieces\\
+\midrule
+7.1, 7.8 & critical volume of a cylinder with $H=D$ and of a sphere for given $\kinf$, $M$: F4--F5, F9--F10, F13; sphere buckling from the Chapter~6 guide, F49--F50\\
+7.2, 7.7 & aspect ratio and $\PNL$ versus $H/D$: F13, F19\\
+7.3, 7.4, 7.5 & cylinders with specified $H/D$, half-assemblies, a tank filled to height $H$: F9--F10, F13 (for 7.5b, let $H\to\infty$ so that $B^2\to B_r^2$)\\
+7.6 & the cube by separation of variables and power normalization: F6--F7, F11\\
+7.9, 7.10, 7.11 & algebra behind the axial and reflector solutions: F7, F22\\
+7.12 & maximum-to-average flux in a critical sphere: F11 (the answer is $\pi^2/3$)\\
+7.13, 7.14 & reflected spheres: F21--F23 with the $1/r$ substitution of the Chapter~6 guide, F36\\
+7.15 & the thick-reflector savings formula: F23--F24\\
+7.16 & slab core with a nonabsorbing, nonmultiplying outer region: F22 (with $\Sigma_a=0$ the outer flux is linear in $x$)\\
+7.17, 7.18 & rod-bank interface conditions and limiting cases: F32--F33\\
+\bottomrule
+\end{tabularx}
+\end{handoutsmall}
+
+\begin{takeawaybox}[Learning objectives]
+The objectives this chapter implies, and how they compare with the Lesson 35--38 objectives already in the course, are tabulated in \texttt{reading\_guide/learning\_objectives.md}. Items flagged there as new (for example, the power normalization and peak-to-average ratio, the design chain from power to leakage through $\Ht/M$, the uniform-poison worth, the single-rod S-curve, and tight versus loose coupling) are the ones this guide spends extra frames on.
+\end{takeawaybox}
+\end{document}

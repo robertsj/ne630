@@ -130,16 +130,16 @@ available for that lesson.
      - `PDF <_static/handouts/lesson-31/lesson_31_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=dCeRWmcJYyc>`__
    * - **Lesson 32** — One-Speed Diffusion in a Homogeneous Slab
-     - —
+     - `PDF <_static/handouts/lesson-32/lesson_32_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=gcoRc_tfe54>`__
    * - **Lesson 33** — One-Speed Diffusion in Heterogeneous Slabs
-     - —
+     - `PDF <_static/handouts/lesson-33/lesson_33_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=mhXa47hdBU0>`__
    * - **Lesson 34** — Diffusion with Multiplication and an Approach to Criticality
-     - —
+     - `PDF <_static/handouts/lesson-34/lesson_34_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=KLGX_3lGhxU>`__
    * - **Lesson 35** — Criticality in Slabs, Cylinders, and Spherical Elephants
-     - —
+     - `PDF <_static/handouts/lesson-35/lesson_35_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=b3PJZsHlV3k>`__
    * - **Lesson 36** — Two-Group Diffusion and Criticality
      - —

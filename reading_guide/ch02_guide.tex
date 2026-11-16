@@ -1,0 +1,561 @@
+% Programmed reading guide for FNRP Chapter 2 (Neutron Interactions).
+% Build: make ch02_guide.pdf   (XeLaTeX via latexmk; the class is in ../handouts)
+% Every number quoted below is recomputed by tools/verify_examples.py.
+\documentclass[compact]{ne630handout}
+\usepackage{ne630guide}
+\handoutsolutionsfalse
+\hypersetup{pdftitle={NE 630 -- Reading Guide: FNRP Chapter 2, Neutron Interactions},pdfauthor={Jeremy Roberts}}
+\newcommand{\iso}[2]{\ensuremath{{}^{#1}\mathrm{#2}}}
+\newcommand{\MeV}[1]{\SI{#1}{\mega\electronvolt}}
+\newcommand{\eV}[1]{\SI{#1}{\electronvolt}}
+\newcommand{\barns}[1]{\SI{#1}{\barn}}
+\newcommand{\icm}[1]{\SI{#1}{\per\centi\meter}}
+\newcommand{\cm}[1]{\SI{#1}{\centi\meter}}
+\newcommand{\percc}[1]{\SI{#1}{\per\centi\meter\cubed}}
+\newcommand{\muc}{\mu_{\mathrm c}}
+
+\begin{document}
+\Guide{2}{Neutron Interactions}
+ {FNRP Sections 2.1--2.5 (cross sections and attenuation, the neutron energy range, the energy dependence of cross sections, and scattering kinematics). Companion handouts: Lessons 4--7.}
+ {4 (2.1--2.2), 5 and 6 (2.3--2.4), 7 (2.5).}
+
+\begin{KeyBox}{How to use this guide}
+\ifguidehandwriting
+\textbf{One cell at a time.} Use one sheet to cover all rows below the current cell and a second sheet to cover its tinted answer. Read only the current question (for example, F1(a)) and write in its ruled space. Reveal that cell\textquotesingle s answer, compare your reasoning, and correct your work. Only then uncover the next question, F1(b). Shared givens appear above each sequence; keep them available as you work.\par\smallskip
+\fi
+Same rules as the Chapter~1 guide. Each frame poses one small task; the tinted column holds the answer and commentary. \textbf{Cover the tinted column}, work the frame, then compare. Frames marked \Chain reuse the previous answer, which is restated, so a missed frame never blocks the next one. Quiz answers are upside down in the footnote.
+\end{KeyBox}
+
+\begin{KeyBox}{Notation: Lewis and the course}
+Lewis writes the nuclide number density as $N$ and Avogadro's number as $N_0=0.6023\times10^{24}$; the Lesson~4 handout writes $n_X$ (with the species named) and $N_A$. Lewis uses $\lambda$ for the mean free path; the handouts use $\ell$, to keep $\lambda$ for the decay constant of Chapter~1. Lewis's superscripts 25 and 28 mean \iso{235}{U} and \iso{238}{U}. In scattering, Lewis writes $p(E\to E')$ for a neutron of energy $E$ leaving with $E'$; Lesson~7 writes the same density as $p(E'\mid E)$. This guide follows Lewis's symbols and notes the handout's where they differ. One barn is \SI{e-24}{\centi\meter\squared}.
+\end{KeyBox}
+
+\begin{programmed}
+\GSec{Cross sections and attenuation (FNRP 2.1--2.2; Lesson 4)}
+
+\begin{pframe}[How empty is a solid?]\label{f:empty}
+\GuideContext{An atom has a radius of order \cm{e-8}; a nucleus, \cm{e-12}. Neutrons are neutral, so only nuclei stop them.}
+
+\GuideSubcell{a}{What fraction of the area of a single layer of atoms is blocked by nuclei?}{
+$(10^{-12})^2/(10^{-8})^2=10^{-8}$. A neutron passes through many millions of atomic layers between collisions.}
+
+\GuideSubcell{b}{Describe a neutron's life in one sentence.}{
+It travels in straight lines between collisions, changing direction and energy at each scattering, until it is absorbed.
+\GuideCommentary{The Lesson~4 handout (Section~1) adds two modeling assumptions used all term: there are enough neutrons that averages are meaningful, and far fewer neutrons than nuclei, so neutrons do not collide with each other.}}
+
+\end{pframe}
+
+\begin{pframe}[From one nucleus to a material]\label{f:slice}
+\GuideContext{A beam of intensity $I=n'''v$ (neutrons per \si{\centi\meter\squared} per second) enters a material with $N$ nuclei per \si{\centi\meter\cubed}, each presenting an area $\sigma$, the \Term{microscopic cross section}. A collision removes a neutron from the beam.}
+
+\GuideSubcell{a}{In a thin slice $dx$, what fraction of the beam's area is blocked?}{
+There are $N\,dx$ nuclei per \si{\centi\meter\squared} of slice, each blocking $\sigma$: the fraction is $N\sigma\,dx$.}
+
+\GuideSubcell{b}{Write the balance $I(x+dx)$, turn it into a differential equation, and solve it.}{
+$I(x+dx)=(1-N\sigma\,dx)I(x)$, so $\dfrac{dI}{dx}=-N\sigma I$ and $I(x)=I(0)e^{-N\sigma x}$, \FNRP{2.1}--(2.4).}
+
+\GuideSubcell{c}{Define the \Term{macroscopic cross section} and give the units of $\sigma$, $N$, and $\Sigma$.}{
+$\Sigma=N\sigma$, \FNRP{2.5}: \si{\centi\meter\squared} (or barns) times \si{\per\centi\meter\cubed} gives \si{\per\centi\meter}.
+\GuideCommentary{$\sigma$ belongs to a nuclide, a reaction, and a neutron energy; $\Sigma$ belongs to a material. The equation is Chapter~1's decay law with $x$ for $t$ and $\Sigma$ for $\lambda$ (Lesson~4 handout, Section~3).}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1: number densities]\label{f:density}
+\GuideContext{$N=\rho N_0/A$, \FNRP{2.10}, with $N_0=\SI{6.022e23}{\per\mole}$. Aluminum: $\rho=\SI{2.70}{\gram\per\centi\meter\cubed}$, $A=26.98$. Water: $\rho=\SI{1.00}{\gram\per\centi\meter\cubed}$, molecular weight $18.015$.}
+
+\GuideSubcell{a}{Compute the number density of aluminum atoms.}{
+$2.70\times6.022\times10^{23}/26.98=\percc{6.03e22}$.}
+
+\GuideSubcell{b}{Compute the number density of water molecules, then of hydrogen atoms.}{
+$6.022\times10^{23}/18.015=\percc{3.34e22}$ molecules; twice that, \percc{6.69e22}, hydrogen atoms.
+\GuideCommentary{Count molecules first, then apply the formula $\mathrm{H_2O}$. Keep the species in the units.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1 continued: a cross section from a transmission measurement]\label{f:trans}
+\GuideContext{A thermal-neutron beam crosses \cm{0.050} of aluminum and emerges with $I/I(0)=0.9949$. Use $N_{\mathrm{Al}}=\percc{6.03e22}$ from \ref*{f:density}.}
+
+\GuideSubcell{a}{Compute $\Sigma$.}{
+$\Sigma=-\ln(0.9949)/0.050=\icm{0.102}$.}
+
+\GuideSubcell{b}{Compute $\sigma$ in barns.}{
+$0.102/6.03\times10^{22}=\SI{1.70e-24}{\centi\meter\squared}=\barns{1.70}$.}
+
+\GuideSubcell{c}{The beam lost 0.51\% of its neutrons. Why is that number not itself a property of aluminum?}{
+It depends on the thickness chosen. Dividing by thickness gives $\Sigma$, a property of the material; dividing again by $N$ gives $\sigma$, a property of the nucleus.}
+
+\end{pframe}
+
+\begin{pframe}[Attenuation as a probability law]\label{f:prob}
+\GuideContext{$\Sigma\,dx$ is the probability that a neutron which has reached $x$ collides in the next $dx$.}
+
+\GuideSubcell{a}{What is the probability that a neutron travels a distance $x$ without colliding?}{
+$I(x)/I(0)=e^{-\Sigma x}$.}
+
+\GuideSubcell{b}{What is the probability $p(x)\,dx$ that its \emph{first} collision occurs in $dx$ about $x$? What are the units of $p$?}{
+Survive to $x$, then collide in $dx$: $p(x)\,dx=\Sigma e^{-\Sigma x}dx$, \FNRP{2.6}. $p$ is a density, in \si{\per\centi\meter}; it integrates to one.}
+
+\GuideSubcell{c}{Compute the mean distance to the first collision, the \Term{mean free path}.}{
+$\lambda=\int_0^\infty x\,\Sigma e^{-\Sigma x}dx=1/\Sigma$, \FNRP{2.7}.}
+
+\GuideSubcell{d}{What fraction of neutrons is still uncollided after one mean free path? Is that the ``half-distance''?}{
+$e^{-1}=0.368$; $63.2\%$ have collided. No: half survive at $\ln2/\Sigma=0.69\lambda$, just as $t_{1/2}=0.69\,\bar t$.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2: neutrons in water]\label{f:water}
+\GuideContext{For neutrons of a few eV take $\sigma^{\mathrm H}=\barns{20}$ and $\sigma^{\mathrm O}=\barns{3.8}$, so that $\Sigma^{\mathrm{H_2O}}=N_{\mathrm{H_2O}}(2\sigma^{\mathrm H}+\sigma^{\mathrm O})$, \FNRP{2.14}, with $N_{\mathrm{H_2O}}=\percc{3.34e22}$.}
+
+\GuideSubcell{a}{Compute $\Sigma$ and the mean free path.}{
+$3.34\times10^{22}\times43.8\times10^{-24}=\icm{1.46}$; $\lambda=\cm{0.68}$.}
+
+\GuideSubcell{b}{What fraction of a beam crosses \cm{2} of water without a collision?}{
+$e^{-2.93}=0.053$.}
+
+\GuideSubcell{c}{For a different material with $\Sigma=\icm{0.8}$ (FNRP problem~2.1): how thick must it be so that no more than 5\% pass uncollided, and what fraction make their first collision in the first \cm{2}?}{
+$x=\ln(20)/0.8=\cm{3.74}$; $1-e^{-1.6}=0.80$.}
+
+\end{pframe}
+
+\begin{pframe}[Uncollided flux: beam and point source]\label{f:point}
+\GuideContext{For the beam the \Term{uncollided flux} is $\phi_u(x)=vn_u'''(x)$, \FNRP{2.8}. For an isotropic point source of $s_p$ neutrons per second, $\phi_u(r)=s_p\,e^{-\Sigma r}/4\pi r^2$, \FNRP{2.9}.}
+
+\GuideSubcell{a}{Which factor is \Term{geometric attenuation} and which is \Term{material attenuation}? Why has the beam no geometric factor?}{
+$1/4\pi r^2$ spreads the survivors over a growing sphere; $e^{-\Sigma r}$ removes neutrons from their first flight. A parallel beam does not spread.}
+
+\GuideSubcell{b}{Compute $\phi_u$ in vacuum \SI{1}{\meter} from a source of \SI{e6}{} neutrons per second.}{
+$10^6/(4\pi\times100^2)=\SI{7.96}{\per\centi\meter\squared\per\second}$.}
+
+\GuideSubcell{c}{In a uniform medium, what is $\phi_u(2r_1)/\phi_u(r_1)$?}{
+$\tfrac14e^{-\Sigma r_1}$; in vacuum, just $\tfrac14$.}
+
+\GuideSubcell{d}{A \cm{50} shield is to cut the uncollided flux tenfold. What $\Sigma$ is needed?}{
+$e^{-50\Sigma}=0.1$, so $\Sigma=\ln(10)/50=\icm{0.046}$.
+\GuideCommentary{Collided neutrons also reach the detector, so real shields need more; Chapter~6 handles them. See the Lesson~4 handout, Section~5, and FNRP problem~2.2.}}
+
+\end{pframe}
+
+\begin{pframe}[Building a material from its composition]\label{f:mix}
+\GuideContext{Lewis gives three routes. Isotopes by atom fraction: $\Sigma=\frac{\rho N_0}{A}\sum_i\frac{N^i}{N}\sigma^i$ with $A=\sum_i(N^i/N)A_i$, \FNRP{2.12}--(2.13). Materials by volume fraction: $\Sigma=\sum_i(V_i/V)\Sigma^i$, \FNRP{2.18}. Constituents by mass fraction: $\Sigma=\sum_i(M_i/M)\frac{\rho N_0}{A_i}\sigma^i$, \FNRP{2.19}.}
+
+\GuideSubcell{a}{Which route gives the cross section of a molecule, and what is water's composite microscopic cross section?}{
+Count atoms per molecule: $\sigma^{\mathrm{H_2O}}=2\sigma^{\mathrm H}+\sigma^{\mathrm O}$, \FNRP{2.15}, times the molecular density.}
+
+\GuideSubcell{b}{A boiling channel is 40\% steam (\icm{0.057}) and 60\% liquid (\icm{1.17}) by volume. What is the mixture's $\Sigma$?}{
+$0.4(0.057)+0.6(1.17)=\icm{0.73}$: volume fractions weight \emph{macroscopic} cross sections (FNRP problem~2.4).}
+
+\GuideSubcell{c}{If water's density falls while its composition is unchanged, which of $N_i$, $\sigma_i$, and $\Sigma$ change?}{
+$N_i$ and $\Sigma$ fall in proportion; $\sigma_i$ does not change.}
+
+\end{pframe}
+
+\begin{pframe}[Enrichment]\label{f:enrich}
+\GuideContext{Atom enrichment is $\tilde e_a=N^{25}/(N^{25}+N^{28})$, \FNRP{2.20}; mass (weight) enrichment is $\tilde e_w=M^{25}/(M^{25}+M^{28})$, \FNRP{2.22}. They are quoted as a/o and w/o.}
+
+\GuideSubcell{a}{Convert \SI{4.00}{w/o} to atom enrichment using a \SI{100}{\gram} basis.}{
+\SI{4}{\gram} is $4/235=0.01702$~mol; \SI{96}{\gram} is $96/238=0.4034$~mol; $\tilde e_a=0.01702/0.4204=0.0405$, or \SI{4.05}{a/o}.}
+
+\GuideSubcell{b}{Why is the atom percent slightly larger?}{
+\iso{235}{U} is lighter, so a gram of it holds more atoms.
+\GuideCommentary{Lewis's \FNRP{2.24}, $\tilde e_a=1.0128\tilde e_w/(1+0.0128\tilde e_w)$, gives the same $0.0405$. The difference is about 1\% of the enrichment, so he then uses a single $\tilde e$, \FNRP{2.25}--(2.26).}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3: Lewis's worked example]\label{f:uo2}
+\GuideContext{$\mathrm{UO_2}$ enriched to 8\% is mixed 1:3 by volume with graphite. Data: $\sigma^{25}=\barns{607.5}$, $\sigma^{28}=\barns{11.8}$, $\sigma^{\mathrm O}=\barns{3.5}$, $\sigma^{\mathrm C}=\barns{4.9}$; $\rho_{\mathrm{UO_2}}=\SI{11.0}{\gram\per\centi\meter\cubed}$, $\rho_{\mathrm C}=\SI{1.60}{\gram\per\centi\meter\cubed}$; $N_0=0.6023\times10^{24}$.}
+
+\GuideSubcell{a}{Compute the microscopic cross section of the uranium, \FNRP{2.26}.}{
+$0.08(607.5)+0.92(11.8)=\barns{59.5}$.}
+
+\GuideSubcell{b}{Compute the microscopic and macroscopic cross sections of $\mathrm{UO_2}$ (molecular weight $238+2\times16$).}{
+$59.5+2(3.5)=\barns{66.5}$; $\Sigma=\dfrac{11.0\times0.6023}{270}\times66.5=\icm{1.63}$.}
+
+\GuideSubcell{c}{Compute $\Sigma$ for graphite.}{
+$\dfrac{1.60\times0.6023}{12}\times4.9=\icm{0.39}$.}
+
+\GuideSubcell{d}{Combine by volume fraction.}{
+$\tfrac14(1.63)+\tfrac34(0.39)=\icm{0.70}$.
+\GuideCommentary{Three routes in one problem: atom fractions for the isotopes, atoms per molecule for the oxide, volume fractions for the mixture. FNRP problems~2.8 and 2.13 are variations.}}
+
+\end{pframe}
+
+\begin{pframe}[Reaction types]\label{f:types}
+\GuideContext{The cross section so far is the \Term{total} cross section. It divides as $\sigma_t=\sigma_s+\sigma_a$, with $\sigma_s=\sigma_n+\sigma_{n'}$ (elastic plus inelastic) and, in fuel, $\sigma_a=\sigma_\gamma+\sigma_f$ (capture plus fission), \FNRP{2.27}--(2.29). Macroscopic cross sections add the same way.}
+
+\GuideSubcell{a}{Given a collision, what are the probabilities of scattering and of absorption? Given an absorption in fuel, the probability of fission?}{
+$\sigma_s/\sigma_t$ and $\sigma_a/\sigma_t$; $\sigma_f/\sigma_a$.}
+
+\GuideSubcell{b}{Distinguish elastic scattering, inelastic scattering, and capture by what happens to the neutron and the nucleus.}{
+Elastic: kinetic energy is conserved, a billiard-ball collision. Inelastic: the neutron leaves the nucleus excited, and the nucleus then emits gamma rays. Capture: the neutron stays and the compound nucleus sheds its excitation as gamma rays, $(\mathrm n,\gamma)$.}
+
+\GuideSubcell{c}{Elastic scattering removes a neutron from the uncollided beam. Does it remove it from the reactor?}{
+No. Only absorption (and leakage) ends a neutron's life; attenuation is not the same as absorption.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4: if a neutron interacts, what happens?]\label{f:mixprob}
+\GuideContext{Lesson~5 (handout Section~5) mixes one water molecule per \iso{235}{U} atom, so the densities of H, O, and U are $2n_0$, $n_0$, and $n_0$. At the chosen energy: H has $\sigma_e=\barns{20}$, $\sigma_\gamma=\barns{0.1}$; O has $\sigma_e=\barns{4}$; \iso{235}{U} has $\sigma_e=\barns{15}$, $\sigma_\gamma=\barns{100}$, $\sigma_f=\barns{500}$. Every reaction rate is $n_i\sigma_x^i\phi$, so compare the strengths $\Sigma_x/n_0$.}
+
+\GuideSubcell{a}{Compute the elastic, absorption, and total strengths.}{
+Elastic: $2(20)+4+15=\barns{59}$. Absorption: $2(0.1)+100+500=\barns{600.2}$. Total: \barns{659.2}.}
+
+\GuideSubcell{b}{Given an interaction, find the probability that it is elastic scattering, and that it is an absorption in uranium.}{
+$59/659.2=0.090$ and $600/659.2=0.91$.}
+
+\GuideSubcell{c}{Given an absorption, find the probability that it is a fission.}{
+$500/600.2=0.83$.}
+
+\GuideSubcell{d}{What is the probability that a neutron's first interaction is a fission occurring within one mean free path?}{
+$\dfrac{\Sigma_f}{\Sigma_t}\big(1-e^{-1}\big)=\dfrac{500}{659.2}(0.632)=0.48$.
+\GuideCommentary{A ratio of rates is a conditional probability; name the condition before forming the ratio. The flux cancels.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (b); 4 (a).}
+\item The macroscopic cross section $\Sigma$ is \opt{a} the area of one nucleus; \opt{b} the probability of interaction per unit path length; \opt{c} the mean free path; \opt{d} the beam intensity.
+\item After two mean free paths the uncollided fraction of a beam is \opt{a} $1/2$; \opt{b} $1/4$; \opt{c} $e^{-2}$; \opt{d} zero.
+\item Halving the density of a material at fixed composition \opt{a} halves $\sigma$; \opt{b} halves $\Sigma$; \opt{c} halves the mean free path; \opt{d} changes nothing.
+\item Uranium of \SI{5}{w/o} enrichment has an atom enrichment that is \opt{a} slightly more than 5\%; \opt{b} slightly less than 5\%; \opt{c} exactly 5\%; \opt{d} about 20\%.
+\end{quiz}}
+
+\GSec{The neutron energy range (FNRP 2.3; Lesson 5)}
+
+\begin{pframe}[The top of the range: fission neutrons]\label{f:chi}
+\GuideContext{$\chi(E)\,dE$ is the fraction of fission neutrons born between $E$ and $E+dE$. Lewis approximates the \Term{fission spectrum} by $\chi(E)=0.453\,e^{-1.036E}\sinh\!\sqrt{2.29E}$, $E$ in MeV, \FNRP{2.31}, with $\int_0^\infty\chi\,dE=1$.}
+
+\GuideSubcell{a}{Numerical integration gives a mean energy of \MeV{1.98} and a most probable energy of \MeV{0.72}. Why do the two differ?}{
+The spectrum is skewed: a long high-energy tail pulls the mean above the peak.}
+
+\GuideSubcell{b}{The same integration gives 1.4\% of fission neutrons below \MeV{0.1} and 0.1\% above \MeV{10} (FNRP problem~2.5). What do these numbers fix?}{
+The \Term{fast} range, \MeV{0.1} to \MeV{10}, holds essentially all fission births; \MeV{10} is the practical upper limit of neutron energies in a reactor.}
+
+\end{pframe}
+
+\begin{pframe}[The bottom of the range: thermal neutrons]\label{f:thermal}
+\GuideContext{Nuclei at absolute temperature $T$ have mean kinetic energy $\tfrac32kT$, \FNRP{2.33}, with $k=\SI{8.617e-5}{\electronvolt\per\kelvin}$. Classically $v=\sqrt{2E/m}=\SI{1.383e4}{\meter\per\second}\times\sqrt{E/\eV{1}}$.}
+
+\GuideSubcell{a}{Compute $kT$ and $\tfrac32kT$ at room temperature, $T=\SI{293.61}{\kelvin}$.}{
+$kT=\eV{0.0253}$ and $\tfrac32kT=\eV{0.0379}$.}
+
+\GuideSubcell{b}{Compute the speed of a neutron at \eV{0.0253} and at \MeV{2}.}{
+$1.383\times10^4\sqrt{0.0253}=\SI{2200}{\meter\per\second}$, and $\SI{1.96e7}{\meter\per\second}$, about 9000 times faster.}
+
+\GuideSubcell{c}{Through how many orders of magnitude in energy must a fission neutron fall to become thermal?}{
+$2\times10^6/0.0253=8\times10^7$: about eight. With the tails, reactor neutrons span \eV{0.001} to \MeV{10}, ten orders of magnitude.}
+
+\GuideSubcell{d}{Name Lewis's three energy ranges and the physics that marks each boundary.}{
+\Term{Thermal}, below \eV{1}: thermal motion of the nuclei matters. \Term{Epithermal} (intermediate), \eV{1} to \MeV{0.1}: resonances and slowing down. \Term{Fast}, above \MeV{0.1}: fission neutrons are born here.}
+
+\end{pframe}
+
+\begin{pframe}[The Maxwell--Boltzmann distribution]\label{f:mb}
+\GuideContext{With no absorption, neutrons would come to equilibrium with the nuclei, with the energy distribution $M(E)=\dfrac{2\pi}{(\pi kT)^{3/2}}E^{1/2}e^{-E/kT}$, \FNRP{2.34}, normalized to one.}
+
+\GuideSubcell{a}{Find the most probable energy by setting $dM/dE=0$ (FNRP problem~2.6c).}{
+$\tfrac12E^{-1/2}-E^{1/2}/kT=0$, so $E=\tfrac12kT$.}
+
+\GuideSubcell{b}{Real media absorb. Which way does the thermal spectrum shift, and why?}{
+Upward in energy: neutrons are absorbed before equilibrium is complete, and low-energy neutrons are absorbed preferentially by $1/v$ absorbers. Chapter~3 calls this spectral hardening.
+\GuideCommentary{$M(E)$ describes the neutron \emph{density}. The \emph{flux} spectrum carries an extra factor of speed and peaks at $kT$ instead; the Chapter~3 guide returns to this.}}
+
+\end{pframe}
+
+\GSec{How cross sections depend on energy (FNRP 2.4; Lessons 5--6)}
+
+\begin{pframe}[Hydrogen: the simplest case]\label{f:hyd}
+\GuideContext{Hydrogen has a flat elastic scattering cross section (about \barns{20} from \eV{1} to \SI{10}{\kilo\electronvolt}) and a capture cross section $\sigma_a(E)=\sqrt{E_o/E}\,\sigma_a(E_o)$, \FNRP{2.36}, with $E_o=\eV{0.0253}$ and $\sigma_a(E_o)=\barns{0.333}$.}
+
+\GuideSubcell{a}{Why is this called a \Term{$1/v$ cross section}? By what factor does it change when $E$ rises a hundredfold?}{
+$E\propto v^2$, so $\sqrt{E_o/E}=v_o/v$. It falls by a factor of ten. A slower neutron spends longer near the nucleus.}
+
+\GuideSubcell{b}{Compute hydrogen's capture cross section at \eV{1}.}{
+$0.333\sqrt{0.0253}=\barns{0.053}$: capture matters only in the thermal range.}
+
+\GuideSubcell{c}{Why can hydrogen not scatter inelastically?}{
+A single proton has no internal structure, hence no excited states to absorb energy.}
+
+\end{pframe}
+
+\begin{pframe}[Potential scattering][3]\label{f:pot}
+\Term{Potential scattering} is a billiard-ball bounce off the nuclear surface, nearly independent of energy, with cross section $4\pi R^2$ and $R=1.25\times10^{-13}A^{1/3}$~cm. Evaluate $R$ and $4\pi R^2$ for \iso{238}{U}.
+\response
+$R=1.25\times10^{-13}(238)^{1/3}=\cm{7.75e-13}$ and $4\pi R^2=\SI{7.5e-24}{\centi\meter\squared}=\barns{7.5}$.
+\GuideCommentary{A few barns is the natural size of a nucleus. Cross sections of thousands of barns therefore signal something else: a resonance.}
+\end{pframe}
+
+\begin{pframe}[Compound-nucleus formation]\label{f:cn}
+\GuideContext{A neutron of mass $m$ and speed $v$ is absorbed by a stationary nucleus of mass $Am$; the compound nucleus moves off at speed $V$.}
+
+\GuideSubcell{a}{Use conservation of momentum to find $V$, then the kinetic energy that disappears.}{
+$mv=(1+A)mV$, so $V=v/(1+A)$. Lost: $\tfrac12mv^2-\tfrac12(1+A)mV^2=\dfrac{A}{1+A}\,\tfrac12mv^2$, \FNRP{2.40}. This is the kinetic energy in the center-of-mass system, $E_{cm}$.}
+
+\GuideSubcell{b}{What is the excitation energy of the compound nucleus? Why does even a thermal neutron excite a nucleus strongly?}{
+$E_{cm}+E_B$, where $E_B$ is the binding energy of the added neutron, typically several MeV. For a thermal neutron $E_{cm}$ is negligible, but $E_B$ alone leaves the nucleus highly excited.}
+
+\GuideSubcell{c}{List the ways the compound nucleus can de-excite.}{
+Re-emit the neutron (resonance elastic scattering, or inelastic scattering if a gamma ray is also emitted); emit gamma rays only (capture); or, in fissionable nuclei, fission.}
+
+\end{pframe}
+
+\begin{pframe}[Resonances]\label{f:res}
+\GuideSubcell{a}{Why do cross sections show sharp peaks at particular neutron energies?}{
+The compound nucleus has discrete quantum states. When $E_{cm}+E_B$ matches one, formation is far more likely: a \Term{resonance}.}
+
+\GuideSubcell{b}{Lewis lists the lowest resonances: \iso{12}{C} at \MeV{2}, \iso{16}{O} at \SI{400}{\kilo\electronvolt}, \iso{23}{Na} at \SI{3}{\kilo\electronvolt}, \iso{238}{U} at \eV{6.6}. What trend is this, and why?}{
+Heavier nuclei have more nucleons, hence more and more closely spaced states, so their resonances begin at lower energies and crowd together.}
+
+\GuideSubcell{c}{The \Term{Breit--Wigner} capture formula \FNRP{2.41} contains the factor $L(E)=1/[1+4(E-E_r)^2/\Gamma^2]$. Evaluate $L$ at $E_r$ and at $E_r\pm\Gamma/2$. What do $E_r$ and $\Gamma$ control?}{
+$L(E_r)=1$ and $L(E_r\pm\Gamma/2)=\tfrac12$: $E_r$ locates the peak and $\Gamma$ is its full width at half maximum (FNRP problem~2.9, if the slowly varying $\sqrt{E_r/E}$ is ignored).}
+
+\GuideSubcell{d}{For a nonfissionable nucleus $\Gamma=\Gamma_\gamma+\Gamma_n$. What do the ratios $\Gamma_\gamma/\Gamma$ and $\Gamma_n/\Gamma$ mean?}{
+The probabilities that the compound state decays by gamma emission (capture) or by re-emitting the neutron (resonance scattering).}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 5: how narrow is a resonance?]\label{f:bw}
+\GuideContext{Take an illustrative resonance, roughly the size of the lowest one in \iso{238}{U}: $E_r=\eV{6.67}$, $\Gamma=\eV{0.027}$, $\Gamma_\gamma/\Gamma=0.95$, $\sigma_o=\barns{2.0e4}$, in $\sigma_\gamma(E)=\sigma_o\dfrac{\Gamma_\gamma}{\Gamma}\Big(\dfrac{E_r}{E}\Big)^{1/2}L(E)$. Figure~\ref{fig:bw} plots it.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}
+\begin{semilogyaxis}[width=\linewidth,height=4.2cm,xlabel={$E$ (eV)},ylabel={$\sigma_\gamma$ (b)},xmin=6.2,xmax=7.15,ymin=3,ymax=4e4,
+ tick label style={font=\scriptsize},label style={font=\scriptsize},domain=6.2:7.15,samples=400]
+\addplot[wcprimary,thick] {19000*sqrt(6.67/x)/(1+4*(x-6.67)^2/0.027^2)};
+\addplot[black!50,thin,dashed] coordinates {(6.2,7.5) (7.15,7.5)};
+\node[font=\scriptsize,black!60,anchor=south west] at (axis cs:6.21,7.5) {$4\pi R^2$};
+\end{semilogyaxis}
+\end{tikzpicture}
+\gfigcap{An illustrative single-level Breit--Wigner capture resonance (the parameters of \ref*{f:bw}; not evaluated data). The dashed line is the potential-scattering size from \ref*{f:pot}.}\label{fig:bw}
+\end{center}}}
+
+\GuideSubcell{a}{Compute $\sigma_\gamma$ at the peak.}{
+$2.0\times10^4\times0.95=\barns{1.9e4}$, thousands of times the geometric size.}
+
+\GuideSubcell{b}{Compute $\sigma_\gamma$ ten widths away, at $E_r+10\Gamma$.}{
+$L=1/(1+400)=0.0025$, so about \barns{47}: the peak has dropped four-hundredfold within \eV{0.27}.}
+
+\GuideSubcell{c}{Far below the resonance, $|E-E_r|\gg\Gamma$ and $L$ is nearly constant. How does $\sigma_\gamma$ then vary with $E$?}{
+As $\sqrt{E_r/E}$, that is, $1/v$: the low-energy tail of a resonance is the origin of $1/v$ capture. With these numbers it is \barns{1.3} at \eV{0.0253}.
+\GuideCommentary{To build a cross section over many resonances, sum one such term per resonance (Lesson~6 handout, Section~4). The scattering formula \FNRP{2.42} adds potential scattering and an interference term that produces the dip just below $E_r$.}}
+
+\end{pframe}
+
+\begin{pframe}[Doppler broadening]\label{f:doppler}
+\GuideSubcell{a}{The formulas above assume a stationary nucleus. What changes when the nuclei are hot?}{
+The relative speed of neutron and nucleus is smeared by the nuclei's thermal motion, so the resonance must be averaged over a Maxwell--Boltzmann distribution of target velocities: \Term{Doppler broadening}.}
+
+\GuideSubcell{b}{What happens to the peak height and the width as temperature rises?}{
+The peak falls and the resonance widens; the area under it is nearly unchanged (FNRP Fig.~2.7).}
+
+\GuideSubcell{c}{Why will this matter later?}{
+A broader resonance captures more of the neutrons slowing past it, so heating the fuel lowers $k$: the negative temperature feedback of Chapter~9. The Chapter~3 guide explains why width matters more than height (self-shielding).}
+
+\end{pframe}
+
+\begin{pframe}[Thresholds and fissionable nuclei]\label{f:thresh}
+\GuideSubcell{a}{Why does inelastic scattering have a \Term{threshold} energy?}{
+The neutron must supply enough energy to lift the target to its first excited state; below that the channel is closed and $\sigma_{n'}=0$.}
+
+\GuideSubcell{b}{Thresholds: \iso{12}{C} \MeV{4.8}, \iso{16}{O} \MeV{6.4}, \iso{238}{U} \MeV{0.04}. Where does inelastic scattering matter in a reactor?}{
+Only in heavy nuclei such as uranium, whose low-lying levels are reachable by fission neutrons. In moderators it is negligible.}
+
+\GuideSubcell{c}{What other threshold does \iso{238}{U} have, and how does that separate fertile from fissile nuclei?}{
+Fission, above about \MeV{1}. A fissile nucleus (\iso{235}{U}, \iso{239}{Pu}) fissions at any neutron energy; a fertile one only above its threshold.
+\GuideCommentary{The Lesson~6 handout asks you to recognize three shapes at sight: a smooth $1/v$ trend, a threshold, and a resonance peak.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (b); 3 (a); 4 (c).}
+\item A neutron in thermal equilibrium at room temperature has an energy of about \opt{a} \eV{1}; \opt{b} \MeV{2}; \opt{c} \eV{0.025}; \opt{d} \SI{25}{\kilo\electronvolt}.
+\item A $1/v$ cross section of \barns{10} at \eV{0.0253} is, at \eV{2.53}, \opt{a} \barns{0.1}; \opt{b} \barns{1}; \opt{c} \barns{10}; \opt{d} \barns{100}.
+\item In the Breit--Wigner formula $\Gamma$ is \opt{a} the width of the resonance at half its height; \opt{b} the resonance energy; \opt{c} the peak cross section; \opt{d} the nuclear radius.
+\item Raising the fuel temperature makes a resonance \opt{a} taller and narrower; \opt{b} disappear; \opt{c} lower and wider; \opt{d} shift to higher energy.
+\end{quiz}}
+
+\GSec{Scattering and slowing down (FNRP 2.5; Lesson 7)}
+
+\begin{pframe}[The head-on collision]\label{f:headon}
+\GuideContext{A neutron of mass $m$ and speed $v$ strikes a stationary nucleus of mass $Am$ head on. Momentum and kinetic energy are conserved, \FNRP{2.44}--(2.45), giving $E'/E=\big(\frac{A-1}{A+1}\big)^2\equiv\alpha$, \FNRP{2.46} and (2.48).}
+
+\GuideSubcell{a}{Evaluate $\alpha$ for \iso{1}{H}, \iso{2}{H}, \iso{12}{C}, and \iso{238}{U}.}{
+$0$, $\tfrac19=0.111$, $(11/13)^2=0.716$, and $(237/239)^2=0.983$.}
+
+\GuideSubcell{b}{What is the largest fraction of its energy a neutron can lose in one elastic collision with each?}{
+$1-\alpha$: 100\%, 89\%, 28\%, and 1.7\%. A head-on collision is the worst case; glancing collisions lose less.}
+
+\GuideSubcell{c}{State the conclusion for reactor design.}{
+Light nuclei slow neutrons efficiently; heavy nuclei barely change their energy by elastic scattering.}
+
+\end{pframe}
+
+\begin{pframe}[Energy and angle]\label{f:angles}
+\GuideContext{Lesson~7 works in the center-of-mass (CM) frame, where the scattering angle $\theta_{\mathrm c}$ has cosine $\muc$. The handout (Section~4) gives $\dfrac{E'}{E}=\dfrac{A^2+2A\muc+1}{(A+1)^2}$ and a mean laboratory cosine $\bar\mu_{\mathrm L}=2/(3A)$ for scattering that is \Term{isotropic in the CM frame}.}
+
+\GuideSubcell{a}{Check the two extremes $\muc=+1$ (a miss) and $\muc=-1$ (head on).}{
+$\muc=1$: $E'/E=1$. $\muc=-1$: $E'/E=(A-1)^2/(A+1)^2=\alpha$. So $\alpha E\le E'\le E$.}
+
+\GuideSubcell{b}{For carbon, what is $E'/E$ at $\muc=0$?}{
+$(144+1)/169=0.858$.}
+
+\GuideSubcell{c}{Compute $\bar\mu_{\mathrm L}$ for hydrogen and carbon. What does a positive value mean?}{
+$0.667$ and $0.056$. On average the neutron keeps going forward in the laboratory, strongly so for light targets; heavy targets scatter nearly isotropically.
+\GuideCommentary{This forward bias returns in Chapter~6 as the transport correction to the diffusion coefficient.}}
+
+\end{pframe}
+
+\begin{pframe}[The scattered-energy distribution]\label{f:pdf}
+\GuideContext{$E'$ is linear in $\muc$, and isotropic CM scattering makes $\muc$ uniform on $[-1,1]$, so $E'$ is uniform on $[\alpha E,E]$: $p(E\to E')=1/[(1-\alpha)E]$ for $\alpha E\le E'\le E$ and zero otherwise, \FNRP{2.47}.}
+
+\GuideSubcell{a}{Check that $p$ is a probability density in $E'$.}{
+It is nonnegative, and $\int_{\alpha E}^{E}\dfrac{dE'}{(1-\alpha)E}=1$. Its units are \si{\per\electronvolt}.}
+
+\GuideSubcell{b}{Compute the mean energy after a collision and the mean energy loss.}{
+The mean of a uniform density is the midpoint: $\overline{E'}=\tfrac12(1+\alpha)E$, so $\overline{E-E'}=\tfrac12(1-\alpha)E$ (FNRP problem~2.18).}
+
+\GuideSubcell{c}{What does $\Sigma_s(E\to E')=\Sigma_s(E)\,p(E\to E')$, \FNRP{2.50}, represent?}{
+The cross section for scattering at $E$ \emph{and} emerging in $dE'$ about $E'$: how often times where to. It is the \Term{scattering kernel} of every balance in Chapter~3.
+\GuideCommentary{The Lesson~7 handout (Sections~5--6) reviews densities, expected values, and the change of variables $p_Y|dy|=p_X|dx|$ used here to pass from $\muc$ to $E'$.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6: one collision at 1 MeV]\label{f:frac}
+\GuideContext{A neutron scatters elastically at $E=\MeV{1}$ (FNRP problem~2.14). The probability that it emerges below $E_c$ is the length of $[\alpha E,E_c]$ divided by the length of $[\alpha E,E]$.}
+
+\GuideSubcell{a}{Find the probability of emerging below \MeV{0.5} from hydrogen.}{
+$\alpha=0$: $0.5/1=0.50$.}
+
+\GuideSubcell{b}{Repeat for deuterium ($\alpha=0.111$).}{
+$(0.5-0.111)/(1-0.111)=0.44$.}
+
+\GuideSubcell{c}{Repeat for carbon ($\alpha=0.716$) and \iso{238}{U}.}{
+Zero for both: the lowest possible energy, $\alpha E$, is \MeV{0.72} for carbon and \MeV{0.98} for uranium.
+\GuideCommentary{When the interval is empty the probability is zero, not negative. The same check appears in the multigroup scattering integrals of the Chapter~3 guide.}}
+
+\end{pframe}
+
+\begin{pframe}[The slowing-down decrement]\label{f:xi}
+\GuideContext{The \Term{slowing-down decrement} is the mean logarithmic energy loss per collision, $\xi\equiv\overline{\ln(E/E')}=\int\ln(E/E')\,p(E\to E')\,dE'$, \FNRP{2.54}.}
+
+\GuideSubcell{a}{Substitute (2.47) and $x=E'/E$, and evaluate. (Use $\int\ln x\,dx=x\ln x-x$.)}{
+$\xi=\dfrac{1}{1-\alpha}\int_\alpha^1(-\ln x)\,dx=\dfrac{1-\alpha+\alpha\ln\alpha}{1-\alpha}=1+\dfrac{\alpha}{1-\alpha}\ln\alpha$, \FNRP{2.56}.}
+
+\GuideSubcell{b}{What is $\xi$ for hydrogen?}{
+As $\alpha\to0$, $\alpha\ln\alpha\to0$, so $\xi=1$ (FNRP problem~2.17).}
+
+\GuideSubcell{c}{Why average the \emph{logarithm} of the energy ratio instead of the energy loss?}{
+$E$ cancelled: $\xi$ depends only on $A$, not on the neutron's energy. Each collision multiplies the energy by a random factor, so logarithms add, and $\xi$ is the same step size at \MeV{1} as at \eV{1}.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 7: counting collisions]\label{f:ncoll}
+\GuideContext{If each collision lowers $\ln E$ by $\xi$ on average, then $n=\dfrac1\xi\ln(E_0/E_n)$, \FNRP{2.59}. For $A>1$, $\xi\approx2/(A+2/3)$, \FNRP{2.57}. From \ref*{f:headon}: $\alpha=0.111$ for \iso{2}{H}, $0.716$ for \iso{12}{C}, $0.983$ for \iso{238}{U}.}
+
+\GuideSubcell{a}{Compute $\xi$ for \iso{2}{H} exactly and from the approximation.}{
+$1+\dfrac{0.111}{0.889}\ln(0.111)=0.725$; approximately, $2/2.667=0.750$, about 3\% high.}
+
+\GuideSubcell{b}{For \iso{12}{C} and \iso{238}{U} the approximation is excellent. Evaluate it.}{
+$2/12.67=0.158$ and $2/238.67=0.0084$.}
+
+\GuideSubcell{c}{Compute $\ln(E_0/E_n)$ for slowing from \MeV{2} to \eV{0.025}, then $n$ for H, D, C, and \iso{238}{U}.}{
+$\ln(8\times10^7)=18.2$. $n=18.2/\xi$: 18, 25, 115, and about 2200.
+\GuideCommentary{Lewis quotes 2275 for \iso{238}{U}, which follows from rounding $\xi$ to $0.008$.}}
+
+\GuideSubcell{d}{The \emph{fewest} collisions occur if every one is head on, each multiplying $E$ by $\alpha$. How few can take a neutron from \MeV{1} to \eV{1} in carbon? (FNRP problem~2.15)}{
+$n\ge\ln(10^6)/\ln(1/\alpha)=13.8/0.334=41.3$, so 42 collisions, against an average of $13.8/0.158=88$.}
+
+\end{pframe}
+
+\begin{pframe}[Mixtures: the decrement of water]\label{f:xibar}
+\GuideContext{For several nuclides the decrement is weighted by scattering rate: $\bar\xi=\dfrac1{\Sigma_s}\sum_i\xi_i\Sigma_{si}$, \FNRP{2.61}. For water use $\sigma_s^{\mathrm H}=\barns{20}$, $\sigma_s^{\mathrm O}=\barns{3.8}$, $\xi_{\mathrm H}=1$, $\xi_{\mathrm O}=0.12$.}
+
+\GuideSubcell{a}{Why weight by $\Sigma_{si}$ and not by atom fraction?}{
+$\bar\xi$ is the mean log loss \emph{per collision}, and $\Sigma_{si}/\Sigma_s$ is the probability that a given collision is with nuclide $i$.}
+
+\GuideSubcell{b}{Evaluate $\bar\xi_{\mathrm{H_2O}}$, \FNRP{2.62}.}{
+$\dfrac{2(1)(20)+0.12(3.8)}{2(20)+3.8}=\dfrac{40.46}{43.8}=0.924$. Hydrogen dominates because it has two atoms and five times the cross section.}
+
+\GuideSubcell{c}{Lesson~7 uses $\xi_{\mathrm{water}}=0.93$. How many collisions slow a neutron from \MeV{2} to \eV{1}?}{
+$n=\ln(2\times10^6)/0.93=14.5/0.93=15.6$, about 16.}
+
+\end{pframe}
+
+\begin{pframe}[Inelastic scattering and the shape of the spectrum]\label{f:inel}
+\GuideSubcell{a}{A neutron of energy $E$ excites a level at energy $E_1$ of a heavy nucleus. With what energy does it leave?}{
+About $E'=E-E_1$; with several levels available, one of $E-E_1$, $E-E_2$, \ldots\ The loss is set by the level excited, not by the mass ratio.}
+
+\GuideSubcell{b}{Which process slows neutrons in a moderator, and which in uranium?}{
+Elastic scattering in light nuclei, at all energies. Inelastic scattering in heavy nuclei, above their thresholds (tens of keV and up), where it removes far more energy than their elastic scattering can.}
+
+\GuideSubcell{c}{Define a \Term{soft} (thermal) and a \Term{hard} (fast) spectrum in terms of the competition this chapter has set up.}{
+Soft: energy loss per collision and $\Sigma_s/\Sigma_a$ are large, so neutrons reach thermal energies before being absorbed. Hard: neutrons are absorbed before they slow down much, and the spectrum stays near the fission spectrum. Chapter~3 quantifies both.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (a); 3 (c); 4 (b).}
+\item After one elastic collision with hydrogen a \MeV{1} neutron has an energy that is \opt{a} exactly \MeV{0.5}; \opt{b} equally likely to be anywhere from 0 to \MeV{1}; \opt{c} always zero; \opt{d} always above \MeV{0.72}.
+\item The slowing-down decrement $\xi$ is the mean value of \opt{a} $\ln(E/E')$; \opt{b} $E-E'$; \opt{c} $E'/E$; \opt{d} the scattering angle.
+\item About how many collisions with carbon thermalize a fission neutron? \opt{a} 18; \opt{b} 25; \opt{c} 115; \opt{d} 2200.
+\item In uranium, fast neutrons lose energy mainly by \opt{a} elastic scattering; \opt{b} inelastic scattering; \opt{c} capture; \opt{d} Doppler broadening.
+\end{quiz}}
+
+\end{programmed}
+
+\ifguidehandwriting\clearpage\fi
+
+\Sec{5}{Key terms}
+\begin{multicols}{2}
+\begin{keyterms}
+\gterm{microscopic cross section $\sigma$}{effective area of one nucleus for a given reaction and neutron energy; barns (\ref*{f:slice}).}
+\gterm{macroscopic cross section $\Sigma$}{$N\sigma$; interaction probability per unit path length (\ref*{f:slice}).}
+\gterm{barn}{$10^{-24}\ \mathrm{cm^2}$ (\ref*{f:slice}).}
+\gterm{beam intensity, uncollided flux}{$I=n'''v$; the neutrons that have not yet collided (\ref*{f:slice}, \ref*{f:point}).}
+\gterm{mean free path $\lambda$ ($\ell$)}{$1/\Sigma$; mean distance to the first collision (\ref*{f:prob}).}
+\gterm{geometric, material attenuation}{$1/4\pi r^2$ spreading; $e^{-\Sigma r}$ removal (\ref*{f:point}).}
+\gterm{nuclide density $N$}{$\rho N_0/A$ (\ref*{f:density}).}
+\gterm{enrichment, a/o and w/o}{fissile fraction of the uranium by atoms or by mass (\ref*{f:enrich}).}
+\gterm{total, scattering, absorption}{$\sigma_t=\sigma_s+\sigma_a$ (\ref*{f:types}).}
+\gterm{elastic, inelastic scattering}{$\sigma_n$ conserves kinetic energy; $\sigma_{n'}$ leaves the nucleus excited (\ref*{f:types}, \ref*{f:inel}).}
+\gterm{capture, fission}{$\sigma_a=\sigma_\gamma+\sigma_f$ (\ref*{f:types}).}
+\gterm{fission spectrum $\chi(E)$}{energy distribution of fission neutrons; mean \MeV{2} (\ref*{f:chi}).}
+\gterm{thermal, epithermal, fast}{below \eV{1}; \eV{1} to \MeV{0.1}; above \MeV{0.1} (\ref*{f:thermal}).}
+\gterm{Maxwell--Boltzmann distribution}{equilibrium energy distribution at temperature $T$ (\ref*{f:mb}).}
+\gterm{$1/v$ cross section}{$\sigma_a\propto E^{-1/2}$ (\ref*{f:hyd}).}
+\gterm{potential scattering}{energy-independent scattering from the nuclear surface, $4\pi R^2$ (\ref*{f:pot}).}
+\gterm{compound nucleus, excitation energy}{target plus neutron; $E_{cm}+E_B$ (\ref*{f:cn}).}
+\gterm{resonance; $E_r$, $\Gamma$}{a peak where the excitation matches a nuclear level; its energy and width (\ref*{f:res}).}
+\gterm{Breit--Wigner formula}{the single-level resonance shape \FNRP{2.41}--(2.42) (\ref*{f:res}--\ref*{f:bw}).}
+\gterm{Doppler broadening}{thermal smearing of a resonance: lower, wider (\ref*{f:doppler}).}
+\gterm{threshold reaction}{zero cross section below a threshold energy (\ref*{f:thresh}).}
+\gterm{collision parameter $\alpha$}{$(A-1)^2/(A+1)^2$; the smallest $E'/E$ (\ref*{f:headon}).}
+\gterm{isotropic in the CM frame}{all CM deflection angles equally likely (\ref*{f:angles}).}
+\gterm{scattering kernel}{$\Sigma_s(E\to E')=\Sigma_s(E)p(E\to E')$ (\ref*{f:pdf}).}
+\gterm{slowing-down decrement $\xi$}{mean $\ln(E/E')$ per elastic collision (\ref*{f:xi}).}
+\gterm{neutron slowing down}{energy degradation by scattering (\ref*{f:ncoll}).}
+\gterm{soft, hard spectrum}{near thermal equilibrium; near the fission spectrum (\ref*{f:inel}).}
+\end{keyterms}
+\end{multicols}
+
+\Sec{6}{Where the end-of-chapter problems live}
+\begin{handoutsmall}[8.3]
+\begin{tabularx}{\linewidth}{@{}p{0.95in}Y@{}}
+\toprule
+FNRP problem & Frames that build the needed pieces\\
+\midrule
+2.1, 2.3, 2.12 & attenuation, mean free path, first-collision fractions, and a cross section from a measurement: \ref*{f:slice}--\ref*{f:water}\\
+2.2 & point source with and without a shield: \ref*{f:point}\\
+2.4, 2.13 & water, steam, and mixtures by volume: \ref*{f:density}, \ref*{f:mix}\\
+2.5 & fractions of the fission spectrum: \ref*{f:chi} (integrate (2.31) numerically)\\
+2.6 & normalization, mean, and mode of $M(E)$: \ref*{f:mb}\\
+2.7, 2.11 & boron as a thermal absorber: \ref*{f:trans}, \ref*{f:mix}, \ref*{f:hyd}\\
+2.8 & enriched $\mathrm{UO_2}$: \ref*{f:enrich}--\ref*{f:uo2}\\
+2.9 & $\Gamma$ as the width at half height: \ref*{f:res}\\
+2.10, 2.17 & verifying (2.46) and (2.56); $\xi=1$ for hydrogen: \ref*{f:headon}, \ref*{f:xi}\\
+2.14, 2.18 & probabilities and averages after one collision: \ref*{f:pdf}--\ref*{f:frac}\\
+2.15 & minimum number of collisions: \ref*{f:ncoll}\\
+2.16 & decrement of a compound: \ref*{f:xibar}\\
+\bottomrule
+\end{tabularx}
+\end{handoutsmall}
+
+\begin{takeawaybox}[Learning objectives]
+The objectives this chapter implies, and how they compare with the Lesson 4--7 objectives already in the course, are tabulated in \texttt{reading\_guide/learning\_objectives.md}. Items flagged there as new (for example, the first-collision probability density, volume-fraction mixing, the excitation energy of a compound nucleus, the $1/v$ tail of a resonance, and the minimum number of collisions) are the ones this guide spends extra frames on.
+\end{takeawaybox}
+\end{document}

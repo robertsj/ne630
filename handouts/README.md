@@ -134,11 +134,10 @@ the principal review items.
 
 Several source inconsistencies remain for instructional review: L29's feedback
 sign, L30's ODE algebra, L33's printed
-flux/partial-current relation; L34's boundary/continuity notation and case labels;
-and L35's eigenproblem coefficient and critical-width expression. L35's title
-also promises cylindrical material while the stored deck returns to transport
-review after its slab examples. These have been preserved rather than silently
-corrected. See the backend guide and manifest for specifics.
+flux/partial-current relation; L34's boundary/continuity notation and case labels.
+See the backend guide and manifest for specifics. Lesson 35 has since been
+trimmed to its four slab-criticality sections, with a matching title/objective
+and corrected absorption coefficient and critical-width expression.
 
 ## Revised Lesson 29
 

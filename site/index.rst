@@ -138,7 +138,7 @@ available for that lesson.
    * - **Lesson 34** — Diffusion with Multiplication and an Approach to Criticality
      - `PDF <_static/handouts/lesson-34/lesson_34_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=KLGX_3lGhxU>`__
-   * - **Lesson 35** — Criticality in Slabs, Cylinders, and Spherical Elephants
+   * - **Lesson 35** — Criticality in Slabs
      - `PDF <_static/handouts/lesson-35/lesson_35_handout.pdf>`__
      - `YouTube video <https://www.youtube.com/watch?v=b3PJZsHlV3k>`__
    * - **Lesson 36** — Two-Group Diffusion and Criticality

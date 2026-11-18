@@ -134,16 +134,17 @@ the principal review items.
 
 Several source inconsistencies remain for instructional review: L29's feedback
 sign, L30's ODE algebra, L33's printed
-flux/partial-current relation; L34's boundary/continuity notation and case labels;
-and L35's eigenproblem coefficient and critical-width expression. L35's title
-also promises cylindrical material while the stored deck returns to transport
-review after its slab examples. These have been preserved rather than silently
-corrected. See the backend guide and manifest for specifics.
+flux/partial-current relation; L34's boundary/continuity notation and case labels.
+See the backend guide and manifest for specifics. Lesson 35 has since been
+trimmed to its four slab-criticality sections, with a matching title/objective
+and corrected absorption coefficient and critical-width expression.
 
 ## Revised Lesson 29
 
-Lesson 29 uses the instructor-supplied feedback handout with embedded plot
-tables. Build with `make L29`. Regenerate tables with
-`python refresh_plot_tables.py` (NumPy and SciPy required), then rebuild.
-Review numerical annotations if model parameters change. Historical seed
-coverage checks do not apply to this revision.
+Lesson 29 uses the instructor-supplied feedback handout and embedded numerical
+plot tables, not the historical draft figures. Build with `make L29`.
+`lesson_29_feedback.py` implements the printed one-group model. To regenerate
+the cached tables, run `python refresh_plot_tables.py` in this directory with
+NumPy and SciPy installed, then rebuild. Numerical annotations and prose must
+be reviewed if model parameters change. The historical seed manifest is not
+an acceptance test for this revised handout.

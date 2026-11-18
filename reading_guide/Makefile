@@ -1,4 +1,4 @@
-# Programmed reading guides for FNRP Chapters 6 and 7.
+# Programmed reading guides for FNRP Chapters 1-4, 6, and 7.
 LATEXMK ?= latexmk
 PYTHON  ?= python3
 FLAGS   := -xelatex -interaction=nonstopmode -halt-on-error
@@ -53,7 +53,8 @@ indie-euler: $(INDIE_EULER_GUIDES)
 	$(LATEXMK) $(FLAGS) $<
 
 # Every number quoted in the guides is recomputed here; --write refreshes the
-# tabulated Bessel functions used by the Chapter 7 figure.
+# tabulated Bessel functions used by the Chapter 7 figure. The script needs
+# NumPy and SciPy: pass PYTHON=/path/to/python if the default lacks them.
 figures/data/bessel.dat: tools/verify_examples.py
 	$(PYTHON) tools/verify_examples.py --write > /dev/null
 

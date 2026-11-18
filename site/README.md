@@ -119,3 +119,11 @@ factors and uses the particular solution exp(x)/(1+p), with the resonant
 p=-1 and repeated-root p=0 cases distinguished. Lesson 31 clarifies angular
 density units and the differential balance convention, and removes a stray
 time argument from a steady-state source.
+
+Handouts 32–35 are published as PDF-only downloads from the lesson table.
+Their notebook or source-bundle downloads are not part of this release.
+
+Lesson 35 now ends after its four slab-criticality sections; unrelated trailing
+transport review is removed. The title/objective match that scope. The retained
+eigenvalue equation uses absorption, and the critical-width expression divides
+by k-infinity minus one, consistent with the 14.05 cm example.

@@ -1,0 +1,547 @@
+% Programmed reading guide for FNRP Chapter 1 (Nuclear Reactions).
+% Build: make ch01_guide.pdf   (XeLaTeX via latexmk; the class is in ../handouts)
+% Every number quoted below is recomputed by tools/verify_examples.py.
+\documentclass[compact]{ne630handout}
+\usepackage{ne630guide}
+\handoutsolutionsfalse
+\hypersetup{pdftitle={NE 630 -- Reading Guide: FNRP Chapter 1, Nuclear Reactions},pdfauthor={Jeremy Roberts}}
+\newcommand{\iso}[2]{\ensuremath{{}^{#1}\mathrm{#2}}}
+\newcommand{\MeV}[1]{\SI{#1}{\mega\electronvolt}}
+\newcommand{\eV}[1]{\SI{#1}{\electronvolt}}
+\newcommand{\amu}[1]{\SI{#1}{\atomicmassunit}}
+
+\begin{document}
+\Guide{1}{Nuclear Reactions}
+ {FNRP Sections 1.1--1.7 (energy scales, reaction equations and $Q$ values, binding energy, fusion and fission, fissile and fertile materials, radioactive decay). Companion handouts: Lessons 1--3.}
+ {1 (1.1--1.3), 2 (1.4--1.5), 3 (1.6--1.7).}
+
+\begin{KeyBox}{How to use this guide}
+\ifguidehandwriting
+\textbf{One cell at a time.} Use one sheet to cover all rows below the current cell and a second sheet to cover its tinted answer. Read only the current question (for example, F1(a)) and write in its ruled space. Reveal that cell\textquotesingle s answer, compare your reasoning, and correct your work. Only then uncover the next question, F1(b). Shared givens appear above each sequence; keep them available as you work.\par\smallskip
+\fi
+Each numbered frame (F1, F2, \ldots) poses one small task: define a term, compute one number, or check one step. The tinted column holds the answer and commentary for the same frame. \textbf{Cover the tinted column}, work the frame, then compare. Frames marked \Chain chain together: each uses the previous answer as its input, and the input is restated, so a missed frame never blocks the next one. Chained frames add up to a homework-scale problem. After each section a short quiz checks the ideas; its answers are printed upside down in the footnote. Budget about two minutes per frame.
+\end{KeyBox}
+
+\begin{KeyBox}{What this chapter sets up}
+Chapter~1 supplies the three quantities that the rest of the course keeps returning to: the energy released per fission, the multiplication $k$ that says how one neutron generation compares with the next, and the decay constant $\lambda$ that governs every radioactive inventory. Notation: Lewis writes the neutron lifetime as $l$ and Avogadro's number as $N_o=0.6023\times10^{24}$; the course handouts write $\ell$ and $N_A$. Lewis calls the production rate in the saturation problem $A_o$; Lesson~3 calls it $R_0$. Masses are in atomic mass units with $\amu{1}=\MeV{931.5}/c^2$, and atomic (neutral-atom) masses are used throughout. ``FNRP~(1.17)'' means Eq.~(1.17) of the textbook.
+\end{KeyBox}
+
+\begin{programmed}
+\GSec{Why nuclear? Energy scales (FNRP 1.1; Lesson 1)}
+
+\begin{pframe}[Energy per reaction]\label{f:scale}
+\GuideContext{Burning one carbon atom, $\mathrm{C+O_2\to CO_2}$, releases about \eV{4}. Fissioning one \iso{235}{U} nucleus releases about \MeV{200}.}
+
+\GuideSubcell{a}{What is the ratio of the two energy releases?}{
+$200\times10^6/4=5\times10^7$: fifty million times more energy per reaction.}
+
+\GuideSubcell{b}{For fission, what fraction of the reactants' mass ($236$~u for $\mathrm{n}+\iso{235}{U}$) is converted to energy?}{
+$200/(236\times931.5)=9.1\times10^{-4}$, about 0.1\%.}
+
+\GuideSubcell{c}{Repeat for combustion ($44$~u for $\mathrm{C+O_2}$; \eV{4} is \MeV{4e-6}).}{
+$4\times10^{-6}/(44\times931.5)=9.8\times10^{-11}$.
+\GuideCommentary{This is FNRP problem~1.6 and the ``reaction-scale mass conversion'' box of the Lesson~1 handout, Section~5. Chemical mass changes are real but far too small to measure.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1: from reactions to power plants]\label{f:plant}
+\GuideContext{Lesson~1 compares two \SI{1}{\giga\watt} (electric) plants. Nuclear: thermal efficiency $0.30$, \SI{100}{\tonne} of $\mathrm{UO_2}$ over 5 years. Coal: efficiency $0.40$, \SI{10000}{\tonne} of coal per day. Use $E=P\,\Delta t$.}
+
+\GuideSubcell{a}{Compute the thermal energy released per kilogram of nuclear fuel, in GWh/kg.}{
+$\dfrac{\SI{1}{\giga\watt}}{0.30}\times\dfrac{5\times365\times24\ \mathrm{h}}{10^5\ \mathrm{kg}}=1.46$~GWh/kg.}
+
+\GuideSubcell{b}{Compute the same for coal, in kWh/kg.}{
+$\dfrac{\SI{1}{\giga\watt}}{0.40}\times\dfrac{24\ \mathrm{h}}{10^7\ \mathrm{kg}}=6.0$~kWh/kg.}
+
+\GuideSubcell{c}{The plant-scale ratio is $2.4\times10^5$, but \ref*{f:scale} gives a mass-conversion ratio of $9.1\times10^{-4}/9.8\times10^{-11}=9\times10^6$. Why is the plant ratio some forty times smaller?}{
+Mostly because only a few percent of the uranium atoms loaded actually fission before the fuel is discharged (\ref*{f:burn} finds about 6\%); every carbon atom burns.
+\GuideCommentary{For scale, converting matter entirely to energy would give $c^2\approx25{,}000$~GWh/kg.}}
+
+\end{pframe}
+
+\GSec{Reaction equations, notation, and energetics (FNRP 1.2; Lesson 1)}
+
+\begin{pframe}[Reading the symbol]\label{f:symbol}
+\GuideContext{A \Term{nuclide} is written ${}^{A}_{Z}X$ with $A=N+Z$. Protons and neutrons are both \Term{nucleons}.}
+
+\GuideSubcell{a}{What do $Z$, $N$, and $A$ count, and which one fixes the chemical element?}{
+$Z$ protons (the \Term{atomic number}, which fixes the element $X$), $N$ neutrons, and $A=N+Z$ nucleons (the \Term{mass number}; Lewis says atomic weight).}
+
+\GuideSubcell{b}{What are \Term{isotopes}? How many neutrons do ${}^{235}_{\phantom{0}92}\mathrm{U}$ and ${}^{238}_{\phantom{0}92}\mathrm{U}$ have?}{
+Nuclides with the same $Z$ but different $N$. $235-92=143$ and $238-92=146$.}
+
+\end{pframe}
+
+\begin{pframe}[Two conservation laws]\label{f:conserve}
+\GuideContext{In $A+B\to C+D$, \FNRP{1.1}, charge ($Z$, the subscripts) and nucleons ($A$, the superscripts) are each conserved. The electron is ${}^{\phantom{-}0}_{-1}\mathrm{e}$. These are the reactions of FNRP problem~1.3 and the Lesson~1 handout, Section~4.}
+
+\GuideSubcell{a}{Complete ${}^{9}_{?}\mathrm{Be}+{}^{4}_{2}\mathrm{He}\to\ ?+{}^{1}_{1}\mathrm{H}$.}{
+Be has $Z=4$. Superscripts: $9+4=A+1$, so $A=12$. Subscripts: $4+2=Z+1$, so $Z=5$: the product is ${}^{12}_{\phantom{0}5}\mathrm{B}$.}
+
+\GuideSubcell{b}{Complete ${}^{60}_{\,?}\mathrm{Co}\to\ ?+{}^{\phantom{-}0}_{-1}\mathrm{e}$.}{
+Co has $Z=27$. $A=60$ and $27=Z-1$, so $Z=28$: ${}^{60}_{28}\mathrm{Ni}$. Beta decay raises $Z$ by one at fixed $A$.}
+
+\GuideSubcell{c}{Complete ${}^{7}_{3}\mathrm{Li}+{}^{1}_{1}\mathrm{H}\to\ ?+{}^{4}_{2}\mathrm{He}$.}{
+$A=7+1-4=4$, $Z=3+1-2=2$: a second ${}^{4}_{2}\mathrm{He}$.}
+
+\end{pframe}
+
+\begin{pframe}[Compound nuclei and shorthand]\label{f:compound}
+\GuideContext{Most reactions pass through a short-lived \Term{compound nucleus}, \FNRP{1.3}. The compact form of $A+B\to C+D$ is $A(B,C)D$, and $\alpha$, $\beta$, $\gamma$, n, p stand for ${}^4_2\mathrm{He}$, the electron, the gamma ray, the neutron, and the proton, \FNRP{1.7}.}
+
+\GuideSubcell{a}{What compound nucleus forms in ${}^{4}_{2}\mathrm{He}+{}^{6}_{3}\mathrm{Li}$?}{
+Add everything: $A=10$, $Z=5$, so ${}^{10}_{\phantom{0}5}\mathrm{B}$, which then splits into ${}^{9}_{4}\mathrm{Be}+\mathrm{p}$.}
+
+\GuideSubcell{b}{Write $\mathrm{n}+{}^{14}_{\phantom{0}7}\mathrm{N}\to{}^{14}_{\phantom{0}6}\mathrm{C}+\mathrm{p}$ in compact form.}{
+${}^{14}_{\phantom{0}7}\mathrm{N}(\mathrm{n},\mathrm{p}){}^{14}_{\phantom{0}6}\mathrm{C}$: target, (in, out), product.}
+
+\GuideSubcell{c}{Which target makes the compound nucleus ${}^{60}_{28}\mathrm{Ni}$ when struck by an alpha particle? By a neutron? (FNRP problem~1.4)}{
+Subtract the projectile: ${}^{56}_{26}\mathrm{Fe}$ for the alpha and ${}^{59}_{28}\mathrm{Ni}$ for the neutron.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2: is a fission neutron relativistic?]\label{f:relativ}
+\GuideContext{Exactly, $E_{\mathrm{total}}=mc^2$ with $m=m_0/\sqrt{1-(v/c)^2}$, \FNRP{1.9}--(1.10), so the kinetic energy is $K=m_0c^2\big(1/\sqrt{1-\beta^2}-1\big)$ with $\beta=v/c$. Classically $K_{\mathrm{cl}}=\tfrac12m_0v^2$, \FNRP{1.13}. For the neutron $m_0c^2=\MeV{939.57}$. Take a fission neutron with $K=\MeV{2.0}$ (FNRP problem~1.5; Lesson~1 handout, Section~3).}
+
+\GuideSubcell{a}{Solve the exact expression for $\beta^2$ and evaluate it; what is $v$?}{
+$\beta^2=1-\big(\tfrac{m_0c^2}{K+m_0c^2}\big)^2=1-(939.57/941.57)^2=0.00424$, so $v=0.065c=\SI{1.95e7}{\meter\per\second}$.}
+
+\GuideSubcell{b}{Compute $K_{\mathrm{cl}}=\tfrac12m_0c^2\beta^2$ and the percent error.}{
+$K_{\mathrm{cl}}=\tfrac12(939.57)(0.004244)=\MeV{1.994}$; the error is $-0.32\%$. The classical formula slightly underestimates $K$.}
+
+\GuideSubcell{c}{The error reaches $-1\%$ at $K=\MeV{6.3}$ and $-1.6\%$ at \MeV{10}. What does that justify for the rest of the course?}{
+Reactor neutrons (below about \MeV{10}) can be treated classically: $E=\tfrac12mv^2$. From here on $E$ means kinetic energy.}
+
+\end{pframe}
+
+\begin{pframe}[The $Q$ value]\label{f:Q}
+\GuideContext{Energy conservation for $A+B\to C+D$ reads $E_A+M_Ac^2+E_B+M_Bc^2=E_C+M_Cc^2+E_D+M_Dc^2$, \FNRP{1.15}, and the \Term{$Q$ value} is $Q=E_C+E_D-E_A-E_B$, \FNRP{1.16}.}
+
+\GuideSubcell{a}{Express $Q$ in terms of the rest masses.}{
+Rearranging (1.15): $Q=(M_A+M_B-M_C-M_D)c^2$, \FNRP{1.17}: initial masses minus final masses.}
+
+\GuideSubcell{b}{If $Q>0$, which side is heavier, and what is the reaction called? What does $Q>0$ imply for a decay $A\to B+C$?}{
+The reactants are heavier; rest mass became kinetic energy, and the reaction is \Term{exothermic}. A decay can occur spontaneously only if $Q>0$.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3: $Q$ values from a mass table]\label{f:Qcalc}
+\GuideContext{Atomic masses (u): \iso{1}{H} $1.007825$; \iso{4}{He} $4.002603$; \iso{7}{Li} $7.016003$; \iso{9}{Be} $9.012183$; \iso{12}{B} $12.014353$; \iso{60}{Co} $59.933816$; \iso{60}{Ni} $59.930785$. Use $\amu{1}=\MeV{931.5}/c^2$. The reactions are those of \ref*{f:conserve}.}
+
+\GuideSubcell{a}{Compute $Q$ for $\iso{7}{Li}(\mathrm{p},\alpha)\iso{4}{He}$.}{
+$(7.016003+1.007825-2\times4.002603)\times931.5=0.018622\times931.5=\MeV{17.35}$: strongly exothermic.}
+
+\GuideSubcell{b}{Compute $Q$ for $\iso{9}{Be}(\alpha,\mathrm{p})\iso{12}{B}$. What does the sign mean?}{
+$(9.012183+4.002603-12.014353-1.007825)\times931.5=\MeV{-6.89}$: \Term{endothermic}. The alpha particle must bring in at least this much kinetic energy.}
+
+\GuideSubcell{c}{Compute $Q$ for the $\beta^-$ decay of \iso{60}{Co}. Why is no electron mass added on the right?}{
+$(59.933816-59.930785)\times931.5=\MeV{2.82}$. The neutral \iso{60}{Ni} atom has 28 electrons, one more than \iso{60}{Co}; that extra electron is the emitted beta particle, so atomic masses already account for it.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (b); 3 (a); 4 (b).}
+\item In a nuclear reaction equation the superscripts balance because \opt{a} charge is conserved; \opt{b} energy is conserved; \opt{c} the number of nucleons is conserved; \opt{d} mass is conserved.
+\item A reaction with $Q<0$ \opt{a} cannot occur; \opt{b} needs kinetic energy supplied by the reactants; \opt{c} releases heat; \opt{d} violates energy conservation.
+\item Beta-minus decay changes a nuclide's $(Z,A)$ to \opt{a} $(Z+1,A)$; \opt{b} $(Z-1,A)$; \opt{c} $(Z-2,A-4)$; \opt{d} $(Z,A-1)$.
+\item Treating a \MeV{2} neutron classically misstates its kinetic energy by about \opt{a} 30\%; \opt{b} 0.3\%; \opt{c} 3\%; \opt{d} $10^{-6}$\%.
+\end{quiz}}
+
+\GSec{Binding energy, fusion, and fission (FNRP 1.3--1.4; Lessons 1--2)}
+
+\begin{pframe}[Mass defect and binding energy]\label{f:defect}
+\GuideContext{The \Term{mass defect} is $\Delta=ZM_P+NM_N-M_X$, \FNRP{1.18}; the \Term{binding energy} is $\Delta c^2$, and the binding energy per nucleon is $\Delta c^2/(N+Z)$, \FNRP{1.19}. With atomic masses, use $m(\iso{1}{H})=\amu{1.007825}$ in place of $M_P$; $m_n=\amu{1.008664}$.}
+
+\GuideSubcell{a}{In words, what is the binding energy?}{
+The energy that would have to be supplied to pull the nucleus apart into free protons and neutrons; equivalently, the energy released when it is assembled.}
+
+\GuideSubcell{b}{Compute $\Delta$, the binding energy, and the binding energy per nucleon of \iso{4}{He} ($\amu{4.002603}$).}{
+$\Delta=2(1.007825)+2(1.008664)-4.002603=\amu{0.030375}$; $\Delta c^2=\MeV{28.3}$; per nucleon, \MeV{7.07}.}
+
+\GuideSubcell{c}{Why may the hydrogen-atom mass replace the proton mass?}{
+$Z$ hydrogen atoms carry $Z$ electrons, the same number as the neutral atom $X$, so the electron masses cancel (electron binding energies, a few eV to keV, are neglected).}
+
+\end{pframe}
+
+\begin{pframe}[Reading the curve of binding energy]\label{f:curve}
+\GuideContext{Figure~\ref{fig:be} sketches the binding energy per nucleon against mass number (compare FNRP Fig.~1.1 and the Lesson~2 handout, Section~1).
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.4cm,xlabel={mass number $A$},ylabel={$\Delta c^2/A$ (MeV)},xmin=0,xmax=250,ymin=6.5,ymax=9.2,
+ tick label style={font=\scriptsize},label style={font=\scriptsize},domain=14:245,samples=120]
+\addplot[wcprimary,thick] {15.75-17.8*x^(-1/3)-0.711*(x/(2+0.015*x^(2/3)))^2/x^(4/3)-23.7*(x-2*x/(2+0.015*x^(2/3)))^2/x^2};
+\addplot[only marks,mark=*,mark size=1.3pt,wcalerted] coordinates {(4,7.07)};
+\node[font=\scriptsize,wcalerted,anchor=west] at (axis cs:8,7.07) {\iso{4}{He}};
+\draw[->,black!60] (axis cs:28,7.6) -- (axis cs:50,8.45) node[midway,below right,font=\scriptsize]{fusion};
+\draw[->,black!60] (axis cs:235,8.1) -- (axis cs:150,8.55) node[midway,above right,font=\scriptsize]{fission};
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Binding energy per nucleon for $A\ge14$ from a smooth semi-empirical mass formula (a schematic; real nuclei scatter about the curve, and \iso{4}{He} is marked separately).}\label{fig:be}
+\end{center}}}
+
+\GuideSubcell{a}{Where is the maximum, and roughly how large is it?}{
+Near $A\approx56$ to 62 (iron and nickel), a little under \MeV{9} per nucleon.}
+
+\GuideSubcell{b}{Why can both fusion of light nuclei and fission of heavy nuclei release energy?}{
+Both move the products toward the maximum, that is, toward more tightly bound (lighter per nucleon) nuclei; the increase in binding energy appears as kinetic energy.
+\GuideCommentary{The maximum reflects a competition: short-range nuclear attraction favors more neighbors, while Coulomb repulsion grows with $Z^2$ and penalizes large nuclei.}}
+
+\GuideSubcell{c}{Read the curve at $A=235$ (about \MeV{7.6}) and $A\approx117$ (about \MeV{8.5}) and estimate the energy released when \iso{235}{U} splits in two.}{
+$235\times(8.5-7.6)\approx\MeV{210}$: the right size, with no detailed nuclear physics needed.}
+
+\end{pframe}
+
+\begin{pframe}[Fusion]\label{f:fusion}
+\GuideContext{The D--T reaction is ${}^2_1\mathrm{H}+{}^3_1\mathrm{H}\to{}^4_2\mathrm{He}+\mathrm{n}$, \FNRP{1.20}. Binding energies per nucleon: D \MeV{1.112}, T \MeV{2.827}, \iso{4}{He} \MeV{7.074}.}
+
+\GuideSubcell{a}{Compute $Q$ from the binding energies.}{
+$Q=4(7.074)-2(1.112)-3(2.827)=\MeV{17.59}$, as in (1.20). $Q$ is the gain in total binding energy.}
+
+\GuideSubcell{b}{Estimate the Coulomb energy $e^2/(4\pi\epsilon_0r)$ of two unit charges at $r=\SI{4}{\femto\meter}$, using $e^2/4\pi\epsilon_0=\SI{1.44}{\mega\electronvolt\femto\meter}$, and the temperature $T=V_C/k$ with $k=\SI{8.617e-5}{\electronvolt\per\kelvin}$.}{
+$V_C=1.44/4=\MeV{0.36}$, and $T\approx\SI{4e9}{\kelvin}$.
+\GuideCommentary{Fusion plasmas run nearer $10^8$~K; quantum tunnelling and the fast tail of the thermal distribution make up the difference (Lesson~2 handout, Section~1).}}
+
+\GuideSubcell{c}{Why does neutron-induced fission need no such temperature?}{
+The neutron is uncharged, so there is no Coulomb barrier: it ``slides into the nucleus'' at any energy.}
+
+\end{pframe}
+
+\GSec{Fission: energy, neutrons, and products (FNRP 1.5; Lesson 2)}
+
+\begin{pframe}[Where the energy goes]\label{f:dissip}
+\GuideContext{A fission releases about \MeV{200}, two or three neutrons, two \Term{fission fragments}, gamma rays, and (from the later beta decays) electrons and neutrinos.}
+
+\GuideSubcell{a}{Which products carry most of the energy, and how far do they travel?}{
+The fission fragments carry more than 80\% as kinetic energy. They are highly charged, ionize the surrounding atoms, and stop within a few microns (their \Term{range}), so most of the heat appears where the fission occurred.}
+
+\GuideSubcell{b}{How do neutral particles (neutrons, gamma rays) behave differently?}{
+They travel in straight lines for centimeters between collisions and deposit their energy far from the fission site; neutrinos escape altogether and their energy is lost.}
+
+\GuideSubcell{c}{Lewis takes the recoverable energy as $\gamma=\SI{3.1e-11}{\joule}$ per fission. Convert it to MeV ($\MeV{1}=\SI{1.602e-13}{\joule}$).}{
+About \MeV{193}: \MeV{200} less the neutrino share.
+\GuideCommentary{The same $\gamma$ fixes the flux amplitude from the reactor power in the Chapter~7 guide.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4: how much uranium does a reactor fission?]\label{f:burn}
+\GuideContext{A plant producing \SI{1}{\giga\watt} electric at 33\% efficiency generates $P=\SI{3000}{\mega\watt}$ of heat. Use $\gamma=\SI{3.1e-11}{\joule}$ per fission and $N_A=\SI{6.022e23}{\per\mole}$.}
+
+\GuideSubcell{a}{Compute the fission rate.}{
+$P/\gamma=3\times10^9/3.1\times10^{-11}=\SI{9.7e19}{}$ fissions per second.}
+
+\GuideSubcell{b}{Compute the mass of \iso{235}{U} fissioned per day.}{
+$9.68\times10^{19}\times86400\times235/6.022\times10^{23}=\SI{3.3}{\kilo\gram}$ per day.}
+
+\GuideSubcell{c}{Compute the mass fissioned per year and compare with Lewis's ``approximately 20 tons per year'' of uranium consumed.}{
+\SI{1.2}{\tonne} per year, about 6\% of the fuel passing through the core. The rest is mostly \iso{238}{U} that never fissions.
+\GuideCommentary{This is the missing factor in \ref*{f:plant}(c).}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 5: the energy of one fission]\label{f:symm}
+\GuideContext{Lesson~2 (handout Section~3) follows a symmetric split, $\mathrm{n}+\iso{235}{U}\to2\,\iso{117}{Pd}+2\mathrm{n}$, whose fragments then beta decay four times each to stable \iso{117}{Sn}. Masses (u): \iso{235}{U} $235.043928$; \iso{117}{Pd} $116.917956$; \iso{117}{Sn} $116.902955$; n $1.008665$.}
+
+\GuideSubcell{a}{Compute the prompt $Q$. (One neutron cancels from each side.)}{
+$(235.043928-2\times116.917956-1.008665)\times931.5=\MeV{185.7}$.}
+
+\GuideSubcell{b}{Compute the total $Q$ after both fragments have decayed to \iso{117}{Sn}.}{
+$(235.043928-2\times116.902955-1.008665)\times931.5=\MeV{213.6}$.}
+
+\GuideSubcell{c}{What carries the \MeV{28} difference, and when?}{
+Beta particles, gamma rays, and antineutrinos from the fragments' decay chains, emitted over seconds to years after the fission: the origin of decay heat (\ref*{f:decayheat}).
+\GuideCommentary{A symmetric split is rare (\ref*{f:fp}); it is used here because the bookkeeping is simple.}}
+
+\end{pframe}
+
+\begin{pframe}[Multiplication]\label{f:k}
+\GuideContext{The \Term{multiplication} $k$ is the ratio of fission neutrons born in one generation to those born in the preceding generation. The \Term{neutron lifetime} $l$ runs from birth in fission, through scattering collisions, to absorption.}
+
+\GuideSubcell{a}{Starting from $n_o$ neutrons in generation zero, how many are in generation $i$?}{
+$k^in_o$.}
+
+\GuideSubcell{b}{Generation $i$ is born at about $t=i\,l$. Eliminate $i$.}{
+$n(t)=n_o\,k^{t/l}$, \FNRP{1.21}.}
+
+\GuideSubcell{c}{Name the three cases $k<1$, $k=1$, $k>1$ and say what the population does.}{
+\Term{Subcritical}: decreases. \Term{Critical}: constant. \Term{Supercritical}: increases.}
+
+\GuideSubcell{d}{About $2.4$ neutrons are emitted per fission of \iso{235}{U}. Why is $k$ not $2.4$?}{
+$k$ counts only the neutrons that go on to cause the next generation's fissions. Many are captured without fission, in fuel or other materials, or leak out.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6: how fast is a chain reaction?]\label{f:kexp}
+\GuideContext{Write $k^{t/l}=\exp[(t/l)\ln k]$, \FNRP{1.22}, and for $|k-1|\ll1$ use $\ln k\simeq k-1$ to get $n(t)=n_o\exp[(k-1)t/l]$, \FNRP{1.23}. Take a lifetime $l=\SI{e-4}{\second}$, typical of a water-moderated reactor.}
+
+\GuideSubcell{a}{What differential equation does (1.23) satisfy?}{
+$\dfrac{dn}{dt}=\dfrac{k-1}{l}\,n$: the Lesson~2 generation model (handout Section~4).}
+
+\GuideSubcell{b}{For $k=1.001$, by what factor does the population grow in one second? Compare with the exact $k^{t/l}$.}{
+$\exp(0.001\times10^4)=e^{10}=2.2\times10^4$; exactly, $1.001^{10000}=2.19\times10^4$. A 0.1\% excess multiplies the power twenty-thousand-fold in a second.}
+
+\GuideSubcell{c}{For $k=0.999$, what fraction remains after one second?}{
+$e^{-10}=4.5\times10^{-5}$.
+\GuideCommentary{If this were the whole story reactors would be uncontrollable. The small fraction of delayed neutrons (\ref*{f:fp}) stretches the time scale enormously; that is Chapter~5.}}
+
+\end{pframe}
+
+\begin{pframe}[Fission products]\label{f:fp}
+\GuideContext{A typical split is $\mathrm{n}+\iso{235}{U}\to\iso{140}{Xe}+\iso{94}{Sr}+2\mathrm{n}+\MeV{200}$, \FNRP{1.24}. Stable nuclei have $N/Z$ near 1 when light (\iso{16}{O}) and near $1.5$ when heavy (\iso{238}{U}).}
+
+\GuideSubcell{a}{Why are fission fragments unstable?}{
+They inherit the heavy parent's large $N/Z$, which is too neutron rich for their own, smaller $Z$, even after the prompt neutrons are emitted.}
+
+\GuideSubcell{b}{How do they approach stability? How many decays take ${}^{140}_{\phantom{0}54}\mathrm{Xe}$ to stable ${}^{140}_{\phantom{0}58}\mathrm{Ce}$ and ${}^{94}_{38}\mathrm{Sr}$ to ${}^{94}_{40}\mathrm{Zr}$?}{
+By $\beta^-$ decay (with gamma rays), each raising $Z$ by one: four and two decays, \FNRP{1.25}--(1.26). Fragments plus their decay daughters are the \Term{fission products}.}
+
+\GuideSubcell{c}{Describe the yield curve (FNRP Fig.~1.5) for thermal fission of \iso{235}{U}.}{
+Two humps: a light group, $A\approx80$ to 110, and a heavy group, $A\approx125$ to 155, with a deep valley at equal masses. More than 40 fragment pairs and over 200 radioactive products result.}
+
+\GuideSubcell{d}{What fraction of fragments decay by emitting a neutron, and why does so small a fraction matter?}{
+Less than 1\%. These \Term{delayed neutrons} appear seconds after the fission and set the controllable time scale of a reactor (Chapter~5; Lesson~3 handout, Section~1).}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 7: decay heat]\label{f:decayheat}
+\GuideContext{About 8\% of the fission energy comes from the beta and gamma decay of fission products. After shutdown the Wigner--Way formula \FNRP{1.27} gives $P_d(t)=0.0622\,P_o\big[t^{-0.2}-(t_o+t)^{-0.2}\big]$, with $t$ the time since shutdown and $t_o$ the operating time, both in seconds. Take $t_o=1$~year $=\SI{3.156e7}{\second}$, for which $t_o^{-0.2}=0.0317$.}
+
+\GuideSubcell{a}{Compute $P_d/P_o$ one second after shutdown.}{
+$0.0622\,(1-0.0317)=0.060$: about 6\% of full power, the value quoted in Lesson~2.}
+
+\GuideSubcell{b}{Compute $P_d/P_o$ one hour ($3600^{-0.2}=0.194$) and one day ($86400^{-0.2}=0.103$) after shutdown.}{
+$0.0622\,(0.194-0.032)=0.0101$ and $0.0622\,(0.103-0.032)=0.0044$: 1.0\% and 0.44\%.}
+
+\GuideSubcell{c}{Convert the three values to megawatts for a \SI{3000}{\mega\watt} reactor.}{
+\SI{181}{\mega\watt}, \SI{30}{\mega\watt}, and \SI{13}{\mega\watt}.
+\GuideCommentary{Cooling must continue long after the chain reaction stops. FNRP problem~1.9 repeats this for other times; with only one month of operation the one-day value falls to 0.32\%, because fewer long-lived products have accumulated.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (b).}
+\item Most of the energy of fission appears first as \opt{a} gamma rays; \opt{b} kinetic energy of the fission fragments; \opt{c} neutron kinetic energy; \opt{d} neutrinos.
+\item A reactor with $k=1$ and a steady neutron population is \opt{a} subcritical; \opt{b} supercritical; \opt{c} critical; \opt{d} shut down.
+\item Fission fragments decay mainly by \opt{a} beta-minus emission; \opt{b} alpha emission; \opt{c} neutron emission; \opt{d} fission.
+\item One day after shutdown from long operation, decay heat is about \opt{a} 6\% of full power; \opt{b} 0.4\%; \opt{c} 20\%; \opt{d} zero.
+\end{quiz}}
+
+\GSec{Fissile and fertile materials (FNRP 1.6; Lesson 2)}
+
+\begin{pframe}[Three words for fuel]\label{f:fissile}
+\GuideSubcell{a}{Define \Term{fissile}, \Term{fertile}, and \Term{fissionable}, with one example of each.}{
+Fissile: fissions with neutrons of any energy (\iso{235}{U}, \iso{233}{U}, \iso{239}{Pu}, \iso{241}{Pu}). Fertile: captures a neutron and decays into a fissile nuclide (\iso{238}{U}, \iso{232}{Th}); it fissions directly only with MeV neutrons. Fissionable: either.}
+
+\GuideSubcell{b}{Which fissile nuclide occurs in nature, and at what abundance?}{
+Only \iso{235}{U}, 0.7\% of natural uranium; the other 99.3\% is \iso{238}{U}.}
+
+\GuideSubcell{c}{Lewis labels a nuclide by the last digits of $Z$ and $A$: ${}^{235}_{\phantom{0}92}\mathrm{U}\to25$. Give the labels for \iso{238}{U}, ${}^{239}_{\phantom{0}94}\mathrm{Pu}$, and ${}^{232}_{\phantom{0}90}\mathrm{Th}$.}{
+28, 49, and 02. Expect $\sigma^{25}$, $N^{28}$, and so on from Chapter~2 onward.}
+
+\end{pframe}
+
+\begin{pframe}[Conversion and breeding]\label{f:breed}
+\GuideSubcell{a}{Write the chain that turns \iso{238}{U} into \iso{239}{Pu}, \FNRP{1.28}.}{
+$\mathrm{n}+{}^{238}_{\phantom{0}92}\mathrm{U}\to{}^{239}_{\phantom{0}92}\mathrm{U}\xrightarrow{\beta}{}^{239}_{\phantom{0}93}\mathrm{Np}\xrightarrow{\beta}{}^{239}_{\phantom{0}94}\mathrm{Pu}$: one capture, two beta decays.}
+
+\GuideSubcell{b}{A \Term{breeder} makes more fissile material than it destroys. Per neutron absorbed in fuel, at least how many fission neutrons must be produced?}{
+More than two: one to continue the chain and more than one to convert fertile nuclei, before any losses to other absorbers or to leakage. Most reactors fall short and are net burners.}
+
+\GuideSubcell{c}{If \iso{239}{Pu} captures two neutrons and then beta decays, what results? (FNRP problem~1.7a)}{
+${}^{241}_{\phantom{0}94}\mathrm{Pu}$, then ${}^{241}_{\phantom{0}95}\mathrm{Am}$.}
+
+\end{pframe}
+
+\begin{pframe}[Starting the chain][3]\label{f:source}
+A radium--beryllium source combines ${}^{226}_{\phantom{0}88}\mathrm{Ra}\xrightarrow{\alpha}{}^{222}_{\phantom{0}86}\mathrm{Rn}$ with $\iso{9}{Be}(\alpha,\mathrm{n})\,?$, \FNRP{1.31}--(1.32). Identify the product nucleus, and say why a reactor needs a source at all.
+\response
+$A=9+4-1=12$ and $Z=4+2-0=6$: \iso{12}{C}. A chain reaction multiplies neutrons but cannot create the first one; a source gives a reliable, measurable population to multiply during startup.
+\end{pframe}
+
+\GSec{Radioactive decay (FNRP 1.7; Lesson 3)}
+
+\begin{pframe}[The decay law]\label{f:law}
+\GuideContext{Each nucleus of a radioisotope has the same probability per unit time, the \Term{decay constant} $\lambda$, of decaying. For $N(t)$ nuclei, $dN/dt=-\lambda N$, \FNRP{1.33}.}
+
+\GuideSubcell{a}{Solve for $N(t)$ given $N(0)$.}{
+Separate: $dN/N=-\lambda\,dt$, so $\ln[N(t)/N(0)]=-\lambda t$ and $N(t)=N(0)e^{-\lambda t}$, \FNRP{1.36}.}
+
+\GuideSubcell{b}{Relate the \Term{half-life} $t_{1/2}$ and the mean life $\bar t$ to $\lambda$.}{
+$t_{1/2}=\ln2/\lambda=0.693/\lambda$, \FNRP{1.37}, and $\bar t=1/\lambda$, \FNRP{1.38}. The mean life is longer: $\bar t=1.44\,t_{1/2}$.}
+
+\GuideSubcell{c}{\iso{131}{I} has a half-life of 8.05 days. Compute $\lambda$. What fraction survives $n$ half-lives?}{
+$\lambda=0.693/8.05=0.0861$ per day. $2^{-n}$.}
+
+\end{pframe}
+
+\begin{pframe}[Activity and its units]\label{f:units}
+\GuideContext{The \Term{activity} is $\lambda N$, in decays per second: $\SI{1}{Bq}=\SI{1}{\per\second}$ and $\SI{1}{Ci}=\SI{3.7e10}{Bq}$. A mass $m$ of molar mass $M$ contains $N=mN_A/M$ atoms.}
+
+\GuideSubcell{a}{Check the definition of the curie: compute the activity of \SI{1}{\gram} of \iso{226}{Ra} ($t_{1/2}=1600$~y; $1$~y $=\SI{3.156e7}{\second}$).}{
+$\lambda=0.693/(1600\times3.156\times10^7)=\SI{1.37e-11}{\per\second}$; $N=6.022\times10^{23}/226=2.66\times10^{21}$; $\lambda N=\SI{3.66e10}{Bq}$, essentially \SI{1}{Ci}.}
+
+\GuideSubcell{b}{Invert the route: express the mass of a pure radionuclide in terms of its measured activity $A$.}{
+$m=\dfrac{AM}{\lambda N_A}$.
+\GuideCommentary{The route mass $\to$ moles $\to$ atoms $\to$ activity (Lesson~3 handout, Section~3) handles FNRP problems~1.12, 1.15, and 1.19.}}
+
+\end{pframe}
+
+\begin{pframe}[Production and saturation]\label{f:sat}
+\GuideContext{A reactor at constant power makes a fission product at a constant rate $A_o$ (Lesson~3: $R_0$), so $dN/dt=A_o-\lambda N$, \FNRP{1.39}, with $N(0)=0$.}
+
+\GuideSubcell{a}{Multiply by the integrating factor $e^{\lambda t}$ and solve for the activity $\lambda N(t)$.}{
+$\dfrac{d}{dt}\big[Ne^{\lambda t}\big]=A_oe^{\lambda t}$; integrating from 0 to $t$ gives $\lambda N(t)=A_o\big[1-e^{-\lambda t}\big]$, \FNRP{1.42}.}
+
+\GuideSubcell{b}{What is the \Term{saturation activity}, and what inventory corresponds to it?}{
+As $t\to\infty$, $\lambda N\to A_o$: decay balances production. The inventory is $N_{\mathrm{sat}}=A_o/\lambda$.}
+
+\GuideSubcell{c}{What fraction of saturation is reached after $n$ half-lives? How many half-lives give 90\% and 99\%?}{
+$1-2^{-n}$: 50\%, 87.5\%, 96.9\% after one, three, five. For 90\%, $n=\log_2 10=3.3$; for 99\%, $n=6.6$.}
+
+\GuideSubcell{d}{How does the activity grow at early times, $\lambda t\ll1$?}{
+$1-e^{-\lambda t}\simeq\lambda t$, so $\lambda N\simeq A_o\lambda t$: linearly, in proportion to the total energy produced so far.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 8: iodine-131 and strontium-90]\label{f:satnum}
+\GuideContext{Lewis's example: a power reactor produces \iso{131}{I} at \SI{0.85e18}{} nuclei per second ($\lambda_I=0.0861$ per day) and \iso{90}{Sr} at \SI{1.63e18}{} nuclei per second ($t_{1/2}=10{,}628$~d, $\lambda_{Sr}=6.52\times10^{-5}$ per day). Figure~\ref{fig:sat} shows the buildup curve.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=3.9cm,xlabel={$\lambda t$},ylabel={$\lambda N/A_o$},xmin=0,xmax=5,ymin=0,ymax=1.08,
+ tick label style={font=\scriptsize},label style={font=\scriptsize},domain=0:5,samples=80]
+\addplot[wcprimary,thick] {1-exp(-x)};
+\addplot[black!50,thin,dashed] coordinates {(0,1) (5,1)};
+\addplot[wcalerted,thin,dashed,domain=0:1] {x};
+\addplot[only marks,mark=*,mark size=1.3pt,wcalerted] coordinates {(0.603,0.453) (2.58,0.924)};
+\node[font=\scriptsize,anchor=west] at (axis cs:0.68,0.42) {\iso{131}{I}, 1 week};
+\node[font=\scriptsize,anchor=north west] at (axis cs:2.58,0.9) {\iso{131}{I}, 1 month};
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Buildup to saturation, \FNRP{1.42}; the dashed line is the early linear growth. After one year \iso{90}{Sr} is still at $\lambda t=0.024$, indistinguishable from the origin on this scale.}\label{fig:sat}
+\end{center}}}
+
+\GuideSubcell{a}{Compute both saturation activities in curies.}{
+$0.85\times10^{18}/3.7\times10^{10}=\SI{2.30e7}{Ci}$ and $1.63\times10^{18}/3.7\times10^{10}=\SI{4.40e7}{Ci}$.}
+
+\GuideSubcell{b}{Compute the \iso{131}{I} activity after 7 and 30 days.}{
+$2.30\times10^7(1-e^{-0.603})=\SI{1.04e7}{Ci}$ and $2.30\times10^7(1-e^{-2.58})=\SI{2.12e7}{Ci}$: 45\% and 92\% of saturation.}
+
+\GuideSubcell{c}{Compute the \iso{90}{Sr} activity after one year, exactly and with the linear approximation.}{
+$\lambda t=0.0238$; $4.40\times10^7(1-e^{-0.0238})=\SI{1.04e6}{Ci}$; linear: $4.40\times10^7\times0.0238=\SI{1.05e6}{Ci}$.}
+
+\GuideSubcell{d}{What does each inventory track in an operating reactor?}{
+Short-lived \iso{131}{I} saturates within weeks and tracks the current power. Long-lived \iso{90}{Sr} keeps growing for years and tracks the total energy produced.}
+
+\end{pframe}
+
+\begin{pframe}[Decay chains]\label{f:chain}
+\GuideContext{For $A\to B\to C$ with decay constants $\lambda_A$ and $\lambda_B$, \FNRP{1.43}, the parent obeys $N_A(t)=N_A(0)e^{-\lambda_At}$.}
+
+\GuideSubcell{a}{Write the balance for $N_B$, and label the gain and the loss.}{
+$\dfrac{dN_B}{dt}=\lambda_AN_A-\lambda_BN_B$, \FNRP{1.45}: gain from each decay of $A$, loss by decay of $B$.}
+
+\GuideSubcell{b}{With $N_B(0)=0$, the integrating factor $e^{\lambda_Bt}$ gives \FNRP{1.48}. Write it and check its value at $t=0$.}{
+$N_B(t)=\dfrac{\lambda_A}{\lambda_B-\lambda_A}N_A(0)\big(e^{-\lambda_At}-e^{-\lambda_Bt}\big)$, which vanishes at $t=0$ as required.}
+
+\GuideSubcell{c}{If $C$ is stable and absent initially, find $N_C(t)$ without solving another equation.}{
+Nuclei are conserved along the chain: $N_C=N_A(0)-N_A(t)-N_B(t)$.
+\GuideCommentary{A one-way chain is solved from the parent downstream, each solution becoming the next source (Lesson~3 handout, Sections~5--6).}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 9: the $A=94$ fission-product chain]\label{f:a94}
+\GuideContext{From \FNRP{1.26} and Lesson~3: $\iso{94}{Sr}\xrightarrow{75\ \mathrm{s}}\iso{94}{Y}\xrightarrow{18.7\ \mathrm{min}}\iso{94}{Zr}$ (stable), starting from $N_0$ nuclei of \iso{94}{Sr} alone.}
+
+\GuideSubcell{a}{Compute the two decay constants in \si{\per\second}.}{
+$\lambda_{Sr}=0.693/75=\SI{9.24e-3}{\per\second}$ and $\lambda_Y=0.693/1122=\SI{6.18e-4}{\per\second}$.}
+
+\GuideSubcell{b}{Compute the three inventories, as fractions of $N_0$, after one hour.}{
+Sr: $e^{-33.3}=3.6\times10^{-15}$. Y: $\dfrac{9.24}{0.618-9.24}\big(e^{-33.3}-e^{-2.22}\big)=0.116$. Zr: $1-0.116=0.884$.}
+
+\GuideSubcell{c}{Setting $dN_Y/dt=0$ gives a maximum at $t=\ln(\lambda_{Sr}/\lambda_Y)/(\lambda_{Sr}-\lambda_Y)$. Evaluate it.}{
+$\ln(14.96)/(8.62\times10^{-3})=\SI{314}{\second}$, about four \iso{94}{Sr} half-lives, when $N_Y=0.82N_0$. After that \iso{94}{Y} decays with its own half-life.}
+
+\end{pframe}
+
+\begin{pframe}[Two limits of the chain]\label{f:secular}
+\GuideSubcell{a}{Long-lived parent, $\lambda_A\ll\lambda_B$: what does (1.48) give after several half-lives of $B$?}{
+$e^{-\lambda_Bt}$ has died away and $\lambda_B-\lambda_A\simeq\lambda_B$, so $\lambda_BN_B\simeq\lambda_AN_A$: the activities are equal. This is \Term{secular equilibrium}.}
+
+\GuideSubcell{b}{In secular equilibrium are the inventories equal? Evaluate $N_B/N_A$ for $\iso{90}{Sr}$ (28.8~y) $\to\iso{90}{Y}$ (64.1~h).}{
+No: $N_B/N_A=\lambda_A/\lambda_B=t_{1/2,B}/t_{1/2,A}=64.1/(28.8\times8766)=2.5\times10^{-4}$. The short-lived daughter is scarce but equally active.}
+
+\GuideSubcell{c}{Short-lived parent, $\lambda_A\gg\lambda_B$: what remains after several half-lives of $A$? Which limit does Chain~9 resemble?}{
+$N_B\simeq N_A(0)e^{-\lambda_Bt}$: the parent has simply become the daughter. Chain~9 is this case ($\lambda_{Sr}=15\lambda_Y$), which is why 0.82 of the nuclei pile up as \iso{94}{Y}.}
+
+\end{pframe}
+
+\begin{pframe}[Steady state is not secular equilibrium][3]\label{f:steady}
+A reactor produces $A$ at a constant rate $A_o$, and $A\to B\to C$ (FNRP problem~1.20). Find $N_A(\infty)$ and $N_B(\infty)$, and say how this \emph{steady state} differs from secular equilibrium.
+\response
+Set both derivatives to zero: $N_A=A_o/\lambda_A$ and $\lambda_BN_B=\lambda_AN_A$, so $N_B=A_o/\lambda_B$. Every member of the chain saturates at activity $A_o$.
+\GuideCommentary{Steady state: production balances removal and each inventory is constant. Secular equilibrium: a short-lived daughter tracks a slowly decaying parent, and both still change (Lesson~3 handout, Section~6).}
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (b).}
+\item After three half-lives the fraction of a radionuclide remaining is \opt{a} $1/3$; \opt{b} $1/8$; \opt{c} $1/6$; \opt{d} $1/9$.
+\item A nuclide produced at a constant rate $A_o$ reaches a saturation activity of \opt{a} $A_o/\lambda$; \opt{b} $\lambda A_o$; \opt{c} $A_o$; \opt{d} $A_ot_{1/2}$.
+\item In secular equilibrium \opt{a} parent and daughter activities are equal; \opt{b} parent and daughter inventories are equal; \opt{c} the daughter is stable; \opt{d} nothing decays.
+\item One curie is \opt{a} one decay per second; \opt{b} $3.7\times10^{10}$ decays per second; \opt{c} one gram of any radionuclide; \opt{d} $10^{-24}\ \mathrm{cm^2}$.
+\end{quiz}}
+
+\end{programmed}
+
+\ifguidehandwriting\clearpage\fi
+
+\Sec{7}{Key terms}
+\begin{multicols}{2}
+\begin{keyterms}
+\gterm{nuclide, isotope}{a nucleus ${}^A_ZX$; isotopes share $Z$ and differ in $N$ (\ref*{f:symbol}).}
+\gterm{atomic number, mass number, nucleon}{$Z$; $A=N+Z$; a proton or neutron (\ref*{f:symbol}).}
+\gterm{reaction equation}{$A+B\to C+D$ or $A(B,C)D$; conserves charge and nucleons (\ref*{f:conserve}--\ref*{f:compound}).}
+\gterm{compound nucleus}{the short-lived intermediate formed by the reactants (\ref*{f:compound}).}
+\gterm{rest mass, total energy, kinetic energy}{$m_0$; $mc^2$; $mc^2-m_0c^2\simeq\tfrac12m_0v^2$ for reactor neutrons (\ref*{f:relativ}).}
+\gterm{$Q$ value}{(initial $-$ final rest mass)$\,c^2$; positive when exothermic (\ref*{f:Q}--\ref*{f:Qcalc}).}
+\gterm{mass defect, binding energy}{$\Delta=ZM_P+NM_N-M_X$ and $\Delta c^2$ (\ref*{f:defect}).}
+\gterm{curve of binding energy}{$\Delta c^2/A$ versus $A$; peaks near iron, which is why fusion and fission both release energy (\ref*{f:curve}).}
+\gterm{fusion, fission}{joining light nuclei; splitting heavy ones (\ref*{f:curve}--\ref*{f:fusion}).}
+\gterm{fission fragment, fission product}{the two pieces of a split; fragments plus their decay daughters (\ref*{f:dissip}, \ref*{f:fp}).}
+\gterm{range}{the distance a charged particle travels before stopping (\ref*{f:dissip}).}
+\gterm{recoverable energy $\gamma$}{$3.1\times10^{-11}$~J per fission, about \MeV{193} (\ref*{f:dissip}).}
+\gterm{multiplication $k$}{fission neutrons in one generation over those in the preceding one (\ref*{f:k}).}
+\gterm{neutron lifetime $l$}{mean time from birth in fission to absorption (\ref*{f:k}).}
+\gterm{subcritical, critical, supercritical}{$k<1$, $k=1$, $k>1$ (\ref*{f:k}).}
+\gterm{prompt, delayed}{emitted at fission; emitted later by decaying fission products (\ref*{f:fp}).}
+\gterm{decay heat}{power from beta and gamma decay of fission products after shutdown (\ref*{f:decayheat}).}
+\gterm{fissile, fertile, fissionable}{fissions at any neutron energy; converts to fissile by capture and decay; either (\ref*{f:fissile}).}
+\gterm{breeder}{a reactor that creates more fissile material than it consumes (\ref*{f:breed}).}
+\gterm{decay constant $\lambda$}{probability of decay per unit time (\ref*{f:law}).}
+\gterm{half-life, mean life}{$0.693/\lambda$ and $1/\lambda$ (\ref*{f:law}).}
+\gterm{activity; Bq, Ci}{$\lambda N$; one decay per second, and $3.7\times10^{10}$ of them (\ref*{f:units}).}
+\gterm{saturation activity}{the limit $\lambda N\to A_o$ under constant production (\ref*{f:sat}).}
+\gterm{decay chain}{$A\to B\to C$; solved from the parent downstream (\ref*{f:chain}).}
+\gterm{secular equilibrium}{equal parent and daughter activities when $\lambda_A\ll\lambda_B$ (\ref*{f:secular}).}
+\end{keyterms}
+\end{multicols}
+
+\Sec{8}{Where the end-of-chapter problems live}
+\begin{handoutsmall}[8.3]
+\begin{tabularx}{\linewidth}{@{}p{0.95in}Y@{}}
+\toprule
+FNRP problem & Frames that build the needed pieces\\
+\midrule
+1.1, 1.2, 1.3, 1.4 & symbols, completing reactions, compound nuclei: \ref*{f:symbol}--\ref*{f:compound}\\
+1.5 & classical versus relativistic kinetic energy: \ref*{f:relativ}\\
+1.6 & mass converted in fission and in combustion: \ref*{f:scale}\\
+1.7 & capture and beta-decay sequences: \ref*{f:breed}\\
+1.8 & nuclear radii: a formula evaluation, revisited in the Chapter~2 guide\\
+1.9 & decay heat at several times and operating histories: \ref*{f:decayheat}\\
+1.10, 1.13, 1.14, 1.16, 1.17 & half-life, saturation, and time to a given fraction of saturation: \ref*{f:law}, \ref*{f:sat}--\ref*{f:satnum} (in 1.10 the slowest step, \iso{239}{Np}, controls)\\
+1.11 & two isotopes decaying at different rates: apply \ref*{f:law} to each and form the ratio\\
+1.12, 1.15, 1.18, 1.19 & curies, mass, and decay power: \ref*{f:units} (for 1.19 multiply the activity by the energy per decay)\\
+1.17d, 1.20 & chains with and without production: \ref*{f:chain}--\ref*{f:steady} (when $\lambda_A=\lambda_B$, take the limit of (1.48): $N_B=\lambda N_A(0)\,t\,e^{-\lambda t}$)\\
+\bottomrule
+\end{tabularx}
+\end{handoutsmall}
+
+\begin{takeawaybox}[Learning objectives]
+The objectives this chapter implies, and how they compare with the Lesson 1--3 objectives already in the course, are tabulated in \texttt{reading\_guide/learning\_objectives.md}. Items flagged there as new (for example, the fuel actually fissioned per unit energy, the time scale $l/(k-1)$ of a prompt chain reaction, decay heat from the Wigner--Way formula, and the two limiting cases of a two-member chain) are the ones this guide spends extra frames on.
+\end{takeawaybox}
+\end{document}

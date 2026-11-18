@@ -1,9 +1,9 @@
 Build the guides with XeLaTeX and latexmk:
 
 ```sh
-make                          # Both chapters, portrait (the default)
-make landscape                # Both chapters, landscape
-make both                     # Both orientations of both chapters
+make                          # Every chapter (1-4, 6, 7), portrait (the default)
+make landscape                # Every chapter, landscape
+make both                     # Both orientations of every chapter
 make reference                # Dense landscape editions without writing space
 make playwrite                # Landscape trials using Playwrite US Modern
 make indie-euler              # Landscape trials: Indie Flower + Euler Math
@@ -103,6 +103,30 @@ latexmk -xelatex -jobname=ch07_guide_landscape \
 
 `make tidy` removes auxiliary files for all editions, retaining PDFs;
 `make clean` removes those PDFs too. `make verify` checks the numerical examples.
+Both `make verify` and the Bessel-table rule run `tools/verify_examples.py`,
+which needs NumPy and SciPy; pass `PYTHON=/path/to/python` if the default
+interpreter lacks them (for this workspace,
+`PYTHON=/home/robertsj/miniforge3/bin/python`).
+
+Guides exist for Chapters 1-4 (`ch01_guide.tex` to `ch04_guide.tex`; Lessons
+1-19) and Chapters 6-7 (Lessons 31-39). The Makefile discovers `ch*_guide.tex`,
+so every target above applies to all of them. The Chapter 1-4 sources label
+each frame (`\label{f:name}`) and cite it with `\ref*{f:name}`, which prints
+the frame number with its F; frames can then be inserted without renumbering
+the cross-references, key terms, or problem tables. After adding or moving
+frames, update the frame tags in `tools/verify_examples.py` to match.
+
+The Chapter 3 guide extends Lewis: its Sections 7 and 8 introduce the
+multigroup method and the multigroup $k$-eigenvalue problem formally,
+following the Lesson 13 and 14 handouts, because the text mentions multigroup
+methods only in passing. `learning_objectives.md` compares the objectives
+implied by Chapters 1-4 with the lesson objectives in `../pages/` and flags
+new ones; the Chapter 6-7 comparison has not been written.
+
+The Chapter 4 guide reuses the lattice, neutron-cycle, and resonance sketches
+of the Lesson 15-18 handouts by loading
+`../handouts/figures/reactor_schematics.tex` (found through `TEXINPUTS`), so a
+change to those sketches changes the guide as well.
 
 This folder contains reading guides for Chapters 6 and 7, with illustrative examples of each new principle, which can include a physical quantity defined in words or by equation, a modeled system via a set of equations representing specific cases of the reading material, and similar exercises that, in isolation, are short but that, if chained together, can recreate more traditional homework problems in terms of extent and depth.
 

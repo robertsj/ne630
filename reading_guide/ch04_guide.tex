@@ -1,0 +1,559 @@
+% Programmed reading guide for FNRP Chapter 4 (The Power Reactor Core).
+% Build: make ch04_guide.pdf   (XeLaTeX via latexmk; the class is in ../handouts)
+% Every number quoted below is recomputed by tools/verify_examples.py.
+\documentclass[compact]{ne630handout}
+\usepackage{ne630guide}
+\handoutsolutionsfalse
+% Shared lattice, neutron-cycle, and resonance sketches from the Lesson 15-18 handouts.
+\input{figures/reactor_schematics.tex}
+\hypersetup{pdftitle={NE 630 -- Reading Guide: FNRP Chapter 4, The Power Reactor Core},pdfauthor={Jeremy Roberts}}
+\newcommand{\iso}[2]{\ensuremath{{}^{#1}\mathrm{#2}}}
+\newcommand{\MeV}[1]{\SI{#1}{\mega\electronvolt}}
+\newcommand{\eV}[1]{\SI{#1}{\electronvolt}}
+\newcommand{\barns}[1]{\SI{#1}{\barn}}
+\newcommand{\icm}[1]{\SI{#1}{\per\centi\meter}}
+\newcommand{\cm}[1]{\SI{#1}{\centi\meter}}
+\newcommand{\VmVf}{V_m/V_f}
+\newcommand{\etaT}{\eta_T}
+
+\begin{document}
+\Guide{4}{The Power Reactor Core}
+ {FNRP Sections 4.1--4.5 (core composition, fast reactor lattices, thermal reactor lattices, and the four factor formula). Companion handouts: Lessons 15--19.}
+ {15 (4.1--4.2), 16 (4.3), 17 (4.4 and the four factors of 4.5), 18 (resonance escape and the PWR example of 4.5), 19 (OpenMC unit cells).}
+
+\begin{KeyBox}{How to use this guide}
+\ifguidehandwriting
+\textbf{One cell at a time.} Use one sheet to cover all rows below the current cell and a second sheet to cover its tinted answer. Read only the current question (for example, F1(a)) and write in its ruled space. Reveal that cell\textquotesingle s answer, compare your reasoning, and correct your work. Only then uncover the next question, F1(b). Shared givens appear above each sequence; keep them available as you work.\par\smallskip
+\fi
+Same rules as the earlier guides. Each frame poses one small task; the tinted column holds the answer and commentary. \textbf{Cover the tinted column}, work the frame, then compare. Frames marked \Chain reuse the previous answer, which is restated, so a missed frame never blocks the next one. Quiz answers are upside down in the footnote.
+\end{KeyBox}
+
+\begin{KeyBox}{What changes from Chapter 3}
+Chapter~3 treated the reactor as a uniform soup: every nucleus saw the same flux $\phi(E)$, and $\kinf=\nu\overline\Sigma_f/\overline\Sigma_a$. Real cores are lattices of fuel pins in coolant or moderator. Chapter~4 asks when the soup is still a fair model (fast reactors) and what replaces it when it is not (thermal reactors), and it organizes the answer as the four factor formula $\kinf=\epsilon p f\etaT$. Notation: Lewis writes the energy-dependent flux as $\varphi(E)$, with $\varphi_f$ and $\varphi_m$ the averages over the fuel and moderator volumes; this guide writes $\phi$, $\phi_f$, $\phi_m$, as the Chapter~3 guide did. Superscripts name materials: $f$ fuel, $m$ moderator, $c$ coolant, $st$ structure, $fi$ fissile, $fe$ fertile. Subscripts $T$, $I$, $F$ are the thermal, intermediate, and fast ranges, divided at \eV{1} and \MeV{0.1}. Lesson~17 abbreviates the volume-integrated absorption and production rates as $A_g^r$ and $B_g^r$; this guide uses that shorthand from Section~4 on.
+\end{KeyBox}
+
+\begin{programmed}
+\GSec{What a power reactor core is made of (FNRP 4.1--4.2; Lesson 15)}
+
+\begin{pframe}[Two criteria]\label{f:criteria}
+\GuideSubcell{a}{Which two requirements dominate the design of a core?}{
+Criticality must be maintained at every power level and throughout the life of the fuel; and the heat of fission must be removed without overheating anything.}
+
+\GuideSubcell{b}{Describe the repeating unit of most power reactor cores.}{
+A long cylindrical \Term{fuel element} (pin) about \cm{1} across, surrounded by its share of coolant and, in some thermal reactors, a separate moderator: a \Term{lattice cell}. Pins are bundled into \Term{fuel assemblies} so they can be handled together.}
+
+\GuideSubcell{c}{Why are pins thin, and why are there so many?}{
+Heat must be conducted out of the fuel, so the centerline temperature and surface heat flux limit the diameter and the \Term{linear heat rate} $q'$ (power per unit length) to a few tens of kW/m. A large core then needs tens of thousands of pins.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1: pins, power density, and volume]\label{f:pins}
+\GuideContext{FNRP Table~4.1, for a PWR: average linear heat rate $\bar q'=\SI{17.5}{\kilo\watt\per\meter}$ and average power density $\bar P'''=\SI{102}{\mega\watt\per\meter\cubed}$. Take $P=\SI{3000}{\mega\watt}$ (thermal) and fuel \SI{3.66}{\meter} long.}
+
+\GuideSubcell{a}{How much power does one pin produce, and how many pins are needed?}{
+$17.5\times3.66=\SI{64}{\kilo\watt}$ per pin; $3\times10^6/64=47{,}000$ pins.}
+
+\GuideSubcell{b}{Use $P=\bar P'''V$ to find the core volume.}{
+$V=3000/102=\SI{29.4}{\meter\cubed}$, as tabulated.}
+
+\GuideSubcell{c}{Table~4.1 lists $\bar P'''=7.7$, $6.6$, and \SI{217}{\mega\watt\per\meter\cubed} for a CANDU, an HTGR, and a sodium-cooled fast reactor. Find their volumes at \SI{3000}{\mega\watt}.}{
+\SI{390}{\meter\cubed}, \SI{455}{\meter\cubed}, and \SI{13.8}{\meter\cubed}: a thirtyfold spread at the same power.}
+
+\GuideSubcell{d}{Why do lattice design and core size ``intertwine'' in setting criticality?}{
+$k=\kinf\PNL$. The lattice (ratios of fuel, coolant, moderator; enrichment) sets $\kinf$ and the achievable power density; the power density sets the volume; the volume sets $\PNL$.}
+
+\end{pframe}
+
+\begin{pframe}[Why each reactor looks the way it does]\label{f:families}
+\GuideContext{From FNRP Table~3.1: $\mathrm{H_2O}$ has the largest slowing-down power and the smallest slowing-down ratio; $\mathrm{D_2O}$ the largest ratio; graphite the smallest power. From Table~4.1, the moderator-to-fuel volume ratios are $1.95$ (PWR), $2.78$ (BWR), $17$ (CANDU), and $135$ (HTGR), with enrichments of $4.2$, $4.2$, $0.7$, and $15$ weight percent.}
+
+\GuideSubcell{a}{Explain the light water reactor's small $\VmVf$ and its need for enrichment.}{
+Water slows neutrons in a short distance, so little is needed; but it absorbs thermal neutrons strongly, so more would cost too much, and even the optimum amount requires 2 to 5\% enrichment.}
+
+\GuideSubcell{b}{Explain the CANDU's large $\VmVf$ and natural uranium fuel.}{
+Heavy water slows neutrons less effectively, so much more is needed; its tiny absorption makes that affordable and leaves enough neutrons for natural uranium. Low reactivity reserve forces on-line refueling.}
+
+\GuideSubcell{c}{Why does a fast reactor use a tight hexagonal lattice and enrichment above 10\%?}{
+To keep light nuclei out (minimum coolant per unit fuel) and so keep the spectrum fast. Fast-spectrum cross sections give a small margin of production over absorption, so the fissile fraction must be high.}
+
+\GuideSubcell{d}{Which reactor has the largest core, and why?}{
+The graphite-moderated HTGR: graphite has the weakest slowing-down power, so the lattice is mostly moderator and the power density is the lowest.
+\GuideCommentary{The Lesson~15 handout tabulates the families (PWR/BWR, PHWR, graphite, fast) by coolant, moderator, and fuel; RBMK is the outlier with a graphite moderator and boiling light-water coolant.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2: lattice geometry]\label{f:pitch}
+\GuideContext{Pins of diameter $D$ on a \Term{pitch} $P$ (center-to-center spacing) tile the plane with square cells of area $P^2$ or hexagonal cells of area $\tfrac{\sqrt3}{2}P^2$ (Fig.~\ref{fig:cells}; Lesson~16 handout, Section~1). Ignore cladding, so the cell is fuel plus moderator.
+\GuideContextFigure{\begin{center}\resizebox{.8\linewidth}{!}{\PinCellsFigure}
+\gfigcap{Square and hexagonal pin cells of the same pitch (from the Lesson~16 handout).}\label{fig:cells}
+\end{center}}}
+
+\GuideSubcell{a}{Write $\VmVf$ for each cell.}{
+$\dfrac{P^2-\pi D^2/4}{\pi D^2/4}$ and $\dfrac{\tfrac{\sqrt3}{2}P^2-\pi D^2/4}{\pi D^2/4}$.}
+
+\GuideSubcell{b}{For $D=\cm{1.2}$ and $\VmVf=2$ (FNRP problem~4.1), find the pitch of each lattice.}{
+The cell area must be $3\times\pi(0.6)^2=\SI{3.39}{\centi\meter\squared}$. Square: $P=\sqrt{3.39}=\cm{1.84}$. Hexagonal: $P=\sqrt{2(3.39)/\sqrt3}=\cm{1.98}$.}
+
+\GuideSubcell{c}{What is the smallest possible coolant-to-fuel volume ratio in each lattice (FNRP problem~4.2)?}{
+Pins touch at $P=D$. Square: $4/\pi-1=0.27$. Hexagonal: $2\sqrt3/\pi-1=0.10$.
+\GuideCommentary{The hexagonal (triangular) array packs pins closer, which is why fast reactors use it.}}
+
+\end{pframe}
+
+\begin{pframe}[The uranium-lump experiment][4]\label{f:lump}
+Lesson~15 (handout Section~3) takes a fixed inventory of water and natural uranium, with a hydrogen-to-uranium atom ratio $h$, and either mixes it uniformly or gathers the uranium into a central metal sphere of radius $r_U$ inside a water sphere of radius $R$. With $N_H=\SI{6.69e22}{\per\centi\meter\cubed}$ in water and $N_U=\SI{4.83e22}{\per\centi\meter\cubed}$ in the metal, find $r_U/R$ for $h=10$. Then say what lumping changes if the atoms are the same.
+\response
+$h=\dfrac{N_H(R^3-r_U^3)}{N_Ur_U^3}$ gives $\dfrac{r_U}{R}=\Big(\dfrac{N_H}{N_H+hN_U}\Big)^{1/3}=\Big(\dfrac{6.69}{6.69+48.3}\Big)^{1/3}=0.50$.
+\GuideCommentary{Lumping changes \emph{where} neutrons slow down. Most slowing down happens in the water, outside the fuel, and neutrons at resonance energies that do reach the lump are absorbed in its outer skin, shielding the interior: \Term{spatial self-shielding}. The rest of the chapter makes this quantitative (Section~5).}
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (b).}
+\item The linear heat rate $q'$ is \opt{a} power per unit core volume; \opt{b} power per unit length of fuel pin; \opt{c} heat flux at the pin surface; \opt{d} power per assembly.
+\item At a fixed power, the core with the largest volume is the one with the \opt{a} highest enrichment; \opt{b} highest power density; \opt{c} lowest power density; \opt{d} most control rods.
+\item Heavy-water reactors use a large moderator-to-fuel ratio because $\mathrm{D_2O}$ \opt{a} has a modest slowing-down power but almost no absorption; \opt{b} is cheap; \opt{c} absorbs strongly; \opt{d} is a gas.
+\item For the same pin diameter and pitch, a hexagonal cell compared with a square cell has \opt{a} more coolant per pin; \opt{b} less coolant per pin; \opt{c} the same; \opt{d} no coolant.
+\end{quiz}}
+
+\GSec{Fast reactor lattices (FNRP 4.3; Lesson 16)}
+
+\begin{pframe}[When is the soup a good model?]\label{f:mfp}
+\GuideContext{Chapter~3's starting point, \FNRP{4.1}, assumed every material sees the same flux. That holds if a neutron crosses many pins between collisions. For fast neutrons take the data of FNRP problem~4.3: oxide fuel with $N\approx\SI{0.0245e24}{\per\centi\meter\cubed}$ and $\sigma_t\approx\barns{8.3}$; sodium with $N=\SI{0.0254e24}{\per\centi\meter\cubed}$ and $\sigma_t=\barns{3.7}$.}
+
+\GuideSubcell{a}{Compute the mean free path in the fuel and in sodium.}{
+Fuel: $\Sigma_t=0.0245\times8.3=\icm{0.20}$, so $\lambda=\cm{4.9}$. Sodium: $\Sigma_t=\icm{0.094}$, $\lambda=\cm{10.6}$.}
+
+\GuideSubcell{b}{Compare with a pin diameter of about \cm{0.6}. What follows for the flux across the cell?}{
+A pin is about one-eighth of a mean free path thick. Neutrons cross many pins and coolant channels between collisions, so the flux is nearly flat across the cell: $\phi_f(E)\simeq\phi_c(E)\simeq\phi_{st}(E)$.}
+
+\GuideSubcell{c}{Why are fast-spectrum mean free paths long?}{
+Cross sections generally fall with increasing neutron energy, and there are no thermal or resonance peaks to shorten them.
+\GuideCommentary{Lesson~16 calls $d\,\Sigma_t$ the optical thickness of a region of size $d$: compare length scales, not just energies.}}
+
+\end{pframe}
+
+\begin{pframe}[Volume weighting]\label{f:volw}
+\GuideContext{With a common flux, cross sections are volume-weighted: $\Sigma_x(E)=\frac{V_f}{V}\Sigma_x^f+\frac{V_c}{V}\Sigma_x^c+\frac{V_{st}}{V}\Sigma_x^{st}$, \FNRP{4.2}, which is \FNRP{2.18} of the Chapter~2 guide.}
+
+\GuideSubcell{a}{Insert this into $\kinf=\nu\overline\Sigma_f/\overline\Sigma_a$ to get \FNRP{4.8}.}{
+$\kinf=\dfrac{V_f\,\nu\overline\Sigma_f^f}{V_f\overline\Sigma_a^f+V_c\overline\Sigma_a^c+V_{st}\overline\Sigma_a^{st}}$: production in the fuel over absorption everywhere.}
+
+\GuideSubcell{b}{Split the fuel into fissile and fertile atoms with enrichment $\tilde e=N_{fi}/N_f$, \FNRP{4.10}. What is the fuel's microscopic cross section?}{
+$\bar\sigma_x^f=\tilde e\,\bar\sigma_x^{fi}+(1-\tilde e)\,\bar\sigma_x^{fe}$, \FNRP{4.14}.}
+
+\GuideSubcell{c}{Equation \FNRP{4.16} shows coolant lowering $\kinf$ through its absorption. What is its second, subtler effect?}{
+Coolant and structure are lighter than fuel, so collisions with them soften the spectrum. That lowers the spectrum-averaged ratio of $\nu\sigma_f$ to $\sigma_a$ in the fuel (the valley in $\eta(E)$ of the Chapter~3 guide).
+\GuideCommentary{So the one-group cross sections are not constants of the material: they depend on the spectrum, which depends on the lattice. Lesson~16: collapse only after finding the spectrum.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3: a sodium-cooled fast lattice]\label{f:sfr}
+\GuideContext{FNRP problem~4.3. Core volume fractions: 30\% fuel, 50\% sodium, 20\% iron. The fuel is 15\% $\mathrm{PuO_2}$ and 85\% depleted $\mathrm{UO_2}$ by volume. Fast-spectrum data: $\mathrm{PuO_2}$: $\sigma_f=\barns{1.95}$, $\sigma_a=\barns{2.40}$, $\nu=2.98$; $\mathrm{UO_2}$: $\sigma_f=\barns{0.05}$, $\sigma_a=\barns{0.404}$, $\nu=2.47$; Na: $\sigma_a=\barns{0.0018}$; Fe: $\sigma_a=\barns{0.0087}$. Number densities ($N=\rho N_0/A$, in units of \SI{e24}{\per\centi\meter\cubed}): $\mathrm{PuO_2}$ $0.0244$, $\mathrm{UO_2}$ $0.0245$, Na $0.0254$, Fe $0.0849$.}
+
+\GuideSubcell{a}{Compute the cell-averaged production cross section, $\nu\Sigma_f$.}{
+$0.30\,[0.15(0.0244)(2.98)(1.95)+0.85(0.0245)(2.47)(0.05)]=0.30\,[0.0213+0.0026]=\icm{0.00717}$.}
+
+\GuideSubcell{b}{Compute the absorption in the fuel, in the sodium, and in the iron.}{
+Fuel: $0.30\,[0.15(0.0244)(2.40)+0.85(0.0245)(0.404)]=\icm{0.00517}$. Na: $0.50(0.0254)(0.0018)=\icm{0.00002}$. Fe: $0.20(0.0849)(0.0087)=\icm{0.00015}$.}
+
+\GuideSubcell{c}{Compute $\kinf$. What fraction of absorptions occurs outside the fuel?}{
+$\kinf=0.00717/0.00534=1.34$. Only 3\%: in a fast lattice the coolant and structure matter through the spectrum, not through absorption.}
+
+\GuideSubcell{d}{Uranium supplies 11\% of the production. From which process?}{
+Fast fission of \iso{238}{U}, above its threshold near \MeV{1}.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3 continued: enrichment as the design lever]\label{f:sfre}
+\GuideContext{FNRP problem~4.4: with a nonleakage probability of $0.90$, the lattice of \ref*{f:sfr} needs $\kinf=1/0.90=1.111$. Hold the spectrum (the cross sections) fixed and vary the $\mathrm{PuO_2}$ fraction $x$ of the fuel. Because the two oxides have nearly equal number densities, $x$ is nearly the atom enrichment $\tilde e$.}
+
+\GuideSubcell{a}{Write $\kinf(\tilde e)$ per fuel atom, with $b=\nu\bar\sigma_f$ and $a=\bar\sigma_a$ for each nuclide and $C$ the nonfuel absorption per fuel atom.}{
+$\kinf=\dfrac{b_{fe}+\tilde e\,(b_{fi}-b_{fe})}{a_{fe}+\tilde e\,(a_{fi}-a_{fe})+C}$, which is \FNRP{4.16}.}
+
+\GuideSubcell{b}{Solve for the enrichment that gives a target $k_*$.}{
+$\tilde e_*=\dfrac{k_*(a_{fe}+C)-b_{fe}}{(b_{fi}-b_{fe})-k_*(a_{fi}-a_{fe})}$ (Lesson~16 handout, Section~4).}
+
+\GuideSubcell{c}{Evaluate it with $b_{fi}=5.81$, $b_{fe}=0.124$, $a_{fi}=2.40$, $a_{fe}=0.404$, $C=\barns{0.023}$, and $k_*=1.111$.}{
+$\tilde e_*=\dfrac{1.111(0.427)-0.124}{5.687-1.111(1.996)}=\dfrac{0.351}{3.469}=0.101$: about 10\% $\mathrm{PuO_2}$.
+\GuideCommentary{Reducing the plutonium from 15\% to 10\% takes $\kinf$ from $1.34$ to $1.11$. In a real design the spectrum shifts as the composition changes, so the cross sections must be recomputed; and note that $\tilde e$ is an atom fraction, while OpenMC's uranium enrichment shortcut takes weight percent.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (a); 3 (c); 4 (b).}
+\item Volume weighting of cross sections is valid when \opt{a} the fuel is enriched; \opt{b} every region of the cell sees nearly the same flux; \opt{c} the moderator is water; \opt{d} the pins are thick.
+\item In a fast lattice a pin is typically \opt{a} a small fraction of a mean free path across; \opt{b} many mean free paths across; \opt{c} exactly one mean free path across; \opt{d} opaque to neutrons.
+\item Adding coolant to a fast lattice lowers $\kinf$ mainly by \opt{a} absorbing neutrons; \opt{b} raising leakage; \opt{c} softening the spectrum; \opt{d} cooling the fuel.
+\item At a fixed spectrum, raising the enrichment of a fast lattice \opt{a} lowers $\kinf$; \opt{b} raises $\kinf$; \opt{c} has no effect; \opt{d} changes only the leakage.
+\end{quiz}}
+
+\GSec{Thermal reactor lattices (FNRP 4.4; Lesson 17)}
+
+\begin{pframe}[Why the soup fails for thermal reactors]\label{f:tworegion}
+\GuideSubcell{a}{Which two facts make the flux in fuel and moderator differ in a thermal lattice?}{
+Thermal and resonance cross sections are far larger than fast ones, and moderator regions are wide. Pins and moderator gaps are then several mean free paths across.}
+
+\GuideSubcell{b}{Where is the flux depressed, and at which energies?}{
+In the fuel, at the energies where the fuel absorbs strongly: at the resonances and in the thermal range.}
+
+\GuideSubcell{c}{Lewis's two-region model writes the cell reaction rate as \FNRP{4.17}. Write it and say what $\phi_f(E)$ and $\phi_m(E)$ are.}{
+$V\Sigma_x(E)\phi(E)=V_f\Sigma_x^f(E)\phi_f(E)+V_m\Sigma_x^m(E)\phi_m(E)$, with $\phi_f$ and $\phi_m$ the fluxes averaged over the fuel and moderator volumes. Rates, not cross sections, are volume-weighted.
+\GuideCommentary{Lesson~17 (handout Section~2): homogenize reaction rates, not atoms. Volume-weighting the cross sections is recovered only when $\phi_f=\phi_m$.}}
+
+\end{pframe}
+
+\begin{pframe}[Which reactions matter in which range]\label{f:retained}
+\GuideContext{Insert (4.17) into (4.1) and split every integral into thermal ($T$), intermediate ($I$), and fast ($F$) parts. Lewis keeps only the terms that matter, \FNRP{4.20}--(4.22).}
+
+\GuideSubcell{a}{Fission neutron production: which ranges are kept, and what is dropped?}{
+Thermal fission (most of it) and fast fission (mainly in \iso{238}{U}). Fission by intermediate neutrons is neglected.}
+
+\GuideSubcell{b}{Absorption in the moderator: which range?}{
+Thermal only; moderators absorb appreciably only at thermal energies.}
+
+\GuideSubcell{c}{Absorption in the fuel: which ranges?}{
+Thermal, and intermediate (resonance capture). Fast absorption is neglected.}
+
+\GuideSubcell{d}{Write the resulting $\kinf$, \FNRP{4.23}, in Lesson~17's shorthand, where $B_g$ is the production rate in range $g$ and $A_g^r$ the absorption rate in range $g$ and region $r$.}{
+$\kinf\simeq\dfrac{B_T+B_F}{A_T^f+A_I^f+A_T^m}$: three of the five terms are thermal.}
+
+\end{pframe}
+
+\GSec{The four factor formula (FNRP 4.5; Lessons 17--18)}
+
+\begin{pframe}[The neutron cycle]\label{f:cycle}
+\GuideContext{Figure~\ref{fig:cycle} follows one generation. Start with $n$ fast neutrons from thermal fission.
+\par\begin{center}\resizebox{\linewidth}{!}{\CycleFigure}
+\gfigcap{The idealized no-leakage neutron cycle (from the Lesson~17 handout, after FNRP Fig.~4.5).}\label{fig:cycle}
+\end{center}}
+
+\GuideSubcell{a}{Fast fission in the fertile material adds neutrons. Name the factor and give the new count.}{
+The \Term{fast fission factor} $\epsilon>1$: $\epsilon n$ fast neutrons.}
+
+\GuideSubcell{b}{They slow down in the moderator, and some are captured in the fuel's resonances. Name the surviving fraction and the count reaching thermal energies.}{
+The \Term{resonance escape probability} $p<1$: $\epsilon pn$ become thermal.}
+
+\GuideSubcell{c}{Thermal neutrons are absorbed in fuel or in moderator. Name the fraction absorbed in fuel.}{
+The \Term{thermal utilization} $f<1$: $\epsilon pfn$ are absorbed in the fuel.}
+
+\GuideSubcell{d}{Each thermal absorption in fuel yields how many fission neutrons? Close the cycle.}{
+$\etaT>1$, giving $\epsilon pf\etaT n$ new fast neutrons. By the definition of multiplication, $\kinf=\epsilon pf\etaT$, \FNRP{4.24}.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4: follow one hundred neutrons]\label{f:table}
+\GuideContext{FNRP Table~4.2 gives, for a PWR with fresh fuel and no poisons, $\epsilon=1.27$, $p=0.63$, $f=0.94$, $\etaT=1.89$; and for a CANDU, $1.08$, $0.84$, $0.97$, $1.31$.}
+
+\GuideSubcell{a}{Start 100 fast neutrons through the PWR cycle. Give the count after each step.}{
+127 after fast fission; 80 reach thermal energy (47 lost to resonance capture); 75 are absorbed in fuel (5 in moderator); 142 new fast neutrons: $\kinf=1.42$ (the table rounds to $1.41$).}
+
+\GuideSubcell{b}{Compute $\kinf$ for the CANDU. Which factor is most responsible for its being lower than the PWR's?}{
+$1.08\times0.84\times0.97\times1.31=1.15$ (tabulated $1.12$). $\etaT$: natural uranium gives $1.31$ against $1.89$ for enriched fuel. Its $p$ and $f$ are actually better, thanks to the large volume of weakly absorbing $\mathrm{D_2O}$.}
+
+\GuideSubcell{c}{These $\kinf$ are far above one. What brings an operating reactor to $k=1$?}{
+Leakage ($\PNL<1$), control poisons (which lower $f$), and fuel depletion (which lowers $\etaT$).}
+
+\end{pframe}
+
+\begin{pframe}[The four factors as ratios of rates]\label{f:ratios}
+\GuideContext{In the shorthand of \ref*{f:retained}, with $A_T=A_T^f+A_T^m$, the definitions \FNRP{4.25}, (4.27), (4.42), and (4.43) are
+\begin{equation*}
+\epsilon=\frac{B_T+B_F}{B_T},\qquad p=\frac{A_T}{A_T+A_I^f},\qquad f=\frac{A_T^f}{A_T},\qquad \etaT=\frac{B_T}{A_T^f}.
+\end{equation*}}
+
+\GuideSubcell{a}{Read each ratio in plain words.}{
+$\epsilon$: all fission neutrons per thermal-fission neutron. $p$: thermal absorptions per absorption of any kind (every neutron is absorbed somewhere; those not captured in resonances reach thermal). $f$: the fuel's share of thermal absorptions. $\etaT$: fission neutrons per thermal neutron absorbed in fuel.}
+
+\GuideSubcell{b}{Multiply the four and cancel (\FNRP{4.51}).}{
+$\dfrac{B_T+B_F}{B_T}\cdot\dfrac{A_T}{A_T+A_I^f}\cdot\dfrac{A_T^f}{A_T}\cdot\dfrac{B_T}{A_T^f}=\dfrac{B_T+B_F}{A_T+A_I^f}$, which is (4.23).}
+
+\GuideSubcell{c}{So what does the four factor formula add to (4.23)?}{
+No new physics: it is the same ratio of production to absorption, factored so that each piece belongs to one stage of the neutron's life and responds to one design choice.}
+
+\GuideSubcell{d}{Is $\etaT$ per fission, per absorption in \iso{235}{U}, or per absorption in fuel?}{
+Per thermal absorption in the fuel as a whole, \iso{238}{U} included.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 5: factors from tallied rates]\label{f:rates}
+\GuideContext{A unit-cell calculation (for example the OpenMC model of Lesson~19, with a cell filter and three energy bins) reports, in arbitrary units: $B_T=1000$, $B_F=270$, $A_T^f=529$, $A_T^m=34$, $A_I^f=331$. These illustrative numbers are chosen to match the PWR column of Table~4.2.}
+
+\GuideSubcell{a}{Compute $\epsilon$ and $p$.}{
+$\epsilon=1270/1000=1.27$; $p=563/(563+331)=0.630$.}
+
+\GuideSubcell{b}{Compute $f$ and $\etaT$.}{
+$f=529/563=0.940$; $\etaT=1000/529=1.89$.}
+
+\GuideSubcell{c}{Compute $\kinf$ two ways.}{
+$1.27\times0.630\times0.940\times1.89=1.42$, and directly $1270/894=1.42$.
+\GuideCommentary{In a real calculation the product, the ratio $B/A$ over all energies, and the eigenvalue differ slightly, because of the omitted reactions (intermediate fission, fast absorption) and statistical uncertainty. Discuss the differences; do not force agreement (Lesson~17 handout).}}
+
+\end{pframe}
+
+\begin{pframe}[Thermal utilization and the disadvantage factor]\label{f:fdef}
+\GuideContext{Define thermal fluxes averaged over each region, $\bar\phi_{fT}$ and $\bar\phi_{mT}$, and thermal cross sections averaged with them, \FNRP{4.44}--(4.47). Then $A_T^f=V_f\overline\Sigma_{aT}^f\bar\phi_{fT}$ and $A_T^m=V_m\overline\Sigma_{aT}^m\bar\phi_{mT}$.}
+
+\GuideSubcell{a}{Write $f$ in terms of these, \FNRP{4.48}.}{
+$f=\dfrac{1}{1+\zeta\,\big(V_m\overline\Sigma_{aT}^m\big/V_f\overline\Sigma_{aT}^f\big)}$, with $\zeta=\bar\phi_{mT}/\bar\phi_{fT}$, \FNRP{4.50}.}
+
+\GuideSubcell{b}{$\zeta$ is the \Term{thermal disadvantage factor}. Is it above or below one, and why the name?}{
+Above one: thermal neutrons are born (thermalized) in the moderator and absorbed in the fuel, so the thermal flux is depressed in the fuel. The moderator, sitting in the higher flux, captures more than its share: a disadvantage.}
+
+\GuideSubcell{c}{Lumping the fuel helps $p$. What does it do to $f$?}{
+It hurts: a thicker lump shields its interior from thermal neutrons too, raising $\zeta$ and lowering $f$. Bigger lumps are not unconditionally better.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (b); 3 (a); 4 (b).}
+\item The resonance escape probability is the fraction of \opt{a} thermal neutrons absorbed in fuel; \opt{b} fission neutrons that cause fast fission; \opt{c} neutrons that slow to thermal energy without being captured; \opt{d} neutrons that do not leak.
+\item Dissolving boron in the moderator mainly lowers \opt{a} $\epsilon$; \opt{b} $f$; \opt{c} $\etaT$; \opt{d} $\nu$.
+\item The four factor formula is \opt{a} equation (4.23) rearranged into physically meaningful ratios; \opt{b} an independent empirical law; \opt{c} valid only for fast reactors; \opt{d} a statement about leakage.
+\item A thermal disadvantage factor $\zeta=1.2$ means the thermal flux is \opt{a} 20\% higher in the fuel; \opt{b} 20\% higher in the moderator; \opt{c} uniform; \opt{d} zero in the fuel.
+\end{quiz}}
+
+\GSec{Resonance escape and a PWR lattice (FNRP 4.5; Lesson 18)}
+
+\begin{pframe}[From the definition of $p$ to an exponential]\label{f:pder}
+\GuideContext{From \FNRP{4.28}, $p=1-A_I^f/A$, where $A$ is the total absorption rate in the cell.}
+
+\GuideSubcell{a}{Every absorbed neutron first slowed down. Replace $A$ by a slowing-down density, and say which region supplies it.}{
+$A=Vq\simeq V_mq_m$, \FNRP{4.30}: the heavy fuel nuclei contribute almost nothing to slowing down.}
+
+\GuideSubcell{b}{In the moderator, between resonances, how are $q_m$ and the flux related?}{
+$q_m=\xi^m\Sigma_s^mE\phi_m(E)$, \FNRP{4.32}: the $1/E$ flux of the Chapter~3 guide.}
+
+\GuideSubcell{c}{Combine these, with resonance capture in the fertile nuclide, to get $p$ and the lattice \Term{resonance integral}.}{
+$p=1-\dfrac{V_fN_{fe}}{V_m\xi^m\Sigma_s^m}\,I$, with $I=\displaystyle\int_I\sigma_a^{fe}(E)\,\frac{\phi_f(E)}{\phi_m(E)}\,\frac{dE}{E}$, \FNRP{4.34}--(4.35).}
+
+\GuideSubcell{d}{Each resonance removes a small fraction, and the survivors face the next. What does the product of many factors $p_i=1-x_i\simeq e^{-x_i}$ become?}{
+$p=\exp\!\Big[-\dfrac{V_fN_{fe}}{V_m\xi^m\Sigma_s^m}\,I\Big]$, \FNRP{4.40}, with $I=\sum_iI_i$.}
+
+\GuideSubcell{e}{Read the exponent as a ratio of two capabilities.}{
+The fuel's ability to capture resonance neutrons, $V_fN_{fe}I$, over the moderator's ability to carry them past the resonances, $V_m\xi^m\Sigma_s^m$ (its slowing-down power times its volume).}
+
+\end{pframe}
+
+\begin{pframe}[Space--energy self-shielding]\label{f:I}
+\GuideContext{The factor $\phi_f/\phi_m$ in $I$ is new. Chapter~3's resonance integral, $\int\sigma_a\,dE/E$, has no such factor and is \barns{278} for \iso{238}{U}. For $\mathrm{UO_2}$ rods of density $\rho$ (\si{\gram\per\centi\meter\cubed}) and diameter $D$ (cm), FNRP Table~4.3 gives the empirical $I=4.45+26.6\sqrt{4/\rho D}$ barns (Fig.~\ref{fig:res}).
+\GuideContextFigure{\begin{center}\resizebox{.9\linewidth}{!}{\ResonanceFigure}
+\gfigcap{A resonance and the flux dip it causes in the fuel, for cooler (solid) and hotter (dashed) fuel (from the Lesson~18 handout, after FNRP Fig.~4.6).}\label{fig:res}
+\end{center}}}
+
+\GuideSubcell{a}{Evaluate $I$ for $\rho=11.0$ and $D=\cm{1.0}$. Compare with \barns{278}.}{
+$4.45+26.6\sqrt{4/11}=\barns{20.5}$: fourteen times smaller.}
+
+\GuideSubcell{b}{What physical effect accounts for the reduction?}{
+At a resonance energy the fuel absorbs so strongly that neutrons are taken in the outer skin of the rod; the interior sees almost none. $\phi_f/\phi_m\ll1$ exactly where $\sigma_a^{fe}$ is large.}
+
+\GuideSubcell{c}{Evaluate $I$ for $D=\cm{0.8}$ and \cm{1.2}. What is the trend, and why?}{
+\barns{22.4} and \barns{19.1}. Fatter rods have less surface per unit volume, so a larger fraction of the \iso{238}{U} is hidden.}
+
+\GuideSubcell{d}{In Fig.~\ref{fig:res}, heating the fuel broadens the resonance. Does $I$ rise or fall?}{
+It rises. The peak was already saturated (shielded); broadening pushes absorption into the wings, where the flux is not depressed. So $p$ falls as the fuel heats: the Doppler feedback of Chapter~9.
+\GuideCommentary{In a tight lattice neighboring rods shadow each other, increasing the self-shielding further; the \Term{Dancoff correction} accounts for it, here by an effectively larger $D$.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6: a PWR lattice, $\eta_T$]\label{f:eta}
+\GuideContext{FNRP problem~4.6: $\mathrm{UO_2}$ pins, 3\% enriched, $D=\cm{1.0}$, $\rho=\SI{11.0}{\gram\per\centi\meter\cubed}$, $\VmVf=2$, room temperature. Thermal data: \iso{235}{U} $\nu=2.43$, $\bar\sigma_f=\barns{505}$, $\bar\sigma_a=\barns{591}$; \iso{238}{U} $\bar\sigma_a=\barns{2.42}$.}
+
+\GuideSubcell{a}{Compute the fuel's thermal absorption cross section per uranium atom, \FNRP{4.52}.}{
+$0.03(591)+0.97(2.42)=\barns{20.1}$.}
+
+\GuideSubcell{b}{Compute $\etaT$.}{
+$\etaT=\dfrac{0.03(2.43)(505)}{20.1}=1.83$.}
+
+\GuideSubcell{c}{Check it with \FNRP{4.53}, $\etaT=\etaT^{fi}\big/\big[1+\frac{(1-\tilde e)\bar\sigma_{aT}^{fe}}{\tilde e\,\bar\sigma_{aT}^{fi}}\big]$.}{
+$\etaT^{fi}=2.43(505)/591=2.08$; the bracket is $1+2.347/17.73=1.132$; $2.08/1.132=1.83$.
+\GuideCommentary{For fuel with more than one fissile nuclide, sum numerator and denominator over all of them: FNRP problem~4.12 (2\% \iso{235}{U}, 1\% \iso{239}{Pu}) gives $\etaT=1.87$.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6 continued: $p$]\label{f:p}
+\GuideContext{Same lattice. The Dancoff correction increases the effective rod diameter by 10\%. $N_{\mathrm{UO_2}}=11.0\times0.6023/270=\SI{0.0245e24}{\per\centi\meter\cubed}$, and water's slowing-down power is $\xi\Sigma_s=\icm{1.28}$ (Table~3.1).}
+
+\GuideSubcell{a}{Compute the resonance integral with $D=\cm{1.1}$.}{
+$4.45+26.6\sqrt{4/(11\times1.1)}=\barns{19.7}$.}
+
+\GuideSubcell{b}{Compute the exponent $\dfrac{V_f}{V_m}\dfrac{N_{fe}I}{\xi\Sigma_s}$, with $N_{fe}=0.97N_{\mathrm{UO_2}}$.}{
+$\dfrac12\times\dfrac{0.97(0.0245)(19.7)}{1.28}=\dfrac12(0.367)=0.184$.}
+
+\GuideSubcell{c}{Compute $p$.}{
+$e^{-0.184}=0.83$.}
+
+\GuideSubcell{d}{Repeat with Chapter~3's unshielded $I=\barns{278}$.}{
+The exponent is $2.59$ and $p=0.075$: a homogeneous mixture of this composition would lose over 90\% of its neutrons to resonance capture.
+\GuideCommentary{Separating fuel from moderator is what makes low-enriched water reactors, and natural-uranium graphite reactors, possible at all. Table~4.2's operating PWR has $p=0.63$: hot water is about 30\% less dense, and the fuel is hot.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6 continued: $f$ and $k_\infty$]\label{f:f}
+\GuideContext{Same lattice, with $\zeta=1.16$ and $\epsilon=1.24$ given. Water at room temperature: $N=\SI{0.0334e24}{\per\centi\meter\cubed}$ and $\bar\sigma_{aT}=\barns{0.590}$ per molecule (Chapter~3 guide). Fuel: \barns{20.1} per uranium atom from \ref*{f:eta}; neglect oxygen.}
+
+\GuideSubcell{a}{Compute the thermal absorption cross sections of moderator and fuel.}{
+$\overline\Sigma_{aT}^m=0.0334(0.590)=\icm{0.0197}$; $\overline\Sigma_{aT}^f=0.0245(20.1)=\icm{0.493}$.}
+
+\GuideSubcell{b}{Compute $f$.}{
+$f=\dfrac{1}{1+1.16\,(2)(0.0197)/0.493}=\dfrac1{1.093}=0.915$. (With $\zeta=1$ it would be $0.926$.)}
+
+\GuideSubcell{c}{Assemble $\kinf$ with $\etaT=1.83$ and $p=0.83$.}{
+$\kinf=1.24\times0.832\times0.915\times1.834=1.73$.
+\GuideCommentary{High, because this is fresh fuel, cold, with no boron, no cladding, and no leakage. Each of those is a later subtraction.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 7: the optimum moderator-to-fuel ratio]\label{f:opt}
+\GuideContext{Let $x=\VmVf$ and hold $\epsilon$, $\etaT$, $\zeta$, and $I$ fixed (FNRP problem~4.10). From \ref*{f:p} and \ref*{f:f}, $p=e^{-a/x}$ with $a=0.367$, and $f=1/(1+cx)$ with $c=1.16(0.0197)/0.493=0.0465$. Figure~\ref{fig:opt} plots the result.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.8cm,xlabel={$V_m/V_f$},xmin=0.5,xmax=6,ymin=0.5,ymax=1.9,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.5,-0.3)},anchor=north},legend columns=4,
+ tick label style={font=\scriptsize},label style={font=\scriptsize},domain=0.5:6,samples=120]
+\addplot[wcprimary,thick] {2.2742*exp(-0.3671/x)/(1+0.04645*x)}; \addlegendentry{$\kinf$, no boron}
+\addplot[wcprimary,thick,dashed] {2.2742*exp(-0.3671/x)/(1+0.1354*x)}; \addlegendentry{$\kinf$, 1000 ppm B}
+\addplot[wcalerted,thin] {exp(-0.3671/x)}; \addlegendentry{$p$}
+\addplot[wcexample,thin] {1/(1+0.04645*x)}; \addlegendentry{$f$, no boron}
+\addplot[black!50,thin,dashed] coordinates {(2,0.5) (2,1.9)};
+\end{axis}
+\end{tikzpicture}
+\gfigcap{$\kinf=\epsilon\etaT\,p\,f$ for the lattice of Chain~6 as the moderator-to-fuel volume ratio varies (compare FNRP Fig.~4.7). The vertical line marks $V_m/V_f=2$.}\label{fig:opt}
+\end{center}}}
+
+\GuideSubcell{a}{As $x$ increases, which factor rises and which falls? Why?}{
+$p$ rises: more moderator carries more neutrons past the resonances. $f$ falls: more moderator captures more thermal neutrons.}
+
+\GuideSubcell{b}{Compute $p$, $f$, and $\kinf$ at $x=1$ and $x=4$, and compare with $1.73$ at $x=2$.}{
+$x=1$: $0.693$, $0.956$, $\kinf=1.51$. $x=4$: $0.912$, $0.843$, $\kinf=1.75$.}
+
+\GuideSubcell{c}{Maximize $\ln\kinf=-a/x-\ln(1+cx)+\text{const}$.}{
+$a/x^2=c/(1+cx)$, or $cx^2-acx-a=0$: $x=\tfrac12\big[a+\sqrt{a^2+4a/c}\,\big]=3.0$, where $\kinf=1.77$.}
+
+\GuideSubcell{d}{Is the lattice at $\VmVf=2$ \Term{undermoderated} or \Term{overmoderated}?}{
+Undermoderated: it has less moderator than the optimum.
+\GuideCommentary{Lesson~19 finds the same optimum by scanning $P/D$ in OpenMC and fitting a polynomial near the maximum. Converting between $\VmVf$ and $P/D$ is the geometry of \ref*{f:pitch}.}}
+
+\end{pframe}
+
+\begin{pframe}[An optimum is not a design]\label{f:under}
+\GuideSubcell{a}{Water expands as it heats, far more than the fuel. Which way does the operating point move on Fig.~\ref{fig:opt}?}{
+To the left: fewer moderator atoms per fuel atom.}
+
+\GuideSubcell{b}{What happens to $\kinf$ if the lattice is undermoderated? If overmoderated?}{
+Undermoderated: $\kinf$ falls as temperature rises, a negative feedback that stabilizes the reactor. Overmoderated: $\kinf$ rises, a positive feedback.}
+
+\GuideSubcell{c}{So why do designers give up the maximum $\kinf$?}{
+Liquid-moderated cores are deliberately undermoderated for stability, and a tighter lattice also means a smaller core. Multiplication is only one criterion (\ref*{f:criteria}).}
+
+\GuideSubcell{d}{Why are solid-moderated reactors more complicated in this respect?}{
+The relative expansion of two solids, or of coolant channels, governs the change; with graphite and a liquid coolant (RBMK), the temperature effects on fuel, coolant, and moderator act separately.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 7 continued: boron moves the optimum]\label{f:boron}
+\GuideContext{Dissolve 1000 parts per million (by mass) of natural boron in the water of Chain~6. Boron is 19.9\% \iso{10}{B}, whose thermal absorption cross section is \barns{3409} (Table~3.2). Then $N_B=10^{-3}\times0.6022/10.81=\SI{5.57e-5}{}\times10^{24}$~\si{\per\centi\meter\cubed}.}
+
+\GuideSubcell{a}{Compute the boron's contribution to $\overline\Sigma_{aT}^m$ and compare with the water's \icm{0.0197}.}{
+$5.57\times10^{-5}\times0.199\times3409=\icm{0.0378}$: a tenth of a percent of boron nearly triples the moderator's absorption.}
+
+\GuideSubcell{b}{Recompute $f$ and $\kinf$ at $\VmVf=2$.}{
+$c=1.16(0.0197+0.0378)/0.493=0.135$; $f=1/1.271=0.787$; $\kinf=1.24\times0.832\times0.787\times1.834=1.49$.}
+
+\GuideSubcell{c}{Recompute the optimum $\VmVf$. Where is the lattice now?}{
+$x=\tfrac12\big[0.367+\sqrt{0.367^2+4(0.367)/0.135}\,\big]=1.84$. The same lattice at $x=2$ is now slightly \emph{overmoderated}.
+\GuideCommentary{Boron makes the moderator a worse bargain, so the optimum shifts to less of it (the dashed curve in Fig.~\ref{fig:opt}). When water expands it also carries boron out of the core. This is one reason soluble-boron concentration is limited, and why Lesson~18 says to change one thing per run and separate the effects.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 8: the same rods in heavy water]\label{f:d2o}
+\GuideContext{FNRP problem~4.7: put the rods of Chain~6 in $\mathrm{D_2O}$, with $\xi\Sigma_s=\icm{0.18}$ and $\overline\Sigma_{aT}=\icm{8.6e-6}$ (Chapter~3 guide). With no Dancoff correction, $I=\barns{20.5}$.}
+
+\GuideSubcell{a}{What $\VmVf$ gives the same $p$ as the water lattice (exponent $0.184$)?}{
+$\VmVf=\dfrac{0.97(0.0245)(20.5)}{0.18\times0.184}=15$.}
+
+\GuideSubcell{b}{What $\VmVf$ would give the same $f$, for the same $\zeta$?}{
+The product $V_m\overline\Sigma_{aT}^m$ must match: $\VmVf=2\times0.0197/8.6\times10^{-6}=4600$.}
+
+\GuideSubcell{c}{Which requirement governs the design, and what does that say about heavy-water lattices?}{
+Resonance escape. A heavy-water lattice needs about fifteen times more moderator than fuel to slow neutrons adequately, and at that ratio thermal absorption in the moderator is still negligible ($f\approx1$). Table~4.1's CANDU has $\VmVf=17$.}
+
+\end{pframe}
+
+\begin{pframe}[Qualitative changes]\label{f:qual}
+\GuideSubcell{a}{The coolant-to-fuel volume ratio of a PWR is increased (FNRP problem~4.9). What happens to $\epsilon$, $p$, $f$, and $\etaT$?}{
+$\epsilon$ falls slightly (fast neutrons are more likely to slow down before meeting \iso{238}{U}). $p$ rises. $f$ falls. $\etaT$ is essentially unchanged, being a property of the fuel (apart from small spectrum shifts).}
+
+\GuideSubcell{b}{Heavy water around uranium rods is replaced by light water at the same volume (FNRP problem~4.8). What happens to $p$, $f$, and $\kinf$?}{
+$p$ rises (seven times the slowing-down power). $f$ falls sharply (2600 times the absorption, in a lattice with a very large $\VmVf$). $\kinf$ falls: the lattice is now grossly overmoderated.}
+
+\GuideSubcell{c}{Uranium metal is replaced by $\mathrm{UO_2}$ at the same enrichment, diameter, and $\VmVf$ (FNRP problem~4.11). What happens to $p$, $f$, and $\etaT$?}{
+The oxide has about half the uranium density. $p$ rises: fewer \iso{238}{U} atoms outweigh the larger resonance integral of the less dense rod. $f$ falls: the fuel absorbs less against the same moderator. $\etaT$ is unchanged: oxygen barely absorbs.}
+
+\end{pframe}
+
+\begin{pframe}[From this chapter to a unit-cell calculation][4]\label{f:openmc}
+Lesson~19's handout builds a pin cell in OpenMC: materials, surfaces, cells, settings, tallies. Which boundary condition makes the single cell represent an infinite lattice, and which tallies recover the four factors?
+\response
+Reflective boundaries on the outer faces of the cell (and axially): no neutron leaks, so the eigenvalue is $\kinf$. Tally flux, absorption, and $\nu$-fission by cell (fuel, cladding, coolant) and by energy bin ($T$, $I$, $F$), then form the ratios of \ref*{f:ratios}; the ratio of regional thermal fluxes gives $\zeta$.
+\GuideCommentary{Always check $P>2r_c$, that the volumes add up to the cell area, and whether an enrichment is an atom fraction or a weight percent.}
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (a); 3 (c); 4 (b).}
+\item Increasing a fuel rod's diameter makes its resonance integral \opt{a} larger; \opt{b} smaller; \opt{c} unchanged; \opt{d} zero.
+\item Increasing the moderator-to-fuel ratio \opt{a} raises $p$ and lowers $f$; \opt{b} lowers $p$ and raises $f$; \opt{c} raises both; \opt{d} lowers both.
+\item An undermoderated water lattice, when heated, \opt{a} gains multiplication; \opt{b} is unaffected; \opt{c} loses multiplication, a stabilizing feedback; \opt{d} becomes a fast reactor.
+\item Heating the fuel lowers $p$ because Doppler broadening \opt{a} raises the resonance peaks; \opt{b} spreads absorption into energies where the fuel flux is not depressed; \opt{c} removes resonances; \opt{d} increases $\nu$.
+\end{quiz}}
+
+\end{programmed}
+
+\ifguidehandwriting\clearpage\fi
+
+\Sec{6}{Key terms}
+\begin{multicols}{2}
+\begin{keyterms}
+\gterm{fuel element (pin), fuel assembly}{a clad fuel rod about \cm{1} across; a bundle of pins handled as one (\ref*{f:criteria}).}
+\gterm{lattice cell}{the repeating unit of fuel, coolant, and moderator (\ref*{f:criteria}, \ref*{f:pitch}).}
+\gterm{linear heat rate $q'$}{power per unit length of pin (\ref*{f:criteria}--\ref*{f:pins}).}
+\gterm{average power density $\bar P'''$}{power per unit core volume; $P=\bar P'''V$ (\ref*{f:pins}).}
+\gterm{moderator-to-fuel ratio $V_m/V_f$}{volume ratio set by pitch and pin diameter (\ref*{f:families}, \ref*{f:pitch}).}
+\gterm{pitch $P$}{center-to-center pin spacing; cell area $P^2$ or $\tfrac{\sqrt3}{2}P^2$ (\ref*{f:pitch}).}
+\gterm{PWR, BWR, PHWR (CANDU), HTGR, RBMK, SFR, GCFR}{the reactor families of Table~4.1 (\ref*{f:families}).}
+\gterm{batch and on-line refueling}{periodic shutdown to replace a fraction of the fuel; continuous replacement at power (\ref*{f:families}).}
+\gterm{volume weighting}{$\Sigma_x=\sum_y(V_y/V)\Sigma_x^y$; valid when all regions see the same flux (\ref*{f:volw}).}
+\gterm{enrichment $\tilde e$}{$N_{fi}/N_f$, an atom fraction (\ref*{f:volw}, \ref*{f:sfre}).}
+\gterm{two-region model}{fuel and moderator with separate average fluxes $\phi_f$, $\phi_m$ (\ref*{f:tworegion}).}
+\gterm{four factor formula}{$\kinf=\epsilon pf\etaT$ (\ref*{f:cycle}, \ref*{f:ratios}).}
+\gterm{fast fission factor $\epsilon$}{all fission neutrons per thermal-fission neutron (\ref*{f:cycle}).}
+\gterm{resonance escape probability $p$}{fraction of slowing-down neutrons that reach thermal energy (\ref*{f:cycle}, \ref*{f:pder}).}
+\gterm{thermal utilization $f$}{fraction of thermal absorptions that occur in fuel (\ref*{f:cycle}, \ref*{f:fdef}).}
+\gterm{$\etaT$}{fission neutrons per thermal neutron absorbed in fuel (\ref*{f:cycle}, \ref*{f:eta}).}
+\gterm{thermal disadvantage factor $\zeta$}{$\bar\phi_{mT}/\bar\phi_{fT}>1$ (\ref*{f:fdef}).}
+\gterm{resonance integral (lattice) $I$}{$\int\sigma_a^{fe}(\phi_f/\phi_m)\,dE/E$; empirically $4.45+26.6\sqrt{4/\rho D}$ b for $\mathrm{UO_2}$ rods (\ref*{f:pder}--\ref*{f:I}).}
+\gterm{spatial (space--energy) self-shielding}{depression of the fuel flux at resonance energies, hiding the rod's interior (\ref*{f:lump}, \ref*{f:I}).}
+\gterm{Dancoff correction}{extra self-shielding from neighboring rods in a tight lattice (\ref*{f:I}).}
+\gterm{optimum moderation}{the $V_m/V_f$ that maximizes $\kinf$ (\ref*{f:opt}).}
+\gterm{undermoderated, overmoderated}{less, or more, moderator than the optimum (\ref*{f:opt}--\ref*{f:under}).}
+\gterm{control poison}{an absorber (boron, cadmium, hafnium) used to hold down multiplication; lowers $f$ (\ref*{f:table}, \ref*{f:boron}).}
+\end{keyterms}
+\end{multicols}
+
+\Sec{7}{Where the end-of-chapter problems live}
+\begin{handoutsmall}[8.3]
+\begin{tabularx}{\linewidth}{@{}p{0.95in}Y@{}}
+\toprule
+FNRP problem & Frames that build the needed pieces\\
+\midrule
+4.1, 4.2 & pitch for a given $V_m/V_f$; tightest packing: \ref*{f:pitch}\\
+4.3, 4.4 & $\kinf$ of a fast lattice and the enrichment for a target: \ref*{f:volw}--\ref*{f:sfre} (the fuel mass fraction in 4.3 is $3.30/5.36=0.62$)\\
+4.5 & verifying (4.18): \ref*{f:tworegion}--\ref*{f:retained}\\
+4.6 & $\etaT$, $p$, $f$, and $\kinf$ of a PWR lattice: \ref*{f:eta}--\ref*{f:f}\\
+4.7 & the same rods in heavy water: \ref*{f:d2o}\\
+4.8, 4.9, 4.11 & qualitative changes in the factors: \ref*{f:qual}\\
+4.10 & $p$, $f$, and $\kinf$ versus $V_m/V_f$ and the optimum: \ref*{f:opt} (over the range $0.5$ to $2.5$ asked for, $\kinf$ is still rising; the maximum lies near $3.0$)\\
+4.12 & $\etaT$ for mixed fissile fuel: \ref*{f:eta}\\
+\bottomrule
+\end{tabularx}
+\end{handoutsmall}
+
+\begin{takeawaybox}[Learning objectives]
+The objectives this chapter implies, and how they compare with the Lesson 15--19 objectives already in the course, are tabulated in \texttt{reading\_guide/learning\_objectives.md}. Items flagged there as new (for example, sizing a core from linear heat rate and power density, testing the flat-flux assumption with a mean free path, the derivation of the exponential form of $p$, the closed-form optimum moderator-to-fuel ratio, and the shift of that optimum with soluble boron) are the ones this guide spends extra frames on.
+\end{takeawaybox}
+\end{document}

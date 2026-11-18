@@ -1,0 +1,751 @@
+% Programmed reading guide for FNRP Chapter 3 (Neutron Distributions in Energy).
+% Build: make ch03_guide.pdf   (XeLaTeX via latexmk; the class is in ../handouts)
+% Every number quoted below is recomputed by tools/verify_examples.py.
+\documentclass[compact]{ne630handout}
+\usepackage{ne630guide}
+\handoutsolutionsfalse
+\hypersetup{pdftitle={NE 630 -- Reading Guide: FNRP Chapter 3, Neutron Distributions in Energy},pdfauthor={Jeremy Roberts}}
+\newcommand{\iso}[2]{\ensuremath{{}^{#1}\mathrm{#2}}}
+\newcommand{\MeV}[1]{\SI{#1}{\mega\electronvolt}}
+\newcommand{\eV}[1]{\SI{#1}{\electronvolt}}
+\newcommand{\barns}[1]{\SI{#1}{\barn}}
+\newcommand{\icm}[1]{\SI{#1}{\per\centi\meter}}
+\newcommand{\flx}[1]{\SI{#1}{\per\centi\meter\squared\per\second}}
+\newcommand{\rate}[1]{\SI{#1}{\per\centi\meter\cubed\per\second}}
+\newcommand{\sfis}{s_f'''}
+\newcommand{\Sg}[2]{\Sigma_{s,#1\gets#2}}
+\newcommand{\sg}[2]{\sigma_{s,#1\gets#2}}
+
+\begin{document}
+\Guide{3}{Neutron Distributions in Energy}
+ {FNRP Sections 3.1--3.6 (fuel and moderator properties, neutron energy spectra, energy-averaged cross sections, and $k_\infty$), extended by the multigroup method and the multigroup $k$-eigenvalue problem. Companion handouts: Lessons 8--10 and 12--14.}
+ {8 (3.1--3.3), 9 and 10 (3.4), 11 (3.4, thermal neutrons; no handout), 12 (3.5--3.6), 13 (multigroup method), 14 ($k$-eigenvalue problem).}
+
+\begin{KeyBox}{How to use this guide}
+\ifguidehandwriting
+\textbf{One cell at a time.} Use one sheet to cover all rows below the current cell and a second sheet to cover its tinted answer. Read only the current question (for example, F1(a)) and write in its ruled space. Reveal that cell\textquotesingle s answer, compare your reasoning, and correct your work. Only then uncover the next question, F1(b). Shared givens appear above each sequence; keep them available as you work.\par\smallskip
+\fi
+Same rules as the Chapter~1 and~2 guides. Each frame poses one small task; the tinted column holds the answer and commentary. \textbf{Cover the tinted column}, work the frame, then compare. Frames marked \Chain reuse the previous answer, which is restated, so a missed frame never blocks the next one. Quiz answers are upside down in the footnote.
+\end{KeyBox}
+
+\begin{KeyBox}{Where this guide goes beyond Lewis}
+Chapter~3 asks one question: in an infinite, uniform, steady reactor, how are the neutrons distributed in energy, and what multiplication $\kinf$ results? Lewis answers with three approximate spectra (fast, slowing-down, thermal), averages the cross sections over them, and forms $\kinf=\nu\overline\Sigma_f/\overline\Sigma_a$. He mentions ``so-called multigroup methods'' in one sentence after \FNRP{3.48} and moves on. The course does not: Lessons~13 and~14 derive the multigroup equations and the multigroup eigenvalue problem, because every later calculation in the course, and every production reactor code, is built on them. Sections~7 and~8 of this guide therefore introduce the multigroup method formally, following those handouts. Notation: Lewis writes the energy-dependent flux as $\varphi(E)$ and its integral as $\phi$; the handouts, and this guide, write $\phi(E)$ and $\phi_{\mathrm{tot}}$ or $\phi_g$. In this chapter Lewis writes scattering as $p(E'\to E)$: the neutron arrives at $E'$ and leaves at $E$, the energy where the balance is written. Group cross sections are written destination first, $\Sg{g}{g'}$.
+\end{KeyBox}
+
+\begin{programmed}
+\GSec{Multiplication and fuel (FNRP 3.1--3.2; Lesson 8)}
+
+\begin{pframe}[The model for this chapter]\label{f:model}
+\GuideContext{$k$ is the number of neutrons in one generation divided by the number in the preceding one, \FNRP{3.1}. For many systems $k=\kinf\PNL$, \FNRP{3.2}.}
+
+\GuideSubcell{a}{What do $\kinf$ and $\PNL$ mean?}{
+$\kinf$ is the multiplication of an infinitely large reactor of the same composition; $\PNL$ is the probability that a neutron does not leak out of the real, finite one.}
+
+\GuideSubcell{b}{Which three simplifications let the chapter concentrate on energy?}{
+Infinite (no leakage: Chapters~6--7), homogeneous (one flux for all materials: Chapter~4 relaxes this), and steady with all neutrons prompt (Chapter~5 adds time and delayed neutrons).}
+
+\end{pframe}
+
+\begin{pframe}[Neutrons produced per neutron absorbed]\label{f:eta}
+\GuideContext{$\eta(E)=\dfrac{\nu\Sigma_f(E)}{\Sigma_a(E)}$, \FNRP{3.3}, with $\Sigma_a=\Sigma_\gamma+\Sigma_f$.}
+
+\GuideSubcell{a}{In words, what does $\eta$ count? How does it differ from $\nu$ and from $\kinf$?}{
+Fission neutrons produced per neutron absorbed \emph{in the fuel} at energy $E$. $\nu$ is per fission, so $\eta=\nu\times$(probability an absorption is a fission) $<\nu$. $\kinf$ is per neutron absorbed \emph{anywhere}, averaged over the spectrum, so $\eta$ is an upper bound on $\kinf$.}
+
+\GuideSubcell{b}{For a single fissile nuclide, why is $\eta$ independent of the fuel density?}{
+The number density cancels: $\eta=\nu\sigma_f/\sigma_a$, \FNRP{3.5}.}
+
+\GuideSubcell{c}{FNRP Fig.~3.1 shows $\eta(E)$ for \iso{235}{U} and \iso{239}{Pu} dipping between about \eV{1} and \MeV{0.1}. What does that suggest?}{
+Keep the neutrons either fast or thermal and hurry them through the intermediate range, where capture competes best with fission.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1: thermal $\eta$ versus enrichment]\label{f:etae}
+\GuideContext{With enrichment $\tilde e=N_{fi}/(N_{fe}+N_{fi})$, \FNRP{3.6}--(3.7) give $\eta=\dfrac{\tilde e\,\nu\sigma_f^{fi}+(1-\tilde e)\nu\sigma_f^{fe}}{\tilde e\,\sigma_a^{fi}+(1-\tilde e)\sigma_a^{fe}}$. Thermal data (FNRP problem~3.4): \iso{235}{U} has $\nu=2.43$, $\sigma_f=\barns{505}$, $\sigma_a=\barns{591}$; \iso{238}{U} has $\sigma_f=0$, $\sigma_a=\barns{2.42}$.}
+
+\GuideSubcell{a}{Compute $\eta$ for pure \iso{235}{U}.}{
+$2.43\times505/591=2.08$.}
+
+\GuideSubcell{b}{Compute $\eta$ for natural uranium, $\tilde e=0.007$.}{
+$\dfrac{0.007(2.43)(505)}{0.007(591)+0.993(2.42)}=\dfrac{8.59}{4.14+2.40}=1.31$.}
+
+\GuideSubcell{c}{Compute $\eta$ at 3\% and 5\%. What do you notice?}{
+$1.83$ and $1.93$. Diminishing returns: by a few percent the \iso{235}{U} already takes most of the absorptions, and $\eta$ creeps toward $2.08$.
+\GuideCommentary{Thermal $\eta$ of natural uranium exceeds one by only 0.31. Everything else in the reactor (moderator, structure, resonance capture on the way down, leakage) must spend less than that, which is why moderator choice is decisive.}}
+
+\end{pframe}
+
+\begin{pframe}[Fast or thermal, never in between]\label{f:fastthermal}
+\GuideSubcell{a}{FNRP Fig.~3.2 shows that \iso{238}{U} deepens the valley in $\eta(E)$ at intermediate energies and raises $\eta$ above \MeV{1}. Which two cross sections of \iso{238}{U} do this?}{
+Resonance capture (deepens the valley) and threshold fission above about \MeV{1} (adds production).}
+
+\GuideSubcell{b}{What must a \emph{fast} reactor avoid, and why can it not run on natural uranium?}{
+Light nuclei, whose elastic scattering drops neutrons into the resonance range. Even with none, inelastic scattering in the 99.3\% \iso{238}{U} slows neutrons too quickly; enrichment above about 10\% is needed.}
+
+\GuideSubcell{c}{What does a \emph{thermal} reactor add, and what does it gain?}{
+A \Term{moderator}: light nuclei that carry neutrons past the valley in few collisions to thermal energies, where $\eta$ is again well above one. Low enrichment, even natural uranium with the best moderators, then suffices.}
+
+\end{pframe}
+
+\GSec{Moderators (FNRP 3.3; Lesson 8)}
+
+\begin{pframe}[Three measures of a moderator]\label{f:mod}
+\GuideContext{FNRP Table~3.1 lists, for $\mathrm{H_2O}$, $\mathrm{D_2O}$, and graphite: the decrement $\xi$ ($0.93$, $0.51$, $0.158$); the \Term{slowing-down power} $\xi\Sigma_s$ ($1.28$, $0.18$, $0.056$, in \si{\per\centi\meter}); and the \Term{slowing-down ratio} $\xi\Sigma_s/\Sigma_a(\text{thermal})$ ($58$; $21{,}000$; $200$).}
+
+\GuideSubcell{a}{What does each measure require of a good moderator?}{
+Large $\xi$: a light nucleus, few collisions needed. Large $\xi\Sigma_s$: enough collisions per centimeter to matter (this rules out gases such as helium). Large ratio: it must not absorb the neutrons it has thermalized (this rules out boron).}
+
+\GuideSubcell{b}{Recover the thermal absorption cross sections implied by the table.}{
+$\Sigma_a=\xi\Sigma_s\div$ ratio: $1.28/58=\icm{0.022}$ for $\mathrm{H_2O}$; $0.18/21{,}000=\icm{8.6e-6}$ for $\mathrm{D_2O}$; $0.056/200=\icm{2.8e-4}$ for graphite.}
+
+\GuideSubcell{c}{Water has the largest slowing-down power and the smallest ratio. What does each fact mean for a reactor?}{
+Water slows neutrons in the shortest distance, so the core is compact; but it absorbs 2600 times more than heavy water, so the fuel must be enriched. Heavy water and graphite permit natural uranium at the price of a large core (compare the migration lengths in the Chapter~7 guide).}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2: a little light water in heavy water]\label{f:leak}
+\GuideContext{FNRP problem~3.10: a leak contaminates a $\mathrm{D_2O}$ moderator with 1\% $\mathrm{H_2O}$ (treat it as 1\% by volume). Macroscopic quantities mix by volume. From Table~3.1 and \ref*{f:mod}: $\xi\Sigma_s=\icm{0.18}$ and $\Sigma_a=\icm{8.6e-6}$ for $\mathrm{D_2O}$; $\icm{1.28}$ and $\icm{0.022}$ for $\mathrm{H_2O}$.}
+
+\GuideSubcell{a}{Compute the slowing-down power of the mixture and its percent change.}{
+$0.99(0.18)+0.01(1.28)=\icm{0.191}$, up 6\%.}
+
+\GuideSubcell{b}{Compute the mixture's $\Sigma_a$.}{
+$0.99(8.57\times10^{-6})+0.01(0.0221)=\icm{2.3e-4}$: 27 times larger.}
+
+\GuideSubcell{c}{Compute the slowing-down ratio and its percent change.}{
+$0.191/2.29\times10^{-4}=830$, down 96\% from $21{,}000$.
+\GuideCommentary{One percent of light water destroys heavy water's advantage, because the ratio is ruled by its smallest term, the absorption. This is why heavy-water reactors guard their isotopic purity.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (b).}
+\item $\eta$ is the number of fission neutrons produced per \opt{a} fission; \opt{b} neutron absorbed in fuel; \opt{c} neutron scattered; \opt{d} generation.
+\item Reactors avoid an intermediate spectrum because there \opt{a} neutrons leak fastest; \opt{b} $\nu$ is small; \opt{c} $\eta(E)$ is lowest, owing to resonance capture; \opt{d} moderators stop working.
+\item The slowing-down ratio is \opt{a} $\xi\Sigma_s/\Sigma_a$; \opt{b} $\xi\Sigma_s$; \opt{c} $\Sigma_s/\Sigma_t$; \opt{d} $\ln(E_0/E_n)/\xi$.
+\item A natural-uranium reactor can be moderated by \opt{a} light water; \opt{b} heavy water; \opt{c} boron; \opt{d} helium gas.
+\end{quiz}}
+
+\GSec{The spectrum equation, fast neutrons, and slowing down (FNRP 3.4; Lesson 9)}
+
+\begin{pframe}[Density, flux, and reaction rate]\label{f:flux}
+\GuideContext{$\tilde n'''(E)\,dE$ is the number of neutrons per \si{\centi\meter\cubed} with energies in $dE$ about $E$, \FNRP{3.8}. The \Term{flux} is $\phi(E)=v(E)\,\tilde n'''(E)$, \FNRP{3.10} (Lewis: $\varphi$).}
+
+\GuideSubcell{a}{Give the units of $\tilde n'''(E)$ and $\phi(E)$.}{
+\si{\per\centi\meter\cubed\per\electronvolt} and \si{\per\centi\meter\squared\per\second\per\electronvolt}. Both are densities in energy; only $\phi(E)\,dE$ is a flux in the usual units.}
+
+\GuideSubcell{b}{Interpret $\phi(E)\,dE$ as a path length.}{
+The total distance traveled in one second by all the neutrons in \SI{1}{\centi\meter\cubed} with energies in $dE$.}
+
+\GuideSubcell{c}{$\Sigma_x(E)$ is a probability per centimeter of flight. What is $\int_0^\infty\Sigma_x(E)\phi(E)\,dE$?}{
+Path length times probability per unit path: the \Term{reaction rate} $R_x$ for reaction $x$, in \si{\per\centi\meter\cubed\per\second}, \FNRP{3.13}.
+\GuideCommentary{The path-length picture is how Monte Carlo codes such as OpenMC estimate flux (Lesson~9 handout, Section~2).}}
+
+\end{pframe}
+
+\begin{pframe}[The balance at energy $E$]\label{f:spectrum}
+\GuideContext{In an infinite uniform medium at steady state, \FNRP{3.15}:
+\begin{equation*}
+\Sigma_t(E)\phi(E)=\int\Sigma_s(E'\to E)\phi(E')\,dE'+\chi(E)\,\sfis ,
+\qquad \sfis=\int_0^\infty\nu\Sigma_f(E')\phi(E')\,dE' .
+\end{equation*}
+The course calls this the \Term{spectrum} (or slowing-down) \Term{equation}; Lesson~9 adds an external source $s_{\mathrm{ext}}(E)$ on the right.}
+
+\GuideSubcell{a}{Why is the left side a loss, and why does it contain $\Sigma_t$, not $\Sigma_a$?}{
+Every collision at $E$, scattering or absorption, removes the neutron from energy $E$.}
+
+\GuideSubcell{b}{Name the two gain terms.}{
+In-scattering from every other energy $E'$, and fission births: $\sfis$ neutrons per \si{\centi\meter\cubed} per second, a fraction $\chi(E)\,dE$ of which appear in $dE$.}
+
+\GuideSubcell{c}{The flux appears on both sides. What kind of equation is this?}{
+An integral equation for $\phi(E)$. If the fission source is included self-consistently it is homogeneous, which is why Section~8 turns it into an eigenvalue problem.}
+
+\GuideSubcell{d}{In which ranges is $\chi(E)=0$, and in which is there no up-scatter, $\Sigma_s(E'\to E)=0$ for $E'<E$?}{
+$\chi=0$ in the intermediate and thermal ranges. No up-scatter in the fast and intermediate ranges; only thermal neutrons can gain energy from moving nuclei.}
+
+\end{pframe}
+
+\begin{pframe}[Fast neutrons][3]\label{f:fast}
+Near the top of the fast range one collision is enough to remove a neutron to much lower energy, so in-scattering is small. What does the spectrum equation reduce to, and which neutrons does that describe?
+\response
+$\phi(E)\approx\chi(E)\,\sfis/\Sigma_t(E)$, \FNRP{3.16}: only the \emph{uncollided} fission neutrons.
+\GuideCommentary{The shape follows $\chi/\Sigma_t$ and the amplitude follows $\sfis$, which itself depends on $\phi$. Real fast spectra are softer: inelastic scattering in uranium and elastic scattering in structure feed neutrons downward.}
+\end{pframe}
+
+\begin{pframe}[The slowing-down density]\label{f:q}
+\GuideContext{$q(E)$ is the number of neutrons slowing down past energy $E$ per \si{\centi\meter\cubed} per second, \FNRP{3.17}. Below the fission range and above thermal energies, $q(E)=\sfis-\int_E^\infty\Sigma_a(E')\phi(E')\,dE'$, \FNRP{3.19}.}
+
+\GuideSubcell{a}{Explain (3.19) in words.}{
+Every fission neutron must slow down past $E$ unless it was absorbed at a higher energy.}
+
+\GuideSubcell{b}{Differentiate. What happens to $q$ where there is no absorption?}{
+$dq/dE=\Sigma_a(E)\phi(E)$, \FNRP{3.20}. Where $\Sigma_a=0$, $q$ is constant: between resonances the downward current of neutrons is conserved.}
+
+\GuideSubcell{c}{How does $q(E)$ differ from the scattering rate $\Sigma_s(E)\phi(E)$?}{
+$\Sigma_s\phi$ counts collisions at $E$, per unit energy. $q$ counts neutrons \emph{crossing} $E$, whatever energy they scattered from; it is a current in energy, in \si{\per\centi\meter\cubed\per\second}.}
+
+\end{pframe}
+
+\begin{pframe}[The $1/E$ spectrum]\label{f:oneoverE}
+\GuideContext{With no absorption, no fission births, and elastic scattering from one nuclide, the kernel of the Chapter~2 guide, $p(E'\to E)=1/[(1-\alpha)E']$ for $\alpha E'\le E\le E'$, reduces the spectrum equation to \FNRP{3.21}--(3.22).}
+
+\GuideSubcell{a}{For fixed $E$, which incident energies $E'$ can scatter to $E$?}{
+$\alpha E'\le E\le E'$ means $E\le E'\le E/\alpha$: the neutron cannot gain energy, nor lose more than the fraction $1-\alpha$.}
+
+\GuideSubcell{b}{Write the reduced balance and verify that $\Sigma_s(E)\phi(E)=C/E$ solves it (FNRP problem~3.1).}{
+$\Sigma_s(E)\phi(E)=\displaystyle\int_E^{E/\alpha}\frac{\Sigma_s(E')\phi(E')}{(1-\alpha)E'}\,dE'$. Insert $C/E'$: $\dfrac{C}{1-\alpha}\displaystyle\int_E^{E/\alpha}\frac{dE'}{E'^2}=\frac{C}{1-\alpha}\Big(\frac1E-\frac{\alpha}{E}\Big)=\frac CE$.}
+
+\GuideSubcell{c}{Lewis evaluates $q$ for this flux and finds $q=\xi C$, \FNRP{3.25}. Write the flux in terms of $q$.}{
+$\phi(E)=\dfrac{q}{\xi\Sigma_s(E)E}$, \FNRP{3.26}. For constant $\Sigma_s$ this is the \Term{$1/E$ flux}.
+\GuideCommentary{With fuel and moderator together, $\Sigma_s$ is the sum and $\xi$ becomes the scattering-weighted $\bar\xi$ of \FNRP{3.27}; the moderator dominates both.}}
+
+\GuideSubcell{d}{Why should the flux be largest where the neutrons are slowest?}{
+A fixed current $q$ passes every energy, but each collision lowers $E$ by a fixed \emph{fraction}. Low energies are crossed in small absolute steps, so neutrons linger there: $E\phi(E)$, the flux per unit $\ln E$, is constant.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3: the epithermal flux in a water-moderated core]\label{f:epi}
+\GuideContext{A core runs at \SI{100}{\watt\per\centi\meter\cubed}. Use $\gamma=\SI{3.1e-11}{\joule}$ per fission, $\nu=2.43$, and water's $\xi\Sigma_s=\icm{1.28}$. Neglect absorption during slowing down, so that $q=\sfis$.}
+
+\GuideSubcell{a}{Compute the fission rate density and $\sfis$.}{
+$100/3.1\times10^{-11}=\rate{3.2e12}$ fissions; $\sfis=2.43\times3.23\times10^{12}=\rate{7.8e12}$ neutrons.}
+
+\GuideSubcell{b}{Compute $E\phi(E)=q/\xi\Sigma_s$.}{
+$7.84\times10^{12}/1.28=\flx{6.1e12}$ per unit $\ln E$.}
+
+\GuideSubcell{c}{Integrate the $1/E$ flux from \eV{1} to \MeV{0.1} to get the intermediate flux $\phi_I$.}{
+$\phi_I=\dfrac{q}{\xi\Sigma_s}\ln\dfrac{10^5}{1}=6.12\times10^{12}\times11.5=\flx{7.0e13}$.
+\GuideCommentary{The intermediate flux is fixed by the power density and the moderator alone. Section~7 turns this kind of reasoning into group equations.}}
+
+\end{pframe}
+
+\GSec{Resonance absorption and energy self-shielding (FNRP 3.4; Lesson 10)}
+
+\begin{pframe}[Is a resonance narrow?]\label{f:narrow}
+\GuideContext{With fuel ($f$) and moderator ($m$) both scattering elastically, the balance is \FNRP{3.28}: $\Sigma_t(E)\phi(E)=I_f(E)+I_m(E)$, with one in-scatter integral $I_i=\int_E^{E/\alpha_i}\frac{\Sigma_s^i(E')\phi(E')}{(1-\alpha_i)E'}dE'$ for each. A neutron scattering near a resonance at $E_r$ can lose up to $(1-\alpha_i)E_r$ in one collision.}
+
+\GuideSubcell{a}{The \Term{narrow resonance (NR) approximation} assumes the resonance is much narrower than that maximum loss, for fuel and moderator alike. What does this buy?}{
+Nearly all neutrons arriving in the resonance made their last collision well outside it, where the flux is the undisturbed $1/E$ shape. The integrals $I_f$ and $I_m$ can then be evaluated with that known flux.}
+
+\GuideSubcell{b}{For $E_r=\eV{10}$, compute $(1-\alpha)E_r$ for hydrogen and for \iso{238}{U} ($\alpha=0.983$).}{
+\eV{10} and \eV{0.17}.}
+
+\GuideSubcell{c}{If the resonance is \eV{0.5} wide (the Lesson~10 example), for which scatterer does the NR condition fail?}{
+For \iso{238}{U}: $0.5>0.17$. A neutron scattering from fuel inside the resonance stays inside it. That case is the \Term{wide resonance} approximation (FNRP problem~3.6).}
+
+\end{pframe}
+
+\begin{pframe}[The narrow-resonance flux]\label{f:nr}
+\GuideContext{Insert the between-resonance flux $q/(\bar\xi\Sigma_{s,0}E')$, with constant background scattering $\Sigma_{s,0}=\Sigma_{s,0}^m+\Sigma_{s,0}^f$, into the right side of (3.28).}
+
+\GuideSubcell{a}{Evaluate one integral $I_i$ (it is the integral of \ref*{f:oneoverE}) and add the two.}{
+Each gives $\dfrac{q}{\bar\xi\Sigma_{s,0}}\dfrac{\Sigma_{s,0}^i}{E}$; their sum is $\dfrac{q}{\bar\xi E}$.}
+
+\GuideSubcell{b}{Solve for the flux, keeping the full energy-dependent $\Sigma_t(E)$ on the left.}{
+$\phi(E)=\dfrac{q}{\bar\xi\Sigma_t(E)E}$, \FNRP{3.29}: (3.26) with $\Sigma_s$ replaced by $\Sigma_t$.}
+
+\GuideSubcell{c}{What happens to the flux at the peak of an absorption resonance? What is this called?}{
+$\Sigma_t$ rises sharply, so the flux dips: $\phi/\phi_{1/E}=\Sigma_{s,0}/\Sigma_t(E)$. This flux depression is \Term{energy self-shielding}: the absorber shields itself from the neutrons it would otherwise absorb.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4: what self-shielding saves]\label{f:shield}
+\GuideContext{Let $x=\Sigma_a/\Sigma_{s,0}$ at an energy inside the resonance, and ignore resonance scattering, so $\Sigma_t=(1+x)\Sigma_{s,0}$. By (3.20) and (3.29), the absorption rate per unit energy is $\Sigma_a\phi=\dfrac{x}{1+x}\dfrac{q}{\bar\xi E}$ (Lesson~10 handout, Section~6).}
+
+\GuideSubcell{a}{Tabulate the flux ratio $1/(1+x)$ and the absorption factor $x/(1+x)$ for $x=1$ and $x=9$.}{
+$x=1$: $\tfrac12$ and $\tfrac12$. $x=9$: $\tfrac1{10}$ and $\tfrac9{10}$. The flux can fall tenfold while the absorption rate saturates near $q/\bar\xi E$.}
+
+\GuideSubcell{b}{Model the resonance as a rectangle of width $\Delta=\eV{0.5}$ at $E_r=\eV{10}$ with $x=9$, in a mixture with $\bar\xi=0.9$. What fraction of the slowing-down density is absorbed in crossing it?}{
+$\dfrac{\Delta q}{q}\approx\dfrac{x}{1+x}\dfrac{\Delta}{\bar\xi E_r}=0.9\times\dfrac{0.5}{0.9\times10}=0.05$: 95\% escape.}
+
+\GuideSubcell{c}{Repeat with the undisturbed $1/E$ flux, that is, with no self-shielding. (Integrating $dq/q$ exactly gives an exponential.)}{
+The exponent is $x\Delta/(\bar\xi E_r)=0.5$, so only $e^{-0.5}=61\%$ escape.
+\GuideCommentary{Self-shielding cuts the loss from 39\% to 5\% here. It is why a reactor full of \iso{238}{U} can work at all, and why Doppler broadening (Chapter~2 guide), which widens $\Delta$ while lowering an already saturated peak, increases absorption. Chapter~4 calls the surviving fraction the resonance escape probability.}}
+
+\end{pframe}
+
+\GSec{Thermal neutrons and whole spectra (FNRP 3.4; Lesson 11)}
+
+\begin{pframe}[Thermal equilibrium]\label{f:mbflux}
+\GuideContext{Below $E_o=\eV{1}$ neutrons gain as well as lose energy in collisions. With no absorption and no source the flux settles to an equilibrium $\phi_M$ obeying the \Term{principle of detailed balance}, $\Sigma_s(E\to E')\phi_M(E)=\Sigma_s(E'\to E)\phi_M(E')$, \FNRP{3.34}, and $\phi_M(E)=\dfrac{1}{(kT)^2}E\,e^{-E/kT}$, \FNRP{3.35}.}
+
+\GuideSubcell{a}{State detailed balance in words.}{
+At equilibrium the rate of scattering from $E$ to $E'$ equals the rate from $E'$ back to $E$, for every pair of energies and whatever the scattering law.}
+
+\GuideSubcell{b}{Where does $\phi_M$ peak? Compare with the Maxwell--Boltzmann \emph{density} $M(E)\propto E^{1/2}e^{-E/kT}$.}{
+$\dfrac{d}{dE}\big(Ee^{-E/kT}\big)=0$ at $E=kT$, \FNRP{3.55}; the density peaks at $\tfrac12kT$. The extra factor $v\propto E^{1/2}$ weights the flux toward faster neutrons.}
+
+\GuideSubcell{c}{Evaluate $kT$ at room temperature and at \SI{300}{\celsius} (\SI{573}{\kelvin}), with $k=\SI{8.62e-5}{\electronvolt\per\kelvin}$.}{
+\eV{0.0253} and \eV{0.0494}. The thermal peak moves with the moderator temperature.}
+
+\end{pframe}
+
+\begin{pframe}[Hardening, and reading a real spectrum]\label{f:hard}
+\GuideSubcell{a}{Real media absorb. What is \Term{spectral hardening}, and how does Lewis mimic it?}{
+Absorption removes neutrons before equilibrium is complete (and $1/v$ absorbers take the slowest first), shifting the thermal peak upward. A Maxwellian at a raised effective temperature, the rise proportional to $\Sigma_a/\xi\Sigma_s$, fits fairly well.}
+
+\GuideSubcell{b}{FNRP Fig.~3.6 plots $E\phi(E)$ for a pressurized-water reactor. Name the feature and its cause in each range.}{
+Fast: a modest fission peak, $\chi/\Sigma_t$. Intermediate: nearly flat, the $1/E$ flux, sagging toward \eV{1} as resonances lower $q$ and cut sharp self-shielding dips. Thermal: a hardened Maxwellian peak.}
+
+\GuideSubcell{c}{Why is the sodium-cooled fast reactor's spectrum confined to keV and MeV energies, and jagged?}{
+No moderator: neutrons are absorbed before slowing below a keV. Sodium and iron have scattering resonances there, and the flux varies as $1/\Sigma_t(E)$.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (a); 3 (c); 4 (b).}
+\item Between resonances in the slowing-down range the flux varies as \opt{a} $E$; \opt{b} $1/E$; \opt{c} $e^{-E/kT}$; \opt{d} $\chi(E)$.
+\item The slowing-down density $q$ is constant with energy wherever \opt{a} there is no absorption; \opt{b} there is no scattering; \opt{c} the flux is constant; \opt{d} the moderator is hydrogen.
+\item At the peak of a strong absorption resonance the flux \opt{a} rises; \opt{b} is unchanged; \opt{c} dips, roughly as $1/\Sigma_t$; \opt{d} becomes negative.
+\item The thermal flux spectrum $\phi_M(E)$ peaks at \opt{a} $\tfrac12kT$; \opt{b} $kT$; \opt{c} $\tfrac32kT$; \opt{d} \eV{1}.
+\end{quiz}}
+
+\GSec{Energy-averaged cross sections and $k_\infty$ (FNRP 3.5--3.6; Lesson 12)}
+
+\begin{pframe}[Integrate the balance over all energies]\label{f:allE}
+\GuideContext{Add an external source $s_{\mathrm{ext}}'''(E)$ to the spectrum equation and integrate over $0<E<\infty$. Use $\int_0^\infty\chi\,dE=1$ and $\int_0^\infty\Sigma_s(E'\to E)\,dE=\Sigma_s(E')$, and write $R_x$ for reaction rates and $s$ for the total source.}
+
+\GuideSubcell{a}{What does each term become?}{
+$R_t=R_s+\sfis+s$.}
+
+\GuideSubcell{b}{Cancel what you can. What remains?}{
+$R_t-R_s=R_a$, so $R_a=\sfis+s$: absorption balances production plus source.}
+
+\GuideSubcell{c}{Why does scattering vanish from this balance but not from the balance at one energy?}{
+Scattering moves neutrons between energies without creating or destroying them. Summed over all energies it cancels; at a single energy it is both a loss and a gain (Lesson~12 handout, Section~1).}
+
+\end{pframe}
+
+\begin{pframe}[Effective cross sections]\label{f:eff}
+\GuideContext{Define $\phi_{\mathrm{tot}}=\int_0^\infty\phi(E)\,dE$ (Lewis: $\phi$) and the energy-averaged, or \Term{effective}, cross section $\overline\Sigma_x=\int_0^\infty\Sigma_x(E)\phi(E)\,dE\big/\phi_{\mathrm{tot}}$, \FNRP{3.38}.}
+
+\GuideSubcell{a}{What does this definition preserve?}{
+The reaction rate: $R_x=\overline\Sigma_x\phi_{\mathrm{tot}}$, exactly.}
+
+\GuideSubcell{b}{Does $\overline\Sigma_x$ change if the flux is doubled at every energy? What does it depend on?}{
+No. It is the average of $\Sigma_x(E)$ with weight $\phi(E)/\phi_{\mathrm{tot}}$, so it depends on the \emph{shape} of the spectrum only.}
+
+\GuideSubcell{c}{A source $s$ sits in a nonmultiplying medium. Find $\phi_{\mathrm{tot}}$.}{
+$\overline\Sigma_a\phi_{\mathrm{tot}}=s$, so $\phi_{\mathrm{tot}}=s/\overline\Sigma_a$.}
+
+\GuideSubcell{d}{Is $\overline{\nu\Sigma_f}$ equal to $\bar\nu\,\overline\Sigma_f$?}{
+Not in general: average the product. (With Lewis's constant $\nu$ the distinction disappears.)}
+
+\end{pframe}
+
+\begin{pframe}[Three ranges]\label{f:three}
+\GuideContext{Split every integral into thermal ($T$, below \eV{1}), intermediate ($I$, \eV{1} to \MeV{0.1}), and fast ($F$) parts, with $\phi_\Omega=\int_\Omega\phi\,dE$ and $\bar\sigma_{x\Omega}=\int_\Omega\sigma_x\phi\,dE\big/\phi_\Omega$, \FNRP{3.47}--(3.48).}
+
+\GuideSubcell{a}{Write the overall average in terms of the three range averages, \FNRP{3.46}.}{
+$\bar\sigma_x=\dfrac{\bar\sigma_{xT}\phi_T+\bar\sigma_{xI}\phi_I+\bar\sigma_{xF}\phi_F}{\phi_T+\phi_I+\phi_F}$: add rates, then divide by the total flux.}
+
+\GuideSubcell{b}{What are the weights? What do they reduce to if $\phi_T=\phi_I=\phi_F$?}{
+The fractions of the total flux in each range (not the widths of the ranges). For equal fluxes, a simple mean of the three.}
+
+\GuideSubcell{c}{Assuming a spectral shape in each range gives the three $\bar\sigma_{x\Omega}$. What is still unknown?}{
+The three amounts $\phi_T$, $\phi_I$, $\phi_F$. Lewis leaves them to judgment; Lesson~12 assumes them equal for its examples; the multigroup method of Section~7 computes them.}
+
+\end{pframe}
+
+\begin{pframe}[The three standard averages]\label{f:avgs}
+\GuideContext{To tabulate cross sections that do not depend on what else is in the core, Lewis drops $\Sigma_t(E)$ from the fast and intermediate spectra: $\phi\approx\chi(E)$ (fast), $1/E$ (intermediate), and $\phi_M(E)$ (thermal).}
+
+\GuideSubcell{a}{Write the fast average.}{
+$\bar\sigma_{xF}=\int\sigma_x(E)\chi(E)\,dE$, \FNRP{3.49}; $\chi$ is already normalized.}
+
+\GuideSubcell{b}{For the intermediate range define the \Term{resonance integral} $I_x=\int\sigma_x(E)\,dE/E$. Write $\bar\sigma_{xI}$ and evaluate the constant.}{
+$\bar\sigma_{xI}=I_x\Big/\displaystyle\int_{1\,\mathrm{eV}}^{0.1\,\mathrm{MeV}}\frac{dE}{E}=\dfrac{I_x}{\ln10^5}=0.0869\,I_x$, \FNRP{3.53}.}
+
+\GuideSubcell{c}{For \iso{238}{U}, Table~3.2 lists $I_a=\barns{278}$ and a thermal $\sigma_a=\barns{2.42}$. Compute $\bar\sigma_{aI}$. Is it an overestimate or an underestimate of what happens in a reactor?}{
+$0.0869\times278=\barns{24}$, ten times the thermal value. An overestimate: the $1/E$ weight has no self-shielding dip (\ref*{f:nr}), so $I_x$ is the infinitely dilute upper bound.}
+
+\GuideSubcell{d}{For a $1/v$ absorber the thermal average is $\bar\sigma_{aT}=\dfrac{\sqrt\pi}{2}\Big(\dfrac{T_o}{T}\Big)^{1/2}\sigma_a(E_o)$, \FNRP{3.59}. Hydrogen's tabulated average is \barns{0.295}. What is $\sigma_a$ at \eV{0.0253}, and what is the average at \SI{573}{\kelvin}?}{
+$\sqrt\pi/2=0.886$, so $\sigma_a(E_o)=0.295/0.886=\barns{0.333}$. At \SI{573}{\kelvin}: $0.295\sqrt{293.6/573.2}=\barns{0.211}$.
+\GuideCommentary{The tabulated thermal cross sections are spectrum averages, not values at \eV{0.0253}; hot moderators absorb less per atom (FNRP problem~3.11).}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 5: a source in a tank of water]\label{f:tank}
+\GuideContext{Lesson~12 (handout Section~6): a large tank of water holds a dilute \iso{252}{Cf} source emitting $s=\rate{10}$. Treat it as infinite, and \emph{assume} $\phi_T=\phi_I=\phi_F$. From Table~3.2, absorption in barns: H: thermal $0.295$, $I_a=0.149$, fast $3.92\times10^{-5}$; O: thermal $1.69\times10^{-4}$, $I_a=8.53\times10^{-5}$, fast $1.20\times10^{-2}$. $N_{\mathrm{H_2O}}=\SI{3.34e22}{\per\centi\meter\cubed}$.}
+
+\GuideSubcell{a}{Compute the three range averages of $\sigma_a$ for one water molecule, $2\sigma^{\mathrm H}+\sigma^{\mathrm O}$.}{
+Thermal: $2(0.295)+0.0002=\barns{0.590}$. Intermediate: $0.0869\,(2(0.149)+0.0001)=\barns{0.0259}$. Fast: $2(0.00004)+0.0120=\barns{0.0121}$.}
+
+\GuideSubcell{b}{Form the equal-flux mean and the macroscopic $\overline\Sigma_a$.}{
+$(0.590+0.026+0.012)/3=\barns{0.209}$; $\overline\Sigma_a=3.34\times10^{22}\times0.209\times10^{-24}=\icm{0.0070}$.}
+
+\GuideSubcell{c}{Compute the total flux and the flux in each range.}{
+$\phi_{\mathrm{tot}}=10/0.0070=\flx{1.4e3}$, hence \flx{480} in each range.
+\GuideCommentary{Nearly all the absorption is thermal capture in hydrogen. The equal-flux assumption is the weak point, and \ref*{f:tank3} replaces it.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 6: $k_\infty$ from averaged cross sections]\label{f:kinf}
+\GuideContext{With no external source, $\kinf=\dfrac{\int\nu\Sigma_f\phi\,dE}{\int\Sigma_a\phi\,dE}=\dfrac{\nu\overline\Sigma_f}{\overline\Sigma_a}$, \FNRP{3.60}--(3.61). Dissolve \iso{235}{U} in the water of \ref*{f:tank} at an atom ratio $r=N_{\mathrm U}/N_{\mathrm{H_2O}}$, and keep the equal-flux assumption. Table~3.2 for \iso{235}{U} (barns): thermal $\sigma_f=505$, $\sigma_a=591$; $I_f=272$, $I_a=404$; fast $\sigma_f=1.22$, $\sigma_a=1.29$. Take $\nu=2.43$.}
+
+\GuideSubcell{a}{Compute the equal-flux averages $\bar\sigma_f$ and $\bar\sigma_a$ for \iso{235}{U}.}{
+$\bar\sigma_f=(505+0.0869(272)+1.22)/3=\barns{177}$; $\bar\sigma_a=(591+0.0869(404)+1.29)/3=\barns{209}$.}
+
+\GuideSubcell{b}{Write $\kinf(r)$, using \barns{0.209} per water molecule.}{
+$\kinf=\dfrac{r\,\nu\bar\sigma_f}{0.209+r\,\bar\sigma_a}=\dfrac{429\,r}{0.209+209\,r}$. The water density cancels.}
+
+\GuideSubcell{c}{Find the limit of large $r$ and the $r$ that makes $\kinf=1$.}{
+As $r\to\infty$, $\kinf\to429/209=2.05$, the spectrum-averaged $\eta$. $\kinf=1$ when $r(429-209)=0.209$: $r=9.5\times10^{-4}$, about one uranium atom per thousand water molecules.}
+
+\GuideSubcell{d}{What is being held fixed as $r$ varies, and should it be?}{
+The spectrum (equal fluxes). It should not: adding an absorber hardens the spectrum, changing every average.
+\GuideCommentary{Lewis's closing caution is different but related: in a real lattice fuel and moderator see different flux \emph{magnitudes}; Chapter~4 handles that. Lesson~12 (handout Section~7) introduces $\kinf$ as an eigenvalue, the idea completed in Section~8 below.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (b).}
+\item An effective cross section is defined so as to preserve \opt{a} the flux; \opt{b} the reaction rate; \opt{c} the neutron density; \opt{d} the mean free path.
+\item A resonance integral $I_x$ has units of \opt{a} eV; \opt{b} \si{\per\centi\meter}; \opt{c} barns; \opt{d} barn-eV.
+\item Raising the moderator temperature makes the thermal average of a $1/v$ cross section \opt{a} smaller; \opt{b} larger; \opt{c} unchanged; \opt{d} zero.
+\item $\kinf$ is the ratio of \opt{a} fissions to absorptions; \opt{b} fission neutrons produced to neutrons absorbed; \opt{c} scattering to absorption; \opt{d} fast flux to thermal flux.
+\end{quiz}}
+
+\GSec{The multigroup method (extends FNRP 3.5; Lesson 13)}
+
+\Span{\begin{KeyBox}{Why groups?}
+Section~6 chose a spectral shape in each of three ranges and then had to guess how much flux each range holds. The \Term{multigroup method} keeps the first step and replaces the guess: divide the energy axis into $G$ groups, integrate the spectrum equation over each group, and obtain $G$ coupled algebraic balance equations whose unknowns are the group fluxes. Nothing is approximated in the integration itself. The approximation is confined to the within-group shape used to compute the group cross sections, and it shrinks as the groups are made narrower. Frames~\ref*{f:groups}--\ref*{f:mgbalance} are the formal development; the rest of the section exercises it.
+\end{KeyBox}}
+
+\begin{pframe}[Group structure]\label{f:groups}
+\GuideContext{Choose energy boundaries $E_0>E_1>\cdots>E_G$. \Term{Group} $g$ is the interval $E_g\le E\le E_{g-1}$, and the \Term{group flux} is
+\begin{equation*}
+\phi_g=\int_{E_g}^{E_{g-1}}\phi(E)\,dE,\qquad g=1,\ldots,G .
+\end{equation*}
+Figure~\ref{fig:groups} shows the three-group structure of Lesson~13, with boundaries $(E_0,E_1,E_2,E_3)=(10^7,10^5,1,10^{-3})$~eV.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}[>=stealth,x=0.72cm,y=1cm]
+\draw[->] (-0.8,0) -- (10.9,0) node[right,font=\scriptsize]{$E$};
+\foreach \x/\lab/\nm in {10/{$10^{7}$}/{$E_0$},8/{$10^{5}$}/{$E_1$},3/{$1$}/{$E_2$},0/{$10^{-3}$}/{$E_3$}}{
+ \draw (\x,0.12) -- (\x,-0.12);
+ \node[below,font=\scriptsize] at (\x,-0.12) {\lab\ eV};
+ \node[above,font=\scriptsize] at (\x,0.75) {\nm};}
+\fill[wcprimary!25] (8,0.15) rectangle (10,0.7);
+\fill[wcexample!25] (3,0.15) rectangle (8,0.7);
+\fill[wcalerted!25] (0,0.15) rectangle (3,0.7);
+\node[font=\scriptsize] at (9,0.42) {$g=1$};
+\node[font=\scriptsize] at (5.5,0.42) {$g=2$};
+\node[font=\scriptsize] at (1.5,0.42) {$g=3$};
+\draw[->,thick,black!60] (9,-0.85) to[bend left=25] node[midway,below,font=\scriptsize]{downscatter: $g'<g$} (5.5,-0.85);
+\end{tikzpicture}
+\gfigcap{Group structure on a logarithmic energy axis. Groups are numbered from high energy to low, so neutrons slowing down move to larger $g$.}\label{fig:groups}
+\end{center}}}
+
+\GuideSubcell{a}{What are the units of $\phi_g$? How does it differ from $\phi(E)$?}{
+\si{\per\centi\meter\squared\per\second}: an ordinary flux, the total path length per \si{\centi\meter\cubed} per second of all neutrons in the group. $\phi(E)$ is a density in energy.}
+
+\GuideSubcell{b}{In Fig.~\ref{fig:groups}, which of Lewis's ranges is each group?}{
+$g=1$ is fast, $g=2$ intermediate, $g=3$ thermal: $(\phi_1,\phi_2,\phi_3)=(\phi_F,\phi_I,\phi_T)$.}
+
+\GuideSubcell{c}{For the group fluxes to add up to $\phi_{\mathrm{tot}}$, what must $E_0$ and $E_G$ be?}{
+$E_0=\infty$ and $E_G=0$, so that the groups cover every energy. Finite cutoffs such as \SI{e7}{} and \eV{e-3} are a (very good) approximation that must be watched (\ref*{f:hcol}).}
+
+\end{pframe}
+
+\begin{pframe}[Group constants for reactions and sources]\label{f:gconst}
+\GuideContext{Integrate the collision and source terms of the spectrum equation over group $g$, that is, apply $\int_{E_g}^{E_{g-1}}\!dE$.}
+
+\GuideSubcell{a}{The collision term gives $\int_{E_g}^{E_{g-1}}\Sigma_t(E)\phi(E)\,dE$. Define the group cross section $\Sigma_{t,g}$ that lets this be written $\Sigma_{t,g}\phi_g$.}{
+$\Sigma_{t,g}=\dfrac{\int_{E_g}^{E_{g-1}}\Sigma_t(E)\phi(E)\,dE}{\phi_g}$, and likewise $\Sigma_{x,g}$ for any reaction $x$: the effective cross section of \ref*{f:eff}, restricted to the group.}
+
+\GuideSubcell{b}{The fission term is $\chi(E)\,\sfis$. Integrate it over group $g$ and express $\sfis$ in group quantities.}{
+$\chi_g\,\sfis$ with $\chi_g=\int_{E_g}^{E_{g-1}}\chi(E)\,dE$, and $\sfis=\sum_{g'=1}^G(\nu\Sigma_f)_{g'}\phi_{g'}$ with $(\nu\Sigma_f)_{g'}$ the group average of the product $\nu\Sigma_f$.}
+
+\GuideSubcell{c}{What is $\sum_g\chi_g$? What is the group source $s_g$?}{
+$\sum_g\chi_g=1$: every fission neutron is born in some group. $s_g=\int_{E_g}^{E_{g-1}}s_{\mathrm{ext}}'''(E)\,dE$.}
+
+\GuideSubcell{d}{Has any approximation been made?}{
+None. These are identities. But each group constant is weighted by the unknown $\phi(E)$ inside its group.}
+
+\end{pframe}
+
+\begin{pframe}[The group-to-group scattering cross section]\label{f:gscat}
+\GuideContext{Integrate the in-scattering term over the destination group $g$, and split the integral over incident energies $E'$ into a sum over incident groups $g'$:
+\begin{equation*}
+\int_{E_g}^{E_{g-1}}\!\!dE\int_0^\infty\!\Sigma_s(E'\to E)\phi(E')\,dE'
+=\sum_{g'=1}^{G}\int_{E_{g'}}^{E_{g'-1}}\!\!\phi(E')\Big[\int_{E_g}^{E_{g-1}}\!\!\Sigma_s(E'\to E)\,dE\Big]dE' .
+\end{equation*}}
+
+\GuideSubcell{a}{Define $\Sg{g}{g'}$ so that the right side becomes $\sum_{g'}\Sg{g}{g'}\phi_{g'}$.}{
+$\Sg{g}{g'}=\dfrac{\displaystyle\int_{E_{g'}}^{E_{g'-1}}\phi(E')\int_{E_g}^{E_{g-1}}\Sigma_s(E'\to E)\,dE\,dE'}{\phi_{g'}}$.}
+
+\GuideSubcell{b}{Which group's flux is in the denominator, and why?}{
+The \emph{incident} group's, $\phi_{g'}$: multiplying by $\phi_{g'}$ must return the rate at which neutrons colliding in $g'$ arrive in $g$.}
+
+\GuideSubcell{c}{Read $\Sg{3}{2}$ aloud. With groups numbered from high energy, is it downscatter or upscatter?}{
+``Scattering into group 3 from group 2.'' Destination $g=3$ is lower in energy than $g'=2$: downscatter ($g>g'$). Upscatter has $g<g'$.}
+
+\GuideSubcell{d}{What is $\sum_{g=1}^G\Sg{g}{g'}$ when the groups cover all energies?}{
+$\Sigma_{s,g'}$: a scattered neutron must land in some group. Scattering only redistributes.}
+
+\end{pframe}
+
+\begin{pframe}[The multigroup balance equations]\label{f:mgbalance}
+\GuideSubcell{a}{Assemble \ref*{f:gconst} and \ref*{f:gscat} into the balance for group $g$.}{
+$\Sigma_{t,g}\phi_g=\displaystyle\sum_{g'=1}^{G}\Sg{g}{g'}\phi_{g'}+\chi_g\sum_{g'=1}^{G}(\nu\Sigma_f)_{g'}\phi_{g'}+s_g$, for $g=1,\ldots,G$.}
+
+\GuideSubcell{b}{Read the three gain terms in words.}{
+Neutrons scattered into $g$ from every group (including $g$ itself); the share $\chi_g$ of all fission neutrons, whichever group caused the fission; and external source neutrons emitted in $g$.}
+
+\GuideSubcell{c}{Within-group scattering, $\Sg{g}{g}\phi_g$, appears on both sides. Move it to the left and name the resulting coefficient.}{
+The \Term{removal cross section} $\Sigma_{r,g}=\Sigma_{t,g}-\Sg{g}{g}$, so $\Sigma_{r,g}\phi_g=\sum_{g'\ne g}\Sg{g}{g'}\phi_{g'}+\chi_g\,\sfis+s_g$.}
+
+\GuideSubcell{d}{Express $\Sigma_{r,g}$ in terms of absorption and scattering. Is removal the same as absorption?}{
+$\Sigma_{r,g}=\Sigma_{a,g}+\sum_{h\ne g}\Sg{h}{g}$: absorption plus scattering \emph{out} of the group. Removal exceeds absorption unless no neutron can scatter out, as in the lowest group with no upscatter.}
+
+\GuideSubcell{e}{The continuous integral equation has become what kind of problem?}{
+$G$ linear algebraic equations in the $G$ unknowns $\phi_g$.
+\GuideCommentary{This is the whole method. The price is that the group constants must be prepared with an assumed within-group shape, a normalized weight $w_g(E)$ such as $\chi/\Sigma_t$, $1/(\Sigma_tE)$, or a Maxwellian (Lesson~12 handout, Section~3). The \emph{amounts} $\phi_g$ are then outputs. Lewis's two-group equations in Chapter~7 are the $G=2$ case with leakage added.}}
+
+\end{pframe}
+
+\begin{pframe}[The structure of the scattering matrix]\label{f:lower}
+\GuideContext{Arrange $\Sg{g}{g'}$ in a matrix with the destination $g$ as the row and the incident group $g'$ as the column.}
+
+\GuideSubcell{a}{If neutrons can only lose energy in a collision, which entries are zero?}{
+Those with $g<g'$ (upscatter): everything above the diagonal. The matrix is lower triangular.}
+
+\GuideSubcell{b}{What does that imply for solving a fixed-source problem without fission?}{
+Group 1 depends on no other group, group 2 only on group 1, and so on: solve from the top down, one division per group.}
+
+\GuideSubcell{c}{When is the matrix not triangular?}{
+When the thermal range is split into several groups: thermal neutrons upscatter, coupling those groups in both directions. Fission also couples every group back to those with $\chi_g>0$; that is Section~8.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 7: the water tank in three groups]\label{f:tank3}
+\GuideContext{Return to the tank of \ref*{f:tank}, now with the source in the fast group, $(s_1,s_2,s_3)=(10,0,0)$~\si{\per\centi\meter\cubed\per\second}, no fission, and no upscatter (Lesson~13 handout, Section~5). Illustrative group constants in \si{\per\centi\meter}: $\Sigma_{r,1}=0.100$, $\Sigma_{r,2}=0.120$, $\Sigma_{a,3}=0.0197$; $\Sg21=0.0990$, $\Sg31=0.0009$, $\Sg32=0.1195$. They are chosen for easy arithmetic, not taken from a data library.}
+
+\GuideSubcell{a}{Write and solve the group-1 balance.}{
+$\Sigma_{r,1}\phi_1=s_1$: $\phi_1=10/0.100=\flx{100}$.}
+
+\GuideSubcell{b}{Write and solve the group-2 balance.}{
+$\Sigma_{r,2}\phi_2=\Sg21\phi_1$: $\phi_2=0.0990(100)/0.120=\flx{82.5}$.}
+
+\GuideSubcell{c}{Write and solve the group-3 balance. Why is its removal cross section just $\Sigma_{a,3}$?}{
+$\Sigma_{a,3}\phi_3=\Sg31\phi_1+\Sg32\phi_2=0.09+9.86$: $\phi_3=\flx{505}$. With no upscatter, nothing scatters out of the lowest group.}
+
+\GuideSubcell{d}{The absorption cross sections are $\Sigma_{a,g}=\Sigma_{r,g}-(\text{out-scatter})$: $0.0001$, $0.0005$, $0.0197$. Check the overall balance of \ref*{f:allE}.}{
+$0.0001(100)+0.0005(82.5)+0.0197(505)=0.01+0.04+9.95=\rate{10.0}=s$.
+\GuideCommentary{Use absorption, not removal, in this check: removal counts neutrons that are still alive in another group. And notice the outcome: 73\% of the flux is thermal. The equal-thirds assumption of \ref*{f:tank} was poor; the group balance replaced it.}}
+
+\end{pframe}
+
+\begin{pframe}[Group scattering from the elastic kernel]\label{f:overlap}
+\GuideContext{For elastic scattering isotropic in the CM frame, a neutron at $E'$ emerges uniformly on $[\alpha E',E']$. The probability that it lands in group $g$ is the overlap of that interval with the group, divided by the interval's length:
+\begin{equation*}
+P_g(E')=\frac{\big[\min(E_{g-1},E')-\max(E_g,\alpha E')\big]_+}{(1-\alpha)E'},\qquad [z]_+=\max(z,0).
+\end{equation*}
+Then $\sg{g}{g'}=\int_{g'}\sigma_s(E')P_g(E')\phi(E')\,dE'\big/\int_{g'}\phi(E')\,dE'$ (Lesson~13 handout, Section~6).}
+
+\GuideSubcell{a}{Why the $[\ ]_+$?}{
+If the two intervals do not overlap, the difference is negative, but the probability is zero. This is the empty-interval check of the Chapter~2 guide.}
+
+\GuideSubcell{b}{For hydrogen ($\alpha=0$) and $E'$ in group 2 of Fig.~\ref{fig:groups}, find $P_2$, $P_3$, and $P_1$.}{
+The neutron lands uniformly on $[0,E']$. $P_2=(E'-E_2)/E'$; $P_3=(E_2-E_3)/E'$; $P_1=0$ (no upscatter).}
+
+\GuideSubcell{c}{For a mixture, how are the nuclides combined?}{
+Compute each nuclide's $\sg{g}{g'}^i$ with its own $\alpha_i$, then $\Sg{g}{g'}=\sum_iN_i\,\sg{g}{g'}^i$.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 8: hydrogen's scattering out of group 2]\label{f:hcol}
+\GuideContext{Lesson~13 (handout Sections~7--8): hydrogen with constant $\sigma_s=\sigma_0=\barns{20}$, a $1/E'$ weight within group 2, and $L=\ln(E_1/E_2)=\ln(10^5)=11.513$. With $P_2$ and $P_3$ from \ref*{f:overlap},
+\begin{equation*}
+\sg22=\frac{\sigma_0}{L}\int_{E_2}^{E_1}\frac{E'-E_2}{E'^2}\,dE',\qquad
+\sg32=\frac{\sigma_0}{L}\int_{E_2}^{E_1}\frac{E_2-E_3}{E'^2}\,dE' .
+\end{equation*}}
+
+\GuideSubcell{a}{Evaluate $\sg22$.}{
+$\dfrac{\sigma_0}{L}\Big[\ln\dfrac{E_1}{E_2}+\dfrac{E_2}{E_1}-1\Big]=20\times\dfrac{11.513+10^{-5}-1}{11.513}=\barns{18.26}$.}
+
+\GuideSubcell{b}{Evaluate $\sg32$.}{
+$\dfrac{\sigma_0}{L}(E_2-E_3)\Big(\dfrac1{E_2}-\dfrac1{E_1}\Big)=20\times\dfrac{0.999\times0.99999}{11.513}=\barns{1.735}$.}
+
+\GuideSubcell{c}{What fraction of group-2 collisions transfer the neutron to group 3? Why so few, when hydrogen can stop a neutron in one collision?}{
+$1.735/20=8.7\%$. Group 2 spans five decades. Only neutrons already within a factor of a few of \eV{1} are likely to land below it; the $1/E'$ flux puts equal numbers in each decade.}
+
+\GuideSubcell{d}{The two entries sum to \barns{19.998}, not 20. Where is the rest?}{
+Collisions that leave the neutron below $E_3=\eV{e-3}$: $\sigma_0E_3(1/E_2-1/E_1)/L=\barns{0.0017}$. With $E_3=0$ the column would sum to $\sigma_0$ exactly.
+\GuideCommentary{A truncated group structure leaks neutrons out of the bottom unless that transfer is kept as a loss or folded into the last group. Say which; do not claim exact conservation after discarding it (Lesson~13 handout, Section~9). Also note that $8.7\%$ is a fraction of collisions, not a ratio of group fluxes.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (c).}
+\item In $\Sg{g}{g'}$ the flux in the denominator of the definition is that of \opt{a} the destination group; \opt{b} the incident group; \opt{c} all groups; \opt{d} the thermal group.
+\item The removal cross section of a group is \opt{a} its absorption cross section; \opt{b} its total cross section; \opt{c} total minus within-group scattering; \opt{d} its downscatter cross section.
+\item With groups numbered from high energy and no upscatter, the scattering matrix (rows $=$ destinations) is \opt{a} lower triangular; \opt{b} upper triangular; \opt{c} diagonal; \opt{d} full.
+\item In the multigroup method the within-group spectral shapes are \opt{a} outputs of the group equations; \opt{b} irrelevant; \opt{c} inputs used to prepare the group constants; \opt{d} always $1/E$.
+\end{quiz}}
+
+\GSec{The $k$-eigenvalue problem in groups (extends FNRP 3.6; Lesson 14)}
+
+\begin{pframe}[\Chain Chain 9: a multiplying two-group system]\label{f:twog}
+\GuideContext{Lesson~14's data, with group 1 above \eV{1} and group 2 thermal (all in \si{\per\centi\meter}): $\Sigma_{\gamma,1}=2.04\times10^{-3}$, $\Sigma_{f,1}=2.96\times10^{-4}$, $\bar\nu_1=2.49$; $\Sigma_{\gamma,2}=1.91\times10^{-2}$, $\Sigma_{f,2}=1.38\times10^{-2}$, $\bar\nu_2=2.43$; downscatter $d=\Sg21=4.27\times10^{-2}$; no upscatter; all fission neutrons born fast, $(\chi_1,\chi_2)=(1,0)$. Write $f_g=(\nu\Sigma_f)_g$.}
+
+\GuideSubcell{a}{Compute $\Sigma_{a,1}$, $\Sigma_{a,2}$, and the removal cross sections.}{
+$\Sigma_{a,1}=0.002336$; $\Sigma_{a,2}=0.0329$. $\Sigma_{r,1}=\Sigma_{a,1}+d=0.045036$; $\Sigma_{r,2}=\Sigma_{a,2}$, since nothing scatters out of the thermal group.}
+
+\GuideSubcell{b}{Compute the production cross sections $f_1$ and $f_2$.}{
+$f_1=2.49\times2.96\times10^{-4}=0.000737$; $f_2=2.43\times0.0138=0.033534$.}
+
+\GuideSubcell{c}{Write the two balance equations with an external source $s_1$ in group 1.}{
+$\Sigma_{r,1}\phi_1=f_1\phi_1+f_2\phi_2+s_1$ and $\Sigma_{a,2}\phi_2=d\,\phi_1$.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 9 continued: the fixed-source solution]\label{f:fixed}
+\GuideContext{Take $s_1=\rate{1}$, with $\Sigma_{r,1}=0.045036$, $\Sigma_{a,2}=0.0329$, $d=0.0427$, $f_1=0.000737$, $f_2=0.033534$.}
+
+\GuideSubcell{a}{The thermal balance fixes the flux ratio $R=\phi_2/\phi_1$. Compute it.}{
+$R=d/\Sigma_{a,2}=0.0427/0.0329=1.298$.}
+
+\GuideSubcell{b}{Substitute $\phi_2=R\phi_1$ into the fast balance and solve.}{
+$\phi_1=\dfrac{s_1}{\Sigma_{r,1}-f_1-f_2R}=\dfrac{1}{0.000776}=\flx{1288}$; $\phi_2=R\phi_1=\flx{1672}$.}
+
+\GuideSubcell{c}{Audit: compute the absorption rate and the fission production rate.}{
+$R_a=0.002336(1288.5)+0.0329(1672.3)=\rate{58.03}$; production $=0.000737(1288.5)+0.033534(1672.3)=\rate{57.03}$. They differ by $1=s_1$, as \ref*{f:allE} requires.}
+
+\end{pframe}
+
+\begin{pframe}[Remove the source: the eigenvalue]\label{f:keig}
+\GuideContext{With $s_1=0$ the equations are homogeneous. A nonzero steady solution exists only if the material is exactly critical. As in the Chapter~7 guide, divide \emph{only the fission production} by a number $\kinf$ chosen so that a solution exists:
+\begin{equation*}
+\Sigma_{r,1}\phi_1=\frac1{\kinf}\big(f_1\phi_1+f_2\phi_2\big),\qquad \Sigma_{a,2}\phi_2=d\,\phi_1 .
+\end{equation*}}
+
+\GuideSubcell{a}{Solve for $\kinf$.}{
+The second equation still gives $\phi_2=R\phi_1$. Dividing the first by $\phi_1$: $\kinf=\dfrac{f_1+f_2\,d/\Sigma_{a,2}}{\Sigma_{r,1}}$.}
+
+\GuideSubcell{b}{Evaluate it for the data of \ref*{f:twog}. Is the system critical?}{
+$\kinf=\dfrac{0.000737+0.033534(1.298)}{0.045036}=0.9828$: subcritical, which is why the fixed-source problem had a positive solution.}
+
+\GuideSubcell{c}{Rewrite $\kinf$ as $\dfrac{f_1}{\Sigma_{r,1}}+\dfrac{d}{\Sigma_{r,1}}\cdot\dfrac{f_2}{\Sigma_{a,2}}$ and interpret the three ratios.}{
+$f_1/\Sigma_{r,1}=0.016$: neutrons produced by fast fission per fast neutron removed. $d/\Sigma_{r,1}=0.948$: probability that a fast neutron reaches thermal energy without being absorbed. $f_2/\Sigma_{a,2}=1.019$: neutrons produced per thermal absorption. $0.016+0.948(1.019)=0.983$.
+\GuideCommentary{These are the seeds of the four-factor formula of Chapter~4: a fast-fission contribution, a resonance escape probability, and the product $\eta_Tf$.}}
+
+\GuideSubcell{d}{Is the factor $1/\kinf$ a physical process?}{
+No. It is a mathematical device that scales production so that a steady solution exists; it measures how far the real system is from critical. It is not a source and not a growth rate.}
+
+\end{pframe}
+
+\begin{pframe}[The matrix form]\label{f:matrix}
+\GuideContext{Collect losses and scattering in $\mathbf M$ and fission production in $\mathbf F$, with entries $M_{gg'}=\Sigma_{t,g}\delta_{gg'}-\Sg{g}{g'}$ and $F_{gg'}=\chi_gf_{g'}$.}
+
+\GuideSubcell{a}{Write $\mathbf M$ and $\mathbf F$ for the two-group system.}{
+$\mathbf M=\begin{bmatrix}\Sigma_{r,1}&0\\-d&\Sigma_{a,2}\end{bmatrix}$, $\mathbf F=\begin{bmatrix}f_1&f_2\\0&0\end{bmatrix}$.}
+
+\GuideSubcell{b}{Why is the entry $-d$ negative when the cross section is positive? Why is the second row of $\mathbf F$ zero?}{
+Downscatter is a \emph{gain} for group 2 moved to the loss side of the equation. No fission neutrons are born thermal ($\chi_2=0$).}
+
+\GuideSubcell{c}{Write the fixed-source and eigenvalue problems in matrix form.}{
+$(\mathbf M-\mathbf F)\symbfit{\phi}=\mathbf s$, a linear system; and $\mathbf M\symbfit{\phi}=\dfrac1{\kinf}\mathbf F\symbfit{\phi}$, or $\mathbf M^{-1}\mathbf F\symbfit{\phi}=\kinf\symbfit{\phi}$, an eigenvalue problem. $\kinf$ is the largest eigenvalue, the one whose eigenvector is positive.}
+
+\GuideSubcell{d}{An eigenvector has no fixed size. Normalize the flux to $\widehat\phi_1+\widehat\phi_2=1$.}{
+$\widehat\phi_1=1/(1+R)=0.435$ and $\widehat\phi_2=R/(1+R)=0.565$.
+\GuideCommentary{The eigenproblem yields $\kinf$ and a spectrum \emph{shape}. The magnitude needs something else: a source if subcritical, or the reactor power if critical (Chapter~7 guide).}}
+
+\end{pframe}
+
+\begin{pframe}[Back to one group]\label{f:collapse}
+\GuideSubcell{a}{Add the two eigenvalue equations of \ref*{f:keig}. What cancels, and what is $\kinf$?}{
+The downscatter $d\phi_1$ cancels, leaving $\Sigma_{a,1}\phi_1+\Sigma_{a,2}\phi_2=\dfrac1{\kinf}(f_1\phi_1+f_2\phi_2)$, so $\kinf=\dfrac{\sum_gf_g\phi_g}{\sum_g\Sigma_{a,g}\phi_g}$.}
+
+\GuideSubcell{b}{Evaluate it with the eigen-spectrum $(0.435,\,0.565)$.}{
+$\dfrac{0.000737(0.435)+0.033534(0.565)}{0.002336(0.435)+0.0329(0.565)}=\dfrac{0.019261}{0.019599}=0.9828$.}
+
+\GuideSubcell{c}{Which of Lewis's equations is this?}{
+\FNRP{3.61}, $\kinf=\nu\overline\Sigma_f/\overline\Sigma_a$, with the averages taken over the group fluxes.
+\GuideCommentary{The multigroup method does not replace Lewis's formula; it supplies the spectrum the formula needs. With an assumed spectrum the same ratio is only an estimate.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 10: source multiplication and the approach to critical]\label{f:mult}
+\GuideContext{In this model the source and the fission births both enter group 1, so the fixed-source and eigenvalue problems share the flux ratio $R$. From \ref*{f:keig}, $f_1+f_2R=\kinf\Sigma_{r,1}$ with $\kinf=0.98277$.}
+
+\GuideSubcell{a}{Rewrite the fixed-source $\phi_1$ of \ref*{f:fixed} in terms of $\kinf$.}{
+$\phi_1=\dfrac{s_1}{\Sigma_{r,1}(1-\kinf)}$.}
+
+\GuideSubcell{b}{Without fission the fast flux would be $s_1/\Sigma_{r,1}=\flx{22.2}$. By what factor does fission multiply it?}{
+$1/(1-\kinf)=1/0.01723=58.0$, giving \flx{1288} as before: each source neutron starts a chain of $1+k+k^2+\cdots$ neutrons.}
+
+\GuideSubcell{c}{What happens as $\kinf\to1$ from below? What does the formula give for $\kinf>1$, and what does that mean?}{
+The flux grows without bound. For $\kinf>1$ it is negative: no steady state with a source exists, and the population grows in time (Chapter~5).}
+
+\GuideSubcell{d}{By what percentage must the thermal production $f_2$ rise to make this system critical?}{
+$\kinf=1$ needs $f_2R=\Sigma_{r,1}-f_1$, so $f_2=0.044299/1.2979=0.03413$, an increase of 1.8\%.
+\GuideCommentary{The simple $1/(1-\kinf)$ rule relies on the source having the fission spectrum's group distribution; it is not universal (Lesson~14 handout, Section~8).}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (b); 3 (a); 4 (b).}
+\item In the multigroup eigenvalue problem, $1/\kinf$ multiplies \opt{a} every term; \opt{b} the scattering terms; \opt{c} only the fission production terms; \opt{d} the absorption terms.
+\item Solving the eigenvalue problem determines \opt{a} the reactor power; \opt{b} $\kinf$ and the relative group fluxes; \opt{c} the absolute group fluxes; \opt{d} the source strength.
+\item A subcritical infinite medium with $\kinf=0.95$ multiplies a fission-spectrum source by \opt{a} 20; \opt{b} 0.95; \opt{c} 1.05; \opt{d} 5.
+\item Adding the group balance equations cancels \opt{a} absorption; \opt{b} group-to-group scattering; \opt{c} fission; \opt{d} the source.
+\end{quiz}}
+
+\end{programmed}
+
+\ifguidehandwriting\clearpage\fi
+
+\Sec{9}{Key terms}
+\begin{multicols}{2}
+\begin{keyterms}
+\gterm{$\kinf$, $\PNL$}{infinite-medium multiplication; nonleakage probability; $k=\kinf\PNL$ (\ref*{f:model}).}
+\gterm{$\eta(E)$}{fission neutrons produced per neutron absorbed in fuel (\ref*{f:eta}).}
+\gterm{enrichment $\tilde e$}{fissile fraction of the fissionable atoms (\ref*{f:etae}).}
+\gterm{moderator}{light material that slows neutrons past the resonance range (\ref*{f:fastthermal}).}
+\gterm{slowing-down power, ratio}{$\xi\Sigma_s$; $\xi\Sigma_s/\Sigma_a$ (\ref*{f:mod}).}
+\gterm{neutron density distribution, flux}{$\tilde n'''(E)$; $\phi(E)=v\tilde n'''(E)$, path length per unit volume, time, and energy (\ref*{f:flux}).}
+\gterm{reaction rate}{$R_x=\int\Sigma_x\phi\,dE$ (\ref*{f:flux}).}
+\gterm{spectrum (slowing-down) equation}{collisions at $E$ $=$ in-scatter $+$ fission births (\ref*{f:spectrum}).}
+\gterm{up-scatter}{a collision in which a thermal neutron gains energy (\ref*{f:spectrum}).}
+\gterm{uncollided fast flux}{$\chi\,\sfis/\Sigma_t$ (\ref*{f:fast}).}
+\gterm{slowing-down density $q(E)$}{neutrons slowing past $E$ per unit volume and time (\ref*{f:q}).}
+\gterm{$1/E$ flux}{$\phi=q/(\xi\Sigma_sE)$ between resonances (\ref*{f:oneoverE}).}
+\gterm{narrow, wide resonance approximations}{resonance width small, or not, compared with the energy lost per collision (\ref*{f:narrow}).}
+\gterm{energy self-shielding}{flux depression $\propto1/\Sigma_t$ at a resonance (\ref*{f:nr}--\ref*{f:shield}).}
+\gterm{detailed balance}{equal forward and reverse scattering rates at equilibrium (\ref*{f:mbflux}).}
+\gterm{Maxwellian flux $\phi_M$}{$Ee^{-E/kT}/(kT)^2$; peaks at $kT$ (\ref*{f:mbflux}).}
+\gterm{spectral hardening}{upward shift of the thermal spectrum caused by absorption (\ref*{f:hard}).}
+\gterm{effective cross section}{flux-weighted average that preserves the reaction rate (\ref*{f:eff}).}
+\gterm{resonance integral $I_x$}{$\int\sigma_x\,dE/E$; $\bar\sigma_{xI}=0.0869I_x$ (\ref*{f:avgs}).}
+\gterm{thermal ($2200$ m/s) cross section}{value at \eV{0.0253}; the Maxwellian average of a $1/v$ absorber is $0.886$ of it (\ref*{f:avgs}).}
+\gterm{energy group, group flux}{an interval $E_g\le E\le E_{g-1}$; $\phi_g=\int_g\phi\,dE$ (\ref*{f:groups}).}
+\gterm{group constants}{$\Sigma_{x,g}$, $(\nu\Sigma_f)_g$, $\chi_g$, $s_g$ (\ref*{f:gconst}).}
+\gterm{group-to-group scattering $\Sg{g}{g'}$}{into $g$ from $g'$, per unit incident-group flux (\ref*{f:gscat}).}
+\gterm{downscatter, upscatter}{$g>g'$; $g<g'$ (\ref*{f:gscat}, \ref*{f:lower}).}
+\gterm{multigroup equations}{$G$ coupled balances for the $\phi_g$ (\ref*{f:mgbalance}).}
+\gterm{removal cross section}{$\Sigma_{r,g}=\Sigma_{t,g}-\Sg{g}{g}$ (\ref*{f:mgbalance}).}
+\gterm{fixed-source problem}{$(\mathbf M-\mathbf F)\symbfit{\phi}=\mathbf s$ (\ref*{f:fixed}, \ref*{f:matrix}).}
+\gterm{$k$-eigenvalue problem}{$\mathbf M\symbfit{\phi}=\kinf^{-1}\mathbf F\symbfit{\phi}$ (\ref*{f:keig}--\ref*{f:matrix}).}
+\gterm{eigen-spectrum}{the normalized group-flux eigenvector (\ref*{f:matrix}).}
+\gterm{source multiplication}{$1/(1-\kinf)$ for a fission-spectrum source (\ref*{f:mult}).}
+\end{keyterms}
+\end{multicols}
+
+\Sec{10}{Where the end-of-chapter problems live}
+\begin{handoutsmall}[8.3]
+\begin{tabularx}{\linewidth}{@{}p{0.95in}Y@{}}
+\toprule
+FNRP problem & Frames that build the needed pieces\\
+\midrule
+3.1 & verifying the $1/E$ solution and $q=\xi C$: \ref*{f:oneoverE}\\
+3.2, 3.3 & the thermal source from slowing down: \ref*{f:oneoverE}, \ref*{f:overlap} (the same overlap argument, with $E_o$ as the boundary)\\
+3.4 & thermal $\eta$ versus enrichment: \ref*{f:etae}\\
+3.5, 3.9 & averages over the Maxwellian: \ref*{f:mbflux}, \ref*{f:avgs}\\
+3.6 & wide-resonance flux and self-shielding: \ref*{f:narrow}--\ref*{f:shield}\\
+3.7, 3.8 & changes of variable for the scattering kernel (lethargy, speed): the density transformation of the Chapter~2 guide and Lesson~7\\
+3.10 & contaminated heavy water: \ref*{f:mod}--\ref*{f:leak}\\
+3.11, 3.12 & temperature dependence of thermal absorption: \ref*{f:avgs}\\
+\bottomrule
+\end{tabularx}
+\end{handoutsmall}
+
+\begin{takeawaybox}[Learning objectives]
+The objectives this chapter implies, and how they compare with the Lesson 8--14 objectives already in the course, are tabulated in \texttt{reading\_guide/learning\_objectives.md}. The multigroup method and the multigroup eigenvalue problem (Sections~7--8) are course objectives that Lewis's text does not develop; this guide supplies them. Items flagged as new relative to the lessons (for example, the sensitivity of the slowing-down ratio to contamination, the fraction of neutrons a self-shielded resonance absorbs, and the decomposition of two-group $\kinf$ into fast-fission, escape, and thermal factors) are the ones this guide spends extra frames on.
+\end{takeawaybox}
+\end{document}

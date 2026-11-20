@@ -1,0 +1,31 @@
+% Reactivity-budget sketch for the Chapter 4 guide addendum (FNRP 9.4),
+% adapted from the Lesson 20 handout's \NEStartupFigure. Schematic only.
+\newcommand{\StartupBudgetFigure}{%
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,line width=0.5pt,
+  every node/.style={font=\fontsize{7.2}{8.2}\selectfont},
+  dot/.style={circle,fill=wcprimary,inner sep=1.6pt}]
+  \draw[->] (0,0)--(7.9,0);
+  \draw[->] (0,0)--(0,3.32);
+  \node[rotate=90] at (-0.44,1.60) {excess reactivity};
+  \node[anchor=east] at (-0.05,0) {$0$};
+  \coordinate (A) at (0.65,2.95);
+  \coordinate (B) at (2.25,2.27);
+  \coordinate (C) at (4.35,1.52);
+  \coordinate (D) at (6.60,0.72);
+  \draw[dashed,wcprimary!70] (A)--(B)--(C)--(D);
+  \foreach \P in {A,B,C,D}{\node[dot] at (\P) {};}
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (2.47,2.27)--node[right=4pt,align=left]{shutdown margin\\$|\Delta\rho_{\rm sd}|$}(2.47,2.95);
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (4.58,1.52)--node[right=4pt,align=left]{temperature defect\\$|D_T|$}(4.58,2.27);
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (6.82,0.72)--node[right=4pt,align=left]{power defect\\$|D_P|$}(6.82,1.52);
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror}]
+    (7.50,0.04)--node[right=4pt,align=left]{variable\\control}(7.50,0.72);
+  \foreach \xx in {0.65,2.25,4.35,6.60}{\draw (\xx,-.035)--(\xx,.035);}
+  \node[below=4pt,align=center] at (.65,0) {cold\\shutdown};
+  \node[below=4pt,align=center] at (2.25,0) {cold\\critical};
+  \node[below=4pt,align=center] at (4.35,0) {hot zero\\power};
+  \node[below=4pt,align=center] at (6.60,0) {hot full\\power};
+  \draw[->] (2.1,-.83)--node[below]{startup sequence}(6.8,-.83);
+\end{tikzpicture}}

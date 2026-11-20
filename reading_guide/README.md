@@ -1,7 +1,7 @@
 Build the guides with XeLaTeX and latexmk:
 
 ```sh
-make                          # Every chapter (1-4, 6, 7), portrait (the default)
+make                          # Every chapter (1-7, 10), portrait (the default)
 make landscape                # Every chapter, landscape
 make both                     # Both orientations of every chapter
 make reference                # Dense landscape editions without writing space
@@ -103,25 +103,50 @@ latexmk -xelatex -jobname=ch07_guide_landscape \
 
 `make tidy` removes auxiliary files for all editions, retaining PDFs;
 `make clean` removes those PDFs too. `make verify` checks the numerical examples.
-Both `make verify` and the Bessel-table rule run `tools/verify_examples.py`,
+Both `make verify` and the figure-data rule run `tools/verify_examples.py`,
 which needs NumPy and SciPy; pass `PYTHON=/path/to/python` if the default
 interpreter lacks them (for this workspace,
-`PYTHON=/home/robertsj/miniforge3/bin/python`).
+`PYTHON=/home/robertsj/miniforge3/bin/python`). With `--write` the script
+refreshes every table under `figures/data/`: the Bessel functions of the
+Chapter 7 figure, the six-group step response of the Chapter 5 figure, and
+the xenon, samarium, and depletion curves of the Chapter 10 figures.
 
 Guides exist for Chapters 1-4 (`ch01_guide.tex` to `ch04_guide.tex`; Lessons
-1-19) and Chapters 6-7 (Lessons 31-39). The Makefile discovers `ch*_guide.tex`,
-so every target above applies to all of them. The Chapter 1-4 sources label
-each frame (`\label{f:name}`) and cite it with `\ref*{f:name}`, which prints
-the frame number with its F; frames can then be inserted without renumbering
-the cross-references, key terms, or problem tables. After adding or moving
-frames, update the frame tags in `tools/verify_examples.py` to match.
+1-21), Chapter 5 (`ch05_guide.tex`; Lessons 25-29), Chapters 6-7 (Lessons
+31-39), and Chapter 10 (`ch10_guide.tex`; Lessons 22-24). The Makefile
+discovers `ch*_guide.tex`, so every target above applies to all of them. The
+Chapter 1-5 and 10 sources label each frame (`\label{f:name}`) and cite it
+with `\ref*{f:name}`, which prints the frame number with its F; frames can
+then be inserted without renumbering the cross-references, key terms, or
+problem tables. After adding or moving frames, update the frame tags in
+`tools/verify_examples.py` to match.
+
+The Chapter 4 guide ends with an addendum (its Section 7, frames F28-F35) on
+FNRP 9.1-9.4: reactivity and its units, the additive form of the four-factor
+formula, the temperature dependence of the resonance integral for UO2 and
+uranium metal rods (FNRP Eqs. 9.13-9.14 and Table 9.1), the fuel and moderator
+temperature coefficients, composite coefficients and defects, and the startup
+reactivity budget. It sits there because Lessons 20-21 introduce reactivity
+coefficients directly from the four-factor analysis of Lessons 17-19, and its
+chains continue the PWR lattice of the Chapter 4 frames. The budget sketch is
+`figures/feedback_schematics.tex`, adapted from the Lesson 20 handout.
+
+The Chapter 10 guide includes a closing section on the linear reactivity
+model and batch refueling, which is the Lesson 24 supplement rather than part
+of Lewis's text, and reuses the Lesson 23 depletion chain
+(`../handouts/figures/depletion_chain_tikz.tex`, found through `TEXINPUTS`).
+Where a textbook problem is assigned as homework in the lesson pages (5.1,
+5.2, 5.4, 5.9, 5.10, 5.15, 10.13, 10.14), the corresponding frames use
+different numbers or materials so that the guide builds the method without
+reproducing the assigned answer.
 
 The Chapter 3 guide extends Lewis: its Sections 7 and 8 introduce the
 multigroup method and the multigroup $k$-eigenvalue problem formally,
 following the Lesson 13 and 14 handouts, because the text mentions multigroup
 methods only in passing. `learning_objectives.md` compares the objectives
-implied by Chapters 1-4 with the lesson objectives in `../pages/` and flags
-new ones; the Chapter 6-7 comparison has not been written.
+implied by Chapters 1-5 and 10 (and the Chapter 9 addendum) with the lesson
+objectives in `../pages/` and flags new ones; the Chapter 6-7 comparison has
+not been written.
 
 The Chapter 4 guide reuses the lattice, neutron-cycle, and resonance sketches
 of the Lesson 15-18 handouts by loading

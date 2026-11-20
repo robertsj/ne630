@@ -1,0 +1,526 @@
+% Programmed reading guide for FNRP Chapter 5 (Reactor Kinetics).
+% Build: make ch05_guide.pdf   (XeLaTeX via latexmk; the class is in ../handouts)
+% Every number quoted below is recomputed by tools/verify_examples.py, which also
+% writes figures/data/kinetics_step.dat for Figure 1.
+\documentclass[compact]{ne630handout}
+\usepackage{ne630guide}
+\handoutsolutionsfalse
+\hypersetup{pdftitle={NE 630 -- Reading Guide: FNRP Chapter 5, Reactor Kinetics},pdfauthor={Jeremy Roberts}}
+\newcommand{\iso}[2]{\ensuremath{{}^{#1}\mathrm{#2}}}
+\newcommand{\eV}[1]{\SI{#1}{\electronvolt}}
+\newcommand{\icm}[1]{\SI{#1}{\per\centi\meter}}
+\newcommand{\cm}[1]{\SI{#1}{\centi\meter}}
+\newcommand{\s}[1]{\SI{#1}{\second}}
+\newcommand{\ms}[1]{\SI{#1}{\milli\second}}
+\newcommand{\us}[1]{\SI{#1}{\micro\second}}
+\newcommand{\pcm}[1]{\SI{#1}{pcm}}
+\newcommand{\linf}{l_\infty}
+\newcommand{\vbar}{\bar v}
+\newcommand{\Lam}{\Lambda}
+\newcommand{\dollar}{\$}
+
+\begin{document}
+\Guide{5}{Reactor Kinetics}
+ {FNRP Sections 5.1--5.6 (neutron balance equations, multiplying systems, delayed neutron kinetics, step reactivity changes, and the prologue to reactor dynamics). Companion handouts: Lessons 25--29.}
+ {25 (5.1--5.2 through Eq.~5.8), 26 (5.2--5.3), 27 (5.4, one precursor group), 28 (5.4--5.5, six groups and the inhour equation), 29 (5.6, feedback).}
+
+\begin{KeyBox}{How to use this guide}
+\ifguidehandwriting
+\textbf{One cell at a time.} Use one sheet to cover all rows below the current cell and a second sheet to cover its tinted answer. Read only the current question (for example, F1(a)) and write in its ruled space. Reveal that cell\textquotesingle s answer, compare your reasoning, and correct your work. Only then uncover the next question, F1(b). Shared givens appear above each sequence; keep them available as you work.\par\smallskip
+\fi
+Same rules as the earlier guides. Each frame poses one small task; the tinted column holds the answer and commentary. \textbf{Cover the tinted column}, work the frame, then compare. Frames marked \Chain reuse the previous answer, which is restated, so a missed frame never blocks the next one. Quiz answers are upside down in the footnote.
+\end{KeyBox}
+
+\begin{KeyBox}{What changes from Chapters 3 and 4}
+Those chapters found the spectrum and the lattice-averaged cross sections of a reactor that does not change in time. Chapter~5 keeps those averages and asks what the \emph{total} neutron population $n(t)$ does when production and loss are not balanced. Energy is integrated away ($\vbar$, $\overline\Sigma_x$), space is handled by a nonleakage probability, and the result is a single ordinary differential equation, later a system of seven. Notation: Lewis writes $n(t)$ for the total number of neutrons and $S(t)$ for the number of source neutrons introduced per second (neither is per unit volume); $l$ is the prompt neutron lifetime, $\Lam=l/k$ the prompt generation time, $\beta$ the delayed neutron fraction, and $\rho=(k-1)/k$ the reactivity. Lessons~25 and~26 write the same equation for the neutron density $n'''$ or the flux $\phi=\vbar n'''$; multiply by the volume to recover Lewis's form.
+\end{KeyBox}
+
+\begin{programmed}
+\GSec{Neutron balance without multiplication (FNRP 5.1--5.2; Lesson 25)}
+
+\begin{pframe}[Bookkeeping]\label{f:book}
+\GuideSubcell{a}{What do $n(t)$, $\vbar$, and $\Sigma_x$ stand for in this chapter?}{
+$n(t)$ is every neutron in the system, whatever its position or energy. $\vbar$ and $\Sigma_x$ are averaged over the spectrum (Chapter~3), and $\Sigma_x$ also over the lattice cell (Chapter~4).}
+
+\GuideSubcell{b}{Write the balance for a nonmultiplying, infinite system, \FNRP{5.2}, and justify the absorption term.}{
+$\dfrac{dn}{dt}=S(t)-\Sigma_a\vbar\,n(t)$. $\Sigma_a$ is the absorption probability per cm of travel and $\vbar$ the cm traveled per second, so $\Sigma_a\vbar$ is the absorption probability per second for each of the $n$ neutrons.}
+
+\GuideSubcell{c}{Set $S=0$ and solve. What is $\linf$, and why the subscript?}{
+$n(t)=n(0)e^{-t/\linf}$ with $\linf=1/\vbar\Sigma_a$, \FNRP{5.4}--(5.5): the mean time from birth to absorption, as $\bar t=\int tn\,dt/\int n\,dt$ confirms, \FNRP{5.6}. Infinite, because no neutron is lost to leakage.
+\GuideCommentary{Lesson~25: this is the third exponential attenuation of the course. $1/\Sigma$ is a mean path, $1/\lambda$ a mean time to decay, and $1/\vbar\Sigma_a$ a mean time to absorption.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1: how long does a neutron live?]\label{f:life}
+\GuideContext{Classically, $v(E)=1.384\times10^{6}\sqrt{E}$ cm/s with $E$ in eV (Lesson~25). Room-temperature water has $\overline\Sigma_{aT}=\icm{0.0197}$ (Chapter~4 guide). A sodium-cooled fast lattice has a cell-averaged $\overline\Sigma_a=\icm{0.0053}$ (Chapter~4 guide, Chain~3) and a mean speed near $10^{9}$ cm/s.}
+
+\GuideSubcell{a}{Check the formula at \eV{0.0253}.}{
+$1.384\times10^{6}\sqrt{0.0253}=2.2\times10^{5}$ cm/s: the 2200 m/s thermal neutron.}
+
+\GuideSubcell{b}{Compute $\linf$ for thermal neutrons in water and for the fast lattice.}{
+Water: $1/(0.0197\times2.2\times10^{5})=\SI{2.3e-4}{\second}=\us{230}$. Fast lattice: $1/(0.0053\times10^{9})=\SI{1.9e-7}{\second}=\us{0.19}$: a thousand times shorter.}
+
+\GuideSubcell{c}{In a thermal reactor, which neutrons set $\vbar$? (Lesson~25 found $\vbar=7.3\times10^{5}$ cm/s for equal thermal, intermediate, and fast fluxes.)}{
+The slow ones. $\vbar$ is a harmonic-type mean, $\int\varphi\,dE\big/\!\int(\varphi/v)\,dE$, and $1/v$ weights the thermal range heavily. That is why thermal systems have the longer lifetimes, $10^{-4}$ s, and fast systems $10^{-7}$ s.}
+
+\GuideSubcell{d}{Express $\linf$ through the absorption mean free path.}{
+$\linf=\lambda_a/\vbar$ with $\lambda_a=1/\Sigma_a$. For water, $\lambda_a=\cm{51}$: a thermal neutron wanders half a meter of path before capture.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1 continued: switching a source on]\label{f:source}
+\GuideContext{Water, $\linf=\SI{2.3e-4}{\second}$. At $t=0$ there are no neutrons and a steady source $S_o=10^{8}$ neutrons/s is inserted, \FNRP{5.7}.}
+
+\GuideSubcell{a}{Solve for $n(t)$.}{
+$n(t)=\linf S_o\,[1-e^{-t/\linf}]$, \FNRP{5.8}: the integrating-factor solution of Chapter~1 with $\lambda\to1/\linf$.}
+
+\GuideSubcell{b}{What is the steady population, and what fraction of it is reached at $t=\linf$, $2\linf$, $3\linf$?}{
+$n(\infty)=\linf S_o=2.3\times10^{4}$ neutrons. $0.632$, $0.865$, $0.950$: steady within \ms{0.7}.}
+
+\GuideSubcell{c}{Read $n(\infty)=\linf S_o$ as a statement about rates.}{
+At steady state the absorption rate $n/\linf$ equals the source rate. The population is the source rate times the time each neutron survives.}
+
+\GuideSubcell{d}{The source is removed at $t_1$. Sketch what follows, and name the only time constant in the problem.}{
+Exponential decay from $n(t_1)$ with the same $\linf$. Build-up and decay of a nonmultiplying system are both governed by the neutron lifetime, so both are over in a millisecond.
+\GuideCommentary{Lesson~26 chains such intervals together for pulsed and ramped accelerator sources: solve each interval, and hand the final population to the next as its initial condition.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (b).}
+\item In this chapter $n(t)$ is \opt{a} a neutron density per cm$^3$; \opt{b} the total number of neutrons in the system; \opt{c} the flux; \opt{d} the number of fissions per second.
+\item The infinite-medium neutron lifetime is \opt{a} $\vbar\Sigma_a$; \opt{b} $1/\Sigma_a$; \opt{c} $1/\vbar\Sigma_a$; \opt{d} $\vbar/\Sigma_a$.
+\item Lifetimes are longer in thermal than in fast systems because \opt{a} the mean speed is far lower; \opt{b} the absorption cross sections are smaller; \opt{c} thermal reactors are larger; \opt{d} water scatters strongly.
+\item With a steady source in a nonmultiplying medium, $n(t)$ \opt{a} grows linearly forever; \opt{b} rises to $\linf S_o$ with time constant $\linf$; \opt{c} is zero; \opt{d} oscillates.
+\end{quiz}}
+
+\GSec{Multiplying systems (FNRP 5.2--5.3; Lesson 26)}
+
+\begin{pframe}[Adding fission]\label{f:fission}
+\GuideSubcell{a}{Add prompt fission production to the balance, \FNRP{5.10}, and name the new term.}{
+$\dfrac{dn}{dt}=S+\nu\Sigma_f\vbar n-\Sigma_a\vbar n$. Fissions per second are $\Sigma_f\vbar n$; each yields $\nu$ neutrons, all assumed prompt.}
+
+\GuideSubcell{b}{Rewrite it with $\kinf=\nu\Sigma_f/\Sigma_a$ and $\linf$, \FNRP{5.12}.}{
+$\dfrac{dn}{dt}=S+\dfrac{\kinf-1}{\linf}\,n$: the net production rate per neutron is the excess of $\kinf$ over one, paid out once per lifetime.
+\GuideCommentary{Lesson~26 reaches the same equation from the energy-integrated diffusion equation with $\phi=n'''\vbar$: $\vbar(\nu\Sigma_f-\Sigma_a)=(\kinf-1)/\linf$.}}
+
+\GuideSubcell{c}{Define critical, subcritical, and supercritical from this equation.}{
+Critical: a time-independent population exists with $S=0$, which requires $\kinf=1$. With $S=0$, $n$ decays if $\kinf<1$ (subcritical) and grows if $\kinf>1$ (supercritical), \FNRP{5.13}.}
+
+\GuideSubcell{d}{Why is $\kinf$ here the same quantity as Chapter~3's $\nu\overline\Sigma_f/\overline\Sigma_a$?}{
+Both are production over absorption with the same spectrum-averaged cross sections. The eigenvalue of the steady problem is the growth parameter of the time-dependent one.}
+
+\end{pframe}
+
+\begin{pframe}[Leakage without geometry]\label{f:leak}
+\GuideContext{For a finite system Lewis writes the leakage rate as $\Gamma\Sigma_a\vbar n$, proportional to the absorption rate, \FNRP{5.15}.}
+
+\GuideSubcell{a}{Express the leakage and nonleakage probabilities in terms of $\Gamma$.}{
+Every neutron dies by absorption or leakage, so $P_L=\Gamma/(1+\Gamma)$ and $\PNL=1/(1+\Gamma)$, \FNRP{5.16}--(5.17). A large reactor has small $\Gamma$.}
+
+\GuideSubcell{b}{Multiply the balance by $\PNL$ and define $k$ and $l$ so that it takes the infinite-medium form, \FNRP{5.22}.}{
+$k=\PNL\kinf$ and $l=\PNL\linf$ give $\dfrac{dn}{dt}=S+\dfrac{k-1}{l}\,n$.}
+
+\GuideSubcell{c}{For $\Gamma=0.1$ and $\kinf=1.1$, find $\PNL$, $k$, and the change in lifetime.}{
+$\PNL=1/1.1=0.909$; $k=1.00$, just critical; $l$ is 9\% shorter than $\linf$ because leakage is one more way to die young.
+\GuideCommentary{Chapters~6 and~7 compute $\PNL$ from the geometry. Here it is a given number, as in Chapter~3.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2: how fast is ``fast''?]\label{f:fast}
+\GuideContext{A water reactor near critical with $l=10^{-4}$ s and no external source, \FNRP{5.24}.}
+
+\GuideSubcell{a}{For $k=1.001$, find the growth rate $(k-1)/l$, the e-folding time, and the doubling time.}{
+$10\,\mathrm{s^{-1}}$; e-folding $0.1$ s; doubling $0.069$ s. In one second $n$ grows by $e^{10}=22{,}000$.}
+
+\GuideSubcell{b}{For $k=0.999$?}{
+Halving every $0.069$ s; after one second only $e^{-10}=4.5\times10^{-5}$ of the population remains.}
+
+\GuideSubcell{c}{Repeat (a) for a fast reactor with $l=10^{-7}$ s.}{
+The e-folding time is $10^{-4}$ s. A tenth of a percent of excess multiplication would be uncontrollable by any mechanical means.}
+
+\GuideSubcell{d}{What rescues the situation?}{
+Delayed neutrons (Section~3). A small fraction of fission neutrons arrives seconds later, and for modest $\rho$ they set the pace.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2 continued: a prompt-only period]\label{f:promptT}
+\GuideContext{Imagine a fissile material whose neutrons are all prompt (compare FNRP problem~5.4), in a reactor with $l=0.002$ s. From critical, the power is to double in \s{20}.}
+
+\GuideSubcell{a}{Find the required period $T$, where $n\propto e^{t/T}$.}{
+$T=20/\ln2=\s{28.9}$.}
+
+\GuideSubcell{b}{Find $k-1$ and the reactivity.}{
+$(k-1)/l=1/T$, so $k-1=0.002/28.9=3.5\times10^{-5}$ and $\rho=(k-1)/k=3.5\times10^{-5}$: \pcm{3.5}.}
+
+\GuideSubcell{c}{Could a control rod be positioned to that precision?}{
+Not routinely; a single rod step is tens of pcm. Prompt-only kinetics would demand control to a few parts in $10^{5}$. With delayed neutrons (\ref*{f:read}) the same 29-second period needs about \pcm{150}, forty times more, and an overshoot of a few pcm merely lengthens the period a little.}
+
+\end{pframe}
+
+\begin{pframe}[Three fates with a source present]\label{f:fates}
+\GuideContext{$S=S_o$ constant and $n(0)=0$, \FNRP{5.26}--(5.30). Use $l=10^{-4}$ s and $S_o=10^{8}$ neutrons/s.}
+
+\GuideSubcell{a}{Subcritical, $k=0.9$: find $n(\infty)$ and the time constant of the approach.}{
+$n(\infty)=lS_o/(1-k)=10^{5}$ neutrons, reached with $\tau=l/(1-k)=\ms{1}$, \FNRP{5.27}--(5.28).}
+
+\GuideSubcell{b}{Repeat for $k=0.99$. What is the factor $1/(1-k)$?}{
+$10^{6}$ neutrons with $\tau=\ms{10}$. The source is multiplied by $1/(1-k)$: ten times more neutrons, approached ten times more slowly (the source multiplication of the Chapter~3 and~6 guides).}
+
+\GuideSubcell{c}{Critical, $k=1$: expand the exponential and find $n(t)$. How many neutrons after one minute?}{
+$n=S_ot$, \FNRP{5.30}: linear growth without bound; $6\times10^{9}$ after \s{60}.}
+
+\GuideSubcell{d}{Which two situations give a time-independent population, and does the definition of criticality depend on the source?}{
+Critical with no source ($k=1$, $S=0$), or subcritical with a source ($k<1$, $S>0$). Criticality is defined by $k$ alone; the behavior depends strongly on whether a source is present.
+\GuideCommentary{FNRP problem~5.3 asks for sketches when the source is inserted at $t=0$ and withdrawn at one minute: a subcritical system rises to a plateau and decays back; a critical one rises linearly and then holds its level.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (a); 3 (b); 4 (c).}
+\item A finite system is critical when \opt{a} $\kinf=1$; \opt{b} $\Gamma=0$; \opt{c} $\PNL\kinf=1$; \opt{d} $S=0$.
+\item With $l=10^{-4}$ s and all neutrons prompt, $k=1.001$ gives a doubling time of about \opt{a} $0.07$ s; \opt{b} $7$ s; \opt{c} $70$ s; \opt{d} $0.7$ ms.
+\item A steady source in a critical, prompt-only system produces a population that \opt{a} saturates; \opt{b} grows linearly; \opt{c} grows exponentially; \opt{d} stays zero.
+\item Source multiplication in a subcritical system is \opt{a} $k$; \opt{b} $1-k$; \opt{c} $1/(1-k)$; \opt{d} $l/k$.
+\end{quiz}}
+
+\GSec{Delayed neutron kinetics (FNRP 5.4; Lessons 27--28)}
+
+\begin{pframe}[Where delayed neutrons come from]\label{f:delayed}
+\GuideContext{FNRP Table~5.1 gives six-group half-lives (56, 23, 6.2, 2.3, 0.61, 0.23 s) and delayed fractions. Totals: $\beta=0.0065$ for \iso{235}{U}, $0.0021$ for \iso{239}{Pu}, $0.0026$ for \iso{233}{U}.}
+
+\GuideSubcell{a}{Describe a delayed neutron precursor and give an example.}{
+A fission product whose $\beta^-$ decay leaves the daughter excited enough to emit a neutron. Lesson~27: \iso{87}{Br} ($t_{1/2}=55.6$ s) decays to \iso{87}{Kr}$^*$, which emits a neutron 2.6\% of the time.}
+
+\GuideSubcell{b}{What is $\beta$, and what is a precursor group?}{
+$\beta$ is the fraction of fission neutrons that are delayed, $\beta=\sum_i\beta_i$, \FNRP{5.31}. A group lumps many precursor nuclides of similar half-life into one effective decay constant $\lambda_i$ and fraction $\beta_i$.}
+
+\GuideSubcell{c}{Fission of \iso{239}{Pu} has one-third the delayed fraction of \iso{235}{U}. What follows for the reactivity in dollars that is ``safe''?}{
+A dollar is $\beta$, so the same pcm insertion is three times more dollars in a plutonium-fueled system. The margin to prompt critical (Section~4) is correspondingly smaller.}
+
+\GuideSubcell{d}{In a core where 20\% of fissions occur in \iso{239}{Pu}, estimate the effective $\beta$.}{
+Weight by fission share: $0.8(0.0065)+0.2(0.0021)=0.0056$, a 14\% drop from fresh fuel.
+\GuideCommentary{FNRP problem~5.2 poses the same estimate for 30\% of the power from plutonium at end of life; weight by the fraction of fissions in each nuclide.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3: average delayed neutron properties]\label{f:avg}
+\GuideContext{\iso{235}{U} groups: $\beta_i=0.00021$, $0.00142$, $0.00128$, $0.00257$, $0.00075$, $0.00027$ with the half-lives above and $\lambda_i=0.693/t_{i1/2}$. Prompt lifetime $l=5\times10^{-5}$ s.}
+
+\GuideSubcell{a}{Compute the average half-life, \FNRP{5.32}.}{
+$t_{1/2}=\frac1\beta\sum_i\beta_it_{i1/2}=\s{9.0}$.}
+
+\GuideSubcell{b}{Compute $1/\lambda$ from \FNRP{5.34}. Why does it differ from $t_{1/2}/0.693$?}{
+$\frac1\lambda=\frac1\beta\sum_i\beta_i/\lambda_i=\s{13.0}$, so $\lambda=0.0766\,\mathrm{s^{-1}}$. Averaging mean lives ($1/\lambda_i$) is not the same as averaging half-lives; the long-lived groups count more in a mean lifetime.}
+
+\GuideSubcell{c}{Compute $l_d$ and the average lifetime $\bar l$, \FNRP{5.35}--(5.36).}{
+$l_d=l+1/\lambda=\s{13.05}$; $\bar l=l+\beta/\lambda=5\times10^{-5}+0.0848=\s{0.085}$: 1700 times the prompt lifetime, though delayed neutrons are 0.65\% of the total.}
+
+\GuideSubcell{d}{Why not simply replace $l$ by $\bar l$ in \ref*{f:fast}?}{
+Prompt and delayed neutrons respond on different time scales, and the precursor inventory has its own dynamics. A single lifetime is adequate only for very small reactivities (\ref*{f:inhour}); the proper treatment is a system of equations.}
+
+\end{pframe}
+
+\begin{pframe}[The kinetics equations]\label{f:pke}
+\GuideSubcell{a}{Split the fission term of \FNRP{5.15} into prompt and delayed production.}{
+Prompt: $(1-\beta)\nu\Sigma_f\vbar n$. Delayed: $\sum_i\lambda_iC_i$, the decay rate of the precursors. Equation \FNRP{5.37}.}
+
+\GuideSubcell{b}{Write the balance for the precursors of group $i$, \FNRP{5.39}.}{
+$\dfrac{dC_i}{dt}=\beta_i\nu\Sigma_f\vbar n-\lambda_iC_i$: produced in a share $\beta_i$ of fission neutrons, lost by decay.}
+
+\GuideSubcell{c}{What exactly is $C_i$?}{
+The number of precursors of group $i$: a reservoir of future delayed neutrons. For a group it is an effective quantity. Lesson~27 relates it to a real nuclide: with one precursor, \iso{87}{Br}, $C=f_nN_{\mathrm{Br}}$, the atoms times the neutron emission probability.}
+
+\GuideSubcell{d}{Express both equations with $k$ and $l$, \FNRP{5.40}--(5.41).}{
+$\dfrac{dn}{dt}=S+\dfrac{(1-\beta)k-1}{l}\,n+\sum_i\lambda_iC_i$ and $\dfrac{dC_i}{dt}=\beta_i\dfrac kl\,n-\lambda_iC_i$, using $\nu\Sigma_f\vbar=k/l$ with the leakage absorbed as in \ref*{f:leak}.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3 continued: steady state is unchanged]\label{f:steady}
+\GuideContext{Set both derivatives to zero with a constant source $S_o$, \FNRP{5.42}--(5.43). Data of \ref*{f:avg}, with $k\simeq1$.}
+
+\GuideSubcell{a}{Solve the precursor equations and substitute into the neutron equation.}{
+$C_i=\beta_ikn/(\lambda_il)$. The delayed production $\sum\lambda_iC_i=\beta kn/l$ exactly restores the fraction removed from the prompt term: $0=S_o+(k-1)n/l$, \FNRP{5.44}.}
+
+\GuideSubcell{b}{What does that say about the conditions for a steady state?}{
+They are those of \ref*{f:fates}: $k<1$ with a source, or $k=1$ without. Delayed neutrons change the \emph{rates} of change, never the steady states.}
+
+\GuideSubcell{c}{Compute $C_1/n$ and $\sum_iC_i/n$ at critical, with $l=5\times10^{-5}$ s.}{
+$C_1/n=0.00021/(0.01238\times5\times10^{-5})=339$; the sum is $\beta/(\lambda l)=0.0848/5\times10^{-5}=1700$. Precursors outnumber neutrons by three orders of magnitude.
+\GuideCommentary{Lesson~28's check: for $n_o=10^{8}$ cm$^{-3}$, $C_1(0)=3.39\times10^{10}$ cm$^{-3}$. Any numerical solution must start from these values, or it starts from a different experiment.}}
+
+\end{pframe}
+
+\begin{pframe}[Reactivity and generation time]\label{f:rho}
+\GuideContext{Define $\rho=(k-1)/k$ and $\Lam=l/k$, \FNRP{5.45}--(5.46).}
+
+\GuideSubcell{a}{Show that $[(1-\beta)k-1]/l=(\rho-\beta)/\Lam$ and rewrite the kinetics equations (FNRP problem~5.5).}{
+$\dfrac{(1-\beta)k-1}{l}=\dfrac kl\Big[(1-\beta)-\dfrac1k\Big]=\dfrac{\rho-\beta}{\Lam}$; likewise $\beta_ik/l=\beta_i/\Lam$. Hence \FNRP{5.47}--(5.48): $\dot n=S+\frac{\rho-\beta}{\Lam}n+\sum\lambda_iC_i$, $\dot C_i=\frac{\beta_i}{\Lam}n-\lambda_iC_i$.}
+
+\GuideSubcell{b}{For $k=1.0065$ and $l=5\times10^{-5}$ s, evaluate $\rho$ and $\Lam$. When is $\Lam\approx l$ acceptable?}{
+$\rho=0.00646$ (\pcm{646}); $\Lam=4.97\times10^{-5}$ s. Whenever $k\approx1$, which is whenever the reactivity is small.}
+
+\GuideSubcell{c}{Give one cent of reactivity in pcm for \iso{235}{U} and for \iso{239}{Pu}.}{
+$\dollar1=\beta$: one cent is \pcm{6.5} for uranium and \pcm{2.1} for plutonium. Dollars measure the distance to prompt critical, so they are system specific (Lesson~20).}
+
+\GuideSubcell{d}{Subcritical with a steady source: show $n=\Lam S_o/|\rho|$ agrees with \ref*{f:fates}.}{
+$\Lam/|\rho|=(l/k)\,k/(1-k)=l/(1-k)$, the same multiplication. And since $\lambda_i\Lam/\beta_i\ll1$, $C_i\gg n$ as in \ref*{f:steady}.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (d).}
+\item The delayed neutron fraction of \iso{235}{U} is about \opt{a} 0.065; \opt{b} 0.0065; \opt{c} 0.00065; \opt{d} 0.021.
+\item Including delayed neutrons changes \opt{a} the condition for criticality; \opt{b} the steady-state population with a source; \opt{c} the rate at which the population changes; \opt{d} the value of $k$.
+\item At steady state the precursor population compared with the neutron population is \opt{a} far larger; \opt{b} about equal; \opt{c} far smaller; \opt{d} zero.
+\item One dollar of reactivity equals \opt{a} 1\% $\Delta k/k$; \opt{b} 1 pcm; \opt{c} $\Lam$; \opt{d} $\beta$.
+\end{quiz}}
+
+\GSec{Step reactivity changes (FNRP 5.5; Lesson 28)}
+
+\begin{pframe}[What a step does]\label{f:step}
+\GuideContext{Figure~\ref{fig:step} is the six-group solution for \iso{235}{U} data, $\Lam=5\times10^{-5}$ s, and steps of $\pm0.1\beta$ from a critical steady state (compare FNRP Figs.~5.2 and~5.5).
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=5cm,xlabel={$t$ (s)},ylabel={$n(t)/n(0)$},xmin=0,xmax=100,ymin=0,ymax=4,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.03,0.97)},anchor=north west},
+ tick label style={font=\scriptsize},label style={font=\scriptsize}]
+\addplot[wcprimary,thick] table[x=t,y=nplus] {figures/data/kinetics_step.dat}; \addlegendentry{$\rho=+0.1\beta$}
+\addplot[wcalerted,thick,dashed] table[x=t,y=nminus] {figures/data/kinetics_step.dat}; \addlegendentry{$\rho=-0.1\beta$}
+\addplot[black!50,thin] coordinates {(0,1) (100,1)};
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Six-group response to $\pm0.1\beta$ steps (data from \texttt{tools/verify\_examples.py}).}\label{fig:step}
+\end{center}}}
+
+\GuideSubcell{a}{Describe the two stages of each curve.}{
+A \Term{prompt jump} (or drop) within a fraction of a second, to about $1.11$ and $0.91$; then a slow exponential rise or fall. By \s{100} the populations are $3.5$ and $0.42$ times the initial value.}
+
+\GuideSubcell{b}{Which time constant governs each stage?}{
+The jump is set by the prompt generation time $\Lam$; the slow exponential by the precursor half-lives, since the precursor inventory must change before the delayed source does.}
+
+\GuideSubcell{c}{Define the reactor period $T$ and its sign convention.}{
+The asymptotic behavior is $n\propto e^{t/T}$; $T$ is the time for the power to change by a factor $e$, positive for a supercritical and negative for a subcritical reactor.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4: the inhour equation]\label{f:inhour}
+\GuideContext{Source free, constant $\rho$. Try $n=Ae^{\omega t}$ and $C_i=B_ie^{\omega t}$ in \FNRP{5.47}--(5.48).}
+
+\GuideSubcell{a}{Write the two algebraic equations, \FNRP{5.49}--(5.50).}{
+$\omega A=\dfrac{\rho-\beta}{\Lam}A+\sum_i\lambda_iB_i$ and $\omega B_i=\dfrac{\beta_i}{\Lam}A-\lambda_iB_i$.}
+
+\GuideSubcell{b}{Eliminate $B_i$ and cancel $A$, \FNRP{5.51}.}{
+$B_i=\dfrac{\beta_iA}{\Lam(\omega+\lambda_i)}$, so $\omega=\dfrac{\rho-\beta}{\Lam}+\dfrac1\Lam\sum_i\dfrac{\beta_i\lambda_i}{\omega+\lambda_i}$.}
+
+\GuideSubcell{c}{Use $\beta=\sum\beta_i$ and solve for $\rho$ (FNRP problem~5.8).}{
+$\beta_i-\dfrac{\beta_i\lambda_i}{\omega+\lambda_i}=\dfrac{\beta_i\omega}{\omega+\lambda_i}$, giving the \Term{inhour equation} $\rho=\Big(\Lam+\sum_i\dfrac{\beta_i}{\omega+\lambda_i}\Big)\omega$, \FNRP{5.53}.}
+
+\GuideSubcell{d}{How many roots $\omega$ are there, and which one survives?}{
+Seven, for six groups (clear the denominators: a degree-7 polynomial). For $\rho>0$ exactly one, $\omega_1$, is positive; the others decay. For $\rho<0$ all are negative and $\omega_1$, the least negative, decays slowest. Either way $n\simeq A_1e^{t/T}$ with $T=1/\omega_1$, \FNRP{5.55}.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4 continued: reading period from reactivity]\label{f:read}
+\GuideContext{Figure~\ref{fig:inhour} plots $\rho/\beta$ against $|T|$ from the inhour equation with \iso{235}{U} data and $\Lam=5\times10^{-5}$ s (compare FNRP Figs.~5.3 and~5.4).
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}
+\begin{semilogxaxis}[width=\linewidth,height=5cm,xlabel={$|T|$ (s)},ylabel={$\rho/\beta$},xmin=0.01,xmax=10000,ymin=-2,ymax=2,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.97,0.97)},anchor=north east},
+ tick label style={font=\scriptsize},label style={font=\scriptsize},samples=300]
+\addplot[wcprimary,thick,domain=0.01:10000] {(5e-5/x + 0.00021/(1+0.012377*x) + 0.00142/(1+0.030137*x) + 0.00128/(1+0.11180*x) + 0.00257/(1+0.30137*x) + 0.00075/(1+1.1363*x) + 0.00027/(1+3.0137*x))/0.0065}; \addlegendentry{$\rho>0$, $T>0$}
+\addplot[wcalerted,thick,dashed,domain=80.9:10000,restrict y to domain=-2:0] {(-5e-5/x + 0.00021/(1-0.012377*x) + 0.00142/(1-0.030137*x) + 0.00128/(1-0.11180*x) + 0.00257/(1-0.30137*x) + 0.00075/(1-1.1363*x) + 0.00027/(1-3.0137*x))/0.0065}; \addlegendentry{$\rho<0$, $T<0$}
+\addplot[black!50,thin] coordinates {(0.01,1) (10000,1)};
+\addplot[black!50,thin,dashed] coordinates {(80.8,-2) (80.8,0)};
+\end{semilogxaxis}
+\end{tikzpicture}
+\gfigcap{Reactivity versus the magnitude of the stable period. The horizontal line is prompt critical; the vertical line is $|T|=1/\lambda_1=80.8$ s.}\label{fig:inhour}
+\end{center}}}
+
+\GuideSubcell{a}{For $\rho=+0.1\beta$ the exact root gives $T=\s{98.7}$. Evaluate the small-reactivity estimate \FNRP{5.56}, $T\approx(\Lam+\beta/\lambda)/\rho$, and explain the discrepancy.}{
+$(5\times10^{-5}+0.0848)/0.00065=\s{131}$. The estimate assumes $\omega_1\ll\lambda_i$ for \emph{every} group, but $\omega_1=0.01\,\mathrm{s^{-1}}$ is comparable to $\lambda_1=0.012$; the long-lived group is not in equilibrium with the growth.}
+
+\GuideSubcell{b}{What governs $T$ at small $\rho$, and why is that surprising?}{
+$\beta$ and $\lambda$ alone, \FNRP{5.57}: $T\approx\beta/(\rho\lambda)$. Surprising because delayed neutrons are under 1\% of all neutrons; but $\beta/\lambda=0.085$ s dwarfs $\Lam$.}
+
+\GuideSubcell{c}{For $\rho=-0.1\beta$ the root gives $T=\s{-172}$. What is the fastest possible asymptotic decay, however negative $\rho$ is?}{
+From Fig.~\ref{fig:inhour}, $\omega_1\to-\lambda_1$: $T\to-1/\lambda_1=-\s{80.8}$ for \iso{235}{U}. After the prompt drop, power can fall no faster than the longest-lived precursor decays.
+\GuideCommentary{Lewis quotes ``approximately 56 s,'' the half-life itself; the mean life $1/\lambda_1$ is 80.8 s. Both say the same thing: the reactor is never off instantly.}}
+
+\GuideSubcell{d}{For $\rho=1.1\beta$ the root gives $T=\ms{62}$. Compare with $\Lam/(\rho-\beta)$, \FNRP{5.58}.}{
+$5\times10^{-5}/(0.1\times0.0065)=\ms{77}$: the right order. Above prompt critical the period scales with $\Lam$ and is independent of the delayed data. For $1.5\beta$ it is \ms{15}.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 4 continued: periods in operations]\label{f:ops}
+\GuideContext{Same data. Use Fig.~\ref{fig:inhour} or the inhour equation directly.}
+
+\GuideSubcell{a}{A uranium reactor at \SI{1}{\watt} is to reach \SI{1}{\kilo\watt} in two hours. Find the period and the reactivity in cents (compare FNRP problem~5.6).}{
+$T=7200/\ln1000=\s{1042}$. Inserting $\omega=1/T$ into the inhour equation: $\rho=7.9\times10^{-5}=\pcm{7.9}$, about $1.2$ cents.}
+
+\GuideSubcell{b}{On a 15-minute period, how long from \SI{1}{\watt} to \SI{1}{\mega\watt} (FNRP problem~5.7)?}{
+$t=T\ln(10^{6})=900\times13.8=\SI{12400}{\second}$, about $3.5$ hours.}
+
+\GuideSubcell{c}{Ten cents is added to critical uranium, plutonium, and \iso{233}{U} systems. The periods are $99$, $124$, and $160$ s. Why does plutonium, with the smallest $\beta$, not have the shortest period?}{
+Ten cents is $0.1\beta$ in each case, so the dimensionless insertion is identical; the periods differ only through the group half-lives and fractions. In pcm, however, plutonium's ten cents is only \pcm{21} against uranium's \pcm{65}.
+\GuideCommentary{Withdrawing ten cents gives $-172$, $-197$, and $-252$ s. FNRP problem~5.9 asks the same for one cent.}}
+
+\end{pframe}
+
+\begin{pframe}[Prompt critical]\label{f:pc}
+\GuideSubcell{a}{What happens to the sign of the prompt term in \FNRP{5.47} at $\rho=\beta$?}{
+$(\rho-\beta)/\Lam$ changes from negative to positive: prompt neutrons alone sustain a growing chain, and the delayed neutrons merely add to it. This is \Term{prompt critical}.}
+
+\GuideSubcell{b}{Estimate the period at $\dollar1.10$ and at $\dollar1.50$ with $\Lam=5\times10^{-5}$ s.}{
+$\Lam/(\rho-\beta)$: \ms{77} and \ms{15}. Figure~\ref{fig:inhour} shows the collapse: the curve drops from hundreds of seconds to milliseconds as $\rho$ crosses $\beta$.}
+
+\GuideSubcell{c}{Why are dollars the natural unit for reactivity?}{
+Because $\rho/\beta=1$ marks the boundary beyond which mechanical control is hopeless. Operators and safety limits are stated in dollars and cents for that reason.}
+
+\GuideSubcell{d}{Can the power be reduced to zero immediately?}{
+No. A large negative insertion gives a prompt drop to $\beta n_o/(\beta+|\rho|)$ (\ref*{f:jump}) and then decay no faster than $e^{-\lambda_1t}$: the precursors keep emitting neutrons for minutes.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 5: the prompt jump, rod drop, and source jerk]\label{f:jump}
+\GuideContext{Critical steady state, so $C_{io}=\beta_in_o/(\lambda_i\Lam)$, \FNRP{5.59}. A negative step $\rho=-|\rho|$ is applied; for $t\ll1/\lambda_i$ the precursors have not changed.}
+
+\GuideSubcell{a}{Write the neutron equation with $C_i=C_{io}$ frozen and solve it, \FNRP{5.60}--(5.61).}{
+$\dot n=-\dfrac{|\rho|+\beta}{\Lam}n+\dfrac\beta\Lam n_o$, so $n(t)=\dfrac{\beta}{|\rho|+\beta}n_o+\dfrac{|\rho|}{|\rho|+\beta}n_oe^{-(|\rho|+\beta)t/\Lam}$.}
+
+\GuideSubcell{b}{After the fast transient, what is $n_1$, and how does a \Term{rod drop} measure a rod's worth, \FNRP{5.62}--(5.63)?}{
+$n_1=\beta n_o/(|\rho|+\beta)$, so $|\rho|/\beta=n_o/n_1-1$. A rod that drops the power from \SI{100}{\watt} to \SI{70}{\watt} is worth $100/70-1=0.43$ dollars. The transient's time constant is $\Lam/(|\rho|+\beta)=\ms{5.4}$.}
+
+\GuideSubcell{c}{Repeat for a positive step $\rho<\beta$. Evaluate for $0.1\beta$, $0.2\beta$, and $0.5\beta$.}{
+$n_1/n_o=\beta/(\beta-\rho)$: $1.11$, $1.25$, $2.0$. Compare the start of Fig.~\ref{fig:step}. The approximation fails as $\rho\to\beta$, where the jump and the period merge.}
+
+\GuideSubcell{d}{What is a \Term{source jerk}, and why does the same algebra apply?}{
+A subcritical system with a source is in steady state, with the same $C_{io}$ relation. Removing the source suddenly leaves the frozen precursors as the only source, so the population drops to the same $n_1$, and $|\rho|/\beta=n_o/n_1-1$ again.
+\GuideCommentary{Lesson~27's graphical exercise estimates $\rho/\beta$ twice, from the jump $J=n_1/n_o$ and from the late slope $1/T$, and asks why the two disagree slightly.}}
+
+\end{pframe}
+
+\begin{pframe}[One delayed group]\label{f:oneg}
+\GuideContext{Lump all precursors into $C=\sum C_i$ with the average $\lambda=0.0766\,\mathrm{s^{-1}}$ of \ref*{f:avg} (FNRP problem~5.10). $\beta=0.0065$, $\Lam=5\times10^{-5}$ s.}
+
+\GuideSubcell{a}{Write the two equations and the characteristic equation for $n,C\propto e^{\omega t}$.}{
+$\dot n=\frac{\rho-\beta}{\Lam}n+\lambda C$, $\dot C=\frac\beta\Lam n-\lambda C$; hence $\Lam\omega^2+(\beta-\rho+\lambda\Lam)\omega-\lambda\rho=0$, the inhour equation with one term.}
+
+\GuideSubcell{b}{Solve for $\rho=0.2\beta$ and identify the two modes.}{
+$\omega_s=0.0191\,\mathrm{s^{-1}}$ ($T=\s{52}$) and $\omega_f=-104\,\mathrm{s^{-1}}$, which is about $-(\beta-\rho)/\Lam$. The fast mode is the prompt jump; the slow one the period. Amplitudes: $A_s=1.25n_o$, $A_f=-0.25n_o$, so $n(0)=n_o$ and the jump lands at $1.25n_o$.}
+
+\GuideSubcell{c}{Six groups give $T=\s{36.9}$ at $0.2\beta$ but $T=\s{618}$ versus $\s{640}$ at $0.02\beta$. Why does one group work at small $\rho$ only?}{
+At small $\rho$, every group satisfies $\omega\ll\lambda_i$ and only $\sum\beta_i/\lambda_i=\beta/\lambda$ matters, which the average preserves. At larger $\rho$ the short-lived groups respond differently from the long-lived ones, and no single $\lambda$ reproduces the mixture.}
+
+\GuideSubcell{d}{Let $\Lam\to0$ in the one-group equations. What do you get (FNRP problem~5.12)?}{
+The \Term{prompt jump approximation}: $n$ adjusts instantly to the precursor source, $n=\lambda\Lam C/(\beta-\rho)$, and $\dot n=\dfrac{\lambda}{\beta-\rho}\Big(\rho+\dfrac1\lambda\dfrac{d\rho}{dt}\Big)n$. For a small step, $T\approx\beta/(\lambda\rho)$ again.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (d).}
+\item Just after a small positive step the population jumps because \opt{a} the precursors decay faster; \opt{b} prompt neutrons rebalance in a few generation times while the precursors have not changed; \opt{c} $\beta$ increases; \opt{d} the source turns on.
+\item For small reactivities the stable period is governed mainly by \opt{a} $\Lam$; \opt{b} $k$; \opt{c} $\beta$ and the precursor decay constants; \opt{d} the leakage.
+\item At prompt critical \opt{a} $\rho=\beta$; \opt{b} $\rho=0$; \opt{c} $k=1$; \opt{d} $T=\infty$.
+\item After a large negative step, the slowest possible asymptotic decay constant is \opt{a} $\beta/\Lam$; \opt{b} $1/\Lam$; \opt{c} $\rho/\Lam$; \opt{d} $\lambda_1$, that of the longest-lived precursors.
+\end{quiz}}
+
+\GSec{Prologue to reactor dynamics (FNRP 5.6; Lesson 29)}
+
+\begin{pframe}[Feedback closes the loop]\label{f:fb}
+\GuideContext{Lesson~29 writes $\rho(t)=\rho_{\rm ext}(t)+\alpha_f\theta(t)$, where $\theta=T_f-T_{f0}$ is the fuel temperature rise and $\alpha_f=-3\times10^{-5}\,\mathrm{K^{-1}}$. Model~A (fast heat removal): $\theta=A(p-1)$ with $p=n/n_o$ and $A=\SI{100}{\kelvin}$.}
+
+\GuideSubcell{a}{List what changes in the kinetics parameters when the core heats up, and which change dominates.}{
+Densities fall, so macroscopic cross sections fall; resonances Doppler-broaden; the thermal spectrum hardens. By far the largest effect is on $\rho$; hence \emph{zero-power} kinetics applies only while the temperatures stay put.}
+
+\GuideSubcell{b}{What fuel temperature rise cancels a \pcm{300} insertion?}{
+$\theta=0.003/(3\times10^{-5})=\SI{100}{\kelvin}$.}
+
+\GuideSubcell{c}{In Model~A, where does the power settle after a \pcm{300} step? After $\dollar1.50$?}{
+A positive steady power needs $\rho=0$: $p=1+\rho_{\rm ext}/(|\alpha_f|A)$, giving $2.0$ and $4.25$ times the initial power. The reactivity is spent on raising the fuel temperature.}
+
+\GuideSubcell{d}{Redraw the positive curve of Fig.~\ref{fig:step} on a log scale with and without feedback (FNRP Fig.~5.6).}{
+Both start as the same straight line (same period). With negative feedback the line bends over, becomes concave downward, and levels off at the power where the feedback has cancelled the insertion.
+\GuideCommentary{Design must assure negative feedback for a temperature rise under all operating conditions; Chapter~9 (and the addendum to the Chapter~4 guide) computes the coefficients.}}
+
+\end{pframe}
+
+\begin{pframe}[Adiabatic fuel: a prompt excursion]\label{f:excursion}
+\GuideContext{Model~B of Lesson~29: no heat removal, $\dot\theta=Bp$, with $\rho_{\rm ext}=\dollar1.50=\pcm{975}$ held constant and $\beta=0.0065$.}
+
+\GuideSubcell{a}{How much must the fuel heat before the reactor drops back below prompt critical?}{
+$(975-650)\,\mathrm{pcm}/(3\,\mathrm{pcm/K})=\SI{108}{\kelvin}$.}
+
+\GuideSubcell{b}{Does the power peak exactly when $\rho=\beta$?}{
+Slightly later, at $\rho\simeq0.92\beta$: at $\rho=\beta$ the prompt term vanishes but $\dot n=\lambda C>0$ still. The peak comes when the prompt loss just balances the delayed source.}
+
+\GuideSubcell{c}{What happens after the peak, and what practical device relies on this?}{
+The fuel keeps heating as long as fissions deposit energy, $\rho$ keeps falling, and the power collapses: the burst terminates itself. A pulsed TRIGA reactor is shut down by its own prompt fuel temperature coefficient.}
+
+\GuideSubcell{d}{Why does the fuel coefficient, not the moderator coefficient, matter here?}{
+The excursion lasts tens of milliseconds, far shorter than the seconds needed to conduct heat into the coolant. Only the fuel temperature responds in time: a \Term{prompt} coefficient (FNRP~9.3).}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (b); 3 (a); 4 (c).}
+\item ``Zero-power kinetics'' means \opt{a} $n=0$; \opt{b} $S=0$; \opt{c} temperatures are assumed not to change; \opt{d} $\rho=0$.
+\item With a negative fuel temperature coefficient, a positive step leads to \opt{a} unbounded exponential growth; \opt{b} growth that bends over and levels off; \opt{c} immediate shutdown; \opt{d} oscillation.
+\item In a prompt excursion the power peaks \opt{a} shortly after $\rho$ falls back to about $\beta$; \opt{b} when $\rho=0$; \opt{c} when the coolant boils; \opt{d} at $t=0$.
+\item The feedback that acts within milliseconds comes from \opt{a} the coolant density; \opt{b} xenon; \opt{c} the fuel temperature; \opt{d} control rods.
+\end{quiz}}
+
+\end{programmed}
+
+\ifguidehandwriting\clearpage\fi
+
+\Sec{6}{Key terms}
+\begin{multicols}{2}
+\begin{keyterms}
+\gterm{neutron lifetime $\linf$, $l$}{mean time from birth to absorption, $1/\vbar\Sigma_a$; shortened by leakage, $l=\PNL\linf$ (\ref*{f:book}, \ref*{f:leak}).}
+\gterm{mean neutron speed $\vbar$}{spectrum-averaged speed, dominated by the slowest neutrons (\ref*{f:life}).}
+\gterm{nonmultiplying, multiplying system}{without, with fissionable material (\ref*{f:book}, \ref*{f:fission}).}
+\gterm{critical, subcritical, supercritical}{$k=1$, $<1$, $>1$: steady, decaying, growing population without a source (\ref*{f:fission}, \ref*{f:fates}).}
+\gterm{$\Gamma$, $P_L$, $\PNL$}{leakage per absorption; leakage and nonleakage probabilities, $\PNL=1/(1+\Gamma)$ (\ref*{f:leak}).}
+\gterm{source multiplication}{$n(\infty)=lS_o/(1-k)$ in a subcritical system (\ref*{f:fates}).}
+\gterm{delayed neutron, precursor}{a neutron emitted after the $\beta^-$ decay of a fission product; that fission product (\ref*{f:delayed}).}
+\gterm{delayed neutron fraction $\beta$, $\beta_i$}{fraction of fission neutrons that are delayed, in total and by group (\ref*{f:delayed}).}
+\gterm{precursor group, $C_i$, $\lambda_i$}{effective lumped precursors with one decay constant (\ref*{f:delayed}, \ref*{f:pke}).}
+\gterm{prompt lifetime $l$, delayed lifetime $l_d$, average lifetime $\bar l$}{$l_d=l+1/\lambda$; $\bar l=l+\beta/\lambda$ (\ref*{f:avg}).}
+\gterm{kinetics equations}{seven coupled balances for $n$ and $C_i$ (\ref*{f:pke}, \ref*{f:rho}).}
+\gterm{reactivity $\rho$}{$(k-1)/k$; in pcm ($10^{5}\rho$), dollars ($\rho/\beta$), cents (\ref*{f:rho}).}
+\gterm{prompt generation time $\Lam$}{$l/k$ (\ref*{f:rho}).}
+\gterm{prompt jump (drop)}{the fast change in $n$ before the precursors respond; $n_1/n_o=\beta/(\beta-\rho)$ (\ref*{f:step}, \ref*{f:jump}).}
+\gterm{reactor period $T$}{$n\propto e^{t/T}$ asymptotically; $T=1/\omega_1$ (\ref*{f:step}, \ref*{f:inhour}).}
+\gterm{inhour equation}{$\rho=(\Lam+\sum\beta_i/(\omega+\lambda_i))\omega$ (\ref*{f:inhour}).}
+\gterm{prompt critical}{$\rho=\beta$, one dollar (\ref*{f:pc}).}
+\gterm{rod drop, source jerk, rod oscillator}{experiments measuring $|\rho|/\beta$ from $n_o/n_1-1$, or $\rho_o/\Lam$ (\ref*{f:jump}).}
+\gterm{one delayed group}{all precursors lumped with the average $\lambda$ (\ref*{f:oneg}).}
+\gterm{prompt jump (zero lifetime) approximation}{$\Lam\to0$ (\ref*{f:oneg}).}
+\gterm{zero-power kinetics, reactor dynamics}{without, with temperature feedback (\ref*{f:fb}).}
+\gterm{prompt (fuel temperature) coefficient}{feedback that acts before heat reaches the coolant (\ref*{f:excursion}).}
+\end{keyterms}
+\end{multicols}
+
+\Sec{7}{Where the end-of-chapter problems live}
+\begin{handoutsmall}[8.3]
+\begin{tabularx}{\linewidth}{@{}p{0.95in}Y@{}}
+\toprule
+FNRP problem & Frames that build the needed pieces\\
+\midrule
+5.1 & lifetimes from $\Sigma_a$ and $v(E)$: \ref*{f:life} (graphite and iron replace the water and fast lattice used there)\\
+5.2 & effective $\beta$ of mixed fuel: \ref*{f:delayed}\\
+5.3 & sketches with a source inserted and removed: \ref*{f:source}, \ref*{f:fates}\\
+5.4 & prompt-only period and reactivity: \ref*{f:promptT}\\
+5.5 & $\rho$ and $\Lam$ form of the equations: \ref*{f:rho}\\
+5.6, 5.7 & period for a power change; time on a given period: \ref*{f:ops}\\
+5.8 & derivation of the inhour equation: \ref*{f:inhour}\\
+5.9 & periods for one cent in three fuels: \ref*{f:read}, \ref*{f:ops}\\
+5.10--5.12 & one delayed group: solution, limits, period at $\rho=\beta$, prompt jump approximation: \ref*{f:oneg}\\
+5.13 & rod worth from a drop: \ref*{f:jump}\\
+5.14 & period from a log plot; reactivity for one minute: \ref*{f:step}, \ref*{f:read}\\
+5.15--5.18 & numerical solutions (Lesson~28's \texttt{ne630\_kinetics.py}); initial conditions: \ref*{f:steady}; checks against \ref*{f:read} and \ref*{f:jump}\\
+5.19 & reactivity for linear growth: start from \ref*{f:oneg}(a) with $n=n_o(1+\vartheta t)$\\
+\bottomrule
+\end{tabularx}
+\end{handoutsmall}
+
+\begin{takeawaybox}[Learning objectives]
+The objectives this chapter implies, and how they compare with the Lesson 25--29 objectives already in the course, are tabulated in \texttt{reading\_guide/learning\_objectives.md}. Items flagged there as new (for example, the leakage parameter $\Gamma$, the distinction between the averaged half-life and $1/\lambda$, the precursor-to-neutron ratio, the limits of the inhour equation, the rod drop and source jerk measurements, and the self-terminating prompt excursion) are the ones this guide spends extra frames on.
+\end{takeawaybox}
+\end{document}

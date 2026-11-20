@@ -1,0 +1,443 @@
+% Programmed reading guide for FNRP Chapter 10 (Long-Term Core Behavior).
+% Build: make ch10_guide.pdf   (XeLaTeX via latexmk; the class is in ../handouts)
+% Every number quoted below is recomputed by tools/verify_examples.py, which also
+% writes figures/data/xenon_shutdown.dat and depletion.dat for the figures.
+\documentclass[compact]{ne630handout}
+\usepackage{ne630guide}
+\handoutsolutionsfalse
+\hypersetup{pdftitle={NE 630 -- Reading Guide: FNRP Chapter 10, Long-Term Core Behavior},pdfauthor={Jeremy Roberts}}
+\newcommand{\iso}[2]{\ensuremath{{}^{#1}\mathrm{#2}}}
+\newcommand{\barns}[1]{\SI{#1}{\barn}}
+\newcommand{\icm}[1]{\SI{#1}{\per\centi\meter}}
+\newcommand{\flx}[1]{\SI{#1}{\per\centi\meter\squared\per\second}}
+\newcommand{\dens}[1]{\SI{#1}{\per\centi\meter\cubed}}
+\newcommand{\pcm}[1]{\SI{#1}{pcm}}
+\newcommand{\h}[1]{\SI{#1}{\hour}}
+\newcommand{\MWdkg}[1]{\SI{#1}{\mega\watt\day\per\kilo\gram}}
+\newcommand{\VmVf}{V_m/V_f}
+\newcommand{\etaT}{\eta_T}
+\newcommand{\Sf}{\overline\Sigma_f}
+\newcommand{\gfp}{\gamma_{fp}}
+\DeclareSIUnit{\day}{d}
+
+\begin{document}
+\Guide{10}{Long-Term Core Behavior}
+ {FNRP Sections 10.1--10.5 (reactivity control, fission product buildup and decay, fuel depletion, burnable poisons, and fission product and actinide inventories), plus the Lesson 24 supplement on the linear reactivity model. Companion handouts: Lessons 22--24.}
+ {22 (10.1--10.3, xenon and samarium), 23 (10.4--10.5, depletion and burnup), 24 (linear reactivity model and batch refueling).}
+
+\begin{KeyBox}{How to use this guide}
+\ifguidehandwriting
+\textbf{One cell at a time.} Use one sheet to cover all rows below the current cell and a second sheet to cover its tinted answer. Read only the current question (for example, F1(a)) and write in its ruled space. Reveal that cell\textquotesingle s answer, compare your reasoning, and correct your work. Only then uncover the next question, F1(b). Shared givens appear above each sequence; keep them available as you work.\par\smallskip
+\fi
+Same rules as the earlier guides. Each frame poses one small task; the tinted column holds the answer and commentary. \textbf{Cover the tinted column}, work the frame, then compare. Frames marked \Chain reuse the previous answer, which is restated, so a missed frame never blocks the next one. Quiz answers are upside down in the footnote.
+\end{KeyBox}
+
+\begin{KeyBox}{What changes from Chapters 4 and 9}
+Chapter~4 computed $\kinf$ for a fixed composition; Chapter~9 let it respond to temperature. Chapter~10 lets the composition itself drift: fission products accumulate, \iso{235}{U} burns, \iso{239}{Pu} grows, and control poisons are withdrawn to keep $k=1$. Every rate equation in the chapter is the one you solved in Chapter~1 for radioactive production and decay, with neutron absorption $\sigma_a\phi$ added as a second loss. Notation: $\gfp$ is a fission product yield (atoms per fission), $\Sf\phi$ the fission rate density, $\Phi=\int\phi\,dt$ the fluence, and ``25'', ``28'', ``49'' name \iso{235}{U}, \iso{238}{U}, \iso{239}{Pu}. Lewis drops the thermal subscript $T$ in this chapter; Lesson~23 keeps it to stress that depletion uses one-group cross sections while the four factors use thermal ones.
+\end{KeyBox}
+
+\begin{programmed}
+\GSec{Reactivity control over core life (FNRP 10.1--10.2; Lesson 22)}
+
+\begin{pframe}[Three time scales]\label{f:scales}
+\GuideSubcell{a}{Name the three categories of long-term change.}{
+Buildup and decay of fission products; depletion of the fissile fuel; buildup of actinides by neutron capture in fissile and fertile nuclides.}
+
+\GuideSubcell{b}{Order the time scales of kinetics, heat transfer, xenon, and depletion.}{
+Prompt neutrons $10^{-5}$ s and delayed neutrons seconds to a minute; thermal time constants seconds to minutes; xenon and samarium hours to days; depletion weeks to years.}
+
+\GuideSubcell{c}{Why can a fuel-management calculation treat kinetics as instantaneous, and a kinetics calculation ignore depletion?}{
+Each process is either over or frozen on the other's time scale: the reactor is always critical to the depletion solver, and the composition is constant to the kinetics solver. Separated scales decouple the equations.}
+
+\end{pframe}
+
+\begin{pframe}[Multiplication with control and fission products]\label{f:kt}
+\GuideContext{Start from $k=\etaT f\epsilon p\PNL$, \FNRP{10.1}, and the thermal utilization of the Chapter~4 guide (its F16), $f=1/[1+\zeta(\VmVf)\Sigma_a^m/\Sigma_a^f]$.}
+
+\GuideSubcell{a}{Write $\etaT f$ explicitly to get \FNRP{10.2}, and say where burnup and fission products enter.}{
+$k=\dfrac{\nu\Sigma_f^f}{\Sigma_a^f+\zeta(\VmVf)\Sigma_\gamma^m}\,\epsilon p\PNL$. Burnup makes $\Sigma_f^f$ and $\Sigma_a^f$ time dependent; fission products add $\Sigma_\gamma^{fp}(t)$ to the fuel absorption.}
+
+\GuideSubcell{b}{Add a control term and state the condition the operator maintains, \FNRP{10.3}.}{
+$1=\dfrac{\nu\Sigma_f^f\,\epsilon p\PNL}{\Sigma_a^f+\Sigma_\gamma^{fp}+\zeta\frac{V_m}{V_f}\Sigma_\gamma^m+\Sigma_\gamma^{con}}$, where the fuel, fission product, and control terms all depend on $t$: the control absorption is withdrawn as the other terms grow.}
+
+\GuideSubcell{c}{Define $k(t)$ and the excess reactivity, \FNRP{10.4}--(10.5).}{
+$k(t)$ is the multiplication with all removable control withdrawn; $\rho_{ex}(t)=[k(t)-1]/k(t)\approx k(t)-1$. It falls to zero at end of core life, when the last control has been removed.}
+
+\GuideSubcell{d}{Lesson~22 puts the control term inside the moderator bracket, multiplied by $\zeta\VmVf$. When does the placement matter?}{
+Only through the disadvantage factor: a poison in the moderator sees the higher moderator flux, so a given $\Sigma_\gamma^{con}$ is worth $\zeta$ times more there. For a scoping calculation either form shows the same physics.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 1: holding down the excess]\label{f:control}
+\GuideContext{FNRP Table~4.2, PWR: $\epsilon=1.27$, $p=0.63$, $f=0.94$, $\etaT=1.89$, so $\kinf=1.42$. Take $\PNL=0.97$. Write $f$ as $A_f/(A_f+A_m)$ in terms of thermal absorption rates, so $A_m/A_f=0.06/0.94$.}
+
+\GuideSubcell{a}{Compute $k$ and $\rho_{ex}$ for the fresh, clean, cold core.}{
+$k=1.42\times0.97=1.38$; $\rho_{ex}=0.275$, about \SI{27500}{pcm}.}
+
+\GuideSubcell{b}{Control absorbers $A_{con}$ are added to the moderator. What must the new utilization $f'=A_f/(A_f+A_m+A_{con})$ be, and hence $A_{con}/A_f$?}{
+$f'=f/k=0.94/1.38=0.682$. Then $A_{con}/A_f=1/f'-1-A_m/A_f=0.403$: the poison must absorb 40\% as many thermal neutrons as the fuel.}
+
+\GuideSubcell{c}{What fraction of all thermal absorptions does the control take at beginning of life?}{
+$0.403/(1+0.064+0.403)=0.275$: exactly $\rho_{ex}$. To hold a reactor critical, the added poison must absorb a fraction $\rho_{ex}$ of the neutrons that would otherwise be absorbed.}
+
+\GuideSubcell{d}{Name three ways to supply that absorption and one drawback of each.}{
+Control rods (distort the flux and cause power peaking in large, loosely coupled cores); soluble boron (lost with the coolant density, which drives the moderator coefficient positive: Chapter~4 guide addendum); burnable poisons (a residual penalty remains at end of life).}
+
+\end{pframe}
+
+\begin{pframe}[Fast reactors]\label{f:fastk}
+\GuideSubcell{a}{Write the fast-reactor form \FNRP{10.6} and say what has disappeared.}{
+$k(t)=\dfrac{\nu\Sigma_f^f(t)}{\Sigma_a^f(t)+(V_c/V_f)\Sigma_\gamma^c}\PNL$: no $\epsilon$, $p$, or $\zeta$, because the flux is flat across the cell and there is no separate thermal range (Chapter~4 guide, Section~2).}
+
+\GuideSubcell{b}{Over which energies are its cross sections averaged?}{
+All of them: these are the one-group constants of Chapter~3, not thermal averages.}
+
+\GuideSubcell{c}{Why do fission products matter far less in a fast reactor?}{
+Their capture cross sections are large only at thermal energies; xenon's $2.6\times10^{6}$ b collapses to a few barns in a fast spectrum.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (c); 3 (a); 4 (d).}
+\item The excess reactivity is the reactivity \opt{a} at full power; \opt{b} with all removable control withdrawn; \opt{c} at end of life; \opt{d} of a cold core with rods in.
+\item Fuel depletion and fission products act mainly through \opt{a} $\epsilon$ and $p$; \opt{b} $\PNL$; \opt{c} the thermal cross sections in $\etaT$ and $f$; \opt{d} $\nu$.
+\item To hold an excess reactivity $\rho_{ex}$, the control poison must absorb \opt{a} a fraction $\rho_{ex}$ of all neutrons; \opt{b} $\rho_{ex}$ neutrons per fission; \opt{c} nothing at end of life; \opt{d} only fast neutrons.
+\item Fission product poisoning is weak in fast reactors because \opt{a} they produce fewer fission products; \opt{b} xenon does not form; \opt{c} the flux is lower; \opt{d} capture cross sections are large only at thermal energies.
+\end{quiz}}
+
+\GSec{Fission product buildup and decay (FNRP 10.3; Lesson 22)}
+
+\begin{pframe}[One fission product]\label{f:onefp}
+\GuideSubcell{a}{Write the rate equation \FNRP{10.7} for a fission product of yield $\gfp$ and name each term.}{
+$\dfrac{dN}{dt}=\gfp\Sf\phi-\lambda N-\sigma_aN\phi$: production in a share $\gfp$ of fissions; loss by decay; loss by neutron absorption (burnout).}
+
+\GuideSubcell{b}{Combine the losses and solve from $N(0)=0$, \FNRP{10.8}--(10.10).}{
+$\lambda'=\lambda+\sigma_a\phi$ and $N(t)=\dfrac{\gfp\Sf\phi}{\lambda'}\big[1-e^{-\lambda't}\big]$: Chapter~1's constant-production problem with an effective half-life $0.693/\lambda'$.}
+
+\GuideSubcell{c}{Give the two limits and say what each inventory is proportional to.}{
+$\lambda't\ll1$: $N\approx\gfp\Sf\phi t$, proportional to the energy produced. $\lambda't\gg1$: $N\to\gfp\Sf\phi/\lambda'$, proportional to the power.}
+
+\GuideSubcell{d}{Classify \iso{131}{I} ($t_{1/2}=8.0$ d) and \iso{137}{Cs} ($30.2$ y) for a fuel cycle of a few years.}{
+Iodine saturates in about five half-lives, 40 days, and then tracks the power. Cesium after three years has $\lambda t=0.069$, within 3.5\% of linear: it tracks the energy.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2: the iodine--xenon chain]\label{f:xechain}
+\GuideContext{Chain \FNRP{10.11}: \iso{135}{Te} (11 s) $\to$ \iso{135}{I} (6.7 h) $\to$ \iso{135}{Xe} (9.2 h) $\to$ \iso{135}{Cs} ($2.3\times10^{6}$ y). Yields for \iso{235}{U} (Table~10.1): $\gamma_I=0.0639$ (tellurium included), $\gamma_X=0.00237$. $\sigma_{aX}=2.65\times10^{6}$ b. Then $\lambda_I=2.87\times10^{-5}$ and $\lambda_X=2.09\times10^{-5}\,\mathrm{s^{-1}}$.}
+
+\GuideSubcell{a}{Why fold tellurium into the iodine yield, and ignore cesium decay?}{
+Eleven seconds is instantaneous on a scale of hours, so tellurium is iodine for our purposes; a million-year half-life makes cesium effectively stable.}
+
+\GuideSubcell{b}{Write the two rate equations, \FNRP{10.12}--(10.13). Why has iodine no absorption term?}{
+$\dot I=\gamma_I\Sf\phi-\lambda_II$; $\dot X=\gamma_X\Sf\phi+\lambda_II-\lambda_XX-\sigma_{aX}X\phi$. Iodine's capture is negligible beside its decay even at high flux.}
+
+\GuideSubcell{c}{Find the equilibrium concentrations, \FNRP{10.14}--(10.15).}{
+$I(\infty)=\gamma_I\Sf\phi/\lambda_I$ and $X(\infty)=\dfrac{(\gamma_I+\gamma_X)\Sf\phi}{\lambda_X+\sigma_{aX}\phi}$: every iodine atom becomes a xenon atom, so the total yield feeds the xenon balance.}
+
+\GuideSubcell{d}{At what flux does burnout equal decay for xenon, and what is the largest possible $X(\infty)$?}{
+$\sigma_{aX}\phi=\lambda_X$ at $\phi=\flx{7.9e12}$. Above that, absorption dominates and $X\to(\gamma_I+\gamma_X)\Sf/\sigma_{aX}$, independent of flux: for $\Sf=\icm{0.16}$, $\dens{4.0e15}$.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2 continued: equilibrium xenon worth]\label{f:xeworth}
+\GuideContext{Lesson~22's example: $\phi=\flx{2e14}$, $\Sf=\icm{0.16}$, and the reactor is critical before xenon with total absorption $\overline\Sigma_a=\icm{0.34}$. The xenon adds $\Sigma_{aX}=\sigma_{aX}X$ to the denominator of \FNRP{10.4}, so $\Delta\rho\simeq-\Sigma_{aX}/\overline\Sigma_a$.}
+
+\GuideSubcell{a}{Compute $X(\infty)$.}{
+$\dfrac{0.0663\times0.16\times2\times10^{14}}{2.09\times10^{-5}+5.30\times10^{-4}}=\dens{3.9e15}$: burnout exceeds decay 25 to 1.}
+
+\GuideSubcell{b}{Compute $\Sigma_{aX}$ and the \Term{equilibrium xenon worth}.}{
+$\Sigma_{aX}=2.65\times10^{-18}\times3.9\times10^{15}=\icm{0.0102}$; $\Delta\rho=-0.0102/0.34=-0.030$, about \pcm{-3000} or $-\$4.6$.}
+
+\GuideSubcell{c}{What is the worth in the infinite-flux limit, and at $\phi=\flx{2e13}$?}{
+$-(\gamma_I+\gamma_X)\Sf/\overline\Sigma_a=-0.031$: the operating point is near saturation. At one-tenth the flux, $X=\dens{2.9e15}$ and the worth is $-0.022$: still most of the limit.}
+
+\GuideSubcell{d}{Why is the worth only weakly dependent on flux above $10^{13}$?}{
+Once $\sigma_{aX}\phi\gg\lambda_X$, xenon is destroyed as fast as it is made, and $\Sigma_{aX}\to(\gamma_I+\gamma_X)\Sf$: a fixed fraction, 6.6\%, of the fission rate is spent on xenon.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2 continued: after shutdown]\label{f:xedead}
+\GuideContext{Set $\phi=0$ at $t=0$ with $I_o$ and $X_o$ at equilibrium, \FNRP{10.16}--(10.19). Figure~\ref{fig:xe} shows $X(t)/X_o$ for two operating fluxes.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=5cm,xlabel={hours after shutdown},ylabel={$X(t)/X_o$, $S(t)/S_o$},xmin=0,xmax=72,ymin=0,ymax=9,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.97,0.97)},anchor=north east},
+ tick label style={font=\scriptsize},label style={font=\scriptsize}]
+\addplot[wcprimary,thick] table[x=th,y=xehi] {figures/data/xenon_shutdown.dat}; \addlegendentry{Xe, $\phi=2\times10^{14}$}
+\addplot[wcprimary,thick,dashed] table[x=th,y=xelo] {figures/data/xenon_shutdown.dat}; \addlegendentry{Xe, $\phi=2\times10^{13}$}
+\addplot[wcalerted,thick] table[x=th,y=smhi] {figures/data/xenon_shutdown.dat}; \addlegendentry{Sm, $\phi=2\times10^{14}$}
+\addplot[black!50,thin] coordinates {(0,1) (72,1)};
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Xenon and samarium after shutdown from equilibrium, relative to their equilibrium values (compare FNRP Figs.~10.1 and~10.2).}\label{fig:xe}
+\end{center}}}
+
+\GuideSubcell{a}{Evaluate $dX/dt$ at $t=0^+$ and find the flux above which xenon \emph{rises} after shutdown.}{
+$\dot X=\lambda_II_o-\lambda_XX_o$. Inserting the equilibria, $\dot X>0$ when $\sigma_{aX}\phi\gamma_I>\lambda_X\gamma_X$, or $\phi>\lambda_X\gamma_X/(\sigma_{aX}\gamma_I)=\flx{2.9e11}$ (Lewis quotes about $4\times10^{11}$ with slightly different data). Above it, iodine decay outpaces the loss of burnout.}
+
+\GuideSubcell{b}{At high flux $X_o\ll I_o$. Maximize the second term of \FNRP{10.18} (FNRP problem~10.1).}{
+$t^*=\dfrac{\ln(\lambda_I/\lambda_X)}{\lambda_I-\lambda_X}=\SI{4.06e4}{\second}=\h{11.3}$.}
+
+\GuideSubcell{c}{For $\phi=\flx{2e14}$, the peak is $8.3X_o$ at \h{10.8}. What is the peak worth?}{
+$8.3\times(-0.030)=-0.25$, some \pcm{-25000}: far beyond any control system's reserve. At $2\times10^{13}$ the peak is only $1.55X_o$ at \h{7.6}.}
+
+\GuideSubcell{d}{If the control system can supply $0.05$ of excess reactivity, when can the high-flux reactor be restarted?}{
+The worth passes $-0.05$ at \h{0.4} and returns to it at \h{45}: a \Term{dead time} of nearly two days, unless the reactor is restarted within the first half hour.
+\GuideCommentary{Lesson~22 solves the same two equations numerically for an arbitrary $\phi(t)$, which is what load following requires. Xenon's lag behind power is also the origin of space--time xenon oscillations in large cores.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 2 continued: samarium]\label{f:sm}
+\GuideContext{Chain \FNRP{10.20}: \iso{149}{Nd} (1.7 h) $\to$ \iso{149}{Pm} (53 h) $\to$ \iso{149}{Sm}, stable. $\gamma_P=0.01071$; $\lambda_P=3.63\times10^{-6}\,\mathrm{s^{-1}}$; Lewis uses $\sigma_{aS}=41{,}000$ b (the 2200 m/s value; FNRP Table~3.2's spectrum average is $61{,}500$ b because \iso{149}{Sm} is not $1/v$). Same reactor as \ref*{f:xeworth}.}
+
+\GuideSubcell{a}{Write the two rate equations, \FNRP{10.21}--(10.22), and the equilibria.}{
+$\dot P=\gamma_P\Sf\phi-\lambda_PP$ and $\dot S=\lambda_PP-\sigma_{aS}S\phi$. $P(\infty)=\gamma_P\Sf\phi/\lambda_P$; $S(\infty)=\gamma_P\Sf/\sigma_{aS}$, independent of flux, since samarium is removed only by burnout.}
+
+\GuideSubcell{b}{Compute the equilibrium samarium worth. What is remarkable about it?}{
+$\Sigma_{aS}=\sigma_{aS}S(\infty)=\gamma_P\Sf=\icm{0.0017}$, so $\Delta\rho=-0.0017/0.34=-0.0050$ (\pcm{-500}). It depends on neither the cross section nor the flux: every promethium atom becomes a samarium atom that will eventually eat one neutron.}
+
+\GuideSubcell{c}{How long does samarium take to saturate at $\phi=2\times10^{14}$?}{
+Its burnout time constant is $1/(\sigma_{aS}\phi)=1.4$ d, after the 53-hour promethium step: equilibrium within a week or two.}
+
+\GuideSubcell{d}{After shutdown, by how much does samarium grow, and does it ever go away?}{
+By $P_o=\gamma_P\Sf\phi/\lambda_P$, \FNRP{10.25}: $P_o/S_o=\sigma_{aS}\phi/\lambda_P=2.3$ at $2\times10^{14}$ (Fig.~\ref{fig:xe}) but only $0.15$ at $1.3\times10^{13}$. Samarium is stable; the extra \pcm{-1100} is removed only by burnout after restart.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (c); 2 (b); 3 (a); 4 (d).}
+\item A fission product with $\lambda't\gg1$ has an inventory proportional to \opt{a} the energy produced; \opt{b} the fluence; \opt{c} the power; \opt{d} the enrichment.
+\item Most \iso{135}{Xe} comes from \opt{a} direct fission yield; \opt{b} decay of \iso{135}{I}; \opt{c} capture in \iso{134}{Xe}; \opt{d} decay of \iso{135}{Cs}.
+\item Xenon rises after shutdown when \opt{a} the operating flux exceeded a few $10^{11}$; \opt{b} the reactor was subcritical; \opt{c} samarium is present; \opt{d} the flux was below $10^{10}$.
+\item The equilibrium samarium worth depends on \opt{a} $\sigma_{aS}$; \opt{b} the flux; \opt{c} both; \opt{d} neither, only on $\gamma_P\Sf/\overline\Sigma_a$.
+\end{quiz}}
+
+\GSec{Fuel depletion (FNRP 10.4; Lesson 23)}
+
+\begin{pframe}[Which nuclides, and which approximations]\label{f:chain}
+\GuideContext{Lesson~23's practical depletion chain (Fig.~\ref{fig:chain}) tracks a dozen actinides. Lewis keeps three.
+\GuideContextFigure{\begin{center}\begingroup\def\NEDepletionChainEmbedded{}\resizebox{\linewidth}{!}{\input{figures/depletion_chain_tikz.tex}}\endgroup
+\gfigcap{The WIMS-D actinide chain of the Lesson~23 handout: orange, neutron-induced production; purple, decay.}\label{fig:chain}
+\end{center}}}
+
+\GuideSubcell{a}{State the four simplifications of FNRP~10.4 (Lesson~23).}{
+Only \iso{235}{U}, \iso{238}{U}, and \iso{239}{Pu} matter; their own radioactive decay is ignored; \iso{239}{Pu} appears directly and immediately on capture in \iso{238}{U}; \iso{238}{U} is so abundant that its depletion is neglected.}
+
+\GuideSubcell{b}{Justify ``immediately.''}{
+The chain \FNRP{10.29} passes through \iso{239}{U} (23 min) and \iso{239}{Np} (2.4 d), both negligible against weeks and months.}
+
+\GuideSubcell{c}{Justify constant \iso{238}{U} for $\phi=\flx{2e14}$ and a one-group $\sigma_a^{28}=1.02$ b.}{
+$\sigma_a^{28}\phi t=1.02\times10^{-24}\times2\times10^{14}\times3.16\times10^{7}=0.006$ per year: under 1\% of the \iso{238}{U} is consumed each year.}
+
+\GuideSubcell{d}{What does the three-nuclide model omit that Fig.~\ref{fig:chain} shows?}{
+Capture products \iso{236}{U}, \iso{240}{Pu}, \iso{241}{Pu} (fissile), \iso{242}{Pu}, and the americium and curium beyond; and all fission products.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3: solving the rate equations]\label{f:rate}
+\GuideContext{One-group cross sections from Lesson~23 (barns): \iso{235}{U} $\sigma_a=57.2$, $\sigma_f=46.9$; \iso{238}{U} $\sigma_a=1.02$, $\sigma_f=0.11$, so $\sigma_\gamma^{28}=0.91$; \iso{239}{Pu} $\sigma_a=195.1$, $\sigma_f=124.4$. Flux $\phi=\flx{2e14}$, constant. Fuel 3\% enriched (atom fraction). Figure~\ref{fig:dep} plots the solutions.
+\GuideContextFigure{\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.8cm,xlabel={fluence $\Phi$ ($10^{21}$ cm$^{-2}$)},ylabel={$N/N^{25}(0)$},xmin=0,xmax=40,ymin=0,ymax=1,
+ legend style={font=\scriptsize,draw=none,fill=none,at={(0.97,0.97)},anchor=north east},
+ tick label style={font=\scriptsize},label style={font=\scriptsize}]
+\addplot[wcprimary,thick] table[x=fluence,y=n25] {figures/data/depletion.dat}; \addlegendentry{\iso{235}{U}}
+\addplot[wcalerted,thick,dashed] table[x=fluence,y=n49] {figures/data/depletion.dat}; \addlegendentry{\iso{239}{Pu}}
+\addplot[black!50,thin,dashed] coordinates {(12.1,0) (12.1,1)};
+\end{axis}
+\end{tikzpicture}
+\gfigcap{Fissile inventories versus fluence for 3\% enriched fuel (compare FNRP Fig.~10.3). The vertical line marks half the \iso{235}{U} burned.}\label{fig:dep}
+\end{center}}}
+
+\GuideSubcell{a}{Solve \FNRP{10.27} and define the fluence. At what fluence, and after how long, is half the \iso{235}{U} gone?}{
+$N^{25}(t)=N^{25}(0)e^{-\sigma_a^{25}\Phi}$ with $\Phi=\int_0^t\phi\,dt'$. $\Phi_{1/2}=\ln2/\sigma_a^{25}=\SI{1.21e22}{\per\centi\meter\squared}$, reached at $t=\Phi/\phi=\SI{6.1e7}{\second}=1.9$ years at this flux.}
+
+\GuideSubcell{b}{With $N^{28}$ constant, solve \FNRP{10.35} for $N^{49}(0)=0$.}{
+$N^{49}=\dfrac{\sigma_\gamma^{28}}{\sigma_a^{49}}N^{28}(0)\big[1-e^{-\sigma_a^{49}\Phi}\big]$, \FNRP{10.37}: the integrating factor of Appendix~A, with $d\Phi=\phi\,dt$ turning the time integral into one over fluence.}
+
+\GuideSubcell{c}{Find the asymptotic plutonium content and the time constant of its approach.}{
+$N^{49}(\infty)/N^{28}=0.91/195.1=0.0047$, approached with $1/(\sigma_a^{49}\phi)=\SI{2.6e7}{\second}=0.8$ year. Plutonium saturates when it burns as fast as it forms.}
+
+\GuideSubcell{d}{Express that asymptote relative to the initial \iso{235}{U}.}{
+$0.0047\times0.97/0.03=0.15$: the plutonium plateau is 15\% of the original \iso{235}{U}, as the dashed curve of Fig.~\ref{fig:dep} shows.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3 continued: conversion ratio and plutonium power]\label{f:cr}
+\GuideContext{Same fuel. At $\Phi_{1/2}$, $N^{25}=0.015$ and $N^{49}=0.0040$ per uranium atom.}
+
+\GuideSubcell{a}{Define the conversion ratio and evaluate \FNRP{10.38} at $t=0$.}{
+Fissile atoms created per fissile atom destroyed: $CR=\dfrac{\sigma_\gamma^{28}N^{28}}{\sigma_a^{25}N^{25}+\sigma_a^{49}N^{49}}$. $CR(0)=\dfrac{0.91\times0.97}{57.2\times0.03}=0.51$.}
+
+\GuideSubcell{b}{Evaluate $CR$ when half the \iso{235}{U} has burned.}{
+$\dfrac{0.883}{57.2\times0.015+195.1\times0.0040}=0.53$: the lost \iso{235}{U} absorption is nearly replaced by plutonium absorption.}
+
+\GuideSubcell{c}{What fraction of the power then comes from plutonium?}{
+$\dfrac{\sigma_f^{49}N^{49}}{\sigma_f^{25}N^{25}+\sigma_f^{49}N^{49}}=\dfrac{124.4\times0.0040}{46.9\times0.015+124.4\times0.0040}=0.42$.}
+
+\GuideSubcell{d}{How does $CR(0)$ change with enrichment, and what does $CR>1$ mean?}{
+It falls: 4\% enrichment gives $0.38$, because more \iso{235}{U} is destroyed per \iso{238}{U} capture. $CR>1$ is a breeding ratio: more fissile material is made than consumed.
+\GuideCommentary{FNRP problem~10.13 asks these three questions for 4\% fuel; problem~10.14 repeats the derivation for thorium, where the 27-day \iso{233}{Pa} step is too slow to be called immediate.}}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3 continued: reactivity versus burnup]\label{f:kburn}
+\GuideContext{Lesson~23's thermal data (barns): \iso{235}{U} $\sigma_{aT}=297.4$, $\sigma_{fT}=253.1$, $\nu=2.43$; \iso{238}{U} $\sigma_{aT}=1.32$; \iso{239}{Pu} $\sigma_{aT}=1146.5$, $\sigma_{fT}=732.2$, $\nu=2.90$. Lattice: $\zeta=1.1$, $\VmVf=1$, $\Sigma_{aT}^m=\icm{0.007}$, $p=0.6$, $\epsilon=1.3$, $\PNL=0.95$. UO$_2$ at \SI{10.4}{\gram\per\centi\meter\cubed}, 3\% enriched: $N_U=\SI{0.0232e24}{\per\centi\meter\cubed}$. Use \FNRP{10.39} without fission products.}
+
+\GuideSubcell{a}{Compute $k$ and $\rho$ at startup.}{
+$N^{25}=6.96\times10^{-4}$, $N^{28}=0.0225$ ($\times10^{24}$). Numerator $2.43(253.1)(6.96\times10^{-4})=0.428$; denominator $0.207+0.0297+0.0077=0.244$; $k=1.751\times1.3\times0.6\times0.95=1.30$; $\rho=0.23$.}
+
+\GuideSubcell{b}{Compute $k$ at $\Phi_{1/2}$ with $N^{25}=3.48\times10^{-4}$ and $N^{49}=9.5\times10^{-5}$.}{
+Numerator $0.214+0.202=0.416$; denominator $0.104+0.109+0.037=0.250$; $k=1.23$, $\rho=0.19$. Without the plutonium, $k$ would be $1.13$.}
+
+\GuideSubcell{c}{Half the \iso{235}{U} is gone but $\rho$ fell only from $0.23$ to $0.19$. What is missing from this picture?}{
+Fission products: equilibrium xenon and samarium alone take about $0.035$ (\ref*{f:xeworth}, \ref*{f:sm}), and the slowly accumulating stable absorbers take more. In practice their buildup and the \iso{235}{U} loss overwhelm the plutonium gain, and $k(t)$ falls steadily (the ``no burnable poison'' curve of FNRP Fig.~10.4).}
+
+\GuideSubcell{d}{The power density is $\gamma\phi[\sigma_f^{25}N^{25}+\sigma_f^{49}N^{49}]$ with $\gamma=3.2\times10^{-11}$ J. At fixed flux it falls from \SI{209}{} to \SI{180}{\watt\per\centi\meter\cubed} over this interval. What must happen at fixed power?}{
+The flux must rise as the fissile inventory falls, \FNRP{10.26}; the fluence per unit energy then grows late in life.}
+
+\end{pframe}
+
+\begin{pframe}[\Chain Chain 3 continued: time, fluence, and burnup]\label{f:burnup}
+\GuideContext{\Term{Burnup} is energy produced per initial mass of heavy metal, usually in MWd/kg (Lesson~23). One MWd is $8.64\times10^{10}$ J; a fission releases $3.2\times10^{-11}$ J. UO$_2$ at \SI{10.4}{\gram\per\centi\meter\cubed} holds $10.4\times238/270=\SI{9.17}{\gram}$ of uranium per cm$^3$.}
+
+\GuideSubcell{a}{Integrating the power density of \ref*{f:kburn} to $\Phi_{1/2}$ gives \SI{1.23e10}{\joule\per\centi\meter\cubed}. Convert to burnup.}{
+$1.23\times10^{10}/(9.17\times10^{-3}\times8.64\times10^{10})=\MWdkg{15.5}$: half the \iso{235}{U} of 3\% fuel is gone by 15 MWd/kg.}
+
+\GuideSubcell{b}{At a constant \SI{100}{\watt\per\centi\meter\cubed}, how much burnup accrues per full-power day, and in three years?}{
+$100\times86400/(9.17\times10^{-3}\times8.64\times10^{10})=\MWdkg{0.011}$ per day; \MWdkg{12} in three years.}
+
+\GuideSubcell{c}{Convert 1 MWd/kg to a fraction of heavy atoms fissioned.}{
+$8.64\times10^{10}/3.2\times10^{-11}=2.7\times10^{21}$ fissions per kg, against $6.02\times10^{26}/238=2.5\times10^{24}$ atoms: $0.107\%$ per MWd/kg. A discharge burnup of 50 MWd/kg has fissioned 5.3\% of all heavy atoms, more than the initial enrichment: plutonium supplied the rest.}
+
+\GuideSubcell{d}{Relate fluence, burnup, and time.}{
+Fluence is $\int\phi\,dt$ and burnup is $\int\gamma\Sigma_f\phi\,dt/m_0$; they are proportional only while $\Sigma_f$ is constant. At fixed power, burnup is proportional to time and fluence is not (\ref*{f:kburn}d).}
+
+\end{pframe}
+
+\begin{pframe}[Burnable poisons]\label{f:bp}
+\GuideContext{A burnable poison obeys $N^{BP}(t)=N^{BP}(0)e^{-\sigma_\gamma^{BP}\Phi}$, \FNRP{10.41}. Thermal flux $\phi_T=\flx{4e13}$; thermal cross sections: \iso{10}{B} $3409$ b, \iso{157}{Gd} $254{,}000$ b, \iso{235}{U} $591$ b (Table~3.2).}
+
+\GuideSubcell{a}{Compute the ``half-life in the flux,'' $0.693/(\sigma\phi_T)$, of each nuclide.}{
+Boron: 59 days. Gadolinium: 19 hours. \iso{235}{U}: 340 days. A poison must burn out faster than the fuel, or it is merely a permanent penalty.}
+
+\GuideSubcell{b}{Why is uniformly distributed boron only a partial solution (FNRP Fig.~10.4)?}{
+Its exponential decays so fast that its effect is concentrated early in life; the excess reactivity still rises to a hump before depletion brings it down.}
+
+\GuideSubcell{c}{How does lumping the poison change its burnout, and why is that useful?}{
+A lump of strong absorber is spatially self-shielded (Chapter~4 guide, F18): only its surface burns at first, so the absorption is metered out over a longer time. The excess reactivity curve is flattened and its maximum reduced, which simplifies the control system.}
+
+\GuideSubcell{d}{What property must the capture product have, and why?}{
+A small capture cross section: \iso{10}{B} becomes \iso{7}{Li} and helium, \iso{157}{Gd} becomes \iso{158}{Gd} (about 2 b). Otherwise the poison would be replaced by another poison.}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (b); 2 (d); 3 (a); 4 (c).}
+\item In the three-nuclide model, \iso{239}{Pu} saturates because \opt{a} \iso{238}{U} runs out; \opt{b} it is destroyed by absorption as fast as it is produced; \opt{c} it decays; \opt{d} the flux drops.
+\item Raising the enrichment \opt{a} raises $CR(0)$; \opt{b} has no effect on $CR(0)$; \opt{c} eliminates plutonium; \opt{d} lowers $CR(0)$.
+\item Burnup measures \opt{a} energy per initial mass of heavy metal; \opt{b} fluence; \opt{c} time at power; \opt{d} the fraction of \iso{235}{U} remaining.
+\item Lumping a burnable poison \opt{a} speeds its burnout; \opt{b} makes it permanent; \opt{c} spreads its effect over a longer time through self-shielding; \opt{d} raises the peak excess reactivity.
+\end{quiz}}
+
+\GSec{Fission product and actinide inventories (FNRP 10.5; Lesson 23)}
+
+\begin{pframe}[\Chain Chain 4: power or energy?]\label{f:inv}
+\GuideContext{A \SI{3000}{\mega\watt} (thermal) core; $3.1\times10^{-11}$ J per fission. Yields for \iso{235}{U}: \iso{131}{I} $0.029$, \iso{137}{Cs} $0.063$ (Lesson~22). One curie is $3.7\times10^{10}$ Bq.}
+
+\GuideSubcell{a}{Compute the fission rate.}{
+$3\times10^{9}/3.1\times10^{-11}=9.7\times10^{19}$ fissions per second.}
+
+\GuideSubcell{b}{Compute the saturation activity of \iso{131}{I}.}{
+At saturation, activity equals production: $\lambda N=\gamma R_f=0.029\times9.7\times10^{19}=2.8\times10^{18}$ Bq, or $7.6\times10^{7}$ Ci, fixed by the power alone (\ref*{f:onefp}).}
+
+\GuideSubcell{c}{Compute the \iso{137}{Cs} inventory and activity after three years at full power.}{
+$N=\gamma R_ft=0.063\times9.7\times10^{19}\times9.5\times10^{7}=5.8\times10^{26}$ atoms: \SI{131}{\kilo\gram}; activity $\lambda N=4.2\times10^{17}$ Bq, $1.1\times10^{7}$ Ci, growing with the energy produced.}
+
+\GuideSubcell{d}{Which inventories matter for accident analysis, and which for waste disposal?}{
+Accidents: volatile and biologically active products present at power, short-lived or not (iodine, noble gases, cesium, strontium). Waste: only the long-lived ones, decades-scale fission products and, beyond a century, the actinides.}
+
+\end{pframe}
+
+\begin{pframe}[The actinide tail][4]\label{f:actinide}
+FNRP Fig.~10.5 plots the radiotoxicity of spent fuel, relative to the ore it came from, over a million years. Which species dominate at a decade, at a few centuries, and beyond, and what does that suggest about reprocessing?
+\response
+At a decade: fission products (cesium, strontium, 30-year half-lives). After a century or so those have largely decayed, and plutonium, americium, neptunium, and curium, with half-lives of hundreds to millions of years, dominate. Recycling the plutonium to fission it would both extract more energy from the same uranium and shrink the long-lived inventory per unit energy.
+\GuideCommentary{The actinides are the right-hand side of Fig.~\ref{fig:chain}: each successive capture in Fig.~\ref{fig:chain} is a step toward the longest-lived part of the waste.}
+\end{pframe}
+
+\GSec{The linear reactivity model (Lesson 24 supplement)}
+
+\begin{pframe}[\Chain Chain 5: batches, cycles, and discharge burnup]\label{f:lrm}
+\GuideContext{Lesson~24 fits the post-xenon fuel reactivity of a 4\% PWR lattice with a line through $(0,\,0.25)$ and $(35\,\mathrm{MWd/kg},\,0.10)$: $\rho_\infty(B)=\rho_0-aB$. Assume $N$ equal batches, each gaining $B_c$ per cycle, a core reactivity equal to the average of the batch reactivities, and a leakage penalty $\rho_L=0.05$. The cycle ends when the core reactivity reaches zero.}
+
+\GuideSubcell{a}{Find $a$, and the cycle and discharge burnups of a one-batch core.}{
+$a=0.15/35=0.0043$ per MWd/kg. $B_c=B_d=(\rho_0-\rho_L)/a=\MWdkg{46.7}$.}
+
+\GuideSubcell{b}{At the end of an $N$-batch cycle the batches have burnups $B_c,2B_c,\dots,NB_c$. Set the average reactivity to $\rho_L$ and solve for $B_c$.}{
+$\rho_0-\dfrac{aB_c}{N}\dfrac{N(N+1)}2=\rho_L$, so $B_c^{(N)}=\dfrac{2(\rho_0-\rho_L)}{a(N+1)}$ and $B_d^{(N)}=NB_c^{(N)}$.}
+
+\GuideSubcell{c}{Evaluate for $N=2$ and $3$.}{
+$N=2$: $B_c=31.1$, $B_d=\MWdkg{62.2}$. $N=3$: $B_c=23.3$, $B_d=\MWdkg{70.0}$. Shorter cycles, but the fuel stays longer and leaves with more burnup.}
+
+\GuideSubcell{d}{What is the limit as $N\to\infty$, and why does it double the one-batch result?}{
+$B_d\to2(\rho_0-\rho_L)/a=\MWdkg{93.3}$. In a one-batch core the fresh fuel's excess reactivity is wasted on control poison; with many batches it is spent supporting burned fuel instead, so the fuel is discharged only when its own reactivity is used up.
+\GuideCommentary{The model ignores the higher fission density in fresher fuel (Lesson~24's weighted average), thermal and fuel-integrity limits, and the fact that the fit is extrapolated beyond 40 MWd/kg.}}
+
+\end{pframe}
+
+\Span{\begin{quiz}{1 (a); 2 (c); 3 (b); 4 (d).}
+\item The inventory of a short-lived fission product in an operating reactor is set by \opt{a} the power; \opt{b} the total energy produced; \opt{c} the enrichment; \opt{d} the burnup.
+\item After a few centuries, spent-fuel radiotoxicity is dominated by \opt{a} iodine; \opt{b} cesium and strontium; \opt{c} actinides; \opt{d} xenon.
+\item In the linear reactivity model, dividing the core into more batches \opt{a} lengthens each cycle; \opt{b} shortens each cycle but raises discharge burnup; \opt{c} changes nothing; \opt{d} lowers discharge burnup.
+\item The limiting discharge burnup for infinitely many batches is \opt{a} the same as one batch; \opt{b} half; \opt{c} $N$ times; \opt{d} twice the one-batch value.
+\end{quiz}}
+
+\end{programmed}
+
+\ifguidehandwriting\clearpage\fi
+
+\Sec{6}{Key terms}
+\begin{multicols}{2}
+\begin{keyterms}
+\gterm{excess reactivity $\rho_{ex}(t)$}{reactivity with all removable control withdrawn (\ref*{f:kt}, \ref*{f:control}).}
+\gterm{control poison, $\Sigma_\gamma^{con}$}{rods, soluble boron, or burnable absorbers that hold $k=1$ (\ref*{f:kt}--\ref*{f:control}).}
+\gterm{reactivity worth}{the change $\Delta\rho$ from adding or removing a component (\ref*{f:control}, \ref*{f:xeworth}).}
+\gterm{fission product yield $\gfp$}{atoms of a product per fission (\ref*{f:onefp}).}
+\gterm{effective decay constant $\lambda'$, effective half-life}{$\lambda+\sigma_a\phi$; $0.693/\lambda'$ (\ref*{f:onefp}).}
+\gterm{saturation}{inventory $\gfp\Sf\phi/\lambda'$, proportional to power (\ref*{f:onefp}, \ref*{f:inv}).}
+\gterm{iodine--xenon chain, equilibrium xenon}{\FNRP{10.11}--(10.15) (\ref*{f:xechain}--\ref*{f:xeworth}).}
+\gterm{xenon peak, dead time}{post-shutdown maximum at about 11 h; interval during which restart is impossible (\ref*{f:xedead}).}
+\gterm{xenon oscillation}{space--time instability of xenon in large cores (\ref*{f:xedead}).}
+\gterm{samarium poisoning}{stable \iso{149}{Sm} from \iso{149}{Pm}; worth $-\gamma_P\Sf/\overline\Sigma_a$ (\ref*{f:sm}).}
+\gterm{depletion chain}{the actinides linked by capture and decay (\ref*{f:chain}).}
+\gterm{fluence $\Phi$}{$\int\phi\,dt$ (\ref*{f:rate}).}
+\gterm{conversion ratio, breeding ratio}{fissile created per fissile destroyed; $CR>1$ (\ref*{f:cr}).}
+\gterm{burnup}{energy per initial heavy-metal mass, MWd/kg (\ref*{f:burnup}).}
+\gterm{burnable poison}{strong absorber that burns out early in life; lumped to self-shield (\ref*{f:bp}).}
+\gterm{actinides}{uranium and heavier elements built by successive capture (\ref*{f:chain}, \ref*{f:actinide}).}
+\gterm{cycle burnup $B_c$, discharge burnup $B_d$}{burnup per cycle; total at removal (\ref*{f:lrm}).}
+\gterm{linear reactivity model, $N$-batch cycle}{$\rho_\infty=\rho_0-aB$; equal batches refueled in turn (\ref*{f:lrm}).}
+\end{keyterms}
+\end{multicols}
+
+\Sec{7}{Where the end-of-chapter problems live}
+\begin{handoutsmall}[8.3]
+\begin{tabularx}{\linewidth}{@{}p{0.95in}Y@{}}
+\toprule
+FNRP problem & Frames that build the needed pieces\\
+\midrule
+10.1 & time of the xenon peak at high flux: \ref*{f:xedead}\\
+10.2, 10.3 & effective half-life of xenon versus flux; $X/N^{25}$ and its maximum: \ref*{f:xechain}\\
+10.4 & average and peak xenon and samarium at $80$ MW/m$^3$: \ref*{f:xechain}, \ref*{f:xeworth}, \ref*{f:sm} (find $\phi$ from $P'''=\gamma\Sf\phi$, then use the peaking factor)\\
+10.5, 10.7, 10.8 & solving the iodine--xenon equations from startup, after shutdown, and after a power cut: \ref*{f:onefp}, \ref*{f:xechain}, \ref*{f:xedead}\\
+10.6 & a three-member chain ending in a strong absorber: \ref*{f:onefp}, \ref*{f:sm}\\
+10.9, 10.10 & periodic iodine and promethium under load following: \ref*{f:xechain}, \ref*{f:sm} (solve each half-day and impose $N(24\,\mathrm h)=N(0)$)\\
+10.11, 10.12 & \iso{240}{Pu} buildup; capture in \iso{238}{Np}: \ref*{f:chain}, \ref*{f:rate}\\
+10.13 & conversion ratio and plutonium power at 4\%: \ref*{f:rate}--\ref*{f:cr}\\
+10.14 & the thorium chain: \ref*{f:rate}, \ref*{f:sm} (protactinium is the analogue of promethium)\\
+\bottomrule
+\end{tabularx}
+\end{handoutsmall}
+
+\begin{takeawaybox}[Learning objectives]
+The objectives this chapter implies, and how they compare with the Lesson 22--24 objectives already in the course, are tabulated in \texttt{reading\_guide/learning\_objectives.md}. Items flagged there as new (for example, the control-absorption identity with $\rho_{ex}$, the flux threshold for the post-shutdown xenon rise, the flux independence of the samarium worth, the plutonium plateau, the conversion of burnup to atoms fissioned, and the burnout time of a burnable poison) are the ones this guide spends extra frames on.
+\end{takeawaybox}
+\end{document}

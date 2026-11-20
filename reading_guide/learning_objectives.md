@@ -1,4 +1,4 @@
-# Learning objectives implied by FNRP Chapters 1–4
+# Learning objectives implied by FNRP Chapters 1–5 and 10
 
 Each table lists the objectives a student must meet to work the chapter's
 reading-guide frames, the frames that exercise them, and the closest existing
@@ -15,7 +15,8 @@ Status key:
 Frame numbers refer to the compiled guides (`ch01_guide.pdf`, etc.).
 
 > The Chapter 6 and 7 guides also point to this file. Their comparison tables
-> have not been written yet; only Chapters 1–4 are tabulated here.
+> have not been written yet; Chapters 1–5 and 10, and the Chapter 9 addendum
+> to the Chapter 4 guide, are tabulated here.
 
 ## Chapter 1 — Nuclear Reactions (Lessons 1–3)
 
@@ -118,6 +119,65 @@ Frame numbers refer to the compiled guides (`ch01_guide.pdf`, etc.).
 | 4.17 | Predict qualitatively how each factor responds to a change of moderator, fuel form, or $V_m/V_f$. | F25–F26 | L19: $P/D$ effects | partial |
 | 4.18 | State what an infinite-lattice unit-cell calculation needs (boundaries, tallies) to yield $k_\infty$ and the four factors. | F27 | L17, L19 (OpenMC cheat sheet) | covered |
 
+
+## Chapter 4 addendum — Reactivity Feedback (FNRP 9.1–9.4; Lessons 20–21)
+
+| # | Implied objective | Frames | Existing objective | Status |
+|---|---|---|---|---|
+| 9.1 | Define reactivity; convert among $\Delta k/k$, percent, pcm, dollars, and cents; distinguish a worth from a coefficient. | F28 | L20: relationship between reactivity and $k$; accepted units | covered |
+| 9.2 | Use $d\rho\approx d\ln k$ to write the four-factor and leakage contributions additively, and state when the near-critical normalization fails. | F29 | L21 handout, Sections 1 and 3 | partial (the leakage term of (9.4) and the $k\neq1$ check are NEW to the objectives list) |
+| 9.3 | Evaluate the temperature dependence of the resonance integral for UO$_2$ and uranium metal rods from $\tilde\gamma=C_1+C_2(4/\rho D)$. | F30 | L21 handout, Section 4 (oxide only) | partial (metal rod and the oxide–metal comparison are NEW) |
+| 9.4 | Derive and evaluate the fuel temperature coefficient $-\tilde\gamma\ln(1/p)/(2\sqrt{T_f})$ and integrate it to a Doppler defect. | F31 | L21: explain why the FTC is strongly negative | covered (the closed-form defect is NEW) |
+| 9.5 | Derive $\alpha_m=-\beta_m[\ln(1/p)-(1-f)]$ and show its sign change with soluble boron. | F32 | L21: how the MTC depends on geometry; L22: how chemical shim impacts the MTC | covered |
+| 9.6 | Contrast solid-moderator and fast-reactor coefficients qualitatively. | F33 | L21: SFR versus LWR coefficients | covered |
+| 9.7 | Define prompt, isothermal, and power coefficients; compute $\alpha_P$ from $R_f$ and $Wc_p$; compute temperature and power defects. | F34 | L20: power defect; L21: PCR, isothermal coefficient | partial (the plant-model evaluation of $\alpha_P$ is NEW) |
+| 9.8 | Account for excess reactivity, shutdown margin, and the defects through the startup sequence. | F35 | L20: integral reactivity changes from cold shutdown; excess reactivity balanced by control | covered |
+
+## Chapter 5 — Reactor Kinetics (Lessons 25–29)
+
+| # | Implied objective | Frames | Existing objective | Status |
+|---|---|---|---|---|
+| 5.1 | Write and solve the balance of a nonmultiplying system; define $l_\infty=1/\bar v\Sigma_a$ as a mean lifetime. | F1 | L25: derive the kinetics equation; similarities between lifetime and mean free path | covered |
+| 5.2 | Compute $v(E)$ classically and estimate lifetimes in thermal and fast systems from $\Sigma_a$ and $\bar v$. | F2 | L25: mean speed; estimate the lifetime of a thermal neutron | covered |
+| 5.3 | Solve the source build-up problem and its removal; identify $n(\infty)=l_\infty S_o$. | F3 | L25: predict the density versus time; L26 handout, Section 8 | covered |
+| 5.4 | Add prompt fission; write $(k_\infty-1)/l_\infty$; define criticality from the time-dependent equation. | F4 | L26: how changes depend on $k$ or $\rho$ | covered |
+| 5.5 | Model leakage through $\Gamma$; derive $P_{NL}=1/(1+\Gamma)$, $k=P_{NL}k_\infty$, $l=P_{NL}l_\infty$. | F5 | — | NEW |
+| 5.6 | Quantify prompt-only growth rates and periods, and the reactivity for a prescribed period. | F6–F7 | L26: reactor period (key term) | partial |
+| 5.7 | Solve the source-driven problem for sub-, exactly, and supercritical systems; relate $1/(1-k)$ to source multiplication. | F8 | L26: show how much a source is amplified | covered |
+| 5.8 | Describe precursors; define $\beta$ and groups; quote $\beta$ for the three fissile nuclides; estimate an effective $\beta$ for mixed fuel. | F9 | L27: how neutrons appear long after fission; representative $\beta$ values | covered (mixed-fuel $\beta$ is in HW 27.1) |
+| 5.9 | Compute the average half-life, $1/\lambda$, $l_d$, and $\bar l$ from six-group data and explain why they differ. | F10 | L27: quantify how delayed neutrons impact the lifetime | covered (the two averages are NEW) |
+| 5.10 | Write the seven kinetics equations; interpret $C_i$; relate it to a physical nuclide. | F11 | L27: relate $C_i$ to a fission product concentration | covered |
+| 5.11 | Show the steady state is unchanged by delayed neutrons; compute $C_i/n$. | F12 | L27: one-group steady state unaffected | covered (the precursor-to-neutron ratio is NEW) |
+| 5.12 | Transform to $\rho$ and $\Lambda$; express one cent in pcm for each fuel. | F13 | L20: units; L26: $\Lambda$ | covered |
+| 5.13 | Describe the prompt jump and the asymptotic period from a six-group solution. | F14 | L28: approximate the density after a step; explain Fig. 5.3 | covered |
+| 5.14 | Derive the inhour equation; count its roots; identify the stable period. | F15 | L28: inhour equation (key term) | covered |
+| 5.15 | Read period from reactivity and vice versa; state the small-reactivity and prompt-supercritical limits and the $-1/\lambda_1$ bound. | F16–F18 | L28: use Figs. 5.3–5.4; why power cannot drop to zero; why solutions change at $\rho>\beta$ | covered (the limits of the small-$\rho$ estimate are NEW) |
+| 5.16 | Derive the rod drop and source jerk relations and the prompt jump for positive steps. | F19 | L27 handout, Section 6 | partial (rod drop and source jerk are NEW to the objectives list) |
+| 5.17 | Solve the one-group kinetics; compare one and six groups; derive the prompt jump approximation. | F20 | L28: solve by hand with one precursor group | covered |
+| 5.18 | Explain how temperature feedback modifies $\rho$; predict the steady power under a quasi-static model. | F21 | L29: describe the terms of the feedback model | covered |
+| 5.19 | Describe a self-terminating prompt excursion under adiabatic fuel heating. | F22 | L29 handout, Section 5 | partial (not in the objectives list) |
+
+## Chapter 10 — Long-Term Core Behavior (Lessons 22–24)
+
+| # | Implied objective | Frames | Existing objective | Status |
+|---|---|---|---|---|
+| 10.1 | Name the three long-term changes and explain why their time scales decouple them from kinetics and heat transfer. | F1 | L22: list the primary long-term changes | covered |
+| 10.2 | Insert burnup, fission product, and control terms into the four-factor formula; define $k(t)$ and $\rho_{ex}(t)$. | F2 | L22: model control, fission products, and depletion in the four-factor formula | covered |
+| 10.3 | Show that holding down $\rho_{ex}$ requires the control to absorb a fraction $\rho_{ex}$ of all neutrons; compare rods, boron, and burnable poisons. | F3 | L20: how excess reactivity is balanced by control | partial (the absorption-fraction identity is NEW) |
+| 10.4 | Write the fast-reactor form and explain why fission products matter less there. | F4 | — | NEW |
+| 10.5 | Solve the generic fission product equation with $\lambda'=\lambda+\sigma_a\phi$; classify inventories as proportional to power or to energy. | F5, F16 | L22: fission product yield (key term) | partial |
+| 10.6 | Write and solve the iodine–xenon equations; find equilibria and the burnout flux; compute the equilibrium xenon worth. | F6–F7 | L22: quantify the impact of xenon buildup; equilibrium xenon | covered |
+| 10.7 | Derive the flux threshold for a post-shutdown xenon rise, the 11.3 h peak time, the peak worth, and the dead time. | F8 | L22 handout, Section 8 | partial (threshold flux and dead time are NEW) |
+| 10.8 | Analyze samarium: flux-independent equilibrium worth and post-shutdown growth. | F9 | L22 handout, Section 9 (mentioned only) | NEW |
+| 10.9 | State the three-nuclide depletion assumptions and justify them numerically. | F10 | L23: define the depletion equations | covered |
+| 10.10 | Solve for $N^{25}$, $N^{49}$ versus fluence; find the plutonium plateau and its time constant. | F11 | L23: depletion equations; burnup conversions | covered (the plateau is NEW) |
+| 10.11 | Compute the conversion ratio at start and after burnup, and the plutonium share of power. | F12 | L23: fraction of power from Pu-239; conversion ratio | covered |
+| 10.12 | Evaluate $k(t)$ from thermal cross sections as the inventory changes; explain the roles of plutonium and fission products. | F13 | L23: general expression for $k$ with transmutation; power at fixed flux and flux at fixed power | covered |
+| 10.13 | Convert among time, fluence, and burnup; convert burnup to the fraction of heavy atoms fissioned. | F14 | L23: convert between time and burnup | covered (fraction fissioned is NEW) |
+| 10.14 | Compare burnout rates of burnable poisons with the fuel; explain lumping and the capture-product requirement. | F15 | L23: how burnable absorbers impact reactivity | covered (burnout time scales are NEW) |
+| 10.15 | Estimate fission product activities from power and energy; distinguish safety from waste concerns; identify the actinide tail. | F16–F17 | — | NEW |
+| 10.16 | Apply the linear reactivity model to $N$-batch cycles and the $N\to\infty$ limit. | F18 | L24: all objectives | course-only |
+
 ### Lesson objectives the guides do not exercise
 
 These are computational or tool objectives that a paper guide cannot carry:
@@ -129,6 +189,10 @@ These are computational or tool objectives that a paper guide cannot carry:
 - L14: plot multigroup functions versus energy and lethargy.
 - L18: Beocat access and OpenMC installation.
 - L19: fit data points to a polynomial; run the OpenMC $P/D$ and Pu-fraction scans.
+- L21: the finite-difference coefficient from two OpenMC runs (the addendum states the result only).
+- L22: the numerical xenon transient (`lesson_22_xenon_transient.py`).
+- L27, L28: `odeint`/`solve_ivp` solutions and the graphical period exercise.
+- L29: the feedback solver and its traces.
 
 ### Flagged for possible inclusion
 
@@ -154,3 +218,25 @@ These are computational or tool objectives that a paper guide cannot carry:
     chapter's central calculation has no listed objective.
 11. **Boron and the optimum moderation** (4.16): explains why a lattice can
     pass from under- to overmoderated without any change of geometry.
+12. **Metal versus oxide Doppler constants and the closed-form Doppler
+    defect** (9.3–9.4): Lesson 21 states the oxide correlation only; the
+    defect integral is exact within the model and anchors HW 22.1(d)–(e).
+13. **The leakage term of (9.4) and the plant-model power coefficient**
+    (9.2, 9.7): the pieces of FNRP problems 9.3–9.7, none of which has a
+    listed objective.
+14. **Leakage as $\Gamma$ and the lifetime shortening $l=P_{NL}l_\infty$**
+    (5.5): the only place Lewis connects $k$ and $l$ to finite size before
+    Chapter 6.
+15. **The two delayed-neutron averages and the precursor-to-neutron ratio**
+    (5.9, 5.11): both are needed to set initial conditions correctly in HW
+    27.2 and 28.2.
+16. **Rod drop and source jerk** (5.16): taught in Lesson 27's graphical
+    exercise, absent from the objectives list.
+17. **Samarium** (10.8) and the **xenon threshold flux and dead time** (10.7):
+    Lesson 22 mentions samarium only in passing; both follow from the same
+    two-equation method.
+18. **The control-absorption identity** (10.3): the fraction of neutrons the
+    poison must absorb equals $\rho_{ex}$, a one-line result that makes
+    HW 22.1(b) interpretable.
+19. **Fission product inventories from power and energy** (10.15): the
+    numbers behind the accident and waste discussions of FNRP 10.5.

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-"""Recompute every number quoted in the Chapter 1-4, 6, and 7 programmed reading guides.
+"""Recompute every number quoted in the Chapter 1-7 and 10 programmed reading guides.
 
 Run from anywhere:
     python tools/verify_examples.py            # print the table of values
     python tools/verify_examples.py --write    # also refresh figures/data/*.dat
 
 Only NumPy and SciPy are required.  Each printed line is labelled with the guide
-(ch01-ch04, ch06, or ch07) and the frame that quotes it, so a reader can check a single value.
+(ch01-ch07 or ch10; the Chapter 4 addendum uses ch04 F28 onward) and the frame that quotes it, so a reader can check a single value.
 """
 import argparse
 import math
@@ -672,6 +672,288 @@ rec("ch04", "F25", "D2O Vm/Vf for same p (no Dancoff)", (1 - e4) * NUO2 * I0 / (
 rec("ch04", "F25", "D2O Vm/Vf for same f", 2 * Sam / (0.18 / 21000), "{:.0f}")
 
 # ----------------------------------------------------------------------------
+# Chapter 4 addendum: reactivity feedback (FNRP 9.1-9.4; Lessons 20-21)
+# ----------------------------------------------------------------------------
+beta5 = 0.0065                      # U-235 delayed fraction (Table 5.1)
+k28 = 1.0065
+rho28 = (k28 - 1) / k28
+rec("ch04", "F28", "k=1.0065: rho, pcm, dollars (beta=0.0065)", (rho28, 1e5 * rho28, rho28 / beta5), "{:.4g}")
+rec("ch04", "F28", "worth of k 1.02 -> 1.00: exact 1/k1-1/k2, and dk/k", (1 / 1.02 - 1.0, (1.0 - 1.02) / 1.02), "{:.5f}")
+# F29: additive form with the Chain 6 lattice
+kinf46 = 1.24 * p46 * f46 * etaT
+rec("ch04", "F29", "k_inf of Chain 6", kinf46, "{:.3f}")
+p_hot = 0.812
+rec("ch04", "F29", "p 0.832 -> 0.812: d ln p, exact drho with k_inf=1.73 (pcm)",
+    (1e5 * math.log(p_hot / p46), 1e5 * (1 / kinf46 - 1 / (kinf46 * p_hot / p46))), "{:.0f}")
+rec("ch04", "F29", "leakage term P_L=0.03, dM2/M2=+0.02 (pcm)", -1e5 * 0.03 * 0.02, "{:.0f}")
+# F30: temperature dependence of the resonance integral, Eq. (9.13)-(9.14), Table 9.1
+def gtilde(C1, C2, rho_f, D):
+    return C1 + C2 * 4 / (rho_f * D)
+g_ox = gtilde(0.0061, 0.0047, 11.0, 1.0)
+g_met = gtilde(0.0048, 0.0064, 19.1, 1.0)
+rec("ch04", "F30", "gamma-tilde UO2 (rho=11, D=1) and U metal (rho=19.1, D=1)", (g_ox, g_met), "{:.5f}", "K^-1/2")
+for T in (600.0, 1200.0):
+    r_ox = 1 + g_ox * (math.sqrt(T) - math.sqrt(300))
+    rec("ch04", "F30", f"I(T)/I(300) UO2 at {T:.0f} K, and I (b) from 19.7", (r_ox, I46 * r_ox), "{:.4g}")
+I_met = 2.95 + 25.8 * math.sqrt(4 / 19.1)
+rec("ch04", "F30", "U metal I(300) (b), I(1200)/I(300)", (I_met, 1 + g_met * (math.sqrt(1200) - math.sqrt(300))), "{:.4g}")
+lnp0 = expo / 2                      # ln(1/p) for the oxide lattice, Vm/Vf = 2
+expo_met = (NUm * 1e-24 / NUO2) * (I_met / I46) * lnp0   # same Vm/Vf, metal rod of the same size
+# NUm is in 1/cm^3; NUO2 in 1e24/cm^3
+rec("ch04", "F30", "metal rod: N_U ratio, exponent ln(1/p), p", (NUm * 1e-24 / NUO2, expo_met, math.exp(-expo_met)), "{:.4g}")
+# F31: fuel temperature coefficient (9.16) and Doppler defect
+def alpha_f(g, lnp, T, exact=False):
+    a = -g * lnp / (2 * math.sqrt(T))
+    if exact:
+        a /= 1 + g * (math.sqrt(T) - math.sqrt(300))
+    return a
+for T in (600.0, 1200.0):
+    rec("ch04", "F31", f"alpha_f UO2 at {T:.0f} K (pcm/K): (9.16), with I(T0)/I(T)",
+        (1e5 * alpha_f(g_ox, lnp0, T), 1e5 * alpha_f(g_ox, lnp0, T, True)), "{:.3f}")
+rec("ch04", "F31", "alpha_f U metal at 1200 K (pcm/K)", 1e5 * alpha_f(g_met, expo_met, 1200.0), "{:.3f}")
+rec("ch04", "F31", "Doppler defect 300->600 and 600->1200 K (pcm)",
+    (-1e5 * g_ox * lnp0 * (math.sqrt(600) - math.sqrt(300)), -1e5 * g_ox * lnp0 * (math.sqrt(1200) - math.sqrt(600))), "{:.0f}")
+rec("ch04", "F31", "Lesson 21 check: p0=0.8, rho=10, D=1, T=1200 (pcm/K)", 1e5 * alpha_f(gtilde(0.0061, 0.0047, 10.0, 1.0), math.log(1 / 0.8), 1200.0), "{:.3f}")
+# F32: moderator temperature coefficient (9.24)
+bm = 2.9e-4
+for name, p_, f_ in (("cold Chain 6", p46, f46), ("Table 4.2 PWR", 0.63, 0.94), ("1000 ppm boron", p46, 1 / (1 + 2 * cb))):
+    rec("ch04", "F32", f"alpha_m {name}: ln(1/p), 1-f, pcm/K", (math.log(1 / p_), 1 - f_, -1e5 * bm * (math.log(1 / p_) - (1 - f_))), "{:.4g}")
+# F34: composite coefficients (illustrative plant data, unlike problem 9.3)
+af, ac = -2.5e-5, -1.0e-5
+Rf = 0.4                                  # K/MW
+Wcp = 1.5e4 * 5500 / 1e6                  # MW/K
+inv2W = 1 / (2 * Wcp)
+rec("ch04", "F34", "W c_p (MW/K), 1/(2 W c_p) (K/MW)", (Wcp, inv2W), "{:.4g}")
+alphaT = af + ac
+alphaP = (Rf + inv2W) * af + inv2W * ac
+rec("ch04", "F34", "isothermal coefficient (pcm/K), power coefficient (pcm/MW)", (1e5 * alphaT, 1e5 * alphaP), "{:.3f}")
+rec("ch04", "F34", "temperature defect 300->560 K (pcm), power defect 0->3000 MW (pcm)", (1e5 * alphaT * 260, 1e5 * alphaP * 3000), "{:.0f}")
+rec("ch04", "F34", "fuel and coolant temperature rise at 3000 MW (K)", ((Rf + inv2W) * 3000, inv2W * 3000), "{:.0f}")
+# F35: startup budget
+rho_ex = 0.15
+rec("ch04", "F35", "rod worth for SDM -0.04; rho_ex at HZP; at HFP", (rho_ex + 0.04, rho_ex + alphaT * 260, rho_ex + alphaT * 260 + alphaP * 3000), "{:.4f}")
+
+# ----------------------------------------------------------------------------
+# Chapter 5
+# ----------------------------------------------------------------------------
+vE = lambda E: 1.384e6 * math.sqrt(E)      # cm/s, E in eV
+rec("ch05", "F2", "v(0.0253 eV) (cm/s)", vE(0.0253), "{:.3g}")
+l_water = 1 / (Sam * vE(0.0253))
+rec("ch05", "F2", "l_inf thermal water (Sigma_a=0.0197) (s)", l_water, "{:.3g}")
+rec("ch05", "F2", "l_inf fast lattice (Sigma_a=0.00534, v=1e9) (s)", 1 / (0.00534 * 1e9), "{:.3g}")
+rec("ch05", "F2", "lambda_a water (cm) = l v", 1 / Sam, "{:.1f}")
+rec("ch05", "F3", "n(inf) = l S0 for S0=1e8/s; 3 l (ms)", (l_water * 1e8, 3e3 * l_water), "{:.3g}")
+rec("ch05", "F3", "fraction of n(inf) at t = l, 2l, 3l", [1 - math.exp(-n) for n in (1, 2, 3)], "{:.3f}")
+rec("ch05", "F5", "Gamma=0.1: P_L, P_NL", (0.1 / 1.1, 1 / 1.1), "{:.4f}")
+l6 = 1e-4
+for k in (1.001, 0.999):
+    r = (k - 1) / l6
+    rec("ch05", "F6", f"k={k}: (k-1)/l (1/s), e-fold (s), doubling/halving (s), factor in 1 s", (r, 1 / abs(r), math.log(2) / abs(r), math.exp(r)), "{:.4g}")
+rec("ch05", "F6", "k=1.001, l=1e-7: e-fold (s)", 1e-7 / 0.001, "{:.1e}")
+T7 = 20 / math.log(2)
+k7 = 1 + 0.001 / T7
+rec("ch05", "F7", "double in 20 s, l=1e-3: T (s), k-1, rho", (T7, k7 - 1, (k7 - 1) / k7), "{:.4g}")
+for k in (0.9, 0.99):
+    rec("ch05", "F8", f"k={k}, l=1e-4, S0=1e8: n(inf), tau (s)", (l6 * 1e8 / (1 - k), l6 / (1 - k)), "{:.3g}")
+rec("ch05", "F8", "critical: n after 60 s at S0=1e8", 1e8 * 60, "{:.1e}")
+# Delayed neutron data, Table 5.1
+thalf = np.array([56, 23, 6.2, 2.3, 0.61, 0.23])
+lam = np.log(2) / thalf
+bi = {"U235": np.array([0.00021, 0.00142, 0.00128, 0.00257, 0.00075, 0.00027]),
+      "Pu239": np.array([0.00007, 0.00063, 0.00044, 0.00069, 0.00018, 0.00009]),
+      "U233": np.array([0.00023, 0.00078, 0.00064, 0.00074, 0.00014, 0.00008])}
+Lam = 5e-5
+for nm, b in bi.items():
+    rec("ch05", "F9", f"beta {nm}", b.sum(), "{:.5f}")
+rec("ch05", "F9", "beta_eff 80% U-235, 20% Pu-239 fissions; fractional drop", (0.8 * 0.0065 + 0.2 * 0.0021, 1 - (0.8 * 0.0065 + 0.2 * 0.0021) / 0.0065), "{:.4g}")
+b = bi["U235"]
+beta = b.sum()
+tbar = (b * thalf).sum() / beta
+lbar = beta / (b / lam).sum()
+rec("ch05", "F10", "U-235: average half-life (5.32) (s), 1/lambda-bar (5.34) (s), lambda-bar (1/s)", (tbar, 1 / lbar, lbar), "{:.4g}")
+rec("ch05", "F10", "l_d = l + 1/lambda (s), lbar = l + beta/lambda (s), lbar/l", (Lam + 1 / lbar, Lam + beta / lbar, (Lam + beta / lbar) / Lam), "{:.4g}")
+rec("ch05", "F12", "C_1/n and sum C_i/n at critical, Lambda=5e-5", (b[0] / (lam[0] * Lam), (b / (lam * Lam)).sum()), "{:.4g}")
+rec("ch05", "F13", "one cent in pcm: U-235, Pu-239", (1e5 * 0.01 * 0.0065, 1e5 * 0.01 * 0.0021), "{:.2f}")
+rec("ch05", "F13", "rho=(k-1)/k and Lambda=l/k for k=1.0065, l=5e-5", ((k28 - 1) / k28, 5e-5 / k28), "{:.4g}")
+
+
+def inhour(omega, b=b, lam=lam, Lam=Lam):
+    return omega * (Lam + (b / (omega + lam)).sum())
+
+
+def period(rho, b=b, lam=lam, Lam=Lam):
+    """Dominant root of the inhour equation."""
+    if rho > 0:
+        w = optimize.brentq(lambda w: inhour(w, b, lam, Lam) - rho, 1e-12, 1e6)
+    else:
+        w = optimize.brentq(lambda w: inhour(w, b, lam, Lam) - rho, -lam[0] * (1 - 1e-12), -1e-12)
+    return 1 / w
+
+
+inhour_T7 = inhour(1 / T7)
+rows.insert(next(i for i, r in enumerate(rows) if r[:2] == ("ch05", "F8")),
+            ("ch05", "F7", "same T=28.9 s with six delayed groups: rho (pcm), ratio to prompt-only",
+             f"{1e5 * inhour_T7:.3g}, {inhour_T7 / ((k7 - 1) / k7):.3g}", ""))
+rec("ch05", "F16", "T for rho=+0.1 beta: exact, small-rho (5.56), (s)", (period(0.1 * beta), (Lam + beta / lbar) / (0.1 * beta)), "{:.1f}")
+rec("ch05", "F16", "T for rho=-0.1 beta: exact, small-rho (s); limit -1/lambda_1 (s)", (period(-0.1 * beta), -(Lam + beta / lbar) / (0.1 * beta), -1 / lam[0]), "{:.1f}")
+rec("ch05", "F16", "T for rho=0.02, 0.2, 0.5 beta (s)", [period(x * beta) for x in (0.02, 0.2, 0.5)], "{:.1f}")
+rec("ch05", "F16", "T for rho=1.1 beta: exact, Lambda/(rho-beta) (s)", (period(1.1 * beta), Lam / (0.1 * beta)), "{:.4f}")
+T17 = 7200 / math.log(1000)
+rho17 = inhour(1 / T17)
+rec("ch05", "F17", "1 W -> 1 kW in 2 h: T (s), rho (pcm), cents", (T17, 1e5 * rho17, 100 * rho17 / beta), "{:.4g}")
+rec("ch05", "F17", "15 min period, 1 W -> 1 MW: time (s), (h)", (900 * math.log(1e6), 900 * math.log(1e6) / 3600), "{:.4g}")
+rec("ch05", "F17", "T for +10 cents: U-235, Pu-239, U-233 (s)", [period(0.1 * bi[n].sum(), bi[n], lam, Lam) for n in ("U235", "Pu239", "U233")], "{:.1f}")
+rec("ch05", "F17", "T for -10 cents: U-235, Pu-239, U-233 (s)", [period(-0.1 * bi[n].sum(), bi[n], lam, Lam) for n in ("U235", "Pu239", "U233")], "{:.1f}")
+rec("ch05", "F18", "T above prompt critical: 1.5 dollars (s)", Lam / (0.5 * beta), "{:.4f}")
+rec("ch05", "F19", "rod drop 100 W -> 70 W: dollars; fast time constant Lambda/(beta+|rho|) (ms)", (100 / 70 - 1, 1e3 * Lam / (beta * (1 + 100 / 70 - 1))), "{:.3g}")
+rec("ch05", "F19", "prompt jump for +0.1, +0.2, +0.5 beta; drop for -0.1 beta", [1 / (1 - x) for x in (0.1, 0.2, 0.5, -0.1)], "{:.3f}")
+# One delayed group (problem 5.10) versus six
+def one_group_roots(rho, beta=beta, lam1=lbar, Lam=Lam):
+    a, bq, c = Lam, beta - rho + lam1 * Lam, -lam1 * rho
+    d = math.sqrt(bq * bq - 4 * a * c)
+    return (-bq + d) / (2 * a), (-bq - d) / (2 * a)
+for x in (0.02, 0.2):
+    ws, wf = one_group_roots(x * beta)
+    rec("ch05", "F20", f"rho={x} beta one group: omega_s, omega_f (1/s), T_1g, T_6g (s)", (ws, wf, 1 / ws, period(x * beta)), "{:.4g}")
+rec("ch05", "F20", "one-group amplitudes for 0.2 beta: A_s/n0, A_f/n0", (lambda ws, wf: ((0.2 * beta / Lam - wf) / (ws - wf), 1 - (0.2 * beta / Lam - wf) / (ws - wf)))(*one_group_roots(0.2 * beta)), "{:.4f}")
+# Feedback (Lesson 29 models)
+alpha29, A29 = -3e-5, 100.0
+rec("ch05", "F21", "temperature rise cancelling 300 pcm (K)", 0.003 / abs(alpha29), "{:.0f}")
+rec("ch05", "F21", "Model A steady p for 300 pcm and 1.5 dollars (beta=0.0065)", (1 + 0.003 / (abs(alpha29) * A29), 1 + 1.5 * beta / (abs(alpha29) * A29)), "{:.3f}")
+rec("ch05", "F22", "Model B: rise to prompt critical at 1.5 dollars (K)", 0.5 * beta / abs(alpha29), "{:.0f}")
+# Six-group step response (Fig. 1 of the Chapter 5 guide)
+def step_response(rho, times, b=b, lam=lam, Lam=Lam):
+    G = len(b)
+    A = np.zeros((G + 1, G + 1))
+    A[0, 0] = (rho - b.sum()) / Lam
+    A[0, 1:] = lam
+    A[1:, 0] = b / Lam
+    A[1:, 1:] = -np.diag(lam)
+    y0 = np.concatenate([[1.0], b / (lam * Lam)])
+    w, V = np.linalg.eig(A)
+    c = np.linalg.solve(V, y0)
+    return np.real(np.array([(V[0] * c * np.exp(w * t)).sum() for t in times]))
+t_fig = np.concatenate([np.linspace(0, 0.05, 51), np.linspace(0.06, 2, 98), np.linspace(2.5, 100, 196)])
+n_plus = step_response(0.1 * beta, t_fig)
+n_minus = step_response(-0.1 * beta, t_fig)
+rec("ch05", "F14", "six-group n/n0 at t=0.5 s and 100 s for +0.1 beta", (step_response(0.1 * beta, [0.5])[0], n_plus[-1]), "{:.3f}")
+rec("ch05", "F14", "six-group n/n0 at t=0.5 s and 100 s for -0.1 beta", (step_response(-0.1 * beta, [0.5])[0], n_minus[-1]), "{:.3f}")
+
+# ----------------------------------------------------------------------------
+# Chapter 10
+# ----------------------------------------------------------------------------
+kPWR = 1.27 * 0.63 * 0.94 * 1.89 * 0.97
+rec("ch10", "F3", "Table 4.2 PWR with P_NL=0.97: k, rho_ex", (kPWR, (kPWR - 1) / kPWR), "{:.4f}")
+f_need = 0.94 / kPWR
+Acon = 1 / f_need - 1 - 0.06 / 0.94
+rec("ch10", "F3", "f needed, A_con/A_f, control share of thermal absorptions", (f_need, Acon, Acon / (1 + 0.06 / 0.94 + Acon)), "{:.4f}")
+lam131 = math.log(2) / (8.02 * 86400)
+lam137 = math.log(2) / (30.2 * 365.25 * 86400)
+rec("ch10", "F5", "I-131: lambda (1/s), 5 half-lives (d)", (lam131, 5 * 8.02), "{:.3g}")
+rec("ch10", "F5", "Cs-137: lambda t after 3 y; 1-exp(-x) over x", (lam137 * 3 * 365.25 * 86400, (1 - math.exp(-lam137 * 3 * 365.25 * 86400)) / (lam137 * 3 * 365.25 * 86400)), "{:.4f}")
+gI, gX, gP = 0.0639, 0.00237, 0.01071
+lamI, lamX, lamP = math.log(2) / (6.7 * 3600), math.log(2) / (9.2 * 3600), math.log(2) / (53 * 3600)
+sX, sS = 2.65e6 * 1e-24, 41000e-24
+rec("ch10", "F6", "lambda_I, lambda_X (1/s)", (lamI, lamX), "{:.3e}")
+rec("ch10", "F6", "flux where sigma_X phi = lambda_X", lamX / sX, "{:.2e}", "1/cm2/s")
+Sf22, phi22, Sa22 = 0.16, 2e14, 0.34
+rec("ch10", "F6", "X_max = (gI+gX) Sigma_f/sigma_X for Sigma_f=0.16", (gI + gX) * Sf22 / sX, "{:.2e}", "1/cm3")
+def xe_eq(phi, Sf=Sf22):
+    I0 = gI * Sf * phi / lamI
+    X0 = (gI + gX) * Sf * phi / (lamX + sX * phi)
+    return I0, X0
+for phi in (2e13, phi22):
+    I0, X0 = xe_eq(phi)
+    rec("ch10", "F7", f"phi={phi:.0e}: I_eq, X_eq (1/cm3), Sigma_aX (1/cm), worth -Sigma_aX/0.34", (I0, X0, sX * X0, -sX * X0 / Sa22), "{:.3g}")
+rec("ch10", "F7", "worth limit at infinite flux", -(gI + gX) * Sf22 / Sa22, "{:.4f}")
+rec("ch10", "F8", "flux above which xenon rises after shutdown", lamX * gX / (sX * gI), "{:.2e}", "1/cm2/s")
+tpk = math.log(lamI / lamX) / (lamI - lamX)
+rec("ch10", "F8", "high-flux peak time (s), (h)", (tpk, tpk / 3600), "{:.4g}")
+def xe_after(t, phi, Sf=Sf22):
+    I0, X0 = xe_eq(phi, Sf)
+    return X0 * np.exp(-lamX * t) + lamI / (lamI - lamX) * I0 * (np.exp(-lamX * t) - np.exp(-lamI * t))
+I0, X0 = xe_eq(phi22)
+tmax = optimize.minimize_scalar(lambda t: -xe_after(t, phi22), bounds=(0, 1e5), method="bounded").x
+rec("ch10", "F8", "phi=2e14: peak time (h), X_peak/X_eq, peak worth", (tmax / 3600, xe_after(tmax, phi22) / X0, -sX * xe_after(tmax, phi22) / Sa22), "{:.3g}")
+reserve = 0.05
+t1 = optimize.brentq(lambda t: sX * xe_after(t, phi22) / Sa22 - reserve, 0, tmax)
+t2 = optimize.brentq(lambda t: sX * xe_after(t, phi22) / Sa22 - reserve, tmax, 1e6)
+rec("ch10", "F8", "dead time for a 0.05 reserve: start, end (h), length (h)", (t1 / 3600, t2 / 3600, (t2 - t1) / 3600), "{:.3g}")
+I0b, X0b = xe_eq(2e13)
+tmaxb = optimize.minimize_scalar(lambda t: -xe_after(t, 2e13), bounds=(0, 1e5), method="bounded").x
+rec("ch10", "F8", "phi=2e13: peak time (h), X_peak/X_eq", (tmaxb / 3600, xe_after(tmaxb, 2e13) / X0b), "{:.3g}")
+rec("ch10", "F9", "lambda_P (1/s); S_eq = gP Sigma_f/sigma_S (1/cm3); Sigma_aS = gP Sigma_f; worth", (lamP, gP * Sf22 / sS, gP * Sf22, -gP * Sf22 / Sa22), "{:.3g}")
+rec("ch10", "F9", "1/(sigma_S phi) at 2e14 (d); P_o/S_o = sigma_S phi/lambda_P at 2e14, 1.3e13", (1 / (sS * phi22) / 86400, sS * phi22 / lamP, sS * 1.3e13 / lamP), "{:.3g}")
+rec("ch10", "F9", "Table 3.2 Sm-149 thermal average (b)", 61500, "{:.0f}")
+# Depletion: Lesson 23 one-group data, 3% enrichment, phi = 2e14
+sa25, sf25, sa28, sf28, sa49, sf49 = 57.20, 46.89, 1.02, 0.11, 195.10, 124.41
+sg28 = sa28 - sf28
+phi23 = 2e14
+rec("ch10", "F10", "U-238 captured per year at 2e14 (sigma_a=1.02 b)", sa28 * 1e-24 * phi23 * 365.25 * 86400, "{:.4f}")
+Phi_half = math.log(2) / (sa25 * 1e-24)
+rec("ch10", "F11", "fluence for half the U-235 (1/cm2), time at 2e14 (s), (y)", (Phi_half, Phi_half / phi23, Phi_half / phi23 / (365.25 * 86400)), "{:.3g}")
+rec("ch10", "F11", "N49(inf)/N28 = sg28/sa49; 1/(sa49 phi) (s), (y)", (sg28 / sa49, 1 / (sa49 * 1e-24 * phi23), 1 / (sa49 * 1e-24 * phi23) / (365.25 * 86400)), "{:.3g}")
+e10 = 0.03
+rec("ch10", "F11", "N49(inf)/N25(0) at 3%", sg28 / sa49 * (1 - e10) / e10, "{:.3f}")
+N25_0, N28_0 = e10, 1 - e10
+N25_h = 0.5 * N25_0
+N49_h = sg28 / sa49 * N28_0 * (1 - math.exp(-sa49 * 1e-24 * Phi_half))
+rec("ch10", "F12", "CR(0) at 3%", sg28 * N28_0 / (sa25 * N25_0), "{:.3f}")
+rec("ch10", "F12", "half burned: N49/N_U, CR, Pu power fraction", (N49_h, sg28 * N28_0 / (sa25 * N25_h + sa49 * N49_h), sf49 * N49_h / (sf25 * N25_h + sf49 * N49_h)), "{:.3f}")
+rec("ch10", "F12", "CR(0) at 4% (for comparison)", sg28 * 0.96 / (sa25 * 0.04), "{:.3f}")
+# k(t) with Lesson 23 thermal data
+NU23 = 10.4 * N0 / 270                     # 1e24/cm3
+sa25T, sf25T, nu25, sa28T, sa49T, sf49T, nu49 = 297.40, 253.09, 2.43, 1.32, 1146.51, 732.22, 2.90
+zeta, vmvf, p23, eps23, pnl23, Sam23 = 1.1, 1.0, 0.6, 1.3, 0.95, 0.007
+def k23(n25, n49):
+    num = nu25 * sf25T * n25 + nu49 * sf49T * n49
+    den = sa25T * n25 + sa49T * n49 + sa28T * N28_0 * NU23 + zeta * vmvf * Sam23
+    return num / den * eps23 * p23 * pnl23
+k0 = k23(N25_0 * NU23, 0.0)
+kh = k23(N25_h * NU23, N49_h * NU23)
+rec("ch10", "F13", "N_U (1e24/cm3), N25(0), N28(0)", (NU23, N25_0 * NU23, N28_0 * NU23), "{:.4g}")
+rec("ch10", "F13", "k(0), rho(0)", (k0, (k0 - 1) / k0), "{:.3f}")
+rec("ch10", "F13", "k, rho at half U-235 (Pu, no FP)", (kh, (kh - 1) / kh), "{:.3f}")
+rec("ch10", "F13", "k at half U-235 if Pu-239 ignored", k23(N25_h * NU23, 0.0), "{:.3f}")
+# burnup to the half-burned point at constant flux
+kappa = 3.2e-11
+t_h = Phi_half / phi23
+tt = np.linspace(0, t_h, 2001)
+n25 = N25_0 * NU23 * 1e24 * np.exp(-sa25 * 1e-24 * phi23 * tt)
+n49 = sg28 / sa49 * N28_0 * NU23 * 1e24 * (1 - np.exp(-sa49 * 1e-24 * phi23 * tt))
+Pd = kappa * phi23 * 1e-24 * (sf25 * n25 + sf49 * n49)
+Q = integrate.trapezoid(Pd, tt)
+m0 = 10.4e-3 * 238 / 270                   # kg heavy metal per cm3
+rec("ch10", "F13", "P''' at t=0 and at half-burned (W/cm3)", (Pd[0], Pd[-1]), "{:.0f}")
+rec("ch10", "F13", "energy per cm3 (J), heavy-metal mass (kg/cm3), burnup (MWd/kg)", (Q, m0, Q / m0 / 8.64e10), "{:.3g}")
+rec("ch10", "F14", "1 full-power day at 100 W/cm3, UO2 10.4 g/cm3: MWd/kg; 3 y", (100 * 86400 / m0 / 8.64e10, 3 * 365.25 * 100 * 86400 / m0 / 8.64e10), "{:.3g}")
+fima = 8.64e10 / kappa / (6.022e26 / 238)
+rec("ch10", "F14", "fissions per kg per MWd/kg; % of heavy atoms per MWd/kg; at 50 MWd/kg", (8.64e10 / kappa, 100 * fima, 50 * 100 * fima), "{:.3g}")
+phiT = 4e13
+for name, s in (("B-10", 3409.0), ("Gd-157", 254000.0), ("U-235", 591.0)):
+    rec("ch10", "F15", f"{name}: sigma phi_T (1/s), half-life in flux (d)", (s * 1e-24 * phiT, math.log(2) / (s * 1e-24 * phiT) / 86400), "{:.3g}")
+Rfis = 3000e6 / 3.1e-11
+rec("ch10", "F16", "fission rate at 3000 MW (1/s)", Rfis, "{:.3g}")
+rec("ch10", "F16", "I-131 saturation activity (Bq), (Ci)", (0.029 * Rfis, 0.029 * Rfis / 3.7e10), "{:.3g}")
+N137 = 0.063 * Rfis * 3 * 365.25 * 86400
+rec("ch10", "F16", "Cs-137 after 3 y: atoms, kg, Bq, Ci", (N137, N137 * 137 / 6.022e23 / 1e3, lam137 * N137, lam137 * N137 / 3.7e10), "{:.3g}")
+rho0, aL, rhoL = 0.25, 0.15 / 35, 0.05
+rec("ch10", "F18", "LRM slope a (per MWd/kg)", aL, "{:.5f}")
+for N in (1, 2, 3, 4):
+    Bc = 2 * (rho0 - rhoL) / (aL * (N + 1))
+    rec("ch10", "F18", f"N={N}: B_c, B_d (MWd/kg)", (Bc, N * Bc), "{:.1f}")
+rec("ch10", "F18", "limit N->inf: B_d (MWd/kg)", 2 * (rho0 - rhoL) / aL, "{:.1f}")
+# Data for the figures
+t_xe = np.linspace(0, 72 * 3600, 289)
+xe_lo = xe_after(t_xe, 2e13) / xe_eq(2e13)[1]
+xe_hi = xe_after(t_xe, phi22) / X0
+sm_hi = 1 + (sS * phi22 / lamP) * (1 - np.exp(-lamP * t_xe))
+sm_lo = 1 + (sS * 2e13 / lamP) * (1 - np.exp(-lamP * t_xe))
+Phi_fig = np.linspace(0, 4e22, 201)
+n25_fig = np.exp(-sa25 * 1e-24 * Phi_fig)
+n49_fig = sg28 / sa49 * (N28_0 / N25_0) * (1 - np.exp(-sa49 * 1e-24 * Phi_fig))
+
+# ----------------------------------------------------------------------------
 # Output
 # ----------------------------------------------------------------------------
 def main():
@@ -690,6 +972,19 @@ def main():
                 y0 = special.y0(xi) if xi > 0 else float("nan")
                 fh.write(f"{xi:.4f} {special.j0(xi):.6f} {special.j1(xi):.6f} {y0:.6f}\n")
         print(f"wrote {os.path.join(DATA, 'bessel.dat')}")
+        with open(os.path.join(DATA, "kinetics_step.dat"), "w") as fh:
+            fh.write("t nplus nminus\n")
+            for ti, a, c in zip(t_fig, n_plus, n_minus):
+                fh.write(f"{ti:.4f} {a:.6f} {c:.6f}\n")
+        with open(os.path.join(DATA, "xenon_shutdown.dat"), "w") as fh:
+            fh.write("th xelo xehi smlo smhi\n")
+            for ti, a, c, d, e in zip(t_xe / 3600, xe_lo, xe_hi, sm_lo, sm_hi):
+                fh.write(f"{ti:.3f} {a:.5f} {c:.5f} {d:.5f} {e:.5f}\n")
+        with open(os.path.join(DATA, "depletion.dat"), "w") as fh:
+            fh.write("fluence n25 n49\n")
+            for ti, a, c in zip(Phi_fig / 1e21, n25_fig, n49_fig):
+                fh.write(f"{ti:.3f} {a:.6f} {c:.6f}\n")
+        print(f"wrote kinetics_step.dat, xenon_shutdown.dat, depletion.dat in {DATA}")
     return 0
 
 

@@ -1,4 +1,4 @@
-# Programmed reading guides for FNRP Chapters 1-4, 6, and 7.
+# Programmed reading guides for FNRP Chapters 1-7 and 10 (Chapter 4 includes a Chapter 9 addendum).
 LATEXMK ?= latexmk
 PYTHON  ?= python3
 FLAGS   := -xelatex -interaction=nonstopmode -halt-on-error
@@ -10,7 +10,8 @@ LANDSCAPE_GUIDES := $(SOURCES:.tex=_landscape.pdf)
 REFERENCE_GUIDES := $(SOURCES:.tex=_landscape_reference.pdf)
 PLAYWRITE_GUIDES := $(SOURCES:.tex=_landscape_playwrite.pdf)
 INDIE_EULER_GUIDES := $(SOURCES:.tex=_landscape_indie_euler.pdf)
-COMMON_DEPS := ne630guide.sty ../handouts/ne630handout.cls figures/data/bessel.dat
+DATA_FILES := figures/data/bessel.dat figures/data/kinetics_step.dat figures/data/xenon_shutdown.dat figures/data/depletion.dat
+COMMON_DEPS := ne630guide.sty ../handouts/ne630handout.cls $(DATA_FILES)
 export TEXINPUTS := ../handouts//:$(TEXINPUTS)
 
 .PHONY: all portrait landscape both reference playwrite indie-euler verify data tidy clean
@@ -53,12 +54,14 @@ indie-euler: $(INDIE_EULER_GUIDES)
 	$(LATEXMK) $(FLAGS) $<
 
 # Every number quoted in the guides is recomputed here; --write refreshes the
-# tabulated Bessel functions used by the Chapter 7 figure. The script needs
-# NumPy and SciPy: pass PYTHON=/path/to/python if the default lacks them.
-figures/data/bessel.dat: tools/verify_examples.py
+# tabulated Bessel functions of the Chapter 7 figure and the kinetics, xenon,
+# and depletion curves of the Chapter 5 and 10 figures (a grouped target, so
+# one run writes all four). The script needs NumPy and SciPy: pass
+# PYTHON=/path/to/python if the default lacks them.
+$(DATA_FILES) &: tools/verify_examples.py
 	$(PYTHON) tools/verify_examples.py --write > /dev/null
 
-data: figures/data/bessel.dat
+data: $(DATA_FILES)
 
 verify:
 	$(PYTHON) tools/verify_examples.py

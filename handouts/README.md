@@ -141,8 +141,10 @@ and corrected absorption coefficient and critical-width expression.
 
 ## Revised Lesson 29
 
-Lesson 29 uses the instructor-supplied feedback handout with embedded plot
-tables. Build with `make L29`. Regenerate tables with
-`python refresh_plot_tables.py` (NumPy and SciPy required), then rebuild.
-Review numerical annotations if model parameters change. Historical seed
-coverage checks do not apply to this revision.
+Lesson 29 uses the instructor-supplied feedback handout and embedded numerical
+plot tables, not the historical draft figures. Build with `make L29`.
+`lesson_29_feedback.py` implements the printed one-group model. To regenerate
+the cached tables, run `python refresh_plot_tables.py` in this directory with
+NumPy and SciPy installed, then rebuild. Numerical annotations and prose must
+be reviewed if model parameters change. The historical seed manifest is not
+an acceptance test for this revised handout.
